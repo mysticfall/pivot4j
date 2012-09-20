@@ -1,0 +1,379 @@
+/*
+ * ====================================================================
+ * This software is subject to the terms of the Common Public License
+ * Agreement, available at the following URL:
+ *   http://www.opensource.org/licenses/cpl.html .
+ * You must accept the terms of that agreement to use this software.
+ * ====================================================================
+ */
+package com.eyeq.pivot4j.mdx;
+
+import java.util.List;
+import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java_cup.runtime.Symbol;
+
+action code {: ParsedQuery pQuery = new ParsedQuery();  :};
+
+parser code {: 
+  static Logger logger = LoggerFactory.getLogger(Parser.class);
+    
+  /**
+   * report_error
+   */ 
+  public void report_error(String message, Object info) {
+    logger.warn("Parsing MDX:" +message);
+    if (info instanceof Symbol) {
+	  if (((Symbol)info).left != -1) {
+	  	 if (logger.isWarnEnabled()) {
+	       logger.warn("at character " + ((Symbol)info).left +  " of input");
+	     }
+	  }
+	}
+  }
+	
+  /**
+   * report_fatal_error
+   */ 
+  public void report_fatal_error(String message, Object info) throws Exception {
+    String err;
+    err = "Fatal error parsing MDX:" +message;
+    if (info instanceof Symbol) {
+	  if (((Symbol)info).left != -1) {
+	     err += "\n at character " + ((Symbol)info).left +  " of input";
+	  } else {
+	    err += "\n invalid symbol \"" + ((Symbol)info).value +"\"";
+	  }
+	} else {
+	  err += "\n" + info.toString();
+	}
+	if (logger.isErrorEnabled()) {
+	  logger.error("Fatal error parsing MDX:" +err);
+	}
+	throw new Exception(err);
+  }
+
+            :};
+
+/* Terminals (tokens returned by the scanner). */
+// a. Keywords.
+terminal
+  AND,
+  AS,
+  CASE,
+  CELL,
+  CELL_ORDINAL,
+  DIMENSION,
+  DRILLTHROUGH,
+  ELSE,
+  EMPTY,
+  END,
+  FROM,
+  MEMBER,
+  NON,
+  NOT,
+  ON,
+  OR,
+  PROPERTIES,
+  QUOTE,
+  SELECT,
+  SET,
+  THEN,
+  WHEN,
+  WHERE,
+  SAP,
+  VARIABLES,
+  INCLUDING,
+  EXCLUDING,
+  XOR,
+  WITH;
+
+// b. Symbols
+terminal
+  ASTERISK, // *
+	COLON, // :
+	COMMA, // ,
+	CONCAT, // ||
+	DOT, // .
+	EQ, // =
+	GE, // >=
+	GT, // >
+	LBRACE, // {
+	LE, // <=
+	LPAREN, // (
+	LT, // <
+	MINUS, // -
+	NE, // <>
+	PLUS, // +
+	RBRACE, // }
+	RPAREN, // )
+	SOLIDUS; // /
+
+// c. Typed terminals
+terminal Double NUMBER;
+terminal String ID;
+terminal String QUOTED_ID;
+terminal String AMP_QUOTED_ID;
+terminal String STRING;
+terminal String UNKNOWN; // a token the lexer doesn't like!
+
+/* Non terminals */
+non terminal ParsedQuery mdx_statement;
+
+non terminal cube_def;
+non terminal slicer_def;
+non terminal cell_prop_def, cell_prop_list;
+non terminal with_clause;
+non terminal sel_clause;
+non terminal sap_var_def,sap_var_list,sap_var_incl,sap_var_opt,sap_var_spec,sap_var_value;
+non terminal ArrayList formula_spec;
+non terminal Formula single_formula_spec, member_spec, set_spec;
+non terminal ArrayList axis_def, axis_spec_list;
+non terminal QueryAxis axis_spec;
+non terminal Exp expression, value_expression, value_expression_opt, case_expression;
+non terminal Exp value_expression_primary, term5, term4, term3, term2, term, factor;
+non terminal Exp else_clause_opt;
+non terminal Exp[] when_clause; 
+non terminal Boolean non_empty_opt;
+non terminal String identifier, axis_name;
+non terminal ArrayList comma_member_property_def_list_opt, member_property_def_list;
+non terminal ArrayList exp_list_opt, exp_list, when_list;
+non terminal MemberProperty member_property_definition;
+non terminal CompoundId  compound_id;
+non terminal String comp_op;
+non terminal List dim_props, dim_prop_list;
+
+/* The grammar */
+
+start with mdx_statement;
+
+sel_clause ::= SELECT | DRILLTHROUGH SELECT;
+
+mdx_statement ::= with_clause sel_clause axis_def FROM cube_def slicer_def cell_prop_def sap_var_def
+	{: RESULT = pQuery; :};
+
+with_clause ::= {: pQuery.formulas = new ArrayList(); /* empty */  :}
+	| WITH formula_spec:f {: pQuery.formulas = f; :} ;
+
+axis_def ::= /* empty */ {: pQuery.axisDef = new ArrayList(); :}
+	| axis_spec_list:l {: pQuery.axisDef = l; :};
+
+axis_spec_list ::= axis_spec:i {: RESULT = new ArrayList(); RESULT.add(i); :}
+	| axis_spec:e COMMA axis_spec_list : list {: list.add(0, e); RESULT = list; :};
+
+axis_spec ::= non_empty_opt:b expression:s dim_props:dprops ON axis_name:a
+		{: RESULT = new QueryAxis(b.booleanValue(), s, a); 
+		   RESULT.setDimProps(dprops); :};
+
+dim_props ::= /* empty */ {: RESULT = new ArrayList(); :}
+    | DIMENSION PROPERTIES dim_prop_list:dplist {: RESULT = dplist; :};
+
+dim_prop_list ::= compound_id:cid {: List lst = new ArrayList();
+                                   lst.add(cid); RESULT = lst; :}
+    |  compound_id:cid2 COMMA dim_prop_list:dpl 
+      {: RESULT = dpl; dpl.add(cid2); :};
+
+non_empty_opt ::= {:RESULT = new Boolean(false); :} /* empty */ 
+	| NON EMPTY {: RESULT = new Boolean(true); :};
+
+axis_name ::= identifier:x {: RESULT = x; :};
+
+cube_def ::= identifier:x {: pQuery.setCube(x); :};
+
+slicer_def ::= /* empty */ {: pQuery.slicer = null; :}
+	| WHERE expression:x {: pQuery.slicer = x; :};
+
+cell_prop_def ::= /* empty */ {: pQuery.cellProps.clear() ; :}
+    | CELL PROPERTIES cell_prop_list;
+
+cell_prop_list ::= identifier:id {: pQuery.cellProps.add(new CompoundId(id)); :}
+	| identifier:id {: pQuery.cellProps.add(new CompoundId(id)); :}
+	  COMMA cell_prop_list:cl;
+
+sap_var_def ::= /* empty */ {: pQuery.sapVariables.clear(); :}
+    | SAP VARIABLES sap_var_list;
+
+sap_var_list ::= sap_var_spec:s {: pQuery.sapVariables.add(s); :}
+	| sap_var_spec:s COMMA sap_var_list {: pQuery.sapVariables.add(s); :};
+
+sap_var_incl ::= INCLUDING | EXCLUDING;
+
+sap_var_opt ::= /* empty */ | comp_op;
+
+sap_var_spec ::= identifier:id sap_var_incl:inc sap_var_opt:opt sap_var_value:v {: RESULT = id + " " + inc + ((opt == null)?"":(" " + opt)) + " " + v; :};
+
+sap_var_value ::= NUMBER:v {: RESULT=v; :}
+	| compound_id:v {: RESULT=v.toMdx(); :}
+	| STRING:v {: RESULT=v; :}
+	| NUMBER:v1 COLON NUMBER:v2 {: RESULT=v1 + ":" + v2; :}
+	| STRING:v1 COLON STRING:v2 {: RESULT=v1 + ":" + v2; :}
+	| compound_id:v1 COLON compound_id:v2 {: RESULT=v1.toMdx() + ":" + v2.toMdx(); :};
+
+formula_spec ::= single_formula_spec:e
+	{: RESULT = new ArrayList();  RESULT.add(e); :}
+	| single_formula_spec:hd formula_spec:tl {: tl.add(0, hd);  RESULT = tl; :};
+
+single_formula_spec ::= member_spec:m {: RESULT = m; :} 
+	| set_spec:s {: RESULT = s; :};
+
+member_spec ::=
+  	MEMBER compound_id:m AS QUOTE value_expression:e QUOTE comma_member_property_def_list_opt:l
+  	{: RESULT = new Formula(m.toStringArray(), e, (MemberProperty[]) l.toArray(new MemberProperty[0])); :}
+	| MEMBER compound_id:m AS value_expression:e comma_member_property_def_list_opt:l
+		{: RESULT = new Formula(m.toStringArray(), e, (MemberProperty[]) l.toArray(new MemberProperty[0])); :};
+
+comma_member_property_def_list_opt ::= /* empty */ {:RESULT = new ArrayList(); :}
+	| COMMA member_property_def_list:l {: RESULT = l; :};
+
+member_property_def_list ::= member_property_definition:m
+	{: RESULT = new ArrayList();  RESULT.add(m);  :}
+	| member_property_definition:hd COMMA member_property_def_list:tl
+	{: RESULT = tl;  RESULT.add(0, hd); :};
+
+member_property_definition ::= identifier:id EQ value_expression:e 
+	{: RESULT = new MemberProperty(id, e); :};
+
+set_spec ::= SET compound_id:s AS QUOTE expression:e QUOTE 
+	{: RESULT = new Formula(s.toStringArray(), e); :}
+ | SET compound_id:s AS expression:e {:RESULT = new Formula(s.toStringArray(), e); :};
+
+compound_id ::= identifier:i {: RESULT = new CompoundId(i); :}
+	| compound_id:hd DOT identifier:tl 
+		{: hd.append(tl);  RESULT = hd; :};
+
+identifier ::= ID:x {: RESULT=x; :} 
+	| QUOTED_ID:y {: RESULT=y; :};
+
+expression ::= expression:x COLON value_expression:y 
+		{: // range yields set
+  	RESULT = new FunCall(":", new Exp[] { x, y }, Syntax.Infix);
+ 	 :}
+	| value_expression:v {: RESULT = v; :};
+
+exp_list_opt ::= /* empty */ {:RESULT = new ArrayList(); :}
+	| exp_list:x {: RESULT=x; :};
+
+exp_list ::= expression:e {: RESULT = new ArrayList();  RESULT.add(e); :}
+	| expression:e COMMA exp_list:list {: list.add(0, e);  RESULT = list;  :};
+
+value_expression ::= term5:t {: RESULT = t; :}
+  | value_expression:x OR term5:y
+		{: RESULT = new FunCall("OR", new Exp[] { x, y }, Syntax.Infix); :}
+	| value_expression:x XOR term5:y
+		{: RESULT = new FunCall("XOR", new Exp[] { x, y }, Syntax.Infix); :};
+
+term5 ::= term4:t {: RESULT = t; :}
+  | term5:x AND term4:y 
+		{: RESULT = new FunCall("AND", new Exp[] { x, y }, Syntax.Infix); :};
+
+term4 ::= term3:t {: RESULT = t; :}
+  | NOT term4:p
+		{: RESULT = new FunCall("NOT", new Exp[] { p }, Syntax.Prefix); :};
+
+term3 ::= term2:t {: RESULT = t; :}
+  | term3:x comp_op:op term2:y 
+		{: RESULT = new FunCall(op, new Exp[] { x, y }, Syntax.Infix); :}; // e.g. 1 < 5 
+
+term2 ::= term:t {: RESULT = t; :}
+	| term2:x PLUS term:y
+		{: RESULT = new FunCall("+", new Exp[] { x, y }, Syntax.Infix); :}
+	| term2:x MINUS term:y 
+		{: RESULT = new FunCall("-", new Exp[] { x, y }, Syntax.Infix); :}
+	| term2:x CONCAT term:y
+		{: RESULT = new FunCall("||", new Exp[] { x, y }, Syntax.Infix); :};
+
+term ::= factor:t {: RESULT = t; :}
+	| term:x ASTERISK factor:y
+		{: RESULT = new FunCall("*", new Exp[] { x, y }, Syntax.Infix); :}
+	| term:x SOLIDUS factor:y
+		{: RESULT = new FunCall("/", new Exp[] { x, y }, Syntax.Infix); :};
+
+factor ::= value_expression_primary:t {: RESULT = t; :} 
+	| PLUS value_expression_primary:p 
+		{: RESULT = p; :}
+	| MINUS value_expression_primary:p 
+		{: RESULT = new FunCall("-", new Exp[] { p }, Syntax.Prefix); :};
+
+value_expression_primary ::= STRING:s
+		{: RESULT = Literal.createString(s); :}
+	| NUMBER:d {: RESULT = Literal.create(d); :}
+  | identifier:i {: RESULT = new CompoundId(i); :}
+  | value_expression_primary:i DOT ID:j
+  	{: RESULT = new FunCall(j, new Exp[] { i }, Syntax.Property); :}
+	| value_expression_primary:i DOT QUOTED_ID:j
+		{:
+		  if (i instanceof CompoundId) {
+		    ((CompoundId) i).append(j);
+		    RESULT = i;
+		  } else {
+		    RESULT = new FunCall(j, new Exp[] { i }, Syntax.PropertyQuoted);
+		  }
+	  :}
+	| value_expression_primary:i DOT AMP_QUOTED_ID:j
+		{:
+		  if (i instanceof CompoundId) {
+		    ((CompoundId) i).append(j, true);
+		    RESULT = i;
+		  } else {
+		    RESULT = new FunCall(j, new Exp[] { i }, Syntax.PropertyAmpQuoted);
+		  }
+	 :}
+	| value_expression_primary:i DOT identifier:j LPAREN exp_list_opt:lis RPAREN 
+		{: lis.add(0, i); RESULT = new FunCall(j, (Exp[]) lis.toArray(new Exp[0]), Syntax.Method); :}
+	| identifier:i LPAREN exp_list_opt:lis RPAREN
+		{: RESULT = new FunCall(i, (Exp[]) lis.toArray(new Exp[0]), Syntax.Function); :}
+	| LPAREN exp_list:lis RPAREN
+		{:
+		  // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
+		  // are just expressions.
+		  RESULT = new FunCall("()", (Exp[]) lis.toArray(new Exp[0]), Syntax.Parentheses);
+		:}
+	| LBRACE exp_list_opt:lis RBRACE 
+		{: // set built from sets/tuples
+  		RESULT = new FunCall("{}", (Exp[]) lis.toArray(new Exp[0]), Syntax.Braces);
+  	:}
+	| case_expression;
+
+case_expression ::= CASE value_expression_opt:x when_list:y else_clause_opt:z END 
+	{: ArrayList v = new ArrayList();
+  	if (x != null) {
+    	v.add(x);
+  	}
+  	for (int i = 0; i < y.size(); i++) {
+    	Exp[] exps = (Exp[]) y.get(i);
+    	// Util.assertTrue(exps.length == 2);
+    	v.add(exps[0]);
+    	v.add(exps[1]);
+  	}
+  	if (z != null) {
+    	v.add(z);
+  	}
+  	if (x == null) {
+    	RESULT = new FunCall("_CaseTest", (Exp[]) v.toArray(new Exp[0]), Syntax.Case);
+  	} else {
+    	RESULT = new FunCall("_CaseMatch", (Exp[]) v.toArray(new Exp[0]), Syntax.Case);
+  	}
+  :};
+
+value_expression_opt ::= /* empty */
+	| value_expression;
+
+when_list ::= /* empty */ {:RESULT = new ArrayList(); :}
+	| when_list:x when_clause:y {: RESULT = x;  x.add(y); :};
+
+when_clause ::= WHEN value_expression:x THEN value_expression:y
+		{: RESULT = new Exp[] { x, y }; :};
+
+else_clause_opt ::= /* empty */
+	| ELSE value_expression:x {: RESULT = x; :};
+
+comp_op ::=
+    EQ {: RESULT = "="; :}
+  |	NE {: RESULT = "<>"; :}
+  |	LT {: RESULT = "<"; :}
+  |	GT {: RESULT = ">"; :}
+  |	LE {: RESULT = "<="; :}
+  |	GE {: RESULT = ">="; :}
+  ;
+	
