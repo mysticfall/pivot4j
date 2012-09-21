@@ -26,8 +26,8 @@ import com.eyeq.pivot4j.PivotModel;
 
 public class PivotModelImplIT extends AbstractIntegrationTestCase {
 
-	private String testQuery = "select {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS from [Sales] where [Time].[1997]";
+	private String testQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] WHERE [Time].[1997]";
 
 	/**
 	 * @return the testQuery
@@ -56,7 +56,7 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 	}
 
 	@Test(expected = PivotException.class)
-	public void testInitializeWithNoInitialMDX() {
+	public void testInitializeWithNoInitialMdx() {
 		PivotModel model = getPivotModel();
 		model.initialize();
 	}
@@ -85,6 +85,27 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		List<CellSetAxis> axes = cellSet.getAxes();
 		assertNotNull("Cell axes list is null.", axes);
 		assertEquals("Invalid cell axes size.", 2, axes.size());
+	}
+
+	@Test
+	public void testGetMdx() {
+		PivotModel model = getPivotModel();
+		model.setMdx(getTestQuery());
+		model.initialize();
+
+		assertEquals("MDX has been modified unexpectedly.", getTestQuery(),
+				model.getMdx());
+	}
+
+	@Test
+	public void testGetCurrentMdx() {
+		PivotModel model = getPivotModel();
+		model.setMdx(getTestQuery());
+		model.initialize();
+
+		String currentMdx = model.getCurrentMdx();
+		assertEquals("MDX has been modified unexpectedly.", getTestQuery(),
+				currentMdx);
 	}
 
 	@Test(expected = NotInitializedException.class)
