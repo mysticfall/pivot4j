@@ -108,6 +108,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 			destroy();
 		}
 
+		if (mdxQuery == null) {
+			throw new PivotException("Initial MDX query is null.");
+		}
+
 		try {
 			this.connection = dataSource.getConnection();
 
@@ -118,11 +122,11 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 			if (locale != null) {
 				connection.setLocale(locale);
 			}
-
-			this.initialized = true;
 		} catch (SQLException e) {
 			throw new PivotException(e);
 		}
+
+		this.initialized = true;
 	}
 
 	private void checkInitialization() throws NotInitializedException {
@@ -269,6 +273,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 *            The mdxQuery to set
 	 */
 	public void setMdx(String mdxQuery) {
+		if (mdxQuery == null) {
+			throw new IllegalArgumentException("MDX query cannot be null.");
+		}
+
 		if (logger.isInfoEnabled()) {
 			logger.info("setMdx: " + mdxQuery);
 		}
@@ -276,7 +284,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		this.mdxQuery = mdxQuery;
 
 		String mdx = mdxQuery.replaceAll("\r", "");
-
 		if (mdx.equals(currentMdx)) {
 			return;
 		}
