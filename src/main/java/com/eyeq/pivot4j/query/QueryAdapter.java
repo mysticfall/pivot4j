@@ -403,17 +403,20 @@ public class QueryAdapter implements StateHolder {
 		Reader reader = new StringReader(mdxQuery);
 		Parser parser = new Parser(new Lexer(reader));
 
-		Symbol parseTree;
+		ParsedQuery parsedQuery;
 
 		try {
-			parseTree = parser.parse();
+			Symbol parseTree = parser.parse();
+			parsedQuery = (ParsedQuery) parseTree.value;
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new PivotException(e);
 		}
 
-		return (ParsedQuery) parseTree.value;
+		parsedQuery.afterParse();
+
+		return parsedQuery;
 	}
 
 	/**
