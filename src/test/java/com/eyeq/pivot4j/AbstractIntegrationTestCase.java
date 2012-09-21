@@ -6,34 +6,47 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.datasource;
-
-import static org.junit.Assert.assertNotNull;
+package com.eyeq.pivot4j;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import mondrian.rolap.RolapConnectionProperties;
 
 import org.apache.derby.jdbc.ClientDriver;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+import org.olap4j.OlapDataSource;
 
-public class SimpleOlapDataSourceIT {
+import com.eyeq.pivot4j.datasource.SimpleOlapDataSource;
+import com.eyeq.pivot4j.impl.PivotModelImpl;
+
+public abstract class AbstractIntegrationTestCase {
+
+	private OlapDataSource dataSource;
+
+	private PivotModel model;
 
 	@Before
-	public void before() throws ClassNotFoundException {
-		Class.forName("mondrian.olap4j.MondrianOlap4jDriver");
+	public void setUp() throws ClassNotFoundException {
+		this.dataSource = createMondrianDataSource();
+		this.model = createPivotModel(dataSource);
 	}
 
-	/**
-	 * Test method for
-	 * {@link com.eyeq.pivot4j.datasource.AbstractOlapDataSource#getConnection()}
-	 * @throws SQLException
-	 */
-	@Test
-	public void testGetMondrianConnection() throws SQLException {
+	@After
+	public void tearDown() {
+		if (model != null && model.isInitialized()) {
+			model.destroy();
+
+			this.model = null;
+		}
+
+		this.dataSource  = null;
+	}
+
+	protected OlapDataSource createMondrianDataSource()
+			throws ClassNotFoundException {
+		Class.forName("mondrian.olap4j.MondrianOlap4jDriver");
+
 		StringBuilder builder = new StringBuilder();
 		builder.append("jdbc:mondrian:");
 		builder.append(RolapConnectionProperties.Jdbc.name());
@@ -71,11 +84,24 @@ public class SimpleOlapDataSourceIT {
 		SimpleOlapDataSource dataSource = new SimpleOlapDataSource();
 		dataSource.setConnectionString(url);
 
-		Connection con = dataSource.getConnection();
-		assertNotNull("Failed to create a connection : " + url, con);
+		return dataSource;
+	}
 
-		if (con != null) {
-			con.close();
-		}
+	protected PivotModel createPivotModel(OlapDataSource dataSource) {
+		return new PivotModelImpl(dataSource);
+	}
+
+	/**
+	 * @return the dataSource
+	 */
+	protected OlapDataSource getDataSource() {
+		return dataSource;
+	}
+
+	/**
+	 * @return the model
+	 */
+	protected PivotModel getPivotModel() {
+		return model;
 	}
 }
