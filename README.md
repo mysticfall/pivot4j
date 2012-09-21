@@ -1,14 +1,9 @@
-About Pivot4j
+About Pivot4J
 =======
 
 Pivot4J provides a common API for OLAP servers which can be used to build an analytical service frontend with pivot style GUI.
 
 It aims to leverage mature but now discontinued JPivot project's codebase to make it a general purpose OLAP API library which is independent of any particular GUI implementation.
-
-Project Page
-=======
-
-Please visit Pivot4J home page at http://mysticfall.github.com/pivot4j
 
 Motivation
 =======
@@ -24,6 +19,11 @@ However, as it is still in very early stage of development, it proved quite chal
 Pivot4J project has been started as a fork and major refactoring effort of JPivot to combine the best parts of both libraries. It replaced JPivot's legacy backend implementation with Olap4J while leveraging its mature query transform API. And also Pivot4J has done extensive refactorings to make the codebase more modern and maintainable.
 
 Pivot4J does not contain any concrete GUI implementation for now. However, it's designed as an easy to use model API for creating pivot GUI component using any web technologies like JSP, JSF, GWT, and more.
+
+Project Page
+=======
+
+Please visit Pivot4J home page at http://mysticfall.github.com/pivot4j
 
 Current Status
 =======
