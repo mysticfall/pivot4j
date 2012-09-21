@@ -100,13 +100,9 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<phase>pre-integration-test</phase>
 						<configuration>
 							<target unless="maven.test.skip">
-								<echo message="Copying test database to build directory : ${project.build.directory}" />
-								<copy todir="${project.build.directory}">
-									<fileset dir="${basedir}/src/test">
-										<include name="derby/**" />
-										<exclude name="**/.gitignore" />
-									</fileset>
-								</copy>
+								<mkdir dir="${project.build.directory}/derby" />
+								<unzip src="${basedir}/src/test/test-data/derby-foodmart.zip"
+									dest="${project.build.directory}/derby" overwrite="false" />
 							</target>
 						</configuration>
 						<goals>
