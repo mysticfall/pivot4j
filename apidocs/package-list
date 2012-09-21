@@ -1,0 +1,7 @@
+com.eyeq.pivot4j
+com.eyeq.pivot4j.datasource
+com.eyeq.pivot4j.impl
+com.eyeq.pivot4j.mdx
+com.eyeq.pivot4j.query
+com.eyeq.pivot4j.transform
+com.eyeq.pivot4j.util
