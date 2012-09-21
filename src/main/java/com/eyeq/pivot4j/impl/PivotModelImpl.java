@@ -168,6 +168,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		this.currentMdx = null;
 		this.sorting = false;
 		this.cellSet = null;
+		this.initialized = false;
 	}
 
 	/**
