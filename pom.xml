@@ -9,7 +9,7 @@
 	<description>Pivot4J provides a common API for OLAP servers which can be used to build an analytical service frontend with pivot style GUI.
 
 It aims to leverage mature but now discontinued JPivot project's codebase to make it a general purpose OLAP API library which is independent of any particular GUI implementation.</description>
-	<url>https://github.com/mysticfall/pivot4j</url>
+	<url>http://mysticfall.github.com/pivot4j</url>
 	<packaging>jar</packaging>
 	<inceptionYear>2012</inceptionYear>
 
@@ -47,9 +47,9 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<url>https://github.com/mysticfall/pivot4j/issues</url>
 	</issueManagement>
 	<scm>
-		<url>https://github.com/mysticfall/pivot4j.git</url>
-		<connection>scm:git:https://github.com/mysticfall/pivot4j.git</connection>
-		<developerConnection>scm:git:https://github.com/mysticfall/pivot4j.git</developerConnection>
+		<url>https://github.com/mysticfall/pivot4j</url>
+		<connection>scm:git:git://github.com/mysticfall/pivot4j.git</connection>
+		<developerConnection>scm:git:git@github.com:mysticfall/pivot4j.git</developerConnection>
 	</scm>
 
 	<build>
@@ -178,7 +178,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<goals>
 							<goal>site</goal>
 						</goals>
-						<phase>site</phase>
+						<phase>site-deploy</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -187,6 +187,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
+					<skipDeploy>true</skipDeploy>
 					<reportPlugins>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
@@ -270,8 +271,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -293,7 +293,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute />
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -310,7 +310,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute />
+										<ignore></ignore>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -378,6 +378,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<url>http://repo.pentaho.org/artifactory/repo/</url>
 		</repository>
 	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>emustudio</id>

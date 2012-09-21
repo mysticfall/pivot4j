@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/DECORATION/1.3.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd"
+	name="Pivot4J">
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.3.0</version>
+	</skin>
+
+	<body>
+		<menu ref="reports" />
+		<links>
+			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j"/>
+			<item name="JPivot Project" href="http://jpivot.sourceforge.net"/>
+			<item name="Olap4J Project" href="http://www.olap4j.org"/>
+		</links>
+	</body>
+
+	<custom>
+		<fluidoSkin>
+			<sideBarEnabled>true</sideBarEnabled>
+			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+			<profile>pre-release</profile>
+			<gitHub>
+				<projectId>mysticfall/pivot4j</projectId>
+				<ribbonOrientation>right</ribbonOrientation>
+				<ribbonColor>black</ribbonColor>
+			</gitHub>
+			<googleSearch />
+		</fluidoSkin>
+	</custom>
+</project>
