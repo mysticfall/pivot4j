@@ -28,6 +28,8 @@ public abstract class AbstractIntegrationTestCase {
 
 	@Before
 	public void setUp() throws ClassNotFoundException {
+		Class.forName("org.apache.derby.jdbc.ClientDriver");
+
 		this.dataSource = createMondrianDataSource();
 		this.model = createPivotModel(dataSource);
 	}
