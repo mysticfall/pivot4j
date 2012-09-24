@@ -1,0 +1,2790 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Quax.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pivot4J</a> &gt; <a href="index.html" class="el_package">com.eyeq.pivot4j.query</a> &gt; <span class="el_source">Quax.java</span></div><h1>Quax.java</h1><pre class="source lang-java linenums"><span class="pc" id="L1">/*</span>
+ * ====================================================================
+ * This software is subject to the terms of the Common Public License
+ * Agreement, available at the following URL:
+ *   http://www.opensource.org/licenses/cpl.html .
+ * You must accept the terms of that agreement to use this software.
+ * ====================================================================
+ */
+package com.eyeq.pivot4j.query;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.olap4j.OlapException;
+import org.olap4j.Position;
+import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.eyeq.pivot4j.PivotException;
+import com.eyeq.pivot4j.StateHolder;
+import com.eyeq.pivot4j.mdx.Exp;
+import com.eyeq.pivot4j.mdx.SetExp;
+import com.eyeq.pivot4j.mdx.Syntax;
+import com.eyeq.pivot4j.util.TreeNode;
+import com.eyeq.pivot4j.util.TreeNodeCallback;
+
+<span class="fc" id="L37">public class Quax implements StateHolder {</span>
+
+<span class="fc" id="L39">	protected static Logger logger = LoggerFactory.getLogger(Quax.class);</span>
+
+	private int nDimension;
+
+	private List&lt;Hierarchy&gt; hiers;
+
+	// currently, we can handle the following Funcalls
+	// member.children, member.descendants, level.members
+	// other funcalls are &quot;unknown functions&quot;
+	private boolean[] containsUF;
+
+	private List[] ufMemberLists; // if there are unknonwn functions
+
+	// private UnknownFunction[] unknownFunctions;
+<span class="fc" id="L53">	private TreeNode&lt;Exp&gt; posTreeRoot = null; // Position tree used in normal</span>
+												// mode
+
+	private int ordinal; // ordinal of query axis, never changed by swap
+
+<span class="fc" id="L58">	private boolean qubonMode = false;</span>
+
+<span class="fc" id="L60">	private boolean hierarchizeNeeded = false;</span>
+
+	// if there are multiple hierarchies on this quax,
+	// &quot;nHierExclude&quot; hierarchies (from right to left)
+	// will *not* be included to the Hierarchize Function.
+	// So MDX like
+	// Crossjoin(Hierarchize(Dim1.A + Dim1.A.Children), {Measures.A.
+	// Measures.B})
+	// will be generated, so that the Measures are excluded from Hierarchize.
+<span class="fc" id="L69">	private int nHierExclude = 0;</span>
+
+<span class="fc" id="L71">	private CalcSetMode generateMode = CalcSetMode.Simple;</span>
+
+<span class="fc" id="L73">	private int generateIndex = -1; // we handle generate for only 1 dimension</span>
+
+<span class="fc" id="L75">	private Object expGenerate = null;</span>
+
+<span class="fc" id="L77">	private Collection&lt;QuaxChangeListener&gt; changeListeners = new ArrayList&lt;QuaxChangeListener&gt;();</span>
+
+<span class="fc" id="L79">	private Map&lt;Member, Boolean&gt; canExpandMemberMap = new HashMap&lt;Member, Boolean&gt;();</span>
+
+<span class="fc" id="L81">	private Map&lt;List&lt;Member&gt;, Boolean&gt; canExpandPosMap = new HashMap&lt;List&lt;Member&gt;, Boolean&gt;();</span>
+
+<span class="fc" id="L83">	private Map&lt;Member, Boolean&gt; canCollapseMemberMap = new HashMap&lt;Member, Boolean&gt;();</span>
+
+<span class="fc" id="L85">	private Map&lt;List&lt;Member&gt;, Boolean&gt; canCollapsePosMap = new HashMap&lt;List&lt;Member&gt;, Boolean&gt;();</span>
+
+	/**
+	 * @param ordinal
+	 */
+<span class="fc" id="L90">	public Quax(int ordinal) {</span>
+<span class="fc" id="L91">		this.ordinal = ordinal;</span>
+<span class="fc" id="L92">	}</span>
+
+	/**
+	 * register change listener
+	 * 
+	 * @param listener
+	 */
+	public void addChangeListener(QuaxChangeListener listener) {
+<span class="fc" id="L100">		changeListeners.add(listener);</span>
+<span class="fc" id="L101">	}</span>
+
+	/**
+	 * unregister change listener
+	 * 
+	 * @param listener
+	 */
+	public void removeChangeListener(QuaxChangeListener listener) {
+<span class="nc" id="L109">		changeListeners.remove(listener);</span>
+<span class="nc" id="L110">	}</span>
+
+	/**
+	 * Handle change
+	 * 
+	 * @param changedByNavigator
+	 *            true if the memberset was changed by the navigator
+	 */
+	protected void fireQuaxChanged(boolean changedByNavigator) {
+<span class="fc" id="L119">		QuaxChangeEvent e = new QuaxChangeEvent(this, changedByNavigator);</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">		for (QuaxChangeListener listener : changeListeners) {</span>
+<span class="fc" id="L121">			listener.quaxChanged(e);</span>
+		}
+
+<span class="fc" id="L124">		canExpandMemberMap.clear();</span>
+<span class="fc" id="L125">		canExpandPosMap.clear();</span>
+<span class="fc" id="L126">		canCollapseMemberMap.clear();</span>
+<span class="fc" id="L127">		canCollapsePosMap.clear();</span>
+<span class="fc" id="L128">	}</span>
+
+	/**
+	 * Initialize quax from result positions
+	 * 
+	 * @param positions
+	 */
+	public void initialize(List&lt;Position&gt; positions) {
+		List&lt;List&lt;Member&gt;&gt; posMembers;
+
+<span class="fc" id="L138">		int nDimension = 0;</span>
+
+<span class="fc" id="L140">		this.hierarchizeNeeded = false;</span>
+<span class="fc" id="L141">		this.nHierExclude = 0;</span>
+<span class="fc" id="L142">		this.qubonMode = true;</span>
+
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">		if (positions.isEmpty()) {</span>
+			// the axis does not have any positions
+<span class="nc" id="L146">			posMembers = new ArrayList&lt;List&lt;Member&gt;&gt;(0);</span>
+<span class="nc" id="L147">			setHierarchies(new ArrayList&lt;Hierarchy&gt;(0));</span>
+<span class="nc" id="L148">			return;</span>
+		} else {
+<span class="fc" id="L150">			nDimension = positions.get(0).getMembers().size();</span>
+<span class="fc" id="L151">			posMembers = new ArrayList&lt;List&lt;Member&gt;&gt;(positions.size());</span>
+
+<span class="fc bfc" id="L153" title="All 2 branches covered.">			for (Position position : positions) {</span>
+<span class="fc" id="L154">				posMembers.add(new ArrayList&lt;Member&gt;(position.getMembers()));</span>
+			}
+		}
+
+<span class="fc" id="L158">		List&lt;Hierarchy&gt; hiers = new ArrayList&lt;Hierarchy&gt;(nDimension);</span>
+
+<span class="fc" id="L160">		List&lt;Member&gt; firstMembers = posMembers.get(0);</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">		for (Member member : firstMembers) {</span>
+<span class="fc" id="L162">			hiers.add(member.getLevel().getHierarchy());</span>
+		}
+
+<span class="fc" id="L165">		setHierarchies(hiers);</span>
+<span class="fc" id="L166">		initPositions(posMembers);</span>
+
+		// initialize the dimension flags
+		// if there is only one set node per dimension,
+		// we are in qubon mode
+<span class="fc" id="L171">		posTreeRoot.walkTree(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback check qubon mode
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="fc" id="L177">				int iDim = node.getLevel();</span>
+
+<span class="fc bfc" id="L179" title="All 2 branches covered.">				if (iDim == Quax.this.nDimension) {</span>
+<span class="fc" id="L180">					return TreeNodeCallback.BREAK; // bottom reached</span>
+				}
+
+<span class="fc bfc" id="L183" title="All 2 branches covered.">				if (node.getChildren().size() == 1) {</span>
+<span class="fc" id="L184">					return TreeNodeCallback.CONTINUE; // continue next level</span>
+				} else {
+					// more than one child - break out
+<span class="fc" id="L187">					Quax.this.qubonMode = false;</span>
+<span class="fc" id="L188">					return TreeNodeCallback.BREAK;</span>
+				}
+			}
+		});
+
+<span class="fc bfc" id="L193" title="All 2 branches covered.">		if (qubonMode) {</span>
+<span class="fc" id="L194">			nHierExclude = nDimension - 1; // nothing hierarchized</span>
+		}
+<span class="fc" id="L196">	}</span>
+
+	/**
+	 * Initialize position member list after first result gotten
+	 * 
+	 * @param posMemStart
+	 */
+	private void initPositions(List&lt;List&lt;Member&gt;&gt; posMemStart) {
+		// no positions - no tree
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">		if (posMemStart.isEmpty()) {</span>
+<span class="nc" id="L206">			this.posTreeRoot = null;</span>
+<span class="nc" id="L207">			return;</span>
+		}
+
+		// before the position tree is created,
+		// we want to hierarchize
+		/*
+		 * if (nDimension &gt; 1) hierarchizePositions(aPosMemStart);
+		 */
+
+		// init position tree
+<span class="fc" id="L217">		this.posTreeRoot = new TreeNode&lt;Exp&gt;(null); // root</span>
+<span class="fc" id="L218">		int end = addToPosTree(posMemStart, 0, posMemStart.size(), 0,</span>
+<span class="fc" id="L219">				posTreeRoot);</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">		while (end &lt; posMemStart.size()) {</span>
+<span class="fc" id="L221">			end = addToPosTree(posMemStart, end, posMemStart.size(), 0,</span>
+<span class="fc" id="L222">					posTreeRoot);</span>
+		}
+
+		// try to factor out the members of the last dimension
+<span class="fc" id="L226">		posTreeRoot.walkTree(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback create member set for last dimension
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="fc" id="L232">				int dimIndex = node.getLevel();</span>
+
+<span class="fc bfc" id="L234" title="All 2 branches covered.">				if (dimIndex == Quax.this.nDimension - 1) {</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">					if (node.getChildren().size() &lt;= 1)</span>
+<span class="fc" id="L236">						return TreeNodeCallback.CONTINUE_SIBLING; // continue</span>
+					// next
+					// sibling
+					// more than one child in last dimension
+					// create a single set function node
+<span class="fc" id="L241">					Exp[] memArray = new Exp[node.getChildren().size()];</span>
+<span class="fc" id="L242">					int i = 0;</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">					for (TreeNode&lt;Exp&gt; child : node.getChildren()) {</span>
+<span class="fc" id="L244">						memArray[i++] = child.getReference();</span>
+					}
+
+<span class="fc" id="L247">					node.getChildren().clear();</span>
+
+<span class="fc" id="L249">					Exp oFun = QuaxUtil.createFunCall(&quot;{}&quot;, memArray,</span>
+<span class="fc" id="L250">							Syntax.Braces);</span>
+
+<span class="fc" id="L252">					TreeNode&lt;Exp&gt; newChild = new TreeNode&lt;Exp&gt;(oFun);</span>
+<span class="fc" id="L253">					node.addChild(newChild);</span>
+
+<span class="fc" id="L255">					return TreeNodeCallback.CONTINUE_SIBLING; // continue next</span>
+					// sibling
+				}
+<span class="fc" id="L258">				return TreeNodeCallback.CONTINUE;</span>
+			}
+		});
+
+<span class="fc" id="L262">		this.containsUF = new boolean[nDimension]; // init false</span>
+<span class="fc" id="L263">		this.ufMemberLists = new List[nDimension];</span>
+
+<span class="pc bpc" id="L265" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L266">			logger.debug(&quot;after initPositions &quot; + this.toString());</span>
+		}
+<span class="fc" id="L268">	}</span>
+
+	/**
+	 * add members of dimension to tree recursively
+	 * 
+	 * @param posMembers
+	 *            positon member array
+	 * @param startIndex
+	 *            start position for this dimension
+	 * @param endIndex
+	 *            end position for this dimension
+	 * @param dimIndex
+	 *            index of this dimension
+	 * @param parentNode
+	 *            parent node (previous dimension)
+	 * @return index of position where the member of this dimension changes
+	 */
+	protected int addToPosTree(List&lt;List&lt;Member&gt;&gt; posMembers, int startIndex,
+			int endIndex, int dimIndex, TreeNode&lt;Exp&gt; parentNode) {
+<span class="fc" id="L287">		Member currentOfDim = posMembers.get(startIndex).get(dimIndex);</span>
+
+<span class="fc" id="L289">		Exp exp = QuaxUtil.expForMember(currentOfDim);</span>
+<span class="fc" id="L290">		TreeNode&lt;Exp&gt; newNode = new TreeNode&lt;Exp&gt;(exp);</span>
+<span class="fc" id="L291">		parentNode.addChild(newNode);</span>
+
+		// check range where member of this dimension is constant
+<span class="fc" id="L294">		int endRange = startIndex + 1;</span>
+<span class="pc bfc" id="L295" title="All 2 branches covered.">		for (; endRange &lt; endIndex; endRange++) {</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">			if (!posMembers.get(endRange).get(dimIndex).equals(currentOfDim)) {</span>
+<span class="fc" id="L297">				break;</span>
+			}
+		}
+
+<span class="fc" id="L301">		int nextDim = dimIndex + 1;</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">		if (nextDim &lt; nDimension) {</span>
+<span class="fc" id="L303">			int endChild = addToPosTree(posMembers, startIndex, endRange,</span>
+<span class="fc" id="L304">					nextDim, newNode);</span>
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">			while (endChild &lt; endRange) {</span>
+<span class="nc" id="L306">				endChild = addToPosTree(posMembers, endChild, endRange,</span>
+<span class="nc" id="L307">						nextDim, newNode);</span>
+			}
+		}
+
+<span class="fc" id="L311">		return endRange;</span>
+	}
+
+	/**
+	 * @return
+	 */
+	public int getNDimension() {
+<span class="nc" id="L318">		return nDimension;</span>
+	}
+
+	/**
+	 * @return posTreeRoot
+	 */
+	public TreeNode&lt;Exp&gt; getPosTreeRoot() {
+<span class="nc" id="L325">		return posTreeRoot;</span>
+	}
+
+	/**
+	 * @param posTreeRoot
+	 * @param hiersChanged
+	 */
+	public void setPosTreeRoot(TreeNode&lt;Exp&gt; posTreeRoot, boolean hiersChanged) {
+<span class="nc" id="L333">		this.posTreeRoot = posTreeRoot;</span>
+
+<span class="nc bnc" id="L335" title="All 2 branches missed.">		if (hiersChanged) {</span>
+			// count dimensions, set hierarchies
+<span class="nc" id="L337">			TreeNode&lt;Exp&gt; firstNode = posTreeRoot;</span>
+
+<span class="nc" id="L339">			List&lt;Hierarchy&gt; hiersList = new ArrayList&lt;Hierarchy&gt;();</span>
+<span class="nc" id="L340">			List&lt;TreeNode&lt;Exp&gt;&gt; children = firstNode.getChildren();</span>
+
+<span class="nc bnc" id="L342" title="All 2 branches missed.">			while (children.size() &gt; 0) {</span>
+<span class="nc" id="L343">				firstNode = children.get(0);</span>
+<span class="nc" id="L344">				Exp oExp = firstNode.getReference();</span>
+
+				Hierarchy hier;
+				try {
+<span class="nc" id="L348">					hier = QuaxUtil.hierForExp(oExp);</span>
+<span class="nc" id="L349">				} catch (UnknownExpressionException e) {</span>
+<span class="nc" id="L350">					throw new PivotException(</span>
+<span class="nc" id="L351">							&quot;Could not determine Hierarchy for set : &quot;</span>
+<span class="nc" id="L352">									+ e.getExpression());</span>
+				}
+
+<span class="nc" id="L355">				hiersList.add(hier);</span>
+
+<span class="nc" id="L357">				++nDimension;</span>
+<span class="nc" id="L358">				children = firstNode.getChildren();</span>
+			}
+
+<span class="nc" id="L361">			hiers = hiersList;</span>
+
+<span class="nc" id="L363">			nDimension = hiers.size();</span>
+
+<span class="nc" id="L365">			containsUF = new boolean[nDimension]; // init false</span>
+<span class="nc" id="L366">			ufMemberLists = new List[nDimension];</span>
+
+			// go through nodes and check for Unknown functions
+			// only one unknown function is possible in one hierarchy
+<span class="nc" id="L370">			posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+				/**
+				 * callback find unknown functions
+				 */
+				public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="nc" id="L376">					int nodeIndex = node.getLevel() - 1;</span>
+
+<span class="nc" id="L378">					Exp oExp = node.getReference();</span>
+<span class="nc bnc" id="L379" title="All 2 branches missed.">					if (!QuaxUtil.canHandle(oExp)) {</span>
+						// indicate that dimension i contains an unknown
+						// function,
+						// which cannot be handled in some cases.
+						// this will cause the member list of this dimension to
+						// be stored
+<span class="nc" id="L385">						containsUF[nodeIndex] = true;</span>
+					}
+
+<span class="nc" id="L388">					return TreeNodeCallback.CONTINUE;</span>
+				}
+			});
+		}
+<span class="nc" id="L392">	}</span>
+
+	public int getGenerateIndex() {
+<span class="nc" id="L395">		return generateIndex;</span>
+	}
+
+	public void setGenerateIndex(int i) {
+<span class="nc" id="L399">		this.generateIndex = i;</span>
+<span class="nc" id="L400">	}</span>
+
+	public CalcSetMode getGenerateMode() {
+<span class="nc" id="L403">		return generateMode;</span>
+	}
+
+	public void setGenerateMode(CalcSetMode mode) {
+<span class="nc" id="L407">		this.generateMode = mode;</span>
+<span class="nc" id="L408">	}</span>
+
+	/**
+	 * reset generate &quot;topcount&quot;
+	 */
+	public void resetGenerate() {
+<span class="nc" id="L414">		this.generateMode = CalcSetMode.Simple;</span>
+<span class="nc" id="L415">		this.generateIndex = -1;</span>
+<span class="nc" id="L416">		this.expGenerate = null;</span>
+<span class="nc" id="L417">	}</span>
+
+	/**
+	 * @return Returns the nHierExclude.
+	 */
+	public int getNHierExclude() {
+<span class="nc" id="L423">		return nHierExclude;</span>
+	}
+
+	/**
+	 * @param hierExclude
+	 *            The nHierExclude to set.
+	 */
+	public void setNHierExclude(int hierExclude) {
+<span class="nc" id="L431">		this.nHierExclude = hierExclude;</span>
+<span class="nc" id="L432">	}</span>
+
+	/**
+	 * only allow expand/collapse left of a &quot;sticky topcount&quot;
+	 */
+	private boolean allowNavigate(Member member, boolean qubon) {
+<span class="fc" id="L438">		int iDim = dimIdx(member.getDimension());</span>
+<span class="fc" id="L439">		return allowNavigate(iDim, qubon);</span>
+	}
+
+	/**
+	 * Only allow expand/collapse left of a &quot;sticky topcount&quot;
+	 */
+	private boolean allowNavigate(int dimIndex, boolean qubon) {
+<span class="pc bpc" id="L446" title="5 of 6 branches missed.">		if (qubon &amp;&amp; generateIndex &gt;= 0 &amp;&amp; generateMode == CalcSetMode.Sticky</span>
+<span class="nc bnc" id="L447" title="All 2 branches missed.">				&amp;&amp; dimIndex == generateIndex) {</span>
+<span class="nc" id="L448">			return false;</span>
+<span class="pc bpc" id="L449" title="2 of 4 branches missed.">		} else if (!qubon &amp;&amp; generateIndex &gt;= 0</span>
+<span class="nc bnc" id="L450" title="All 2 branches missed.">				&amp;&amp; generateMode == CalcSetMode.Sticky</span>
+<span class="nc bnc" id="L451" title="All 2 branches missed.">				&amp;&amp; dimIndex &gt;= generateIndex) {</span>
+<span class="nc" id="L452">			return false;</span>
+		} else {
+<span class="fc" id="L454">			return true;</span>
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isHierarchizeNeeded() {
+<span class="fc" id="L462">		return hierarchizeNeeded;</span>
+	}
+
+	/**
+	 * @param b
+	 */
+	public void setHierarchizeNeeded(boolean b) {
+<span class="nc" id="L469">		hierarchizeNeeded = b;</span>
+<span class="nc" id="L470">	}</span>
+
+	/**
+	 * get Ordinal for axis, this is the immutable id of the quax
+	 * 
+	 * @return ordinal
+	 */
+	public int getOrdinal() {
+<span class="nc" id="L478">		return ordinal;</span>
+	}
+
+	/**
+	 * @return hierarchies
+	 */
+	public List&lt;Hierarchy&gt; getHierarchies() {
+<span class="nc" id="L485">		return hiers;</span>
+	}
+
+	/**
+	 * @param hierarchies
+	 */
+	public void setHierarchies(List&lt;Hierarchy&gt; hierarchies) {
+<span class="fc" id="L492">		this.hiers = hierarchies;</span>
+<span class="fc" id="L493">		this.nDimension = hierarchies.size();</span>
+<span class="fc" id="L494">	}</span>
+
+	/**
+	 * @return
+	 */
+	public boolean isQubonMode() {
+<span class="nc" id="L500">		return qubonMode;</span>
+	}
+
+	/**
+	 * @param qubonMode
+	 */
+	public void setQubonMode(boolean qubonMode) {
+<span class="nc" id="L507">		this.qubonMode = qubonMode;</span>
+<span class="nc" id="L508">	}</span>
+
+	/**
+	 * Find out, whether axis contains dimension
+	 * 
+	 * @param dim
+	 * @return index of dimension, -1 if not there
+	 */
+	public int dimIdx(Dimension dim) {
+<span class="pc bpc" id="L517" title="2 of 4 branches missed.">		if (hiers == null || hiers.isEmpty()) {</span>
+<span class="nc" id="L518">			return -1; // quax was not initialized yet</span>
+		}
+
+<span class="fc" id="L521">		int i = 0;</span>
+<span class="fc bfc" id="L522" title="All 2 branches covered.">		for (Hierarchy hierarchy : hiers) {</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">			if (hierarchy.getDimension().equals(dim)) {</span>
+<span class="fc" id="L524">				return i;</span>
+			}
+
+<span class="fc" id="L527">			i++;</span>
+		}
+
+<span class="fc" id="L530">		return -1;</span>
+	}
+
+	/**
+	 * Regenerate the position tree as crossjoin between sets
+	 * 
+	 * @param hiersChanged
+	 *            indicates that the hierarchies were changed
+	 */
+	public void regeneratePosTree(List&lt;Exp&gt; sets, boolean hiersChanged) {
+<span class="nc bnc" id="L540" title="All 2 branches missed.">		if (hiersChanged) {</span>
+<span class="nc" id="L541">			this.nDimension = sets.size();</span>
+<span class="nc" id="L542">			this.hiers = new ArrayList&lt;Hierarchy&gt;(nDimension);</span>
+
+<span class="nc bnc" id="L544" title="All 2 branches missed.">			for (Exp set : sets) {</span>
+				try {
+<span class="nc" id="L546">					hiers.add(QuaxUtil.hierForExp(set));</span>
+<span class="nc" id="L547">				} catch (UnknownExpressionException e) {</span>
+<span class="nc" id="L548">					throw new PivotException(&quot;Unknown expression : &quot;</span>
+<span class="nc" id="L549">							+ e.getExpression());</span>
+				}
+			}
+
+<span class="nc" id="L553">			this.containsUF = new boolean[nDimension]; // init false</span>
+<span class="nc" id="L554">			this.ufMemberLists = new List[nDimension];</span>
+<span class="nc" id="L555">			this.generateIndex = 0;</span>
+<span class="nc" id="L556">			this.generateMode = CalcSetMode.Simple;</span>
+		}
+
+<span class="nc bnc" id="L559" title="All 2 branches missed.">		if (posTreeRoot == null) {</span>
+<span class="nc" id="L560">			return;</span>
+		}
+
+<span class="nc" id="L563">		posTreeRoot.getChildren().clear();</span>
+
+<span class="nc" id="L565">		TreeNode&lt;Exp&gt; current = posTreeRoot;</span>
+
+		// it would be fine, if we could get rid of an existing Hierarchize
+		// - but this is not easy to decide.
+		// we will not do it, if there is a &quot;children&quot; function call
+		// not on the highest Level. This indicates that we have drilled
+		// down any member.
+<span class="nc" id="L572">		this.nHierExclude = 0;</span>
+
+<span class="nc" id="L574">		int nChildrenFound = 0;</span>
+<span class="nc" id="L575">		boolean childrenFound = false;</span>
+<span class="nc bnc" id="L576" title="All 2 branches missed.">		for (int i = 0; i &lt; nDimension; i++) {</span>
+			TreeNode&lt;Exp&gt; newNode;
+
+<span class="nc" id="L579">			Exp set = sets.get(i);</span>
+<span class="nc bnc" id="L580" title="All 2 branches missed.">			if (set instanceof SetExp) {</span>
+<span class="nc" id="L581">				SetExp setx = (SetExp) set;</span>
+<span class="nc" id="L582">				newNode = new TreeNode&lt;Exp&gt;(setx.getExpression());</span>
+
+<span class="nc" id="L584">				CalcSetMode mode = setx.getMode();</span>
+<span class="nc bnc" id="L585" title="All 2 branches missed.">				if (mode != CalcSetMode.Simple) {</span>
+<span class="nc" id="L586">					this.generateMode = mode;</span>
+<span class="nc" id="L587">					this.generateIndex = i;</span>
+<span class="nc" id="L588">					this.expGenerate = setx.getExpression();</span>
+				}
+			} else {
+				// can we remove an existing &quot;hierarchize needed&quot;?
+<span class="nc" id="L592">				boolean bChildrenFound = findChildrenCall(set, 0);</span>
+<span class="nc bnc" id="L593" title="All 2 branches missed.">				if (bChildrenFound) {</span>
+<span class="nc" id="L594">					childrenFound = true;</span>
+<span class="nc" id="L595">					nChildrenFound = i + 1;</span>
+				}
+
+<span class="nc" id="L598">				newNode = new TreeNode&lt;Exp&gt;(set);</span>
+<span class="nc bnc" id="L599" title="All 4 branches missed.">				if (generateIndex == i &amp;&amp; generateMode == CalcSetMode.Sticky) {</span>
+					// there was a sticky generate on this hier
+					// reset, if set expression is different now
+<span class="nc bnc" id="L602" title="All 2 branches missed.">					if (!set.equals(expGenerate)) {</span>
+<span class="nc" id="L603">						resetGenerate();</span>
+					}
+				}
+			}
+<span class="nc" id="L607">			current.addChild(newNode);</span>
+<span class="nc" id="L608">			current = newNode;</span>
+
+<span class="nc bnc" id="L610" title="All 2 branches missed.">			if (!QuaxUtil.canHandle(newNode.getReference())) {</span>
+				// indicate that dimension i contains an unknown function,
+				// which cannot be handled in some cases.
+				// this will cause the member list of this dimension to be
+				// stored
+<span class="nc" id="L615">				containsUF[i] = true;</span>
+			}
+		}
+
+<span class="nc" id="L619">		this.qubonMode = true;</span>
+<span class="nc" id="L620">		this.nHierExclude = nDimension - nChildrenFound;</span>
+
+<span class="nc bnc" id="L622" title="All 2 branches missed.">		if (!childrenFound) {</span>
+<span class="nc" id="L623">			this.hierarchizeNeeded = false;</span>
+		}
+<span class="nc" id="L625">	}</span>
+
+	/**
+	 * Recursively find &quot;children&quot; Funcall
+	 */
+	private boolean findChildrenCall(Exp oExp, int level) {
+<span class="nc bnc" id="L631" title="All 2 branches missed.">		if (!QuaxUtil.isFunCall(oExp))</span>
+<span class="nc" id="L632">			return false; // member or level or ...</span>
+<span class="nc bnc" id="L633" title="All 4 branches missed.">		if (level &gt; 0 &amp;&amp; QuaxUtil.isFunCallTo(oExp, &quot;children&quot;)) {</span>
+<span class="nc" id="L634">			return true;</span>
+		}
+
+<span class="nc" id="L637">		int argCount = QuaxUtil.funCallArgCount(oExp);</span>
+<span class="nc bnc" id="L638" title="All 2 branches missed.">		for (int i = 0; i &lt; argCount; i++) {</span>
+<span class="nc bnc" id="L639" title="All 2 branches missed.">			if (findChildrenCall(QuaxUtil.funCallArg(oExp, i), level + 1)) {</span>
+<span class="nc" id="L640">				return true;</span>
+			}
+		}
+
+<span class="nc" id="L644">		return false;</span>
+	}
+
+	/**
+	 * Check, whether a member in a specific position path can be expanded
+	 * 
+	 * @param memberPath
+	 *            position path to be expanded
+	 */
+	public boolean canExpand(List&lt;Member&gt; memberPath) {
+<span class="fc" id="L654">		int dimIndex = memberPath.size() - 1;</span>
+
+		// we only allow expand / collapse for a dimension
+		// left of a &quot;sticky topcount&quot;
+<span class="pc bpc" id="L658" title="1 of 2 branches missed.">		if (!allowNavigate(dimIndex, false)) {</span>
+<span class="nc" id="L659">			return false;</span>
+		}
+
+		// first check the cache
+<span class="fc bfc" id="L663" title="All 2 branches covered.">		if (canExpandPosMap.containsKey(memberPath)) {</span>
+<span class="fc" id="L664">			Boolean bCanExpand = (Boolean) canExpandPosMap.get(memberPath);</span>
+<span class="fc" id="L665">			return bCanExpand.booleanValue();</span>
+		}
+
+		// loop over Position Tree
+		// reject expansion, if the axis already contains child-positions
+<span class="fc" id="L670">		boolean childFound = checkChildPosition(memberPath);</span>
+
+		// cache the result
+<span class="fc bfc" id="L673" title="All 2 branches covered.">		Boolean bool = new Boolean(!childFound);</span>
+<span class="fc" id="L674">		canExpandPosMap.put(memberPath, bool);</span>
+
+<span class="fc bfc" id="L676" title="All 2 branches covered.">		return !childFound;</span>
+	}
+
+	/**
+	 * Expand position path
+	 * 
+	 * @param memberPath
+	 */
+	public void expand(List&lt;Member&gt; memberPath) {
+<span class="pc bpc" id="L685" title="1 of 2 branches missed.">		if (qubonMode) {</span>
+<span class="nc" id="L686">			resolveUnions();</span>
+
+<span class="nc bnc" id="L688" title="All 2 branches missed.">			if (logger.isDebugEnabled()) {</span>
+<span class="nc" id="L689">				logger.debug(&quot;Expand after resolveUnions &quot; + this.toString());</span>
+			}
+		}
+
+<span class="fc" id="L693">		int dimIndex = memberPath.size() - 1;</span>
+
+		// update the position member tree
+		// assume mPath = (Product.Drink,Time.2003,Customers.USA)
+		// 1. find the node N1 for (Product.Drink,Time.2003)
+		// 2. add the child node Customers.USA.Children to the node N1
+		//
+		// if the node N1 for (Product.Drink,Time.2003) was not found:
+		// we look for a matching node and find for instance
+		// node N2 = (Product.AllProducts.Children,Time.2003)
+		// here, we cannot append Customers.USA.Children as a child node.
+		// we add a new branch
+		// (Product.Drink,Time.2003,Customers.USA.Children) to the tree.
+
+<span class="fc" id="L707">		TreeNode&lt;Exp&gt; bestNode = findBestNode(memberPath);</span>
+<span class="fc" id="L708">		int bestNodeIndex = bestNode.getLevel() - 1;</span>
+
+		// add branch at startNode
+		// example
+		// dimensions: Product,MaritalStatus,Gender,Customer
+		// mPath to Drill Down = (Product.AllProducts, MaritalStatus.M,
+		// Gender.AllGender)
+		// MaritalStatus.AllMaritalStatus was drilled down so best match is
+		// (Product.AllProducts)
+		// add the branch from MaritalStatus to this node giving
+		// (Product.AllProducts,MaritalStatus.M,Gender.AllGender.children)
+		// for the Customer Dimension, add all nodes matching
+		// (Product.AllProducts, MaritalStatus.M, Gender.AllGender, * )
+
+		List&lt;TreeNode&lt;Exp&gt;&gt; tailNodeList;
+<span class="pc bpc" id="L723" title="1 of 2 branches missed.">		if (memberPath.size() &lt; nDimension) {</span>
+<span class="nc" id="L724">			tailNodeList = collectTailNodes(posTreeRoot, memberPath);</span>
+		} else {
+<span class="fc" id="L726">			tailNodeList = Collections.emptyList();</span>
+		}
+
+		TreeNode&lt;Exp&gt; newNode;
+
+<span class="fc" id="L731">		Exp oMember = QuaxUtil.expForMember(memberPath.get(dimIndex));</span>
+<span class="fc" id="L732">		Exp fChildren = QuaxUtil.createFunCall(&quot;Children&quot;,</span>
+<span class="fc" id="L733">				new Exp[] { oMember }, Syntax.Property);</span>
+
+<span class="fc" id="L735">		TreeNode&lt;Exp&gt; parent = bestNode;</span>
+
+		// if bestNode is matching mPath[iDim]
+		// we will add the children Funcall to its parent
+		// otherwise create path from bestNode to mPath[iDim-1] and
+		// add the children FunCall there
+<span class="pc bpc" id="L741" title="1 of 2 branches missed.">		if (bestNodeIndex == dimIndex) {</span>
+<span class="fc" id="L742">			parent = bestNode.getParent();</span>
+		} else {
+<span class="nc bnc" id="L744" title="All 2 branches missed.">			for (int i = bestNodeIndex + 1; i &lt; memberPath.size() - 1; i++) {</span>
+<span class="nc" id="L745">				oMember = QuaxUtil.expForMember(memberPath.get(i));</span>
+<span class="nc" id="L746">				newNode = new TreeNode&lt;Exp&gt;(oMember);</span>
+
+<span class="nc" id="L748">				parent.addChild(newNode);</span>
+<span class="nc" id="L749">				parent = newNode;</span>
+			}
+		}
+
+		// any dimension left and including iDim will *not* be excluded from
+		// hierarchize
+<span class="fc" id="L755">		int n = nDimension - dimIndex - 1;</span>
+<span class="pc bpc" id="L756" title="1 of 2 branches missed.">		if (n &lt; nHierExclude) {</span>
+<span class="nc" id="L757">			this.nHierExclude = n;</span>
+		}
+
+<span class="fc" id="L760">		newNode = new TreeNode&lt;Exp&gt;(fChildren);</span>
+<span class="fc" id="L761">		parent.addChild(newNode);</span>
+
+<span class="pc bpc" id="L763" title="1 of 2 branches missed.">		if (memberPath.size() &lt; nDimension) {</span>
+<span class="nc bnc" id="L764" title="All 2 branches missed.">			for (TreeNode&lt;Exp&gt; tailNode : tailNodeList) {</span>
+<span class="nc" id="L765">				newNode.addChild(tailNode.deepCopy());</span>
+			}
+		}
+
+<span class="pc bpc" id="L769" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L770">			logger.debug(&quot;After expand &quot; + this.toString());</span>
+		}
+
+<span class="fc" id="L773">		this.qubonMode = false;</span>
+<span class="fc" id="L774">		this.hierarchizeNeeded = true;</span>
+
+<span class="fc" id="L776">		fireQuaxChanged(false);</span>
+<span class="fc" id="L777">	}</span>
+
+	/**
+	 * Check, whether a member can be expanded
+	 * 
+	 * @param member
+	 *            member to be expanded
+	 */
+	public boolean canExpand(Member member) {
+		// we only allow expand / collapse for a dimension
+		// left of a &quot;sticky topcount&quot;
+<span class="pc bpc" id="L788" title="1 of 2 branches missed.">		if (!allowNavigate(member, false)) {</span>
+<span class="nc" id="L789">			return false;</span>
+		}
+
+		// first check the cache
+<span class="fc bfc" id="L793" title="All 2 branches covered.">		if (canExpandMemberMap.containsKey(member)) {</span>
+<span class="fc" id="L794">			boolean canExpand = canExpandMemberMap.get(member);</span>
+<span class="fc" id="L795">			return canExpand;</span>
+		}
+
+		// loop over Position Tree
+		// reject expansion, if the axis already contains children of member
+<span class="fc bfc" id="L800" title="All 2 branches covered.">		boolean found = !findMemberChild(member);</span>
+
+		// cache the result
+<span class="fc" id="L803">		canExpandMemberMap.put(member, found);</span>
+
+<span class="fc" id="L805">		return found;</span>
+	}
+
+	/**
+	 * Expand member all over position tree
+	 * 
+	 * @param member
+	 */
+	public void expand(final Member member) {
+<span class="pc bpc" id="L814" title="1 of 2 branches missed.">		if (qubonMode) {</span>
+<span class="nc" id="L815">			resolveUnions();</span>
+
+<span class="nc bnc" id="L817" title="All 2 branches missed.">			if (logger.isDebugEnabled()) {</span>
+<span class="nc" id="L818">				logger.debug(&quot;Expand after resolveUnions &quot; + this.toString());</span>
+			}
+		}
+
+		// old stuff, always hierarchize everything
+<span class="fc" id="L823">		this.nHierExclude = 0;</span>
+
+<span class="fc" id="L825">		final int dimIndex = this.dimIdx(member.getDimension());</span>
+<span class="fc" id="L826">		final List&lt;TreeNode&lt;Exp&gt;&gt; nodesForMember = new ArrayList&lt;TreeNode&lt;Exp&gt;&gt;();</span>
+
+		// update the position member tree
+		// wherever we find monMember, expand it
+		// collect all nodes for monMember in workList
+<span class="fc" id="L831">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback find node matching member Path exactly
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="fc" id="L837">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="fc bfc" id="L838" title="All 2 branches covered.">				if (nodeIndex &lt; dimIndex) {</span>
+<span class="fc" id="L839">					return TreeNodeCallback.CONTINUE; // we are below iDim,</span>
+					// don't care
+				}
+
+				// iDimNode == iDim
+				// node Exp must contain children of member[iDim]
+<span class="fc" id="L845">				Exp oExp = node.getReference();</span>
+<span class="pc bpc" id="L846" title="1 of 2 branches missed.">				if (QuaxUtil.isMember(oExp)) {</span>
+<span class="pc bpc" id="L847" title="1 of 2 branches missed.">					if (QuaxUtil.equalMember(oExp, member)) {</span>
+<span class="fc" id="L848">						nodesForMember.add(node);</span>
+					}
+				} else {
+					// must be FunCall
+<span class="nc bnc" id="L852" title="All 2 branches missed.">					if (isMemberInFunCall(oExp, member, dimIndex)) {</span>
+<span class="nc" id="L853">						nodesForMember.add(node);</span>
+					}
+				}
+
+<span class="fc" id="L857">				return TreeNodeCallback.CONTINUE_SIBLING; // continue next</span>
+				// sibling
+			}
+		});
+
+		// add children of member to each node in list
+<span class="fc" id="L863">		Exp oMember = QuaxUtil.expForMember(member);</span>
+<span class="fc" id="L864">		Exp fChildren = QuaxUtil.createFunCall(&quot;Children&quot;,</span>
+<span class="fc" id="L865">				new Exp[] { oMember }, Syntax.Property);</span>
+
+<span class="fc bfc" id="L867" title="All 2 branches covered.">		for (TreeNode&lt;Exp&gt; node : nodesForMember) {</span>
+<span class="fc" id="L868">			TreeNode&lt;Exp&gt; newNode = new TreeNode&lt;Exp&gt;(fChildren);</span>
+
+<span class="pc bpc" id="L870" title="1 of 2 branches missed.">			for (TreeNode&lt;Exp&gt; child : node.getChildren()) {</span>
+<span class="nc" id="L871">				newNode.addChild(child.deepCopy());</span>
+			}
+
+<span class="fc" id="L874">			TreeNode&lt;Exp&gt; parent = node.getParent();</span>
+<span class="fc" id="L875">			parent.addChild(newNode);</span>
+		}
+
+<span class="pc bpc" id="L878" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L879">			logger.debug(&quot;After expand member &quot; + this.toString());</span>
+		}
+
+<span class="fc" id="L882">		this.hierarchizeNeeded = true;</span>
+
+<span class="fc" id="L884">		fireQuaxChanged(false);</span>
+<span class="fc" id="L885">	}</span>
+
+	/**
+	 * Check, whether a member path can be collapsed this is true if there is a
+	 * child position path
+	 * 
+	 * @param memberPath
+	 *            position path to be collapsed
+	 */
+	public boolean canCollapse(List&lt;Member&gt; memberPath) {
+<span class="fc" id="L895">		int dimIndex = memberPath.size() - 1;</span>
+
+		// we only allow expand / collapse for a dimension
+		// left of a &quot;sticky topcount&quot;
+<span class="pc bpc" id="L899" title="1 of 2 branches missed.">		if (!allowNavigate(dimIndex, false)) {</span>
+<span class="nc" id="L900">			return false;</span>
+		}
+
+		// first check the cache
+<span class="pc bpc" id="L904" title="1 of 2 branches missed.">		if (canCollapsePosMap.containsKey(memberPath)) {</span>
+<span class="nc" id="L905">			boolean canCollapse = canCollapsePosMap.get(memberPath);</span>
+<span class="nc" id="L906">			return canCollapse;</span>
+		}
+
+		// loop over Position Tree
+		// collapse is possible, if the axis already contains child-positions
+<span class="fc" id="L911">		boolean childFound = checkChildPosition(memberPath);</span>
+
+		// cache the result
+<span class="fc" id="L914">		canCollapsePosMap.put(memberPath, childFound);</span>
+
+<span class="fc" id="L916">		return childFound;</span>
+	}
+
+	/**
+	 * Remove child positions of mPath from position tree
+	 * 
+	 * @param memberPath
+	 *            member path to be collapsed
+	 */
+	public void collapse(final List&lt;Member&gt; memberPath) {
+<span class="pc bpc" id="L926" title="1 of 2 branches missed.">		if (qubonMode) {</span>
+<span class="nc" id="L927">			resolveUnions();</span>
+
+<span class="nc bnc" id="L929" title="All 2 branches missed.">			if (logger.isDebugEnabled()) {</span>
+<span class="nc" id="L930">				logger.debug(&quot;Collapse after resolveUnions &quot; + this.toString());</span>
+			}
+		}
+
+<span class="fc" id="L934">		final int dimIndex = memberPath.size() - 1;</span>
+
+<span class="fc" id="L936">		int pathSize = memberPath.size();</span>
+
+		// determine FunCall nodes to be split
+<span class="fc" id="L939">		final List&lt;List&lt;TreeNode&lt;Exp&gt;&gt;&gt; splitLists = new ArrayList&lt;List&lt;TreeNode&lt;Exp&gt;&gt;&gt;(</span>
+<span class="fc" id="L940">				pathSize);</span>
+<span class="fc bfc" id="L941" title="All 2 branches covered.">		for (int i = 0; i &lt; pathSize; i++) {</span>
+<span class="fc" id="L942">			splitLists.add(new ArrayList&lt;TreeNode&lt;Exp&gt;&gt;());</span>
+		}
+
+<span class="fc" id="L945">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback Find child paths of member path. Collect FunCall nodes
+			 * above in List. We have a list for any dimension, so that we can
+			 * avoid dependency conflicts when we split the FunCalls.
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+				// check, whether this node matches mPath
+<span class="fc" id="L954">				Exp oExp = node.getReference();</span>
+
+<span class="fc" id="L956">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="fc bfc" id="L957" title="All 2 branches covered.">				if (nodeIndex &lt; dimIndex) {</span>
+<span class="pc bpc" id="L958" title="1 of 2 branches missed.">					if (QuaxUtil.isMember(oExp)) {</span>
+<span class="fc bfc" id="L959" title="All 2 branches covered.">						if (QuaxUtil.equalMember(oExp,</span>
+<span class="fc" id="L960">								memberPath.get(nodeIndex))) {</span>
+<span class="fc" id="L961">							return TreeNodeCallback.CONTINUE;</span>
+						} else {
+<span class="fc" id="L963">							return TreeNodeCallback.CONTINUE_SIBLING;</span>
+						}
+					} else {
+						// Funcall
+<span class="nc bnc" id="L967" title="All 2 branches missed.">						if (isMemberInFunCall(oExp, memberPath.get(nodeIndex),</span>
+<span class="nc" id="L968">								nodeIndex)) {</span>
+<span class="nc" id="L969">							return TreeNodeCallback.CONTINUE;</span>
+						} else {
+<span class="nc" id="L971">							return TreeNodeCallback.CONTINUE_SIBLING;</span>
+						}
+					}
+				}
+				// idi == iDim
+				// oExp *must* be descendant of mPath[iDim] to get deleted
+<span class="fc" id="L977">				boolean found = false;</span>
+<span class="fc bfc" id="L978" title="All 2 branches covered.">				if (QuaxUtil.isMember(oExp)) {</span>
+					// Member
+<span class="pc bpc" id="L980" title="1 of 2 branches missed.">					if (QuaxUtil.isDescendant(memberPath.get(dimIndex), oExp)) {</span>
+<span class="nc" id="L981">						found = true;</span>
+					}
+				} else {
+					// FunCall
+<span class="pc bpc" id="L985" title="1 of 2 branches missed.">					if (isChildOfMemberInFunCall(oExp,</span>
+<span class="fc" id="L986">							memberPath.get(dimIndex), dimIndex)) {</span>
+<span class="fc" id="L987">						found = true;</span>
+					}
+				}
+
+<span class="fc bfc" id="L991" title="All 2 branches covered.">				if (found) {</span>
+					// add this node and all parent nodes, if they are funcalls,
+					// to split list
+<span class="fc" id="L994">					int level = node.getLevel();</span>
+<span class="fc" id="L995">					TreeNode&lt;Exp&gt; currentNode = node;</span>
+<span class="fc bfc" id="L996" title="All 2 branches covered.">					while (level &gt; 0) {</span>
+<span class="fc" id="L997">						Exp o = currentNode.getReference();</span>
+<span class="fc bfc" id="L998" title="All 2 branches covered.">						if (!QuaxUtil.isMember(o)) {</span>
+<span class="fc" id="L999">							List&lt;TreeNode&lt;Exp&gt;&gt; list = splitLists</span>
+<span class="fc" id="L1000">									.get(level - 1);</span>
+							// Funcall
+<span class="pc bpc" id="L1002" title="1 of 2 branches missed.">							if (!list.contains(currentNode)) {</span>
+<span class="fc" id="L1003">								list.add(currentNode);</span>
+							}
+						}
+<span class="fc" id="L1006">						currentNode = currentNode.getParent();</span>
+<span class="fc" id="L1007">						level = currentNode.getLevel();</span>
+					}
+				}
+<span class="fc" id="L1010">				return TreeNodeCallback.CONTINUE_SIBLING;</span>
+			} // handleTreeNode
+		});
+
+		// split all FunCall nodes collected in worklist
+		// start with higher levels to avoid dependency conflicts
+<span class="fc bfc" id="L1016" title="All 2 branches covered.">		for (int i = pathSize - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L1017">			List&lt;TreeNode&lt;Exp&gt;&gt; list = splitLists.get(i);</span>
+<span class="fc" id="L1018">			Member member = memberPath.get(i);</span>
+<span class="fc bfc" id="L1019" title="All 2 branches covered.">			for (TreeNode&lt;Exp&gt; node : list) {</span>
+<span class="fc" id="L1020">				splitFunCall(node, member, i);</span>
+			}
+		}
+
+		// remove child Paths of mPath from position tree
+		// collect nodes to be deleted
+<span class="fc" id="L1026">		final List&lt;TreeNode&lt;Exp&gt;&gt; removeList = new ArrayList&lt;TreeNode&lt;Exp&gt;&gt;();</span>
+
+<span class="fc" id="L1028">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+			/**
+			 * callback remove child nodes of member path, first collect nodes
+			 * in workList
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+				// check, whether this node matches mPath
+<span class="fc" id="L1035">				Exp oExp = node.getReference();</span>
+<span class="fc" id="L1036">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="fc bfc" id="L1037" title="All 2 branches covered.">				if (nodeIndex &lt; dimIndex) {</span>
+<span class="pc bpc" id="L1038" title="1 of 2 branches missed.">					if (QuaxUtil.isMember(oExp)) {</span>
+<span class="fc bfc" id="L1039" title="All 2 branches covered.">						if (QuaxUtil.equalMember(oExp,</span>
+<span class="fc" id="L1040">								memberPath.get(nodeIndex))) {</span>
+<span class="fc" id="L1041">							return TreeNodeCallback.CONTINUE;</span>
+						} else {
+<span class="fc" id="L1043">							return TreeNodeCallback.CONTINUE_SIBLING;</span>
+						}
+					} else {
+						// FunCall
+						// cannot match as we just did the split of FunCalls
+<span class="nc" id="L1048">						return TreeNodeCallback.CONTINUE_SIBLING;</span>
+					}
+<span class="pc bpc" id="L1050" title="1 of 2 branches missed.">				} else if (nodeIndex == dimIndex) {</span>
+					// *must* be descendant of mPath[iDim] to get deleted
+
+<span class="fc bfc" id="L1053" title="All 2 branches covered.">					if (!QuaxUtil.isMember(oExp)) {</span>
+						// FunCall
+<span class="pc bpc" id="L1055" title="1 of 2 branches missed.">						if (QuaxUtil.isFunCallTo(oExp, &quot;Children&quot;)) {</span>
+<span class="fc" id="L1056">							Exp oMember = QuaxUtil.funCallArg(oExp, 0);</span>
+
+<span class="fc" id="L1058">							if (QuaxUtil.expForMember(memberPath.get(dimIndex))</span>
+<span class="pc bpc" id="L1059" title="1 of 2 branches missed.">									.equals(oMember)</span>
+<span class="nc bnc" id="L1060" title="All 2 branches missed.">									|| QuaxUtil.isDescendant(</span>
+<span class="nc" id="L1061">											memberPath.get(dimIndex), oMember)) {</span>
+<span class="fc" id="L1062">								removeList.add(node); // add to delete list</span>
+							}
+<span class="nc bnc" id="L1064" title="All 2 branches missed.">						} else if (QuaxUtil.isFunCallTo(oExp, &quot;{}&quot;)) {</span>
+							// set of members may be there as result of split,
+							// we will remove any descendant member from the
+							// set.
+							// if the set is empty thereafter, we will add the
+							// node
+							// to the remove list.
+<span class="nc" id="L1071">							int argCount = QuaxUtil.funCallArgCount(oExp);</span>
+<span class="nc" id="L1072">							List&lt;Exp&gt; removeMembers = new ArrayList&lt;Exp&gt;();</span>
+<span class="nc bnc" id="L1073" title="All 2 branches missed.">							for (int i = 0; i &lt; argCount; i++) {</span>
+<span class="nc" id="L1074">								Exp oSetMember = QuaxUtil.funCallArg(oExp, i);</span>
+<span class="nc bnc" id="L1075" title="All 2 branches missed.">								if (QuaxUtil.isDescendant(</span>
+<span class="nc" id="L1076">										memberPath.get(dimIndex), oSetMember)) {</span>
+<span class="nc" id="L1077">									removeMembers.add(oSetMember);</span>
+								}
+							}
+<span class="nc" id="L1080">							int nRemove = removeMembers.size();</span>
+<span class="nc bnc" id="L1081" title="All 2 branches missed.">							if (nRemove == argCount) {</span>
+								// all memers in set are descendants, remove the
+								// node
+<span class="nc" id="L1084">								removeList.add(node); // add to delete list</span>
+<span class="nc bnc" id="L1085" title="All 2 branches missed.">							} else if (nRemove &gt; 0) {</span>
+								// remove descendant nodes from set
+<span class="nc" id="L1087">								Exp[] remaining = new Exp[argCount - nRemove];</span>
+<span class="nc" id="L1088">								int j = 0;</span>
+<span class="nc bnc" id="L1089" title="All 2 branches missed.">								for (int i = 0; i &lt; argCount; i++) {</span>
+<span class="nc" id="L1090">									Exp oSetMember = QuaxUtil.funCallArg(oExp,</span>
+<span class="nc" id="L1091">											i);</span>
+<span class="nc bnc" id="L1092" title="All 2 branches missed.">									if (!removeMembers.contains(oSetMember)) {</span>
+<span class="nc" id="L1093">										remaining[j++] = oSetMember;</span>
+									}
+								}
+
+<span class="nc bnc" id="L1097" title="All 2 branches missed.">								if (remaining.length == 1) {</span>
+<span class="nc" id="L1098">									node.setReference(remaining[0]); // single</span>
+									// member
+								} else {
+<span class="nc" id="L1101">									Exp newSet = QuaxUtil.createFunCall(&quot;{}&quot;,</span>
+<span class="nc" id="L1102">											remaining, Syntax.Braces);</span>
+<span class="nc" id="L1103">									node.setReference(newSet);</span>
+								}
+							}
+<span class="nc bnc" id="L1106" title="All 2 branches missed.">						} else if (QuaxUtil.isFunCallTo(oExp, &quot;Union&quot;)) {</span>
+							// HHTASK Cleanup, always use
+							// removeDescendantsFromFunCall
+<span class="nc" id="L1109">							Exp oRemain = removeDescendantsFromFunCall(oExp,</span>
+<span class="nc" id="L1110">									memberPath.get(dimIndex), dimIndex);</span>
+<span class="nc bnc" id="L1111" title="All 2 branches missed.">							if (oRemain == null) {</span>
+<span class="nc" id="L1112">								removeList.add(node);</span>
+							} else {
+<span class="nc" id="L1114">								node.setReference(oRemain);</span>
+							}
+						}
+<span class="fc" id="L1117">						return TreeNodeCallback.CONTINUE_SIBLING;</span>
+<span class="pc bpc" id="L1118" title="1 of 2 branches missed.">					} else if (QuaxUtil.isMember(oExp)) {</span>
+<span class="pc bpc" id="L1119" title="1 of 2 branches missed.">						if (QuaxUtil.isDescendant(memberPath.get(dimIndex),</span>
+<span class="fc" id="L1120">								oExp)) {</span>
+<span class="nc" id="L1121">							removeList.add(node);</span>
+						}
+					}
+<span class="fc" id="L1124">					return TreeNodeCallback.CONTINUE_SIBLING;</span>
+					// always break on level iDim, next sibling
+				} else {
+					// should never get here
+<span class="nc" id="L1128">					throw new PivotException(&quot;Unexpected tree node level &quot;</span>
+<span class="nc" id="L1129">							+ nodeIndex + &quot; &quot;</span>
+<span class="nc" id="L1130">							+ QuaxUtil.memberString(memberPath));</span>
+				}
+			}
+		});
+
+		// remove nodes collected in work list
+<span class="fc bfc" id="L1136" title="All 2 branches covered.">		for (TreeNode&lt;Exp&gt; nodeToRemove : removeList) {</span>
+<span class="fc" id="L1137">			removePathToNode(nodeToRemove);</span>
+		}
+
+		// any dimension left and including iDim will *not* be excluded from
+		// hierarchize
+<span class="fc" id="L1142">		int n = nDimension - dimIndex - 1;</span>
+<span class="pc bpc" id="L1143" title="1 of 2 branches missed.">		if (n &lt; nHierExclude) {</span>
+<span class="nc" id="L1144">			this.nHierExclude = n;</span>
+		}
+
+<span class="pc bpc" id="L1147" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L1148">			logger.debug(&quot;After collapse &quot; + this.toString());</span>
+		}
+
+<span class="fc" id="L1151">		fireQuaxChanged(false);</span>
+<span class="fc" id="L1152">	}</span>
+
+	/**
+	 * Check, whether a member path can be collapsed this is true if there is a
+	 * child position path
+	 * 
+	 * @param member
+	 *            position path to be collapsed
+	 */
+	public boolean canCollapse(Member member) {
+		// we only allow expand / collapse for a dimension
+		// left of a &quot;sticky topcount&quot;
+<span class="pc bpc" id="L1164" title="1 of 2 branches missed.">		if (!allowNavigate(member, false)) {</span>
+<span class="nc" id="L1165">			return false;</span>
+		}
+
+		// first check the cache
+<span class="pc bpc" id="L1169" title="1 of 2 branches missed.">		if (canCollapseMemberMap.containsKey(member)) {</span>
+<span class="nc" id="L1170">			boolean canCollapse = canCollapseMemberMap.get(member);</span>
+<span class="nc" id="L1171">			return canCollapse;</span>
+		}
+
+		// loop over Position Tree
+		// can collapse, if we find a descendant of member
+<span class="fc" id="L1176">		boolean found = findMemberChild(member);</span>
+
+		// cache the result
+<span class="fc" id="L1179">		canCollapseMemberMap.put(member, found);</span>
+
+<span class="fc" id="L1181">		return found;</span>
+	}
+
+	/**
+	 * Remove child nodes of monMember
+	 * 
+	 * @param member
+	 *            member to be collapsed
+	 */
+	public void collapse(final Member member) {
+<span class="pc bpc" id="L1191" title="1 of 2 branches missed.">		if (qubonMode) {</span>
+<span class="nc" id="L1192">			resolveUnions();</span>
+
+<span class="nc bnc" id="L1194" title="All 2 branches missed.">			if (logger.isDebugEnabled()) {</span>
+<span class="nc" id="L1195">				logger.debug(&quot;collapse member after resolveUnions &quot;</span>
+<span class="nc" id="L1196">						+ this.toString());</span>
+			}
+		}
+
+<span class="fc" id="L1200">		final int dimIndex = this.dimIdx(member.getDimension());</span>
+
+<span class="fc" id="L1202">		final List&lt;TreeNode&lt;Exp&gt;&gt; nodesForMember = new ArrayList&lt;TreeNode&lt;Exp&gt;&gt;();</span>
+
+		// update the position member tree
+		// wherever we find a descendant node of monMember, split and remove it
+		// collect all descendant nodes for monMember in workList
+<span class="fc" id="L1207">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback find node matching member Path exactly
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="fc" id="L1213">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="fc bfc" id="L1214" title="All 2 branches covered.">				if (nodeIndex &lt; dimIndex) {</span>
+<span class="fc" id="L1215">					return TreeNodeCallback.CONTINUE; // we are below iDim,</span>
+					// don't care
+				}
+
+				// iDimNode == iDim
+				// node Exp must contain children of member[iDim]
+<span class="fc" id="L1221">				Exp oExp = node.getReference();</span>
+<span class="fc bfc" id="L1222" title="All 2 branches covered.">				if (QuaxUtil.isMember(oExp)) {</span>
+<span class="pc bpc" id="L1223" title="1 of 2 branches missed.">					if (QuaxUtil.isDescendant(member, oExp)) {</span>
+<span class="nc" id="L1224">						nodesForMember.add(node);</span>
+					}
+				} else {
+					// must be FunCall
+<span class="pc bpc" id="L1228" title="1 of 2 branches missed.">					if (isDescendantOfMemberInFunCall(oExp, member, nodeIndex)) {</span>
+<span class="fc" id="L1229">						nodesForMember.add(node);</span>
+					}
+				}
+<span class="fc" id="L1232">				return TreeNodeCallback.CONTINUE_SIBLING; // continue next</span>
+				// sibling
+			}
+		});
+
+<span class="fc bfc" id="L1237" title="All 2 branches covered.">		for (TreeNode&lt;Exp&gt; node : nodesForMember) {</span>
+<span class="fc" id="L1238">			Exp oExp = node.getReference();</span>
+<span class="pc bpc" id="L1239" title="1 of 2 branches missed.">			if (QuaxUtil.isMember(oExp)) {</span>
+<span class="nc" id="L1240">				removePathToNode(node);</span>
+			} else {
+				// FunCall
+<span class="fc" id="L1243">				Exp oComplement = removeDescendantsFromFunCall(oExp, member,</span>
+<span class="fc" id="L1244">						dimIndex);</span>
+<span class="pc bpc" id="L1245" title="1 of 2 branches missed.">				if (oComplement == null) {</span>
+<span class="fc" id="L1246">					removePathToNode(node);</span>
+				} else {
+<span class="nc" id="L1248">					node.setReference(oComplement); // replace node object by</span>
+													// complement
+				}
+			}
+		}
+
+<span class="pc bpc" id="L1254" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L1255">			logger.debug(&quot;After collapse &quot; + this.toString());</span>
+		}
+
+<span class="fc" id="L1258">		fireQuaxChanged(false);</span>
+<span class="fc" id="L1259">	}</span>
+
+	/**
+	 * drill down is possible if there is no sticky generate
+	 */
+	public boolean canDrillDown(Member member) {
+<span class="nc" id="L1265">		return allowNavigate(member, true);</span>
+	}
+
+	/**
+	 * Drill down
+	 * 
+	 * @param member
+	 *            drill down member
+	 */
+	public void drillDown(Member member) {
+<span class="nc" id="L1275">		final int dimIndex = this.dimIdx(member.getDimension());</span>
+
+		// collect the Exp's of all dimensions except iDim
+<span class="nc" id="L1278">		List&lt;Exp&gt; sets = new ArrayList&lt;Exp&gt;(nDimension);</span>
+
+<span class="nc" id="L1280">		Exp oMember = QuaxUtil.expForMember(member);</span>
+<span class="nc" id="L1281">		Exp fChildren = QuaxUtil.createFunCall(&quot;Children&quot;,</span>
+<span class="nc" id="L1282">				new Exp[] { oMember }, Syntax.Property);</span>
+
+<span class="nc bnc" id="L1284" title="All 2 branches missed.">		for (int i = 0; i &lt; nDimension; i++) {</span>
+<span class="nc bnc" id="L1285" title="All 2 branches missed.">			if (i == dimIndex) {</span>
+				// replace drilldown dimension by member.children
+<span class="nc" id="L1287">				sets.add(fChildren);</span>
+			} else {
+				// generate exp for all nodes of this dimension
+<span class="nc" id="L1290">				sets.add(genExpForDim(i));</span>
+			}
+		}
+
+		// regenerate the position tree as crossjoin of sets
+<span class="nc" id="L1295">		regeneratePosTree(sets, false);</span>
+
+<span class="nc" id="L1297">		fireQuaxChanged(false);</span>
+<span class="nc" id="L1298">	}</span>
+
+	/**
+	 * Drill up is possible if at least one member in the tree is not at the top
+	 * level of this hierarchy.
+	 */
+	public boolean canDrillUp(Hierarchy hierarchy) {
+<span class="nc" id="L1305">		final int dimIndex = this.dimIdx(hierarchy.getDimension());</span>
+
+<span class="nc bnc" id="L1307" title="All 2 branches missed.">		if (!allowNavigate(dimIndex, true)) {</span>
+<span class="nc" id="L1308">			return false;</span>
+		}
+
+<span class="nc" id="L1311">		int result = posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * Callback check for member of hierarchy not on top level
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="nc" id="L1317">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="nc bnc" id="L1318" title="All 2 branches missed.">				if (nodeIndex &lt; dimIndex) {</span>
+<span class="nc" id="L1319">					return TreeNodeCallback.CONTINUE;</span>
+				}
+
+				// iDimNode == workInt
+<span class="nc" id="L1323">				Exp oExp = node.getReference();</span>
+<span class="nc bnc" id="L1324" title="All 2 branches missed.">				if (!QuaxUtil.isMember(oExp)) {</span>
+					// FunCall
+<span class="nc bnc" id="L1326" title="All 2 branches missed.">					if (isFunCallNotTopLevel(oExp, nodeIndex)) {</span>
+<span class="nc" id="L1327">						return TreeNodeCallback.BREAK; // got it</span>
+					} else {
+<span class="nc" id="L1329">						return TreeNodeCallback.CONTINUE_SIBLING;</span>
+					}
+				} else {
+					// member
+<span class="nc bnc" id="L1333" title="All 2 branches missed.">					if (QuaxUtil.levelDepthForMember(oExp) &gt; 0) {</span>
+<span class="nc" id="L1334">						return TreeNodeCallback.BREAK; // got it</span>
+					} else {
+<span class="nc" id="L1336">						return TreeNodeCallback.CONTINUE_SIBLING;</span>
+					}
+				}
+			}
+		});
+
+<span class="nc bnc" id="L1342" title="All 2 branches missed.">		return (result == TreeNodeCallback.BREAK);</span>
+	}
+
+	/**
+	 * Drill up
+	 * 
+	 * @param hierarchy
+	 *            drill down member
+	 */
+	public void drillUp(Hierarchy hierarchy) {
+<span class="nc" id="L1352">		int dimIndex = dimIdx(hierarchy.getDimension());</span>
+
+		// collect the Exp's of all dimensions
+<span class="nc" id="L1355">		List&lt;Exp&gt; sets = new ArrayList&lt;Exp&gt;(nDimension);</span>
+
+<span class="nc bnc" id="L1357" title="All 2 branches missed.">		for (int i = 0; i &lt; nDimension; i++) {</span>
+<span class="nc bnc" id="L1358" title="All 2 branches missed.">			if (i == dimIndex) {</span>
+				// replace drillup dimension by drillup set
+<span class="nc" id="L1360">				sets.add(drillupExp(dimIndex, hierarchy));</span>
+			} else {
+<span class="nc" id="L1362">				sets.add(genExpForDim(i));</span>
+			}
+		}
+
+		// regenerate the position tree as crossjoin of sets
+<span class="nc" id="L1367">		regeneratePosTree(sets, false);</span>
+
+<span class="nc" id="L1369">		fireQuaxChanged(false);</span>
+<span class="nc" id="L1370">	}</span>
+
+	/**
+	 * MDX Generation generate Exp from tree
+	 * 
+	 * @return Exp for axis set
+	 */
+	public Exp genExp(boolean genHierarchize) {
+<span class="pc bpc" id="L1378" title="3 of 4 branches missed.">		if (generateMode != CalcSetMode.Simple &amp;&amp; generateIndex &gt; 0) {</span>
+<span class="nc" id="L1379">			return genGenerateExp(genHierarchize);</span>
+		} else {
+<span class="fc" id="L1381">			return genNormalExp(genHierarchize);</span>
+		}
+	}
+
+	/**
+	 * Normal MDX Generation - no Generate
+	 * 
+	 * @return Exp for axis set
+	 */
+	private Exp genNormalExp(boolean genHierarchize) {
+<span class="fc" id="L1391">		ExpGenerator expGenerator = new ExpGenerator();</span>
+
+<span class="fc bfc" id="L1393" title="All 2 branches covered.">		if (!genHierarchize) {</span>
+			// no Hierarchize
+<span class="fc" id="L1395">			expGenerator.init(posTreeRoot, hiers.size());</span>
+<span class="fc" id="L1396">			return expGenerator.generate();</span>
+		}
+
+		// do we need a special hierarchize ?
+		// this will be true, if nHierExclude &gt; 0
+<span class="pc bpc" id="L1401" title="1 of 2 branches missed.">		if (nHierExclude == 0) {</span>
+			// no special hierarchize needed
+<span class="fc" id="L1403">			expGenerator.init(posTreeRoot, hiers.size());</span>
+
+<span class="fc" id="L1405">			Exp exp = expGenerator.generate();</span>
+			// Hierarchize around &quot;everything&quot;
+<span class="fc" id="L1407">			return QuaxUtil.createFunCall(&quot;Hierarchize&quot;, new Exp[] { exp },</span>
+<span class="fc" id="L1408">					Syntax.Function);</span>
+		}
+
+		// special hierarchize to be generated
+		// the Qubon Mode Hierarchies are factored out,
+		// as they consist only of a single set of members.
+		// the left expression will be generated and then hierarchized,
+		// *before* beeing crossjoined to the right Expression.
+<span class="nc" id="L1416">		return genLeftRight(expGenerator, nDimension - nHierExclude,</span>
+<span class="nc" id="L1417">				nHierExclude);</span>
+	}
+
+	/**
+	 * Generate an expression with hierarchize for the hierarchies &lt;
+	 * nHierExclude without hierarchize for the hierarchies &gt;= nHierExclude
+	 */
+	private Exp genLeftRight(ExpGenerator expGenerator, int leftDepth,
+			int rightDepth) {
+		// generate left expression to be hierarchized
+<span class="nc" id="L1427">		Exp leftExp = null;</span>
+<span class="nc bnc" id="L1428" title="All 2 branches missed.">		if (leftDepth &gt; 0) {</span>
+<span class="nc" id="L1429">			TreeNode&lt;Exp&gt; leftRoot = posTreeRoot.deepCopyPrune(leftDepth);</span>
+<span class="nc" id="L1430">			leftRoot.setReference(null);</span>
+
+<span class="nc" id="L1432">			List&lt;Hierarchy&gt; leftHiers = new ArrayList&lt;Hierarchy&gt;(leftDepth);</span>
+<span class="nc bnc" id="L1433" title="All 2 branches missed.">			for (int i = 0; i &lt; leftDepth; i++) {</span>
+<span class="nc" id="L1434">				leftHiers.add(hiers.get(i));</span>
+			}
+
+<span class="nc" id="L1437">			expGenerator.init(leftRoot, leftHiers.size());</span>
+
+<span class="nc" id="L1439">			leftExp = QuaxUtil.createFunCall(&quot;Hierarchize&quot;,</span>
+<span class="nc" id="L1440">					new Exp[] { expGenerator.generate() }, Syntax.Function);</span>
+		}
+
+		// generate the right expression, not to be hierarchized
+<span class="nc" id="L1444">		Exp rightExp = null;</span>
+
+<span class="nc" id="L1446">		List&lt;Hierarchy&gt; rightHiers = new ArrayList&lt;Hierarchy&gt;(rightDepth);</span>
+<span class="nc bnc" id="L1447" title="All 2 branches missed.">		for (int i = 0; i &lt; rightDepth; i++) {</span>
+<span class="nc" id="L1448">			rightHiers.add(hiers.get(leftDepth + i));</span>
+		}
+
+		// go down to the first hier to be excluded from hierarchize
+		// note: the subtree tree under any node of the hierarchy above
+		// is always the same, so we can replicate any subtree under
+		// a node of hierarchy nLeft-1
+<span class="nc" id="L1455">		TreeNode&lt;Exp&gt; rightRoot = new TreeNode&lt;Exp&gt;(null);</span>
+<span class="nc" id="L1456">		TreeNode&lt;Exp&gt; current = posTreeRoot;</span>
+<span class="nc bnc" id="L1457" title="All 2 branches missed.">		for (int i = 0; i &lt; leftDepth; i++) {</span>
+<span class="nc" id="L1458">			List&lt;TreeNode&lt;Exp&gt;&gt; list = current.getChildren();</span>
+<span class="nc" id="L1459">			current = list.get(0);</span>
+		}
+
+<span class="nc" id="L1462">		List&lt;TreeNode&lt;Exp&gt;&gt; list = current.getChildren();</span>
+<span class="nc bnc" id="L1463" title="All 2 branches missed.">		for (TreeNode&lt;Exp&gt; node : list) {</span>
+<span class="nc" id="L1464">			rightRoot.addChild(node.deepCopy());</span>
+		}
+
+<span class="nc" id="L1467">		expGenerator.init(rightRoot, rightHiers.size());</span>
+
+<span class="nc" id="L1469">		rightExp = expGenerator.generate();</span>
+<span class="nc bnc" id="L1470" title="All 2 branches missed.">		if (leftExp == null) {</span>
+<span class="nc" id="L1471">			return rightExp;</span>
+		}
+
+<span class="nc" id="L1474">		Exp exp = QuaxUtil.createFunCall(&quot;CrossJoin&quot;, new Exp[] { leftExp,</span>
+<span class="nc" id="L1475">				rightExp }, Syntax.Function);</span>
+
+<span class="nc" id="L1477">		return exp;</span>
+	}
+
+	/**
+	 * MDX Generation for Generate
+	 * 
+	 * @return Exp for axis set
+	 */
+	private Exp genGenerateExp(boolean genHierarchize) {
+<span class="nc" id="L1486">		ExpGenerator expGenerator = new ExpGenerator();</span>
+
+		// Generate(GSet, FSet) to be generated
+		// hierarchies &gt;= generateIndex will not be &quot;hierarchized&quot;
+		// we expect the hierarchies &gt;= generateIndex to be excluded
+		// from hierarchize.
+<span class="nc bnc" id="L1492" title="All 4 branches missed.">		if (nDimension - generateIndex &gt; nHierExclude &amp;&amp; logger.isWarnEnabled()) {</span>
+<span class="nc" id="L1493">			logger.warn(&quot;Unexpected values: nHierExclude=&quot; + nHierExclude</span>
+<span class="nc" id="L1494">					+ &quot; generateIndex=&quot; + generateIndex);</span>
+		}
+
+		// assume following situation:
+		// 3 hierarchies
+		// time - customers - product
+		// we want top 5 customers, generated for each time member
+		// 1. step
+		// generate expression until customers (only time here), result = set1
+		// if neccessary, put hierarchize around
+		// 2. step
+		// Generate(set1, Topcount(Crossjoin ({Time.Currentmember}, Set for
+		// Customers),
+		// 5, condition))
+		// result = set2
+		// 3.step
+		// append the tail nodes , here Product
+		// Crossjoin(set2 , Product dimension nodes)
+		//
+		// 1. step left expression, potentially hierarchized
+
+<span class="nc" id="L1515">		Exp leftExp = null;</span>
+		// if nHierExclude &gt; nDimension - generateIndex
+		// and nHierExclude &lt; nDimension
+		// the the left expression (inside Generate) will be partly
+		// hierarchized
+<span class="nc bnc" id="L1520" title="All 4 branches missed.">		if (genHierarchize &amp;&amp; nHierExclude &gt; nDimension - generateIndex</span>
+<span class="nc bnc" id="L1521" title="All 2 branches missed.">				&amp;&amp; nHierExclude &lt; nDimension) {</span>
+<span class="nc" id="L1522">			int leftDepth = nDimension - nHierExclude;</span>
+<span class="nc" id="L1523">			int rightDepth = generateIndex - leftDepth;</span>
+
+<span class="nc" id="L1525">			leftExp = genLeftRight(expGenerator, leftDepth, rightDepth);</span>
+		} else {
+<span class="nc" id="L1527">			TreeNode&lt;Exp&gt; leftRoot = posTreeRoot.deepCopyPrune(generateIndex);</span>
+<span class="nc" id="L1528">			leftRoot.setReference(null);</span>
+
+<span class="nc" id="L1530">			List&lt;Hierarchy&gt; leftHiers = new ArrayList&lt;Hierarchy&gt;(generateIndex);</span>
+<span class="nc bnc" id="L1531" title="All 2 branches missed.">			for (int i = 0; i &lt; generateIndex; i++) {</span>
+<span class="nc" id="L1532">				leftHiers.add(hiers.get(i));</span>
+			}
+
+<span class="nc" id="L1535">			expGenerator.init(leftRoot, leftHiers.size());</span>
+<span class="nc" id="L1536">			leftExp = expGenerator.generate();</span>
+
+<span class="nc bnc" id="L1538" title="All 2 branches missed.">			if (genHierarchize) {</span>
+<span class="nc" id="L1539">				leftExp = QuaxUtil.createFunCall(&quot;Hierarchize&quot;,</span>
+<span class="nc" id="L1540">						new Exp[] { leftExp }, Syntax.Function);</span>
+			}
+		}
+
+		// 2. step Generate(set1, Topcount())
+<span class="nc" id="L1545">		TreeNode&lt;Exp&gt; topCountNode = posTreeRoot;</span>
+		// top count node can be anything like topcount, bottomcount, filter
+<span class="nc bnc" id="L1547" title="All 2 branches missed.">		for (int i = 0; i &lt;= generateIndex; i++) {</span>
+			// the path to the topcount node at generateIndex does not matter
+<span class="nc" id="L1549">			List&lt;TreeNode&lt;Exp&gt;&gt; children = topCountNode.getChildren();</span>
+<span class="nc" id="L1550">			topCountNode = children.get(0);</span>
+		}
+
+<span class="nc" id="L1553">		Exp topcount = topCountNode.getReference();</span>
+		// we have to replace the &quot;set&quot; of the topcount function
+<span class="nc" id="L1555">		Exp origTopcountSet = QuaxUtil.funCallArg(topcount, 0);</span>
+
+		// generate the Tuple of dimension.currentmember until generateIndex
+<span class="nc" id="L1558">		Exp currentMembersTuple = genCurrentTuple();</span>
+<span class="nc" id="L1559">		Exp ocj = QuaxUtil.createFunCall(&quot;Crossjoin&quot;, new Exp[] {</span>
+<span class="nc" id="L1560">				currentMembersTuple, origTopcountSet }, Syntax.Function);</span>
+
+		// replace the topcout original set
+<span class="nc" id="L1563">		String fun = QuaxUtil.funCallName(topcount);</span>
+
+<span class="nc" id="L1565">		int n = QuaxUtil.funCallArgCount(topcount);</span>
+<span class="nc" id="L1566">		Exp[] args = new Exp[n];</span>
+<span class="nc bnc" id="L1567" title="All 2 branches missed.">		for (int i = 1; i &lt; n; i++) {</span>
+<span class="nc" id="L1568">			args[i] = QuaxUtil.funCallArg(topcount, i);</span>
+		}
+
+<span class="nc" id="L1571">		args[0] = ocj;</span>
+
+<span class="nc" id="L1573">		Exp newTopcount = QuaxUtil.createFunCall(fun, args, Syntax.Function);</span>
+<span class="nc" id="L1574">		Exp oGenerate = QuaxUtil.createFunCall(&quot;Generate&quot;, new Exp[] { leftExp,</span>
+<span class="nc" id="L1575">				newTopcount }, Syntax.Function);</span>
+
+<span class="nc bnc" id="L1577" title="All 2 branches missed.">		if (generateIndex + 1 == nDimension) {</span>
+<span class="nc" id="L1578">			return oGenerate;</span>
+		}
+
+		// 3. step append the tail nodes
+		// generate CrossJoin
+<span class="nc" id="L1583">		int nRight = nDimension - generateIndex - 1;</span>
+<span class="nc" id="L1584">		Hierarchy[] rightHiers = new Hierarchy[nRight];</span>
+<span class="nc bnc" id="L1585" title="All 2 branches missed.">		for (int i = 1; i &lt;= nRight; i++) {</span>
+<span class="nc" id="L1586">			rightHiers[nRight - i] = hiers.get(nDimension - i);</span>
+		}
+
+<span class="nc" id="L1589">		TreeNode&lt;Exp&gt; root = new TreeNode&lt;Exp&gt;(null);</span>
+<span class="nc" id="L1590">		List&lt;TreeNode&lt;Exp&gt;&gt; list = topCountNode.getChildren();</span>
+<span class="nc bnc" id="L1591" title="All 2 branches missed.">		for (TreeNode&lt;Exp&gt; node : list) {</span>
+<span class="nc" id="L1592">			root.addChild(node.deepCopy());</span>
+		}
+
+<span class="nc" id="L1595">		expGenerator.init(root, rightHiers.length);</span>
+<span class="nc" id="L1596">		Exp rightExp = expGenerator.generate();</span>
+
+<span class="nc" id="L1598">		Exp exp = QuaxUtil.createFunCall(&quot;CrossJoin&quot;, new Exp[] { oGenerate,</span>
+<span class="nc" id="L1599">				rightExp }, Syntax.Function);</span>
+
+<span class="nc" id="L1601">		return exp;</span>
+	}
+
+	/**
+	 * Generate {(dim1.Currentmember, dim2.Currentmember, ... )}
+	 */
+	private Exp genCurrentTuple() {
+<span class="nc" id="L1608">		Exp[] currentsOfDim = new Exp[generateIndex];</span>
+<span class="nc bnc" id="L1609" title="All 2 branches missed.">		for (int i = 0; i &lt; currentsOfDim.length; i++) {</span>
+<span class="nc" id="L1610">			Dimension dim = hiers.get(i).getDimension();</span>
+
+<span class="nc" id="L1612">			currentsOfDim[i] = QuaxUtil.createFunCall(&quot;CurrentMember&quot;,</span>
+<span class="nc" id="L1613">					new Exp[] { QuaxUtil.expForDim(dim) }, Syntax.Property);</span>
+		}
+
+		Exp oTuple;
+<span class="nc bnc" id="L1617" title="All 2 branches missed.">		if (generateIndex &gt; 1) {</span>
+<span class="nc" id="L1618">			oTuple = QuaxUtil.createFunCall(&quot;()&quot;, currentsOfDim,</span>
+<span class="nc" id="L1619">					Syntax.Parentheses);</span>
+		} else {
+<span class="nc" id="L1621">			oTuple = currentsOfDim[0]; // just dimension.currentmember</span>
+		}
+
+		// generate set braces around tuple
+<span class="nc" id="L1625">		Exp oSet = QuaxUtil.createFunCall(&quot;{}&quot;, new Exp[] { oTuple },</span>
+<span class="nc" id="L1626">				Syntax.Braces);</span>
+
+<span class="nc" id="L1628">		return oSet;</span>
+	}
+
+	/**
+	 * @return true if child position can be found
+	 */
+	private boolean checkChildPosition(final List&lt;Member&gt; memberPath) {
+
+<span class="fc" id="L1636">		int result = posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback find node matching member Path exactly
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="fc" id="L1642">				int dimIndex = memberPath.size() - 1;</span>
+<span class="fc" id="L1643">				int nodeIndex = node.getLevel() - 1;</span>
+
+<span class="fc" id="L1645">				Exp oExp = node.getReference();</span>
+<span class="fc bfc" id="L1646" title="All 2 branches covered.">				if (nodeIndex &lt; dimIndex) {</span>
+					// node Exp must match member[iDim]
+<span class="pc bpc" id="L1648" title="1 of 2 branches missed.">					if (QuaxUtil.isMember(oExp)) {</span>
+<span class="fc bfc" id="L1649" title="All 2 branches covered.">						if (QuaxUtil.equalMember(oExp,</span>
+<span class="fc" id="L1650">								memberPath.get(nodeIndex))) {</span>
+<span class="fc" id="L1651">							return TreeNodeCallback.CONTINUE;</span>
+						} else {
+<span class="fc" id="L1653">							return TreeNodeCallback.CONTINUE_SIBLING; // continue</span>
+							// next
+							// sibling
+						}
+					} else {
+						// must be FunCall
+<span class="nc bnc" id="L1659" title="All 2 branches missed.">						if (isMemberInFunCall(oExp, memberPath.get(nodeIndex),</span>
+<span class="nc" id="L1660">								nodeIndex)) {</span>
+<span class="nc" id="L1661">							return TreeNodeCallback.CONTINUE;</span>
+						} else {
+<span class="nc" id="L1663">							return TreeNodeCallback.CONTINUE_SIBLING; // continue</span>
+							// next
+							// sibling
+						}
+					}
+				}
+
+				// iDimNode == iDim
+				// node Exp must contain children of member[iDim]
+<span class="fc bfc" id="L1672" title="All 2 branches covered.">				if (QuaxUtil.isMember(oExp)) {</span>
+<span class="pc bpc" id="L1673" title="1 of 2 branches missed.">					if (QuaxUtil.checkParent(memberPath.get(nodeIndex), oExp)) {</span>
+<span class="nc" id="L1674">						return TreeNodeCallback.BREAK; // found</span>
+					} else {
+<span class="fc" id="L1676">						return TreeNodeCallback.CONTINUE_SIBLING; // continue</span>
+						// next
+						// sibling
+					}
+				} else {
+					// must be FunCall
+<span class="fc bfc" id="L1682" title="All 2 branches covered.">					if (isChildOfMemberInFunCall(oExp,</span>
+<span class="fc" id="L1683">							memberPath.get(nodeIndex), nodeIndex)) {</span>
+<span class="fc" id="L1684">						return TreeNodeCallback.BREAK; // found</span>
+					} else {
+<span class="fc" id="L1686">						return TreeNodeCallback.CONTINUE_SIBLING; // continue</span>
+						// next
+						// sibling
+					}
+				}
+			}
+		});
+
+<span class="fc bfc" id="L1694" title="All 2 branches covered.">		return (result == TreeNodeCallback.BREAK);</span>
+	}
+
+	/**
+	 * Resolve the qubon mode unions and crossjoins only used in &quot;old&quot; expand
+	 * mode
+	 */
+	private void resolveUnions() {
+<span class="nc" id="L1702">		final List&lt;List&lt;Exp&gt;&gt; setLists = new ArrayList&lt;List&lt;Exp&gt;&gt;(nDimension);</span>
+
+<span class="nc bnc" id="L1704" title="All 2 branches missed.">		for (int i = 0; i &lt; nDimension; i++) {</span>
+<span class="nc" id="L1705">			setLists.add(new ArrayList&lt;Exp&gt;());</span>
+		}
+
+<span class="nc" id="L1708">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback resolve sets of any dimension
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="nc" id="L1714">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="nc" id="L1715">				Exp oExp = node.getReference();</span>
+<span class="nc bnc" id="L1716" title="All 2 branches missed.">				if (!QuaxUtil.isMember(oExp)) {</span>
+					// FunCall
+<span class="nc" id="L1718">					funToList(oExp, setLists.get(nodeIndex));</span>
+				} else {
+					// member
+<span class="nc" id="L1721">					setLists.get(nodeIndex).add(oExp);</span>
+				}
+<span class="nc" id="L1723">				return TreeNodeCallback.CONTINUE;</span>
+			}
+		});
+
+		// unions and sets are resolved, now resolve crossjoins
+<span class="nc" id="L1728">		this.posTreeRoot = new TreeNode&lt;Exp&gt;(null);</span>
+<span class="nc" id="L1729">		crossJoinTree(setLists, posTreeRoot, 0);</span>
+
+<span class="nc" id="L1731">		this.qubonMode = false;</span>
+<span class="nc" id="L1732">	}</span>
+
+	/**
+	 * Find the best tree node for member path (longest match)
+	 */
+	private TreeNode&lt;Exp&gt; findBestNode(final List&lt;Member&gt; memberPath) {
+		@SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L1739">		final TreeNode&lt;Exp&gt;[] bestNode = new TreeNode[1];</span>
+<span class="fc" id="L1740">		bestNode[0] = posTreeRoot;</span>
+
+<span class="fc" id="L1742">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback find node matching member Path exactly
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="fc" id="L1748">				int dimIndex = memberPath.size() - 1;</span>
+<span class="fc" id="L1749">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="fc" id="L1750">				Exp oExp = node.getReference();</span>
+
+<span class="pc bpc" id="L1752" title="1 of 2 branches missed.">				if (!QuaxUtil.isMember(oExp)) {</span>
+<span class="nc" id="L1753">					return TreeNodeCallback.CONTINUE_SIBLING; // continue next</span>
+					// sibling
+				}
+
+<span class="pc bpc" id="L1757" title="1 of 2 branches missed.">				if (QuaxUtil.equalMember(oExp, memberPath.get(nodeIndex))) {</span>
+					// match
+<span class="fc bfc" id="L1759" title="All 2 branches covered.">					if (nodeIndex == dimIndex) {</span>
+						// found exactly matching node
+<span class="fc" id="L1761">						bestNode[0] = node;</span>
+<span class="fc" id="L1762">						return TreeNodeCallback.BREAK;</span>
+					} else {
+						// best match up to now
+<span class="fc" id="L1765">						bestNode[0] = node;</span>
+<span class="fc" id="L1766">						return TreeNodeCallback.CONTINUE;</span>
+					}
+				} else {
+					// no match
+<span class="nc" id="L1770">					return TreeNodeCallback.CONTINUE_SIBLING; // continue next</span>
+					// sibling
+				}
+			}
+		});
+
+<span class="fc" id="L1776">		return bestNode[0];</span>
+	}
+
+	/**
+	 * Collect tail nodes for all nodes matching member path
+	 */
+	private List&lt;TreeNode&lt;Exp&gt;&gt; collectTailNodes(TreeNode&lt;Exp&gt; startNode,
+			final List&lt;Member&gt; memberPath) {
+
+<span class="nc" id="L1785">		final List&lt;TreeNode&lt;Exp&gt;&gt; tailNodes = new ArrayList&lt;TreeNode&lt;Exp&gt;&gt;();</span>
+<span class="nc" id="L1786">		startNode.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback find node matching mPath collect tail nodes
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="nc" id="L1792">				int dimIndex = memberPath.size() - 1;</span>
+<span class="nc" id="L1793">				int nodeIndex = node.getLevel() - 1;</span>
+
+<span class="nc" id="L1795">				Exp oExp = node.getReference();</span>
+<span class="nc" id="L1796">				boolean match = false;</span>
+<span class="nc bnc" id="L1797" title="All 2 branches missed.">				if (QuaxUtil.isMember(oExp)) {</span>
+					// exp is member
+<span class="nc bnc" id="L1799" title="All 2 branches missed.">					if (QuaxUtil.equalMember(oExp, memberPath.get(nodeIndex))) {</span>
+<span class="nc" id="L1800">						match = true;</span>
+					}
+				} else {
+					// must be FunCall
+<span class="nc bnc" id="L1804" title="All 2 branches missed.">					if (isMemberInFunCall(oExp, memberPath.get(nodeIndex),</span>
+<span class="nc" id="L1805">							nodeIndex)) {</span>
+<span class="nc" id="L1806">						match = true;</span>
+					}
+				}
+
+<span class="nc bnc" id="L1810" title="All 2 branches missed.">				if (match) {</span>
+<span class="nc bnc" id="L1811" title="All 2 branches missed.">					if (nodeIndex == dimIndex) {</span>
+						// add the children to the tail list
+<span class="nc" id="L1813">						tailNodes.addAll(node.getChildren());</span>
+<span class="nc" id="L1814">						return TreeNodeCallback.CONTINUE_SIBLING;</span>
+					} else {
+						// iDimNode &lt; iDim
+<span class="nc" id="L1817">						return TreeNodeCallback.CONTINUE;</span>
+					}
+				} else
+<span class="nc" id="L1820">					return TreeNodeCallback.CONTINUE_SIBLING; // no match,</span>
+				// continue next
+				// sibling
+			}
+		});
+
+<span class="nc" id="L1826">		return tailNodes;</span>
+	}
+
+	private boolean findMemberChild(final Member member) {
+<span class="fc" id="L1830">		final int iDim = this.dimIdx(member.getDimension());</span>
+
+<span class="fc" id="L1832">		int result = posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback find child node of member
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="fc" id="L1838">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="fc bfc" id="L1839" title="All 2 branches covered.">				if (nodeIndex &lt; iDim) {</span>
+<span class="fc" id="L1840">					return TreeNodeCallback.CONTINUE; // we are below iDim,</span>
+					// don't care
+				}
+
+				// iDimNode == iDim
+				// node Exp must contain children of member[iDim]
+<span class="fc" id="L1846">				Exp oExp = node.getReference();</span>
+<span class="fc bfc" id="L1847" title="All 2 branches covered.">				if (QuaxUtil.isMember(oExp)) {</span>
+<span class="pc bpc" id="L1848" title="1 of 2 branches missed.">					if (QuaxUtil.checkParent(member, oExp)) {</span>
+<span class="nc" id="L1849">						return TreeNodeCallback.BREAK; // found</span>
+					}
+				} else {
+					// must be FunCall
+<span class="pc bpc" id="L1853" title="1 of 2 branches missed.">					if (isChildOfMemberInFunCall(oExp, member, nodeIndex)) {</span>
+<span class="fc" id="L1854">						return TreeNodeCallback.BREAK; // found</span>
+					}
+				}
+<span class="fc" id="L1857">				return TreeNodeCallback.CONTINUE_SIBLING; // continue next</span>
+				// sibling
+			}
+		});
+
+<span class="fc bfc" id="L1862" title="All 2 branches covered.">		return (result == TreeNodeCallback.BREAK);</span>
+	}
+
+	/**
+	 * Build tree resolving crossjoin
+	 * 
+	 * @param currentNode
+	 * @param dimIndex
+	 */
+	private void crossJoinTree(List&lt;List&lt;Exp&gt;&gt; setLists,
+			TreeNode&lt;Exp&gt; currentNode, int dimIndex) {
+<span class="nc bnc" id="L1873" title="All 2 branches missed.">		for (Exp oExp : setLists.get(dimIndex)) {</span>
+<span class="nc" id="L1874">			TreeNode&lt;Exp&gt; newNode = new TreeNode&lt;Exp&gt;(oExp);</span>
+<span class="nc bnc" id="L1875" title="All 2 branches missed.">			if (dimIndex &lt; nDimension - 1) {</span>
+<span class="nc" id="L1876">				crossJoinTree(setLists, newNode, dimIndex + 1);</span>
+			}
+
+<span class="nc" id="L1879">			currentNode.addChild(newNode);</span>
+		}
+<span class="nc" id="L1881">	}</span>
+
+	/**
+	 * Split Funcall to node and complement
+	 */
+	private void splitFunCall(TreeNode&lt;Exp&gt; funCall, Member member,
+			int hierIndex) {
+<span class="fc" id="L1888">		Exp oExp = funCall.getReference();</span>
+
+		// it is possible (if the split member is of dimension to be collapsed),
+		// that this funcall does not contain member.
+		// Then - there is nothing to split.
+<span class="pc bpc" id="L1893" title="1 of 2 branches missed.">		if (!isMemberInFunCall(oExp, member, funCall.getLevel() - 1)) {</span>
+<span class="nc" id="L1894">			return; // nothing to split</span>
+		}
+
+<span class="fc" id="L1897">		Exp oComplement = createComplement(oExp, member, hierIndex); // can be</span>
+																		// null
+<span class="pc bpc" id="L1899" title="1 of 2 branches missed.">		if (oComplement == null) {</span>
+			// this means, that the set resolves to a single member,
+			// mPath[iDimNode]
+<span class="nc" id="L1902">			funCall.setReference(QuaxUtil.expForMember(member));</span>
+			// nothing to split
+<span class="nc" id="L1904">			return;</span>
+		}
+
+		// split the Funcall
+<span class="fc" id="L1908">		TreeNode&lt;Exp&gt; newNodeComplement = new TreeNode&lt;Exp&gt;(oComplement);</span>
+<span class="fc" id="L1909">		TreeNode&lt;Exp&gt; newNodeMember = new TreeNode&lt;Exp&gt;(</span>
+<span class="fc" id="L1910">				QuaxUtil.expForMember(member));</span>
+
+		// add the children
+<span class="pc bpc" id="L1913" title="1 of 2 branches missed.">		for (TreeNode&lt;Exp&gt; child : funCall.getChildren()) {</span>
+<span class="nc" id="L1914">			newNodeComplement.addChild(child.deepCopy());</span>
+<span class="nc" id="L1915">			newNodeMember.addChild(child.deepCopy());</span>
+		}
+
+<span class="fc" id="L1918">		TreeNode&lt;Exp&gt; insert = funCall.getParent();</span>
+<span class="fc" id="L1919">		funCall.remove();</span>
+
+<span class="fc" id="L1921">		insert.addChild(newNodeComplement);</span>
+<span class="fc" id="L1922">		insert.addChild(newNodeMember);</span>
+<span class="fc" id="L1923">	}</span>
+
+	/**
+	 * Remove Children node
+	 * 
+	 * @param nodeToRemove
+	 */
+	private void removePathToNode(TreeNode&lt;Exp&gt; nodeToRemove) {
+<span class="pc bpc" id="L1931" title="1 of 2 branches missed.">		if (nodeToRemove.getParent().getChildren().size() &gt; 1) {</span>
+			// this node has siblings, just remove it
+<span class="fc" id="L1933">			nodeToRemove.remove();</span>
+		} else {
+			// no siblings, remove the first parent node having siblings
+<span class="nc" id="L1936">			TreeNode&lt;Exp&gt; parent = nodeToRemove.getParent();</span>
+<span class="nc bnc" id="L1937" title="All 2 branches missed.">			while (parent.getParent().getChildren().size() == 1) {</span>
+<span class="nc" id="L1938">				parent = parent.getParent();</span>
+			}
+
+<span class="nc bnc" id="L1941" title="All 2 branches missed.">			if (parent.getLevel() &gt; 0) { // should always be true</span>
+<span class="nc" id="L1942">				parent.remove();</span>
+			}
+		}
+<span class="fc" id="L1945">	}</span>
+
+	/**
+	 * generate Exp for all nodes of dimension iDimension
+	 * 
+	 * @param dimIndex
+	 * @return Exp for all nodes
+	 */
+	public Exp genExpForDim(int dimIndex) {
+		// if we got a generate function on this hier, preserve it
+<span class="nc bnc" id="L1955" title="All 4 branches missed.">		if (generateIndex &gt;= 0 &amp;&amp; generateIndex == dimIndex</span>
+<span class="nc bnc" id="L1956" title="All 2 branches missed.">				&amp;&amp; generateMode != CalcSetMode.Simple) {</span>
+<span class="nc" id="L1957">			TreeNode&lt;Exp&gt; topCountNode = posTreeRoot.getChildren().get(0);</span>
+<span class="nc bnc" id="L1958" title="All 2 branches missed.">			for (int i = 0; i &lt; generateIndex; i++) {</span>
+				// the path to the topcount node at generateIndex does not
+				// matter
+<span class="nc" id="L1961">				List&lt;TreeNode&lt;Exp&gt;&gt; children = topCountNode.getChildren();</span>
+<span class="nc" id="L1962">				topCountNode = children.get(0);</span>
+			}
+
+<span class="nc" id="L1965">			Exp topcount = topCountNode.getReference();</span>
+
+<span class="nc" id="L1967">			SetExp setexp = new SetExp(generateMode, topcount,</span>
+<span class="nc" id="L1968">					hiers.get(dimIndex));</span>
+
+<span class="nc" id="L1970">			return setexp;</span>
+		}
+
+<span class="nc" id="L1973">		List&lt;Exp&gt; funCallList = collectFunCalls(dimIndex);</span>
+<span class="nc" id="L1974">		List&lt;Exp&gt; memberList = collectMembers(dimIndex);</span>
+
+<span class="nc" id="L1976">		cleanupMemberList(funCallList, memberList, dimIndex);</span>
+
+<span class="nc bnc" id="L1978" title="All 4 branches missed.">		if (funCallList.isEmpty() &amp;&amp; memberList.size() == 1) {</span>
+<span class="nc" id="L1979">			return memberList.get(0); // single member only</span>
+		}
+
+<span class="nc" id="L1982">		Exp mSet = null;</span>
+<span class="nc bnc" id="L1983" title="All 2 branches missed.">		if (memberList.size() &gt; 0) {</span>
+<span class="nc" id="L1984">			Exp[] aExp = memberList.toArray(new Exp[0]);</span>
+<span class="nc" id="L1985">			mSet = QuaxUtil.createFunCall(&quot;{}&quot;, aExp, Syntax.Braces);</span>
+		}
+
+<span class="nc bnc" id="L1988" title="All 2 branches missed.">		if (funCallList.isEmpty()) {</span>
+<span class="nc" id="L1989">			return mSet;</span>
+		}
+
+<span class="nc bnc" id="L1992" title="All 4 branches missed.">		if (funCallList.size() == 1 &amp;&amp; mSet == null) {</span>
+<span class="nc" id="L1993">			return funCallList.get(0);</span>
+		}
+
+		Exp set;
+
+		int start;
+<span class="nc bnc" id="L1999" title="All 2 branches missed.">		if (mSet != null) {</span>
+<span class="nc" id="L2000">			set = mSet;</span>
+<span class="nc" id="L2001">			start = 0;</span>
+		} else {
+<span class="nc" id="L2003">			set = funCallList.get(0);</span>
+<span class="nc" id="L2004">			start = 1;</span>
+		}
+<span class="nc bnc" id="L2006" title="All 2 branches missed.">		for (int j = start; j &lt; funCallList.size(); j++) {</span>
+<span class="nc" id="L2007">			set = QuaxUtil.createFunCall(&quot;Union&quot;,</span>
+<span class="nc" id="L2008">					new Exp[] { set, funCallList.get(j) }, Syntax.Function);</span>
+		}
+
+<span class="nc" id="L2011">		return set;</span>
+	}
+
+	/**
+	 * Create drillup expression for dimension
+	 * 
+	 * @param dimIndex
+	 *            dimension to be drilled up
+	 * @return
+	 */
+	private Exp drillupExp(int dimIndex, Hierarchy hierarchy) {
+		// the drillup logic is:
+		// for all members of this dimension find the deepest level.
+		// find the members of this deepest level
+		// find the grandfathers of those deepest members
+		// drill up goes to the children of those grandfathers.
+		// special cases:
+		// the deepest level has all members (level.members)
+		// the drillup goes to parent_level.members
+
+<span class="nc" id="L2031">		final int[] maxLevel = new int[1];</span>
+<span class="nc" id="L2032">		maxLevel[0] = 0;</span>
+
+<span class="nc" id="L2034">		List&lt;Exp&gt; drillupList = collectDrillup(dimIndex, maxLevel);</span>
+
+<span class="nc" id="L2036">		Exp expForHier = null;</span>
+<span class="nc bnc" id="L2037" title="All 2 branches missed.">		if (maxLevel[0] == 0) {</span>
+			// drillup goes to top level members
+			// we generate an explicit member set rather than level.members
+			// usually, this is a single member &quot;All xy&quot;
+<span class="nc" id="L2041">			expForHier = QuaxUtil.topLevelMembers(hierarchy, false);</span>
+		} else {
+<span class="nc bnc" id="L2043" title="All 2 branches missed.">			if (drillupList.size() == 1) {</span>
+<span class="nc" id="L2044">				expForHier = drillupList.get(0);</span>
+			} else {
+				// more than 1 set expression , need union
+<span class="nc bnc" id="L2047" title="All 2 branches missed.">				for (Exp oExp : drillupList) {</span>
+<span class="nc bnc" id="L2048" title="All 2 branches missed.">					if (expForHier == null) {</span>
+<span class="nc" id="L2049">						expForHier = oExp;</span>
+					} else {
+<span class="nc" id="L2051">						expForHier = QuaxUtil.createFunCall(&quot;Union&quot;, new Exp[] {</span>
+<span class="nc" id="L2052">								expForHier, oExp }, Syntax.Function);</span>
+					}
+				}
+			}
+		}
+
+<span class="nc" id="L2058">		return expForHier;</span>
+	}
+
+	/**
+	 * Collect drillup Exps of dimension i
+	 * 
+	 * @param dimIndex
+	 */
+	private List&lt;Exp&gt; collectDrillup(final int dimIndex, final int[] maxLevel) {
+<span class="nc" id="L2067">		final List&lt;Exp&gt; drillupList = new ArrayList&lt;Exp&gt;();</span>
+
+<span class="nc" id="L2069">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback collect GrandFathers of deepest for dimension workInt
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="nc" id="L2075">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="nc bnc" id="L2076" title="All 2 branches missed.">				if (nodeIndex &lt; dimIndex) {</span>
+<span class="nc" id="L2077">					return TreeNodeCallback.CONTINUE;</span>
+				}
+
+				// iDimNode == workInt
+<span class="nc" id="L2081">				Exp oExp = node.getReference();</span>
+<span class="nc bnc" id="L2082" title="All 2 branches missed.">				if (!QuaxUtil.isMember(oExp)) {</span>
+					// FunCall
+<span class="nc" id="L2084">					addFunCallToDrillup(drillupList, oExp, maxLevel);</span>
+				} else {
+					// member
+<span class="nc" id="L2087">					Member m = QuaxUtil.memberForExp(oExp);</span>
+<span class="nc" id="L2088">					QuaxUtil.addMemberUncles(drillupList, m, maxLevel);</span>
+				}
+
+<span class="nc" id="L2091">				return TreeNodeCallback.CONTINUE_SIBLING;</span>
+			}
+		});
+
+<span class="nc" id="L2095">		return drillupList;</span>
+	}
+
+	/**
+	 * Collect FunCalls of dimension iDim
+	 * 
+	 * @param dimIndex
+	 */
+	private List&lt;Exp&gt; collectFunCalls(final int dimIndex) {
+<span class="nc bnc" id="L2104" title="All 2 branches missed.">		if (posTreeRoot == null) {</span>
+<span class="nc" id="L2105">			return Collections.emptyList();</span>
+		}
+
+<span class="nc" id="L2108">		final List&lt;Exp&gt; funCalls = new ArrayList&lt;Exp&gt;();</span>
+<span class="nc" id="L2109">		final List&lt;String&gt; uniqueNames = new ArrayList&lt;String&gt;();</span>
+
+<span class="nc" id="L2111">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback collect Funcalls of dimension workInt
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="nc" id="L2117">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="nc bnc" id="L2118" title="All 2 branches missed.">				if (nodeIndex &lt; dimIndex) {</span>
+<span class="nc" id="L2119">					return TreeNodeCallback.CONTINUE;</span>
+				}
+
+				// iDimNode == workInt
+<span class="nc" id="L2123">				Exp oExp = node.getReference();</span>
+<span class="nc bnc" id="L2124" title="All 2 branches missed.">				if (!QuaxUtil.isMember(oExp)) {</span>
+					// FunCall need unique representation in order to avoid
+					// doubles
+<span class="nc" id="L2127">					String unique = QuaxUtil.funString(oExp).toString();</span>
+<span class="nc bnc" id="L2128" title="All 2 branches missed.">					if (!uniqueNames.contains(unique)) {</span>
+<span class="nc" id="L2129">						funCalls.add(oExp);</span>
+<span class="nc" id="L2130">						uniqueNames.add(unique);</span>
+					}
+				}
+
+<span class="nc" id="L2134">				return TreeNodeCallback.CONTINUE_SIBLING;</span>
+			}
+		});
+
+<span class="nc" id="L2138">		return funCalls;</span>
+	}
+
+	/**
+	 * Remove members from member list being in FunCall list
+	 * 
+	 * @param funCalls
+	 * @param memberList
+	 * @param dimIndex
+	 */
+	private void cleanupMemberList(List&lt;Exp&gt; funCalls, List&lt;Exp&gt; memberList,
+			int dimIndex) {
+<span class="nc bnc" id="L2150" title="All 4 branches missed.">		if (!funCalls.isEmpty() &amp;&amp; !memberList.isEmpty()) {</span>
+<span class="nc bnc" id="L2151" title="All 2 branches missed.">			MemberLoop: for (Iterator&lt;Exp&gt; itMem = memberList.iterator(); itMem</span>
+<span class="nc" id="L2152">					.hasNext();) {</span>
+<span class="nc" id="L2153">				Exp oMember = itMem.next();</span>
+
+<span class="nc" id="L2155">				Member m = QuaxUtil.memberForExp(oMember);</span>
+<span class="nc bnc" id="L2156" title="All 2 branches missed.">				for (Iterator&lt;Exp&gt; itFun = funCalls.iterator(); itFun.hasNext();) {</span>
+<span class="nc" id="L2157">					Exp oFun = itFun.next();</span>
+<span class="nc bnc" id="L2158" title="All 2 branches missed.">					if (isMemberInFunCall(oFun, m, dimIndex)) {</span>
+<span class="nc" id="L2159">						itMem.remove();</span>
+<span class="nc" id="L2160">						continue MemberLoop;</span>
+					}
+				}
+			}
+		}
+<span class="nc" id="L2165">	}</span>
+
+	/**
+	 * Collect Members of dimension iDim
+	 * 
+	 * @param dimIndex
+	 */
+	private List&lt;Exp&gt; collectMembers(final int dimIndex) {
+<span class="nc bnc" id="L2173" title="All 2 branches missed.">		if (posTreeRoot == null) {</span>
+<span class="nc" id="L2174">			return Collections.emptyList();</span>
+		}
+
+<span class="nc" id="L2177">		final List&lt;Exp&gt; memberList = new ArrayList&lt;Exp&gt;();</span>
+
+<span class="nc" id="L2179">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback collect Funcalls of dimension workInt
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="nc" id="L2185">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="nc bnc" id="L2186" title="All 2 branches missed.">				if (nodeIndex &lt; dimIndex) {</span>
+<span class="nc" id="L2187">					return TreeNodeCallback.CONTINUE;</span>
+				}
+
+				// iDimNode == workInt
+<span class="nc" id="L2191">				Exp oExp = node.getReference();</span>
+<span class="nc bnc" id="L2192" title="All 4 branches missed.">				if (QuaxUtil.isMember(oExp) &amp;&amp; !memberList.contains(oExp)) {</span>
+<span class="nc" id="L2193">					memberList.add(oExp);</span>
+				}
+
+<span class="nc" id="L2196">				return TreeNodeCallback.CONTINUE_SIBLING;</span>
+			}
+		});
+
+<span class="nc" id="L2200">		return memberList;</span>
+	}
+
+	/**
+	 * Add a Funcall to Drillup list
+	 */
+	private void addFunCallToDrillup(List&lt;Exp&gt; list, Exp oFun, int[] maxLevel) {
+<span class="nc bnc" id="L2207" title="All 2 branches missed.">		if (QuaxUtil.isFunCallTo(oFun, &quot;Union&quot;)) {</span>
+<span class="nc bnc" id="L2208" title="All 2 branches missed.">			for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L2209">				Exp fExp = QuaxUtil.funCallArg(oFun, i);</span>
+<span class="nc" id="L2210">				addFunCallToDrillup(list, fExp, maxLevel);</span>
+			}
+<span class="nc bnc" id="L2212" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;{}&quot;)) {</span>
+			// set of members
+<span class="nc bnc" id="L2214" title="All 2 branches missed.">			for (int i = 0; i &lt; QuaxUtil.funCallArgCount(oFun); i++) {</span>
+<span class="nc" id="L2215">				Exp oMember = QuaxUtil.funCallArg(oFun, i);</span>
+<span class="nc" id="L2216">				Member m = QuaxUtil.memberForExp(oMember);</span>
+<span class="nc" id="L2217">				QuaxUtil.addMemberUncles(list, m, maxLevel);</span>
+			}
+<span class="nc bnc" id="L2219" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;Children&quot;)) {</span>
+<span class="nc" id="L2220">			Exp oMember = QuaxUtil.funCallArg(oFun, 0);</span>
+<span class="nc" id="L2221">			Member m = QuaxUtil.memberForExp(oMember);</span>
+<span class="nc" id="L2222">			QuaxUtil.addMemberSiblings(list, m, maxLevel);</span>
+<span class="nc bnc" id="L2223" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;Descendants&quot;)) {</span>
+<span class="nc" id="L2224">			Exp oMember = QuaxUtil.funCallArg(oFun, 0);</span>
+<span class="nc" id="L2225">			Member m = QuaxUtil.memberForExp(oMember);</span>
+<span class="nc" id="L2226">			Exp oLevel = QuaxUtil.funCallArg(oFun, 1);</span>
+<span class="nc" id="L2227">			Level lev = QuaxUtil.levelForExp(oLevel);</span>
+
+<span class="nc" id="L2229">			int level = m.getLevel().getDepth();</span>
+<span class="nc" id="L2230">			int levlev = lev.getDepth();</span>
+<span class="nc bnc" id="L2231" title="All 2 branches missed.">			if (levlev == level + 1) {</span>
+<span class="nc" id="L2232">				QuaxUtil.addMemberSiblings(list, m, maxLevel); // same as</span>
+																// children
+<span class="nc bnc" id="L2234" title="All 2 branches missed.">			} else if (levlev == level + 2) {</span>
+<span class="nc" id="L2235">				QuaxUtil.addMemberChildren(list, m, maxLevel); // m *is*</span>
+																// grandfather
+			} else {
+				// add descendants of parent level
+<span class="nc" id="L2239">				Level parentLevel = QuaxUtil.getParentLevel(lev);</span>
+<span class="nc" id="L2240">				QuaxUtil.addMemberDescendants(list, m, parentLevel, maxLevel);</span>
+			}
+<span class="nc bnc" id="L2242" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;Members&quot;)) {</span>
+			// add parent level members
+<span class="nc" id="L2244">			Exp oLevel = QuaxUtil.funCallArg(oFun, 0);</span>
+<span class="nc" id="L2245">			Level lev = QuaxUtil.levelForExp(oLevel);</span>
+
+<span class="nc" id="L2247">			int levlev = lev.getDepth();</span>
+<span class="nc bnc" id="L2248" title="All 2 branches missed.">			if (levlev == 0) {</span>
+<span class="nc" id="L2249">				return; // cannot drill up</span>
+			}
+
+<span class="nc" id="L2252">			Level parentLevel = QuaxUtil.getParentLevel(lev);</span>
+<span class="nc" id="L2253">			QuaxUtil.addLevelMembers(list, parentLevel, maxLevel);</span>
+		} else {
+			// must be Top/Bottom Function with arg[0] being base set
+<span class="nc" id="L2256">			Exp oFun2 = QuaxUtil.funCallArg(oFun, 0);</span>
+<span class="nc" id="L2257">			addFunCallToDrillup(list, oFun2, maxLevel); // do not have a better</span>
+														// solution
+		}
+<span class="nc" id="L2260">	}</span>
+
+	/**
+	 * Add FunCall to list
+	 * 
+	 * @param oFun
+	 * @param list
+	 */
+	private void funToList(Exp oFun, List&lt;Exp&gt; list) {
+<span class="nc bnc" id="L2269" title="All 2 branches missed.">		if (QuaxUtil.isFunCallTo(oFun, &quot;Union&quot;)) {</span>
+<span class="nc" id="L2270">			Exp arg0 = QuaxUtil.funCallArg(oFun, 0);</span>
+<span class="nc" id="L2271">			Exp arg1 = QuaxUtil.funCallArg(oFun, 1);</span>
+
+<span class="nc" id="L2273">			funToList(arg0, list);</span>
+<span class="nc" id="L2274">			funToList(arg1, list);</span>
+<span class="nc bnc" id="L2275" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;{}&quot;)) {</span>
+<span class="nc bnc" id="L2276" title="All 2 branches missed.">			for (int i = 0; i &lt; QuaxUtil.funCallArgCount(oFun); i++) {</span>
+				// member sets are resolved to single members
+<span class="nc" id="L2278">				Exp oMember = QuaxUtil.funCallArg(oFun, i);</span>
+<span class="nc" id="L2279">				list.add(oMember);</span>
+			}
+		} else {
+<span class="nc" id="L2282">			list.add(oFun);</span>
+		}
+<span class="nc" id="L2284">	}</span>
+
+	/**
+	 * Check, whether member is in set defined by funcall
+	 * 
+	 * @param oExp
+	 *            set funcall
+	 * @param member
+	 * @return
+	 */
+	private boolean isMemberInFunCall(Exp oExp, Member member, int hierIndex) {
+<span class="fc" id="L2295">		boolean result = false;</span>
+
+		try {
+<span class="fc" id="L2298">			result = QuaxUtil.isMemberInFunCall(oExp, member);</span>
+<span class="nc" id="L2299">		} catch (UnknownExpressionException e) {</span>
+			// it is an Unkown FunCall
+			// assume &quot;true&quot; if the member is in the List for this dimension
+<span class="nc bnc" id="L2302" title="All 2 branches missed.">			if (ufMemberLists[hierIndex] == null)</span>
+<span class="nc" id="L2303">				throw new PivotException(</span>
+<span class="nc" id="L2304">						&quot;Unknow Function - no member list, dimension=&quot;</span>
+<span class="nc" id="L2305">								+ hierIndex + &quot; function=&quot; + e.getExpression());</span>
+
+<span class="nc" id="L2307">			result = ufMemberLists[hierIndex].contains(member);</span>
+		}
+
+<span class="fc" id="L2310">		return result;</span>
+	}
+
+	/**
+	 * Check whether a Funcall does NOT resolve to top level of hierarchy
+	 */
+	private boolean isFunCallNotTopLevel(Exp oExp, int hierIndex) {
+<span class="nc" id="L2317">		boolean result = false;</span>
+
+		try {
+<span class="nc" id="L2320">			result = QuaxUtil.isFunCallNotTopLevel(oExp);</span>
+<span class="nc" id="L2321">		} catch (UnknownExpressionException e) {</span>
+			// it is an Unkown FunCall
+			// assume &quot;true&quot; if the member is in the List for this dimension
+<span class="nc bnc" id="L2324" title="All 2 branches missed.">			if (ufMemberLists[hierIndex] == null) {</span>
+<span class="nc" id="L2325">				throw new PivotException(</span>
+<span class="nc" id="L2326">						&quot;Unknow Function - no member list, dimension=&quot;</span>
+<span class="nc" id="L2327">								+ hierIndex + &quot; function=&quot; + e.getExpression());</span>
+			}
+
+<span class="nc" id="L2330">			List&lt;Member&gt; members = ufMemberLists[hierIndex];</span>
+<span class="nc bnc" id="L2331" title="All 2 branches missed.">			for (Member member : members) {</span>
+<span class="nc bnc" id="L2332" title="All 2 branches missed.">				if (member.getLevel().getDepth() &gt; 0) {</span>
+<span class="nc" id="L2333">					result = true;</span>
+<span class="nc" id="L2334">					break;</span>
+				}
+			}
+		}
+
+<span class="nc" id="L2339">		return result;</span>
+	}
+
+	/**
+	 * Check whether a Funcall contains child of member
+	 */
+	private boolean isChildOfMemberInFunCall(Exp oExp, Member member,
+			int hierIndex) {
+<span class="fc" id="L2347">		boolean result = false;</span>
+
+		try {
+<span class="fc" id="L2350">			result = QuaxUtil.isChildOfMemberInFunCall(oExp, member);</span>
+<span class="nc" id="L2351">		} catch (UnknownExpressionException e) {</span>
+			// it is an Unkown FunCall
+			// assume &quot;true&quot; if the member List for this dimension contains
+			// child of member
+<span class="nc bnc" id="L2355" title="All 2 branches missed.">			if (ufMemberLists[hierIndex] == null) {</span>
+<span class="nc" id="L2356">				throw new PivotException(</span>
+<span class="nc" id="L2357">						&quot;Unknow Function - no member list, dimension=&quot;</span>
+<span class="nc" id="L2358">								+ hierIndex + &quot; function=&quot; + e.getExpression());</span>
+			}
+
+<span class="nc" id="L2361">			List&lt;Member&gt; members = ufMemberLists[hierIndex];</span>
+<span class="nc bnc" id="L2362" title="All 2 branches missed.">			for (Member m : members) {</span>
+<span class="nc bnc" id="L2363" title="All 2 branches missed.">				if (QuaxUtil.checkParent(member, QuaxUtil.expForMember(m))) {</span>
+<span class="nc" id="L2364">					result = true;</span>
+<span class="nc" id="L2365">					break;</span>
+				}
+			}
+		}
+
+<span class="fc" id="L2370">		return result;</span>
+	}
+
+	/**
+	 * Check whether a Funcall contains descendant of member
+	 */
+	private boolean isDescendantOfMemberInFunCall(Exp oExp, Member member,
+			int hierIndex) {
+<span class="fc" id="L2378">		boolean result = false;</span>
+
+		try {
+<span class="fc" id="L2381">			result = QuaxUtil.isDescendantOfMemberInFunCall(oExp, member);</span>
+<span class="nc" id="L2382">		} catch (UnknownExpressionException e) {</span>
+			// it is an Unkown FunCall
+			// assume &quot;true&quot; if the member List for this dimension contains
+			// descendant of member
+<span class="nc bnc" id="L2386" title="All 2 branches missed.">			if (ufMemberLists[hierIndex] == null) {</span>
+<span class="nc" id="L2387">				throw new PivotException(</span>
+<span class="nc" id="L2388">						&quot;Unknow Function - no member list, dimension=&quot;</span>
+<span class="nc" id="L2389">								+ hierIndex + &quot; function=&quot; + e.getExpression());</span>
+			}
+
+<span class="nc" id="L2392">			List&lt;Member&gt; members = ufMemberLists[hierIndex];</span>
+<span class="nc bnc" id="L2393" title="All 2 branches missed.">			for (Member m : members) {</span>
+<span class="nc bnc" id="L2394" title="All 2 branches missed.">				if (QuaxUtil.checkDescendantM(member, m)) {</span>
+<span class="nc" id="L2395">					result = true;</span>
+<span class="nc" id="L2396">					break;</span>
+				}
+			}
+		}
+
+<span class="fc" id="L2401">		return result;</span>
+	}
+
+	/**
+	 * Remove descendants of member from Funcall set
+	 * 
+	 * @return the remainder after descendants were removed
+	 */
+	private Exp removeDescendantsFromFunCall(Exp oFun, Member member,
+			int hierIndex) {
+		try {
+<span class="fc" id="L2412">			return removeDescendantsFromFunCall(oFun, member);</span>
+<span class="nc" id="L2413">		} catch (UnknownExpressionException e) {</span>
+			// the FunCall was not handled,
+			// assume that it is an &quot;Unkown FunCall&quot; which was resolved by the
+			// latest result
+			// the &quot;Unknown Functions&quot; are probably not properly resolved
+<span class="nc bnc" id="L2418" title="All 2 branches missed.">			if (logger.isErrorEnabled()) {</span>
+<span class="nc" id="L2419">				logger.error(&quot;Unkown FunCall &quot; + QuaxUtil.funCallName(oFun));</span>
+			}
+
+<span class="nc bnc" id="L2422" title="All 2 branches missed.">			if (ufMemberLists[hierIndex] == null) {</span>
+<span class="nc" id="L2423">				throw new PivotException(</span>
+<span class="nc" id="L2424">						&quot;Unknow Function - no member list, dimension=&quot;</span>
+<span class="nc" id="L2425">								+ hierIndex + &quot; function=&quot; + e.getExpression());</span>
+			}
+
+<span class="nc" id="L2428">			List&lt;Exp&gt; newList = new ArrayList&lt;Exp&gt;();</span>
+
+<span class="nc" id="L2430">			List&lt;Member&gt; members = ufMemberLists[hierIndex];</span>
+<span class="nc bnc" id="L2431" title="All 2 branches missed.">			for (Member m : members) {</span>
+<span class="nc bnc" id="L2432" title="All 2 branches missed.">				if (!QuaxUtil.checkDescendantM(member, m)) {</span>
+<span class="nc" id="L2433">					newList.add(QuaxUtil.expForMember(m));</span>
+				}
+			}
+
+<span class="nc" id="L2437">			return QuaxUtil.createFunCall(&quot;{}&quot;,</span>
+<span class="nc" id="L2438">					newList.toArray(new Exp[newList.size()]), Syntax.Braces);</span>
+		}
+	}
+
+	/**
+	 * Remove descendants of member from Funcall set
+	 * 
+	 * @return the remainder after descendants were removed
+	 */
+	private Exp removeDescendantsFromFunCall(Exp oFun, Member member)
+			throws UnknownExpressionException {
+<span class="pc bpc" id="L2449" title="1 of 2 branches missed.">		if (QuaxUtil.isFunCallTo(oFun, &quot;Children&quot;)) {</span>
+			// as we know, that there is a descendent of m in x.children,
+			// we know that *all* x.children are descendants of m
+<span class="fc" id="L2452">			return null;</span>
+<span class="nc bnc" id="L2453" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;Descendants&quot;)) {</span>
+			// as we know, that there is a descendent of m in x.descendants
+			// we know that *all* x.descendants are descendants of m
+<span class="nc" id="L2456">			return null;</span>
+<span class="nc bnc" id="L2457" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;Members&quot;)) {</span>
+<span class="nc" id="L2458">			Level level = member.getLevel();</span>
+
+			List&lt;Member&gt; members;
+			try {
+<span class="nc" id="L2462">				members = level.getMembers();</span>
+<span class="nc" id="L2463">			} catch (OlapException e) {</span>
+<span class="nc" id="L2464">				throw new PivotException(e);</span>
+			}
+
+<span class="nc" id="L2467">			List&lt;Member&gt; remainder = new ArrayList&lt;Member&gt;(members.size());</span>
+<span class="nc bnc" id="L2468" title="All 2 branches missed.">			for (Member m : members) {</span>
+<span class="nc bnc" id="L2469" title="All 2 branches missed.">				if (!QuaxUtil.isDescendant(member, m))</span>
+<span class="nc" id="L2470">					remainder.add(m);</span>
+			}
+
+<span class="nc" id="L2473">			return QuaxUtil.createMemberSet(remainder);</span>
+<span class="nc bnc" id="L2474" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;{}&quot;)) {</span>
+<span class="nc" id="L2475">			List&lt;Member&gt; remainder = new ArrayList&lt;Member&gt;();</span>
+
+<span class="nc bnc" id="L2477" title="All 2 branches missed.">			for (int i = 0; i &lt; QuaxUtil.funCallArgCount(oFun); i++) {</span>
+<span class="nc" id="L2478">				Exp arg = QuaxUtil.funCallArg(oFun, i);</span>
+
+<span class="nc bnc" id="L2480" title="All 2 branches missed.">				if (!QuaxUtil.isDescendant(member, arg)) {</span>
+<span class="nc" id="L2481">					remainder.add(QuaxUtil.memberForExp(arg));</span>
+				}
+			}
+
+<span class="nc" id="L2485">			return QuaxUtil.createMemberSet(remainder);</span>
+<span class="nc bnc" id="L2486" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;Union&quot;)) {</span>
+<span class="nc" id="L2487">			Exp[] uargs = new Exp[2];</span>
+<span class="nc" id="L2488">			uargs[0] = removeDescendantsFromFunCall(</span>
+<span class="nc" id="L2489">					QuaxUtil.funCallArg(oFun, 0), member);</span>
+<span class="nc" id="L2490">			uargs[1] = removeDescendantsFromFunCall(</span>
+<span class="nc" id="L2491">					QuaxUtil.funCallArg(oFun, 0), member);</span>
+
+<span class="nc bnc" id="L2493" title="All 4 branches missed.">			if (uargs[0] == null &amp;&amp; uargs[1] == null) {</span>
+<span class="nc" id="L2494">				return null;</span>
+			}
+
+<span class="nc bnc" id="L2497" title="All 2 branches missed.">			if (uargs[1] == null) {</span>
+<span class="nc" id="L2498">				return uargs[0];</span>
+			}
+
+<span class="nc bnc" id="L2501" title="All 2 branches missed.">			if (uargs[0] == null) {</span>
+<span class="nc" id="L2502">				return uargs[1];</span>
+			}
+
+<span class="nc bnc" id="L2505" title="All 2 branches missed.">			if (QuaxUtil.isMember(uargs[0])) {</span>
+<span class="nc" id="L2506">				uargs[0] = QuaxUtil.createFunCall(&quot;{}&quot;, new Exp[] { uargs[0] },</span>
+<span class="nc" id="L2507">						Syntax.Braces);</span>
+			}
+
+<span class="nc bnc" id="L2510" title="All 2 branches missed.">			if (QuaxUtil.isMember(uargs[1])) {</span>
+<span class="nc" id="L2511">				uargs[1] = QuaxUtil.createFunCall(&quot;{}&quot;, new Exp[] { uargs[1] },</span>
+<span class="nc" id="L2512">						Syntax.Braces);</span>
+			}
+
+<span class="nc bnc" id="L2515" title="All 2 branches missed.">			if (QuaxUtil.isFunCallTo(uargs[0], &quot;{}&quot;)</span>
+<span class="nc bnc" id="L2516" title="All 2 branches missed.">					&amp;&amp; QuaxUtil.isFunCallTo(uargs[1], &quot;{}&quot;)) {</span>
+<span class="nc" id="L2517">				return unionOfSets(uargs[0], uargs[1]);</span>
+			}
+
+<span class="nc" id="L2520">			return QuaxUtil.createFunCall(&quot;Union&quot;, uargs, Syntax.Function);</span>
+		}
+
+<span class="nc" id="L2523">		throw new UnknownExpressionException(QuaxUtil.funCallName(oFun));</span>
+	}
+
+	/**
+	 * Determine complement set (set minus member)
+	 */
+	private Exp createComplement(Exp oFun, Member member, int hierIndex) {
+		try {
+<span class="fc" id="L2531">			return createComplement(oFun, member);</span>
+<span class="nc" id="L2532">		} catch (UnknownExpressionException e) {</span>
+			// the FunCall was not handled,
+			// assume that it is an &quot;Unkown FunCall&quot; which was resolved by the
+			// latest result
+			// the &quot;Unknown Functions&quot; are probably not properly resolved
+<span class="nc bnc" id="L2537" title="All 2 branches missed.">			if (logger.isErrorEnabled()) {</span>
+<span class="nc" id="L2538">				logger.error(&quot;Unkown FunCall &quot; + QuaxUtil.funCallName(oFun));</span>
+			}
+
+<span class="nc bnc" id="L2541" title="All 2 branches missed.">			if (ufMemberLists[hierIndex] == null) {</span>
+<span class="nc" id="L2542">				throw new PivotException(</span>
+<span class="nc" id="L2543">						&quot;Unknow Function - no member list, dimension=&quot;</span>
+<span class="nc" id="L2544">								+ hierIndex + &quot; function=&quot; + e.getExpression());</span>
+			}
+
+<span class="nc" id="L2547">			List&lt;Exp&gt; newList = new ArrayList&lt;Exp&gt;();</span>
+
+<span class="nc" id="L2549">			List&lt;Member&gt; members = ufMemberLists[hierIndex];</span>
+<span class="nc bnc" id="L2550" title="All 2 branches missed.">			for (Member m : members) {</span>
+<span class="nc bnc" id="L2551" title="All 2 branches missed.">				if (!member.equals(m)) {</span>
+<span class="nc" id="L2552">					newList.add(QuaxUtil.expForMember(m));</span>
+				}
+			}
+
+<span class="nc" id="L2556">			return QuaxUtil.createFunCall(&quot;{}&quot;,</span>
+<span class="nc" id="L2557">					newList.toArray(new Exp[newList.size()]), Syntax.Braces);</span>
+		}
+	}
+
+	/**
+	 * Determine complement set (set minus member)
+	 * 
+	 * @throws UnknownExpressionException
+	 */
+	private Exp createComplement(Exp oFun, Member member)
+			throws UnknownExpressionException {
+<span class="pc bpc" id="L2568" title="1 of 2 branches missed.">		if (QuaxUtil.isFunCallTo(oFun, &quot;Children&quot;)) {</span>
+<span class="fc" id="L2569">			Exp oParent = QuaxUtil.funCallArg(oFun, 0);</span>
+
+			// if member is NOT a child of Funcall arg, then the complement is
+			// the original set
+<span class="fc" id="L2573">			Exp oMember = QuaxUtil.expForMember(member);</span>
+<span class="pc bpc" id="L2574" title="1 of 2 branches missed.">			if (!QuaxUtil.checkChild(member, oParent)) {</span>
+<span class="fc" id="L2575">				return oFun;</span>
+			}
+
+<span class="nc" id="L2578">			List&lt;Exp&gt; oChildren = QuaxUtil.getChildMembers(oParent);</span>
+<span class="nc bnc" id="L2579" title="All 2 branches missed.">			if (oChildren.size() &lt; 2) {</span>
+<span class="nc" id="L2580">				return null;</span>
+			}
+
+<span class="nc" id="L2583">			Exp[] mComplement = new Exp[oChildren.size() - 1];</span>
+<span class="nc" id="L2584">			int ii = 0;</span>
+<span class="nc bnc" id="L2585" title="All 2 branches missed.">			for (Exp child : oChildren) {</span>
+<span class="nc bnc" id="L2586" title="All 2 branches missed.">				if (!child.equals(oMember)) {</span>
+<span class="nc" id="L2587">					mComplement[ii++] = child;</span>
+				}
+			}
+
+<span class="nc bnc" id="L2591" title="All 2 branches missed.">			if (mComplement.length == 1) {</span>
+<span class="nc" id="L2592">				return mComplement[0]; // single member</span>
+			}
+
+<span class="nc" id="L2595">			Exp oComplement = QuaxUtil.createFunCall(&quot;{}&quot;, mComplement,</span>
+<span class="nc" id="L2596">					Syntax.Braces);</span>
+
+<span class="nc" id="L2598">			return oComplement;</span>
+<span class="nc bnc" id="L2599" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;{}&quot;)) {</span>
+<span class="nc" id="L2600">			int nComp = 0;</span>
+<span class="nc" id="L2601">			int nArg = QuaxUtil.funCallArgCount(oFun);</span>
+
+<span class="nc" id="L2603">			Exp oMember = QuaxUtil.expForMember(member);</span>
+<span class="nc bnc" id="L2604" title="All 2 branches missed.">			for (int i = 0; i &lt; nArg; i++) {</span>
+<span class="nc" id="L2605">				Exp o = QuaxUtil.funCallArg(oFun, i);</span>
+<span class="nc bnc" id="L2606" title="All 2 branches missed.">				if (!(o.equals(oMember))) {</span>
+<span class="nc" id="L2607">					++nComp;</span>
+				}
+			}
+
+<span class="nc bnc" id="L2611" title="All 2 branches missed.">			if (nComp == 0) {</span>
+<span class="nc" id="L2612">				return null;</span>
+			}
+
+<span class="nc bnc" id="L2615" title="All 2 branches missed.">			if (nComp == nArg) {</span>
+				// complement = same
+<span class="nc" id="L2617">				return oFun;</span>
+			}
+
+<span class="nc" id="L2620">			Exp[] mComplement = new Exp[nComp];</span>
+<span class="nc" id="L2621">			int ii = 0;</span>
+<span class="nc bnc" id="L2622" title="All 2 branches missed.">			for (int i = 0; i &lt; nArg; i++) {</span>
+<span class="nc" id="L2623">				Exp o = QuaxUtil.funCallArg(oFun, i);</span>
+<span class="nc bnc" id="L2624" title="All 2 branches missed.">				if (!(o.equals(oMember)))</span>
+<span class="nc" id="L2625">					mComplement[ii++] = o;</span>
+			}
+
+<span class="nc bnc" id="L2628" title="All 2 branches missed.">			if (mComplement.length == 1) {</span>
+<span class="nc" id="L2629">				return mComplement[0]; // single member</span>
+			}
+
+<span class="nc" id="L2632">			Exp oComplement = QuaxUtil.createFunCall(&quot;{}&quot;, mComplement,</span>
+<span class="nc" id="L2633">					Syntax.Braces);</span>
+
+<span class="nc" id="L2635">			return oComplement;</span>
+<span class="nc bnc" id="L2636" title="All 2 branches missed.">		} else if (QuaxUtil.isFunCallTo(oFun, &quot;Union&quot;)) {</span>
+			// Union of FunCalls, recursive
+			// Complement(Union(a,b)) = Union(Complement(a), Complement(b))
+<span class="nc" id="L2639">			Exp[] complements = new Exp[2];</span>
+<span class="nc bnc" id="L2640" title="All 2 branches missed.">			for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L2641">				Exp o = QuaxUtil.funCallArg(oFun, i);</span>
+<span class="nc" id="L2642">				complements[i] = createComplement(o, member);</span>
+			}
+
+<span class="nc bnc" id="L2645" title="All 4 branches missed.">			if (complements[0] == null &amp;&amp; complements[1] == null) {</span>
+<span class="nc" id="L2646">				return null;</span>
+<span class="nc bnc" id="L2647" title="All 4 branches missed.">			} else if (complements[0] != null &amp;&amp; complements[1] == null) {</span>
+<span class="nc" id="L2648">				return complements[0]; // No Union needed</span>
+<span class="nc bnc" id="L2649" title="All 4 branches missed.">			} else if (complements[0] == null &amp;&amp; complements[1] != null) {</span>
+<span class="nc" id="L2650">				return complements[1]; // No Union needed</span>
+			} else {
+				// complement can be single member
+<span class="nc bnc" id="L2653" title="All 2 branches missed.">				if (!QuaxUtil.isFunCall(complements[0])) {</span>
+<span class="nc" id="L2654">					complements[0] = QuaxUtil.createFunCall(&quot;{}&quot;,</span>
+<span class="nc" id="L2655">							new Exp[] { complements[0] }, Syntax.Braces);</span>
+				}
+
+<span class="nc bnc" id="L2658" title="All 2 branches missed.">				if (!QuaxUtil.isFunCall(complements[1])) {</span>
+<span class="nc" id="L2659">					complements[1] = QuaxUtil.createFunCall(&quot;{}&quot;,</span>
+<span class="nc" id="L2660">							new Exp[] { complements[1] }, Syntax.Braces);</span>
+				}
+
+<span class="nc bnc" id="L2663" title="All 2 branches missed.">				if (QuaxUtil.isFunCallTo(complements[0], &quot;{}&quot;)</span>
+<span class="nc bnc" id="L2664" title="All 2 branches missed.">						&amp;&amp; QuaxUtil.isFunCallTo(complements[1], &quot;{}&quot;)) {</span>
+					// create single set as union ow two sets
+<span class="nc" id="L2666">					return unionOfSets(complements[0], complements[1]);</span>
+				}
+
+<span class="nc" id="L2669">				Exp newUnion = QuaxUtil.createFunCall(&quot;Union&quot;, complements,</span>
+<span class="nc" id="L2670">						Syntax.Function);</span>
+
+<span class="nc" id="L2672">				return newUnion;</span>
+			}
+		}
+
+		// the fun call is not supported
+<span class="nc" id="L2677">		throw new UnknownExpressionException(QuaxUtil.funCallName(oFun));</span>
+	}
+
+	/**
+	 * Create new set as union of 2 sets
+	 */
+	private Exp unionOfSets(Exp set1, Exp set2) {
+		// create single set as union ow two sets
+<span class="nc" id="L2685">		int n1 = QuaxUtil.funCallArgCount(set1);</span>
+<span class="nc" id="L2686">		int n2 = QuaxUtil.funCallArgCount(set2);</span>
+
+<span class="nc" id="L2688">		Exp[] newSet = new Exp[n1 + n2];</span>
+<span class="nc" id="L2689">		int i = 0;</span>
+<span class="nc bnc" id="L2690" title="All 2 branches missed.">		for (int j = 0; j &lt; n1; j++) {</span>
+<span class="nc" id="L2691">			newSet[i++] = QuaxUtil.funCallArg(set1, j);</span>
+		}
+
+<span class="nc bnc" id="L2694" title="All 2 branches missed.">		for (int j = 0; j &lt; n2; j++) {</span>
+<span class="nc" id="L2695">			newSet[i++] = QuaxUtil.funCallArg(set2, j);</span>
+		}
+<span class="nc" id="L2697">		return QuaxUtil.createFunCall(&quot;{}&quot;, newSet, Syntax.Braces);</span>
+	}
+
+	/**
+	 * @param iHier
+	 *            index of Hierarchy
+	 * @param list
+	 *            Member List
+	 */
+	public void setHierMemberList(int iHier, List list) {
+<span class="nc" id="L2707">		ufMemberLists[iHier] = list;</span>
+<span class="nc" id="L2708">	}</span>
+
+	/**
+	 * 
+	 * @param iHier
+	 *            index of Hierarchy
+	 * @return true, if the Hierarchy has an unknown function
+	 */
+	public boolean isUnknownFunction(int iHier) {
+<span class="nc" id="L2717">		return containsUF[iHier];</span>
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
+	 */
+	public Serializable bookmarkState() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L2727">		return null;</span>
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
+	 */
+	public void restoreState(Serializable bookmark) {
+		// TODO Auto-generated method stub
+
+<span class="nc" id="L2738">	}</span>
+
+	/**
+	 * String representation (debugging)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+<span class="fc" id="L2747">		final StringBuilder builder = new StringBuilder();</span>
+<span class="fc" id="L2748">		builder.append(&quot;Number of hierarchies excluded from HIEARARCHIZE=&quot;</span>
+<span class="fc" id="L2749">				+ nHierExclude);</span>
+<span class="fc" id="L2750">		builder.append('\n');</span>
+
+<span class="pc bpc" id="L2752" title="1 of 2 branches missed.">		if (posTreeRoot == null) {</span>
+<span class="nc" id="L2753">			builder.append(&quot;Root=null&quot;);</span>
+<span class="nc" id="L2754">			return builder.toString();</span>
+		}
+
+<span class="fc" id="L2757">		posTreeRoot.walkChildren(new TreeNodeCallback&lt;Exp&gt;() {</span>
+
+			/**
+			 * callback quax to String
+			 */
+			public int handleTreeNode(TreeNode&lt;Exp&gt; node) {
+<span class="fc" id="L2763">				int nodeIndex = node.getLevel() - 1;</span>
+<span class="fc" id="L2764">				builder.append(&quot;\n&quot;);</span>
+
+<span class="pc bpc" id="L2766" title="1 of 2 branches missed.">				for (int i = 0; i &lt; nodeIndex - 1; i++) {</span>
+<span class="nc" id="L2767">					builder.append(&quot;   &quot;);</span>
+				}
+
+<span class="fc bfc" id="L2770" title="All 2 branches covered.">				if (nodeIndex &gt; 0) {</span>
+<span class="fc" id="L2771">					builder.append(&quot;+--&quot;);</span>
+				}
+
+<span class="fc" id="L2774">				Exp oExp = node.getReference();</span>
+<span class="fc bfc" id="L2775" title="All 2 branches covered.">				if (!QuaxUtil.isMember(oExp)) {</span>
+					// FunCall
+<span class="fc" id="L2777">					builder.append(QuaxUtil.funString(oExp));</span>
+				} else {
+					// member
+<span class="fc" id="L2780">					builder.append(QuaxUtil.getMemberUniqueName(oExp));</span>
+				}
+
+<span class="fc" id="L2783">				return TreeNodeCallback.CONTINUE;</span>
+			}
+		});
+
+<span class="fc" id="L2787">		return builder.toString();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

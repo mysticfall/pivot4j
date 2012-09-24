@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ParsedQuery.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pivot4J</a> &gt; <a href="index.html" class="el_package">com.eyeq.pivot4j.mdx</a> &gt; <span class="el_source">ParsedQuery.java</span></div><h1>ParsedQuery.java</h1><pre class="source lang-java linenums">/*
+ * ====================================================================
+ * This software is subject to the terms of the Common Public License
+ * Agreement, available at the following URL:
+ *   http://www.opensource.org/licenses/cpl.html .
+ * You must accept the terms of that agreement to use this software.
+ * ====================================================================
+ */
+package com.eyeq.pivot4j.mdx;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.eyeq.pivot4j.PivotException;
+
+/**
+ * this is the result of parsing an MDX
+ */
+<span class="fc" id="L25">public class ParsedQuery implements Exp {</span>
+
+<span class="fc" id="L27">	protected static Logger logger = LoggerFactory.getLogger(ParsedQuery.class);</span>
+
+<span class="fc" id="L29">	List&lt;Formula&gt; formulas = new ArrayList&lt;Formula&gt;();</span>
+
+<span class="fc" id="L31">	Map&lt;String, Parameter&gt; paraMap = new HashMap&lt;String, Parameter&gt;();</span>
+
+	List&lt;QueryAxis&gt; axisDef;
+
+	String cube;
+
+<span class="fc" id="L37">	List&lt;CompoundId&gt; cellProps = new ArrayList&lt;CompoundId&gt;();</span>
+
+<span class="fc" id="L39">	Exp slicer = null;</span>
+
+	// TODO implement proper node for SAP variable expressions.
+<span class="fc" id="L42">	List&lt;Object&gt; sapVariables = new ArrayList&lt;Object&gt;();</span>
+
+<span class="fc" id="L44">	private QueryAxis[] axes = new QueryAxis[0];</span>
+
+	/**
+	 * called after parse to make things easier
+	 */
+	public void afterParse() throws PivotException {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">		if (axisDef != null) {</span>
+<span class="fc" id="L51">			this.axes = (QueryAxis[]) axisDef.toArray(new QueryAxis[0]);</span>
+<span class="fc" id="L52">			this.axisDef = null;</span>
+		}
+<span class="fc" id="L54">		collectParams();</span>
+<span class="fc" id="L55">	}</span>
+
+	/**
+	 * 
+	 * @return QueryAxis[]
+	 */
+	public QueryAxis[] getAxes() {
+<span class="fc" id="L62">		return this.axes;</span>
+	}
+
+	/**
+	 * 
+	 * @param axes
+	 */
+	public void setAxes(QueryAxis[] axes) {
+<span class="nc" id="L70">		this.axes = axes;</span>
+<span class="nc" id="L71">	}</span>
+
+	/**
+	 * Returns the cube.
+	 * 
+	 * @return String
+	 */
+	public String getCube() {
+		// remove enclosing brackets, if there
+<span class="nc bnc" id="L80" title="All 4 branches missed.">		if (cube.charAt(0) == '[' &amp;&amp; cube.charAt(cube.length() - 1) == ']') {</span>
+<span class="nc" id="L81">			return cube.substring(1, cube.length() - 1);</span>
+		} else {
+<span class="nc" id="L83">			return cube;</span>
+		}
+	}
+
+	/**
+	 * Sets the cube.
+	 * 
+	 * @param cube
+	 *            The cube to set
+	 */
+	public void setCube(String cube) {
+<span class="fc" id="L94">		this.cube = cube;</span>
+<span class="fc" id="L95">	}</span>
+
+	/**
+	 * @return the sapVariables
+	 */
+	public List&lt;Object&gt; getSapVariables() {
+<span class="nc" id="L101">		return sapVariables;</span>
+	}
+
+	/**
+	 * @param sapVariables
+	 *            the sapVariables to set
+	 */
+	public void setSapVariables(List&lt;Object&gt; sapVariables) {
+<span class="nc" id="L109">		this.sapVariables = sapVariables;</span>
+<span class="nc" id="L110">	}</span>
+
+	/**
+	 * get the formulas of this query
+	 * 
+	 * @return Formula[]
+	 */
+	public Formula[] getFormulas() {
+<span class="nc" id="L118">		return formulas.toArray(new Formula[0]);</span>
+	}
+
+	public String toMdx() {
+<span class="fc" id="L122">		StringBuffer mdx = new StringBuffer();</span>
+		boolean isFollow;
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">		if (formulas.size() &gt; 0) {</span>
+<span class="nc" id="L125">			mdx.append(&quot;WITH &quot;);</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">			for (Formula form : formulas) {</span>
+<span class="nc" id="L127">				mdx.append(' ');</span>
+<span class="nc" id="L128">				mdx.append(form.toMdx());</span>
+<span class="nc" id="L129">			}</span>
+<span class="nc" id="L130">			mdx.append(' ');</span>
+		}
+<span class="fc" id="L132">		mdx.append(&quot;SELECT &quot;);</span>
+<span class="fc" id="L133">		isFollow = false;</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">		for (int i = 0; i &lt; axes.length; i++) {</span>
+<span class="fc" id="L135">			QueryAxis qa = axes[i];</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">			if (isFollow)</span>
+<span class="fc" id="L137">				mdx.append(&quot;, &quot;);</span>
+<span class="fc" id="L138">			isFollow = true;</span>
+<span class="fc" id="L139">			mdx.append(qa.toMdx());</span>
+		}
+<span class="fc" id="L141">		mdx.append(&quot; FROM &quot;);</span>
+<span class="fc" id="L142">		mdx.append(cube);</span>
+
+<span class="fc bfc" id="L144" title="All 2 branches covered.">		if (slicer != null) {</span>
+<span class="fc" id="L145">			mdx.append(&quot; WHERE &quot;);</span>
+<span class="fc" id="L146">			mdx.append(slicer.toMdx());</span>
+		}
+
+		// add CELL PROPERTIES VALUE, FORMATTED_VALUE, ...
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">		if (cellProps.size() &gt; 0) {</span>
+<span class="nc" id="L151">			mdx.append(&quot; CELL PROPERTIES VALUE, FORMATTED_VALUE&quot;);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">			for (CompoundId cid : cellProps) {</span>
+<span class="nc" id="L153">				String str = cid.toMdx();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">				if (str.equalsIgnoreCase(&quot;VALUE&quot;))</span>
+<span class="nc" id="L155">					continue; // default</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">				if (str.equalsIgnoreCase(&quot;FORMATTED_VALUE&quot;))</span>
+<span class="nc" id="L157">					continue; // default</span>
+<span class="nc" id="L158">				mdx.append(&quot; ,&quot;);</span>
+<span class="nc" id="L159">				mdx.append(str);</span>
+<span class="nc" id="L160">			}</span>
+		}
+
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">		if (!sapVariables.isEmpty()) {</span>
+<span class="nc" id="L164">			mdx.append(&quot; SAP VARIABLES &quot;);</span>
+
+<span class="nc" id="L166">			boolean first = true;</span>
+
+<span class="nc bnc" id="L168" title="All 2 branches missed.">			for (Object sapVariable : sapVariables) {</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">				if (first) {</span>
+<span class="nc" id="L170">					first = false;</span>
+				} else {
+<span class="nc" id="L172">					mdx.append(&quot;, &quot;);</span>
+				}
+
+<span class="nc" id="L175">				mdx.append(sapVariable);</span>
+<span class="nc" id="L176">			}</span>
+		}
+
+<span class="fc" id="L179">		return mdx.toString();</span>
+	}
+
+	public String toDrillMdx() {
+<span class="nc" id="L183">		StringBuffer mdx = new StringBuffer();</span>
+		boolean isFollow;
+<span class="nc bnc" id="L185" title="All 2 branches missed.">		if (formulas.size() &gt; 0) {</span>
+<span class="nc" id="L186">			mdx.append(&quot;WITH &quot;);</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">			for (Formula form : formulas) {</span>
+<span class="nc" id="L188">				mdx.append(' ');</span>
+<span class="nc" id="L189">				mdx.append(form.toMdx());</span>
+<span class="nc" id="L190">			}</span>
+<span class="nc" id="L191">			mdx.append(' ');</span>
+		}
+<span class="nc" id="L193">		mdx.append(&quot;DRILLTHROUGH SELECT &quot;);</span>
+
+<span class="nc" id="L195">		isFollow = false;</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">		for (int i = 0; i &lt; axes.length; i++) {</span>
+<span class="nc" id="L197">			QueryAxis qa = axes[i];</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">			if (isFollow)</span>
+<span class="nc" id="L199">				mdx.append(&quot;, &quot;);</span>
+<span class="nc" id="L200">			isFollow = true;</span>
+<span class="nc" id="L201">			mdx.append(qa.toMdx());</span>
+		}
+<span class="nc" id="L203">		mdx.append(&quot; FROM &quot;);</span>
+<span class="nc" id="L204">		mdx.append(cube);</span>
+
+<span class="nc bnc" id="L206" title="All 2 branches missed.">		if (slicer != null) {</span>
+<span class="nc" id="L207">			mdx.append(&quot; WHERE &quot;);</span>
+<span class="nc" id="L208">			mdx.append(slicer.toMdx());</span>
+		}
+
+		// add CELL PROPERTIES VALUE, FORMATTED_VALUE, ...
+<span class="nc bnc" id="L212" title="All 2 branches missed.">		if (cellProps.size() &gt; 0) {</span>
+<span class="nc" id="L213">			mdx.append(&quot; CELL PROPERTIES VALUE, FORMATTED_VALUE&quot;);</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">			for (CompoundId cid : cellProps) {</span>
+<span class="nc" id="L215">				String str = cid.toMdx();</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">				if (str.equalsIgnoreCase(&quot;VALUE&quot;))</span>
+<span class="nc" id="L217">					continue; // default</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">				if (str.equalsIgnoreCase(&quot;FORMATTED_VALUE&quot;))</span>
+<span class="nc" id="L219">					continue; // default</span>
+<span class="nc" id="L220">				mdx.append(&quot; ,&quot;);</span>
+<span class="nc" id="L221">				mdx.append(str);</span>
+<span class="nc" id="L222">			}</span>
+		}
+
+<span class="nc bnc" id="L225" title="All 2 branches missed.">		if (!sapVariables.isEmpty()) {</span>
+<span class="nc" id="L226">			mdx.append(&quot; SAP VARIABLES &quot;);</span>
+
+<span class="nc" id="L228">			boolean first = true;</span>
+
+<span class="nc bnc" id="L230" title="All 2 branches missed.">			for (Object sapVariable : sapVariables) {</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">				if (first) {</span>
+<span class="nc" id="L232">					first = false;</span>
+				} else {
+<span class="nc" id="L234">					mdx.append(&quot;, &quot;);</span>
+				}
+
+<span class="nc" id="L237">				mdx.append(sapVariable);</span>
+<span class="nc" id="L238">			}</span>
+		}
+
+<span class="nc" id="L241">		return mdx.toString();</span>
+	}
+
+	/**
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	public ParsedQuery clone() {
+<span class="nc" id="L249">		ParsedQuery cloned = new ParsedQuery();</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">		if (!formulas.isEmpty()) {</span>
+<span class="nc" id="L251">			List&lt;Formula&gt; clonedFormulas = new ArrayList&lt;Formula&gt;();</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">			for (Formula form : formulas) {</span>
+<span class="nc" id="L253">				clonedFormulas.add((Formula) form.clone());</span>
+<span class="nc" id="L254">			}</span>
+<span class="nc" id="L255">			cloned.formulas = clonedFormulas;</span>
+		}
+<span class="nc bnc" id="L257" title="All 2 branches missed.">		if (axes.length &gt; 0) {</span>
+<span class="nc" id="L258">			QueryAxis[] clonedAxes = new QueryAxis[axes.length];</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">			for (int i = 0; i &lt; clonedAxes.length; i++) {</span>
+<span class="nc" id="L260">				clonedAxes[i] = (QueryAxis) axes[i].clone();</span>
+			}
+<span class="nc" id="L262">			cloned.setAxes(clonedAxes);</span>
+		}
+<span class="nc bnc" id="L264" title="All 2 branches missed.">		if (slicer != null)</span>
+<span class="nc" id="L265">			cloned.slicer = (Exp) this.slicer.clone();</span>
+
+		// you need to wrap the cube in backets again!
+		// Why does getCube remove the brackets?
+<span class="nc" id="L269">		cloned.setCube(&quot;[&quot; + this.getCube() + &quot;]&quot;);</span>
+<span class="nc" id="L270">		return cloned;</span>
+	}
+
+	/**
+	 * @return sliecer exp
+	 */
+	public Exp getSlicer() {
+<span class="nc" id="L277">		return slicer;</span>
+	}
+
+	/**
+	 * set the slicer exp
+	 * 
+	 * @param exp
+	 */
+	public void setSlicer(Exp exp) {
+<span class="nc" id="L286">		slicer = exp;</span>
+<span class="nc" id="L287">	}</span>
+
+	/**
+	 * Collect Parameters and Parameter references
+	 */
+	private void collectParams() throws PivotException {
+
+		// walk Formulas
+<span class="fc" id="L295">		int iAxis = -2;</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">		for (Formula formula : formulas) {</span>
+<span class="nc" id="L297">			walkTreeForParams(formula.getExp(), iAxis);</span>
+			// dont forget the member properties
+<span class="nc bnc" id="L299" title="All 2 branches missed.">			for (int i = 0; i &lt; formula.memberProperties.length; i++) {</span>
+<span class="nc" id="L300">				walkTreeForParams(formula.memberProperties[i].getExp(), iAxis);</span>
+			}
+<span class="nc" id="L302">		}</span>
+
+		// walk axes
+<span class="fc bfc" id="L305" title="All 2 branches covered.">		for (int i = 0; i &lt; axes.length; i++) {</span>
+<span class="fc" id="L306">			Exp exp = axes[i].getExp();</span>
+<span class="fc" id="L307">			iAxis = i;</span>
+<span class="fc" id="L308">			walkTreeForParams(exp, iAxis);</span>
+		}
+
+<span class="fc" id="L311">	}</span>
+
+	/**
+	 * Collect Parameters and Parameter references in a subtree below (and
+	 * including) exp visitor ???
+	 */
+	private void walkTreeForParams(Exp exp, int iAxis) throws PivotException {
+<span class="fc bfc" id="L318" title="All 2 branches covered.">		if (!(exp instanceof FunCall))</span>
+<span class="fc" id="L319">			return;</span>
+<span class="fc" id="L320">		FunCall f = (FunCall) exp;</span>
+<span class="pc bpc" id="L321" title="1 of 2 branches missed.">		if (f.isCallTo(&quot;Parameter&quot;)) {</span>
+<span class="nc" id="L322">			int nArgs = f.getArgs().length;</span>
+<span class="nc bnc" id="L323" title="All 4 branches missed.">			if (nArgs != 3 &amp;&amp; nArgs != 4) {</span>
+<span class="nc" id="L324">				throw new PivotException(</span>
+						&quot;Syntax Error in Parameter: wrong number of arguments&quot;);
+			}
+<span class="nc bnc" id="L327" title="All 2 branches missed.">			if (!(f.getArgs()[0] instanceof Literal)) {</span>
+<span class="nc" id="L328">				throw new PivotException(</span>
+						&quot;Syntax Error in Parameter definition - 1.argument&quot;);
+			}
+
+<span class="nc" id="L332">			Literal eName = (Literal) f.getArgs()[0];</span>
+<span class="nc" id="L333">			String paraName = eName.stringValue();</span>
+			// Found a parameter
+			// if it is already there, throw an error
+<span class="nc bnc" id="L336" title="All 2 branches missed.">			if (paraMap.containsKey(paraName.toUpperCase())) {</span>
+				// already there, error
+<span class="nc" id="L338">				String err = &quot;Parameter defined more than once:&quot; + paraName;</span>
+<span class="nc" id="L339">				logger.error(err);</span>
+<span class="nc" id="L340">				throw new PivotException(err);</span>
+			} else {
+				// analyze and add the Parameter
+				int type;
+<span class="nc" id="L344">				Object value = null;</span>
+<span class="nc" id="L345">				f.pQuery = this;</span>
+				// second Parameter must be ID, either a hierarchy or NUMERIC or
+				// STRING
+<span class="nc" id="L348">				CompoundId id = (CompoundId) f.getArgs()[1];</span>
+<span class="nc" id="L349">				String[] ids = id.toStringArray();</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">				if (ids.length &gt; 1) {</span>
+					// error, must be NUMERIC or STRING or name of an hierarchy
+<span class="nc" id="L352">					throw new PivotException(</span>
+							&quot;Syntax Error in Parameter definition - 2.argument&quot;);
+				}
+<span class="nc bnc" id="L355" title="All 2 branches missed.">				if (ids[0].equalsIgnoreCase(&quot;NUMERIC&quot;)) {</span>
+<span class="nc" id="L356">					type = Parameter.TYPE_NUMERIC;</span>
+					// 3.argument (value) is literal
+<span class="nc bnc" id="L358" title="All 2 branches missed.">					if (!(f.getArgs()[0] instanceof Literal)) {</span>
+<span class="nc" id="L359">						throw new PivotException(</span>
+								&quot;Syntax Error in Parameter definition - 3.argument&quot;);
+					}
+<span class="nc" id="L362">					Literal val = (Literal) f.getArgs()[2];</span>
+<span class="nc" id="L363">					value = val.getValueObject();</span>
+
+<span class="nc bnc" id="L365" title="All 2 branches missed.">				} else if (ids[0].equalsIgnoreCase(&quot;STRING&quot;)) {</span>
+<span class="nc" id="L366">					type = Parameter.TYPE_STRING;</span>
+<span class="nc" id="L367">					Literal val = (Literal) f.getArgs()[2];</span>
+<span class="nc" id="L368">					value = val.getValueObject();</span>
+<span class="nc" id="L369">				} else {</span>
+					// hierarchy expected
+<span class="nc" id="L371">					type = Parameter.TYPE_MEMBER;</span>
+<span class="nc" id="L372">					CompoundId val = (CompoundId) f.getArgs()[2];</span>
+<span class="nc" id="L373">					value = val.toMdx(); // member String</span>
+				}
+<span class="nc" id="L375">				Parameter par = new Parameter(paraName, type, iAxis);</span>
+<span class="nc" id="L376">				par.setOValue(value);</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">				if (nArgs == 4) {</span>
+					// set description
+<span class="nc" id="L379">					Literal desc = (Literal) f.getArgs()[3];</span>
+<span class="nc" id="L380">					String description = (String) desc.getValueObject();</span>
+<span class="nc" id="L381">					par.setDescription(description);</span>
+				}
+<span class="nc" id="L383">				paraMap.put(paraName.toUpperCase(), par);</span>
+			}
+<span class="pc bpc" id="L385" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;ParamRef&quot;)) {</span>
+<span class="nc" id="L386">			f.pQuery = this;</span>
+		}
+
+		// recurse down on params
+<span class="fc bfc" id="L390" title="All 2 branches covered.">		for (int i = 0; i &lt; f.getArgs().length; i++) {</span>
+<span class="fc" id="L391">			walkTreeForParams(f.getArgs()[i], iAxis);</span>
+		}
+
+<span class="fc" id="L394">	}</span>
+
+	/**
+	 * @return parameter map
+	 */
+	public Map&lt;String, Parameter&gt; getParaMap() {
+<span class="nc" id="L400">		return paraMap;</span>
+	}
+
+	/**
+	 * add a formula for a member
+	 */
+	public void addFormula(String[] names, Exp exp,
+			MemberProperty[] memberProperties) {
+<span class="nc" id="L408">		Formula newFormula = new Formula(names, exp, memberProperties);</span>
+<span class="nc" id="L409">		formulas.add(newFormula);</span>
+<span class="nc" id="L410">	}</span>
+
+	/**
+	 * add a formula for a set
+	 */
+	public void addFormula(String[] names, Exp exp) {
+<span class="nc" id="L416">		Formula newFormula = new Formula(names, exp);</span>
+<span class="nc" id="L417">		formulas.add(newFormula);</span>
+<span class="nc" id="L418">	}</span>
+
+	/**
+	 * remove a formula
+	 */
+	public void removeFormula(String uniqueName) {
+<span class="nc bnc" id="L424" title="All 2 branches missed.">		for (Iterator&lt;Formula&gt; iter = formulas.iterator(); iter.hasNext();) {</span>
+<span class="nc" id="L425">			Formula formula = iter.next();</span>
+<span class="nc bnc" id="L426" title="All 2 branches missed.">			if (uniqueName.equals(formula.getUniqeName()))</span>
+<span class="nc" id="L427">				iter.remove();</span>
+<span class="nc" id="L428">		}</span>
+<span class="nc" id="L429">	}</span>
+
+	/**
+	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 */
+	public void accept(ExpVisitor visitor) {
+<span class="nc" id="L435">		visitor.visitParsedQuery(this);</span>
+<span class="nc" id="L436">	}</span>
+
+	/**
+	 * @return
+	 */
+	public List&lt;CompoundId&gt; getCellProps() {
+<span class="nc" id="L442">		return cellProps;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

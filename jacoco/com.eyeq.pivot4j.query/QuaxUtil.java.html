@@ -1,0 +1,1090 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>QuaxUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pivot4J</a> &gt; <a href="index.html" class="el_package">com.eyeq.pivot4j.query</a> &gt; <span class="el_source">QuaxUtil.java</span></div><h1>QuaxUtil.java</h1><pre class="source lang-java linenums">/*
+ * ====================================================================
+ * This software is subject to the terms of the Common Publilc License
+ * Agreement, available at the following URL:
+ *   http://www.opensource.org/licenses/cpl.html .
+ * You must accept the terms of that agreement to use this software.
+ * ====================================================================
+ */
+package com.eyeq.pivot4j.query;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.olap4j.OlapException;
+import org.olap4j.mdx.DimensionNode;
+import org.olap4j.mdx.LevelNode;
+import org.olap4j.mdx.MemberNode;
+import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Member;
+import org.olap4j.type.LevelType;
+import org.olap4j.type.MemberType;
+import org.olap4j.type.Type;
+
+import com.eyeq.pivot4j.PivotException;
+import com.eyeq.pivot4j.mdx.Exp;
+import com.eyeq.pivot4j.mdx.FunCall;
+import com.eyeq.pivot4j.mdx.ParseTreeNodeExp;
+import com.eyeq.pivot4j.mdx.SetExp;
+import com.eyeq.pivot4j.mdx.Syntax;
+
+public class QuaxUtil {
+
+<span class="nc" id="L36">	private QuaxUtil() {</span>
+<span class="nc" id="L37">	}</span>
+
+	/**
+	 * @param oExp
+	 * @return true if oExp is a member expression
+	 */
+	public static boolean isMember(Exp oExp) {
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		if (oExp instanceof ParseTreeNodeExp) {</span>
+<span class="fc" id="L45">			ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;</span>
+<span class="fc" id="L46">			return adapter.getType() instanceof MemberType;</span>
+		}
+
+<span class="fc" id="L49">		return false;</span>
+	}
+
+	/**
+	 * @param oExp
+	 * @return true if oExp is a FunCall expression
+	 */
+	public static boolean isFunCall(Exp oExp) {
+<span class="fc" id="L57">		return (oExp instanceof FunCall);</span>
+	}
+
+	/**
+	 * @param oExp
+	 * @param member
+	 * @return true if oExp is equal to member
+	 */
+	public static boolean equalMember(Exp oExp, Member member) {
+<span class="fc" id="L66">		return member.equals(memberForExp(oExp));</span>
+	}
+
+	/**
+	 * @param oExp
+	 * @param function
+	 * @return true if oExp is a specific function call
+	 */
+	public static boolean isFunCallTo(Exp oExp, String function) {
+<span class="pc bpc" id="L75" title="1 of 4 branches missed.">		return isFunCall(oExp) &amp;&amp; ((FunCall) oExp).isCallTo(function);</span>
+	}
+
+	/**
+	 * Check, whether member is parent of other member
+	 * 
+	 * @param pMember
+	 *            (parent)
+	 * @param cMember
+	 *            (child)
+	 * @return true if cMember (2.arg) is child of pMember (1.arg)
+	 */
+	public static boolean checkParent(Member pMember, Exp cMembObj) {
+<span class="fc" id="L88">		Member child = memberForExp(cMembObj);</span>
+<span class="pc bpc" id="L89" title="2 of 4 branches missed.">		return child != null &amp;&amp; pMember.equals(child.getParentMember());</span>
+	}
+
+	/**
+	 * Check, whether member is child of other member
+	 * 
+	 * @param pMember
+	 *            (child)
+	 * @param cMember
+	 *            (parent)
+	 * @return true if cMember (1.arg) is child of pMember (2.arg)
+	 */
+	public static boolean checkChild(Member cMember, Exp pMembObj) {
+<span class="fc" id="L102">		Member parent = memberForExp(pMembObj);</span>
+<span class="pc bpc" id="L103" title="2 of 4 branches missed.">		return parent != null &amp;&amp; parent.equals(cMember.getParentMember());</span>
+	}
+
+	/**
+	 * Check, whether member is descendant of other member
+	 * 
+	 * @param aMember
+	 *            (ancestor)
+	 * @param dMember
+	 *            (descendant)
+	 * @return true if dMember (2.arg) is descendant of aMember (1.arg)
+	 */
+	public static boolean checkDescendantM(Member aMember, Member dMember) {
+<span class="nc" id="L116">		return dMember.getAncestorMembers().contains(dMember);</span>
+	}
+
+	/**
+	 * Check, whether funcall set contains member
+	 * 
+	 * @param f
+	 * @param m
+	 * @return true if FunCall contains member
+	 */
+	public static boolean isMemberInFunCall(Exp oExp, Member member)
+			throws UnknownExpressionException {
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">		if (!isFunCall(oExp)) {</span>
+<span class="nc" id="L129">			return false;</span>
+		}
+
+<span class="fc" id="L132">		FunCall f = (FunCall) oExp;</span>
+
+<span class="pc bpc" id="L134" title="1 of 2 branches missed.">		if (f.isCallTo(&quot;Children&quot;)) {</span>
+<span class="fc" id="L135">			return isMemberInChildren(f, member);</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Descendants&quot;)) {</span>
+<span class="nc" id="L137">			return isMemberInDescendants(f, member);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Members&quot;)) {</span>
+<span class="nc" id="L139">			return isMemberInLevel(f, member);</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Union&quot;)) {</span>
+<span class="nc" id="L141">			return isMemberInUnion(f, member);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;{}&quot;)) {</span>
+<span class="nc" id="L143">			return isMemberInSet(f, member);</span>
+		}
+
+<span class="nc" id="L146">		throw new UnknownExpressionException(f.getFunction());</span>
+	}
+
+	/**
+	 * Check, whether a funcall set contains any child of a specific member
+	 * 
+	 * @param oExp
+	 * @param member
+	 * @return true, if FunCall contains member's child
+	 * @throws UnknownExpressionException
+	 */
+	public static boolean isChildOfMemberInFunCall(Exp oExp, Member member)
+			throws UnknownExpressionException {
+		// calculated members do not have children
+<span class="pc bpc" id="L160" title="2 of 4 branches missed.">		if (!isFunCall(oExp) || member.isCalculated()) {</span>
+<span class="nc" id="L161">			return false;</span>
+		}
+
+<span class="fc" id="L164">		FunCall f = (FunCall) oExp;</span>
+
+<span class="fc bfc" id="L166" title="All 2 branches covered.">		if (f.isCallTo(&quot;Children&quot;)) {</span>
+<span class="fc" id="L167">			return member.equals(memberForExp(f.getArgs()[0]));</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;Descendants&quot;)) {</span>
+			// true, if f = descendants(m2, level) contains any child of m
+			// so level must be parent-level of m
+<span class="nc" id="L171">			Member ancestor = memberForExp(f.getArgs()[0]);</span>
+
+<span class="nc" id="L173">			Level level = levelForExp(f.getArgs()[1]);</span>
+<span class="nc" id="L174">			Level parentLevel = getParentLevel(level);</span>
+
+<span class="nc bnc" id="L176" title="All 4 branches missed.">			if (parentLevel != null &amp;&amp; member.getLevel().equals(parentLevel)) {</span>
+<span class="nc" id="L177">				int ancestorLevelNumber = ancestor.getLevel().getDepth();</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">				while (ancestorLevelNumber &lt; member.getLevel().getDepth()) {</span>
+<span class="nc" id="L179">					member = member.getParentMember();</span>
+				}
+
+<span class="nc bnc" id="L182" title="All 2 branches missed.">				if (member.equals(ancestor)) {</span>
+<span class="nc" id="L183">					return true;</span>
+				} else {
+<span class="nc" id="L185">					return false;</span>
+				}
+			} else {
+<span class="nc" id="L188">				return false;</span>
+			}
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;Members&quot;)) {</span>
+<span class="nc" id="L191">			Level level = levelForExp(f.getArgs()[0]);</span>
+<span class="nc" id="L192">			Level parentLevel = null;</span>
+
+<span class="nc bnc" id="L194" title="All 2 branches missed.">			if (level.getDepth() &gt; 0) {</span>
+<span class="nc" id="L195">				List&lt;Level&gt; levels = level.getHierarchy().getLevels();</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">				for (Level l : levels) {</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">					if (l.getDepth() == level.getDepth() - 1) {</span>
+<span class="nc" id="L198">						parentLevel = l;</span>
+<span class="nc" id="L199">						break;</span>
+					}
+				}
+			}
+
+<span class="nc bnc" id="L204" title="All 4 branches missed.">			if (parentLevel != null &amp;&amp; member.getLevel().equals(parentLevel)) {</span>
+<span class="nc" id="L205">				return true;</span>
+			} else {
+<span class="nc" id="L207">				return false;</span>
+			}
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;Union&quot;)) {</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">			if (isChildOfMemberInFunCall(f.getArgs()[0], member))</span>
+<span class="nc" id="L211">				return true;</span>
+			else
+<span class="nc" id="L213">				return isChildOfMemberInFunCall(f.getArgs()[1], member);</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;{}&quot;)) {</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">			for (int i = 0; i &lt; f.getArgs().length; i++) {</span>
+<span class="fc" id="L216">				Member mm = memberForExp(f.getArgs()[i]);</span>
+<span class="fc" id="L217">				Member mmp = mm.getParentMember();</span>
+<span class="pc bpc" id="L218" title="3 of 4 branches missed.">				if (mmp != null &amp;&amp; mmp.equals(member)) {</span>
+<span class="nc" id="L219">					return true;</span>
+				}
+			}
+<span class="fc" id="L222">			return false;</span>
+		}
+
+<span class="nc" id="L225">		throw new UnknownExpressionException(f.getFunction());</span>
+	}
+
+	/**
+	 * Check, whether funcall set contains descendant of a specific member
+	 * 
+	 * @param f
+	 * @param m
+	 * @return true if FunCall contains descendant of member
+	 */
+	public static boolean isDescendantOfMemberInFunCall(Exp oExp, Member member)
+			throws UnknownExpressionException {
+		// calculated members do not have children
+<span class="pc bpc" id="L238" title="2 of 4 branches missed.">		if (!isFunCall(oExp) || member.isCalculated()) {</span>
+<span class="nc" id="L239">			return false;</span>
+		}
+
+<span class="fc" id="L242">		FunCall f = (FunCall) oExp;</span>
+
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">		if (f.isCallTo(&quot;Children&quot;)) {</span>
+			// true, if m2.children contains descendants of m
+			// &lt;==&gt; m is equal or ancestor of m2
+<span class="fc" id="L247">			Member mExp = memberForExp(f.getArgs()[0]);</span>
+<span class="pc bpc" id="L248" title="3 of 4 branches missed.">			return (member.equals(mExp) || isDescendant(member, mExp));</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Descendants&quot;)) {</span>
+			// true, if descendants(m2) contain descendants of m
+			// &lt;==&gt; m is equal or ancestor of m2
+<span class="nc" id="L252">			Member mExp = memberForExp(f.getArgs()[0]);</span>
+<span class="nc bnc" id="L253" title="All 4 branches missed.">			return (member.equals(mExp) || isDescendant(member, mExp));</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Members&quot;)) {</span>
+<span class="nc" id="L255">			Level levExp = levelForExp(f.getArgs()[0]);</span>
+<span class="nc bnc" id="L256" title="All 2 branches missed.">			return levExp.getDepth() &gt; member.getLevel().getDepth();</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Union&quot;)) {</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">			if (isDescendantOfMemberInFunCall(f.getArgs()[0], member)) {</span>
+<span class="nc" id="L259">				return true;</span>
+			} else {
+<span class="nc" id="L261">				return isDescendantOfMemberInFunCall(f.getArgs()[1], member);</span>
+			}
+<span class="nc bnc" id="L263" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;{}&quot;)) {</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">			for (Exp arg : f.getArgs()) {</span>
+<span class="nc" id="L265">				Member mExp = memberForExp(arg);</span>
+<span class="nc bnc" id="L266" title="All 4 branches missed.">				return (!member.equals(mExp) &amp;&amp; isDescendant(member, mExp));</span>
+			}
+
+<span class="nc" id="L269">			return false;</span>
+		}
+
+<span class="nc" id="L272">		throw new UnknownExpressionException(f.getFunction());</span>
+	}
+
+	/**
+	 * @param ancestor
+	 * @param descendant
+	 */
+	public static boolean isDescendant(Member ancestor, Exp descendant) {
+<span class="fc" id="L280">		Member member = memberForExp(descendant);</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">		if (member == null) {</span>
+<span class="nc" id="L282">			return false;</span>
+		}
+
+<span class="fc" id="L285">		return isDescendant(ancestor, member);</span>
+	}
+
+	/**
+	 * @param ancestor
+	 * @param descendant
+	 */
+	public static boolean isDescendant(Member ancestor, Member descendant) {
+		// a calculated member, even if defined under &quot;ancestor&quot; is *not*
+		// descendant,
+		// WITM MEMBER a.b as '..'
+		// a.children does *not* include b
+<span class="pc bpc" id="L297" title="1 of 2 branches missed.">		if (descendant.isCalculated()) {</span>
+<span class="nc" id="L298">			return false;</span>
+		}
+<span class="pc bpc" id="L300" title="1 of 2 branches missed.">		if (ancestor.equals(descendant)) {</span>
+<span class="fc" id="L301">			return false;</span>
+		}
+
+<span class="nc" id="L304">		int ancestorLevelNumber = ancestor.getDepth();</span>
+<span class="nc" id="L305">		Member mm = descendant;</span>
+<span class="nc bnc" id="L306" title="All 4 branches missed.">		while (mm != null &amp;&amp; ancestorLevelNumber &lt; mm.getDepth()) {</span>
+<span class="nc" id="L307">			mm = mm.getParentMember();</span>
+		}
+
+<span class="nc bnc" id="L310" title="All 2 branches missed.">		if (mm.equals(ancestor)) {</span>
+<span class="nc" id="L311">			return true;</span>
+		} else {
+<span class="nc" id="L313">			return false;</span>
+		}
+	}
+
+	/**
+	 * Check whether a Funcall does NOT resolve to top level of hierarchy
+	 * 
+	 * @param oExp
+	 *            - FunCall Exp
+	 * @return true, if any member of the set defined by funcall is NOT top
+	 *         level
+	 */
+	public static boolean isFunCallNotTopLevel(Exp oExp)
+			throws UnknownExpressionException {
+<span class="nc bnc" id="L327" title="All 2 branches missed.">		if (!isFunCall(oExp)) {</span>
+<span class="nc" id="L328">			return false;</span>
+		}
+
+<span class="nc" id="L331">		FunCall f = (FunCall) oExp;</span>
+
+<span class="nc bnc" id="L333" title="All 2 branches missed.">		if (f.isCallTo(&quot;Children&quot;)) {</span>
+<span class="nc" id="L334">			return true; // children *not* top level</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Descendants&quot;)) {</span>
+<span class="nc" id="L336">			return true; // descendants*not* top level</span>
+<span class="nc bnc" id="L337" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Members&quot;)) {</span>
+<span class="nc" id="L338">			Level level = levelForExp(f.getArgs()[0]);</span>
+<span class="nc bnc" id="L339" title="All 2 branches missed.">			return (level.getDepth() &gt; 0);</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Union&quot;)) {</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">			if (isFunCallNotTopLevel(f.getArgs()[0])) {</span>
+<span class="nc" id="L342">				return true;</span>
+			}
+<span class="nc" id="L344">			return isFunCallNotTopLevel(f.getArgs()[1]);</span>
+<span class="nc bnc" id="L345" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;{}&quot;)) {</span>
+<span class="nc bnc" id="L346" title="All 2 branches missed.">			for (int i = 0; i &lt; f.getArgs().length; i++) {</span>
+<span class="nc bnc" id="L347" title="All 2 branches missed.">				if (!isMemberOnToplevel(f.getArgs()[i])) {</span>
+<span class="nc" id="L348">					return true;</span>
+				}
+			}
+<span class="nc" id="L351">			return false;</span>
+		}
+
+<span class="nc" id="L354">		throw new UnknownExpressionException(f.getFunction());</span>
+	}
+
+	/**
+	 * Check, whether a member is on top level (has no parent);
+	 * 
+	 * @param m
+	 *            - member to be checked
+	 * @return true - if member is on top level
+	 */
+	public static boolean isMemberOnToplevel(Exp oMem) {
+<span class="nc" id="L365">		Member member = memberForExp(oMem);</span>
+<span class="nc bnc" id="L366" title="All 2 branches missed.">		if (member.getLevel().getDepth() &gt; 0) {</span>
+<span class="nc" id="L367">			return false;</span>
+		} else {
+<span class="nc" id="L369">			return true;</span>
+		}
+	}
+
+	/**
+	 * Check a Funcall expression whether we can handle it. currently we can
+	 * basically handle following FunCalls member.children, member.descendants,
+	 * level.members
+	 */
+	public static boolean canHandle(Exp oExp) {
+<span class="nc bnc" id="L379" title="All 2 branches missed.">		if (isMember(oExp)) {</span>
+<span class="nc" id="L380">			return true;</span>
+<span class="nc bnc" id="L381" title="All 2 branches missed.">		} else if (isFunCall(oExp)) {</span>
+<span class="nc" id="L382">			FunCall f = (FunCall) oExp;</span>
+
+<span class="nc bnc" id="L384" title="All 2 branches missed.">			if (f.isCallTo(&quot;children&quot;)) {</span>
+<span class="nc" id="L385">				return true;</span>
+			}
+<span class="nc bnc" id="L387" title="All 2 branches missed.">			if (f.isCallTo(&quot;descendants&quot;)) {</span>
+<span class="nc" id="L388">				return true;</span>
+			}
+<span class="nc bnc" id="L390" title="All 2 branches missed.">			if (f.isCallTo(&quot;members&quot;)) {</span>
+<span class="nc" id="L391">				return true;</span>
+			}
+<span class="nc bnc" id="L393" title="All 2 branches missed.">			if (f.isCallTo(&quot;{}&quot;)) {</span>
+<span class="nc" id="L394">				return true;</span>
+			}
+<span class="nc bnc" id="L396" title="All 2 branches missed.">			if (f.isCallTo(&quot;union&quot;)) {</span>
+<span class="nc bnc" id="L397" title="All 2 branches missed.">				for (int i = 0; i &lt; f.getArgs().length; i++) {</span>
+<span class="nc bnc" id="L398" title="All 2 branches missed.">					if (!canHandle(f.getArgs()[i])) {</span>
+<span class="nc" id="L399">						return false;</span>
+					}
+				}
+<span class="nc" id="L402">				return true;</span>
+			}
+		}
+
+<span class="nc" id="L406">		return false;</span>
+	}
+
+	/**
+	 * @param oExp
+	 * @return
+	 */
+	public static Member getParentMember(Exp oExp) {
+<span class="nc" id="L414">		return memberForExp(oExp).getParentMember();</span>
+	}
+
+	/**
+	 * @param oParent
+	 * @return
+	 */
+	public static List&lt;Exp&gt; getChildMembers(Exp oParent) {
+<span class="nc" id="L422">		Member parent = memberForExp(oParent);</span>
+
+<span class="nc bnc" id="L424" title="All 2 branches missed.">		if (parent == null) {</span>
+<span class="nc" id="L425">			return Collections.emptyList();</span>
+		}
+
+		List&lt;? extends Member&gt; members;
+
+		try {
+<span class="nc" id="L431">			members = parent.getChildMembers();</span>
+<span class="nc" id="L432">		} catch (OlapException e) {</span>
+<span class="nc" id="L433">			throw new PivotException(e);</span>
+		}
+
+<span class="nc" id="L436">		List&lt;Exp&gt; children = new ArrayList&lt;Exp&gt;(members.size());</span>
+<span class="nc bnc" id="L437" title="All 2 branches missed.">		for (Member member : members) {</span>
+<span class="nc" id="L438">			children.add(expForMember(member));</span>
+		}
+
+<span class="nc" id="L441">		return children;</span>
+	}
+
+	/**
+	 * @param oExp
+	 * @return
+	 */
+	public static Member memberForExp(Exp oExp) {
+<span class="pc bpc" id="L449" title="1 of 2 branches missed.">		if (oExp instanceof ParseTreeNodeExp) {</span>
+<span class="fc" id="L450">			ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;</span>
+
+<span class="fc" id="L452">			Type type = adapter.getType();</span>
+<span class="pc bpc" id="L453" title="1 of 2 branches missed.">			if (type instanceof MemberType) {</span>
+<span class="fc" id="L454">				return ((MemberType) type).getMember();</span>
+			}
+		}
+
+<span class="nc" id="L458">		return null;</span>
+	}
+
+	/**
+	 * @param oLevel
+	 * @return
+	 */
+	public static Level levelForExp(Exp oExp) {
+<span class="nc bnc" id="L466" title="All 2 branches missed.">		if (oExp instanceof ParseTreeNodeExp) {</span>
+<span class="nc" id="L467">			ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;</span>
+
+<span class="nc" id="L469">			Type type = adapter.getType();</span>
+<span class="nc bnc" id="L470" title="All 2 branches missed.">			if (type instanceof LevelType) {</span>
+<span class="nc" id="L471">				return ((LevelType) type).getLevel();</span>
+			}
+		}
+
+<span class="nc" id="L475">		return null;</span>
+	}
+
+	/**
+	 * @param oExp
+	 * @return
+	 */
+	public static StringBuilder funString(Exp oExp) {
+<span class="fc" id="L483">		FunCall f = (FunCall) oExp;</span>
+
+<span class="fc" id="L485">		StringBuilder sb = new StringBuilder();</span>
+
+<span class="fc bfc" id="L487" title="All 2 branches covered.">		if (f.isCallTo(&quot;Children&quot;)) {</span>
+<span class="fc" id="L488">			Member m = memberForExp(f.getArgs()[0]);</span>
+<span class="fc" id="L489">			sb.append(m.getUniqueName());</span>
+<span class="fc" id="L490">			sb.append(&quot;.children&quot;);</span>
+<span class="pc bpc" id="L491" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;Descendants&quot;)) {</span>
+<span class="nc" id="L492">			Member m = memberForExp(f.getArgs()[0]);</span>
+<span class="nc" id="L493">			Level lev = levelForExp(f.getArgs()[1]);</span>
+<span class="nc" id="L494">			sb.append(&quot;Descendants(&quot;);</span>
+<span class="nc" id="L495">			sb.append(m.getUniqueName());</span>
+<span class="nc" id="L496">			sb.append(&quot;,&quot;);</span>
+<span class="nc" id="L497">			sb.append(lev.getUniqueName());</span>
+<span class="nc" id="L498">			sb.append(&quot;)&quot;);</span>
+<span class="pc bpc" id="L499" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;members&quot;)) {</span>
+<span class="nc" id="L500">			Level lev = levelForExp(f.getArgs()[0]);</span>
+<span class="nc" id="L501">			sb.append(lev.getUniqueName());</span>
+<span class="nc" id="L502">			sb.append(&quot;.Members&quot;);</span>
+<span class="pc bpc" id="L503" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;Union&quot;)) {</span>
+<span class="nc" id="L504">			sb.append(&quot;Union(&quot;);</span>
+<span class="nc" id="L505">			FunCall f1 = (FunCall) f.getArgs()[0];</span>
+<span class="nc" id="L506">			sb.append(funString(f1));</span>
+<span class="nc" id="L507">			sb.append(&quot;,&quot;);</span>
+<span class="nc" id="L508">			FunCall f2 = (FunCall) f.getArgs()[1];</span>
+<span class="nc" id="L509">			sb.append(funString(f2));</span>
+<span class="nc" id="L510">			sb.append(&quot;)&quot;);</span>
+<span class="pc bpc" id="L511" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;{}&quot;)) {</span>
+<span class="fc" id="L512">			sb.append(&quot;{&quot;);</span>
+<span class="fc bfc" id="L513" title="All 2 branches covered.">			for (int i = 0; i &lt; f.getArgs().length; i++) {</span>
+<span class="fc bfc" id="L514" title="All 2 branches covered.">				if (i &gt; 0)</span>
+<span class="fc" id="L515">					sb.append(&quot;,&quot;);</span>
+<span class="fc" id="L516">				Member m = memberForExp(f.getArgs()[i]);</span>
+<span class="fc" id="L517">				sb.append(m.getUniqueName());</span>
+			}
+<span class="fc" id="L519">			sb.append(&quot;}&quot;);</span>
+<span class="nc bnc" id="L520" title="All 4 branches missed.">		} else if (f.isCallTo(&quot;TopCount&quot;) || f.isCallTo(&quot;BottomCount&quot;)</span>
+<span class="nc bnc" id="L521" title="All 4 branches missed.">				|| f.isCallTo(&quot;TopPercent&quot;) || f.isCallTo(&quot;BottomPercent&quot;)) {</span>
+			// just generate Topcount(set)
+<span class="nc" id="L523">			sb.append(f.getFunction());</span>
+<span class="nc" id="L524">			sb.append(&quot;(&quot;);</span>
+<span class="nc" id="L525">			FunCall f1 = (FunCall) f.getArgs()[0];</span>
+<span class="nc" id="L526">			sb.append(funString(f1));</span>
+<span class="nc" id="L527">			sb.append(&quot;)&quot;);</span>
+		}
+<span class="fc" id="L529">		return sb;</span>
+	}
+
+	/**
+	 * @param oExp
+	 * @return
+	 */
+	public static String getMemberUniqueName(Exp oExp) {
+<span class="fc" id="L537">		Member member = memberForExp(oExp);</span>
+<span class="fc" id="L538">		return member.getUniqueName();</span>
+	}
+
+	/**
+	 * Expression Object for member
+	 * 
+	 * @param member
+	 * @return Expression Object
+	 */
+	public static Exp expForMember(Member member) {
+<span class="fc" id="L548">		return new ParseTreeNodeExp(new MemberNode(null, member));</span>
+	}
+
+	/**
+	 * Expression Object for Dimension
+	 * 
+	 * @param dimension
+	 * @return Expression Object
+	 */
+	public static Exp expForDim(Dimension dimension) {
+<span class="nc" id="L558">		return new ParseTreeNodeExp(new DimensionNode(null, dimension));</span>
+	}
+
+	/**
+	 * Expression Object for level
+	 * 
+	 * @param level
+	 * @return Expression Object
+	 */
+	public static Exp expForLevel(Level level) {
+<span class="nc" id="L568">		return new ParseTreeNodeExp(new LevelNode(null, level));</span>
+	}
+
+	/**
+	 * @param path
+	 * @return
+	 */
+	public static String memberString(List&lt;Member&gt; path) {
+<span class="nc bnc" id="L576" title="All 4 branches missed.">		if (path == null || path.isEmpty()) {</span>
+<span class="nc" id="L577">			return &quot;&quot;;</span>
+		}
+
+<span class="nc" id="L580">		StringBuilder sb = new StringBuilder();</span>
+
+<span class="nc" id="L582">		int i = 0;</span>
+<span class="nc bnc" id="L583" title="All 2 branches missed.">		for (Member member : path) {</span>
+<span class="nc bnc" id="L584" title="All 2 branches missed.">			if (i &gt; 0) {</span>
+<span class="nc" id="L585">				sb.append(&quot; &quot;);</span>
+			}
+<span class="nc" id="L587">			sb.append(member.getUniqueName());</span>
+<span class="nc" id="L588">			i++;</span>
+		}
+<span class="nc" id="L590">		return sb.toString();</span>
+	}
+
+	/**
+	 * generate an object for a list of members
+	 * 
+	 * @param members
+	 *            list of members
+	 * @return null for empty list, single member or set function otherwise
+	 */
+	public static Exp createMemberSet(List&lt;Member&gt; members) {
+<span class="nc bnc" id="L601" title="All 4 branches missed.">		if (members == null || members.isEmpty()) {</span>
+<span class="nc" id="L602">			return null;</span>
+<span class="nc bnc" id="L603" title="All 2 branches missed.">		} else if (members.size() == 1) {</span>
+<span class="nc" id="L604">			return expForMember(members.get(0));</span>
+		} else {
+<span class="nc" id="L606">			Exp[] remExps = new Exp[members.size()];</span>
+<span class="nc bnc" id="L607" title="All 2 branches missed.">			for (int i = 0; i &lt; remExps.length; i++) {</span>
+<span class="nc" id="L608">				remExps[i] = expForMember(members.get(i));</span>
+			}
+<span class="nc" id="L610">			return new FunCall(&quot;{}&quot;, remExps, Syntax.Braces);</span>
+		}
+	}
+
+	/**
+	 * Level depth for member
+	 * 
+	 * @param oExp
+	 *            - member
+	 * @return depth
+	 */
+	public static int levelDepthForMember(Exp oExp) {
+<span class="nc" id="L622">		Member member = memberForExp(oExp);</span>
+<span class="nc" id="L623">		Level level = member.getLevel();</span>
+
+<span class="nc" id="L625">		return level.getDepth();</span>
+	}
+
+	/**
+	 * @param oExp
+	 * @return hierarchy for Exp
+	 * @throws UnknownExpressionException
+	 */
+	public static Hierarchy hierForExp(Exp oExp)
+			throws UnknownExpressionException {
+<span class="nc bnc" id="L635" title="All 2 branches missed.">		if (isMember(oExp)) {</span>
+<span class="nc" id="L636">			return memberForExp(oExp).getHierarchy();</span>
+<span class="nc bnc" id="L637" title="All 2 branches missed.">		} else if (oExp instanceof SetExp) {</span>
+			// set expression generated by CalcSet extension
+<span class="nc" id="L639">			SetExp set = (SetExp) oExp;</span>
+<span class="nc" id="L640">			return set.getHierarchy();</span>
+		}
+
+		// must be FunCall
+<span class="nc" id="L644">		FunCall f = (FunCall) oExp;</span>
+
+<span class="nc bnc" id="L646" title="All 4 branches missed.">		if (f.isCallTo(&quot;Children&quot;) || f.isCallTo(&quot;Descendants&quot;)</span>
+<span class="nc bnc" id="L647" title="All 2 branches missed.">				|| f.isCallTo(&quot;{}&quot;)) {</span>
+<span class="nc" id="L648">			Member member = memberForExp(f.getArgs()[0]);</span>
+<span class="nc" id="L649">			return member.getHierarchy();</span>
+<span class="nc bnc" id="L650" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Members&quot;)) {</span>
+<span class="nc" id="L651">			Level level = levelForExp(f.getArgs()[0]);</span>
+<span class="nc" id="L652">			return level.getHierarchy();</span>
+<span class="nc bnc" id="L653" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Union&quot;)) {</span>
+			// continue with first set
+<span class="nc" id="L655">			return hierForExp(f.getArgs()[0]);</span>
+<span class="nc bnc" id="L656" title="All 4 branches missed.">		} else if (f.isCallTo(&quot;TopCount&quot;) || f.isCallTo(&quot;BottomCount&quot;)</span>
+<span class="nc bnc" id="L657" title="All 4 branches missed.">				|| f.isCallTo(&quot;TopPercent&quot;) || f.isCallTo(&quot;BottomPercent&quot;)</span>
+<span class="nc bnc" id="L658" title="All 2 branches missed.">				|| f.isCallTo(&quot;Filter&quot;)) {</span>
+			// continue with base set of top bottom function
+<span class="nc" id="L660">			return hierForExp(f.getArgs()[0]);</span>
+		}
+
+<span class="nc" id="L663">		throw new UnknownExpressionException(f.getFunction());</span>
+	}
+
+	/**
+	 * @param hierarchy
+	 *            the Hierarchy
+	 * @param expandAllMember
+	 *            if true, an &quot;All&quot; member will be expanded
+	 * @return a set for the top level members of an hierarchy
+	 */
+	public static Exp topLevelMembers(Hierarchy hierarchy,
+			boolean expandAllMember) {
+<span class="nc" id="L675">		Level topLevel = hierarchy.getLevels().get(0);</span>
+
+		Member mAll;
+		try {
+<span class="nc" id="L679">			mAll = hierarchy.getDefaultMember();</span>
+
+<span class="nc bnc" id="L681" title="All 2 branches missed.">			if (!mAll.isAll()) {</span>
+<span class="nc" id="L682">				mAll = null;</span>
+<span class="nc bnc" id="L683" title="All 2 branches missed.">				for (Member m : hierarchy.getRootMembers()) {</span>
+<span class="nc bnc" id="L684" title="All 2 branches missed.">					if (m.isAll()) {</span>
+<span class="nc" id="L685">						mAll = m;</span>
+<span class="nc" id="L686">						break;</span>
+					}
+				}
+			}
+<span class="nc" id="L690">		} catch (OlapException e) {</span>
+<span class="nc" id="L691">			throw new PivotException(e);</span>
+		}
+
+		// if there is an All Member, we will have to expand it
+		// according to expandAllMember flag
+<span class="nc bnc" id="L696" title="All 2 branches missed.">		if (mAll != null) {</span>
+<span class="nc" id="L697">			Exp[] memar = new Exp[] { expForMember(mAll) };</span>
+<span class="nc" id="L698">			Exp mAllSet = new FunCall(&quot;{}&quot;, memar, Syntax.Braces);</span>
+<span class="nc bnc" id="L699" title="All 2 branches missed.">			if (!expandAllMember) {</span>
+<span class="nc" id="L700">				return memar[0];</span>
+			}
+
+			// must expand
+			// create Union({AllMember}, AllMember.children)
+<span class="nc" id="L705">			Exp mAllChildren = new FunCall(&quot;children&quot;, memar, Syntax.Property);</span>
+<span class="nc" id="L706">			Exp union = new FunCall(&quot;union&quot;,</span>
+<span class="nc" id="L707">					new Exp[] { mAllSet, mAllChildren }, Syntax.Function);</span>
+
+<span class="nc" id="L709">			return union;</span>
+		}
+
+		// HHTASK ok, for a parent-child hierarchy ?
+		List&lt;Member&gt; topMembers;
+		try {
+<span class="nc" id="L715">			topMembers = topLevel.getMembers();</span>
+<span class="nc" id="L716">		} catch (OlapException e) {</span>
+<span class="nc" id="L717">			throw new PivotException(e);</span>
+		}
+
+<span class="nc" id="L720">		Exp[] topExp = new Exp[topMembers.size()];</span>
+
+<span class="nc bnc" id="L722" title="All 2 branches missed.">		for (int i = 0; i &lt; topExp.length; i++) {</span>
+<span class="nc" id="L723">			topExp[i] = expForMember(topMembers.get(i));</span>
+		}
+
+<span class="nc bnc" id="L726" title="All 2 branches missed.">		if (topExp.length == 1) {</span>
+<span class="nc" id="L727">			return topExp[0]; // single member</span>
+		}
+
+<span class="nc" id="L730">		return new FunCall(&quot;{}&quot;, topExp, Syntax.Braces);</span>
+	}
+
+	/**
+	 * generation of FunCalls
+	 * 
+	 * @param function
+	 *            name
+	 * @param args
+	 *            arguments
+	 * @param funType
+	 *            FUNTYPE
+	 * @return function object
+	 */
+	public static Exp createFunCall(String function, Exp[] args, Syntax funType) {
+<span class="fc" id="L745">		Exp[] expArgs = new Exp[args.length];</span>
+<span class="fc bfc" id="L746" title="All 2 branches covered.">		for (int i = 0; i &lt; expArgs.length; i++) {</span>
+<span class="fc" id="L747">			expArgs[i] = (Exp) args[i];</span>
+		}
+
+<span class="fc" id="L750">		return new FunCall(function, expArgs, funType);</span>
+	}
+
+	/**
+	 * Get number of funCall arguments
+	 * 
+	 * @param oFun
+	 *            funcall expression
+	 * @return number of args
+	 */
+	public static int funCallArgCount(Exp oFun) {
+<span class="nc" id="L761">		FunCall f = (FunCall) oFun;</span>
+<span class="nc" id="L762">		return f.getArgs().length;</span>
+	}
+
+	/**
+	 * Get funcall name
+	 * 
+	 * @param oFun
+	 *            funcall expression
+	 * @return function name
+	 */
+	public static String funCallName(Exp oFun) {
+<span class="nc" id="L773">		return ((FunCall) oFun).getFunction();</span>
+	}
+
+	/**
+	 * Get funcall argument
+	 * 
+	 * @param oFun
+	 *            funcall expression
+	 * @param i
+	 *            index of argument
+	 * @return argument object
+	 */
+	public static Exp funCallArg(Exp oFun, int index) {
+<span class="fc" id="L786">		return ((FunCall) oFun).getArgs()[index];</span>
+	}
+
+	/**
+	 * @param list
+	 * @param member
+	 * @param maxLevel
+	 */
+	public static void addMemberUncles(List&lt;Exp&gt; list, Member member,
+			int[] maxLevel) {
+<span class="nc" id="L796">		int parentLevel = member.getLevel().getDepth() - 1;</span>
+
+<span class="nc bnc" id="L798" title="All 2 branches missed.">		if (parentLevel &lt; maxLevel[0])</span>
+<span class="nc" id="L799">			return;</span>
+<span class="nc bnc" id="L800" title="All 2 branches missed.">		if (parentLevel &gt; maxLevel[0]) {</span>
+<span class="nc" id="L801">			maxLevel[0] = parentLevel;</span>
+<span class="nc" id="L802">			list.clear();</span>
+		}
+
+<span class="nc bnc" id="L805" title="All 2 branches missed.">		if (parentLevel &gt; 0) {</span>
+<span class="nc" id="L806">			Member parent = member.getParentMember();</span>
+<span class="nc" id="L807">			Member grandPa = parent.getParentMember();</span>
+
+			// do nothing if already on List
+<span class="nc bnc" id="L810" title="All 2 branches missed.">			for (Exp exp : list) {</span>
+<span class="nc bnc" id="L811" title="All 2 branches missed.">				if (exp instanceof FunCall) {</span>
+<span class="nc" id="L812">					FunCall f = (FunCall) exp;</span>
+<span class="nc bnc" id="L813" title="All 2 branches missed.">					if (f.isCallTo(&quot;Children&quot;)</span>
+<span class="nc bnc" id="L814" title="All 2 branches missed.">							&amp;&amp; memberForExp(f.getArgs()[0]).equals(grandPa)) {</span>
+<span class="nc" id="L815">						return;</span>
+					}
+				}
+			}
+
+<span class="nc" id="L820">			FunCall uncles = new FunCall(&quot;Children&quot;,</span>
+<span class="nc" id="L821">					new Exp[] { expForMember(grandPa) }, Syntax.Property);</span>
+<span class="nc" id="L822">			list.add(uncles);</span>
+		}
+<span class="nc" id="L824">	}</span>
+
+	/**
+	 * @param list
+	 * @param member
+	 * @param maxLevel
+	 */
+	public static void addMemberSiblings(List&lt;Exp&gt; list, Member member,
+			int[] maxLevel) {
+<span class="nc" id="L833">		int level = member.getLevel().getDepth();</span>
+<span class="nc bnc" id="L834" title="All 2 branches missed.">		if (level &lt; maxLevel[0]) {</span>
+<span class="nc" id="L835">			return;</span>
+		}
+
+<span class="nc bnc" id="L838" title="All 2 branches missed.">		if (level &gt; maxLevel[0]) {</span>
+<span class="nc" id="L839">			maxLevel[0] = level;</span>
+<span class="nc" id="L840">			list.clear();</span>
+		}
+
+<span class="nc bnc" id="L843" title="All 2 branches missed.">		if (level &gt; 0) {</span>
+<span class="nc" id="L844">			Member parent = member.getParentMember();</span>
+
+			// do nothing if already on List
+<span class="nc bnc" id="L847" title="All 2 branches missed.">			for (Exp exp : list) {</span>
+<span class="nc bnc" id="L848" title="All 2 branches missed.">				if (exp instanceof FunCall) {</span>
+<span class="nc" id="L849">					FunCall f = (FunCall) exp;</span>
+<span class="nc bnc" id="L850" title="All 2 branches missed.">					if (f.isCallTo(&quot;Children&quot;)</span>
+<span class="nc bnc" id="L851" title="All 2 branches missed.">							&amp;&amp; memberForExp(f.getArgs()[0]).equals(parent)) {</span>
+<span class="nc" id="L852">						return;</span>
+					}
+				}
+			}
+
+<span class="nc" id="L857">			FunCall siblings = new FunCall(&quot;Children&quot;,</span>
+<span class="nc" id="L858">					new Exp[] { expForMember(parent) }, Syntax.Property);</span>
+<span class="nc" id="L859">			list.add(siblings);</span>
+		}
+<span class="nc" id="L861">	}</span>
+
+	/**
+	 * @param list
+	 * @param member
+	 * @param maxLevel
+	 */
+	public static void addMemberChildren(List&lt;Exp&gt; list, Member member,
+			int[] maxLevel) {
+<span class="nc" id="L870">		int childLevel = member.getLevel().getDepth() + 1;</span>
+<span class="nc bnc" id="L871" title="All 2 branches missed.">		if (childLevel &lt; maxLevel[0]) {</span>
+<span class="nc" id="L872">			return;</span>
+		}
+
+<span class="nc bnc" id="L875" title="All 2 branches missed.">		if (childLevel &gt; maxLevel[0]) {</span>
+<span class="nc" id="L876">			maxLevel[0] = childLevel;</span>
+<span class="nc" id="L877">			list.clear();</span>
+		}
+
+<span class="nc bnc" id="L880" title="All 2 branches missed.">		if (childLevel &gt; 0) {</span>
+			// do nothing if already on List
+<span class="nc bnc" id="L882" title="All 2 branches missed.">			for (Exp exp : list) {</span>
+<span class="nc bnc" id="L883" title="All 2 branches missed.">				if (exp instanceof FunCall) {</span>
+<span class="nc" id="L884">					FunCall f = (FunCall) exp;</span>
+<span class="nc bnc" id="L885" title="All 2 branches missed.">					if (f.isCallTo(&quot;Children&quot;)</span>
+<span class="nc bnc" id="L886" title="All 2 branches missed.">							&amp;&amp; memberForExp(f.getArgs()[0]).equals(member)) {</span>
+<span class="nc" id="L887">						return;</span>
+					}
+				}
+			}
+
+<span class="nc" id="L892">			FunCall children = new FunCall(&quot;Children&quot;,</span>
+<span class="nc" id="L893">					new Exp[] { expForMember(member) }, Syntax.Property);</span>
+<span class="nc" id="L894">			list.add(children);</span>
+		}
+<span class="nc" id="L896">	}</span>
+
+	/**
+	 * @param list
+	 * @param member
+	 * @param level
+	 * @param maxLevel
+	 */
+	public static void addMemberDescendants(List&lt;Exp&gt; list, Member member,
+			Level level, int[] maxLevel) {
+<span class="nc" id="L906">		int parentLevel = member.getLevel().getDepth() - 1;</span>
+<span class="nc bnc" id="L907" title="All 2 branches missed.">		if (parentLevel &lt; maxLevel[0]) {</span>
+<span class="nc" id="L908">			return;</span>
+		}
+
+<span class="nc bnc" id="L911" title="All 2 branches missed.">		if (parentLevel &gt; maxLevel[0]) {</span>
+<span class="nc" id="L912">			maxLevel[0] = parentLevel;</span>
+<span class="nc" id="L913">			list.clear();</span>
+		}
+
+<span class="nc bnc" id="L916" title="All 2 branches missed.">		if (parentLevel &gt; 0) {</span>
+			// do nothing if already on List
+<span class="nc bnc" id="L918" title="All 2 branches missed.">			for (Exp exp : list) {</span>
+<span class="nc bnc" id="L919" title="All 2 branches missed.">				if (exp instanceof FunCall) {</span>
+<span class="nc" id="L920">					FunCall f = (FunCall) exp;</span>
+<span class="nc bnc" id="L921" title="All 2 branches missed.">					if (f.isCallTo(&quot;Descendants&quot;)</span>
+<span class="nc bnc" id="L922" title="All 2 branches missed.">							&amp;&amp; memberForExp(f.getArgs()[0]).equals(member)) {</span>
+<span class="nc" id="L923">						return;</span>
+					}
+				}
+			}
+<span class="nc" id="L927">			FunCall children = new FunCall(&quot;Descendants&quot;, new Exp[] {</span>
+<span class="nc" id="L928">					expForMember(member), expForLevel(level) }, Syntax.Function);</span>
+<span class="nc" id="L929">			list.add(children);</span>
+		}
+<span class="nc" id="L931">	}</span>
+
+	/**
+	 * @param list
+	 * @param level
+	 * @param maxLevel
+	 */
+	public static void addLevelMembers(List&lt;Exp&gt; list, Level level,
+			int[] maxLevel) {
+<span class="nc" id="L940">		int depth = level.getDepth();</span>
+<span class="nc bnc" id="L941" title="All 2 branches missed.">		if (depth &lt; maxLevel[0]) {</span>
+<span class="nc" id="L942">			return;</span>
+		}
+
+<span class="nc bnc" id="L945" title="All 2 branches missed.">		if (depth &gt; maxLevel[0]) {</span>
+<span class="nc" id="L946">			maxLevel[0] = depth;</span>
+<span class="nc" id="L947">			list.clear();</span>
+		}
+
+<span class="nc bnc" id="L950" title="All 2 branches missed.">		if (depth &gt; 0) {</span>
+			// do nothing if already on List
+<span class="nc bnc" id="L952" title="All 2 branches missed.">			for (Exp exp : list) {</span>
+<span class="nc bnc" id="L953" title="All 2 branches missed.">				if (exp instanceof FunCall) {</span>
+<span class="nc" id="L954">					FunCall f = (FunCall) exp;</span>
+<span class="nc bnc" id="L955" title="All 2 branches missed.">					if (f.isCallTo(&quot;Members&quot;)) {</span>
+<span class="nc" id="L956">						return;</span>
+					}
+				}
+			}
+
+<span class="nc" id="L961">			FunCall members = new FunCall(&quot;Members&quot;,</span>
+<span class="nc" id="L962">					new Exp[] { expForLevel(level) }, Syntax.Property);</span>
+<span class="nc" id="L963">			list.add(members);</span>
+		}
+<span class="nc" id="L965">	}</span>
+
+	/**
+	 * @param level
+	 * @return
+	 */
+	public static Level getParentLevel(Level level) {
+<span class="nc" id="L972">		Level parent = null;</span>
+
+<span class="nc bnc" id="L974" title="All 2 branches missed.">		if (level.getDepth() &gt; 0) {</span>
+<span class="nc" id="L975">			List&lt;Level&gt; levels = level.getHierarchy().getLevels();</span>
+<span class="nc bnc" id="L976" title="All 2 branches missed.">			for (Level l : levels) {</span>
+<span class="nc bnc" id="L977" title="All 2 branches missed.">				if (l.getDepth() == level.getDepth() - 1) {</span>
+<span class="nc" id="L978">					parent = l;</span>
+<span class="nc" id="L979">					break;</span>
+				}
+			}
+		}
+
+<span class="nc" id="L984">		return parent;</span>
+	}
+
+	/**
+	 * @param f
+	 *            Children FunCall
+	 * @param member
+	 *            member to search for
+	 * @return true if member mSearch is in set of children function
+	 */
+	public static boolean isMemberInChildren(FunCall f, Member member) {
+		// calculated members are not really child
+<span class="pc bpc" id="L996" title="1 of 2 branches missed.">		if (member.isCalculated()) {</span>
+<span class="nc" id="L997">			return false;</span>
+		}
+
+<span class="fc" id="L1000">		Member parent = memberForExp(f.getArgs()[0]);</span>
+<span class="fc" id="L1001">		return member.equals(parent);</span>
+	}
+
+	/**
+	 * @param f
+	 *            Descendants FunCall
+	 * @param member
+	 *            member to search for
+	 * @return true if member mSearch is in set of Descendants function
+	 */
+	public static boolean isMemberInDescendants(FunCall f, Member member) {
+		// calculated members are not really child
+<span class="nc bnc" id="L1013" title="All 2 branches missed.">		if (member.isCalculated()) {</span>
+<span class="nc" id="L1014">			return false;</span>
+		}
+
+<span class="nc" id="L1017">		Member ancestor = memberForExp(f.getArgs()[0]);</span>
+
+<span class="nc" id="L1019">		Level level = levelForExp(f.getArgs()[1]);</span>
+<span class="nc" id="L1020">		Level mLevel = member.getLevel();</span>
+
+<span class="nc bnc" id="L1022" title="All 2 branches missed.">		if (!mLevel.equals(level)) {</span>
+<span class="nc" id="L1023">			return false;</span>
+		}
+
+<span class="nc bnc" id="L1026" title="All 2 branches missed.">		if (member.equals(ancestor)) {</span>
+<span class="nc" id="L1027">			return false;</span>
+		}
+
+<span class="nc" id="L1030">		int ancestorLevelNumber = ancestor.getLevel().getDepth();</span>
+
+<span class="nc" id="L1032">		Member mm = member;</span>
+<span class="nc bnc" id="L1033" title="All 2 branches missed.">		while (ancestorLevelNumber &lt; mm.getLevel().getDepth()) {</span>
+<span class="nc" id="L1034">			mm = mm.getParentMember();</span>
+		}
+
+<span class="nc" id="L1037">		return mm.equals(ancestor);</span>
+	}
+
+	/**
+	 * @param f
+	 *            Members FunCall
+	 * @param member
+	 *            member to search for
+	 * @return true if member mSearch is in set of Members function
+	 */
+	public static boolean isMemberInLevel(FunCall f, Member member) {
+<span class="nc" id="L1048">		Level level = levelForExp(f.getArgs()[0]);</span>
+<span class="nc" id="L1049">		return level.equals(member.getLevel());</span>
+	}
+
+	/**
+	 * @param f
+	 *            Set FunCall
+	 * @param member
+	 *            member to search for
+	 * @return true if member mSearch is in set function
+	 */
+	public static boolean isMemberInSet(FunCall f, Member member) {
+		// set of members expected
+<span class="nc bnc" id="L1061" title="All 2 branches missed.">		for (Exp arg : f.getArgs()) {</span>
+<span class="nc" id="L1062">			Member m = memberForExp(arg);</span>
+<span class="nc bnc" id="L1063" title="All 2 branches missed.">			if (m.equals(member)) {</span>
+<span class="nc" id="L1064">				return true;</span>
+			}
+		}
+<span class="nc" id="L1067">		return false;</span>
+	}
+
+	/**
+	 * @param f
+	 *            Union FunCall
+	 * @param member
+	 *            member to search for
+	 * @return true if member mSearch is in set function
+	 * @throws UnknownExpressionException
+	 */
+	public static boolean isMemberInUnion(FunCall f, Member member)
+			throws UnknownExpressionException {
+		// Unions may be nested
+<span class="nc bnc" id="L1081" title="All 2 branches missed.">		for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L1082">			FunCall fChild = (FunCall) f.getArgs()[i];</span>
+<span class="nc bnc" id="L1083" title="All 2 branches missed.">			if (isMemberInFunCall(fChild, member)) {</span>
+<span class="nc" id="L1084">				return true;</span>
+			}
+		}
+<span class="nc" id="L1087">		return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

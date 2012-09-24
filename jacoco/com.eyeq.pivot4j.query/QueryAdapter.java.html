@@ -1,0 +1,945 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>QueryAdapter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pivot4J</a> &gt; <a href="index.html" class="el_package">com.eyeq.pivot4j.query</a> &gt; <span class="el_source">QueryAdapter.java</span></div><h1>QueryAdapter.java</h1><pre class="source lang-java linenums">/*
+ * ====================================================================
+ * This software is subject to the terms of the Common Public License
+ * Agreement, available at the following URL:
+ *   http://www.opensource.org/licenses/cpl.html .
+ * You must accept the terms of that agreement to use this software.
+ * ====================================================================
+ */
+package com.eyeq.pivot4j.query;
+
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import java_cup.runtime.Symbol;
+
+import org.olap4j.CellSet;
+import org.olap4j.CellSetAxis;
+import org.olap4j.OlapException;
+import org.olap4j.Position;
+import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.eyeq.pivot4j.PivotException;
+import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.StateHolder;
+import com.eyeq.pivot4j.mdx.Exp;
+import com.eyeq.pivot4j.mdx.FunCall;
+import com.eyeq.pivot4j.mdx.Lexer;
+import com.eyeq.pivot4j.mdx.Literal;
+import com.eyeq.pivot4j.mdx.ParsedQuery;
+import com.eyeq.pivot4j.mdx.Parser;
+import com.eyeq.pivot4j.mdx.QueryAxis;
+import com.eyeq.pivot4j.mdx.Syntax;
+
+/**
+ * Adapt the MDX query to the model
+ */
+public class QueryAdapter implements StateHolder {
+
+<span class="fc" id="L48">	protected static Logger logger = LoggerFactory</span>
+<span class="fc" id="L49">			.getLogger(QueryAdapter.class);</span>
+
+	private PivotModel model;
+
+	private List&lt;Quax&gt; quaxes; // Array of query axis state object
+
+<span class="fc" id="L55">	private boolean useQuax = false;</span>
+
+<span class="fc" id="L57">	private boolean axesSwapped = false;</span>
+
+	private Quax quaxToSort; // this is the Quax to be sorted
+
+	private ParsedQuery parsedQuery;
+
+	private ParsedQuery cloneQuery;
+
+<span class="fc" id="L65">	private Collection&lt;QueryChangeListener&gt; listeners = new ArrayList&lt;QueryChangeListener&gt;();</span>
+
+<span class="fc" id="L67">	private QuaxChangeListener quaxListener = new QuaxChangeListener() {</span>
+
+		public void quaxChanged(QuaxChangeEvent e) {
+<span class="fc" id="L70">			onQuaxChanged(e.getQuax(), e.isChangedByNavigator());</span>
+<span class="fc" id="L71">		}</span>
+	};
+
+	/**
+	 * @param model
+	 */
+<span class="fc" id="L77">	public QueryAdapter(PivotModel model) {</span>
+<span class="fc" id="L78">		this.model = model;</span>
+<span class="fc" id="L79">		this.parsedQuery = parseQuery(model.getMdx());</span>
+
+<span class="fc" id="L81">		QueryAxis[] queryAxes = parsedQuery.getAxes();</span>
+
+<span class="fc" id="L83">		this.quaxes = new ArrayList&lt;Quax&gt;(queryAxes.length);</span>
+
+<span class="fc" id="L85">		int ordinal = 0;</span>
+		for (@SuppressWarnings(&quot;unused&quot;)
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		QueryAxis queryAxis : queryAxes) {</span>
+<span class="fc" id="L88">			Quax quax = new Quax(ordinal++);</span>
+<span class="fc" id="L89">			quax.addChangeListener(quaxListener);</span>
+
+<span class="fc" id="L91">			quaxes.add(quax);</span>
+		}
+<span class="fc" id="L93">	}</span>
+
+	/**
+	 * @return the model
+	 */
+	public PivotModel getModel() {
+<span class="nc" id="L99">		return model;</span>
+	}
+
+	/**
+	 * register change listener
+	 * 
+	 * @param listener
+	 */
+	public void addChangeListener(QueryChangeListener listener) {
+<span class="fc" id="L108">		listeners.add(listener);</span>
+<span class="fc" id="L109">	}</span>
+
+	/**
+	 * unregister change listener
+	 * 
+	 * @param listener
+	 */
+	public void removeChangeListener(QueryChangeListener listener) {
+<span class="fc" id="L117">		listeners.remove(listener);</span>
+<span class="fc" id="L118">	}</span>
+
+	protected void fireQueryChanged() {
+<span class="fc" id="L121">		this.useQuax = true;</span>
+
+<span class="fc" id="L123">		updateQuery();</span>
+
+<span class="fc" id="L125">		QueryChangeEvent e = new QueryChangeEvent(this);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">		for (QueryChangeListener listener : listeners) {</span>
+<span class="fc" id="L127">			listener.queryChanged(e);</span>
+<span class="fc" id="L128">		}</span>
+<span class="fc" id="L129">	}</span>
+
+	/**
+	 * @return the XMLA Query object
+	 */
+	public ParsedQuery getParsedQuery() {
+<span class="fc" id="L135">		return parsedQuery;</span>
+	}
+
+	/**
+	 * @return
+	 */
+	public List&lt;Quax&gt; getQuaxes() {
+<span class="nc" id="L142">		return Collections.unmodifiableList(quaxes);</span>
+	}
+
+	/**
+	 * @return true if quas is to be used
+	 */
+	public boolean getUseQuax() {
+<span class="nc" id="L149">		return useQuax;</span>
+	}
+
+	/**
+	 * @return true, if axes are currently swapped
+	 */
+	public boolean isAxesSwapped() {
+<span class="nc" id="L156">		return axesSwapped;</span>
+	}
+
+	/**
+	 * @param axesSwapped
+	 */
+	public void setAxesSwapped(boolean axesSwapped) {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">		if (parsedQuery.getAxes().length &gt;= 2) {</span>
+<span class="nc" id="L164">			this.axesSwapped = axesSwapped;</span>
+
+<span class="nc bnc" id="L166" title="All 2 branches missed.">			if (logger.isInfoEnabled()) {</span>
+<span class="nc" id="L167">				logger.info(&quot;swapAxes &quot; + axesSwapped);</span>
+			}
+
+<span class="nc" id="L170">			fireQueryChanged();</span>
+		}
+<span class="nc" id="L172">	}</span>
+
+	/**
+	 * @return the quaxToSort
+	 */
+	public Quax getQuaxToSort() {
+<span class="nc" id="L178">		return quaxToSort;</span>
+	}
+
+	/**
+	 * @param quaxToSort
+	 *            the quaxToSort to set
+	 */
+	public void setQuaxToSort(Quax quaxToSort) {
+<span class="nc" id="L186">		this.quaxToSort = quaxToSort;</span>
+<span class="nc" id="L187">	}</span>
+
+	protected boolean isSortOnQuery() {
+<span class="pc bpc" id="L190" title="3 of 4 branches missed.">		return model.isSorting() &amp;&amp; model.getSortPosMembers() != null</span>
+<span class="pc bnc" id="L191" title="All 2 branches missed.">				&amp;&amp; !model.getSortPosMembers().isEmpty();</span>
+	}
+
+	/**
+	 * @return ordinal of quax to sort, if sorting is active
+	 */
+	protected int activeQuaxToSort() {
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">		if (isSortOnQuery()) {</span>
+<span class="nc" id="L199">			return quaxToSort.getOrdinal();</span>
+		} else {
+<span class="fc" id="L201">			return -1;</span>
+		}
+	}
+
+	/**
+	 * find the Quax for a specific dimension
+	 * 
+	 * @param dim
+	 *            Dimension
+	 * @return Quax containg dimension
+	 */
+	public Quax findQuax(Dimension dim) {
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">		for (Quax quax : quaxes) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">			if (quax.dimIdx(dim) &gt;= 0) {</span>
+<span class="fc" id="L215">				return quax;</span>
+			}
+<span class="fc" id="L217">		}</span>
+<span class="nc" id="L218">		return null;</span>
+	}
+
+	/**
+	 * Update the Query Object before Execute. The current query is build from -
+	 * the original query - adding the drilldown groups - apply pending swap
+	 * axes - apply pending sorts.
+	 */
+	public ParsedQuery updateQuery() {
+		// if quax is to be used, generate axes from quax
+<span class="fc bfc" id="L228" title="All 2 branches covered.">		if (useQuax) {</span>
+<span class="fc" id="L229">			int iQuaxToSort = activeQuaxToSort();</span>
+
+<span class="fc" id="L231">			QueryAxis[] qAxes = parsedQuery.getAxes();</span>
+
+<span class="fc" id="L233">			int i = 0;</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">			for (Quax quax : quaxes) {</span>
+<span class="fc" id="L235">				boolean doHierarchize = false;</span>
+<span class="pc bpc" id="L236" title="1 of 4 branches missed.">				if (quax.isHierarchizeNeeded() &amp;&amp; i != iQuaxToSort) {</span>
+<span class="fc" id="L237">					doHierarchize = true;</span>
+
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">					if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L240">						logger.debug(&quot;MDX Generation added Hierarchize()&quot;);</span>
+					}
+				}
+
+<span class="fc" id="L244">				Exp eSet = (Exp) quax.genExp(doHierarchize);</span>
+<span class="fc" id="L245">				qAxes[i].setExp(eSet);</span>
+
+<span class="fc" id="L247">				i++;</span>
+<span class="fc" id="L248">			}</span>
+		}
+
+		// generate order function if neccessary
+<span class="fc bfc" id="L252" title="All 2 branches covered.">		if (!useQuax) {</span>
+			// if Quax is used, the axis exp's are re-generated every time.
+			// if not -
+			// adding a sort to the query must not be permanent.
+			// Therefore, we clone the orig state of the query object and
+			// use
+			// the clone furthermore in order to avoid duplicate &quot;Order&quot;
+			// functions.
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">			if (cloneQuery == null) {</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">				if (isSortOnQuery()) {</span>
+<span class="nc" id="L262">					this.cloneQuery = (ParsedQuery) parsedQuery.clone();</span>
+				}
+			} else {
+				// reset to original state
+<span class="nc bnc" id="L266" title="All 2 branches missed.">				if (isSortOnQuery()) {</span>
+<span class="nc" id="L267">					this.parsedQuery = (ParsedQuery) cloneQuery.clone();</span>
+				} else {
+<span class="nc" id="L269">					this.parsedQuery = cloneQuery;</span>
+				}
+			}
+
+<span class="fc" id="L273">			addSortToQuery();</span>
+		}
+
+		// swap axes function if neccessary
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">		if (axesSwapped) {</span>
+<span class="nc" id="L278">			swapAxes();</span>
+		}
+
+<span class="fc" id="L281">		return parsedQuery;</span>
+	}
+
+	/**
+	 * Apply sort to query
+	 */
+	public void addSortToQuery() {
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">		if (isSortOnQuery()) {</span>
+<span class="nc bnc" id="L289" title="All 4 branches missed.">			switch (model.getSortMode()) {</span>
+			case ASC:
+			case DESC:
+			case BASC:
+			case BDESC:
+				// call sort
+<span class="nc" id="L295">				orderAxis(parsedQuery);</span>
+<span class="nc" id="L296">				break;</span>
+			case TOPCOUNT:
+<span class="nc" id="L298">				topBottomAxis(parsedQuery, &quot;TopCount&quot;);</span>
+<span class="nc" id="L299">				break;</span>
+			case BOTTOMCOUNT:
+<span class="nc" id="L301">				topBottomAxis(parsedQuery, &quot;BottomCount&quot;);</span>
+<span class="nc" id="L302">				break;</span>
+			default:
+<span class="nc" id="L304">				return; // do nothing</span>
+			}
+		}
+<span class="fc" id="L307">	}</span>
+
+	/**
+	 * Add Order Funcall to QueryAxis
+	 * 
+	 * @param monAx
+	 * @param monSortMode
+	 */
+	protected void orderAxis(ParsedQuery pq) {
+		// Order(TopCount) is allowed, Order(Order) is not permitted
+<span class="nc" id="L317">		QueryAxis[] queryAxes = pq.getAxes();</span>
+<span class="nc" id="L318">		QueryAxis qa = queryAxes[quaxToSort.getOrdinal()];</span>
+
+<span class="nc" id="L320">		Exp setForAx = qa.getExp();</span>
+
+		// setForAx is the top level Exp of the axis
+		// put an Order FunCall around
+<span class="nc" id="L324">		Exp[] args = new Exp[3];</span>
+<span class="nc" id="L325">		args[0] = setForAx; // the set to be sorted is the set representing the</span>
+							// query axis
+		// if we got more than 1 position member, generate a tuple for the 2.arg
+		Exp sortExp;
+
+<span class="nc" id="L330">		List&lt;Member&gt; sortPosMembers = model.getSortPosMembers();</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">		if (sortPosMembers == null) {</span>
+<span class="nc" id="L332">			return;</span>
+		}
+
+<span class="nc bnc" id="L335" title="All 2 branches missed.">		if (sortPosMembers.size() &gt; 1) {</span>
+<span class="nc" id="L336">			Exp[] memberExp = new Exp[sortPosMembers.size()];</span>
+<span class="nc bnc" id="L337" title="All 2 branches missed.">			for (int i = 0; i &lt; memberExp.length; i++) {</span>
+<span class="nc" id="L338">				memberExp[i] = QuaxUtil.expForMember(sortPosMembers.get(i));</span>
+			}
+
+<span class="nc" id="L341">			sortExp = new FunCall(&quot;()&quot;, memberExp, Syntax.Parentheses);</span>
+<span class="nc" id="L342">		} else {</span>
+<span class="nc" id="L343">			sortExp = QuaxUtil.expForMember(sortPosMembers.get(0));</span>
+		}
+
+<span class="nc" id="L346">		args[1] = sortExp;</span>
+<span class="nc" id="L347">		args[2] = Literal.createString(model.getSortMode().name());</span>
+
+<span class="nc" id="L349">		FunCall order = new FunCall(&quot;Order&quot;, args, Syntax.Function);</span>
+<span class="nc" id="L350">		qa.setExp(order);</span>
+<span class="nc" id="L351">	}</span>
+
+	/**
+	 * Add Top/BottomCount Funcall to QueryAxis
+	 * 
+	 * @param monAx
+	 * @param nShow
+	 */
+	protected void topBottomAxis(ParsedQuery pq, String function) {
+		// TopCount(TopCount) and TopCount(Order) is not permitted
+<span class="nc" id="L361">		QueryAxis[] queryAxes = pq.getAxes();</span>
+<span class="nc" id="L362">		QueryAxis qa = queryAxes[quaxToSort.getOrdinal()];</span>
+<span class="nc" id="L363">		Exp setForAx = qa.getExp();</span>
+		Exp sortExp;
+
+<span class="nc" id="L366">		List&lt;Member&gt; sortPosMembers = model.getSortPosMembers();</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">		if (sortPosMembers == null) {</span>
+<span class="nc" id="L368">			return;</span>
+		}
+
+		// if we got more than 1 position member, generate a tuple
+<span class="nc bnc" id="L372" title="All 2 branches missed.">		if (sortPosMembers.size() &gt; 1) {</span>
+<span class="nc" id="L373">			Exp[] memberExp = new Exp[sortPosMembers.size()];</span>
+<span class="nc bnc" id="L374" title="All 2 branches missed.">			for (int i = 0; i &lt; memberExp.length; i++) {</span>
+<span class="nc" id="L375">				memberExp[i] = QuaxUtil.expForMember(sortPosMembers.get(i));</span>
+			}
+<span class="nc" id="L377">			sortExp = new FunCall(&quot;()&quot;, memberExp, Syntax.Parentheses);</span>
+<span class="nc" id="L378">		} else {</span>
+<span class="nc" id="L379">			sortExp = QuaxUtil.expForMember(sortPosMembers.get(0));</span>
+		}
+
+<span class="nc" id="L382">		Exp[] args = new Exp[3];</span>
+<span class="nc" id="L383">		args[0] = setForAx; // the set representing the query axis</span>
+<span class="nc" id="L384">		args[1] = Literal.create(model.getTopBottomCount());</span>
+<span class="nc" id="L385">		args[2] = sortExp;</span>
+
+<span class="nc" id="L387">		FunCall topbottom = new FunCall(function, args, Syntax.Function);</span>
+<span class="nc" id="L388">		qa.setExp(topbottom);</span>
+<span class="nc" id="L389">	}</span>
+
+	/**
+	 * Swap axes in parsed query
+	 */
+	protected void swapAxes() {
+<span class="nc" id="L395">		QueryAxis[] queryAxes = parsedQuery.getAxes();</span>
+<span class="nc bnc" id="L396" title="All 2 branches missed.">		if (queryAxes.length &gt;= 2) {</span>
+<span class="nc" id="L397">			Exp exp = queryAxes[0].getExp();</span>
+<span class="nc" id="L398">			queryAxes[0].setExp(queryAxes[1].getExp());</span>
+<span class="nc" id="L399">			queryAxes[1].setExp(exp);</span>
+		}
+<span class="nc" id="L401">	}</span>
+
+	/**
+	 * @param mdxQuery
+	 */
+	protected ParsedQuery parseQuery(String mdxQuery) {
+<span class="fc" id="L407">		Reader reader = new StringReader(mdxQuery);</span>
+<span class="fc" id="L408">		Parser parser = new Parser(new Lexer(reader));</span>
+
+		ParsedQuery parsedQuery;
+
+		try {
+<span class="fc" id="L413">			Symbol parseTree = parser.parse();</span>
+<span class="fc" id="L414">			parsedQuery = (ParsedQuery) parseTree.value;</span>
+<span class="nc" id="L415">		} catch (RuntimeException e) {</span>
+<span class="nc" id="L416">			throw e;</span>
+<span class="nc" id="L417">		} catch (Exception e) {</span>
+<span class="nc" id="L418">			throw new PivotException(e);</span>
+<span class="fc" id="L419">		}</span>
+
+<span class="fc" id="L421">		parsedQuery.afterParse();</span>
+
+<span class="fc" id="L423">		return parsedQuery;</span>
+	}
+
+	/**
+	 * After the startup query was run: get the current positions as array of
+	 * array of member. Called from Model.getResult after the query was
+	 * executed.
+	 * 
+	 * @param result
+	 *            the result which redefines the query axes
+	 */
+	public void afterExecute(CellSet cellSet) {
+<span class="fc" id="L435">		List&lt;CellSetAxis&gt; axes = cellSet.getAxes();</span>
+
+		// initialization: get the result positions and set it to quax
+		// if the quaxes are not yet used to generate the query
+<span class="pc bpc" id="L439" title="1 of 2 branches missed.">		if (!useQuax) {</span>
+<span class="fc" id="L440">			int i = 0;</span>
+<span class="fc bfc" id="L441" title="All 2 branches covered.">			for (CellSetAxis axis : axes) {</span>
+<span class="fc" id="L442">				List&lt;Position&gt; positions = axis.getPositions();</span>
+
+<span class="pc bpc" id="L444" title="1 of 2 branches missed.">				int index = axesSwapped ? (i + 1) % 2 : i;</span>
+<span class="fc" id="L445">				quaxes.get(index).initialize(positions);</span>
+
+<span class="fc" id="L447">				i++;</span>
+<span class="fc" id="L448">			}</span>
+<span class="fc" id="L449">		} else {</span>
+			// hierarchize result if neccessary
+<span class="nc" id="L451">			int i = 0;</span>
+<span class="nc bnc" id="L452" title="All 2 branches missed.">			for (Quax quax : quaxes) {</span>
+<span class="nc bnc" id="L453" title="All 2 branches missed.">				int index = axesSwapped ? (i + 1) % 2 : i;</span>
+<span class="nc" id="L454">				List&lt;Position&gt; positions = axes.get(index).getPositions();</span>
+
+				// after a result for CalcSet.GENERATE was gotten
+				// we have to re-initialize the quax,
+				// so that we can navigate.
+<span class="nc bnc" id="L459" title="All 2 branches missed.">				if (quax.getGenerateMode() == CalcSetMode.Generate) {</span>
+<span class="nc" id="L460">					quax.resetGenerate();</span>
+<span class="nc" id="L461">					quax.initialize(positions);</span>
+				} else {
+					// unknown function members are collected
+					// - always for a &quot;Sticky generate&quot; unknown function
+					// - on first result for any other unknown function
+<span class="nc" id="L466">					int nDimension = quax.getNDimension();</span>
+<span class="nc bnc" id="L467" title="All 2 branches missed.">					for (int j = 0; j &lt; nDimension; j++) {</span>
+						// collect members for unknown functions on quax
+<span class="nc bnc" id="L469" title="All 2 branches missed.">						if (quax.isUnknownFunction(j)) {</span>
+<span class="nc" id="L470">							List&lt;Member&gt; members = memListForHier(j, positions);</span>
+<span class="nc" id="L471">							quax.setHierMemberList(j, members);</span>
+						}
+					}
+				}
+<span class="nc" id="L475">				i++;</span>
+<span class="nc" id="L476">			}</span>
+		}
+
+<span class="pc bpc" id="L479" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+			// print the result positions to logger
+<span class="fc bfc" id="L481" title="All 2 branches covered.">			for (CellSetAxis axis : axes) {</span>
+<span class="fc" id="L482">				List&lt;Position&gt; positions = axis.getPositions();</span>
+<span class="fc" id="L483">				logger.debug(&quot;Positions of axis &quot;</span>
+<span class="fc" id="L484">						+ axis.getAxisOrdinal().axisOrdinal());</span>
+
+<span class="pc bpc" id="L486" title="1 of 2 branches missed.">				if (positions.size() == 0) {</span>
+					// the axis does not have any positions
+<span class="nc" id="L488">					logger.debug(&quot;0 positions&quot;);</span>
+				} else {
+<span class="fc" id="L490">					int nDimension = positions.get(0).getMembers().size();</span>
+<span class="fc bfc" id="L491" title="All 2 branches covered.">					for (Position position : positions) {</span>
+<span class="fc" id="L492">						List&lt;Member&gt; members = position.getMembers();</span>
+
+<span class="fc" id="L494">						StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L495" title="All 2 branches covered.">						for (int j = 0; j &lt; nDimension; j++) {</span>
+<span class="fc bfc" id="L496" title="All 2 branches covered.">							if (j &gt; 0) {</span>
+<span class="fc" id="L497">								sb.append(&quot; * &quot;);</span>
+							}
+
+<span class="fc" id="L500">							List&lt;Member&gt; memsj = new ArrayList&lt;Member&gt;(j + 1);</span>
+<span class="fc bfc" id="L501" title="All 2 branches covered.">							for (int k = 0; k &lt;= j; k++) {</span>
+<span class="fc" id="L502">								memsj.add(members.get(k));</span>
+							}
+
+<span class="fc bfc" id="L505" title="All 2 branches covered.">							if (this.canExpand(memsj)) {</span>
+<span class="fc" id="L506">								sb.append(&quot;(+)&quot;);</span>
+<span class="pc bpc" id="L507" title="1 of 2 branches missed.">							} else if (this.canCollapse(memsj)) {</span>
+<span class="nc" id="L508">								sb.append(&quot;(-)&quot;);</span>
+							} else {
+<span class="fc" id="L510">								sb.append(&quot;   &quot;);</span>
+							}
+
+<span class="fc" id="L513">							sb.append(members.get(j).getUniqueName());</span>
+						}
+<span class="fc" id="L515">						logger.debug(sb.toString());</span>
+<span class="fc" id="L516">					}</span>
+				}
+<span class="fc" id="L518">			}</span>
+		}
+<span class="fc" id="L520">	}</span>
+
+	/**
+	 * Extract members of hier from Result
+	 * 
+	 * @param hierIndex
+	 * @return members of hier
+	 */
+	protected List&lt;Member&gt; memListForHier(int hierIndex,
+			List&lt;Position&gt; positions) {
+<span class="nc" id="L530">		List&lt;Member&gt; members = new ArrayList&lt;Member&gt;();</span>
+<span class="nc bnc" id="L531" title="All 2 branches missed.">		for (Position position : positions) {</span>
+<span class="nc" id="L532">			Member member = position.getMembers().get(hierIndex);</span>
+<span class="nc bnc" id="L533" title="All 2 branches missed.">			if (!members.contains(member)) {</span>
+<span class="nc" id="L534">				members.add(member);</span>
+			}
+<span class="nc" id="L536">		}</span>
+
+<span class="nc" id="L538">		return members;</span>
+	}
+
+	/**
+	 * Create set expression for list of members
+	 * 
+	 * @param members
+	 * @return set expression
+	 */
+	protected Object createMemberSet(List&lt;Member&gt; members) {
+<span class="nc" id="L548">		Exp[] exps = new Exp[members.size()];</span>
+
+<span class="nc" id="L550">		int i = 0;</span>
+<span class="nc bnc" id="L551" title="All 2 branches missed.">		for (Member member : members) {</span>
+<span class="nc" id="L552">			exps[i++] = QuaxUtil.expForMember(member);</span>
+<span class="nc" id="L553">		}</span>
+
+<span class="nc" id="L555">		return new FunCall(&quot;{}&quot;, exps, Syntax.Braces);</span>
+	}
+
+	/**
+	 * Find out, whether a member can be expanded. this is true, if - the member
+	 * is on an axis and - the member is not yet expanded and - the member has
+	 * children
+	 * 
+	 * @param member
+	 *            Member to be expanded
+	 * @return true if the member can be expanded
+	 */
+	public boolean canExpand(Member member) {
+		// a calculated member cannot be expanded
+<span class="pc bpc" id="L569" title="1 of 2 branches missed.">		if (member.isCalculated()) {</span>
+<span class="nc" id="L570">			return false;</span>
+		}
+
+		try {
+<span class="pc bpc" id="L574" title="1 of 2 branches missed.">			if (member.getChildMemberCount() &lt;= 0) {</span>
+<span class="nc" id="L575">				return false;</span>
+			}
+<span class="nc" id="L577">		} catch (OlapException e) {</span>
+<span class="nc" id="L578">			throw new PivotException(e);</span>
+<span class="fc" id="L579">		}</span>
+
+<span class="fc" id="L581">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+<span class="fc" id="L582">		Quax quax = findQuax(dim);</span>
+<span class="pc bpc" id="L583" title="1 of 2 branches missed.">		return (quax == null) ? false : quax.canExpand(member);</span>
+	}
+
+	/**
+	 * @param pathMembers
+	 *            Members to be expanded
+	 * @return true if the member can be expanded
+	 */
+	public boolean canExpand(List&lt;Member&gt; pathMembers) {
+<span class="fc" id="L592">		Member member = pathMembers.get(pathMembers.size() - 1);</span>
+		// a calculated member cannot be expanded
+<span class="pc bpc" id="L594" title="1 of 2 branches missed.">		if (member.isCalculated()) {</span>
+<span class="nc" id="L595">			return false;</span>
+		}
+
+		try {
+<span class="fc bfc" id="L599" title="All 2 branches covered.">			if (member.getChildMemberCount() &lt;= 0) {</span>
+<span class="fc" id="L600">				return false;</span>
+			}
+<span class="nc" id="L602">		} catch (OlapException e) {</span>
+<span class="nc" id="L603">			throw new PivotException(e);</span>
+<span class="fc" id="L604">		}</span>
+
+<span class="fc" id="L606">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+<span class="fc" id="L607">		Quax quax = findQuax(dim);</span>
+
+<span class="pc bpc" id="L609" title="1 of 2 branches missed.">		return (quax == null) ? false : quax.canExpand(pathMembers);</span>
+	}
+
+	/**
+	 * @param member
+	 *            Member to be collapsed
+	 * @return true if the member can be collapsed
+	 */
+	public boolean canCollapse(Member member) {
+		// a calculated member cannot be collapsed
+<span class="pc bpc" id="L619" title="1 of 2 branches missed.">		if (member.isCalculated()) {</span>
+<span class="nc" id="L620">			return false;</span>
+		}
+
+<span class="fc" id="L623">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+<span class="fc" id="L624">		Quax quax = findQuax(dim);</span>
+
+<span class="pc bpc" id="L626" title="1 of 2 branches missed.">		return (quax == null) ? false : quax.canCollapse(member);</span>
+	}
+
+	/**
+	 * @param position
+	 *            position to be expanded
+	 * @return true if the position can be collapsed
+	 */
+	public boolean canCollapse(List&lt;Member&gt; pathMembers) {
+<span class="fc" id="L635">		Member member = pathMembers.get(pathMembers.size() - 1);</span>
+		// a calculated member cannot be expanded
+<span class="pc bpc" id="L637" title="1 of 2 branches missed.">		if (member.isCalculated()) {</span>
+<span class="nc" id="L638">			return false;</span>
+		}
+
+<span class="fc" id="L641">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+<span class="fc" id="L642">		Quax quax = findQuax(dim);</span>
+
+<span class="pc bpc" id="L644" title="1 of 2 branches missed.">		return (quax == null) ? false : quax.canCollapse(pathMembers);</span>
+	}
+
+	/**
+	 * Expand a member in all positions this is done by applying
+	 * ToggleDrillState to the Query
+	 * 
+	 * @param member
+	 *            member to be expanded
+	 */
+	public void expand(Member member) {
+<span class="fc" id="L655">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+<span class="fc" id="L656">		Quax quax = findQuax(dim);</span>
+
+<span class="pc bpc" id="L658" title="1 of 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="fc" id="L659">			logger.info(&quot;Expand member&quot; + getPositionString(null, member));</span>
+		}
+
+<span class="pc bpc" id="L662" title="2 of 4 branches missed.">		if ((quax == null) || !quax.canExpand(member)) {</span>
+<span class="nc" id="L663">			String msg = &quot;Expand member failed for&quot; + member.getUniqueName();</span>
+<span class="nc" id="L664">			throw new PivotException(msg);</span>
+		}
+
+<span class="fc" id="L667">		quax.expand(member);</span>
+
+<span class="fc" id="L669">		fireQueryChanged();</span>
+<span class="fc" id="L670">	}</span>
+
+	/**
+	 * Expand a member in a specific position
+	 * 
+	 * @param pathMembers
+	 *            members to be expanded
+	 */
+	public void expand(List&lt;Member&gt; pathMembers) {
+<span class="fc" id="L679">		Member member = pathMembers.get(pathMembers.size() - 1);</span>
+<span class="fc" id="L680">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+<span class="fc" id="L681">		Quax quax = findQuax(dim);</span>
+
+<span class="pc bpc" id="L683" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L684">			logger.info(&quot;Expand path&quot; + getPositionString(pathMembers, null));</span>
+		}
+
+<span class="pc bpc" id="L687" title="2 of 4 branches missed.">		if ((quax == null) || !quax.canExpand(pathMembers)) {</span>
+<span class="nc" id="L688">			String msg = &quot;Expand failed for&quot;</span>
+<span class="nc" id="L689">					+ getPositionString(pathMembers, null);</span>
+<span class="nc" id="L690">			throw new PivotException(msg);</span>
+		}
+
+<span class="fc" id="L693">		quax.expand(pathMembers);</span>
+
+<span class="fc" id="L695">		fireQueryChanged();</span>
+<span class="fc" id="L696">	}</span>
+
+	/**
+	 * Collapse a member in all positions
+	 * 
+	 * @param member
+	 *            Member to be collapsed
+	 */
+	public void collapse(Member member) {
+<span class="fc" id="L705">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+
+<span class="pc bpc" id="L707" title="1 of 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="fc" id="L708">			logger.info(&quot;Collapse &quot; + member.getUniqueName());</span>
+		}
+
+<span class="fc" id="L711">		Quax quax = findQuax(dim);</span>
+<span class="pc bpc" id="L712" title="1 of 2 branches missed.">		if (quax == null) {</span>
+<span class="nc" id="L713">			String msg = &quot;Collapse quax was null &quot; + member.getUniqueName();</span>
+<span class="nc" id="L714">			throw new PivotException(msg);</span>
+		}
+
+<span class="fc" id="L717">		quax.collapse(member);</span>
+
+<span class="fc" id="L719">		fireQueryChanged();</span>
+<span class="fc" id="L720">	}</span>
+
+	/**
+	 * Collapse a member in a specific position
+	 * 
+	 * @param position
+	 *            Position to be collapsed
+	 */
+	public void collapse(List&lt;Member&gt; pathMembers) {
+<span class="pc bpc" id="L729" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L730">			logger.debug(&quot;Collapse&quot; + getPositionString(pathMembers, null));</span>
+		}
+
+<span class="fc" id="L733">		Member member = pathMembers.get(pathMembers.size() - 1);</span>
+<span class="fc" id="L734">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+<span class="fc" id="L735">		Quax quax = findQuax(dim);</span>
+<span class="pc bpc" id="L736" title="1 of 2 branches missed.">		if (quax == null) {</span>
+<span class="nc" id="L737">			String msg = &quot;Collapse quax was null&quot;</span>
+<span class="nc" id="L738">					+ getPositionString(pathMembers, null);</span>
+<span class="nc" id="L739">			throw new PivotException(msg);</span>
+		}
+
+<span class="fc" id="L742">		quax.collapse(pathMembers);</span>
+
+<span class="fc" id="L744">		fireQueryChanged();</span>
+<span class="fc" id="L745">	}</span>
+
+	/**
+	 * Drill down is possible if &lt;code&gt;member&lt;/code&gt; has children
+	 * 
+	 * @param member
+	 *            Member to drill down
+	 */
+	public boolean canDrillDown(Member member) {
+		try {
+<span class="nc bnc" id="L755" title="All 2 branches missed.">			if (member.getChildMemberCount() &lt;= 0) {</span>
+<span class="nc" id="L756">				return false;</span>
+			}
+<span class="nc" id="L758">		} catch (OlapException e) {</span>
+<span class="nc" id="L759">			throw new PivotException(e);</span>
+<span class="nc" id="L760">		}</span>
+
+<span class="nc" id="L762">		Dimension dim = member.getLevel().getHierarchy().getDimension();</span>
+<span class="nc" id="L763">		Quax quax = findQuax(dim);</span>
+<span class="nc bnc" id="L764" title="All 2 branches missed.">		return (quax == null) ? false : quax.canDrillDown(member);</span>
+	}
+
+	/**
+	 * Drill up is possible if at least one member in the tree is not at the top
+	 * level of this hierarchy.
+	 */
+	public boolean canDrillUp(Hierarchy hierarchy) {
+<span class="nc" id="L772">		Quax quax = findQuax(hierarchy.getDimension());</span>
+<span class="nc bnc" id="L773" title="All 2 branches missed.">		return (quax == null) ? false : quax.canDrillUp(hierarchy);</span>
+	}
+
+	/**
+	 * After switch to Qubon mode: replaces the members. Let &lt;code&gt;H&lt;/code&gt; be
+	 * the hierarchy that member belongs to. Then drillDown will replace all
+	 * members from &lt;code&gt;H&lt;/code&gt; that are currently visible with the children
+	 * of &lt;code&gt;member&lt;/code&gt;.
+	 */
+	public void drillDown(Member member) {
+		// switch to Qubon mode, if not yet in
+<span class="nc" id="L784">		Quax quax = findQuax(member.getLevel().getHierarchy().getDimension());</span>
+
+<span class="nc bnc" id="L786" title="All 2 branches missed.">		if (quax == null) {</span>
+<span class="nc" id="L787">			logger.info(&quot;drillDown Quax was null&quot;</span>
+<span class="nc" id="L788">					+ getPositionString(null, member));</span>
+<span class="nc" id="L789">			return;</span>
+		}
+
+		// replace dimension iDim by monMember.children
+<span class="nc" id="L793">		quax.drillDown(member);</span>
+
+<span class="nc" id="L795">		fireQueryChanged();</span>
+
+<span class="nc bnc" id="L797" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="nc" id="L798">			logger.info(&quot;Drill down &quot; + getPositionString(null, member));</span>
+		}
+<span class="nc" id="L800">	}</span>
+
+	/**
+	 * After switch to Qubon mode: replaces all visible members of hier with the
+	 * members of the next higher level.
+	 */
+	public void drillUp(Hierarchy hierarchy) {
+		// switch to Qubon mode, if not yet in
+<span class="nc" id="L808">		Quax quax = findQuax(hierarchy.getDimension());</span>
+<span class="nc bnc" id="L809" title="All 2 branches missed.">		if (quax == null) {</span>
+<span class="nc" id="L810">			String msg = &quot;Drill up hierarchy quax was null &quot;</span>
+<span class="nc" id="L811">					+ hierarchy.getCaption();</span>
+<span class="nc" id="L812">			throw new PivotException(msg);</span>
+		}
+<span class="nc" id="L814">		quax.drillUp(hierarchy);</span>
+
+<span class="nc" id="L816">		fireQueryChanged();</span>
+
+<span class="nc bnc" id="L818" title="All 2 branches missed.">		if (logger.isInfoEnabled())</span>
+<span class="nc" id="L819">			logger.info(&quot;Drill up hierarchy &quot; + hierarchy.getCaption());</span>
+<span class="nc" id="L820">	}</span>
+
+	/**
+	 * Display position member for debugging purposes
+	 * 
+	 * @param posMembers
+	 * @param member
+	 * @return
+	 */
+	protected String getPositionString(List&lt;Member&gt; posMembers, Member member) {
+<span class="fc" id="L830">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L831" title="All 2 branches covered.">		if (posMembers != null) {</span>
+<span class="fc" id="L832">			sb.append(&quot; Position=&quot;);</span>
+<span class="fc" id="L833">			int i = 0;</span>
+<span class="fc bfc" id="L834" title="All 2 branches covered.">			for (Member m : posMembers) {</span>
+<span class="fc bfc" id="L835" title="All 2 branches covered.">				if (i &gt; 0) {</span>
+<span class="fc" id="L836">					sb.append(&quot; &quot;);</span>
+				}
+<span class="fc" id="L838">				sb.append(m.getUniqueName());</span>
+<span class="fc" id="L839">				i++;</span>
+<span class="fc" id="L840">			}</span>
+		}
+
+<span class="fc bfc" id="L843" title="All 2 branches covered.">		if (member != null) {</span>
+<span class="fc" id="L844">			sb.append(&quot; Member=&quot;);</span>
+<span class="fc" id="L845">			sb.append(member.getUniqueName());</span>
+		}
+
+<span class="fc" id="L848">		return sb.toString();</span>
+	}
+
+	/**
+	 * @param quax
+	 * @param changedByNavigator
+	 */
+	protected void onQuaxChanged(Quax quax, boolean changedByNavigator) {
+		// if the axis to sort (normaly *not* the measures)
+		// was changed by the Navi GUI, we want to switch sorting off
+<span class="pc bpc" id="L858" title="5 of 6 branches missed.">		if (changedByNavigator &amp;&amp; model.isSorting() &amp;&amp; quax == getQuaxToSort()) {</span>
+<span class="nc bnc" id="L859" title="All 2 branches missed.">			if (logger.isDebugEnabled()) {</span>
+<span class="nc" id="L860">				logger.debug(&quot;Quax changed by navi - switch sorting off&quot;);</span>
+			}
+
+<span class="nc" id="L863">			model.setSorting(false);</span>
+		}
+
+<span class="fc" id="L866">		fireQueryChanged();</span>
+<span class="fc" id="L867">	}</span>
+
+	/**
+	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
+	 */
+	public Serializable bookmarkState() {
+<span class="nc" id="L873">		Serializable[] state = new Serializable[4];</span>
+
+<span class="nc" id="L875">		state[0] = isAxesSwapped();</span>
+<span class="nc" id="L876">		state[1] = getUseQuax();</span>
+
+<span class="nc" id="L878">		Quax quaxToSort = getQuaxToSort();</span>
+
+<span class="nc bnc" id="L880" title="All 2 branches missed.">		if (quaxToSort == null) {</span>
+<span class="nc" id="L881">			state[2] = -1;</span>
+		} else {
+<span class="nc" id="L883">			state[2] = quaxToSort.getOrdinal();</span>
+		}
+
+<span class="nc bnc" id="L886" title="All 2 branches missed.">		if (getUseQuax()) {</span>
+<span class="nc" id="L887">			List&lt;Quax&gt; quaxes = getQuaxes();</span>
+
+<span class="nc" id="L889">			Serializable[] quaxStates = new Serializable[quaxes.size()];</span>
+<span class="nc bnc" id="L890" title="All 2 branches missed.">			for (int i = 0; i &lt; quaxStates.length; i++) {</span>
+<span class="nc" id="L891">				quaxStates[i] = quaxes.get(i).bookmarkState();</span>
+			}
+
+<span class="nc" id="L894">			state[3] = quaxStates;</span>
+<span class="nc" id="L895">		} else {</span>
+<span class="nc" id="L896">			state[3] = null;</span>
+		}
+
+<span class="nc" id="L899">		return state;</span>
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
+	 */
+	public void restoreState(Serializable state) {
+<span class="nc" id="L906">		Serializable[] states = (Serializable[]) state;</span>
+
+<span class="nc" id="L908">		this.axesSwapped = (Boolean) states[0];</span>
+<span class="nc" id="L909">		this.useQuax = (Boolean) states[1];</span>
+
+<span class="nc" id="L911">		int quaxOrdinal = (Integer) states[2];</span>
+
+<span class="nc" id="L913">		Quax quaxToSort = null;</span>
+
+<span class="nc bnc" id="L915" title="All 2 branches missed.">		if (quaxOrdinal &gt; -1) {</span>
+<span class="nc" id="L916">			List&lt;Quax&gt; quaxes = getQuaxes();</span>
+<span class="nc bnc" id="L917" title="All 2 branches missed.">			for (Quax quax : quaxes) {</span>
+<span class="nc bnc" id="L918" title="All 2 branches missed.">				if (quaxOrdinal == quax.getOrdinal()) {</span>
+<span class="nc" id="L919">					quaxToSort = quax;</span>
+<span class="nc" id="L920">					break;</span>
+				}
+<span class="nc" id="L922">			}</span>
+		}
+
+<span class="nc" id="L925">		this.quaxToSort = quaxToSort;</span>
+
+<span class="nc bnc" id="L927" title="All 2 branches missed.">		if (useQuax) {</span>
+<span class="nc" id="L928">			Serializable[] quaxStates = (Serializable[]) states[3];</span>
+
+			// reset the quaxes to current state
+<span class="nc" id="L931">			List&lt;Quax&gt; quaxes = getQuaxes();</span>
+<span class="nc bnc" id="L932" title="All 2 branches missed.">			if (quaxes.size() != quaxStates.length) {</span>
+<span class="nc" id="L933">				throw new IllegalArgumentException(</span>
+						&quot;Stored quax state is not compatible with the current MDX.&quot;);
+			}
+
+<span class="nc bnc" id="L937" title="All 2 branches missed.">			for (int i = 0; i &lt; quaxStates.length; i++) {</span>
+<span class="nc" id="L938">				quaxes.get(i).restoreState(quaxStates[i]);</span>
+			}
+		}
+
+<span class="nc" id="L942">		fireQueryChanged();</span>
+<span class="nc" id="L943">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

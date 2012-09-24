@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>SimpleOlapDataSource.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pivot4J</a> &gt; <a href="index.html" class="el_package">com.eyeq.pivot4j.datasource</a> &gt; <span class="el_source">SimpleOlapDataSource.java</span></div><h1>SimpleOlapDataSource.java</h1><pre class="source lang-java linenums">/*
+ * ====================================================================
+ * This software is subject to the terms of the Common Public License
+ * Agreement, available at the following URL:
+ *   http://www.opensource.org/licenses/cpl.html .
+ * You must accept the terms of that agreement to use this software.
+ * ====================================================================
+ */
+package com.eyeq.pivot4j.datasource;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+import org.olap4j.OlapConnection;
+
+<span class="fc" id="L18">public class SimpleOlapDataSource extends AbstractOlapDataSource {</span>
+
+	private String connectionString;
+
+	private Properties connectionProperties;
+
+	/**
+	 * @return the connectionString
+	 */
+	public String getConnectionString() {
+<span class="fc" id="L28">		return connectionString;</span>
+	}
+
+	/**
+	 * @param connectionString
+	 *            the connectionString to set
+	 */
+	public void setConnectionString(String connectionString) {
+<span class="fc" id="L36">		this.connectionString = connectionString;</span>
+<span class="fc" id="L37">	}</span>
+
+	/**
+	 * @return the connectionProperties
+	 */
+	public Properties getConnectionProperties() {
+<span class="nc" id="L43">		return connectionProperties;</span>
+	}
+
+	/**
+	 * @param connectionProperties
+	 *            the connectionProperties to set
+	 */
+	public void setConnectionProperties(Properties connectionProperties) {
+<span class="nc" id="L51">		this.connectionProperties = connectionProperties;</span>
+<span class="nc" id="L52">	}</span>
+
+	/**
+	 * @throws SQLException
+	 * @see com.eyeq.pivot4j.datasource.AbstractOlapDataSource#createConnection(java
+	 *      .lang.String, java.lang.String)
+	 */
+	@Override
+	protected OlapConnection createConnection(String username, String password)
+			throws SQLException {
+<span class="fc" id="L62">		Connection connection = DriverManager</span>
+<span class="fc" id="L63">				.getConnection(getConnectionString());</span>
+<span class="fc" id="L64">		return connection.unwrap(OlapConnection.class);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

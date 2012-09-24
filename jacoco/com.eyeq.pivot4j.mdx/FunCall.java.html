@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FunCall.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pivot4J</a> &gt; <a href="index.html" class="el_package">com.eyeq.pivot4j.mdx</a> &gt; <span class="el_source">FunCall.java</span></div><h1>FunCall.java</h1><pre class="source lang-java linenums">/*
+ * ====================================================================
+ * This software is subject to the terms of the Common Public License
+ * Agreement, available at the following URL:
+ *   http://www.opensource.org/licenses/cpl.html .
+ * You must accept the terms of that agreement to use this software.
+ * ====================================================================
+ */
+package com.eyeq.pivot4j.mdx;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class FunCall implements Exp {
+
+<span class="fc" id="L16">	protected static Logger logger = LoggerFactory.getLogger(FunCall.class);</span>
+
+	private Syntax syntacticType;
+
+	private String function;
+
+	private Exp[] args;
+
+<span class="pc" id="L24">	ParsedQuery pQuery = null; // needed by Parameter FunCall</span>
+
+	/**
+	 * @param fun
+	 * @param args
+	 */
+	public FunCall(String fun, Exp[] args) {
+<span class="nc" id="L31">		this(fun, args, Syntax.Function);</span>
+<span class="nc" id="L32">	}</span>
+
+	/**
+	 * @param fun
+	 * @param args
+	 * @param syntacticCode
+	 */
+<span class="nc" id="L39">	public FunCall(String fun, Exp[] args, int syntacticCode) {</span>
+<span class="nc" id="L40">		this.function = fun;</span>
+<span class="nc" id="L41">		this.args = args;</span>
+
+<span class="nc" id="L43">		Syntax type = null;</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		for (Syntax t : Syntax.values()) {</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">			if (syntacticCode == t.getCode()) {</span>
+<span class="nc" id="L46">				type = t;</span>
+<span class="nc" id="L47">				break;</span>
+			}
+		}
+
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		if (type == null) {</span>
+<span class="nc" id="L52">			throw new IllegalArgumentException(&quot;Unknown syntactic code : &quot;</span>
+					+ syntacticCode);
+		}
+
+<span class="nc" id="L56">		this.syntacticType = type;</span>
+<span class="nc" id="L57">	}</span>
+
+	/**
+	 * @param fun
+	 * @param args
+	 * @param syntacticType
+	 */
+<span class="fc" id="L64">	public FunCall(String fun, Exp[] args, Syntax syntacticType) {</span>
+<span class="fc" id="L65">		this.function = fun;</span>
+<span class="fc" id="L66">		this.args = args;</span>
+<span class="fc" id="L67">		this.syntacticType = syntacticType;</span>
+<span class="fc" id="L68">	}</span>
+
+	/**
+	 * format to MDX
+	 */
+	public String toMdx() {
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">		if ((this.isCallTo(&quot;Parameter&quot;) || this.isCallTo(&quot;ParamRef&quot;))</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">				&amp;&amp; (pQuery.getParaMap().size() &gt; 0)) {</span>
+			// parameters are evaluated to MDX
+<span class="nc" id="L77">			return evaluateParameter();</span>
+		}
+
+<span class="fc" id="L80">		StringBuffer sb = new StringBuffer();</span>
+
+		// &quot;+&quot; instead of Union yields much better readable MDX
+		// however
+		// - does not work with SAP
+		// - is not compatible with Mondrian
+		/*
+		 * sorry if (this.isCallTo(&quot;Union&quot;)) { // render Union as &quot;+&quot;
+		 * sb.append(args[0].toMdx()); sb.append(&quot; + &quot;);
+		 * sb.append(args[1].toMdx()); return sb.toString(); }
+		 */
+
+<span class="fc" id="L92">		boolean isFollow = false;</span>
+
+<span class="pc bpc" id="L94" title="4 of 8 branches missed.">		switch (syntacticType) {</span>
+		case Function: // f(a, b, c)
+<span class="fc" id="L96">			sb.append(function);</span>
+<span class="fc" id="L97">			sb.append(&quot;(&quot;);</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">			for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">				if (isFollow)</span>
+<span class="fc" id="L100">					sb.append(&quot;, &quot;);</span>
+<span class="fc" id="L101">				isFollow = true;</span>
+<span class="fc" id="L102">				sb.append(args[i].toMdx());</span>
+			}
+<span class="fc" id="L104">			sb.append(&quot;)&quot;);</span>
+<span class="fc" id="L105">			break;</span>
+		case Braces: // { a, b, c }
+<span class="fc" id="L107">			sb.append(&quot;{&quot;);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">			for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">				if (isFollow)</span>
+<span class="fc" id="L110">					sb.append(&quot;, &quot;);</span>
+<span class="fc" id="L111">				isFollow = true;</span>
+<span class="fc" id="L112">				sb.append(args[i].toMdx());</span>
+			}
+<span class="fc" id="L114">			sb.append(&quot;}&quot;);</span>
+<span class="fc" id="L115">			break;</span>
+		case Parentheses: // (a, b, c)
+<span class="fc" id="L117">			sb.append(&quot;(&quot;);</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">			for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">				if (isFollow)</span>
+<span class="fc" id="L120">					sb.append(&quot;, &quot;);</span>
+<span class="fc" id="L121">				isFollow = true;</span>
+<span class="fc" id="L122">				sb.append(args[i].toMdx());</span>
+			}
+<span class="fc" id="L124">			sb.append(&quot;)&quot;);</span>
+<span class="fc" id="L125">			break;</span>
+		case Prefix: // NOT a
+<span class="nc" id="L127">			sb.append(function);</span>
+<span class="nc" id="L128">			sb.append(&quot; &quot;);</span>
+<span class="nc" id="L129">			sb.append(args[0].toMdx());</span>
+<span class="nc" id="L130">			break;</span>
+		case Infix: // a + b
+<span class="nc" id="L132">			sb.append(args[0].toMdx());</span>
+<span class="nc" id="L133">			sb.append(&quot; &quot;);</span>
+<span class="nc" id="L134">			sb.append(function);</span>
+<span class="nc" id="L135">			sb.append(&quot; &quot;);</span>
+<span class="nc" id="L136">			sb.append(args[1].toMdx());</span>
+<span class="nc" id="L137">			break;</span>
+		case Property: // a.b
+		case PropertyQuoted:
+		case PropertyAmpQuoted:
+<span class="fc" id="L141">			sb.append(args[0].toMdx());</span>
+<span class="fc" id="L142">			sb.append(&quot;.&quot;);</span>
+<span class="fc" id="L143">			sb.append(function);</span>
+<span class="fc" id="L144">			break;</span>
+		case Method:
+<span class="nc" id="L146">			sb.append(args[0].toMdx());</span>
+<span class="nc" id="L147">			sb.append(&quot;.&quot;);</span>
+<span class="nc" id="L148">			sb.append(function);</span>
+<span class="nc" id="L149">			sb.append(&quot;(&quot;);</span>
+<span class="nc" id="L150">			sb.append(args[1].toMdx());</span>
+<span class="nc" id="L151">			sb.append(&quot;)&quot;);</span>
+<span class="nc" id="L152">			break;</span>
+		default:
+<span class="nc" id="L154">			throw new IllegalArgumentException(</span>
+					&quot;unexpected FunCall syntatic type&quot;);
+		}
+<span class="fc" id="L157">		return sb.toString();</span>
+	}
+
+	/**
+	 * 
+	 * @see java.lang.Object#clone()
+	 */
+	public FunCall clone() {
+<span class="nc" id="L165">		Exp[] cloneArgs = new Exp[args.length];</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">		for (int i = 0; i &lt; cloneArgs.length; i++) {</span>
+<span class="nc" id="L167">			cloneArgs[i] = (Exp) args[i].clone();</span>
+		}
+<span class="nc" id="L169">		return new FunCall(function, cloneArgs, syntacticType);</span>
+	}
+
+	/**
+	 * compare function name ignoring case
+	 * 
+	 * @param fName
+	 * @return boolean
+	 */
+	public boolean isCallTo(String fName) {
+<span class="fc bfc" id="L179" title="All 2 branches covered.">		return (fName.compareToIgnoreCase(function) == 0);</span>
+	}
+
+	/**
+	 * Returns the args.
+	 * 
+	 * @return Exp[]
+	 */
+	public Exp[] getArgs() {
+<span class="fc" id="L188">		return args;</span>
+	}
+
+	/**
+	 * @return
+	 */
+	public String getFunction() {
+<span class="nc" id="L195">		return function;</span>
+	}
+
+	/**
+	 * put parameter value to MDX
+	 */
+	private String evaluateParameter() {
+<span class="nc" id="L202">		Literal eName = (Literal) args[0];</span>
+<span class="nc" id="L203">		String paraName = eName.stringValue();</span>
+<span class="nc" id="L204">		Parameter param = (Parameter) pQuery.paraMap</span>
+<span class="nc" id="L205">				.get(paraName.toUpperCase());</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">		if (param == null) {</span>
+			// should not occur
+<span class="nc" id="L208">			logger.error(&quot;could not find parameter &quot; + paraName);</span>
+<span class="nc" id="L209">			return (&quot;Parameter( \&quot;&quot; + paraName + &quot;\&quot; )&quot;); // MDX parse will fail</span>
+															// here
+		}
+<span class="nc" id="L212">		int type = param.getType();</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">		if (type == Parameter.TYPE_NUMERIC) {</span>
+<span class="nc" id="L214">			Object value = param.getOValue();</span>
+<span class="nc" id="L215">			return value.toString(); // Integer or double</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">		} else if (type == Parameter.TYPE_STRING) {</span>
+<span class="nc" id="L217">			String str = (String) param.getOValue();</span>
+<span class="nc" id="L218">			return &quot;\&quot;&quot; + str + &quot;\&quot;&quot;;</span>
+		} else {
+			// member assumed
+<span class="nc" id="L221">			String str = (String) param.getOValue();</span>
+<span class="nc" id="L222">			return str;</span>
+
+		}
+	}
+
+	/**
+	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 */
+	public void accept(ExpVisitor visitor) {
+<span class="nc" id="L231">		visitor.visitFunCall(this);</span>
+<span class="nc" id="L232">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>
