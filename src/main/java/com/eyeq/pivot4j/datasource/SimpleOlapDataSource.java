@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import org.olap4j.OlapConnection;
-import org.olap4j.OlapWrapper;
 
 public class SimpleOlapDataSource extends AbstractOlapDataSource {
 
@@ -62,8 +61,6 @@ public class SimpleOlapDataSource extends AbstractOlapDataSource {
 			throws SQLException {
 		Connection connection = DriverManager
 				.getConnection(getConnectionString());
-		OlapWrapper wrapper = (OlapWrapper) connection;
-
-		return wrapper.unwrap(OlapConnection.class);
+		return connection.unwrap(OlapConnection.class);
 	}
 }

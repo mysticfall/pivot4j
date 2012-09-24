@@ -10,6 +10,8 @@ package com.eyeq.pivot4j.datasource;
 
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
 
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
@@ -32,6 +34,10 @@ public abstract class AbstractOlapDataSource implements OlapDataSource {
 	 */
 	public void setLogWriter(PrintWriter out) {
 		this.logWriter = out;
+	}
+
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	/**
@@ -71,4 +77,19 @@ public abstract class AbstractOlapDataSource implements OlapDataSource {
 	 */
 	protected abstract OlapConnection createConnection(String username,
 			String password) throws SQLException;
+
+	/**
+	 * @see java.sql.Wrapper#unwrap(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T unwrap(Class<T> iface) throws SQLException {
+		return (T) this;
+	}
+
+	/**
+	 * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
+	 */
+	public boolean isWrapperFor(Class<?> iface) throws SQLException {
+		return iface.isAssignableFrom(getClass());
+	}
 }
