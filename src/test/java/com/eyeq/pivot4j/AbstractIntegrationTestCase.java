@@ -19,6 +19,8 @@ import org.olap4j.OlapDataSource;
 
 import com.eyeq.pivot4j.datasource.SimpleOlapDataSource;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
+import com.eyeq.pivot4j.transform.TransformFactory;
+import com.eyeq.pivot4j.transform.impl.TransformFactoryImpl;
 
 public abstract class AbstractIntegrationTestCase {
 
@@ -26,12 +28,15 @@ public abstract class AbstractIntegrationTestCase {
 
 	private PivotModel model;
 
+	private TransformFactory transformFactory;
+
 	@Before
 	public void setUp() throws ClassNotFoundException {
 		Class.forName("org.apache.derby.jdbc.ClientDriver");
 
 		this.dataSource = createMondrianDataSource();
-		this.model = createPivotModel(dataSource);
+		this.transformFactory = createTransformFactory();
+		this.model = createPivotModel(dataSource, transformFactory);
 	}
 
 	@After
@@ -42,7 +47,7 @@ public abstract class AbstractIntegrationTestCase {
 			this.model = null;
 		}
 
-		this.dataSource  = null;
+		this.dataSource = null;
 	}
 
 	protected OlapDataSource createMondrianDataSource()
@@ -89,8 +94,13 @@ public abstract class AbstractIntegrationTestCase {
 		return dataSource;
 	}
 
-	protected PivotModel createPivotModel(OlapDataSource dataSource) {
-		return new PivotModelImpl(dataSource);
+	protected TransformFactory createTransformFactory() {
+		return new TransformFactoryImpl();
+	}
+
+	protected PivotModel createPivotModel(OlapDataSource dataSource,
+			TransformFactory transformFactory) {
+		return new PivotModelImpl(dataSource, transformFactory);
 	}
 
 	/**
@@ -98,6 +108,13 @@ public abstract class AbstractIntegrationTestCase {
 	 */
 	protected OlapDataSource getDataSource() {
 		return dataSource;
+	}
+
+	/**
+	 * @return the transformFactory
+	 */
+	protected TransformFactory getTransformFactory() {
+		return transformFactory;
 	}
 
 	/**

@@ -17,6 +17,8 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.Member;
 
+import com.eyeq.pivot4j.transform.Transform;
+
 /**
  * Provides access to result and metadata. It does not specify what data are
  * displayed (the query).
@@ -47,6 +49,10 @@ public interface PivotModel {
 
 	void setMdx(String mdxQuery);
 
+	/**
+	 * Returns the current MDX query which this model instance is based on or
+	 * null if the model is not initialized.
+	 */
 	String getCurrentMdx();
 
 	Locale getLocale();
@@ -69,6 +75,11 @@ public interface PivotModel {
 	 * Removes a model change listener
 	 */
 	void removeModelChangeListener(ModelChangeListener listener);
+
+	/**
+	 * Returns the registered transform instance for the given type.
+	 */
+	<T extends Transform> T getTransform(Class<T> type);
 
 	boolean isSorting();
 

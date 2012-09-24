@@ -83,8 +83,9 @@ public class QueryAdapter implements StateHolder {
 		this.quaxes = new ArrayList<Quax>(queryAxes.length);
 
 		int ordinal = 0;
-		for (QueryAxis queryAxis : queryAxes) {
-			Quax quax = new Quax(ordinal++, queryAxis, model);
+		for (@SuppressWarnings("unused")
+		QueryAxis queryAxis : queryAxes) {
+			Quax quax = new Quax(ordinal++);
 			quax.addChangeListener(quaxListener);
 
 			quaxes.add(quax);

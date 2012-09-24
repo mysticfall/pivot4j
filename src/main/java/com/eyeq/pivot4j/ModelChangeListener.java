@@ -12,9 +12,15 @@ import java.util.EventListener;
 
 public interface ModelChangeListener extends EventListener {
 
-	/** model data have changed, e.g. user has navigated */
+	/** Model has initialized */
+	void modelInitialized(ModelChangeEvent e);
+
+	/** Model data have changed, e.g. user has navigated */
 	void modelChanged(ModelChangeEvent e);
 
-	/** major change, e.g. extensions added/removed */
+	/** Model change, e.g. extensions added/removed */
 	void structureChanged(ModelChangeEvent e);
+
+	/** Model has destroyed */
+	void modelDestroyed(ModelChangeEvent e);
 }

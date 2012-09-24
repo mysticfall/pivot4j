@@ -10,7 +10,6 @@ package com.eyeq.pivot4j.query;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,10 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotException;
-import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.mdx.Exp;
-import com.eyeq.pivot4j.mdx.QueryAxis;
 import com.eyeq.pivot4j.mdx.SetExp;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.util.TreeNode;
@@ -40,10 +37,6 @@ import com.eyeq.pivot4j.util.TreeNodeCallback;
 public class Quax implements StateHolder {
 
 	protected static Logger logger = LoggerFactory.getLogger(Quax.class);
-
-	private PivotModel model;
-
-	private Exp originalSet;
 
 	private int nDimension;
 
@@ -93,13 +86,9 @@ public class Quax implements StateHolder {
 
 	/**
 	 * @param ordinal
-	 * @param queryAxis
-	 * @param model
 	 */
-	public Quax(int ordinal, QueryAxis queryAxis, PivotModel model) {
+	public Quax(int ordinal) {
 		this.ordinal = ordinal;
-		this.model = model;
-		this.originalSet = queryAxis.getExp();
 	}
 
 	/**

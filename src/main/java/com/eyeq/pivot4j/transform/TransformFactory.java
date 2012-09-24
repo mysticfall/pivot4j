@@ -6,9 +6,13 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j;
+package com.eyeq.pivot4j.transform;
 
-public interface PivotModelFactory {
+import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.query.QueryAdapter;
 
-	PivotModel createPivotModel();
+public interface TransformFactory {
+
+	<T extends Transform> T getTransform(Class<T> type, PivotModel model,
+			QueryAdapter queryAdapter);
 }

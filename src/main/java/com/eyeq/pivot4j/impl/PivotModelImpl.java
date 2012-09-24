@@ -27,9 +27,9 @@ import org.olap4j.mdx.IdentifierNode;
 import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Schema;
 import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Member;
-import org.olap4j.metadata.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,13 +38,14 @@ import com.eyeq.pivot4j.ModelChangeListener;
 import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.SortMode;
 import com.eyeq.pivot4j.StateHolder;
-import com.eyeq.pivot4j.mdx.ParsedQuery;
+import com.eyeq.pivot4j.SortMode;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.query.QueryChangeEvent;
 import com.eyeq.pivot4j.query.QueryChangeListener;
+import com.eyeq.pivot4j.transform.Transform;
+import com.eyeq.pivot4j.transform.TransformFactory;
 
 /**
  * The pivot model represents all (meta-)data for an MDX query.
@@ -72,6 +73,8 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 	private QueryAdapter queryAdapter;
 
+	private TransformFactory transformFactory;
+
 	private int topBottomCount = 10;
 
 	private SortMode sortMode = SortMode.ASC;
@@ -81,8 +84,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	private List<Member> sortPosMembers;
 
 	private String mdxQuery;
-
-	private String currentMdx;
 
 	private CellSet cellSet;
 
@@ -95,219 +96,22 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 	/**
 	 * @param dataSource
+	 * @param transformFactory
 	 */
-	public PivotModelImpl(OlapDataSource dataSource) {
+	public PivotModelImpl(OlapDataSource dataSource,
+			TransformFactory transformFactory) {
+		if (dataSource == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'dataSource'.");
+		}
+
+		if (transformFactory == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'transformFactory'.");
+		}
+
 		this.dataSource = dataSource;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#initialize()
-	 */
-	public synchronized void initialize() {
-		if (isInitialized()) {
-			destroy();
-		}
-
-		if (mdxQuery == null) {
-			throw new PivotException("Initial MDX query is null.");
-		}
-
-		try {
-			this.connection = dataSource.getConnection();
-
-			if (roleName != null) {
-				connection.setRoleName(roleName);
-			}
-
-			if (locale != null) {
-				connection.setLocale(locale);
-			}
-		} catch (SQLException e) {
-			throw new PivotException(e);
-		}
-
-		this.initialized = true;
-	}
-
-	private void checkInitialization() throws NotInitializedException {
-		if (!isInitialized()) {
-			throw new NotInitializedException(
-					"Model has not been initialized yet.");
-		}
-	}
-
-	/**
-	 * Session terminated, closing connections etc
-	 */
-	public synchronized void destroy() {
-		checkInitialization();
-
-		if (queryAdapter != null) {
-			queryAdapter.removeChangeListener(queryChangeListener);
-			this.queryAdapter = null;
-		}
-
-		if (connection != null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Closing OLAP connection " + connection);
-			}
-
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new PivotException(e);
-			}
-
-			this.connection = null;
-		}
-
-		this.cubeName = null;
-		this.schemaName = null;
-		this.sortPosMembers = null;
-		this.sortMode = SortMode.ASC;
-		this.currentMdx = null;
-		this.sorting = false;
-		this.cellSet = null;
-		this.initialized = false;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#isInitialized()
-	 */
-	public boolean isInitialized() {
-		return initialized;
-	}
-
-	/**
-	 * Returns the connection.
-	 */
-	protected OlapConnection getConnection() {
-		return connection;
-	}
-
-	public OlapDataSource getDataSource() {
-		return dataSource;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#getCatalog()
-	 */
-	public Catalog getCatalog() throws NotInitializedException {
-		checkInitialization();
-
-		try {
-			return connection.getOlapCatalog();
-		} catch (OlapException e) {
-			throw new PivotException(e);
-		}
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel.jpivot.olap.model.OlapModel#getCellSet()
-	 * @return Result of Query Execution
-	 */
-	public synchronized CellSet getCellSet() throws NotInitializedException {
-		checkInitialization();
-
-		if (cellSet != null) {
-			return cellSet;
-		}
-
-		if (logger.isDebugEnabled()) {
-			logger.debug(currentMdx);
-		}
-
-		long t1 = System.currentTimeMillis();
-
-		ParsedQuery query = queryAdapter.updateQuery();
-
-		this.currentMdx = query.toMdx().replaceAll("\r", "");
-
-		try {
-			OlapStatement stmt = connection.createStatement();
-
-			this.cellSet = stmt.executeOlapQuery(currentMdx);
-
-			Cube cube = cellSet.getMetaData().getCube();
-
-			this.cubeName = cube.getName();
-			this.schemaName = cube.getSchema().getName();
-		} catch (OlapException e) {
-			throw new PivotException(e);
-		}
-
-		queryAdapter.afterExecute(cellSet);
-
-		if (logger.isInfoEnabled()) {
-			long t2 = System.currentTimeMillis();
-			logger.info("Query execution time " + (t2 - t1) + " ms");
-		}
-
-		return cellSet;
-	}
-
-	/**
-	 * @return the corresponding mdx
-	 * @see com.eyeq.pivot4j.PivotModel#getCurrentMdx()
-	 */
-	public String getCurrentMdx() {
-		if (!isInitialized()) {
-			return getMdx();
-		}
-
-		return queryAdapter.getParsedQuery().toMdx();
-	}
-
-	/**
-	 * Returns the mdxQuery.
-	 * 
-	 * @return String
-	 */
-	public String getMdx() {
-		return mdxQuery;
-	}
-
-	/**
-	 * Sets the mdxQuery.
-	 * 
-	 * @param mdxQuery
-	 *            The mdxQuery to set
-	 */
-	public void setMdx(String mdxQuery) {
-		if (mdxQuery == null) {
-			throw new IllegalArgumentException("MDX query cannot be null.");
-		}
-
-		if (logger.isInfoEnabled()) {
-			logger.info("setMdx: " + mdxQuery);
-		}
-
-		this.mdxQuery = mdxQuery;
-
-		String mdx = mdxQuery.replaceAll("\r", "");
-		if (mdx.equals(currentMdx)) {
-			return;
-		}
-
-		this.cellSet = null;
-		this.topBottomCount = 10;
-		this.sortMode = SortMode.ASC;
-		this.sorting = false;
-		this.sortPosMembers = null;
-
-		if (queryAdapter != null) {
-			queryAdapter.removeChangeListener(queryChangeListener);
-		}
-
-		this.queryAdapter = createQueryAdapter();
-
-		queryAdapter.addChangeListener(queryChangeListener);
-
-		this.currentMdx = mdx;
-	}
-
-	protected QueryAdapter createQueryAdapter() {
-		return new QueryAdapter(this);
+		this.transformFactory = transformFactory;
 	}
 
 	/**
@@ -352,6 +156,284 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.PivotModel#initialize()
+	 */
+	public synchronized void initialize() {
+		if (isInitialized()) {
+			destroy();
+		}
+
+		if (mdxQuery == null) {
+			throw new PivotException("Initial MDX query is null.");
+		}
+
+		try {
+			this.connection = createConnection(dataSource);
+		} catch (SQLException e) {
+			throw new PivotException(e);
+		}
+
+		this.initialized = true;
+
+		fireModelInitialized();
+	}
+
+	/**
+	 * @param dataSource
+	 * @return
+	 * @throws SQLException
+	 */
+	protected OlapConnection createConnection(OlapDataSource dataSource)
+			throws SQLException {
+		OlapConnection connection = dataSource.getConnection();
+
+		if (roleName != null) {
+			connection.setRoleName(roleName);
+		}
+
+		if (locale != null) {
+			connection.setLocale(locale);
+		}
+
+		return connection;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#isInitialized()
+	 */
+	public boolean isInitialized() {
+		return initialized;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#destroy()
+	 */
+	public synchronized void destroy() throws NotInitializedException {
+		checkInitialization();
+
+		if (queryAdapter != null) {
+			queryAdapter.removeChangeListener(queryChangeListener);
+			this.queryAdapter = null;
+		}
+
+		if (connection != null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Closing OLAP connection " + connection);
+			}
+
+			try {
+				closeConnection(connection);
+			} catch (SQLException e) {
+				throw new PivotException(e);
+			}
+
+			this.connection = null;
+		}
+
+		this.cubeName = null;
+		this.schemaName = null;
+		this.sortPosMembers = null;
+		this.sortMode = SortMode.ASC;
+		this.sorting = false;
+		this.cellSet = null;
+		this.initialized = false;
+
+		fireModelDestroyed();
+	}
+
+	/**
+	 * @param dataSource
+	 * @return
+	 * @throws SQLException
+	 */
+	protected void closeConnection(OlapConnection connection)
+			throws SQLException {
+		connection.close();
+	}
+
+	private void checkInitialization() throws NotInitializedException {
+		if (!isInitialized()) {
+			throw new NotInitializedException(
+					"Model has not been initialized yet.");
+		}
+	}
+
+	/**
+	 * Returns the connection.
+	 */
+	protected OlapConnection getConnection() {
+		return connection;
+	}
+
+	public OlapDataSource getDataSource() {
+		return dataSource;
+	}
+
+	/**
+	 * @return the schemaName
+	 */
+	protected String getSchemaName() {
+		return schemaName;
+	}
+
+	/**
+	 * @return the cubeName
+	 */
+	protected String getCubeName() {
+		return cubeName;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getCatalog()
+	 */
+	public Catalog getCatalog() throws NotInitializedException {
+		checkInitialization();
+
+		try {
+			return connection.getOlapCatalog();
+		} catch (OlapException e) {
+			throw new PivotException(e);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getCellSet()
+	 */
+	public synchronized CellSet getCellSet() throws NotInitializedException {
+		checkInitialization();
+
+		if (cellSet != null) {
+			return cellSet;
+		}
+
+		long t1 = System.currentTimeMillis();
+
+		if (queryAdapter == null) {
+			throw new IllegalStateException("Initial MDX is not specified.");
+		}
+
+		queryAdapter.updateQuery();
+
+		String mdx = normalizeMdx(getCurrentMdx());
+
+		if (logger.isDebugEnabled()) {
+			logger.debug(mdx);
+		}
+
+		try {
+			this.cellSet = executeMdx(connection, mdx);
+
+			Cube cube = cellSet.getMetaData().getCube();
+
+			this.cubeName = cube.getName();
+			this.schemaName = cube.getSchema().getName();
+		} catch (OlapException e) {
+			throw new PivotException(e);
+		}
+
+		queryAdapter.afterExecute(cellSet);
+
+		if (logger.isInfoEnabled()) {
+			long t2 = System.currentTimeMillis();
+			logger.info("Query execution time " + (t2 - t1) + " ms");
+		}
+
+		return cellSet;
+	}
+
+	/**
+	 * @param connection
+	 * @param mdx
+	 * @return
+	 * @throws OlapException
+	 */
+	protected CellSet executeMdx(OlapConnection connection, String mdx)
+			throws OlapException {
+		OlapStatement stmt = connection.createStatement();
+		return stmt.executeOlapQuery(mdx);
+	}
+
+	protected String normalizeMdx(String mdx) {
+		if (mdx == null) {
+			return null;
+		} else {
+			return mdx.replaceAll("\r", "");
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getCurrentMdx()
+	 */
+	public String getCurrentMdx() {
+		if (queryAdapter == null) {
+			return null;
+		} else {
+			return queryAdapter.getParsedQuery().toMdx();
+		}
+	}
+
+	/**
+	 * Returns the mdxQuery.
+	 * 
+	 * @return String
+	 */
+	public String getMdx() {
+		return mdxQuery;
+	}
+
+	/**
+	 * Sets the mdxQuery.
+	 * 
+	 * @param mdxQuery
+	 *            The mdxQuery to set
+	 */
+	public void setMdx(String mdxQuery) {
+		if (mdxQuery == null) {
+			throw new IllegalArgumentException("MDX query cannot be null.");
+		}
+
+		this.mdxQuery = mdxQuery;
+
+		String mdx = normalizeMdx(mdxQuery);
+		if (!mdx.equals(normalizeMdx(getCurrentMdx()))) {
+			onMdxChanged(mdx);
+		}
+	}
+
+	protected void onMdxChanged(String mdx) {
+		if (logger.isInfoEnabled()) {
+			logger.info("setMdx: " + mdx);
+		}
+
+		this.cellSet = null;
+		this.topBottomCount = 10;
+		this.sortMode = SortMode.ASC;
+		this.sorting = false;
+		this.sortPosMembers = null;
+
+		if (queryAdapter != null) {
+			queryAdapter.removeChangeListener(queryChangeListener);
+		}
+
+		this.queryAdapter = createQueryAdapter();
+
+		queryAdapter.addChangeListener(queryChangeListener);
+	}
+
+	protected QueryAdapter createQueryAdapter() {
+		return new QueryAdapter(this);
+	}
+
+	/**
+	 * Returns the queryAdapter.
+	 * 
+	 * @return QueryAdapter
+	 */
+	protected QueryAdapter getQueryAdapter() {
+		return queryAdapter;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.tonbeller.jpivot.core.Model#addModelChangeListener(ModelChangeListener)
 	 */
 	public void addModelChangeListener(ModelChangeListener listener) {
@@ -363,6 +445,13 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 */
 	public void removeModelChangeListener(ModelChangeListener listener) {
 		listeners.remove(listener);
+	}
+
+	protected void fireModelInitialized() {
+		ModelChangeEvent e = new ModelChangeEvent(this);
+		for (ModelChangeListener listener : listeners) {
+			listener.modelInitialized(e);
+		}
 	}
 
 	protected void fireModelChanged() {
@@ -383,13 +472,18 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		}
 	}
 
+	protected void fireModelDestroyed() {
+		ModelChangeEvent e = new ModelChangeEvent(this);
+		for (ModelChangeListener listener : listeners) {
+			listener.modelDestroyed(e);
+		}
+	}
+
 	/**
-	 * Returns the queryAdapter.
-	 * 
-	 * @return MondrianQueryAdapter
+	 * @see com.eyeq.pivot4j.PivotModel#getTransform(java.lang.Class)
 	 */
-	public QueryAdapter getQueryAdapter() {
-		return queryAdapter;
+	public <T extends Transform> T getTransform(Class<T> type) {
+		return transformFactory.getTransform(type, this, queryAdapter);
 	}
 
 	/**
@@ -608,7 +702,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	public synchronized Serializable bookmarkState() {
 		Serializable[] state = new Serializable[5];
 
-		state[0] = currentMdx;
+		state[0] = getCurrentMdx();
 		state[1] = cubeName;
 		state[2] = schemaName;
 
@@ -630,7 +724,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 			state[3] = sortState;
 		}
 
-		state[4] = queryAdapter.bookmarkState();
+		state[4] = getQueryAdapter().bookmarkState();
 
 		return state;
 	}
