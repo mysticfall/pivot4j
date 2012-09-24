@@ -8,7 +8,6 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.Transform;
 import com.eyeq.pivot4j.transform.TransformFactory;
@@ -16,13 +15,19 @@ import com.eyeq.pivot4j.transform.TransformFactory;
 public class TransformFactoryImpl implements TransformFactory {
 
 	/**
-	 * @see com.eyeq.pivot4j.transform.TransformFactory#getTransform(java.lang.Class,
-	 *      com.eyeq.pivot4j.PivotModel, com.eyeq.pivot4j.query.QueryAdapter)
+	 * @see com.eyeq.pivot4j.transform.TransformFactory#createTransform(java.lang.Class,
+	 *      com.eyeq.pivot4j.query.QueryAdapter)
 	 */
-	public <T extends Transform> T getTransform(Class<T> type,
-			PivotModel model, QueryAdapter queryAdapter) {
-		// TODO Auto-generated method stub
+	@SuppressWarnings("unchecked")
+	public <T extends Transform> T createTransform(Class<T> type,
+			QueryAdapter queryAdapter) {
+		// TODO Improve lookup method
+		if (type.isAssignableFrom(DrillExpandMemberImpl.class)) {
+			return (T) new DrillExpandMemberImpl(queryAdapter);
+		} else if (type.isAssignableFrom(DrillExpandPositionImpl.class)) {
+			return (T) new DrillExpandPositionImpl(queryAdapter);
+		}
+
 		return null;
 	}
-
 }

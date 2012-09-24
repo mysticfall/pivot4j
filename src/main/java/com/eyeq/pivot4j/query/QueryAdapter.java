@@ -93,6 +93,13 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	/**
+	 * @return the model
+	 */
+	public PivotModel getModel() {
+		return model;
+	}
+
+	/**
 	 * register change listener
 	 * 
 	 * @param listener
@@ -111,6 +118,10 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	protected void fireQueryChanged() {
+		this.useQuax = true;
+
+		updateQuery();
+
 		QueryChangeEvent e = new QueryChangeEvent(this);
 		for (QueryChangeListener listener : listeners) {
 			listener.queryChanged(e);
@@ -136,14 +147,6 @@ public class QueryAdapter implements StateHolder {
 	 */
 	public boolean getUseQuax() {
 		return useQuax;
-	}
-
-	/**
-	 * @param useQuax
-	 *            true if quas is to be used
-	 */
-	public void setUseQuax(boolean useQuax) {
-		this.useQuax = useQuax;
 	}
 
 	/**
@@ -852,16 +855,13 @@ public class QueryAdapter implements StateHolder {
 	protected void onQuaxChanged(Quax quax, boolean changedByNavigator) {
 		// if the axis to sort (normaly *not* the measures)
 		// was changed by the Navi GUI, we want to switch sorting off
-		if (quax != getQuaxToSort() || !changedByNavigator
-				|| !model.isSorting()) {
-			return;
-		}
+		if (changedByNavigator && model.isSorting() && quax == getQuaxToSort()) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Quax changed by navi - switch sorting off");
+			}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Quax changed by navi - switch sorting off");
+			model.setSorting(false);
 		}
-
-		model.setSorting(false);
 
 		fireQueryChanged();
 	}

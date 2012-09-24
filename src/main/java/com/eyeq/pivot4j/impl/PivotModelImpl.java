@@ -27,9 +27,9 @@ import org.olap4j.mdx.IdentifierNode;
 import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
-import org.olap4j.metadata.Schema;
 import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Member;
+import org.olap4j.metadata.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +38,8 @@ import com.eyeq.pivot4j.ModelChangeListener;
 import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.SortMode;
+import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.query.QueryChangeEvent;
@@ -312,8 +312,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 			throw new IllegalStateException("Initial MDX is not specified.");
 		}
 
-		queryAdapter.updateQuery();
-
 		String mdx = normalizeMdx(getCurrentMdx());
 
 		if (logger.isDebugEnabled()) {
@@ -416,6 +414,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		}
 
 		this.queryAdapter = createQueryAdapter();
+		queryAdapter.updateQuery();
 
 		queryAdapter.addChangeListener(queryChangeListener);
 	}
@@ -483,7 +482,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#getTransform(java.lang.Class)
 	 */
 	public <T extends Transform> T getTransform(Class<T> type) {
-		return transformFactory.getTransform(type, this, queryAdapter);
+		return transformFactory.createTransform(type, queryAdapter);
 	}
 
 	/**

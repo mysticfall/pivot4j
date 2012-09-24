@@ -8,6 +8,9 @@
  */
 package com.eyeq.pivot4j.transform;
 
+import com.eyeq.pivot4j.PivotModel;
+
 public interface Transform {
 
+	PivotModel getModel();
 }

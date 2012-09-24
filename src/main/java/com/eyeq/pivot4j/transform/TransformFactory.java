@@ -8,11 +8,10 @@
  */
 package com.eyeq.pivot4j.transform;
 
-import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.query.QueryAdapter;
 
 public interface TransformFactory {
 
-	<T extends Transform> T getTransform(Class<T> type, PivotModel model,
+	<T extends Transform> T createTransform(Class<T> type,
 			QueryAdapter queryAdapter);
 }

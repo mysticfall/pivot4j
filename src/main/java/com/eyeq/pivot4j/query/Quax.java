@@ -1049,10 +1049,12 @@ public class Quax implements StateHolder {
 					}
 				} else if (nodeIndex == dimIndex) {
 					// *must* be descendant of mPath[iDim] to get deleted
+
 					if (!QuaxUtil.isMember(oExp)) {
 						// FunCall
 						if (QuaxUtil.isFunCallTo(oExp, "Children")) {
 							Exp oMember = QuaxUtil.funCallArg(oExp, 0);
+
 							if (QuaxUtil.expForMember(memberPath.get(dimIndex))
 									.equals(oMember)
 									|| QuaxUtil.isDescendant(
@@ -1101,7 +1103,6 @@ public class Quax implements StateHolder {
 									node.setReference(newSet);
 								}
 							}
-
 						} else if (QuaxUtil.isFunCallTo(oExp, "Union")) {
 							// HHTASK Cleanup, always use
 							// removeDescendantsFromFunCall
@@ -1114,7 +1115,6 @@ public class Quax implements StateHolder {
 							}
 						}
 						return TreeNodeCallback.CONTINUE_SIBLING;
-
 					} else if (QuaxUtil.isMember(oExp)) {
 						if (QuaxUtil.isDescendant(memberPath.get(dimIndex),
 								oExp)) {

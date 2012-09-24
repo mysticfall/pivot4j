@@ -8,7 +8,10 @@
  */
 package com.eyeq.pivot4j.mdx;
 
+import java.io.StringWriter;
+
 import org.olap4j.mdx.ParseTreeNode;
+import org.olap4j.mdx.ParseTreeWriter;
 import org.olap4j.type.DimensionType;
 import org.olap4j.type.HierarchyType;
 import org.olap4j.type.LevelType;
@@ -23,6 +26,11 @@ public class ParseTreeNodeExp implements Exp {
 	 * @param node
 	 */
 	public ParseTreeNodeExp(ParseTreeNode node) {
+		if (node == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'node'.");
+		}
+
 		this.node = node;
 	}
 
@@ -38,8 +46,10 @@ public class ParseTreeNodeExp implements Exp {
 	 * @see com.eyeq.pivot4j.mdx.Exp#toMdx()
 	 */
 	public String toMdx() {
-		// TODO Auto-generated method stub
-		return null;
+		StringWriter writer = new StringWriter();
+		node.unparse(new ParseTreeWriter(writer));
+
+		return writer.toString();
 	}
 
 	/**
@@ -65,5 +75,37 @@ public class ParseTreeNodeExp implements Exp {
 		} else if (type instanceof HierarchyType) {
 			visitor.visitHierarchy(((HierarchyType) type).getHierarchy());
 		}
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return node.toString();
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return 31 + node.hashCode();
+	}
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+
+		// ParseTreeNode does not override equals()!
+		ParseTreeNodeExp other = (ParseTreeNodeExp) obj;
+		return toMdx().equals(other.toMdx());
 	}
 }
