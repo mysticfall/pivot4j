@@ -998,7 +998,7 @@ public class QuaxUtil {
 		}
 
 		Member parent = memberForExp(f.getArgs()[0]);
-		return member.equals(parent);
+		return parent.equals(member.getParentMember());
 	}
 
 	/**
