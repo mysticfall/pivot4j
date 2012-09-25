@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 public class FunCall implements Exp {
 
+	private static final long serialVersionUID = -1747077227822699594L;
+
 	protected static Logger logger = LoggerFactory.getLogger(FunCall.class);
 
 	private Syntax syntacticType;

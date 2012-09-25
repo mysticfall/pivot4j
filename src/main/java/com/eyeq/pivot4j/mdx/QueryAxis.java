@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class QueryAxis implements Exp {
 
+	private static final long serialVersionUID = 9064412375948950770L;
+
 	private String name;
 
 	private boolean nonEmpty;

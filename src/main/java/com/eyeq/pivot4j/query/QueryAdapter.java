@@ -22,6 +22,7 @@ import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
+import org.olap4j.mdx.parser.MdxParser;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
@@ -73,8 +74,19 @@ public class QueryAdapter implements StateHolder {
 
 	/**
 	 * @param model
+	 * @param parser
 	 */
-	public QueryAdapter(PivotModel model) {
+	public QueryAdapter(PivotModel model, MdxParser parser) {
+		if (model == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'model'.");
+		}
+
+		if (parser == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'parser'.");
+		}
+
 		this.model = model;
 		this.parsedQuery = parseQuery(model.getMdx());
 
@@ -85,7 +97,7 @@ public class QueryAdapter implements StateHolder {
 		int ordinal = 0;
 		for (@SuppressWarnings("unused")
 		QueryAxis queryAxis : queryAxes) {
-			Quax quax = new Quax(ordinal++);
+			Quax quax = new Quax(ordinal++, parser);
 			quax.addChangeListener(quaxListener);
 
 			quaxes.add(quax);

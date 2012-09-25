@@ -12,6 +12,7 @@ import java.io.StringWriter;
 
 import org.olap4j.mdx.ParseTreeNode;
 import org.olap4j.mdx.ParseTreeWriter;
+import org.olap4j.mdx.parser.MdxParser;
 import org.olap4j.type.DimensionType;
 import org.olap4j.type.HierarchyType;
 import org.olap4j.type.LevelType;
@@ -20,7 +21,11 @@ import org.olap4j.type.Type;
 
 public class ParseTreeNodeExp implements Exp {
 
-	private ParseTreeNode node;
+	private static final long serialVersionUID = -1850996813470282590L;
+
+	private transient ParseTreeNode node;
+
+	private String mdx;
 
 	/**
 	 * @param node
@@ -32,6 +37,10 @@ public class ParseTreeNodeExp implements Exp {
 		}
 
 		this.node = node;
+
+		StringWriter writer = new StringWriter();
+		node.unparse(new ParseTreeWriter(writer));
+		this.mdx = writer.toString();
 	}
 
 	public ParseTreeNode getNode() {
@@ -39,6 +48,7 @@ public class ParseTreeNodeExp implements Exp {
 	}
 
 	public Type getType() {
+		checkState();
 		return node.getType();
 	}
 
@@ -46,10 +56,7 @@ public class ParseTreeNodeExp implements Exp {
 	 * @see com.eyeq.pivot4j.mdx.Exp#toMdx()
 	 */
 	public String toMdx() {
-		StringWriter writer = new StringWriter();
-		node.unparse(new ParseTreeWriter(writer));
-
-		return writer.toString();
+		return mdx;
 	}
 
 	/**
@@ -57,6 +64,7 @@ public class ParseTreeNodeExp implements Exp {
 	 */
 	@Override
 	public ParseTreeNodeExp clone() {
+		checkState();
 		return new ParseTreeNodeExp(node.deepCopy());
 	}
 
@@ -77,12 +85,26 @@ public class ParseTreeNodeExp implements Exp {
 		}
 	}
 
+	private void checkState() {
+		if (node == null) {
+			throw new IllegalStateException(
+					"Nested parse tree node has not been restored yet.");
+		}
+	}
+
+	/**
+	 * @param parser
+	 */
+	public void restore(MdxParser parser) {
+		this.node = parser.parseExpression(mdx);
+	}
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return node.toString();
+		return toMdx();
 	}
 
 	/**
@@ -90,7 +112,7 @@ public class ParseTreeNodeExp implements Exp {
 	 */
 	@Override
 	public int hashCode() {
-		return 31 + node.hashCode();
+		return 31 + mdx.hashCode();
 	}
 
 	/**

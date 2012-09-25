@@ -13,6 +13,8 @@ package com.eyeq.pivot4j.mdx;
  */
 public class Literal implements Exp {
 
+	private static final long serialVersionUID = 3137892085820716628L;
+
 	public int type;
 	private Object o;
 

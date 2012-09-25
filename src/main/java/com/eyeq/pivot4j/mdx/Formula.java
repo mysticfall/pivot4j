@@ -15,6 +15,8 @@ import com.eyeq.pivot4j.util.StringUtil;
  */
 public class Formula implements Exp {
 
+	private static final long serialVersionUID = 8119836944328850979L;
+
 	boolean isMember;
 
 	String[] names;

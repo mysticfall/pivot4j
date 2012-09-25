@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.mdx;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,6 +25,8 @@ import com.eyeq.pivot4j.PivotException;
  */
 public class ParsedQuery implements Exp {
 
+	private static final long serialVersionUID = 8608792548174831908L;
+
 	protected static Logger logger = LoggerFactory.getLogger(ParsedQuery.class);
 
 	List<Formula> formulas = new ArrayList<Formula>();
@@ -39,7 +42,7 @@ public class ParsedQuery implements Exp {
 	Exp slicer = null;
 
 	// TODO implement proper node for SAP variable expressions.
-	List<Object> sapVariables = new ArrayList<Object>();
+	List<String> sapVariables = new ArrayList<String>();
 
 	private QueryAxis[] axes = new QueryAxis[0];
 
@@ -97,7 +100,7 @@ public class ParsedQuery implements Exp {
 	/**
 	 * @return the sapVariables
 	 */
-	public List<Object> getSapVariables() {
+	public List<String> getSapVariables() {
 		return sapVariables;
 	}
 
@@ -105,7 +108,7 @@ public class ParsedQuery implements Exp {
 	 * @param sapVariables
 	 *            the sapVariables to set
 	 */
-	public void setSapVariables(List<Object> sapVariables) {
+	public void setSapVariables(List<String> sapVariables) {
 		this.sapVariables = sapVariables;
 	}
 
@@ -373,7 +376,7 @@ public class ParsedQuery implements Exp {
 					value = val.toMdx(); // member String
 				}
 				Parameter par = new Parameter(paraName, type, iAxis);
-				par.setOValue(value);
+				par.setOValue((Serializable) value);
 				if (nArgs == 4) {
 					// set description
 					Literal desc = (Literal) f.getArgs()[3];

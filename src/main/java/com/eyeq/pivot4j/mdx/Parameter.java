@@ -8,7 +8,11 @@
  */
 package com.eyeq.pivot4j.mdx;
 
-public class Parameter {
+import java.io.Serializable;
+
+public class Parameter implements Serializable {
+
+	private static final long serialVersionUID = 4905092756214686630L;
 
 	public static final int TYPE_NUMERIC = 1;
 	public static final int TYPE_STRING = 2;
@@ -18,7 +22,7 @@ public class Parameter {
 	private String description;
 	private int type;
 	private int iAxis; // negative, if not on axis
-	private Object oValue;
+	private Serializable oValue;
 
 	public Parameter(String name, int type, int iAxis) {
 		this.name = name;
@@ -29,7 +33,7 @@ public class Parameter {
 	/**
 	 * @return the value object
 	 */
-	public Object getOValue() {
+	public Serializable getOValue() {
 		return oValue;
 	}
 
@@ -39,7 +43,7 @@ public class Parameter {
 	 * @param object
 	 *            value
 	 */
-	public void setOValue(Object object) {
+	public void setOValue(Serializable object) {
 		oValue = object;
 	}
 

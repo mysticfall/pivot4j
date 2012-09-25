@@ -194,8 +194,8 @@ cell_prop_list ::= identifier:id {: pQuery.cellProps.add(new CompoundId(id)); :}
 sap_var_def ::= /* empty */ {: pQuery.sapVariables.clear(); :}
     | SAP VARIABLES sap_var_list;
 
-sap_var_list ::= sap_var_spec:s {: pQuery.sapVariables.add(s); :}
-	| sap_var_spec:s COMMA sap_var_list {: pQuery.sapVariables.add(s); :};
+sap_var_list ::= sap_var_spec:s {: pQuery.sapVariables.add((String) s); :}
+	| sap_var_spec:s COMMA sap_var_list {: pQuery.sapVariables.add((String) s); :};
 
 sap_var_incl ::= INCLUDING | EXCLUDING;
 

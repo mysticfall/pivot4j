@@ -13,6 +13,8 @@ package com.eyeq.pivot4j.mdx;
  */
 public class MemberProperty implements Exp {
 
+	private static final long serialVersionUID = 519325113391951347L;
+
 	private String name;
 
 	private Exp exp;

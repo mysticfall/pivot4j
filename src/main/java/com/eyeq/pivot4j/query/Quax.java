@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.olap4j.OlapException;
 import org.olap4j.Position;
+import org.olap4j.mdx.parser.MdxParser;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.mdx.Exp;
+import com.eyeq.pivot4j.mdx.ParseTreeNodeExp;
 import com.eyeq.pivot4j.mdx.SetExp;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.util.TreeNode;
@@ -37,6 +39,8 @@ import com.eyeq.pivot4j.util.TreeNodeCallback;
 public class Quax implements StateHolder {
 
 	protected static Logger logger = LoggerFactory.getLogger(Quax.class);
+
+	private MdxParser parser;
 
 	private int nDimension;
 
@@ -47,7 +51,7 @@ public class Quax implements StateHolder {
 	// other funcalls are "unknown functions"
 	private boolean[] containsUF;
 
-	private List[] ufMemberLists; // if there are unknonwn functions
+	private List<List<Member>> ufMemberLists; // if there are unknonwn functions
 
 	// private UnknownFunction[] unknownFunctions;
 	private TreeNode<Exp> posTreeRoot = null; // Position tree used in normal
@@ -86,9 +90,23 @@ public class Quax implements StateHolder {
 
 	/**
 	 * @param ordinal
+	 * @param parser
 	 */
-	public Quax(int ordinal) {
+	public Quax(int ordinal, MdxParser parser) {
+		if (parser == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'parser'.");
+		}
+
 		this.ordinal = ordinal;
+		this.parser = parser;
+	}
+
+	/**
+	 * @return the parser
+	 */
+	protected MdxParser getParser() {
+		return parser;
 	}
 
 	/**
@@ -262,7 +280,11 @@ public class Quax implements StateHolder {
 		});
 
 		this.containsUF = new boolean[nDimension]; // init false
-		this.ufMemberLists = new List[nDimension];
+		this.ufMemberLists = new ArrayList<List<Member>>(nDimension);
+
+		for (int i = 0; i < nDimension; i++) {
+			ufMemberLists.add(null);
+		}
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("after initPositions " + this.toString());
@@ -365,7 +387,11 @@ public class Quax implements StateHolder {
 			nDimension = hiers.size();
 
 			containsUF = new boolean[nDimension]; // init false
-			ufMemberLists = new List[nDimension];
+			ufMemberLists = new ArrayList<List<Member>>(nDimension);
+
+			for (int i = 0; i < nDimension; i++) {
+				ufMemberLists.add(null);
+			}
 
 			// go through nodes and check for Unknown functions
 			// only one unknown function is possible in one hierarchy
@@ -553,7 +579,12 @@ public class Quax implements StateHolder {
 			}
 
 			this.containsUF = new boolean[nDimension]; // init false
-			this.ufMemberLists = new List[nDimension];
+			this.ufMemberLists = new ArrayList<List<Member>>(nDimension);
+
+			for (int i = 0; i < nDimension; i++) {
+				ufMemberLists.add(null);
+			}
+
 			this.generateIndex = 0;
 			this.generateMode = CalcSetMode.Simple;
 		}
@@ -2300,12 +2331,12 @@ public class Quax implements StateHolder {
 		} catch (UnknownExpressionException e) {
 			// it is an Unkown FunCall
 			// assume "true" if the member is in the List for this dimension
-			if (ufMemberLists[hierIndex] == null)
+			if (ufMemberLists.get(hierIndex) == null)
 				throw new PivotException(
 						"Unknow Function - no member list, dimension="
 								+ hierIndex + " function=" + e.getExpression());
 
-			result = ufMemberLists[hierIndex].contains(member);
+			result = ufMemberLists.get(hierIndex).contains(member);
 		}
 
 		return result;
@@ -2322,13 +2353,13 @@ public class Quax implements StateHolder {
 		} catch (UnknownExpressionException e) {
 			// it is an Unkown FunCall
 			// assume "true" if the member is in the List for this dimension
-			if (ufMemberLists[hierIndex] == null) {
+			if (ufMemberLists.get(hierIndex) == null) {
 				throw new PivotException(
 						"Unknow Function - no member list, dimension="
 								+ hierIndex + " function=" + e.getExpression());
 			}
 
-			List<Member> members = ufMemberLists[hierIndex];
+			List<Member> members = ufMemberLists.get(hierIndex);
 			for (Member member : members) {
 				if (member.getLevel().getDepth() > 0) {
 					result = true;
@@ -2353,13 +2384,13 @@ public class Quax implements StateHolder {
 			// it is an Unkown FunCall
 			// assume "true" if the member List for this dimension contains
 			// child of member
-			if (ufMemberLists[hierIndex] == null) {
+			if (ufMemberLists.get(hierIndex) == null) {
 				throw new PivotException(
 						"Unknow Function - no member list, dimension="
 								+ hierIndex + " function=" + e.getExpression());
 			}
 
-			List<Member> members = ufMemberLists[hierIndex];
+			List<Member> members = ufMemberLists.get(hierIndex);
 			for (Member m : members) {
 				if (QuaxUtil.checkParent(member, QuaxUtil.expForMember(m))) {
 					result = true;
@@ -2384,13 +2415,13 @@ public class Quax implements StateHolder {
 			// it is an Unkown FunCall
 			// assume "true" if the member List for this dimension contains
 			// descendant of member
-			if (ufMemberLists[hierIndex] == null) {
+			if (ufMemberLists.get(hierIndex) == null) {
 				throw new PivotException(
 						"Unknow Function - no member list, dimension="
 								+ hierIndex + " function=" + e.getExpression());
 			}
 
-			List<Member> members = ufMemberLists[hierIndex];
+			List<Member> members = ufMemberLists.get(hierIndex);
 			for (Member m : members) {
 				if (QuaxUtil.checkDescendantM(member, m)) {
 					result = true;
@@ -2420,7 +2451,7 @@ public class Quax implements StateHolder {
 				logger.error("Unkown FunCall " + QuaxUtil.funCallName(oFun));
 			}
 
-			if (ufMemberLists[hierIndex] == null) {
+			if (ufMemberLists.get(hierIndex) == null) {
 				throw new PivotException(
 						"Unknow Function - no member list, dimension="
 								+ hierIndex + " function=" + e.getExpression());
@@ -2428,7 +2459,7 @@ public class Quax implements StateHolder {
 
 			List<Exp> newList = new ArrayList<Exp>();
 
-			List<Member> members = ufMemberLists[hierIndex];
+			List<Member> members = ufMemberLists.get(hierIndex);
 			for (Member m : members) {
 				if (!QuaxUtil.checkDescendantM(member, m)) {
 					newList.add(QuaxUtil.expForMember(m));
@@ -2539,7 +2570,7 @@ public class Quax implements StateHolder {
 				logger.error("Unkown FunCall " + QuaxUtil.funCallName(oFun));
 			}
 
-			if (ufMemberLists[hierIndex] == null) {
+			if (ufMemberLists.get(hierIndex) == null) {
 				throw new PivotException(
 						"Unknow Function - no member list, dimension="
 								+ hierIndex + " function=" + e.getExpression());
@@ -2547,7 +2578,7 @@ public class Quax implements StateHolder {
 
 			List<Exp> newList = new ArrayList<Exp>();
 
-			List<Member> members = ufMemberLists[hierIndex];
+			List<Member> members = ufMemberLists.get(hierIndex);
 			for (Member m : members) {
 				if (!member.equals(m)) {
 					newList.add(QuaxUtil.expForMember(m));
@@ -2704,8 +2735,8 @@ public class Quax implements StateHolder {
 	 * @param list
 	 *            Member List
 	 */
-	public void setHierMemberList(int iHier, List list) {
-		ufMemberLists[iHier] = list;
+	public void setHierMemberList(int iHier, List<Member> list) {
+		ufMemberLists.set(iHier, list);
 	}
 
 	/**
@@ -2718,24 +2749,57 @@ public class Quax implements StateHolder {
 		return containsUF[iHier];
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
 	 */
 	public Serializable bookmarkState() {
-		// TODO Auto-generated method stub
-		return null;
+		Serializable[] state = new Serializable[8];
+
+		state[0] = this.qubonMode;
+		state[1] = this.ordinal;
+		state[2] = this.nDimension;
+		state[3] = this.hierarchizeNeeded;
+		state[4] = this.generateIndex;
+		state[5] = this.generateMode;
+		state[6] = this.nHierExclude;
+		state[7] = posTreeRoot.getReference();
+
+		return state;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
 	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
 	 */
-	public void restoreState(Serializable bookmark) {
-		// TODO Auto-generated method stub
+	public void restoreState(Serializable state) {
+		Serializable[] states = (Serializable[]) state;
 
+		this.qubonMode = (Boolean) states[0];
+		this.ordinal = (Integer) states[1];
+		this.nDimension = (Integer) states[2];
+		this.hierarchizeNeeded = (Boolean) states[3];
+		this.generateIndex = (Integer) states[4];
+		this.generateMode = (CalcSetMode) states[5];
+		this.nHierExclude = (Integer) states[6];
+
+		Exp exp = (Exp) states[7];
+
+		TreeNode<Exp> node = new TreeNode<Exp>(exp);
+		posTreeRoot.walkTree(new TreeNodeCallback<Exp>() {
+
+			/**
+			 * @param node
+			 * @return
+			 */
+			public int handleTreeNode(TreeNode<Exp> node) {
+				if (node.getReference() instanceof ParseTreeNodeExp) {
+					((ParseTreeNodeExp) node.getReference()).restore(parser);
+				}
+
+				return CONTINUE;
+			}
+		});
+
+		this.posTreeRoot = node;
 	}
 
 	/**

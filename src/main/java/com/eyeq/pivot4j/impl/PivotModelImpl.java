@@ -24,6 +24,8 @@ import org.olap4j.OlapException;
 import org.olap4j.OlapStatement;
 import org.olap4j.Position;
 import org.olap4j.mdx.IdentifierNode;
+import org.olap4j.mdx.parser.MdxParser;
+import org.olap4j.mdx.parser.MdxParserFactory;
 import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
@@ -172,6 +174,11 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		} catch (SQLException e) {
 			throw new PivotException(e);
 		}
+
+		this.queryAdapter = createQueryAdapter();
+		queryAdapter.updateQuery();
+
+		queryAdapter.addChangeListener(queryChangeListener);
 
 		this.initialized = true;
 
@@ -411,16 +418,22 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 		if (queryAdapter != null) {
 			queryAdapter.removeChangeListener(queryChangeListener);
+			queryAdapter = null;
 		}
 
-		this.queryAdapter = createQueryAdapter();
-		queryAdapter.updateQuery();
+		if (isInitialized()) {
+			this.queryAdapter = createQueryAdapter();
+			queryAdapter.updateQuery();
 
-		queryAdapter.addChangeListener(queryChangeListener);
+			queryAdapter.addChangeListener(queryChangeListener);
+		}
 	}
 
 	protected QueryAdapter createQueryAdapter() {
-		return new QueryAdapter(this);
+		MdxParserFactory factory = getConnection().getParserFactory();
+		MdxParser parser = factory.createMdxParser(connection);
+
+		return new QueryAdapter(this, parser);
 	}
 
 	/**

@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.mdx;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import java.util.List;
  * can be any MDX object
  */
 public class CompoundId implements Exp {
+
+	private static final long serialVersionUID = 697157412160301933L;
 
 	private List<NamePart> names = new ArrayList<NamePart>();
 
@@ -50,7 +53,10 @@ public class CompoundId implements Exp {
 		return ret;
 	}
 
-	private class NamePart {
+	private class NamePart implements Serializable {
+
+		private static final long serialVersionUID = 8583427269370241977L;
+
 		private String name;
 		private boolean isKey;
 
@@ -101,4 +107,3 @@ public class CompoundId implements Exp {
 		visitor.visitCompoundId(this);
 	}
 }
-

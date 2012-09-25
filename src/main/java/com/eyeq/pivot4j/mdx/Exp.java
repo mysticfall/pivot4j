@@ -8,10 +8,12 @@
  */
 package com.eyeq.pivot4j.mdx;
 
+import java.io.Serializable;
+
 /**
  * Expression node for an MDX parse tree
  */
-public interface Exp extends Cloneable {
+public interface Exp extends Cloneable, Serializable {
 
 	String toMdx();
 

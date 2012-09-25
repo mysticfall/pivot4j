@@ -17,6 +17,8 @@ import com.eyeq.pivot4j.query.CalcSetMode;
  */
 public class SetExp implements Exp {
 
+	private static final long serialVersionUID = 1634345220637156479L;
+
 	private CalcSetMode mode;
 
 	private Exp expression;
