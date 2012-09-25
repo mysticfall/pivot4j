@@ -99,8 +99,8 @@ public class QuaxUtil {
 	 * @return true if cMember (1.arg) is child of pMember (2.arg)
 	 */
 	public static boolean checkChild(Member cMember, Exp pMembObj) {
-<span class="fc" id="L102">		Member parent = memberForExp(pMembObj);</span>
-<span class="pc bpc" id="L103" title="2 of 4 branches missed.">		return parent != null &amp;&amp; parent.equals(cMember.getParentMember());</span>
+<span class="nc" id="L102">		Member parent = memberForExp(pMembObj);</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">		return parent != null &amp;&amp; parent.equals(cMember.getParentMember());</span>
 	}
 
 	/**
@@ -998,7 +998,7 @@ public class QuaxUtil {
 		}
 
 <span class="fc" id="L1000">		Member parent = memberForExp(f.getArgs()[0]);</span>
-<span class="fc" id="L1001">		return member.equals(parent);</span>
+<span class="fc" id="L1001">		return parent.equals(member.getParentMember());</span>
 	}
 
 	/**
