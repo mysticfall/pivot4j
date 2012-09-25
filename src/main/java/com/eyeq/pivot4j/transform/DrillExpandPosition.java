@@ -44,8 +44,6 @@ import org.olap4j.metadata.Member;
  * 2003 | Europe
  * -----+-------
  * </pre>
- * 
- * @author av
  */
 
 public interface DrillExpandPosition extends Transform {

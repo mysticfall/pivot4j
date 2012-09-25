@@ -47,8 +47,6 @@ import org.olap4j.metadata.Member;
  *      |   France
  * -----+-------
  * </pre>
- * 
- * @author av
  */
 
 public interface DrillExpandMember extends Transform {
