@@ -12,6 +12,7 @@ import java.io.StringWriter;
 
 import org.olap4j.mdx.ParseTreeNode;
 import org.olap4j.mdx.ParseTreeWriter;
+import org.olap4j.mdx.parser.MdxParser;
 import org.olap4j.type.DimensionType;
 import org.olap4j.type.HierarchyType;
 import org.olap4j.type.LevelType;
@@ -20,36 +21,42 @@ import org.olap4j.type.Type;
 
 public class ParseTreeNodeExp implements Exp {
 
-	private ParseTreeNode node;
+	private static final long serialVersionUID = -1850996813470282590L;
+
+	private transient ParseTreeNode node;
+
+	private String mdx;
 
 	/**
 	 * @param node
 	 */
-<span class="fc" id="L28">	public ParseTreeNodeExp(ParseTreeNode node) {</span>
-<span class="pc bpc" id="L29" title="1 of 2 branches missed.">		if (node == null) {</span>
-<span class="nc" id="L30">			throw new IllegalArgumentException(</span>
-<span class="nc" id="L31">					&quot;Missing required argument 'node'.&quot;);</span>
+<span class="fc" id="L33">	public ParseTreeNodeExp(ParseTreeNode node) {</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">		if (node == null) {</span>
+<span class="nc" id="L35">			throw new IllegalArgumentException(</span>
+<span class="nc" id="L36">					&quot;Missing required argument 'node'.&quot;);</span>
 		}
 
-<span class="fc" id="L34">		this.node = node;</span>
-<span class="fc" id="L35">	}</span>
+<span class="fc" id="L39">		this.node = node;</span>
+
+<span class="fc" id="L41">		StringWriter writer = new StringWriter();</span>
+<span class="fc" id="L42">		node.unparse(new ParseTreeWriter(writer));</span>
+<span class="fc" id="L43">		this.mdx = writer.toString();</span>
+<span class="fc" id="L44">	}</span>
 
 	public ParseTreeNode getNode() {
-<span class="nc" id="L38">		return node;</span>
+<span class="nc" id="L47">		return node;</span>
 	}
 
 	public Type getType() {
-<span class="fc" id="L42">		return node.getType();</span>
+<span class="fc" id="L51">		checkState();</span>
+<span class="fc" id="L52">		return node.getType();</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.mdx.Exp#toMdx()
 	 */
 	public String toMdx() {
-<span class="fc" id="L49">		StringWriter writer = new StringWriter();</span>
-<span class="fc" id="L50">		node.unparse(new ParseTreeWriter(writer));</span>
-
-<span class="fc" id="L52">		return writer.toString();</span>
+<span class="fc" id="L59">		return mdx;</span>
 	}
 
 	/**
@@ -57,32 +64,47 @@ public class ParseTreeNodeExp implements Exp {
 	 */
 	@Override
 	public ParseTreeNodeExp clone() {
-<span class="nc" id="L60">		return new ParseTreeNodeExp(node.deepCopy());</span>
+<span class="nc" id="L67">		checkState();</span>
+<span class="nc" id="L68">		return new ParseTreeNodeExp(node.deepCopy());</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
-<span class="nc" id="L67">		Type type = getType();</span>
+<span class="nc" id="L75">		Type type = getType();</span>
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">		if (type instanceof MemberType) {</span>
-<span class="nc" id="L70">			visitor.visitMember(((MemberType) type).getMember());</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">		} else if (type instanceof LevelType) {</span>
-<span class="nc" id="L72">			visitor.visitLevel(((LevelType) type).getLevel());</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">		} else if (type instanceof DimensionType) {</span>
-<span class="nc" id="L74">			visitor.visitDimension(((DimensionType) type).getDimension());</span>
-<span class="nc bnc" id="L75" title="All 2 branches missed.">		} else if (type instanceof HierarchyType) {</span>
-<span class="nc" id="L76">			visitor.visitHierarchy(((HierarchyType) type).getHierarchy());</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		if (type instanceof MemberType) {</span>
+<span class="nc" id="L78">			visitor.visitMember(((MemberType) type).getMember());</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		} else if (type instanceof LevelType) {</span>
+<span class="nc" id="L80">			visitor.visitLevel(((LevelType) type).getLevel());</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		} else if (type instanceof DimensionType) {</span>
+<span class="nc" id="L82">			visitor.visitDimension(((DimensionType) type).getDimension());</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">		} else if (type instanceof HierarchyType) {</span>
+<span class="nc" id="L84">			visitor.visitHierarchy(((HierarchyType) type).getHierarchy());</span>
 		}
-<span class="nc" id="L78">	}</span>
+<span class="nc" id="L86">	}</span>
+
+	private void checkState() {
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">		if (node == null) {</span>
+<span class="nc" id="L90">			throw new IllegalStateException(</span>
+<span class="nc" id="L91">					&quot;Nested parse tree node has not been restored yet.&quot;);</span>
+		}
+<span class="fc" id="L93">	}</span>
+
+	/**
+	 * @param parser
+	 */
+	public void restore(MdxParser parser) {
+<span class="nc" id="L99">		this.node = parser.parseExpression(mdx);</span>
+<span class="nc" id="L100">	}</span>
 
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-<span class="nc" id="L85">		return node.toString();</span>
+<span class="nc" id="L107">		return toMdx();</span>
 	}
 
 	/**
@@ -90,7 +112,7 @@ public class ParseTreeNodeExp implements Exp {
 	 */
 	@Override
 	public int hashCode() {
-<span class="nc" id="L93">		return 31 + node.hashCode();</span>
+<span class="nc" id="L115">		return 31 + mdx.hashCode();</span>
 	}
 
 	/**
@@ -98,15 +120,15 @@ public class ParseTreeNodeExp implements Exp {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">		if (this == obj) {</span>
-<span class="nc" id="L102">			return true;</span>
-<span class="pc bpc" id="L103" title="2 of 4 branches missed.">		} else if (obj == null || getClass() != obj.getClass()) {</span>
-<span class="nc" id="L104">			return false;</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">		if (this == obj) {</span>
+<span class="nc" id="L124">			return true;</span>
+<span class="pc bpc" id="L125" title="2 of 4 branches missed.">		} else if (obj == null || getClass() != obj.getClass()) {</span>
+<span class="nc" id="L126">			return false;</span>
 		}
 
 		// ParseTreeNode does not override equals()!
-<span class="fc" id="L108">		ParseTreeNodeExp other = (ParseTreeNodeExp) obj;</span>
-<span class="fc" id="L109">		return toMdx().equals(other.toMdx());</span>
+<span class="fc" id="L130">		ParseTreeNodeExp other = (ParseTreeNodeExp) obj;</span>
+<span class="fc" id="L131">		return toMdx().equals(other.toMdx());</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

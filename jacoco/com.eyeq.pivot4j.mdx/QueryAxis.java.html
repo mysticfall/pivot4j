@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class QueryAxis implements Exp {
 
+	private static final long serialVersionUID = 9064412375948950770L;
+
 	private String name;
 
 	private boolean nonEmpty;
@@ -28,11 +30,11 @@ public class QueryAxis implements Exp {
 	 * 
 	 * @see java.lang.Object#Object()
 	 */
-<span class="fc" id="L31">	public QueryAxis(boolean nonEmpty, Exp exp, String name) {</span>
-<span class="fc" id="L32">		this.nonEmpty = nonEmpty;</span>
-<span class="fc" id="L33">		this.exp = exp;</span>
-<span class="fc" id="L34">		this.name = name;</span>
-<span class="fc" id="L35">	}</span>
+<span class="fc" id="L33">	public QueryAxis(boolean nonEmpty, Exp exp, String name) {</span>
+<span class="fc" id="L34">		this.nonEmpty = nonEmpty;</span>
+<span class="fc" id="L35">		this.exp = exp;</span>
+<span class="fc" id="L36">		this.name = name;</span>
+<span class="fc" id="L37">	}</span>
 
 	/**
 	 * Returns the exp.
@@ -40,7 +42,7 @@ public class QueryAxis implements Exp {
 	 * @return Exp
 	 */
 	public Exp getExp() {
-<span class="fc" id="L43">		return exp;</span>
+<span class="fc" id="L45">		return exp;</span>
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class QueryAxis implements Exp {
 	 * @return String
 	 */
 	public String getName() {
-<span class="nc" id="L52">		return name;</span>
+<span class="nc" id="L54">		return name;</span>
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class QueryAxis implements Exp {
 	 * @return boolean
 	 */
 	public boolean isNonEmpty() {
-<span class="nc" id="L61">		return nonEmpty;</span>
+<span class="nc" id="L63">		return nonEmpty;</span>
 	}
 
 	/**
@@ -68,8 +70,8 @@ public class QueryAxis implements Exp {
 	 *            The exp to set
 	 */
 	public void setExp(Exp exp) {
-<span class="fc" id="L71">		this.exp = exp;</span>
-<span class="fc" id="L72">	}</span>
+<span class="fc" id="L73">		this.exp = exp;</span>
+<span class="fc" id="L74">	}</span>
 
 	/**
 	 * Sets the name.
@@ -78,8 +80,8 @@ public class QueryAxis implements Exp {
 	 *            The name to set
 	 */
 	public void setName(String name) {
-<span class="nc" id="L81">		this.name = name;</span>
-<span class="nc" id="L82">	}</span>
+<span class="nc" id="L83">		this.name = name;</span>
+<span class="nc" id="L84">	}</span>
 
 	/**
 	 * Sets the nonEmpty.
@@ -88,30 +90,30 @@ public class QueryAxis implements Exp {
 	 *            The nonEmpty to set
 	 */
 	public void setNonEmpty(boolean nonEmpty) {
-<span class="nc" id="L91">		this.nonEmpty = nonEmpty;</span>
-<span class="nc" id="L92">	}</span>
+<span class="nc" id="L93">		this.nonEmpty = nonEmpty;</span>
+<span class="nc" id="L94">	}</span>
 
 	/**
 	 * format to MDX
 	 */
 	public String toMdx() {
-<span class="fc" id="L98">		StringBuffer sb = new StringBuffer();</span>
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">		if (nonEmpty) {</span>
-<span class="nc" id="L100">			sb.append(&quot;NON EMPTY &quot;);</span>
+<span class="fc" id="L100">		StringBuffer sb = new StringBuffer();</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">		if (nonEmpty) {</span>
+<span class="nc" id="L102">			sb.append(&quot;NON EMPTY &quot;);</span>
 		}
-<span class="fc" id="L102">		sb.append(exp.toMdx());</span>
-<span class="pc bpc" id="L103" title="2 of 4 branches missed.">		if (dimProps != null &amp;&amp; dimProps.size() &gt; 0) {</span>
-<span class="nc" id="L104">			sb.append(&quot; DIMENSION PROPERTIES &quot;);</span>
-<span class="nc bnc" id="L105" title="All 2 branches missed.">			for (int i = 0; i &lt; dimProps.size(); i++) {</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">				if (i &gt; 0) {</span>
-<span class="nc" id="L107">					sb.append(',');</span>
+<span class="fc" id="L104">		sb.append(exp.toMdx());</span>
+<span class="pc bpc" id="L105" title="2 of 4 branches missed.">		if (dimProps != null &amp;&amp; dimProps.size() &gt; 0) {</span>
+<span class="nc" id="L106">			sb.append(&quot; DIMENSION PROPERTIES &quot;);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">			for (int i = 0; i &lt; dimProps.size(); i++) {</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">				if (i &gt; 0) {</span>
+<span class="nc" id="L109">					sb.append(',');</span>
 				}
-<span class="nc" id="L109">				sb.append(dimProps.get(i).toMdx());</span>
+<span class="nc" id="L111">				sb.append(dimProps.get(i).toMdx());</span>
 			}
 		}
-<span class="fc" id="L112">		sb.append(&quot; ON &quot;);</span>
-<span class="fc" id="L113">		sb.append(name);</span>
-<span class="fc" id="L114">		return sb.toString();</span>
+<span class="fc" id="L114">		sb.append(&quot; ON &quot;);</span>
+<span class="fc" id="L115">		sb.append(name);</span>
+<span class="fc" id="L116">		return sb.toString();</span>
 	}
 
 	/**
@@ -119,30 +121,30 @@ public class QueryAxis implements Exp {
 	 * @see java.lang.Object#clone()
 	 */
 	public QueryAxis clone() {
-<span class="nc" id="L122">		QueryAxis qa = new QueryAxis(nonEmpty, (Exp) exp.clone(), name);</span>
-<span class="nc" id="L123">		qa.setDimProps(dimProps);</span>
-<span class="nc" id="L124">		return qa;</span>
+<span class="nc" id="L124">		QueryAxis qa = new QueryAxis(nonEmpty, (Exp) exp.clone(), name);</span>
+<span class="nc" id="L125">		qa.setDimProps(dimProps);</span>
+<span class="nc" id="L126">		return qa;</span>
 	}
 
 	/**
 	 * @return
 	 */
 	public List&lt;CompoundId&gt; getDimProps() {
-<span class="nc" id="L131">		return dimProps;</span>
+<span class="nc" id="L133">		return dimProps;</span>
 	}
 
 	/**
 	 * @param dimProps
 	 */
 	public void setDimProps(List&lt;CompoundId&gt; dimProps) {
-<span class="fc" id="L138">		this.dimProps = dimProps;</span>
-<span class="fc" id="L139">	}</span>
+<span class="fc" id="L140">		this.dimProps = dimProps;</span>
+<span class="fc" id="L141">	}</span>
 
 	/**
 	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
 	 */
 	public void accept(ExpVisitor visitor) {
-<span class="nc" id="L145">		visitor.visitQueryAxis(this);</span>
-<span class="nc" id="L146">	}</span>
+<span class="nc" id="L147">		visitor.visitQueryAxis(this);</span>
+<span class="nc" id="L148">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

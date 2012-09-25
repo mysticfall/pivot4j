@@ -11,65 +11,67 @@ package com.eyeq.pivot4j.mdx;
 /**
  * MDX parser Literal Expressions
  */
-public class Literal implements Exp {
+<span class="nc" id="L14">public class Literal implements Exp {</span>
+
+	private static final long serialVersionUID = 3137892085820716628L;
 
 	public int type;
 	private Object o;
 
-<span class="nc" id="L19">	public static final Literal emptyString = new Literal(&quot;&quot;, false);</span>
-<span class="nc" id="L20">	public static final Literal zero = new Literal(new Integer(0));</span>
-<span class="nc" id="L21">	public static final Literal one = new Literal(new Integer(1));</span>
-<span class="nc" id="L22">	public static final Literal doubleZero = new Literal(new Double(0.0));</span>
-<span class="nc" id="L23">	public static final Literal doubleOne = new Literal(new Double(1.0));</span>
+<span class="nc" id="L21">	public static final Literal emptyString = new Literal(&quot;&quot;, false);</span>
+<span class="nc" id="L22">	public static final Literal zero = new Literal(new Integer(0));</span>
+<span class="nc" id="L23">	public static final Literal one = new Literal(new Integer(1));</span>
+<span class="nc" id="L24">	public static final Literal doubleZero = new Literal(new Double(0.0));</span>
+<span class="nc" id="L25">	public static final Literal doubleOne = new Literal(new Double(1.0));</span>
 
 	public static final int TYPE_SYMBOL = 1;
 	public static final int TYPE_STRING = 2;
 	public static final int TYPE_NUMERIC = 3;
 
-<span class="nc" id="L29">	private Literal(String s, boolean isSymbol) {</span>
-<span class="nc" id="L30">		this.o = s;</span>
-<span class="nc bnc" id="L31" title="All 2 branches missed.">		this.type = isSymbol ? TYPE_SYMBOL : TYPE_STRING;</span>
-<span class="nc" id="L32">	}</span>
+<span class="nc" id="L31">	private Literal(String s, boolean isSymbol) {</span>
+<span class="nc" id="L32">		this.o = s;</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		this.type = isSymbol ? TYPE_SYMBOL : TYPE_STRING;</span>
+<span class="nc" id="L34">	}</span>
 
 	public static Literal createString(String s) {
-<span class="nc bnc" id="L35" title="All 2 branches missed.">		if (s.equals(&quot;&quot;)) {</span>
-<span class="nc" id="L36">			return emptyString;</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">		if (s.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L38">			return emptyString;</span>
 		} else {
-<span class="nc" id="L38">			return new Literal(s, false);</span>
+<span class="nc" id="L40">			return new Literal(s, false);</span>
 		}
 	}
 
 	public static Literal createSymbol(String s) {
-<span class="nc" id="L43">		return new Literal(s, true);</span>
+<span class="nc" id="L45">		return new Literal(s, true);</span>
 	}
 
-<span class="nc" id="L46">	private Literal(Double d) {</span>
-<span class="nc" id="L47">		this.o = d;</span>
-<span class="nc" id="L48">		this.type = TYPE_NUMERIC;</span>
-<span class="nc" id="L49">	}</span>
+<span class="nc" id="L48">	private Literal(Double d) {</span>
+<span class="nc" id="L49">		this.o = d;</span>
+<span class="nc" id="L50">		this.type = TYPE_NUMERIC;</span>
+<span class="nc" id="L51">	}</span>
 
 	public static Literal create(Double d) {
-<span class="nc bnc" id="L52" title="All 2 branches missed.">		if (d.doubleValue() == 0.0) {</span>
-<span class="nc" id="L53">			return doubleZero;</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">		} else if (d.doubleValue() == 1.0) {</span>
-<span class="nc" id="L55">			return doubleOne;</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (d.doubleValue() == 0.0) {</span>
+<span class="nc" id="L55">			return doubleZero;</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		} else if (d.doubleValue() == 1.0) {</span>
+<span class="nc" id="L57">			return doubleOne;</span>
 		} else {
-<span class="nc" id="L57">			return new Literal(d);</span>
+<span class="nc" id="L59">			return new Literal(d);</span>
 		}
 	}
 
-<span class="nc" id="L61">	private Literal(Integer i) {</span>
-<span class="nc" id="L62">		this.o = i;</span>
-<span class="nc" id="L63">		this.type = TYPE_NUMERIC;</span>
-<span class="nc" id="L64">	}</span>
+<span class="nc" id="L63">	private Literal(Integer i) {</span>
+<span class="nc" id="L64">		this.o = i;</span>
+<span class="nc" id="L65">		this.type = TYPE_NUMERIC;</span>
+<span class="nc" id="L66">	}</span>
 
 	public static Literal create(Integer i) {
-<span class="nc bnc" id="L67" title="All 2 branches missed.">		if (i.intValue() == 0) {</span>
-<span class="nc" id="L68">			return zero;</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">		} else if (i.intValue() == 1) {</span>
-<span class="nc" id="L70">			return one;</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		if (i.intValue() == 0) {</span>
+<span class="nc" id="L70">			return zero;</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		} else if (i.intValue() == 1) {</span>
+<span class="nc" id="L72">			return one;</span>
 		} else {
-<span class="nc" id="L72">			return new Literal(i);</span>
+<span class="nc" id="L74">			return new Literal(i);</span>
 		}
 	}
 
@@ -77,7 +79,7 @@ public class Literal implements Exp {
 	 * format to MDX
 	 */
 	public String toMdx() {
-<span class="nc" id="L80">		return o.toString();</span>
+<span class="nc" id="L82">		return o.toString();</span>
 	}
 
 	/**
@@ -86,32 +88,32 @@ public class Literal implements Exp {
 	 * @see java.lang.Object#clone()
 	 */
 	public Literal clone() {
-<span class="nc" id="L89">		return this;</span>
+<span class="nc" id="L91">		return this;</span>
 	}
 
 	/**
    */
 	public String stringValue() {
-<span class="nc bnc" id="L95" title="All 2 branches missed.">		if (type == TYPE_STRING) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		if (type == TYPE_STRING) {</span>
 			// must remove enclosing double quotes
-<span class="nc" id="L97">			String str = (String) o;</span>
-<span class="nc" id="L98">			return str.substring(1, str.length() - 1);</span>
+<span class="nc" id="L99">			String str = (String) o;</span>
+<span class="nc" id="L100">			return str.substring(1, str.length() - 1);</span>
 		} else
-<span class="nc" id="L100">			return o.toString();</span>
+<span class="nc" id="L102">			return o.toString();</span>
 	}
 
 	/**
 	 * @return
 	 */
 	public Object getValueObject() {
-<span class="nc" id="L107">		return o;</span>
+<span class="nc" id="L109">		return o;</span>
 	}
 
 	/**
 	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
 	 */
 	public void accept(ExpVisitor visitor) {
-<span class="nc" id="L114">		visitor.visitLiteral(this);</span>
-<span class="nc" id="L115">	}</span>
+<span class="nc" id="L116">		visitor.visitLiteral(this);</span>
+<span class="nc" id="L117">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

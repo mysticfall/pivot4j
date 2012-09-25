@@ -74,7 +74,7 @@ import com.eyeq.pivot4j.util.TreeNode;
 				} else {
 					// generate Union
 <span class="nc" id="L76">					exp = QuaxUtil.createFunCall(&quot;Union&quot;,</span>
-							new Exp[] { exp, set }, Syntax.Function);
+<span class="nc" id="L77">							new Exp[] { exp, set }, Syntax.Function);</span>
 				}
 
 <span class="nc" id="L80">				openSet.clear();</span>
@@ -85,9 +85,9 @@ import com.eyeq.pivot4j.util.TreeNode;
 			} else {
 				// generate Union of Exp and expForNode
 <span class="fc" id="L87">				exp = QuaxUtil.createFunCall(&quot;Union&quot;, new Exp[] { exp,</span>
-						expForNode }, Syntax.Function);
+<span class="fc" id="L88">						expForNode }, Syntax.Function);</span>
 			}
-<span class="fc" id="L90">		}</span>
+		}
 
 <span class="fc bfc" id="L92" title="All 2 branches covered.">		if (!openSet.isEmpty()) {</span>
 			// close open set
@@ -99,7 +99,7 @@ import com.eyeq.pivot4j.util.TreeNode;
 			} else {
 				// generate Union
 <span class="fc" id="L101">				exp = QuaxUtil.createFunCall(&quot;Union&quot;, new Exp[] { exp, set },</span>
-						Syntax.Function);
+<span class="fc" id="L102">						Syntax.Function);</span>
 			}
 
 <span class="fc" id="L105">			openSet.clear();</span>
@@ -143,7 +143,7 @@ import com.eyeq.pivot4j.util.TreeNode;
 			} else {
 				// member
 <span class="fc" id="L145">				eSet = QuaxUtil.createFunCall(&quot;{}&quot;, new Exp[] { eNode },</span>
-						Syntax.Braces);
+<span class="fc" id="L146">						Syntax.Braces);</span>
 			}
 
 <span class="pc bpc" id="L149" title="1 of 2 branches missed.">			if (childExp == null) {</span>
@@ -152,15 +152,15 @@ import com.eyeq.pivot4j.util.TreeNode;
 <span class="fc" id="L152">				Exp childSet = bracesAround(childExp);</span>
 
 <span class="fc" id="L154">				Exp cj = QuaxUtil.createFunCall(&quot;CrossJoin&quot;, new Exp[] { eSet,</span>
-						childSet }, Syntax.Function);
+<span class="fc" id="L155">						childSet }, Syntax.Function);</span>
 <span class="fc bfc" id="L156" title="All 2 branches covered.">				if (exp == null) {</span>
 <span class="fc" id="L157">					exp = cj;</span>
 				} else {
 <span class="fc" id="L159">					exp = QuaxUtil.createFunCall(&quot;Union&quot;,</span>
-							new Exp[] { exp, cj }, Syntax.Function);
+<span class="fc" id="L160">							new Exp[] { exp, cj }, Syntax.Function);</span>
 				}
 			}
-<span class="fc" id="L163">		}</span>
+		}
 <span class="fc" id="L164">		return exp;</span>
 	}
 
@@ -175,7 +175,7 @@ import com.eyeq.pivot4j.util.TreeNode;
 
 <span class="pc bpc" id="L176" title="1 of 4 branches missed.">		if (QuaxUtil.isMember(oExp) || QuaxUtil.isFunCallTo(oExp, &quot;()&quot;)) {</span>
 <span class="fc" id="L177">			oSet = QuaxUtil.createFunCall(&quot;{}&quot;, new Exp[] { oExp },</span>
-					Syntax.Braces);
+<span class="fc" id="L178">					Syntax.Braces);</span>
 		} else {
 <span class="fc" id="L180">			oSet = oExp;</span>
 		}

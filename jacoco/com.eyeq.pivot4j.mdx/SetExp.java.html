@@ -17,6 +17,8 @@ import com.eyeq.pivot4j.query.CalcSetMode;
  */
 public class SetExp implements Exp {
 
+	private static final long serialVersionUID = 1634345220637156479L;
+
 	private CalcSetMode mode;
 
 	private Exp expression;
@@ -28,53 +30,53 @@ public class SetExp implements Exp {
 	 * @param expression
 	 * @param hierarchy
 	 */
-<span class="nc" id="L31">	public SetExp(CalcSetMode mode, Exp expression, Hierarchy hierarchy) {</span>
-<span class="nc" id="L32">		this.mode = mode;</span>
-<span class="nc" id="L33">		this.expression = expression;</span>
-<span class="nc" id="L34">		this.hierarchy = hierarchy;</span>
-<span class="nc" id="L35">	}</span>
+<span class="nc" id="L33">	public SetExp(CalcSetMode mode, Exp expression, Hierarchy hierarchy) {</span>
+<span class="nc" id="L34">		this.mode = mode;</span>
+<span class="nc" id="L35">		this.expression = expression;</span>
+<span class="nc" id="L36">		this.hierarchy = hierarchy;</span>
+<span class="nc" id="L37">	}</span>
 
 	/**
 	 * @return
 	 */
 	public Hierarchy getHierarchy() {
-<span class="nc" id="L41">		return hierarchy;</span>
+<span class="nc" id="L43">		return hierarchy;</span>
 	}
 
 	/**
 	 * @return
 	 */
 	public CalcSetMode getMode() {
-<span class="nc" id="L48">		return mode;</span>
+<span class="nc" id="L50">		return mode;</span>
 	}
 
 	/**
 	 * @return
 	 */
 	public Exp getExpression() {
-<span class="nc" id="L55">		return expression;</span>
+<span class="nc" id="L57">		return expression;</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.mdx.Exp#toMdx()
 	 */
 	public String toMdx() {
-<span class="nc" id="L62">		return expression.toMdx();</span>
+<span class="nc" id="L64">		return expression.toMdx();</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
-<span class="nc" id="L69">		expression.accept(visitor);</span>
-<span class="nc" id="L70">	}</span>
+<span class="nc" id="L71">		expression.accept(visitor);</span>
+<span class="nc" id="L72">	}</span>
 
 	/**
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
 	public SetExp clone() {
-<span class="nc" id="L77">		return new SetExp(mode, expression.clone(), hierarchy);</span>
+<span class="nc" id="L79">		return new SetExp(mode, expression.clone(), hierarchy);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

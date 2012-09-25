@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.mdx;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import java.util.List;
  */
 public class CompoundId implements Exp {
 
-<span class="pc" id="L19">	private List&lt;NamePart&gt; names = new ArrayList&lt;NamePart&gt;();</span>
+	private static final long serialVersionUID = 697157412160301933L;
+
+<span class="pc" id="L22">	private List&lt;NamePart&gt; names = new ArrayList&lt;NamePart&gt;();</span>
 
 	/**
 	 * c'tor
@@ -24,40 +27,43 @@ public class CompoundId implements Exp {
 	 * @param name
 	 * @param isKey
 	 */
-<span class="fc" id="L27">	public CompoundId(String name, boolean isKey) {</span>
-<span class="fc" id="L28">		names.add(new NamePart(name, isKey));</span>
-<span class="fc" id="L29">	}</span>
+<span class="fc" id="L30">	public CompoundId(String name, boolean isKey) {</span>
+<span class="fc" id="L31">		names.add(new NamePart(name, isKey));</span>
+<span class="fc" id="L32">	}</span>
 
 	public CompoundId(String name) {
-<span class="fc" id="L32">		this(name, false);</span>
-<span class="fc" id="L33">	}</span>
+<span class="fc" id="L35">		this(name, false);</span>
+<span class="fc" id="L36">	}</span>
 
 	public void append(String name, boolean isKey) {
-<span class="nc" id="L36">		names.add(new NamePart(name, isKey));</span>
-<span class="nc" id="L37">	}</span>
+<span class="nc" id="L39">		names.add(new NamePart(name, isKey));</span>
+<span class="nc" id="L40">	}</span>
 
 	public void append(String name) {
-<span class="fc" id="L40">		names.add(new NamePart(name, false));</span>
-<span class="fc" id="L41">	}</span>
+<span class="fc" id="L43">		names.add(new NamePart(name, false));</span>
+<span class="fc" id="L44">	}</span>
 
 	public String[] toStringArray() {
-<span class="nc" id="L44">		String[] ret = new String[names.size()];</span>
-<span class="nc" id="L45">		int i = 0;</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">		for (NamePart np : names) {</span>
-<span class="nc" id="L47">			ret[i++] = np.name;</span>
-<span class="nc" id="L48">		}</span>
+<span class="nc" id="L47">		String[] ret = new String[names.size()];</span>
+<span class="nc" id="L48">		int i = 0;</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">		for (NamePart np : names) {</span>
+<span class="nc" id="L50">			ret[i++] = np.name;</span>
+		}
 
-<span class="nc" id="L50">		return ret;</span>
+<span class="nc" id="L53">		return ret;</span>
 	}
 
-	private class NamePart {
+	private class NamePart implements Serializable {
+
+		private static final long serialVersionUID = 8583427269370241977L;
+
 		private String name;
 		private boolean isKey;
 
-<span class="fc" id="L57">		protected NamePart(String name, boolean isKey) {</span>
-<span class="fc" id="L58">			this.name = name;</span>
-<span class="fc" id="L59">			this.isKey = isKey;</span>
-<span class="fc" id="L60">		}</span>
+<span class="fc" id="L63">		protected NamePart(String name, boolean isKey) {</span>
+<span class="fc" id="L64">			this.name = name;</span>
+<span class="fc" id="L65">			this.isKey = isKey;</span>
+<span class="fc" id="L66">		}</span>
 	}
 
 	/**
@@ -66,40 +72,39 @@ public class CompoundId implements Exp {
 	 * @see interface Exp
 	 */
 	public String toMdx() {
-<span class="fc" id="L69">		String str = &quot;&quot;;</span>
-<span class="fc" id="L70">		boolean isFollow = false;</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">		for (NamePart np : names) {</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">			if (isFollow)</span>
-<span class="fc" id="L73">				str += &quot;.&quot;;</span>
-<span class="fc" id="L74">			isFollow = true;</span>
-<span class="fc" id="L75">			str += np.name;</span>
-<span class="fc" id="L76">		}</span>
+<span class="fc" id="L75">		String str = &quot;&quot;;</span>
+<span class="fc" id="L76">		boolean isFollow = false;</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">		for (NamePart np : names) {</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">			if (isFollow)</span>
+<span class="fc" id="L79">				str += &quot;.&quot;;</span>
+<span class="fc" id="L80">			isFollow = true;</span>
+<span class="fc" id="L81">			str += np.name;</span>
+		}
 
-<span class="fc" id="L78">		return str;</span>
+<span class="fc" id="L84">		return str;</span>
 	}
 
-<span class="nc" id="L81">	private CompoundId() {</span>
+<span class="nc" id="L87">	private CompoundId() {</span>
 		// default
-<span class="nc" id="L83">	}</span>
+<span class="nc" id="L89">	}</span>
 
 	/**
 	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public CompoundId clone() {
-<span class="nc" id="L90">		CompoundId cloned = new CompoundId();</span>
-<span class="nc bnc" id="L91" title="All 2 branches missed.">		for (NamePart np : names) {</span>
-<span class="nc" id="L92">			cloned.append(np.name, np.isKey);</span>
-<span class="nc" id="L93">		}</span>
-<span class="nc" id="L94">		return cloned;</span>
+<span class="nc" id="L96">		CompoundId cloned = new CompoundId();</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		for (NamePart np : names) {</span>
+<span class="nc" id="L98">			cloned.append(np.name, np.isKey);</span>
+		}
+<span class="nc" id="L100">		return cloned;</span>
 	}
 
 	/**
 	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
 	 */
 	public void accept(ExpVisitor visitor) {
-<span class="nc" id="L101">		visitor.visitCompoundId(this);</span>
-<span class="nc" id="L102">	}</span>
+<span class="nc" id="L107">		visitor.visitCompoundId(this);</span>
+<span class="nc" id="L108">	}</span>
 }
-
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

@@ -8,7 +8,11 @@
  */
 package com.eyeq.pivot4j.mdx;
 
-public class Parameter {
+import java.io.Serializable;
+
+public class Parameter implements Serializable {
+
+	private static final long serialVersionUID = 4905092756214686630L;
 
 	public static final int TYPE_NUMERIC = 1;
 	public static final int TYPE_STRING = 2;
@@ -18,19 +22,19 @@ public class Parameter {
 	private String description;
 	private int type;
 	private int iAxis; // negative, if not on axis
-	private Object oValue;
+	private Serializable oValue;
 
-<span class="nc" id="L23">	public Parameter(String name, int type, int iAxis) {</span>
-<span class="nc" id="L24">		this.name = name;</span>
-<span class="nc" id="L25">		this.type = type;</span>
-<span class="nc" id="L26">		this.iAxis = iAxis;</span>
-<span class="nc" id="L27">	}</span>
+<span class="nc" id="L27">	public Parameter(String name, int type, int iAxis) {</span>
+<span class="nc" id="L28">		this.name = name;</span>
+<span class="nc" id="L29">		this.type = type;</span>
+<span class="nc" id="L30">		this.iAxis = iAxis;</span>
+<span class="nc" id="L31">	}</span>
 
 	/**
 	 * @return the value object
 	 */
-	public Object getOValue() {
-<span class="nc" id="L33">		return oValue;</span>
+	public Serializable getOValue() {
+<span class="nc" id="L37">		return oValue;</span>
 	}
 
 	/**
@@ -39,43 +43,43 @@ public class Parameter {
 	 * @param object
 	 *            value
 	 */
-	public void setOValue(Object object) {
-<span class="nc" id="L43">		oValue = object;</span>
-<span class="nc" id="L44">	}</span>
+	public void setOValue(Serializable object) {
+<span class="nc" id="L47">		oValue = object;</span>
+<span class="nc" id="L48">	}</span>
 
 	/**
 	 * @return parameter type
 	 */
 	public int getType() {
-<span class="nc" id="L50">		return type;</span>
+<span class="nc" id="L54">		return type;</span>
 	}
 
 	/**
 	 * @return parameter's name
 	 */
 	public String getName() {
-<span class="nc" id="L57">		return name;</span>
+<span class="nc" id="L61">		return name;</span>
 	}
 
 	/**
 	 * @return description
 	 */
 	public String getDescription() {
-<span class="nc" id="L64">		return description;</span>
+<span class="nc" id="L68">		return description;</span>
 	}
 
 	/**
 	 * @param description
 	 */
 	public void setDescription(String description) {
-<span class="nc" id="L71">		this.description = description;</span>
-<span class="nc" id="L72">	}</span>
+<span class="nc" id="L75">		this.description = description;</span>
+<span class="nc" id="L76">	}</span>
 
 	/**
 	 * @return index of axis, negative if not on any axis
 	 */
 	public int getIAxis() {
-<span class="nc" id="L78">		return iAxis;</span>
+<span class="nc" id="L82">		return iAxis;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

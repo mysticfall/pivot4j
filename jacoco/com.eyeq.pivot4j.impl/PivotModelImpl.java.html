@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PivotModelImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pivot4J</a> &gt; <a href="index.html" class="el_package">com.eyeq.pivot4j.impl</a> &gt; <span class="el_source">PivotModelImpl.java</span></div><h1>PivotModelImpl.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PivotModelImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pivot4J</a> &gt; <a href="index.html" class="el_package">com.eyeq.pivot4j.impl</a> &gt; <span class="el_source">PivotModelImpl.java</span></div><h1>PivotModelImpl.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/*</span>
  * ====================================================================
  * This software is subject to the terms of the Common Public License
  * Agreement, available at the following URL:
@@ -24,6 +24,8 @@ import org.olap4j.OlapException;
 import org.olap4j.OlapStatement;
 import org.olap4j.Position;
 import org.olap4j.mdx.IdentifierNode;
+import org.olap4j.mdx.parser.MdxParser;
+import org.olap4j.mdx.parser.MdxParserFactory;
 import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
@@ -50,10 +52,10 @@ import com.eyeq.pivot4j.transform.TransformFactory;
 /**
  * The pivot model represents all (meta-)data for an MDX query.
  */
-public class PivotModelImpl implements PivotModel, StateHolder {
+<span class="fc" id="L55">public class PivotModelImpl implements PivotModel, StateHolder {</span>
 
-<span class="fc" id="L55">	protected static Logger logger = LoggerFactory</span>
-<span class="fc" id="L56">			.getLogger(PivotModelImpl.class);</span>
+<span class="fc" id="L57">	protected static Logger logger = LoggerFactory</span>
+<span class="fc" id="L58">			.getLogger(PivotModelImpl.class);</span>
 
 	private OlapDataSource dataSource;
 
@@ -67,19 +69,19 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 	private Locale locale;
 
-<span class="fc" id="L70">	private boolean initialized = false;</span>
+<span class="fc" id="L72">	private boolean initialized = false;</span>
 
-<span class="fc" id="L72">	private Collection&lt;ModelChangeListener&gt; listeners = new ArrayList&lt;ModelChangeListener&gt;();</span>
+<span class="fc" id="L74">	private Collection&lt;ModelChangeListener&gt; listeners = new ArrayList&lt;ModelChangeListener&gt;();</span>
 
 	private QueryAdapter queryAdapter;
 
 	private TransformFactory transformFactory;
 
-<span class="fc" id="L78">	private int topBottomCount = 10;</span>
+<span class="fc" id="L80">	private int topBottomCount = 10;</span>
 
-<span class="fc" id="L80">	private SortMode sortMode = SortMode.ASC;</span>
+<span class="fc" id="L82">	private SortMode sortMode = SortMode.ASC;</span>
 
-<span class="fc" id="L82">	private boolean sorting = false;</span>
+<span class="fc" id="L84">	private boolean sorting = false;</span>
 
 	private List&lt;Member&gt; sortPosMembers;
 
@@ -87,32 +89,32 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 	private CellSet cellSet;
 
-<span class="fc" id="L90">	private QueryChangeListener queryChangeListener = new QueryChangeListener() {</span>
+<span class="fc" id="L92">	private QueryChangeListener queryChangeListener = new QueryChangeListener() {</span>
 
 		public void queryChanged(QueryChangeEvent e) {
-<span class="fc" id="L93">			fireModelChanged();</span>
-<span class="fc" id="L94">		}</span>
+<span class="fc" id="L95">			fireModelChanged();</span>
+<span class="fc" id="L96">		}</span>
 	};
 
 	/**
 	 * @param dataSource
 	 * @param transformFactory
 	 */
-	public PivotModelImpl(OlapDataSource dataSource,
-<span class="fc" id="L102">			TransformFactory transformFactory) {</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">		if (dataSource == null) {</span>
-<span class="nc" id="L104">			throw new IllegalArgumentException(</span>
-					&quot;Missing required argument 'dataSource'.&quot;);
+<span class="fc" id="L103">	public PivotModelImpl(OlapDataSource dataSource,</span>
+			TransformFactory transformFactory) {
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">		if (dataSource == null) {</span>
+<span class="nc" id="L106">			throw new IllegalArgumentException(</span>
+<span class="nc" id="L107">					&quot;Missing required argument 'dataSource'.&quot;);</span>
 		}
 
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">		if (transformFactory == null) {</span>
-<span class="nc" id="L109">			throw new IllegalArgumentException(</span>
-					&quot;Missing required argument 'transformFactory'.&quot;);
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">		if (transformFactory == null) {</span>
+<span class="nc" id="L111">			throw new IllegalArgumentException(</span>
+<span class="nc" id="L112">					&quot;Missing required argument 'transformFactory'.&quot;);</span>
 		}
 
-<span class="fc" id="L113">		this.dataSource = dataSource;</span>
-<span class="fc" id="L114">		this.transformFactory = transformFactory;</span>
-<span class="fc" id="L115">	}</span>
+<span class="fc" id="L115">		this.dataSource = dataSource;</span>
+<span class="fc" id="L116">		this.transformFactory = transformFactory;</span>
+<span class="fc" id="L117">	}</span>
 
 	/**
 	 * Returns the current locale.
@@ -121,10 +123,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#getLocale()
 	 */
 	public Locale getLocale() {
-<span class="nc bnc" id="L124" title="All 2 branches missed.">		if (locale == null) {</span>
-<span class="nc" id="L125">			return Locale.getDefault();</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">		if (locale == null) {</span>
+<span class="nc" id="L127">			return Locale.getDefault();</span>
 		}
-<span class="nc" id="L127">		return locale;</span>
+<span class="nc" id="L129">		return locale;</span>
 	}
 
 	/**
@@ -135,15 +137,15 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#setLocale(java.util.Locale)
 	 */
 	public void setLocale(Locale locale) {
-<span class="nc" id="L138">		this.locale = locale;</span>
-<span class="nc" id="L139">	}</span>
+<span class="nc" id="L140">		this.locale = locale;</span>
+<span class="nc" id="L141">	}</span>
 
 	/**
 	 * @return the roleName
 	 * @see com.eyeq.pivot4j.PivotModel#getRoleName()
 	 */
 	public String getRoleName() {
-<span class="nc" id="L146">		return roleName;</span>
+<span class="nc" id="L148">		return roleName;</span>
 	}
 
 	/**
@@ -152,31 +154,36 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#setRoleName(java.lang.String)
 	 */
 	public void setRoleName(String roleName) {
-<span class="nc" id="L155">		this.roleName = roleName;</span>
-<span class="nc" id="L156">	}</span>
+<span class="nc" id="L157">		this.roleName = roleName;</span>
+<span class="nc" id="L158">	}</span>
 
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#initialize()
 	 */
 	public synchronized void initialize() {
-<span class="pc bpc" id="L162" title="1 of 2 branches missed.">		if (isInitialized()) {</span>
-<span class="nc" id="L163">			destroy();</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">		if (isInitialized()) {</span>
+<span class="nc" id="L165">			destroy();</span>
 		}
 
-<span class="fc bfc" id="L166" title="All 2 branches covered.">		if (mdxQuery == null) {</span>
-<span class="fc" id="L167">			throw new PivotException(&quot;Initial MDX query is null.&quot;);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">		if (mdxQuery == null) {</span>
+<span class="fc" id="L169">			throw new PivotException(&quot;Initial MDX query is null.&quot;);</span>
 		}
 
 		try {
-<span class="fc" id="L171">			this.connection = createConnection(dataSource);</span>
-<span class="nc" id="L172">		} catch (SQLException e) {</span>
-<span class="nc" id="L173">			throw new PivotException(e);</span>
-<span class="fc" id="L174">		}</span>
+<span class="fc" id="L173">			this.connection = createConnection(dataSource);</span>
+<span class="nc" id="L174">		} catch (SQLException e) {</span>
+<span class="nc" id="L175">			throw new PivotException(e);</span>
+		}
 
-<span class="fc" id="L176">		this.initialized = true;</span>
+<span class="fc" id="L178">		this.queryAdapter = createQueryAdapter();</span>
+<span class="fc" id="L179">		queryAdapter.updateQuery();</span>
 
-<span class="fc" id="L178">		fireModelInitialized();</span>
-<span class="fc" id="L179">	}</span>
+<span class="fc" id="L181">		queryAdapter.addChangeListener(queryChangeListener);</span>
+
+<span class="fc" id="L183">		this.initialized = true;</span>
+
+<span class="fc" id="L185">		fireModelInitialized();</span>
+<span class="fc" id="L186">	}</span>
 
 	/**
 	 * @param dataSource
@@ -185,61 +192,61 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 */
 	protected OlapConnection createConnection(OlapDataSource dataSource)
 			throws SQLException {
-<span class="fc" id="L188">		OlapConnection connection = dataSource.getConnection();</span>
+<span class="fc" id="L195">		OlapConnection connection = dataSource.getConnection();</span>
 
-<span class="pc bpc" id="L190" title="1 of 2 branches missed.">		if (roleName != null) {</span>
-<span class="nc" id="L191">			connection.setRoleName(roleName);</span>
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">		if (roleName != null) {</span>
+<span class="nc" id="L198">			connection.setRoleName(roleName);</span>
 		}
 
-<span class="pc bpc" id="L194" title="1 of 2 branches missed.">		if (locale != null) {</span>
-<span class="nc" id="L195">			connection.setLocale(locale);</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">		if (locale != null) {</span>
+<span class="nc" id="L202">			connection.setLocale(locale);</span>
 		}
 
-<span class="fc" id="L198">		return connection;</span>
+<span class="fc" id="L205">		return connection;</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#isInitialized()
 	 */
 	public boolean isInitialized() {
-<span class="fc" id="L205">		return initialized;</span>
+<span class="fc" id="L212">		return initialized;</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#destroy()
 	 */
 	public synchronized void destroy() throws NotInitializedException {
-<span class="fc" id="L212">		checkInitialization();</span>
+<span class="fc" id="L219">		checkInitialization();</span>
 
-<span class="pc bpc" id="L214" title="1 of 2 branches missed.">		if (queryAdapter != null) {</span>
-<span class="fc" id="L215">			queryAdapter.removeChangeListener(queryChangeListener);</span>
-<span class="fc" id="L216">			this.queryAdapter = null;</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">		if (queryAdapter != null) {</span>
+<span class="fc" id="L222">			queryAdapter.removeChangeListener(queryChangeListener);</span>
+<span class="fc" id="L223">			this.queryAdapter = null;</span>
 		}
 
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">		if (connection != null) {</span>
-<span class="pc bpc" id="L220" title="1 of 2 branches missed.">			if (logger.isDebugEnabled()) {</span>
-<span class="fc" id="L221">				logger.debug(&quot;Closing OLAP connection &quot; + connection);</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">		if (connection != null) {</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">			if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L228">				logger.debug(&quot;Closing OLAP connection &quot; + connection);</span>
 			}
 
 			try {
-<span class="fc" id="L225">				closeConnection(connection);</span>
-<span class="nc" id="L226">			} catch (SQLException e) {</span>
-<span class="nc" id="L227">				throw new PivotException(e);</span>
-<span class="fc" id="L228">			}</span>
+<span class="fc" id="L232">				closeConnection(connection);</span>
+<span class="nc" id="L233">			} catch (SQLException e) {</span>
+<span class="nc" id="L234">				throw new PivotException(e);</span>
+			}
 
-<span class="fc" id="L230">			this.connection = null;</span>
+<span class="fc" id="L237">			this.connection = null;</span>
 		}
 
-<span class="fc" id="L233">		this.cubeName = null;</span>
-<span class="fc" id="L234">		this.schemaName = null;</span>
-<span class="fc" id="L235">		this.sortPosMembers = null;</span>
-<span class="fc" id="L236">		this.sortMode = SortMode.ASC;</span>
-<span class="fc" id="L237">		this.sorting = false;</span>
-<span class="fc" id="L238">		this.cellSet = null;</span>
-<span class="fc" id="L239">		this.initialized = false;</span>
+<span class="fc" id="L240">		this.cubeName = null;</span>
+<span class="fc" id="L241">		this.schemaName = null;</span>
+<span class="fc" id="L242">		this.sortPosMembers = null;</span>
+<span class="fc" id="L243">		this.sortMode = SortMode.ASC;</span>
+<span class="fc" id="L244">		this.sorting = false;</span>
+<span class="fc" id="L245">		this.cellSet = null;</span>
+<span class="fc" id="L246">		this.initialized = false;</span>
 
-<span class="fc" id="L241">		fireModelDestroyed();</span>
-<span class="fc" id="L242">	}</span>
+<span class="fc" id="L248">		fireModelDestroyed();</span>
+<span class="fc" id="L249">	}</span>
 
 	/**
 	 * @param dataSource
@@ -248,51 +255,51 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 */
 	protected void closeConnection(OlapConnection connection)
 			throws SQLException {
-<span class="fc" id="L251">		connection.close();</span>
-<span class="fc" id="L252">	}</span>
+<span class="fc" id="L258">		connection.close();</span>
+<span class="fc" id="L259">	}</span>
 
 	private void checkInitialization() throws NotInitializedException {
-<span class="fc bfc" id="L255" title="All 2 branches covered.">		if (!isInitialized()) {</span>
-<span class="fc" id="L256">			throw new NotInitializedException(</span>
-					&quot;Model has not been initialized yet.&quot;);
+<span class="fc bfc" id="L262" title="All 2 branches covered.">		if (!isInitialized()) {</span>
+<span class="fc" id="L263">			throw new NotInitializedException(</span>
+<span class="fc" id="L264">					&quot;Model has not been initialized yet.&quot;);</span>
 		}
-<span class="fc" id="L259">	}</span>
+<span class="fc" id="L266">	}</span>
 
 	/**
 	 * Returns the connection.
 	 */
 	protected OlapConnection getConnection() {
-<span class="nc" id="L265">		return connection;</span>
+<span class="fc" id="L272">		return connection;</span>
 	}
 
 	public OlapDataSource getDataSource() {
-<span class="nc" id="L269">		return dataSource;</span>
+<span class="nc" id="L276">		return dataSource;</span>
 	}
 
 	/**
 	 * @return the schemaName
 	 */
 	protected String getSchemaName() {
-<span class="nc" id="L276">		return schemaName;</span>
+<span class="nc" id="L283">		return schemaName;</span>
 	}
 
 	/**
 	 * @return the cubeName
 	 */
 	protected String getCubeName() {
-<span class="nc" id="L283">		return cubeName;</span>
+<span class="nc" id="L290">		return cubeName;</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#getCatalog()
 	 */
 	public Catalog getCatalog() throws NotInitializedException {
-<span class="nc" id="L290">		checkInitialization();</span>
+<span class="nc" id="L297">		checkInitialization();</span>
 
 		try {
-<span class="nc" id="L293">			return connection.getOlapCatalog();</span>
-<span class="nc" id="L294">		} catch (OlapException e) {</span>
-<span class="nc" id="L295">			throw new PivotException(e);</span>
+<span class="nc" id="L300">			return connection.getOlapCatalog();</span>
+<span class="nc" id="L301">		} catch (OlapException e) {</span>
+<span class="nc" id="L302">			throw new PivotException(e);</span>
 		}
 	}
 
@@ -300,43 +307,43 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#getCellSet()
 	 */
 	public synchronized CellSet getCellSet() throws NotInitializedException {
-<span class="fc" id="L303">		checkInitialization();</span>
+<span class="fc" id="L310">		checkInitialization();</span>
 
-<span class="pc bpc" id="L305" title="1 of 2 branches missed.">		if (cellSet != null) {</span>
-<span class="nc" id="L306">			return cellSet;</span>
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">		if (cellSet != null) {</span>
+<span class="nc" id="L313">			return cellSet;</span>
 		}
 
-<span class="fc" id="L309">		long t1 = System.currentTimeMillis();</span>
+<span class="fc" id="L316">		long t1 = System.currentTimeMillis();</span>
 
-<span class="pc bpc" id="L311" title="1 of 2 branches missed.">		if (queryAdapter == null) {</span>
-<span class="nc" id="L312">			throw new IllegalStateException(&quot;Initial MDX is not specified.&quot;);</span>
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">		if (queryAdapter == null) {</span>
+<span class="nc" id="L319">			throw new IllegalStateException(&quot;Initial MDX is not specified.&quot;);</span>
 		}
 
-<span class="fc" id="L315">		String mdx = normalizeMdx(getCurrentMdx());</span>
+<span class="fc" id="L322">		String mdx = normalizeMdx(getCurrentMdx());</span>
 
-<span class="pc bpc" id="L317" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
-<span class="fc" id="L318">			logger.debug(mdx);</span>
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">		if (logger.isDebugEnabled()) {</span>
+<span class="fc" id="L325">			logger.debug(mdx);</span>
 		}
 
 		try {
-<span class="fc" id="L322">			this.cellSet = executeMdx(connection, mdx);</span>
+<span class="fc" id="L329">			this.cellSet = executeMdx(connection, mdx);</span>
 
-<span class="fc" id="L324">			Cube cube = cellSet.getMetaData().getCube();</span>
+<span class="fc" id="L331">			Cube cube = cellSet.getMetaData().getCube();</span>
 
-<span class="fc" id="L326">			this.cubeName = cube.getName();</span>
-<span class="fc" id="L327">			this.schemaName = cube.getSchema().getName();</span>
-<span class="nc" id="L328">		} catch (OlapException e) {</span>
-<span class="nc" id="L329">			throw new PivotException(e);</span>
-<span class="fc" id="L330">		}</span>
-
-<span class="fc" id="L332">		queryAdapter.afterExecute(cellSet);</span>
-
-<span class="pc bpc" id="L334" title="1 of 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
-<span class="fc" id="L335">			long t2 = System.currentTimeMillis();</span>
-<span class="fc" id="L336">			logger.info(&quot;Query execution time &quot; + (t2 - t1) + &quot; ms&quot;);</span>
+<span class="fc" id="L333">			this.cubeName = cube.getName();</span>
+<span class="fc" id="L334">			this.schemaName = cube.getSchema().getName();</span>
+<span class="nc" id="L335">		} catch (OlapException e) {</span>
+<span class="nc" id="L336">			throw new PivotException(e);</span>
 		}
 
-<span class="fc" id="L339">		return cellSet;</span>
+<span class="fc" id="L339">		queryAdapter.afterExecute(cellSet);</span>
+
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="fc" id="L342">			long t2 = System.currentTimeMillis();</span>
+<span class="fc" id="L343">			logger.info(&quot;Query execution time &quot; + (t2 - t1) + &quot; ms&quot;);</span>
+		}
+
+<span class="fc" id="L346">		return cellSet;</span>
 	}
 
 	/**
@@ -347,15 +354,15 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 */
 	protected CellSet executeMdx(OlapConnection connection, String mdx)
 			throws OlapException {
-<span class="fc" id="L350">		OlapStatement stmt = connection.createStatement();</span>
-<span class="fc" id="L351">		return stmt.executeOlapQuery(mdx);</span>
+<span class="fc" id="L357">		OlapStatement stmt = connection.createStatement();</span>
+<span class="fc" id="L358">		return stmt.executeOlapQuery(mdx);</span>
 	}
 
 	protected String normalizeMdx(String mdx) {
-<span class="fc bfc" id="L355" title="All 2 branches covered.">		if (mdx == null) {</span>
-<span class="fc" id="L356">			return null;</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">		if (mdx == null) {</span>
+<span class="fc" id="L363">			return null;</span>
 		} else {
-<span class="fc" id="L358">			return mdx.replaceAll(&quot;\r&quot;, &quot;&quot;);</span>
+<span class="fc" id="L365">			return mdx.replaceAll(&quot;\r&quot;, &quot;&quot;);</span>
 		}
 	}
 
@@ -363,10 +370,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#getCurrentMdx()
 	 */
 	public String getCurrentMdx() {
-<span class="fc bfc" id="L366" title="All 2 branches covered.">		if (queryAdapter == null) {</span>
-<span class="fc" id="L367">			return null;</span>
+<span class="fc bfc" id="L373" title="All 2 branches covered.">		if (queryAdapter == null) {</span>
+<span class="fc" id="L374">			return null;</span>
 		} else {
-<span class="fc" id="L369">			return queryAdapter.getParsedQuery().toMdx();</span>
+<span class="fc" id="L376">			return queryAdapter.getParsedQuery().toMdx();</span>
 		}
 	}
 
@@ -376,7 +383,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @return String
 	 */
 	public String getMdx() {
-<span class="fc" id="L379">		return mdxQuery;</span>
+<span class="fc" id="L386">		return mdxQuery;</span>
 	}
 
 	/**
@@ -386,41 +393,47 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 *            The mdxQuery to set
 	 */
 	public void setMdx(String mdxQuery) {
-<span class="pc bpc" id="L389" title="1 of 2 branches missed.">		if (mdxQuery == null) {</span>
-<span class="nc" id="L390">			throw new IllegalArgumentException(&quot;MDX query cannot be null.&quot;);</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">		if (mdxQuery == null) {</span>
+<span class="nc" id="L397">			throw new IllegalArgumentException(&quot;MDX query cannot be null.&quot;);</span>
 		}
 
-<span class="fc" id="L393">		this.mdxQuery = mdxQuery;</span>
+<span class="fc" id="L400">		this.mdxQuery = mdxQuery;</span>
 
-<span class="fc" id="L395">		String mdx = normalizeMdx(mdxQuery);</span>
-<span class="pc bpc" id="L396" title="1 of 2 branches missed.">		if (!mdx.equals(normalizeMdx(getCurrentMdx()))) {</span>
-<span class="fc" id="L397">			onMdxChanged(mdx);</span>
+<span class="fc" id="L402">		String mdx = normalizeMdx(mdxQuery);</span>
+<span class="pc bpc" id="L403" title="1 of 2 branches missed.">		if (!mdx.equals(normalizeMdx(getCurrentMdx()))) {</span>
+<span class="fc" id="L404">			onMdxChanged(mdx);</span>
 		}
-<span class="fc" id="L399">	}</span>
+<span class="fc" id="L406">	}</span>
 
 	protected void onMdxChanged(String mdx) {
-<span class="pc bpc" id="L402" title="1 of 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
-<span class="fc" id="L403">			logger.info(&quot;setMdx: &quot; + mdx);</span>
+<span class="pc bpc" id="L409" title="1 of 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="fc" id="L410">			logger.info(&quot;setMdx: &quot; + mdx);</span>
 		}
 
-<span class="fc" id="L406">		this.cellSet = null;</span>
-<span class="fc" id="L407">		this.topBottomCount = 10;</span>
-<span class="fc" id="L408">		this.sortMode = SortMode.ASC;</span>
-<span class="fc" id="L409">		this.sorting = false;</span>
-<span class="fc" id="L410">		this.sortPosMembers = null;</span>
+<span class="fc" id="L413">		this.cellSet = null;</span>
+<span class="fc" id="L414">		this.topBottomCount = 10;</span>
+<span class="fc" id="L415">		this.sortMode = SortMode.ASC;</span>
+<span class="fc" id="L416">		this.sorting = false;</span>
+<span class="fc" id="L417">		this.sortPosMembers = null;</span>
 
-<span class="pc bpc" id="L412" title="1 of 2 branches missed.">		if (queryAdapter != null) {</span>
-<span class="nc" id="L413">			queryAdapter.removeChangeListener(queryChangeListener);</span>
+<span class="pc bpc" id="L419" title="1 of 2 branches missed.">		if (queryAdapter != null) {</span>
+<span class="nc" id="L420">			queryAdapter.removeChangeListener(queryChangeListener);</span>
+<span class="nc" id="L421">			queryAdapter = null;</span>
 		}
 
-<span class="fc" id="L416">		this.queryAdapter = createQueryAdapter();</span>
-<span class="fc" id="L417">		queryAdapter.updateQuery();</span>
+<span class="pc bpc" id="L424" title="1 of 2 branches missed.">		if (isInitialized()) {</span>
+<span class="nc" id="L425">			this.queryAdapter = createQueryAdapter();</span>
+<span class="nc" id="L426">			queryAdapter.updateQuery();</span>
 
-<span class="fc" id="L419">		queryAdapter.addChangeListener(queryChangeListener);</span>
-<span class="fc" id="L420">	}</span>
+<span class="nc" id="L428">			queryAdapter.addChangeListener(queryChangeListener);</span>
+		}
+<span class="fc" id="L430">	}</span>
 
 	protected QueryAdapter createQueryAdapter() {
-<span class="fc" id="L423">		return new QueryAdapter(this);</span>
+<span class="fc" id="L433">		MdxParserFactory factory = getConnection().getParserFactory();</span>
+<span class="fc" id="L434">		MdxParser parser = factory.createMdxParser(connection);</span>
+
+<span class="fc" id="L436">		return new QueryAdapter(this, parser);</span>
 	}
 
 	/**
@@ -429,67 +442,67 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @return QueryAdapter
 	 */
 	protected QueryAdapter getQueryAdapter() {
-<span class="nc" id="L432">		return queryAdapter;</span>
+<span class="nc" id="L445">		return queryAdapter;</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.tonbeller.jpivot.core.Model#addModelChangeListener(ModelChangeListener)
 	 */
 	public void addModelChangeListener(ModelChangeListener listener) {
-<span class="nc" id="L439">		listeners.add(listener);</span>
-<span class="nc" id="L440">	}</span>
+<span class="nc" id="L452">		listeners.add(listener);</span>
+<span class="nc" id="L453">	}</span>
 
 	/**
 	 * @see com.eyeq.pivot4j.tonbeller.jpivot.core.Model#removeModelChangeListener(ModelChangeListener)
 	 */
 	public void removeModelChangeListener(ModelChangeListener listener) {
-<span class="nc" id="L446">		listeners.remove(listener);</span>
-<span class="nc" id="L447">	}</span>
+<span class="nc" id="L459">		listeners.remove(listener);</span>
+<span class="nc" id="L460">	}</span>
 
 	protected void fireModelInitialized() {
-<span class="fc" id="L450">		ModelChangeEvent e = new ModelChangeEvent(this);</span>
-<span class="pc bpc" id="L451" title="1 of 2 branches missed.">		for (ModelChangeListener listener : listeners) {</span>
-<span class="nc" id="L452">			listener.modelInitialized(e);</span>
-<span class="nc" id="L453">		}</span>
-<span class="fc" id="L454">	}</span>
+<span class="fc" id="L463">		ModelChangeEvent e = new ModelChangeEvent(this);</span>
+<span class="pc bpc" id="L464" title="1 of 2 branches missed.">		for (ModelChangeListener listener : listeners) {</span>
+<span class="nc" id="L465">			listener.modelInitialized(e);</span>
+		}
+<span class="fc" id="L467">	}</span>
 
 	protected void fireModelChanged() {
-<span class="fc" id="L457">		this.cellSet = null;</span>
+<span class="fc" id="L470">		this.cellSet = null;</span>
 
-<span class="fc" id="L459">		ModelChangeEvent e = new ModelChangeEvent(this);</span>
-<span class="pc bpc" id="L460" title="1 of 2 branches missed.">		for (ModelChangeListener listener : listeners) {</span>
-<span class="nc" id="L461">			listener.modelChanged(e);</span>
-<span class="nc" id="L462">		}</span>
-<span class="fc" id="L463">	}</span>
+<span class="fc" id="L472">		ModelChangeEvent e = new ModelChangeEvent(this);</span>
+<span class="pc bpc" id="L473" title="1 of 2 branches missed.">		for (ModelChangeListener listener : listeners) {</span>
+<span class="nc" id="L474">			listener.modelChanged(e);</span>
+		}
+<span class="fc" id="L476">	}</span>
 
 	protected void fireStructureChanged() {
-<span class="nc" id="L466">		this.cellSet = null;</span>
+<span class="nc" id="L479">		this.cellSet = null;</span>
 
-<span class="nc" id="L468">		ModelChangeEvent e = new ModelChangeEvent(this);</span>
-<span class="nc bnc" id="L469" title="All 2 branches missed.">		for (ModelChangeListener listener : listeners) {</span>
-<span class="nc" id="L470">			listener.structureChanged(e);</span>
-<span class="nc" id="L471">		}</span>
-<span class="nc" id="L472">	}</span>
+<span class="nc" id="L481">		ModelChangeEvent e = new ModelChangeEvent(this);</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">		for (ModelChangeListener listener : listeners) {</span>
+<span class="nc" id="L483">			listener.structureChanged(e);</span>
+		}
+<span class="nc" id="L485">	}</span>
 
 	protected void fireModelDestroyed() {
-<span class="fc" id="L475">		ModelChangeEvent e = new ModelChangeEvent(this);</span>
-<span class="pc bpc" id="L476" title="1 of 2 branches missed.">		for (ModelChangeListener listener : listeners) {</span>
-<span class="nc" id="L477">			listener.modelDestroyed(e);</span>
-<span class="nc" id="L478">		}</span>
-<span class="fc" id="L479">	}</span>
+<span class="fc" id="L488">		ModelChangeEvent e = new ModelChangeEvent(this);</span>
+<span class="pc bpc" id="L489" title="1 of 2 branches missed.">		for (ModelChangeListener listener : listeners) {</span>
+<span class="nc" id="L490">			listener.modelDestroyed(e);</span>
+		}
+<span class="fc" id="L492">	}</span>
 
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#getTransform(java.lang.Class)
 	 */
 	public &lt;T extends Transform&gt; T getTransform(Class&lt;T&gt; type) {
-<span class="fc" id="L485">		return transformFactory.createTransform(type, queryAdapter);</span>
+<span class="fc" id="L498">		return transformFactory.createTransform(type, queryAdapter);</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#isSorting()
 	 */
 	public boolean isSorting() {
-<span class="fc" id="L492">		return sorting;</span>
+<span class="fc" id="L505">		return sorting;</span>
 	}
 
 	/**
@@ -499,24 +512,24 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#isSorting(org.olap4j.Position)
 	 */
 	public boolean isSorting(Position position) {
-<span class="nc bnc" id="L502" title="All 2 branches missed.">		if (!isSortOnQuery()) {</span>
-<span class="nc" id="L503">			return false;</span>
+<span class="nc bnc" id="L515" title="All 2 branches missed.">		if (!isSortOnQuery()) {</span>
+<span class="nc" id="L516">			return false;</span>
 		} else {
-<span class="nc bnc" id="L505" title="All 2 branches missed.">			if (sortPosMembers.size() != position.getMembers().size()) {</span>
-<span class="nc" id="L506">				return false;</span>
+<span class="nc bnc" id="L518" title="All 2 branches missed.">			if (sortPosMembers.size() != position.getMembers().size()) {</span>
+<span class="nc" id="L519">				return false;</span>
 			}
 
-<span class="nc bnc" id="L509" title="All 2 branches missed.">			for (int i = 0; i &lt; sortPosMembers.size(); i++) {</span>
-<span class="nc" id="L510">				Member member1 = sortPosMembers.get(i);</span>
-<span class="nc" id="L511">				Member member2 = position.getMembers().get(i);</span>
+<span class="nc bnc" id="L522" title="All 2 branches missed.">			for (int i = 0; i &lt; sortPosMembers.size(); i++) {</span>
+<span class="nc" id="L523">				Member member1 = sortPosMembers.get(i);</span>
+<span class="nc" id="L524">				Member member2 = position.getMembers().get(i);</span>
 				// any null does not compare
-<span class="nc bnc" id="L513" title="All 2 branches missed.">				if (member1 == null) {</span>
-<span class="nc" id="L514">					return false;</span>
-<span class="nc bnc" id="L515" title="All 2 branches missed.">				} else if (!member1.equals(member2)) {</span>
-<span class="nc" id="L516">					return false;</span>
+<span class="nc bnc" id="L526" title="All 2 branches missed.">				if (member1 == null) {</span>
+<span class="nc" id="L527">					return false;</span>
+<span class="nc bnc" id="L528" title="All 2 branches missed.">				} else if (!member1.equals(member2)) {</span>
+<span class="nc" id="L529">					return false;</span>
 				}
 			}
-<span class="nc" id="L519">			return true;</span>
+<span class="nc" id="L532">			return true;</span>
 		}
 	}
 
@@ -525,24 +538,24 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#setSorting(boolean)
 	 */
 	public void setSorting(boolean sorting) {
-<span class="nc bnc" id="L528" title="All 2 branches missed.">		if (sorting == this.sorting) {</span>
-<span class="nc" id="L529">			return;</span>
+<span class="nc bnc" id="L541" title="All 2 branches missed.">		if (sorting == this.sorting) {</span>
+<span class="nc" id="L542">			return;</span>
 		}
 
-<span class="nc bnc" id="L532" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
-<span class="nc" id="L533">			logger.info(&quot;change sorting to &quot; + sorting);</span>
+<span class="nc bnc" id="L545" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="nc" id="L546">			logger.info(&quot;change sorting to &quot; + sorting);</span>
 		}
 
-<span class="nc" id="L536">		this.sorting = sorting;</span>
+<span class="nc" id="L549">		this.sorting = sorting;</span>
 
-<span class="nc" id="L538">		fireModelChanged();</span>
-<span class="nc" id="L539">	}</span>
+<span class="nc" id="L551">		fireModelChanged();</span>
+<span class="nc" id="L552">	}</span>
 
 	/**
 	 * @return sort mode (ASC,DESC,BASC,BDESC,TOPCOUNT,BOTTOMCOUNT)
 	 */
 	public SortMode getSortMode() {
-<span class="nc" id="L545">		return sortMode;</span>
+<span class="nc" id="L558">		return sortMode;</span>
 	}
 
 	/**
@@ -550,21 +563,21 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 *            mode (ASC,DESC,BASC,BDESC)
 	 */
 	public void setSortMode(SortMode sortMode) {
-<span class="nc bnc" id="L553" title="All 2 branches missed.">		if (this.sortMode == sortMode) {</span>
-<span class="nc" id="L554">			return;</span>
+<span class="nc bnc" id="L566" title="All 2 branches missed.">		if (this.sortMode == sortMode) {</span>
+<span class="nc" id="L567">			return;</span>
 		}
 
-<span class="nc bnc" id="L557" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
-<span class="nc" id="L558">			logger.info(&quot;change topBottomCount from &quot; + this.sortMode + &quot; to &quot;</span>
-					+ sortMode);
+<span class="nc bnc" id="L570" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="nc" id="L571">			logger.info(&quot;change topBottomCount from &quot; + this.sortMode + &quot; to &quot;</span>
+<span class="nc" id="L572">					+ sortMode);</span>
 		}
 
-<span class="nc" id="L562">		this.sortMode = sortMode;</span>
+<span class="nc" id="L575">		this.sortMode = sortMode;</span>
 
-<span class="nc bnc" id="L564" title="All 2 branches missed.">		if (isSortOnQuery()) {</span>
-<span class="nc" id="L565">			fireModelChanged();</span>
+<span class="nc bnc" id="L577" title="All 2 branches missed.">		if (isSortOnQuery()) {</span>
+<span class="nc" id="L578">			fireModelChanged();</span>
 		}
-<span class="nc" id="L567">	}</span>
+<span class="nc" id="L580">	}</span>
 
 	/**
 	 * returns true, if one of the members is a measure
@@ -575,39 +588,39 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 */
 	public boolean isSortable(Position position) {
 		try {
-<span class="nc" id="L578">			List&lt;Member&gt; members = position.getMembers();</span>
-<span class="nc bnc" id="L579" title="All 2 branches missed.">			for (Member member : members) {</span>
-<span class="nc" id="L580">				if (member.getLevel().getHierarchy().getDimension()</span>
-<span class="nc bnc" id="L581" title="All 2 branches missed.">						.getDimensionType() == Type.MEASURE) {</span>
-<span class="nc" id="L582">					return true;</span>
+<span class="nc" id="L591">			List&lt;Member&gt; members = position.getMembers();</span>
+<span class="nc bnc" id="L592" title="All 2 branches missed.">			for (Member member : members) {</span>
+<span class="nc bnc" id="L593" title="All 2 branches missed.">				if (member.getLevel().getHierarchy().getDimension()</span>
+<span class="nc" id="L594">						.getDimensionType() == Type.MEASURE) {</span>
+<span class="nc" id="L595">					return true;</span>
 				}
-<span class="nc" id="L584">			}</span>
-<span class="nc" id="L585">		} catch (OlapException e) {</span>
-<span class="nc" id="L586">			throw new PivotException(e);</span>
-<span class="nc" id="L587">		}</span>
+			}
+<span class="nc" id="L598">		} catch (OlapException e) {</span>
+<span class="nc" id="L599">			throw new PivotException(e);</span>
+		}
 
-<span class="nc" id="L589">		return false;</span>
+<span class="nc" id="L602">		return false;</span>
 	}
 
 	/**
 	 * @return true, if there is a sort for the query
 	 */
 	protected boolean isSortOnQuery() {
-<span class="nc bnc" id="L596" title="All 6 branches missed.">		return sorting &amp;&amp; sortPosMembers != null &amp;&amp; !sortPosMembers.isEmpty();</span>
+<span class="nc bnc" id="L609" title="All 6 branches missed.">		return sorting &amp;&amp; sortPosMembers != null &amp;&amp; !sortPosMembers.isEmpty();</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#getSortPosMembers()
 	 */
 	public List&lt;Member&gt; getSortPosMembers() {
-<span class="nc" id="L603">		return Collections.unmodifiableList(sortPosMembers);</span>
+<span class="nc" id="L616">		return Collections.unmodifiableList(sortPosMembers);</span>
 	}
 
 	/**
 	 * @return top/bottom count
 	 */
 	public int getTopBottomCount() {
-<span class="nc" id="L610">		return topBottomCount;</span>
+<span class="nc" id="L623">		return topBottomCount;</span>
 	}
 
 	/**
@@ -615,23 +628,23 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 *            /bottom count
 	 */
 	public void setTopBottomCount(int topBottomCount) {
-<span class="nc bnc" id="L618" title="All 2 branches missed.">		if (this.topBottomCount == topBottomCount) {</span>
-<span class="nc" id="L619">			return;</span>
+<span class="nc bnc" id="L631" title="All 2 branches missed.">		if (this.topBottomCount == topBottomCount) {</span>
+<span class="nc" id="L632">			return;</span>
 		}
 
-<span class="nc bnc" id="L622" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
-<span class="nc" id="L623">			logger.info(&quot;Change topBottomCount from &quot; + this.topBottomCount</span>
-					+ &quot; to &quot; + topBottomCount);
+<span class="nc bnc" id="L635" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="nc" id="L636">			logger.info(&quot;Change topBottomCount from &quot; + this.topBottomCount</span>
+<span class="nc" id="L637">					+ &quot; to &quot; + topBottomCount);</span>
 		}
 
-<span class="nc" id="L627">		this.topBottomCount = topBottomCount;</span>
+<span class="nc" id="L640">		this.topBottomCount = topBottomCount;</span>
 
-<span class="nc bnc" id="L629" title="All 8 branches missed.">		if (sorting</span>
-				&amp;&amp; sortPosMembers != null
-				&amp;&amp; (sortMode == SortMode.TOPCOUNT || sortMode == SortMode.BOTTOMCOUNT)) {
-<span class="nc" id="L632">			fireModelChanged();</span>
+<span class="nc bnc" id="L642" title="All 2 branches missed.">		if (sorting</span>
+<span class="nc bnc" id="L643" title="All 2 branches missed.">				&amp;&amp; sortPosMembers != null</span>
+<span class="nc bnc" id="L644" title="All 4 branches missed.">				&amp;&amp; (sortMode == SortMode.TOPCOUNT || sortMode == SortMode.BOTTOMCOUNT)) {</span>
+<span class="nc" id="L645">			fireModelChanged();</span>
 		}
-<span class="nc" id="L634">	}</span>
+<span class="nc" id="L647">	}</span>
 
 	/**
 	 * @param membersToSort
@@ -641,153 +654,153 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 *            membersToSort are sorted
 	 */
 	public void sort(CellSetAxis membersToSort, Position position) {
-<span class="nc" id="L644">		List&lt;Position&gt; positions = membersToSort.getPositions();</span>
+<span class="nc" id="L657">		List&lt;Position&gt; positions = membersToSort.getPositions();</span>
 
 		// if the axis to sort does not contain any positions - sorting is not
 		// posssible
-<span class="nc bnc" id="L648" title="All 2 branches missed.">		if (positions.isEmpty()) {</span>
-<span class="nc bnc" id="L649" title="All 2 branches missed.">			if (logger.isWarnEnabled()) {</span>
-<span class="nc" id="L650">				logger.warn(&quot;Reject sort, the axis to be sorted is empty.&quot;);</span>
+<span class="nc bnc" id="L661" title="All 2 branches missed.">		if (positions.isEmpty()) {</span>
+<span class="nc bnc" id="L662" title="All 2 branches missed.">			if (logger.isWarnEnabled()) {</span>
+<span class="nc" id="L663">				logger.warn(&quot;Reject sort, the axis to be sorted is empty.&quot;);</span>
 			}
 
-<span class="nc" id="L653">			this.sorting = false;</span>
-<span class="nc" id="L654">			return;</span>
+<span class="nc" id="L666">			this.sorting = false;</span>
+<span class="nc" id="L667">			return;</span>
 		}
 
-<span class="nc" id="L657">		this.sortPosMembers = position.getMembers();</span>
+<span class="nc" id="L670">		this.sortPosMembers = position.getMembers();</span>
 
 		// find the axis to sort
-<span class="nc" id="L660">		Dimension dim = positions.get(0).getMembers().get(0).getDimension();</span>
+<span class="nc" id="L673">		Dimension dim = positions.get(0).getMembers().get(0).getDimension();</span>
 
-<span class="nc" id="L662">		Quax quaxToSort = getQueryAdapter().findQuax(dim);</span>
+<span class="nc" id="L675">		Quax quaxToSort = getQueryAdapter().findQuax(dim);</span>
 
-<span class="nc bnc" id="L664" title="All 2 branches missed.">		if (quaxToSort == null) {</span>
-<span class="nc bnc" id="L665" title="All 2 branches missed.">			if (logger.isWarnEnabled()) {</span>
-<span class="nc" id="L666">				logger.warn(&quot;Reject sort, the Quax is null&quot;);</span>
+<span class="nc bnc" id="L677" title="All 2 branches missed.">		if (quaxToSort == null) {</span>
+<span class="nc bnc" id="L678" title="All 2 branches missed.">			if (logger.isWarnEnabled()) {</span>
+<span class="nc" id="L679">				logger.warn(&quot;Reject sort, the Quax is null&quot;);</span>
 			}
-<span class="nc" id="L668">			this.sorting = false;</span>
-<span class="nc" id="L669">			return;</span>
+<span class="nc" id="L681">			this.sorting = false;</span>
+<span class="nc" id="L682">			return;</span>
 		}
 
-<span class="nc" id="L672">		getQueryAdapter().setQuaxToSort(quaxToSort);</span>
+<span class="nc" id="L685">		getQueryAdapter().setQuaxToSort(quaxToSort);</span>
 
-<span class="nc bnc" id="L674" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
-<span class="nc" id="L675">			StringBuilder builder = new StringBuilder();</span>
-<span class="nc" id="L676">			builder.append(&quot;Change Sort Position &quot;);</span>
+<span class="nc bnc" id="L687" title="All 2 branches missed.">		if (logger.isInfoEnabled()) {</span>
+<span class="nc" id="L688">			StringBuilder builder = new StringBuilder();</span>
+<span class="nc" id="L689">			builder.append(&quot;Change Sort Position &quot;);</span>
 
-<span class="nc" id="L678">			boolean first = true;</span>
+<span class="nc" id="L691">			boolean first = true;</span>
 
-<span class="nc" id="L680">			List&lt;Member&gt; members = position.getMembers();</span>
-<span class="nc bnc" id="L681" title="All 2 branches missed.">			for (Member member : members) {</span>
-<span class="nc bnc" id="L682" title="All 2 branches missed.">				if (first) {</span>
-<span class="nc" id="L683">					first = false;</span>
+<span class="nc" id="L693">			List&lt;Member&gt; members = position.getMembers();</span>
+<span class="nc bnc" id="L694" title="All 2 branches missed.">			for (Member member : members) {</span>
+<span class="nc bnc" id="L695" title="All 2 branches missed.">				if (first) {</span>
+<span class="nc" id="L696">					first = false;</span>
 				} else {
-<span class="nc" id="L685">					builder.append(&quot; &quot;);</span>
+<span class="nc" id="L698">					builder.append(&quot; &quot;);</span>
 				}
-<span class="nc" id="L687">				builder.append(member.getUniqueName());</span>
-<span class="nc" id="L688">			}</span>
-<span class="nc" id="L689">			builder.append(&quot; iAxisToSort=&quot;);</span>
-<span class="nc" id="L690">			builder.append(Integer.toString(quaxToSort.getOrdinal()));</span>
+<span class="nc" id="L700">				builder.append(member.getUniqueName());</span>
+			}
+<span class="nc" id="L702">			builder.append(&quot; iAxisToSort=&quot;);</span>
+<span class="nc" id="L703">			builder.append(Integer.toString(quaxToSort.getOrdinal()));</span>
 
-<span class="nc" id="L692">			logger.info(builder.toString());</span>
+<span class="nc" id="L705">			logger.info(builder.toString());</span>
 		}
 
-<span class="nc" id="L695">		fireModelChanged();</span>
-<span class="nc" id="L696">	}</span>
+<span class="nc" id="L708">		fireModelChanged();</span>
+<span class="nc" id="L709">	}</span>
 
 	/**
 	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
 	 */
 	public synchronized Serializable bookmarkState() {
-<span class="nc" id="L702">		Serializable[] state = new Serializable[5];</span>
+<span class="nc" id="L715">		Serializable[] state = new Serializable[5];</span>
 
-<span class="nc" id="L704">		state[0] = getCurrentMdx();</span>
-<span class="nc" id="L705">		state[1] = cubeName;</span>
-<span class="nc" id="L706">		state[2] = schemaName;</span>
+<span class="nc" id="L717">		state[0] = getCurrentMdx();</span>
+<span class="nc" id="L718">		state[1] = cubeName;</span>
+<span class="nc" id="L719">		state[2] = schemaName;</span>
 
-<span class="nc bnc" id="L708" title="All 2 branches missed.">		if (sortPosMembers == null) {</span>
-<span class="nc" id="L709">			state[3] = null;</span>
+<span class="nc bnc" id="L721" title="All 2 branches missed.">		if (sortPosMembers == null) {</span>
+<span class="nc" id="L722">			state[3] = null;</span>
 		} else {
-<span class="nc" id="L711">			Serializable[] sortState = new Serializable[4];</span>
+<span class="nc" id="L724">			Serializable[] sortState = new Serializable[4];</span>
 
-<span class="nc" id="L713">			String[] uniqueNames = new String[sortPosMembers.size()];</span>
-<span class="nc bnc" id="L714" title="All 2 branches missed.">			for (int i = 0; i &lt; uniqueNames.length; i++) {</span>
-<span class="nc" id="L715">				uniqueNames[i] = sortPosMembers.get(i).getUniqueName();</span>
+<span class="nc" id="L726">			String[] uniqueNames = new String[sortPosMembers.size()];</span>
+<span class="nc bnc" id="L727" title="All 2 branches missed.">			for (int i = 0; i &lt; uniqueNames.length; i++) {</span>
+<span class="nc" id="L728">				uniqueNames[i] = sortPosMembers.get(i).getUniqueName();</span>
 			}
 
-<span class="nc" id="L718">			sortState[0] = uniqueNames;</span>
-<span class="nc" id="L719">			sortState[1] = getTopBottomCount();</span>
-<span class="nc" id="L720">			sortState[2] = getSortMode();</span>
-<span class="nc" id="L721">			sortState[3] = isSorting();</span>
+<span class="nc" id="L731">			sortState[0] = uniqueNames;</span>
+<span class="nc" id="L732">			sortState[1] = getTopBottomCount();</span>
+<span class="nc" id="L733">			sortState[2] = getSortMode();</span>
+<span class="nc" id="L734">			sortState[3] = isSorting();</span>
 
-<span class="nc" id="L723">			state[3] = sortState;</span>
+<span class="nc" id="L736">			state[3] = sortState;</span>
 		}
 
-<span class="nc" id="L726">		state[4] = getQueryAdapter().bookmarkState();</span>
+<span class="nc" id="L739">		state[4] = getQueryAdapter().bookmarkState();</span>
 
-<span class="nc" id="L728">		return state;</span>
+<span class="nc" id="L741">		return state;</span>
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
 	 */
 	public synchronized void restoreState(Serializable state) {
-<span class="nc" id="L735">		Serializable[] states = (Serializable[]) state;</span>
+<span class="nc" id="L748">		Serializable[] states = (Serializable[]) state;</span>
 
-<span class="nc" id="L737">		setMdx((String) states[0]);</span>
+<span class="nc" id="L750">		setMdx((String) states[0]);</span>
 
-<span class="nc" id="L739">		this.cubeName = (String) states[1];</span>
-<span class="nc" id="L740">		this.schemaName = (String) states[2];</span>
+<span class="nc" id="L752">		this.cubeName = (String) states[1];</span>
+<span class="nc" id="L753">		this.schemaName = (String) states[2];</span>
 
-<span class="nc bnc" id="L742" title="All 2 branches missed.">		if (!isInitialized()) {</span>
-<span class="nc" id="L743">			initialize();</span>
+<span class="nc bnc" id="L755" title="All 2 branches missed.">		if (!isInitialized()) {</span>
+<span class="nc" id="L756">			initialize();</span>
 		}
 
 		// sorting
-<span class="nc bnc" id="L747" title="All 6 branches missed.">		if (states[3] == null || cubeName == null || schemaName == null) {</span>
-<span class="nc" id="L748">			this.sortPosMembers = null;</span>
+<span class="nc bnc" id="L760" title="All 6 branches missed.">		if (states[3] == null || cubeName == null || schemaName == null) {</span>
+<span class="nc" id="L761">			this.sortPosMembers = null;</span>
 		} else {
 			try {
-<span class="nc" id="L751">				Schema schema = getCatalog().getSchemas().get(schemaName);</span>
-<span class="nc" id="L752">				Cube cube = schema.getCubes().get(cubeName);</span>
+<span class="nc" id="L764">				Schema schema = getCatalog().getSchemas().get(schemaName);</span>
+<span class="nc" id="L765">				Cube cube = schema.getCubes().get(cubeName);</span>
 
-<span class="nc" id="L754">				Serializable[] sortStates = (Serializable[]) states[3];</span>
+<span class="nc" id="L767">				Serializable[] sortStates = (Serializable[]) states[3];</span>
 
-<span class="nc" id="L756">				String[] sortPosUniqueNames = (String[]) sortStates[0];</span>
-<span class="nc bnc" id="L757" title="All 2 branches missed.">				if (sortPosUniqueNames == null) {</span>
-<span class="nc" id="L758">					this.sortPosMembers = null;</span>
+<span class="nc" id="L769">				String[] sortPosUniqueNames = (String[]) sortStates[0];</span>
+<span class="nc bnc" id="L770" title="All 2 branches missed.">				if (sortPosUniqueNames == null) {</span>
+<span class="nc" id="L771">					this.sortPosMembers = null;</span>
 				} else {
-<span class="nc" id="L760">					this.sortPosMembers = new ArrayList&lt;Member&gt;(</span>
-							sortPosUniqueNames.length);
+<span class="nc" id="L773">					this.sortPosMembers = new ArrayList&lt;Member&gt;(</span>
+<span class="nc" id="L774">							sortPosUniqueNames.length);</span>
 
-<span class="nc bnc" id="L763" title="All 2 branches missed.">					for (int i = 0; i &lt; sortPosUniqueNames.length; i++) {</span>
-<span class="nc" id="L764">						Member member = cube.lookupMember(IdentifierNode</span>
-<span class="nc" id="L765">								.parseIdentifier(sortPosUniqueNames[i])</span>
-<span class="nc" id="L766">								.getSegmentList());</span>
-<span class="nc bnc" id="L767" title="All 2 branches missed.">						if (member == null) {</span>
-<span class="nc bnc" id="L768" title="All 2 branches missed.">							if (logger.isWarnEnabled()) {</span>
-<span class="nc" id="L769">								logger.warn(&quot;sort position member not found &quot;</span>
-										+ sortPosUniqueNames[i]);
+<span class="nc bnc" id="L776" title="All 2 branches missed.">					for (int i = 0; i &lt; sortPosUniqueNames.length; i++) {</span>
+<span class="nc" id="L777">						Member member = cube.lookupMember(IdentifierNode</span>
+<span class="nc" id="L778">								.parseIdentifier(sortPosUniqueNames[i])</span>
+<span class="nc" id="L779">								.getSegmentList());</span>
+<span class="nc bnc" id="L780" title="All 2 branches missed.">						if (member == null) {</span>
+<span class="nc bnc" id="L781" title="All 2 branches missed.">							if (logger.isWarnEnabled()) {</span>
+<span class="nc" id="L782">								logger.warn(&quot;sort position member not found &quot;</span>
+<span class="nc" id="L783">										+ sortPosUniqueNames[i]);</span>
 							}
 
-							break;
+<span class="nc" id="L786">							break;</span>
 						}
 
-<span class="nc" id="L776">						sortPosMembers.add(member);</span>
+<span class="nc" id="L789">						sortPosMembers.add(member);</span>
 					}
 
-<span class="nc" id="L779">					this.topBottomCount = (Integer) sortStates[1];</span>
-<span class="nc" id="L780">					this.sortMode = (SortMode) sortStates[2];</span>
-<span class="nc" id="L781">					this.sorting = (Boolean) sortStates[3];</span>
+<span class="nc" id="L792">					this.topBottomCount = (Integer) sortStates[1];</span>
+<span class="nc" id="L793">					this.sortMode = (SortMode) sortStates[2];</span>
+<span class="nc" id="L794">					this.sorting = (Boolean) sortStates[3];</span>
 				}
-<span class="nc" id="L783">			} catch (OlapException e) {</span>
-<span class="nc" id="L784">				throw new PivotException(e);</span>
-<span class="nc" id="L785">			}</span>
+<span class="nc" id="L796">			} catch (OlapException e) {</span>
+<span class="nc" id="L797">				throw new PivotException(e);</span>
+			}
 		}
 
-<span class="nc" id="L788">		this.cellSet = null;</span>
+<span class="nc" id="L801">		this.cellSet = null;</span>
 
-<span class="nc" id="L790">		queryAdapter.restoreState(states[4]);</span>
-<span class="nc" id="L791">	}</span>
+<span class="nc" id="L803">		queryAdapter.restoreState(states[4]);</span>
+<span class="nc" id="L804">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

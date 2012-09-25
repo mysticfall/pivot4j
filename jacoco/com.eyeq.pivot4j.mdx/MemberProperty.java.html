@@ -13,30 +13,32 @@ package com.eyeq.pivot4j.mdx;
  */
 public class MemberProperty implements Exp {
 
+	private static final long serialVersionUID = 519325113391951347L;
+
 	private String name;
 
 	private Exp exp;
 
-<span class="nc" id="L20">	public MemberProperty(String name, Exp exp) {</span>
-<span class="nc" id="L21">		this.name = name;</span>
-<span class="nc" id="L22">		this.exp = exp;</span>
-<span class="nc" id="L23">	}</span>
+<span class="nc" id="L22">	public MemberProperty(String name, Exp exp) {</span>
+<span class="nc" id="L23">		this.name = name;</span>
+<span class="nc" id="L24">		this.exp = exp;</span>
+<span class="nc" id="L25">	}</span>
 
 	/**
 	 * @return The expression that makes up the value of the member property
 	 */
 	public Exp getExp() {
-<span class="nc" id="L29">		return exp;</span>
+<span class="nc" id="L31">		return exp;</span>
 	}
 
 	/**
 	 * format to MDX
 	 */
 	public String toMdx() {
-<span class="nc" id="L36">		String str = name;</span>
-<span class="nc" id="L37">		str += &quot; = &quot;;</span>
-<span class="nc" id="L38">		str += exp.toMdx();</span>
-<span class="nc" id="L39">		return str;</span>
+<span class="nc" id="L38">		String str = name;</span>
+<span class="nc" id="L39">		str += &quot; = &quot;;</span>
+<span class="nc" id="L40">		str += exp.toMdx();</span>
+<span class="nc" id="L41">		return str;</span>
 	}
 
 	/**
@@ -44,14 +46,14 @@ public class MemberProperty implements Exp {
 	 * @see java.lang.Object#clone()
 	 */
 	public MemberProperty clone() {
-<span class="nc" id="L47">		return new MemberProperty(name, (Exp) exp.clone());</span>
+<span class="nc" id="L49">		return new MemberProperty(name, (Exp) exp.clone());</span>
 	}
 
 	/**
 	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
 	 */
 	public void accept(ExpVisitor visitor) {
-<span class="nc" id="L54">		visitor.visitMemberProperty(this);</span>
-<span class="nc" id="L55">	}</span>
+<span class="nc" id="L56">		visitor.visitMemberProperty(this);</span>
+<span class="nc" id="L57">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>
