@@ -232,8 +232,10 @@ public class Quax implements StateHolder {
 				int dimIndex = node.getLevel();
 
 				if (dimIndex == Quax.this.nDimension - 1) {
-					if (node.getChildren().size() <= 1)
-						return TreeNodeCallback.CONTINUE_SIBLING; // continue
+					if (node.getChildren().size() <= 1) {
+						return TreeNodeCallback.CONTINUE_SIBLING;
+					}
+					// continue
 					// next
 					// sibling
 					// more than one child in last dimension
@@ -1049,7 +1051,6 @@ public class Quax implements StateHolder {
 					}
 				} else if (nodeIndex == dimIndex) {
 					// *must* be descendant of mPath[iDim] to get deleted
-
 					if (!QuaxUtil.isMember(oExp)) {
 						// FunCall
 						if (QuaxUtil.isFunCallTo(oExp, "Children")) {
