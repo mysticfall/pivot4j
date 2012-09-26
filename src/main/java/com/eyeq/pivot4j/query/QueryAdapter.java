@@ -193,6 +193,33 @@ public class QueryAdapter implements StateHolder {
 		}
 	}
 
+	public boolean isNonEmpty() {
+		boolean nonEmpty = true;
+
+		QueryAxis[] queryAxes = parsedQuery.getAxes();
+		for (QueryAxis axis : queryAxes) {
+			nonEmpty &= axis.isNonEmpty();
+		}
+
+		return queryAxes.length > 0 && nonEmpty;
+	}
+
+	/**
+	 * @param nonEmpty
+	 */
+	public void setNonEmpty(boolean nonEmpty) {
+		boolean changed = nonEmpty != isNonEmpty();
+
+		if (changed) {
+			QueryAxis[] queryAxes = parsedQuery.getAxes();
+			for (QueryAxis axis : queryAxes) {
+				axis.setNonEmpty(nonEmpty);
+			}
+		}
+
+		fireQueryChanged(false);
+	}
+
 	/**
 	 * @return the quaxToSort
 	 */
