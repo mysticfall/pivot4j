@@ -304,6 +304,17 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getCube()
+	 */
+	public Cube getCube() throws NotInitializedException {
+		try {
+			return getCellSet().getMetaData().getCube();
+		} catch (OlapException e) {
+			throw new PivotException(e);
+		}
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.PivotModel#getCellSet()
 	 */
 	public synchronized CellSet getCellSet() throws NotInitializedException {

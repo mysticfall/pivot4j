@@ -15,6 +15,7 @@ import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Catalog;
+import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.transform.Transform;
@@ -35,6 +36,8 @@ public interface PivotModel {
 	void destroy() throws NotInitializedException;
 
 	Catalog getCatalog() throws NotInitializedException;
+
+	Cube getCube() throws NotInitializedException;
 
 	/**
 	 * Runs the query and returns the result.
