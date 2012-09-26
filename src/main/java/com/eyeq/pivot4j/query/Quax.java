@@ -590,6 +590,7 @@ public class Quax implements StateHolder {
 		}
 
 		if (posTreeRoot == null) {
+			fireQuaxChanged(hiersChanged);
 			return;
 		}
 
@@ -655,6 +656,8 @@ public class Quax implements StateHolder {
 		if (!childrenFound) {
 			this.hierarchizeNeeded = false;
 		}
+
+		fireQuaxChanged(hiersChanged);
 	}
 
 	/**
@@ -1325,8 +1328,6 @@ public class Quax implements StateHolder {
 
 		// regenerate the position tree as crossjoin of sets
 		regeneratePosTree(sets, false);
-
-		fireQuaxChanged(false);
 	}
 
 	/**
@@ -1397,8 +1398,6 @@ public class Quax implements StateHolder {
 
 		// regenerate the position tree as crossjoin of sets
 		regeneratePosTree(sets, false);
-
-		fireQuaxChanged(false);
 	}
 
 	/**

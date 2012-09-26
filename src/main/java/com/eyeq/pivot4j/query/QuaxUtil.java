@@ -453,6 +453,11 @@ public class QuaxUtil {
 			if (type instanceof MemberType) {
 				return ((MemberType) type).getMember();
 			}
+		} else if (oExp instanceof FunCall && isFunCallTo(oExp, "{}")) {
+			FunCall func = (FunCall) oExp;
+			if (func.getArgs().length == 1) {
+				return memberForExp(func.getArgs()[0]);
+			}
 		}
 
 		return null;
@@ -487,7 +492,7 @@ public class QuaxUtil {
 		if (f.isCallTo("Children")) {
 			Member m = memberForExp(f.getArgs()[0]);
 			sb.append(m.getUniqueName());
-			sb.append(".children");
+			sb.append(".Children");
 		} else if (f.isCallTo("Descendants")) {
 			Member m = memberForExp(f.getArgs()[0]);
 			Level lev = levelForExp(f.getArgs()[1]);

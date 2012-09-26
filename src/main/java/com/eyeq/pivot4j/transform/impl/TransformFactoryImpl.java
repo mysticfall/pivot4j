@@ -34,6 +34,8 @@ public class TransformFactoryImpl implements TransformFactory {
 			return (T) new NonEmptyImpl(queryAdapter);
 		} else if (type.isAssignableFrom(SwapAxesImpl.class)) {
 			return (T) new SwapAxesImpl(queryAdapter);
+		} else if (type.isAssignableFrom(PlaceHierarchiesOnAxesImpl.class)) {
+			return (T) new PlaceHierarchiesOnAxesImpl(queryAdapter);
 		}
 
 		return null;
