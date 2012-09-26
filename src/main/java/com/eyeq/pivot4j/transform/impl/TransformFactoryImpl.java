@@ -32,6 +32,8 @@ public class TransformFactoryImpl implements TransformFactory {
 			return (T) new DrillReplaceImpl(queryAdapter);
 		} else if (type.isAssignableFrom(NonEmptyImpl.class)) {
 			return (T) new NonEmptyImpl(queryAdapter);
+		} else if (type.isAssignableFrom(SwapAxesImpl.class)) {
+			return (T) new SwapAxesImpl(queryAdapter);
 		}
 
 		return null;

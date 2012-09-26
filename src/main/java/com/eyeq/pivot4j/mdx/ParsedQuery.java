@@ -41,6 +41,8 @@ public class ParsedQuery implements Exp {
 
 	Exp slicer = null;
 
+	boolean axesSwapped = false;
+
 	// TODO implement proper node for SAP variable expressions.
 	List<String> sapVariables = new ArrayList<String>();
 
@@ -71,6 +73,21 @@ public class ParsedQuery implements Exp {
 	 */
 	public void setAxes(QueryAxis[] axes) {
 		this.axes = axes;
+	}
+
+	/**
+	 * @return the axesSwapped
+	 */
+	public boolean isAxesSwapped() {
+		return axesSwapped;
+	}
+
+	/**
+	 * @param axesSwapped
+	 *            the axesSwapped to set
+	 */
+	public void setAxesSwapped(boolean axesSwapped) {
+		this.axesSwapped = axesSwapped;
 	}
 
 	/**

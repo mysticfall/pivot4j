@@ -428,15 +428,8 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		this.sortPosMembers = null;
 
 		if (queryAdapter != null) {
-			queryAdapter.removeChangeListener(queryChangeListener);
-			queryAdapter = null;
-		}
-
-		if (isInitialized()) {
-			this.queryAdapter = createQueryAdapter();
+			queryAdapter.initialize();
 			queryAdapter.updateQuery();
-
-			queryAdapter.addChangeListener(queryChangeListener);
 		}
 	}
 

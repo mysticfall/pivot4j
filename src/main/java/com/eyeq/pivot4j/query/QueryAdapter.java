@@ -51,6 +51,8 @@ public class QueryAdapter implements StateHolder {
 
 	private PivotModel model;
 
+	private MdxParser parser;
+
 	private List<Quax> quaxes; // Array of query axis state object
 
 	private boolean useQuax = false;
@@ -88,7 +90,18 @@ public class QueryAdapter implements StateHolder {
 		}
 
 		this.model = model;
+		this.parser = parser;
+
+		initialize();
+	}
+
+	public void initialize() {
+		this.useQuax = false;
+		this.axesSwapped = false;
+		this.quaxToSort = null;
+
 		this.parsedQuery = parseQuery(model.getMdx());
+		this.cloneQuery = null;
 
 		QueryAxis[] queryAxes = parsedQuery.getAxes();
 
@@ -109,6 +122,13 @@ public class QueryAdapter implements StateHolder {
 	 */
 	public PivotModel getModel() {
 		return model;
+	}
+
+	/**
+	 * @return the parser
+	 */
+	public MdxParser getMdxParser() {
+		return parser;
 	}
 
 	/**
@@ -182,12 +202,19 @@ public class QueryAdapter implements StateHolder {
 	 * @param axesSwapped
 	 */
 	public void setAxesSwapped(boolean axesSwapped) {
-		if (parsedQuery.getAxes().length >= 2) {
+		if (parsedQuery.getAxes().length >= 2
+				&& axesSwapped != this.axesSwapped) {
 			this.axesSwapped = axesSwapped;
 
 			if (logger.isInfoEnabled()) {
-				logger.info("swapAxes " + axesSwapped);
+				logger.info("swapAxes : " + axesSwapped);
 			}
+
+			QueryAxis[] queryAxes = parsedQuery.getAxes();
+
+			Exp exp = queryAxes[0].getExp();
+			queryAxes[0].setExp(queryAxes[1].getExp());
+			queryAxes[1].setExp(exp);
 
 			fireQueryChanged();
 		}
@@ -281,6 +308,10 @@ public class QueryAdapter implements StateHolder {
 
 			int i = 0;
 			for (Quax quax : quaxes) {
+				if (quax.getPosTreeRoot() == null) {
+					continue;
+				}
+
 				boolean doHierarchize = false;
 				if (quax.isHierarchizeNeeded() && i != iQuaxToSort) {
 					doHierarchize = true;
@@ -320,11 +351,6 @@ public class QueryAdapter implements StateHolder {
 			}
 
 			addSortToQuery();
-		}
-
-		// swap axes function if neccessary
-		if (axesSwapped) {
-			swapAxes();
 		}
 
 		return parsedQuery;
@@ -435,18 +461,6 @@ public class QueryAdapter implements StateHolder {
 
 		FunCall topbottom = new FunCall(function, args, Syntax.Function);
 		qa.setExp(topbottom);
-	}
-
-	/**
-	 * Swap axes in parsed query
-	 */
-	protected void swapAxes() {
-		QueryAxis[] queryAxes = parsedQuery.getAxes();
-		if (queryAxes.length >= 2) {
-			Exp exp = queryAxes[0].getExp();
-			queryAxes[0].setExp(queryAxes[1].getExp());
-			queryAxes[1].setExp(exp);
-		}
 	}
 
 	/**
