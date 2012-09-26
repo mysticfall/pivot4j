@@ -8,9 +8,6 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.NonEmpty;
@@ -19,9 +16,6 @@ import com.eyeq.pivot4j.transform.NonEmpty;
  * Implementation of the NonEmpty transform
  */
 public class NonEmptyImpl extends AbstractTransform implements NonEmpty {
-
-	protected static Logger logger = LoggerFactory
-			.getLogger(NonEmptyImpl.class);
 
 	/**
 	 * @param queryAdapter
