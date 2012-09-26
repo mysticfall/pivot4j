@@ -28,6 +28,8 @@ public class TransformFactoryImpl implements TransformFactory {
 			return (T) new DrillExpandPositionImpl(queryAdapter);
 		} else if (type.isAssignableFrom(ChangeSlicerImpl.class)) {
 			return (T) new ChangeSlicerImpl(queryAdapter);
+		} else if (type.isAssignableFrom(DrillReplaceImpl.class)) {
+			return (T) new DrillReplaceImpl(queryAdapter);
 		}
 
 		return null;
