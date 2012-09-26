@@ -19,11 +19,11 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
-import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillExpandPosition;
 
-public class DrillExpandPositionImplIT extends AbstractIntegrationTestCase {
+public class DrillExpandPositionImplIT extends
+		AbstractTransformTestCase<DrillExpandPosition> {
 
 	private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 			+ "Hierarchize({([Time].[1997], [Promotion Media].[All Media]), ([Time].[1998], [Promotion Media].[All Media])}) ON ROWS FROM [Sales]";
@@ -35,45 +35,32 @@ public class DrillExpandPositionImplIT extends AbstractIntegrationTestCase {
 
 	/**
 	 * @return the initialQuery
+	 * @see com.eyeq.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
 	 */
-	public String getInitialQuery() {
+	protected String getInitialQuery() {
 		return initialQuery;
-	}
-
-	/**
-	 * @param initialQuery
-	 *            the initialQuery to set
-	 */
-	public void setInitialQuery(String testQuery) {
-		this.initialQuery = testQuery;
 	}
 
 	/**
 	 * @return the transformedQuery
 	 */
-	public String getTransformedQuery() {
+	protected String getTransformedQuery() {
 		return transformedQuery;
 	}
 
 	/**
-	 * @param transformedQuery
-	 *            the transformedQuery to set
+	 * @see com.eyeq.pivot4j.transform.impl.AbstractTransformTestCase#getType()
 	 */
-	public void setTransformedQuery(String transformedQuery) {
-		this.transformedQuery = transformedQuery;
+	@Override
+	protected Class<DrillExpandPosition> getType() {
+		return DrillExpandPosition.class;
 	}
 
 	@Test
 	public void testTransform() {
+		DrillExpandPosition transform = getTransform();
+
 		PivotModel model = getPivotModel();
-		model.setMdx(getInitialQuery());
-		model.initialize();
-
-		DrillExpandPosition transform = model
-				.getTransform(DrillExpandPosition.class);
-
-		assertNotNull("No suitable transform found for "
-				+ DrillExpandPosition.class, transform);
 
 		CellSet cellSet = model.getCellSet();
 		assertNotNull("Unable to execute MDX query : " + getInitialQuery(),

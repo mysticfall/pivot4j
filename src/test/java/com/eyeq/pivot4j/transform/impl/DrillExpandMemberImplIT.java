@@ -19,11 +19,11 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
-import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillExpandMember;
 
-public class DrillExpandMemberImplIT extends AbstractIntegrationTestCase {
+public class DrillExpandMemberImplIT extends
+		AbstractTransformTestCase<DrillExpandMember> {
 
 	private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 			+ "Hierarchize({([Time].[1997], [Promotion Media].[All Media]), ([Time].[1998], [Promotion Media].[All Media])}) ON ROWS FROM [Sales]";
@@ -35,45 +35,32 @@ public class DrillExpandMemberImplIT extends AbstractIntegrationTestCase {
 
 	/**
 	 * @return the initialQuery
+	 * @see com.eyeq.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
 	 */
-	public String getInitialQuery() {
+	protected String getInitialQuery() {
 		return initialQuery;
-	}
-
-	/**
-	 * @param initialQuery
-	 *            the initialQuery to set
-	 */
-	public void setInitialQuery(String testQuery) {
-		this.initialQuery = testQuery;
 	}
 
 	/**
 	 * @return the transformedQuery
 	 */
-	public String getTransformedQuery() {
+	protected String getTransformedQuery() {
 		return transformedQuery;
 	}
 
 	/**
-	 * @param transformedQuery
-	 *            the transformedQuery to set
+	 * @see com.eyeq.pivot4j.transform.impl.AbstractTransformTestCase#getType()
 	 */
-	public void setTransformedQuery(String transformedQuery) {
-		this.transformedQuery = transformedQuery;
+	@Override
+	protected Class<DrillExpandMember> getType() {
+		return DrillExpandMember.class;
 	}
 
 	@Test
 	public void testTransform() {
+		DrillExpandMember transform = getTransform();
+
 		PivotModel model = getPivotModel();
-		model.setMdx(getInitialQuery());
-		model.initialize();
-
-		DrillExpandMember transform = model
-				.getTransform(DrillExpandMember.class);
-
-		assertNotNull("No suitable transform found for "
-				+ DrillExpandMember.class, transform);
 
 		CellSet cellSet = model.getCellSet();
 		assertNotNull("Unable to execute MDX query : " + getInitialQuery(),
@@ -106,8 +93,8 @@ public class DrillExpandMemberImplIT extends AbstractIntegrationTestCase {
 
 		transform.collapse(allMedia);
 
-		assertEquals("Unexpected MDX after collapse : ",
-				getInitialQuery(), model.getCurrentMdx());
+		assertEquals("Unexpected MDX after collapse : ", getInitialQuery(),
+				model.getCurrentMdx());
 
 		assertFalse("[All Media] should not be collapsible after collapse",
 				transform.canCollapse(allMedia));
