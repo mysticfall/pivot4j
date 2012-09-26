@@ -373,7 +373,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		if (queryAdapter == null) {
 			return null;
 		} else {
-			return queryAdapter.getParsedQuery().toMdx();
+			return queryAdapter.getCurrentMdx();
 		}
 	}
 

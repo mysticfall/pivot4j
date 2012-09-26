@@ -112,7 +112,7 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	/**
-	 * register change listener
+	 * Register change listener
 	 * 
 	 * @param listener
 	 */
@@ -121,7 +121,7 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	/**
-	 * unregister change listener
+	 * Unregister change listener
 	 * 
 	 * @param listener
 	 */
@@ -130,9 +130,15 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	protected void fireQueryChanged() {
-		this.useQuax = true;
+		fireQueryChanged(true);
+	}
 
-		updateQuery();
+	protected void fireQueryChanged(boolean update) {
+		if (update) {
+			this.useQuax = true;
+
+			updateQuery();
+		}
 
 		QueryChangeEvent e = new QueryChangeEvent(this);
 		for (QueryChangeListener listener : listeners) {
@@ -143,8 +149,12 @@ public class QueryAdapter implements StateHolder {
 	/**
 	 * @return the XMLA Query object
 	 */
-	public ParsedQuery getParsedQuery() {
+	protected ParsedQuery getParsedQuery() {
 		return parsedQuery;
+	}
+
+	public String getCurrentMdx() {
+		return parsedQuery.toMdx();
 	}
 
 	/**
@@ -253,7 +263,7 @@ public class QueryAdapter implements StateHolder {
 					}
 				}
 
-				Exp eSet = (Exp) quax.genExp(doHierarchize);
+				Exp eSet = quax.genExp(doHierarchize);
 				qAxes[i].setExp(eSet);
 
 				i++;
@@ -271,12 +281,12 @@ public class QueryAdapter implements StateHolder {
 			// functions.
 			if (cloneQuery == null) {
 				if (isSortOnQuery()) {
-					this.cloneQuery = (ParsedQuery) parsedQuery.clone();
+					this.cloneQuery = parsedQuery.clone();
 				}
 			} else {
 				// reset to original state
 				if (isSortOnQuery()) {
-					this.parsedQuery = (ParsedQuery) cloneQuery.clone();
+					this.parsedQuery = cloneQuery.clone();
 				} else {
 					this.parsedQuery = cloneQuery;
 				}
@@ -829,6 +839,14 @@ public class QueryAdapter implements StateHolder {
 
 		if (logger.isInfoEnabled())
 			logger.info("Drill up hierarchy " + hierarchy.getCaption());
+	}
+
+	/**
+	 * @param slicerExp
+	 */
+	public void changeSlicer(Exp exp) {
+		parsedQuery.setSlicer(exp);
+		fireQueryChanged(false);
 	}
 
 	/**

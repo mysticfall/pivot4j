@@ -286,14 +286,13 @@ public class ParsedQuery implements Exp {
 	 * @param exp
 	 */
 	public void setSlicer(Exp exp) {
-		slicer = exp;
+		this.slicer = exp;
 	}
 
 	/**
 	 * Collect Parameters and Parameter references
 	 */
 	private void collectParams() throws PivotException {
-
 		// walk Formulas
 		int iAxis = -2;
 		for (Formula formula : formulas) {
