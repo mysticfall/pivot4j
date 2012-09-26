@@ -137,9 +137,9 @@ import com.eyeq.pivot4j.util.TreeNode;
 <span class="fc" id="L137">			Exp childExp = genExpForNode(childNode, untilIndex);</span>
 
 			Exp eSet;
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">			if (!QuaxUtil.isMember(eNode)) {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">			if (!QuaxUtil.isMember(eNode)) {</span>
 				// FunCall
-<span class="nc" id="L142">				eSet = eNode;</span>
+<span class="fc" id="L142">				eSet = eNode;</span>
 			} else {
 				// member
 <span class="fc" id="L145">				eSet = QuaxUtil.createFunCall(&quot;{}&quot;, new Exp[] { eNode },</span>
@@ -190,8 +190,8 @@ import com.eyeq.pivot4j.util.TreeNode;
 	 * @return
 	 */
 	private Exp[] genTuple(TreeNode&lt;Exp&gt; node) {
-<span class="pc bpc" id="L193" title="1 of 2 branches missed.">		if (!QuaxUtil.isMember(node.getReference())) {</span>
-<span class="nc" id="L194">			return null;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">		if (!QuaxUtil.isMember(node.getReference())) {</span>
+<span class="fc" id="L194">			return null;</span>
 		}
 
 <span class="fc" id="L197">		int size = nDimension - node.getLevel() + 1;</span>

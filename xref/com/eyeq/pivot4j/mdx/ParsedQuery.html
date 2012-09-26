@@ -296,165 +296,164 @@
 <a class="jxr_linenumber" name="286" href="#286">286</a> <em class="jxr_javadoccomment">	 * @param exp</em>
 <a class="jxr_linenumber" name="287" href="#287">287</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="288" href="#288">288</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSlicer(<a href="../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> exp) {
-<a class="jxr_linenumber" name="289" href="#289">289</a> 		slicer = exp;
+<a class="jxr_linenumber" name="289" href="#289">289</a> 		<strong class="jxr_keyword">this</strong>.slicer = exp;
 <a class="jxr_linenumber" name="290" href="#290">290</a> 	}
 <a class="jxr_linenumber" name="291" href="#291">291</a> 
 <a class="jxr_linenumber" name="292" href="#292">292</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="293" href="#293">293</a> <em class="jxr_javadoccomment">	 * Collect Parameters and Parameter references</em>
 <a class="jxr_linenumber" name="294" href="#294">294</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="295" href="#295">295</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> collectParams() <strong class="jxr_keyword">throws</strong> PivotException {
-<a class="jxr_linenumber" name="296" href="#296">296</a> 
-<a class="jxr_linenumber" name="297" href="#297">297</a> 		<em class="jxr_comment">// walk Formulas</em>
-<a class="jxr_linenumber" name="298" href="#298">298</a> 		<strong class="jxr_keyword">int</strong> iAxis = -2;
-<a class="jxr_linenumber" name="299" href="#299">299</a> 		<strong class="jxr_keyword">for</strong> (Formula formula : formulas) {
-<a class="jxr_linenumber" name="300" href="#300">300</a> 			walkTreeForParams(formula.getExp(), iAxis);
-<a class="jxr_linenumber" name="301" href="#301">301</a> 			<em class="jxr_comment">// dont forget the member properties</em>
-<a class="jxr_linenumber" name="302" href="#302">302</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; formula.memberProperties.length; i++) {
-<a class="jxr_linenumber" name="303" href="#303">303</a> 				walkTreeForParams(formula.memberProperties[i].getExp(), iAxis);
-<a class="jxr_linenumber" name="304" href="#304">304</a> 			}
-<a class="jxr_linenumber" name="305" href="#305">305</a> 		}
-<a class="jxr_linenumber" name="306" href="#306">306</a> 
-<a class="jxr_linenumber" name="307" href="#307">307</a> 		<em class="jxr_comment">// walk axes</em>
-<a class="jxr_linenumber" name="308" href="#308">308</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; axes.length; i++) {
-<a class="jxr_linenumber" name="309" href="#309">309</a> 			Exp exp = axes[i].getExp();
-<a class="jxr_linenumber" name="310" href="#310">310</a> 			iAxis = i;
-<a class="jxr_linenumber" name="311" href="#311">311</a> 			walkTreeForParams(exp, iAxis);
-<a class="jxr_linenumber" name="312" href="#312">312</a> 		}
-<a class="jxr_linenumber" name="313" href="#313">313</a> 
-<a class="jxr_linenumber" name="314" href="#314">314</a> 	}
-<a class="jxr_linenumber" name="315" href="#315">315</a> 
-<a class="jxr_linenumber" name="316" href="#316">316</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="317" href="#317">317</a> <em class="jxr_javadoccomment">	 * Collect Parameters and Parameter references in a subtree below (and</em>
-<a class="jxr_linenumber" name="318" href="#318">318</a> <em class="jxr_javadoccomment">	 * including) exp visitor ???</em>
-<a class="jxr_linenumber" name="319" href="#319">319</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="320" href="#320">320</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> walkTreeForParams(<a href="../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> exp, <strong class="jxr_keyword">int</strong> iAxis) <strong class="jxr_keyword">throws</strong> PivotException {
-<a class="jxr_linenumber" name="321" href="#321">321</a> 		<strong class="jxr_keyword">if</strong> (!(exp instanceof FunCall))
-<a class="jxr_linenumber" name="322" href="#322">322</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="323" href="#323">323</a> 		FunCall f = (FunCall) exp;
-<a class="jxr_linenumber" name="324" href="#324">324</a> 		<strong class="jxr_keyword">if</strong> (f.isCallTo(<span class="jxr_string">"Parameter"</span>)) {
-<a class="jxr_linenumber" name="325" href="#325">325</a> 			<strong class="jxr_keyword">int</strong> nArgs = f.getArgs().length;
-<a class="jxr_linenumber" name="326" href="#326">326</a> 			<strong class="jxr_keyword">if</strong> (nArgs != 3 &amp;&amp; nArgs != 4) {
-<a class="jxr_linenumber" name="327" href="#327">327</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(
-<a class="jxr_linenumber" name="328" href="#328">328</a> 						<span class="jxr_string">"Syntax Error in Parameter: wrong number of arguments"</span>);
-<a class="jxr_linenumber" name="329" href="#329">329</a> 			}
-<a class="jxr_linenumber" name="330" href="#330">330</a> 			<strong class="jxr_keyword">if</strong> (!(f.getArgs()[0] instanceof Literal)) {
-<a class="jxr_linenumber" name="331" href="#331">331</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(
-<a class="jxr_linenumber" name="332" href="#332">332</a> 						<span class="jxr_string">"Syntax Error in Parameter definition - 1.argument"</span>);
-<a class="jxr_linenumber" name="333" href="#333">333</a> 			}
-<a class="jxr_linenumber" name="334" href="#334">334</a> 
-<a class="jxr_linenumber" name="335" href="#335">335</a> 			Literal eName = (Literal) f.getArgs()[0];
-<a class="jxr_linenumber" name="336" href="#336">336</a> 			String paraName = eName.stringValue();
-<a class="jxr_linenumber" name="337" href="#337">337</a> 			<em class="jxr_comment">// Found a parameter</em>
-<a class="jxr_linenumber" name="338" href="#338">338</a> 			<em class="jxr_comment">// if it is already there, throw an error</em>
-<a class="jxr_linenumber" name="339" href="#339">339</a> 			<strong class="jxr_keyword">if</strong> (paraMap.containsKey(paraName.toUpperCase())) {
-<a class="jxr_linenumber" name="340" href="#340">340</a> 				<em class="jxr_comment">// already there, error</em>
-<a class="jxr_linenumber" name="341" href="#341">341</a> 				String err = <span class="jxr_string">"Parameter defined more than once:"</span> + paraName;
-<a class="jxr_linenumber" name="342" href="#342">342</a> 				logger.error(err);
-<a class="jxr_linenumber" name="343" href="#343">343</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(err);
-<a class="jxr_linenumber" name="344" href="#344">344</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="345" href="#345">345</a> 				<em class="jxr_comment">// analyze and add the Parameter</em>
-<a class="jxr_linenumber" name="346" href="#346">346</a> 				<strong class="jxr_keyword">int</strong> type;
-<a class="jxr_linenumber" name="347" href="#347">347</a> 				Object value = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="348" href="#348">348</a> 				f.pQuery = <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="349" href="#349">349</a> 				<em class="jxr_comment">// second Parameter must be ID, either a hierarchy or NUMERIC or</em>
-<a class="jxr_linenumber" name="350" href="#350">350</a> 				<em class="jxr_comment">// STRING</em>
-<a class="jxr_linenumber" name="351" href="#351">351</a> 				CompoundId id = (CompoundId) f.getArgs()[1];
-<a class="jxr_linenumber" name="352" href="#352">352</a> 				String[] ids = id.toStringArray();
-<a class="jxr_linenumber" name="353" href="#353">353</a> 				<strong class="jxr_keyword">if</strong> (ids.length &gt; 1) {
-<a class="jxr_linenumber" name="354" href="#354">354</a> 					<em class="jxr_comment">// error, must be NUMERIC or STRING or name of an hierarchy</em>
-<a class="jxr_linenumber" name="355" href="#355">355</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(
-<a class="jxr_linenumber" name="356" href="#356">356</a> 							<span class="jxr_string">"Syntax Error in Parameter definition - 2.argument"</span>);
-<a class="jxr_linenumber" name="357" href="#357">357</a> 				}
-<a class="jxr_linenumber" name="358" href="#358">358</a> 				<strong class="jxr_keyword">if</strong> (ids[0].equalsIgnoreCase(<span class="jxr_string">"NUMERIC"</span>)) {
-<a class="jxr_linenumber" name="359" href="#359">359</a> 					type = Parameter.TYPE_NUMERIC;
-<a class="jxr_linenumber" name="360" href="#360">360</a> 					<em class="jxr_comment">// 3.argument (value) is literal</em>
-<a class="jxr_linenumber" name="361" href="#361">361</a> 					<strong class="jxr_keyword">if</strong> (!(f.getArgs()[0] instanceof Literal)) {
-<a class="jxr_linenumber" name="362" href="#362">362</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(
-<a class="jxr_linenumber" name="363" href="#363">363</a> 								<span class="jxr_string">"Syntax Error in Parameter definition - 3.argument"</span>);
-<a class="jxr_linenumber" name="364" href="#364">364</a> 					}
-<a class="jxr_linenumber" name="365" href="#365">365</a> 					Literal val = (Literal) f.getArgs()[2];
-<a class="jxr_linenumber" name="366" href="#366">366</a> 					value = val.getValueObject();
-<a class="jxr_linenumber" name="367" href="#367">367</a> 
-<a class="jxr_linenumber" name="368" href="#368">368</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ids[0].equalsIgnoreCase(<span class="jxr_string">"STRING"</span>)) {
-<a class="jxr_linenumber" name="369" href="#369">369</a> 					type = Parameter.TYPE_STRING;
-<a class="jxr_linenumber" name="370" href="#370">370</a> 					Literal val = (Literal) f.getArgs()[2];
-<a class="jxr_linenumber" name="371" href="#371">371</a> 					value = val.getValueObject();
-<a class="jxr_linenumber" name="372" href="#372">372</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="373" href="#373">373</a> 					<em class="jxr_comment">// hierarchy expected</em>
-<a class="jxr_linenumber" name="374" href="#374">374</a> 					type = Parameter.TYPE_MEMBER;
-<a class="jxr_linenumber" name="375" href="#375">375</a> 					CompoundId val = (CompoundId) f.getArgs()[2];
-<a class="jxr_linenumber" name="376" href="#376">376</a> 					value = val.toMdx(); <em class="jxr_comment">// member String</em>
-<a class="jxr_linenumber" name="377" href="#377">377</a> 				}
-<a class="jxr_linenumber" name="378" href="#378">378</a> 				Parameter par = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/mdx/Parameter.html">Parameter</a>(paraName, type, iAxis);
-<a class="jxr_linenumber" name="379" href="#379">379</a> 				par.setOValue((Serializable) value);
-<a class="jxr_linenumber" name="380" href="#380">380</a> 				<strong class="jxr_keyword">if</strong> (nArgs == 4) {
-<a class="jxr_linenumber" name="381" href="#381">381</a> 					<em class="jxr_comment">// set description</em>
-<a class="jxr_linenumber" name="382" href="#382">382</a> 					Literal desc = (Literal) f.getArgs()[3];
-<a class="jxr_linenumber" name="383" href="#383">383</a> 					String description = (String) desc.getValueObject();
-<a class="jxr_linenumber" name="384" href="#384">384</a> 					par.setDescription(description);
-<a class="jxr_linenumber" name="385" href="#385">385</a> 				}
-<a class="jxr_linenumber" name="386" href="#386">386</a> 				paraMap.put(paraName.toUpperCase(), par);
-<a class="jxr_linenumber" name="387" href="#387">387</a> 			}
-<a class="jxr_linenumber" name="388" href="#388">388</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (f.isCallTo(<span class="jxr_string">"ParamRef"</span>)) {
-<a class="jxr_linenumber" name="389" href="#389">389</a> 			f.pQuery = <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="390" href="#390">390</a> 		}
-<a class="jxr_linenumber" name="391" href="#391">391</a> 
-<a class="jxr_linenumber" name="392" href="#392">392</a> 		<em class="jxr_comment">// recurse down on params</em>
-<a class="jxr_linenumber" name="393" href="#393">393</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; f.getArgs().length; i++) {
-<a class="jxr_linenumber" name="394" href="#394">394</a> 			walkTreeForParams(f.getArgs()[i], iAxis);
-<a class="jxr_linenumber" name="395" href="#395">395</a> 		}
-<a class="jxr_linenumber" name="396" href="#396">396</a> 
-<a class="jxr_linenumber" name="397" href="#397">397</a> 	}
-<a class="jxr_linenumber" name="398" href="#398">398</a> 
-<a class="jxr_linenumber" name="399" href="#399">399</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="400" href="#400">400</a> <em class="jxr_javadoccomment">	 * @return parameter map</em>
-<a class="jxr_linenumber" name="401" href="#401">401</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="402" href="#402">402</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String, Parameter&gt; getParaMap() {
-<a class="jxr_linenumber" name="403" href="#403">403</a> 		<strong class="jxr_keyword">return</strong> paraMap;
-<a class="jxr_linenumber" name="404" href="#404">404</a> 	}
-<a class="jxr_linenumber" name="405" href="#405">405</a> 
-<a class="jxr_linenumber" name="406" href="#406">406</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="407" href="#407">407</a> <em class="jxr_javadoccomment">	 * add a formula for a member</em>
-<a class="jxr_linenumber" name="408" href="#408">408</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="409" href="#409">409</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addFormula(String[] names, <a href="../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> exp,
-<a class="jxr_linenumber" name="410" href="#410">410</a> 			MemberProperty[] memberProperties) {
-<a class="jxr_linenumber" name="411" href="#411">411</a> 		Formula newFormula = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/mdx/Formula.html">Formula</a>(names, exp, memberProperties);
-<a class="jxr_linenumber" name="412" href="#412">412</a> 		formulas.add(newFormula);
-<a class="jxr_linenumber" name="413" href="#413">413</a> 	}
-<a class="jxr_linenumber" name="414" href="#414">414</a> 
-<a class="jxr_linenumber" name="415" href="#415">415</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="416" href="#416">416</a> <em class="jxr_javadoccomment">	 * add a formula for a set</em>
-<a class="jxr_linenumber" name="417" href="#417">417</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="418" href="#418">418</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addFormula(String[] names, <a href="../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> exp) {
-<a class="jxr_linenumber" name="419" href="#419">419</a> 		Formula newFormula = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/mdx/Formula.html">Formula</a>(names, exp);
-<a class="jxr_linenumber" name="420" href="#420">420</a> 		formulas.add(newFormula);
-<a class="jxr_linenumber" name="421" href="#421">421</a> 	}
-<a class="jxr_linenumber" name="422" href="#422">422</a> 
-<a class="jxr_linenumber" name="423" href="#423">423</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="424" href="#424">424</a> <em class="jxr_javadoccomment">	 * remove a formula</em>
-<a class="jxr_linenumber" name="425" href="#425">425</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="426" href="#426">426</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeFormula(String uniqueName) {
-<a class="jxr_linenumber" name="427" href="#427">427</a> 		<strong class="jxr_keyword">for</strong> (Iterator&lt;Formula&gt; iter = formulas.iterator(); iter.hasNext();) {
-<a class="jxr_linenumber" name="428" href="#428">428</a> 			Formula formula = iter.next();
-<a class="jxr_linenumber" name="429" href="#429">429</a> 			<strong class="jxr_keyword">if</strong> (uniqueName.equals(formula.getUniqeName()))
-<a class="jxr_linenumber" name="430" href="#430">430</a> 				iter.remove();
-<a class="jxr_linenumber" name="431" href="#431">431</a> 		}
-<a class="jxr_linenumber" name="432" href="#432">432</a> 	}
-<a class="jxr_linenumber" name="433" href="#433">433</a> 
-<a class="jxr_linenumber" name="434" href="#434">434</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="435" href="#435">435</a> <em class="jxr_javadoccomment">	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept</em>
-<a class="jxr_linenumber" name="436" href="#436">436</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="437" href="#437">437</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> accept(<a href="../../../../com/eyeq/pivot4j/mdx/ExpVisitor.html">ExpVisitor</a> visitor) {
-<a class="jxr_linenumber" name="438" href="#438">438</a> 		visitor.visitParsedQuery(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="439" href="#439">439</a> 	}
-<a class="jxr_linenumber" name="440" href="#440">440</a> 
-<a class="jxr_linenumber" name="441" href="#441">441</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="442" href="#442">442</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="443" href="#443">443</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="444" href="#444">444</a> 	<strong class="jxr_keyword">public</strong> List&lt;CompoundId&gt; getCellProps() {
-<a class="jxr_linenumber" name="445" href="#445">445</a> 		<strong class="jxr_keyword">return</strong> cellProps;
-<a class="jxr_linenumber" name="446" href="#446">446</a> 	}
-<a class="jxr_linenumber" name="447" href="#447">447</a> }
+<a class="jxr_linenumber" name="296" href="#296">296</a> 		<em class="jxr_comment">// walk Formulas</em>
+<a class="jxr_linenumber" name="297" href="#297">297</a> 		<strong class="jxr_keyword">int</strong> iAxis = -2;
+<a class="jxr_linenumber" name="298" href="#298">298</a> 		<strong class="jxr_keyword">for</strong> (Formula formula : formulas) {
+<a class="jxr_linenumber" name="299" href="#299">299</a> 			walkTreeForParams(formula.getExp(), iAxis);
+<a class="jxr_linenumber" name="300" href="#300">300</a> 			<em class="jxr_comment">// dont forget the member properties</em>
+<a class="jxr_linenumber" name="301" href="#301">301</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; formula.memberProperties.length; i++) {
+<a class="jxr_linenumber" name="302" href="#302">302</a> 				walkTreeForParams(formula.memberProperties[i].getExp(), iAxis);
+<a class="jxr_linenumber" name="303" href="#303">303</a> 			}
+<a class="jxr_linenumber" name="304" href="#304">304</a> 		}
+<a class="jxr_linenumber" name="305" href="#305">305</a> 
+<a class="jxr_linenumber" name="306" href="#306">306</a> 		<em class="jxr_comment">// walk axes</em>
+<a class="jxr_linenumber" name="307" href="#307">307</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; axes.length; i++) {
+<a class="jxr_linenumber" name="308" href="#308">308</a> 			Exp exp = axes[i].getExp();
+<a class="jxr_linenumber" name="309" href="#309">309</a> 			iAxis = i;
+<a class="jxr_linenumber" name="310" href="#310">310</a> 			walkTreeForParams(exp, iAxis);
+<a class="jxr_linenumber" name="311" href="#311">311</a> 		}
+<a class="jxr_linenumber" name="312" href="#312">312</a> 
+<a class="jxr_linenumber" name="313" href="#313">313</a> 	}
+<a class="jxr_linenumber" name="314" href="#314">314</a> 
+<a class="jxr_linenumber" name="315" href="#315">315</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="316" href="#316">316</a> <em class="jxr_javadoccomment">	 * Collect Parameters and Parameter references in a subtree below (and</em>
+<a class="jxr_linenumber" name="317" href="#317">317</a> <em class="jxr_javadoccomment">	 * including) exp visitor ???</em>
+<a class="jxr_linenumber" name="318" href="#318">318</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="319" href="#319">319</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> walkTreeForParams(<a href="../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> exp, <strong class="jxr_keyword">int</strong> iAxis) <strong class="jxr_keyword">throws</strong> PivotException {
+<a class="jxr_linenumber" name="320" href="#320">320</a> 		<strong class="jxr_keyword">if</strong> (!(exp instanceof FunCall))
+<a class="jxr_linenumber" name="321" href="#321">321</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="322" href="#322">322</a> 		FunCall f = (FunCall) exp;
+<a class="jxr_linenumber" name="323" href="#323">323</a> 		<strong class="jxr_keyword">if</strong> (f.isCallTo(<span class="jxr_string">"Parameter"</span>)) {
+<a class="jxr_linenumber" name="324" href="#324">324</a> 			<strong class="jxr_keyword">int</strong> nArgs = f.getArgs().length;
+<a class="jxr_linenumber" name="325" href="#325">325</a> 			<strong class="jxr_keyword">if</strong> (nArgs != 3 &amp;&amp; nArgs != 4) {
+<a class="jxr_linenumber" name="326" href="#326">326</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(
+<a class="jxr_linenumber" name="327" href="#327">327</a> 						<span class="jxr_string">"Syntax Error in Parameter: wrong number of arguments"</span>);
+<a class="jxr_linenumber" name="328" href="#328">328</a> 			}
+<a class="jxr_linenumber" name="329" href="#329">329</a> 			<strong class="jxr_keyword">if</strong> (!(f.getArgs()[0] instanceof Literal)) {
+<a class="jxr_linenumber" name="330" href="#330">330</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(
+<a class="jxr_linenumber" name="331" href="#331">331</a> 						<span class="jxr_string">"Syntax Error in Parameter definition - 1.argument"</span>);
+<a class="jxr_linenumber" name="332" href="#332">332</a> 			}
+<a class="jxr_linenumber" name="333" href="#333">333</a> 
+<a class="jxr_linenumber" name="334" href="#334">334</a> 			Literal eName = (Literal) f.getArgs()[0];
+<a class="jxr_linenumber" name="335" href="#335">335</a> 			String paraName = eName.stringValue();
+<a class="jxr_linenumber" name="336" href="#336">336</a> 			<em class="jxr_comment">// Found a parameter</em>
+<a class="jxr_linenumber" name="337" href="#337">337</a> 			<em class="jxr_comment">// if it is already there, throw an error</em>
+<a class="jxr_linenumber" name="338" href="#338">338</a> 			<strong class="jxr_keyword">if</strong> (paraMap.containsKey(paraName.toUpperCase())) {
+<a class="jxr_linenumber" name="339" href="#339">339</a> 				<em class="jxr_comment">// already there, error</em>
+<a class="jxr_linenumber" name="340" href="#340">340</a> 				String err = <span class="jxr_string">"Parameter defined more than once:"</span> + paraName;
+<a class="jxr_linenumber" name="341" href="#341">341</a> 				logger.error(err);
+<a class="jxr_linenumber" name="342" href="#342">342</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(err);
+<a class="jxr_linenumber" name="343" href="#343">343</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="344" href="#344">344</a> 				<em class="jxr_comment">// analyze and add the Parameter</em>
+<a class="jxr_linenumber" name="345" href="#345">345</a> 				<strong class="jxr_keyword">int</strong> type;
+<a class="jxr_linenumber" name="346" href="#346">346</a> 				Object value = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="347" href="#347">347</a> 				f.pQuery = <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="348" href="#348">348</a> 				<em class="jxr_comment">// second Parameter must be ID, either a hierarchy or NUMERIC or</em>
+<a class="jxr_linenumber" name="349" href="#349">349</a> 				<em class="jxr_comment">// STRING</em>
+<a class="jxr_linenumber" name="350" href="#350">350</a> 				CompoundId id = (CompoundId) f.getArgs()[1];
+<a class="jxr_linenumber" name="351" href="#351">351</a> 				String[] ids = id.toStringArray();
+<a class="jxr_linenumber" name="352" href="#352">352</a> 				<strong class="jxr_keyword">if</strong> (ids.length &gt; 1) {
+<a class="jxr_linenumber" name="353" href="#353">353</a> 					<em class="jxr_comment">// error, must be NUMERIC or STRING or name of an hierarchy</em>
+<a class="jxr_linenumber" name="354" href="#354">354</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(
+<a class="jxr_linenumber" name="355" href="#355">355</a> 							<span class="jxr_string">"Syntax Error in Parameter definition - 2.argument"</span>);
+<a class="jxr_linenumber" name="356" href="#356">356</a> 				}
+<a class="jxr_linenumber" name="357" href="#357">357</a> 				<strong class="jxr_keyword">if</strong> (ids[0].equalsIgnoreCase(<span class="jxr_string">"NUMERIC"</span>)) {
+<a class="jxr_linenumber" name="358" href="#358">358</a> 					type = Parameter.TYPE_NUMERIC;
+<a class="jxr_linenumber" name="359" href="#359">359</a> 					<em class="jxr_comment">// 3.argument (value) is literal</em>
+<a class="jxr_linenumber" name="360" href="#360">360</a> 					<strong class="jxr_keyword">if</strong> (!(f.getArgs()[0] instanceof Literal)) {
+<a class="jxr_linenumber" name="361" href="#361">361</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(
+<a class="jxr_linenumber" name="362" href="#362">362</a> 								<span class="jxr_string">"Syntax Error in Parameter definition - 3.argument"</span>);
+<a class="jxr_linenumber" name="363" href="#363">363</a> 					}
+<a class="jxr_linenumber" name="364" href="#364">364</a> 					Literal val = (Literal) f.getArgs()[2];
+<a class="jxr_linenumber" name="365" href="#365">365</a> 					value = val.getValueObject();
+<a class="jxr_linenumber" name="366" href="#366">366</a> 
+<a class="jxr_linenumber" name="367" href="#367">367</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ids[0].equalsIgnoreCase(<span class="jxr_string">"STRING"</span>)) {
+<a class="jxr_linenumber" name="368" href="#368">368</a> 					type = Parameter.TYPE_STRING;
+<a class="jxr_linenumber" name="369" href="#369">369</a> 					Literal val = (Literal) f.getArgs()[2];
+<a class="jxr_linenumber" name="370" href="#370">370</a> 					value = val.getValueObject();
+<a class="jxr_linenumber" name="371" href="#371">371</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="372" href="#372">372</a> 					<em class="jxr_comment">// hierarchy expected</em>
+<a class="jxr_linenumber" name="373" href="#373">373</a> 					type = Parameter.TYPE_MEMBER;
+<a class="jxr_linenumber" name="374" href="#374">374</a> 					CompoundId val = (CompoundId) f.getArgs()[2];
+<a class="jxr_linenumber" name="375" href="#375">375</a> 					value = val.toMdx(); <em class="jxr_comment">// member String</em>
+<a class="jxr_linenumber" name="376" href="#376">376</a> 				}
+<a class="jxr_linenumber" name="377" href="#377">377</a> 				Parameter par = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/mdx/Parameter.html">Parameter</a>(paraName, type, iAxis);
+<a class="jxr_linenumber" name="378" href="#378">378</a> 				par.setOValue((Serializable) value);
+<a class="jxr_linenumber" name="379" href="#379">379</a> 				<strong class="jxr_keyword">if</strong> (nArgs == 4) {
+<a class="jxr_linenumber" name="380" href="#380">380</a> 					<em class="jxr_comment">// set description</em>
+<a class="jxr_linenumber" name="381" href="#381">381</a> 					Literal desc = (Literal) f.getArgs()[3];
+<a class="jxr_linenumber" name="382" href="#382">382</a> 					String description = (String) desc.getValueObject();
+<a class="jxr_linenumber" name="383" href="#383">383</a> 					par.setDescription(description);
+<a class="jxr_linenumber" name="384" href="#384">384</a> 				}
+<a class="jxr_linenumber" name="385" href="#385">385</a> 				paraMap.put(paraName.toUpperCase(), par);
+<a class="jxr_linenumber" name="386" href="#386">386</a> 			}
+<a class="jxr_linenumber" name="387" href="#387">387</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (f.isCallTo(<span class="jxr_string">"ParamRef"</span>)) {
+<a class="jxr_linenumber" name="388" href="#388">388</a> 			f.pQuery = <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="389" href="#389">389</a> 		}
+<a class="jxr_linenumber" name="390" href="#390">390</a> 
+<a class="jxr_linenumber" name="391" href="#391">391</a> 		<em class="jxr_comment">// recurse down on params</em>
+<a class="jxr_linenumber" name="392" href="#392">392</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; f.getArgs().length; i++) {
+<a class="jxr_linenumber" name="393" href="#393">393</a> 			walkTreeForParams(f.getArgs()[i], iAxis);
+<a class="jxr_linenumber" name="394" href="#394">394</a> 		}
+<a class="jxr_linenumber" name="395" href="#395">395</a> 
+<a class="jxr_linenumber" name="396" href="#396">396</a> 	}
+<a class="jxr_linenumber" name="397" href="#397">397</a> 
+<a class="jxr_linenumber" name="398" href="#398">398</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="399" href="#399">399</a> <em class="jxr_javadoccomment">	 * @return parameter map</em>
+<a class="jxr_linenumber" name="400" href="#400">400</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="401" href="#401">401</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String, Parameter&gt; getParaMap() {
+<a class="jxr_linenumber" name="402" href="#402">402</a> 		<strong class="jxr_keyword">return</strong> paraMap;
+<a class="jxr_linenumber" name="403" href="#403">403</a> 	}
+<a class="jxr_linenumber" name="404" href="#404">404</a> 
+<a class="jxr_linenumber" name="405" href="#405">405</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="406" href="#406">406</a> <em class="jxr_javadoccomment">	 * add a formula for a member</em>
+<a class="jxr_linenumber" name="407" href="#407">407</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="408" href="#408">408</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addFormula(String[] names, <a href="../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> exp,
+<a class="jxr_linenumber" name="409" href="#409">409</a> 			MemberProperty[] memberProperties) {
+<a class="jxr_linenumber" name="410" href="#410">410</a> 		Formula newFormula = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/mdx/Formula.html">Formula</a>(names, exp, memberProperties);
+<a class="jxr_linenumber" name="411" href="#411">411</a> 		formulas.add(newFormula);
+<a class="jxr_linenumber" name="412" href="#412">412</a> 	}
+<a class="jxr_linenumber" name="413" href="#413">413</a> 
+<a class="jxr_linenumber" name="414" href="#414">414</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="415" href="#415">415</a> <em class="jxr_javadoccomment">	 * add a formula for a set</em>
+<a class="jxr_linenumber" name="416" href="#416">416</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="417" href="#417">417</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addFormula(String[] names, <a href="../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> exp) {
+<a class="jxr_linenumber" name="418" href="#418">418</a> 		Formula newFormula = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/mdx/Formula.html">Formula</a>(names, exp);
+<a class="jxr_linenumber" name="419" href="#419">419</a> 		formulas.add(newFormula);
+<a class="jxr_linenumber" name="420" href="#420">420</a> 	}
+<a class="jxr_linenumber" name="421" href="#421">421</a> 
+<a class="jxr_linenumber" name="422" href="#422">422</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="423" href="#423">423</a> <em class="jxr_javadoccomment">	 * remove a formula</em>
+<a class="jxr_linenumber" name="424" href="#424">424</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="425" href="#425">425</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeFormula(String uniqueName) {
+<a class="jxr_linenumber" name="426" href="#426">426</a> 		<strong class="jxr_keyword">for</strong> (Iterator&lt;Formula&gt; iter = formulas.iterator(); iter.hasNext();) {
+<a class="jxr_linenumber" name="427" href="#427">427</a> 			Formula formula = iter.next();
+<a class="jxr_linenumber" name="428" href="#428">428</a> 			<strong class="jxr_keyword">if</strong> (uniqueName.equals(formula.getUniqeName()))
+<a class="jxr_linenumber" name="429" href="#429">429</a> 				iter.remove();
+<a class="jxr_linenumber" name="430" href="#430">430</a> 		}
+<a class="jxr_linenumber" name="431" href="#431">431</a> 	}
+<a class="jxr_linenumber" name="432" href="#432">432</a> 
+<a class="jxr_linenumber" name="433" href="#433">433</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="434" href="#434">434</a> <em class="jxr_javadoccomment">	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept</em>
+<a class="jxr_linenumber" name="435" href="#435">435</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="436" href="#436">436</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> accept(<a href="../../../../com/eyeq/pivot4j/mdx/ExpVisitor.html">ExpVisitor</a> visitor) {
+<a class="jxr_linenumber" name="437" href="#437">437</a> 		visitor.visitParsedQuery(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="438" href="#438">438</a> 	}
+<a class="jxr_linenumber" name="439" href="#439">439</a> 
+<a class="jxr_linenumber" name="440" href="#440">440</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="441" href="#441">441</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="442" href="#442">442</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="443" href="#443">443</a> 	<strong class="jxr_keyword">public</strong> List&lt;CompoundId&gt; getCellProps() {
+<a class="jxr_linenumber" name="444" href="#444">444</a> 		<strong class="jxr_keyword">return</strong> cellProps;
+<a class="jxr_linenumber" name="445" href="#445">445</a> 	}
+<a class="jxr_linenumber" name="446" href="#446">446</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

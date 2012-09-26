@@ -24,11 +24,15 @@ import com.eyeq.pivot4j.transform.TransformFactory;
 		// TODO Improve lookup method
 <span class="fc bfc" id="L25" title="All 2 branches covered.">		if (type.isAssignableFrom(DrillExpandMemberImpl.class)) {</span>
 <span class="fc" id="L26">			return (T) new DrillExpandMemberImpl(queryAdapter);</span>
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">		} else if (type.isAssignableFrom(DrillExpandPositionImpl.class)) {</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		} else if (type.isAssignableFrom(DrillExpandPositionImpl.class)) {</span>
 <span class="fc" id="L28">			return (T) new DrillExpandPositionImpl(queryAdapter);</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">		} else if (type.isAssignableFrom(ChangeSlicerImpl.class)) {</span>
+<span class="fc" id="L30">			return (T) new ChangeSlicerImpl(queryAdapter);</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">		} else if (type.isAssignableFrom(DrillReplaceImpl.class)) {</span>
+<span class="fc" id="L32">			return (T) new DrillReplaceImpl(queryAdapter);</span>
 		}
 
-<span class="nc" id="L31">		return null;</span>
+<span class="nc" id="L35">		return null;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

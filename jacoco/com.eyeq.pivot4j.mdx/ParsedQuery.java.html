@@ -286,121 +286,120 @@ import com.eyeq.pivot4j.PivotException;
 	 * @param exp
 	 */
 	public void setSlicer(Exp exp) {
-<span class="nc" id="L289">		slicer = exp;</span>
-<span class="nc" id="L290">	}</span>
+<span class="fc" id="L289">		this.slicer = exp;</span>
+<span class="fc" id="L290">	}</span>
 
 	/**
 	 * Collect Parameters and Parameter references
 	 */
 	private void collectParams() throws PivotException {
-
 		// walk Formulas
-<span class="fc" id="L298">		int iAxis = -2;</span>
-<span class="pc bpc" id="L299" title="1 of 2 branches missed.">		for (Formula formula : formulas) {</span>
-<span class="nc" id="L300">			walkTreeForParams(formula.getExp(), iAxis);</span>
+<span class="fc" id="L297">		int iAxis = -2;</span>
+<span class="pc bpc" id="L298" title="1 of 2 branches missed.">		for (Formula formula : formulas) {</span>
+<span class="nc" id="L299">			walkTreeForParams(formula.getExp(), iAxis);</span>
 			// dont forget the member properties
-<span class="nc bnc" id="L302" title="All 2 branches missed.">			for (int i = 0; i &lt; formula.memberProperties.length; i++) {</span>
-<span class="nc" id="L303">				walkTreeForParams(formula.memberProperties[i].getExp(), iAxis);</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">			for (int i = 0; i &lt; formula.memberProperties.length; i++) {</span>
+<span class="nc" id="L302">				walkTreeForParams(formula.memberProperties[i].getExp(), iAxis);</span>
 			}
 		}
 
 		// walk axes
-<span class="fc bfc" id="L308" title="All 2 branches covered.">		for (int i = 0; i &lt; axes.length; i++) {</span>
-<span class="fc" id="L309">			Exp exp = axes[i].getExp();</span>
-<span class="fc" id="L310">			iAxis = i;</span>
-<span class="fc" id="L311">			walkTreeForParams(exp, iAxis);</span>
+<span class="fc bfc" id="L307" title="All 2 branches covered.">		for (int i = 0; i &lt; axes.length; i++) {</span>
+<span class="fc" id="L308">			Exp exp = axes[i].getExp();</span>
+<span class="fc" id="L309">			iAxis = i;</span>
+<span class="fc" id="L310">			walkTreeForParams(exp, iAxis);</span>
 		}
 
-<span class="fc" id="L314">	}</span>
+<span class="fc" id="L313">	}</span>
 
 	/**
 	 * Collect Parameters and Parameter references in a subtree below (and
 	 * including) exp visitor ???
 	 */
 	private void walkTreeForParams(Exp exp, int iAxis) throws PivotException {
-<span class="fc bfc" id="L321" title="All 2 branches covered.">		if (!(exp instanceof FunCall))</span>
-<span class="fc" id="L322">			return;</span>
-<span class="fc" id="L323">		FunCall f = (FunCall) exp;</span>
-<span class="pc bpc" id="L324" title="1 of 2 branches missed.">		if (f.isCallTo(&quot;Parameter&quot;)) {</span>
-<span class="nc" id="L325">			int nArgs = f.getArgs().length;</span>
-<span class="nc bnc" id="L326" title="All 4 branches missed.">			if (nArgs != 3 &amp;&amp; nArgs != 4) {</span>
-<span class="nc" id="L327">				throw new PivotException(</span>
-<span class="nc" id="L328">						&quot;Syntax Error in Parameter: wrong number of arguments&quot;);</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">		if (!(exp instanceof FunCall))</span>
+<span class="fc" id="L321">			return;</span>
+<span class="fc" id="L322">		FunCall f = (FunCall) exp;</span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">		if (f.isCallTo(&quot;Parameter&quot;)) {</span>
+<span class="nc" id="L324">			int nArgs = f.getArgs().length;</span>
+<span class="nc bnc" id="L325" title="All 4 branches missed.">			if (nArgs != 3 &amp;&amp; nArgs != 4) {</span>
+<span class="nc" id="L326">				throw new PivotException(</span>
+<span class="nc" id="L327">						&quot;Syntax Error in Parameter: wrong number of arguments&quot;);</span>
 			}
-<span class="nc bnc" id="L330" title="All 2 branches missed.">			if (!(f.getArgs()[0] instanceof Literal)) {</span>
-<span class="nc" id="L331">				throw new PivotException(</span>
-<span class="nc" id="L332">						&quot;Syntax Error in Parameter definition - 1.argument&quot;);</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">			if (!(f.getArgs()[0] instanceof Literal)) {</span>
+<span class="nc" id="L330">				throw new PivotException(</span>
+<span class="nc" id="L331">						&quot;Syntax Error in Parameter definition - 1.argument&quot;);</span>
 			}
 
-<span class="nc" id="L335">			Literal eName = (Literal) f.getArgs()[0];</span>
-<span class="nc" id="L336">			String paraName = eName.stringValue();</span>
+<span class="nc" id="L334">			Literal eName = (Literal) f.getArgs()[0];</span>
+<span class="nc" id="L335">			String paraName = eName.stringValue();</span>
 			// Found a parameter
 			// if it is already there, throw an error
-<span class="nc bnc" id="L339" title="All 2 branches missed.">			if (paraMap.containsKey(paraName.toUpperCase())) {</span>
+<span class="nc bnc" id="L338" title="All 2 branches missed.">			if (paraMap.containsKey(paraName.toUpperCase())) {</span>
 				// already there, error
-<span class="nc" id="L341">				String err = &quot;Parameter defined more than once:&quot; + paraName;</span>
-<span class="nc" id="L342">				logger.error(err);</span>
-<span class="nc" id="L343">				throw new PivotException(err);</span>
+<span class="nc" id="L340">				String err = &quot;Parameter defined more than once:&quot; + paraName;</span>
+<span class="nc" id="L341">				logger.error(err);</span>
+<span class="nc" id="L342">				throw new PivotException(err);</span>
 			} else {
 				// analyze and add the Parameter
 				int type;
-<span class="nc" id="L347">				Object value = null;</span>
-<span class="nc" id="L348">				f.pQuery = this;</span>
+<span class="nc" id="L346">				Object value = null;</span>
+<span class="nc" id="L347">				f.pQuery = this;</span>
 				// second Parameter must be ID, either a hierarchy or NUMERIC or
 				// STRING
-<span class="nc" id="L351">				CompoundId id = (CompoundId) f.getArgs()[1];</span>
-<span class="nc" id="L352">				String[] ids = id.toStringArray();</span>
-<span class="nc bnc" id="L353" title="All 2 branches missed.">				if (ids.length &gt; 1) {</span>
+<span class="nc" id="L350">				CompoundId id = (CompoundId) f.getArgs()[1];</span>
+<span class="nc" id="L351">				String[] ids = id.toStringArray();</span>
+<span class="nc bnc" id="L352" title="All 2 branches missed.">				if (ids.length &gt; 1) {</span>
 					// error, must be NUMERIC or STRING or name of an hierarchy
-<span class="nc" id="L355">					throw new PivotException(</span>
-<span class="nc" id="L356">							&quot;Syntax Error in Parameter definition - 2.argument&quot;);</span>
+<span class="nc" id="L354">					throw new PivotException(</span>
+<span class="nc" id="L355">							&quot;Syntax Error in Parameter definition - 2.argument&quot;);</span>
 				}
-<span class="nc bnc" id="L358" title="All 2 branches missed.">				if (ids[0].equalsIgnoreCase(&quot;NUMERIC&quot;)) {</span>
-<span class="nc" id="L359">					type = Parameter.TYPE_NUMERIC;</span>
+<span class="nc bnc" id="L357" title="All 2 branches missed.">				if (ids[0].equalsIgnoreCase(&quot;NUMERIC&quot;)) {</span>
+<span class="nc" id="L358">					type = Parameter.TYPE_NUMERIC;</span>
 					// 3.argument (value) is literal
-<span class="nc bnc" id="L361" title="All 2 branches missed.">					if (!(f.getArgs()[0] instanceof Literal)) {</span>
-<span class="nc" id="L362">						throw new PivotException(</span>
-<span class="nc" id="L363">								&quot;Syntax Error in Parameter definition - 3.argument&quot;);</span>
+<span class="nc bnc" id="L360" title="All 2 branches missed.">					if (!(f.getArgs()[0] instanceof Literal)) {</span>
+<span class="nc" id="L361">						throw new PivotException(</span>
+<span class="nc" id="L362">								&quot;Syntax Error in Parameter definition - 3.argument&quot;);</span>
 					}
-<span class="nc" id="L365">					Literal val = (Literal) f.getArgs()[2];</span>
-<span class="nc" id="L366">					value = val.getValueObject();</span>
+<span class="nc" id="L364">					Literal val = (Literal) f.getArgs()[2];</span>
+<span class="nc" id="L365">					value = val.getValueObject();</span>
 
-<span class="nc bnc" id="L368" title="All 2 branches missed.">				} else if (ids[0].equalsIgnoreCase(&quot;STRING&quot;)) {</span>
-<span class="nc" id="L369">					type = Parameter.TYPE_STRING;</span>
-<span class="nc" id="L370">					Literal val = (Literal) f.getArgs()[2];</span>
-<span class="nc" id="L371">					value = val.getValueObject();</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">				} else if (ids[0].equalsIgnoreCase(&quot;STRING&quot;)) {</span>
+<span class="nc" id="L368">					type = Parameter.TYPE_STRING;</span>
+<span class="nc" id="L369">					Literal val = (Literal) f.getArgs()[2];</span>
+<span class="nc" id="L370">					value = val.getValueObject();</span>
 				} else {
 					// hierarchy expected
-<span class="nc" id="L374">					type = Parameter.TYPE_MEMBER;</span>
-<span class="nc" id="L375">					CompoundId val = (CompoundId) f.getArgs()[2];</span>
-<span class="nc" id="L376">					value = val.toMdx(); // member String</span>
+<span class="nc" id="L373">					type = Parameter.TYPE_MEMBER;</span>
+<span class="nc" id="L374">					CompoundId val = (CompoundId) f.getArgs()[2];</span>
+<span class="nc" id="L375">					value = val.toMdx(); // member String</span>
 				}
-<span class="nc" id="L378">				Parameter par = new Parameter(paraName, type, iAxis);</span>
-<span class="nc" id="L379">				par.setOValue((Serializable) value);</span>
-<span class="nc bnc" id="L380" title="All 2 branches missed.">				if (nArgs == 4) {</span>
+<span class="nc" id="L377">				Parameter par = new Parameter(paraName, type, iAxis);</span>
+<span class="nc" id="L378">				par.setOValue((Serializable) value);</span>
+<span class="nc bnc" id="L379" title="All 2 branches missed.">				if (nArgs == 4) {</span>
 					// set description
-<span class="nc" id="L382">					Literal desc = (Literal) f.getArgs()[3];</span>
-<span class="nc" id="L383">					String description = (String) desc.getValueObject();</span>
-<span class="nc" id="L384">					par.setDescription(description);</span>
+<span class="nc" id="L381">					Literal desc = (Literal) f.getArgs()[3];</span>
+<span class="nc" id="L382">					String description = (String) desc.getValueObject();</span>
+<span class="nc" id="L383">					par.setDescription(description);</span>
 				}
-<span class="nc" id="L386">				paraMap.put(paraName.toUpperCase(), par);</span>
+<span class="nc" id="L385">				paraMap.put(paraName.toUpperCase(), par);</span>
 			}
-<span class="pc bpc" id="L388" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;ParamRef&quot;)) {</span>
-<span class="nc" id="L389">			f.pQuery = this;</span>
+<span class="pc bpc" id="L387" title="1 of 2 branches missed.">		} else if (f.isCallTo(&quot;ParamRef&quot;)) {</span>
+<span class="nc" id="L388">			f.pQuery = this;</span>
 		}
 
 		// recurse down on params
-<span class="fc bfc" id="L393" title="All 2 branches covered.">		for (int i = 0; i &lt; f.getArgs().length; i++) {</span>
-<span class="fc" id="L394">			walkTreeForParams(f.getArgs()[i], iAxis);</span>
+<span class="fc bfc" id="L392" title="All 2 branches covered.">		for (int i = 0; i &lt; f.getArgs().length; i++) {</span>
+<span class="fc" id="L393">			walkTreeForParams(f.getArgs()[i], iAxis);</span>
 		}
 
-<span class="fc" id="L397">	}</span>
+<span class="fc" id="L396">	}</span>
 
 	/**
 	 * @return parameter map
 	 */
 	public Map&lt;String, Parameter&gt; getParaMap() {
-<span class="nc" id="L403">		return paraMap;</span>
+<span class="nc" id="L402">		return paraMap;</span>
 	}
 
 	/**
@@ -408,41 +407,41 @@ import com.eyeq.pivot4j.PivotException;
 	 */
 	public void addFormula(String[] names, Exp exp,
 			MemberProperty[] memberProperties) {
-<span class="nc" id="L411">		Formula newFormula = new Formula(names, exp, memberProperties);</span>
-<span class="nc" id="L412">		formulas.add(newFormula);</span>
-<span class="nc" id="L413">	}</span>
+<span class="nc" id="L410">		Formula newFormula = new Formula(names, exp, memberProperties);</span>
+<span class="nc" id="L411">		formulas.add(newFormula);</span>
+<span class="nc" id="L412">	}</span>
 
 	/**
 	 * add a formula for a set
 	 */
 	public void addFormula(String[] names, Exp exp) {
-<span class="nc" id="L419">		Formula newFormula = new Formula(names, exp);</span>
-<span class="nc" id="L420">		formulas.add(newFormula);</span>
-<span class="nc" id="L421">	}</span>
+<span class="nc" id="L418">		Formula newFormula = new Formula(names, exp);</span>
+<span class="nc" id="L419">		formulas.add(newFormula);</span>
+<span class="nc" id="L420">	}</span>
 
 	/**
 	 * remove a formula
 	 */
 	public void removeFormula(String uniqueName) {
-<span class="nc bnc" id="L427" title="All 2 branches missed.">		for (Iterator&lt;Formula&gt; iter = formulas.iterator(); iter.hasNext();) {</span>
-<span class="nc" id="L428">			Formula formula = iter.next();</span>
-<span class="nc bnc" id="L429" title="All 2 branches missed.">			if (uniqueName.equals(formula.getUniqeName()))</span>
-<span class="nc" id="L430">				iter.remove();</span>
+<span class="nc bnc" id="L426" title="All 2 branches missed.">		for (Iterator&lt;Formula&gt; iter = formulas.iterator(); iter.hasNext();) {</span>
+<span class="nc" id="L427">			Formula formula = iter.next();</span>
+<span class="nc bnc" id="L428" title="All 2 branches missed.">			if (uniqueName.equals(formula.getUniqeName()))</span>
+<span class="nc" id="L429">				iter.remove();</span>
 		}
-<span class="nc" id="L432">	}</span>
+<span class="nc" id="L431">	}</span>
 
 	/**
 	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
 	 */
 	public void accept(ExpVisitor visitor) {
-<span class="nc" id="L438">		visitor.visitParsedQuery(this);</span>
-<span class="nc" id="L439">	}</span>
+<span class="nc" id="L437">		visitor.visitParsedQuery(this);</span>
+<span class="nc" id="L438">	}</span>
 
 	/**
 	 * @return
 	 */
 	public List&lt;CompoundId&gt; getCellProps() {
-<span class="nc" id="L445">		return cellProps;</span>
+<span class="nc" id="L444">		return cellProps;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.10.201208310627</span></div></body></html>

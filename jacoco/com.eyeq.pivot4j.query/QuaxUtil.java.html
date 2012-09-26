@@ -324,14 +324,14 @@ public class QuaxUtil {
 	 */
 	public static boolean isFunCallNotTopLevel(Exp oExp)
 			throws UnknownExpressionException {
-<span class="nc bnc" id="L327" title="All 2 branches missed.">		if (!isFunCall(oExp)) {</span>
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">		if (!isFunCall(oExp)) {</span>
 <span class="nc" id="L328">			return false;</span>
 		}
 
-<span class="nc" id="L331">		FunCall f = (FunCall) oExp;</span>
+<span class="fc" id="L331">		FunCall f = (FunCall) oExp;</span>
 
-<span class="nc bnc" id="L333" title="All 2 branches missed.">		if (f.isCallTo(&quot;Children&quot;)) {</span>
-<span class="nc" id="L334">			return true; // children *not* top level</span>
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">		if (f.isCallTo(&quot;Children&quot;)) {</span>
+<span class="fc" id="L334">			return true; // children *not* top level</span>
 <span class="nc bnc" id="L335" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Descendants&quot;)) {</span>
 <span class="nc" id="L336">			return true; // descendants*not* top level</span>
 <span class="nc bnc" id="L337" title="All 2 branches missed.">		} else if (f.isCallTo(&quot;Members&quot;)) {</span>
@@ -376,13 +376,13 @@ public class QuaxUtil {
 	 * level.members
 	 */
 	public static boolean canHandle(Exp oExp) {
-<span class="nc bnc" id="L379" title="All 2 branches missed.">		if (isMember(oExp)) {</span>
-<span class="nc" id="L380">			return true;</span>
-<span class="nc bnc" id="L381" title="All 2 branches missed.">		} else if (isFunCall(oExp)) {</span>
-<span class="nc" id="L382">			FunCall f = (FunCall) oExp;</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">		if (isMember(oExp)) {</span>
+<span class="fc" id="L380">			return true;</span>
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">		} else if (isFunCall(oExp)) {</span>
+<span class="fc" id="L382">			FunCall f = (FunCall) oExp;</span>
 
-<span class="nc bnc" id="L384" title="All 2 branches missed.">			if (f.isCallTo(&quot;children&quot;)) {</span>
-<span class="nc" id="L385">				return true;</span>
+<span class="pc bpc" id="L384" title="1 of 2 branches missed.">			if (f.isCallTo(&quot;children&quot;)) {</span>
+<span class="fc" id="L385">				return true;</span>
 			}
 <span class="nc bnc" id="L387" title="All 2 branches missed.">			if (f.isCallTo(&quot;descendants&quot;)) {</span>
 <span class="nc" id="L388">				return true;</span>
@@ -619,10 +619,10 @@ public class QuaxUtil {
 	 * @return depth
 	 */
 	public static int levelDepthForMember(Exp oExp) {
-<span class="nc" id="L622">		Member member = memberForExp(oExp);</span>
-<span class="nc" id="L623">		Level level = member.getLevel();</span>
+<span class="fc" id="L622">		Member member = memberForExp(oExp);</span>
+<span class="fc" id="L623">		Level level = member.getLevel();</span>
 
-<span class="nc" id="L625">		return level.getDepth();</span>
+<span class="fc" id="L625">		return level.getDepth();</span>
 	}
 
 	/**
@@ -672,13 +672,13 @@ public class QuaxUtil {
 	 */
 	public static Exp topLevelMembers(Hierarchy hierarchy,
 			boolean expandAllMember) {
-<span class="nc" id="L675">		Level topLevel = hierarchy.getLevels().get(0);</span>
+<span class="fc" id="L675">		Level topLevel = hierarchy.getLevels().get(0);</span>
 
 		Member mAll;
 		try {
-<span class="nc" id="L679">			mAll = hierarchy.getDefaultMember();</span>
+<span class="fc" id="L679">			mAll = hierarchy.getDefaultMember();</span>
 
-<span class="nc bnc" id="L681" title="All 2 branches missed.">			if (!mAll.isAll()) {</span>
+<span class="pc bpc" id="L681" title="1 of 2 branches missed.">			if (!mAll.isAll()) {</span>
 <span class="nc" id="L682">				mAll = null;</span>
 <span class="nc bnc" id="L683" title="All 2 branches missed.">				for (Member m : hierarchy.getRootMembers()) {</span>
 <span class="nc bnc" id="L684" title="All 2 branches missed.">					if (m.isAll()) {</span>
@@ -693,11 +693,11 @@ public class QuaxUtil {
 
 		// if there is an All Member, we will have to expand it
 		// according to expandAllMember flag
-<span class="nc bnc" id="L696" title="All 2 branches missed.">		if (mAll != null) {</span>
-<span class="nc" id="L697">			Exp[] memar = new Exp[] { expForMember(mAll) };</span>
-<span class="nc" id="L698">			Exp mAllSet = new FunCall(&quot;{}&quot;, memar, Syntax.Braces);</span>
-<span class="nc bnc" id="L699" title="All 2 branches missed.">			if (!expandAllMember) {</span>
-<span class="nc" id="L700">				return memar[0];</span>
+<span class="pc bpc" id="L696" title="1 of 2 branches missed.">		if (mAll != null) {</span>
+<span class="fc" id="L697">			Exp[] memar = new Exp[] { expForMember(mAll) };</span>
+<span class="fc" id="L698">			Exp mAllSet = new FunCall(&quot;{}&quot;, memar, Syntax.Braces);</span>
+<span class="pc bpc" id="L699" title="1 of 2 branches missed.">			if (!expandAllMember) {</span>
+<span class="fc" id="L700">				return memar[0];</span>
 			}
 
 			// must expand
@@ -758,8 +758,8 @@ public class QuaxUtil {
 	 * @return number of args
 	 */
 	public static int funCallArgCount(Exp oFun) {
-<span class="nc" id="L761">		FunCall f = (FunCall) oFun;</span>
-<span class="nc" id="L762">		return f.getArgs().length;</span>
+<span class="fc" id="L761">		FunCall f = (FunCall) oFun;</span>
+<span class="fc" id="L762">		return f.getArgs().length;</span>
 	}
 
 	/**
@@ -830,17 +830,17 @@ public class QuaxUtil {
 	 */
 	public static void addMemberSiblings(List&lt;Exp&gt; list, Member member,
 			int[] maxLevel) {
-<span class="nc" id="L833">		int level = member.getLevel().getDepth();</span>
-<span class="nc bnc" id="L834" title="All 2 branches missed.">		if (level &lt; maxLevel[0]) {</span>
+<span class="fc" id="L833">		int level = member.getLevel().getDepth();</span>
+<span class="pc bpc" id="L834" title="1 of 2 branches missed.">		if (level &lt; maxLevel[0]) {</span>
 <span class="nc" id="L835">			return;</span>
 		}
 
-<span class="nc bnc" id="L838" title="All 2 branches missed.">		if (level &gt; maxLevel[0]) {</span>
+<span class="pc bpc" id="L838" title="1 of 2 branches missed.">		if (level &gt; maxLevel[0]) {</span>
 <span class="nc" id="L839">			maxLevel[0] = level;</span>
 <span class="nc" id="L840">			list.clear();</span>
 		}
 
-<span class="nc bnc" id="L843" title="All 2 branches missed.">		if (level &gt; 0) {</span>
+<span class="pc bpc" id="L843" title="1 of 2 branches missed.">		if (level &gt; 0) {</span>
 <span class="nc" id="L844">			Member parent = member.getParentMember();</span>
 
 			// do nothing if already on List
@@ -858,7 +858,7 @@ public class QuaxUtil {
 <span class="nc" id="L858">					new Exp[] { expForMember(parent) }, Syntax.Property);</span>
 <span class="nc" id="L859">			list.add(siblings);</span>
 		}
-<span class="nc" id="L861">	}</span>
+<span class="fc" id="L861">	}</span>
 
 	/**
 	 * @param list
