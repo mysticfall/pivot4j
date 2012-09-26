@@ -10,9 +10,6 @@
 
 	<body>
 		<menu ref="reports" />
-		<menu name="Additional Reports">
-			<item name="Test Coverage" href="jacoco/index.html" target="_blank" />
-		</menu>
 		<links>
 			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j"/>
 			<item name="JPivot Project" href="http://jpivot.sourceforge.net"/>
