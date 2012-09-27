@@ -17,8 +17,10 @@ import org.junit.Test;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 
+import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
+
 public class PlaceHierarchiesOnAxesImplIT extends
-		AbstractTransformTestCase<PlaceHierarchiesOnAxesImpl> {
+		AbstractTransformTestCase<PlaceHierarchiesOnAxes> {
 
 	private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 			+ "Hierarchize(Union({[Product].[All Products]}, [Product].[All Products].Children)) ON ROWS FROM [Sales]";
@@ -35,13 +37,13 @@ public class PlaceHierarchiesOnAxesImplIT extends
 	 * @see com.eyeq.pivot4j.transform.impl.AbstractTransformTestCase#getType()
 	 */
 	@Override
-	protected Class<PlaceHierarchiesOnAxesImpl> getType() {
-		return PlaceHierarchiesOnAxesImpl.class;
+	protected Class<PlaceHierarchiesOnAxes> getType() {
+		return PlaceHierarchiesOnAxes.class;
 	}
 
 	@Test
 	public void testTransform() {
-		PlaceHierarchiesOnAxesImpl transform = getTransform();
+		PlaceHierarchiesOnAxes transform = getTransform();
 
 		Cube cube = getPivotModel().getCube();
 
@@ -66,7 +68,7 @@ public class PlaceHierarchiesOnAxesImplIT extends
 
 	@Test
 	public void testTransformExpandAllMembers() {
-		PlaceHierarchiesOnAxesImpl transform = getTransform();
+		PlaceHierarchiesOnAxes transform = getTransform();
 
 		Cube cube = getPivotModel().getCube();
 
