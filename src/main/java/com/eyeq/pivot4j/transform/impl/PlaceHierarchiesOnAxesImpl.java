@@ -69,11 +69,8 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 			}
 		}
 
-		// if any of the member expressions is a memberlist from PlaceMembers
-		// we will have to reset sorting
 		List<Exp> sets = new ArrayList<Exp>(nDimension);
 
-		boolean changedMemberSet = false;
 		for (Exp memberExpression : memberExpressions) {
 			// null possible due to access control
 			if (memberExpressions != null) {
@@ -87,13 +84,8 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		quax.regeneratePosTree(sets, true);
 
 		if (logger.isInfoEnabled()) {
-			String changed = "";
-			if (changedMemberSet) {
-				changed = " changed by navi";
-			}
-
 			logger.info("setQueryAxis axis=" + quax.getOrdinal()
-					+ " nDimension=" + nDimension + changed);
+					+ " nDimension=" + nDimension);
 			logger.info("Expression for Axis=" + quax.toString());
 		}
 	}
