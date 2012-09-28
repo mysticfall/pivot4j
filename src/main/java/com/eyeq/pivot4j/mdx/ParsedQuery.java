@@ -27,7 +27,7 @@ public class ParsedQuery implements Exp {
 
 	private static final long serialVersionUID = 8608792548174831908L;
 
-	protected static Logger logger = LoggerFactory.getLogger(ParsedQuery.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	List<Formula> formulas = new ArrayList<Formula>();
 

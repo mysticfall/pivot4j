@@ -38,7 +38,7 @@ import com.eyeq.pivot4j.util.TreeNodeCallback;
 
 public class Quax implements StateHolder {
 
-	protected static Logger logger = LoggerFactory.getLogger(Quax.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private MdxParser parser;
 

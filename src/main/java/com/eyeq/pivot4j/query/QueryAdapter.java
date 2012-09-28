@@ -46,8 +46,7 @@ import com.eyeq.pivot4j.mdx.Syntax;
  */
 public class QueryAdapter implements StateHolder {
 
-	protected static Logger logger = LoggerFactory
-			.getLogger(QueryAdapter.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PivotModel model;
 

@@ -15,7 +15,7 @@ public class FunCall implements Exp {
 
 	private static final long serialVersionUID = -1747077227822699594L;
 
-	protected static Logger logger = LoggerFactory.getLogger(FunCall.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Syntax syntacticType;
 

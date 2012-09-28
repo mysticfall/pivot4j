@@ -30,8 +30,7 @@ import com.eyeq.pivot4j.transform.ChangeSlicer;
 
 public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer {
 
-	protected static Logger logger = LoggerFactory
-			.getLogger(ChangeSlicerImpl.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * @param queryAdapter

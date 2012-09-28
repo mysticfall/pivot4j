@@ -34,8 +34,7 @@ import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
 public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		PlaceMembersOnAxes {
 
-	protected static Logger logger = LoggerFactory
-			.getLogger(PlaceHierarchiesOnAxesImpl.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * @param queryAdapter

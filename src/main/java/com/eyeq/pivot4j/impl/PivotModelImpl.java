@@ -54,8 +54,7 @@ import com.eyeq.pivot4j.transform.TransformFactory;
  */
 public class PivotModelImpl implements PivotModel, StateHolder {
 
-	protected static Logger logger = LoggerFactory
-			.getLogger(PivotModelImpl.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private OlapDataSource dataSource;
 
