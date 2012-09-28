@@ -52,6 +52,15 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<developerConnection>scm:git:git@github.com:mysticfall/pivot4j.git</developerConnection>
 	</scm>
 
+	<mailingLists>
+		<mailingList>
+			<name>Pivot4J Discussion (Google Groups)</name>
+			<archive>http://groups.google.com/d/forum/pivot4j-list</archive>
+			<post>pivot4j-list@googlegroups.com</post>
+			<unsubscribe>pivot4j-list+unsubscribe@googlegroups.com</unsubscribe>
+		</mailingList>
+	</mailingLists>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -375,4 +384,17 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<url>http://emustudio.sf.net/repository/</url>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<distributionManagement>
+		<repository>
+			<id>dev.eyeq.co.kr</id>
+			<name>dev.eyeq.co.kr-releases</name>
+			<url>http://dev.eyeq.co.kr/artifactory/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>dev.eyeq.co.kr</id>
+			<name>dev.eyeq.co.kr-snapshots</name>
+			<url>http://dev.eyeq.co.kr/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>

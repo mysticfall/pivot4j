@@ -21,7 +21,7 @@
 		<fluidoSkin>
 			<sideBarEnabled>true</sideBarEnabled>
 			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
-			<profile>pre-release</profile>
+			<profile>production</profile>
 			<gitHub>
 				<projectId>mysticfall/pivot4j</projectId>
 				<ribbonOrientation>right</ribbonOrientation>

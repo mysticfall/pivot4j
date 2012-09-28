@@ -24,7 +24,39 @@ Motivation
 
 	Pivot4J does not contain any concrete GUI implementation for now. However, it's designed as an easy to use model API for creating pivot GUI component using any web technologies like JSP, JSF, GWT, and more.
 
+Usage
 
-Current Status
+	If you're using {{{http://maven.apache.org}Maven}}, update your pom.xml as below :
 
-	Pivot4J is still in very early stage of development. First release is expected to be in October, 2012.
++-----+
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>some-project</groupId>
+    <artifactId>some-project</artifactId>
+    <packaging>jar</packaging>
+    <name>My Project</name>
+    <version>1.0.0</version>
+    <repositories>
+        <repository>
+            <id>eyeq</id>
+            <url>http://dev.eyeq.co.kr/artifactory/libs-release/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>com.eyeq</groupId>
+            <artifactId>pivot4j</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
+</project>
++-----+
+
+News
+
+	* <<[2012-09-28]>> Pivot4J 0.0.1 has been released. You can download it from {{{https://github.com/mysticfall/pivot4j/downloads}here}}
+
+Contact
+
+	If you have any question or suggestion for the project, please contact us {{{http://groups.google.com/d/forum/pivot4j-list}here}}.
