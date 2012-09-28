@@ -48,6 +48,7 @@ import com.eyeq.pivot4j.query.QueryChangeEvent;
 import com.eyeq.pivot4j.query.QueryChangeListener;
 import com.eyeq.pivot4j.transform.Transform;
 import com.eyeq.pivot4j.transform.TransformFactory;
+import com.eyeq.pivot4j.transform.impl.TransformFactoryImpl;
 
 /**
  * The pivot model represents all (meta-)data for an MDX query.
@@ -94,6 +95,13 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 			fireModelChanged();
 		}
 	};
+
+	/**
+	 * @param dataSource
+	 */
+	public PivotModelImpl(OlapDataSource dataSource) {
+		this(dataSource, new TransformFactoryImpl());
+	}
 
 	/**
 	 * @param dataSource

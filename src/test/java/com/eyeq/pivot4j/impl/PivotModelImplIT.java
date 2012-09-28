@@ -8,11 +8,12 @@
  */
 package com.eyeq.pivot4j.impl;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.junit.Test;
@@ -23,6 +24,8 @@ import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.SortMode;
+import com.eyeq.pivot4j.StateHolder;
 
 public class PivotModelImplIT extends AbstractIntegrationTestCase {
 
@@ -114,5 +117,44 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		assertFalse("Model is already initialized.", model.isInitialized());
 
 		model.getCellSet();
+	}
+
+	@Test
+	public void testBookmarkState() {
+		PivotModel model = getPivotModel();
+		model.setMdx(getTestQuery());
+		model.initialize();
+
+		model.setSorting(true);
+		model.setTopBottomCount(3);
+		model.setSortMode(SortMode.BOTTOMCOUNT);
+
+		CellSet cellSet = model.getCellSet();
+		CellSetAxis axis = cellSet.getAxes().get(0);
+
+		model.sort(axis, axis.getPositions().get(0));
+
+		String mdx = model.getCurrentMdx();
+
+		Serializable bookmark = ((StateHolder) model).bookmarkState();
+
+		assertNotNull("Bookmarked state should not be null", bookmark);
+
+		PivotModel newModel = new PivotModelImpl(getDataSource());
+		((StateHolder) newModel).restoreState(bookmark);
+
+		newModel.getCellSet();
+
+		assertEquals("MDX has been changed after the state restoration", mdx,
+				newModel.getCurrentMdx());
+		assertTrue(
+				"Property 'sorting' has been changed after the state restoration",
+				newModel.isSorting());
+		assertEquals(
+				"Property 'topBottomCount' has been changed after the state restoration",
+				3, newModel.getTopBottomCount());
+		assertEquals(
+				"Property 'sortMode' has been changed after the state restoration",
+				SortMode.BOTTOMCOUNT, newModel.getSortMode());
 	}
 }
