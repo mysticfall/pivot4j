@@ -24,8 +24,3 @@ Project Page
 =======
 
 Please visit Pivot4J home page at http://mysticfall.github.com/pivot4j
-
-Current Status
-=======
-
-Pivot4J is still in very early stage of development. First release is expected to be in October, 2012.
