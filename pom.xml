@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.eyeq</groupId>
@@ -43,7 +44,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 	</organization>
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/mysticfall/pivot4j/issues</url>
+		<url>https://github.com/mysticfall/pivot4j/issues/</url>
 	</issueManagement>
 	<scm>
 		<url>https://github.com/mysticfall/pivot4j</url>
@@ -126,7 +127,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<configuration>
 							<target unless="maven.test.skip">
 								<mkdir dir="${project.build.directory}/derby" />
-								<unzip src="${basedir}/src/test/test-data/derby-foodmart.zip" dest="${project.build.directory}/derby" overwrite="false" />
+								<unzip src="${basedir}/src/test/test-data/derby-foodmart.zip"
+									dest="${project.build.directory}/derby" overwrite="false" />
 							</target>
 						</configuration>
 						<goals>
@@ -226,6 +228,14 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-changes-plugin</artifactId>
 							<version>2.8</version>
+							<reportSets>
+								<reportSet>
+									<reports>
+										<report>changes-report</report>
+										<report>github-report</report>
+									</reports>
+								</reportSet>
+							</reportSets>
 						</plugin>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
@@ -258,6 +268,12 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-javadoc-plugin</artifactId>
 							<version>2.9</version>
+							<configuration>
+								<links>
+									<link>http://www.olap4j.org/head/api/</link>
+									<link>http://commons.apache.org/pool/apidocs/</link>
+								</links>
+							</configuration>
 						</plugin>
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>

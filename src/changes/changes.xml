@@ -1,0 +1,19 @@
+<document xmlns="http://maven.apache.org/changes/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+	<properties>
+		<title>Pivot4J Project</title>
+		<author email="fender@eyeq.co.kr">Xavier Cho</author>
+	</properties>
+	<body>
+		<release version="0.0.1" date="2012-09-28" description="The first public release">
+			<action dev="mysticfall" type="add" issue="2">
+				Finished migration
+				of major JPivot extensions as Transform API.
+			</action>
+			<action dev="mysticfall" type="add" issue="4">
+				Added various data source implementations including PooledOlapDataSource.
+			</action>
+		</release>
+	</body>
+</document>
