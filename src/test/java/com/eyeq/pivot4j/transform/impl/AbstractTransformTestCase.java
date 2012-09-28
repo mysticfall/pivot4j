@@ -23,7 +23,7 @@ public abstract class AbstractTransformTestCase<T extends Transform> extends
 	 * @see com.eyeq.pivot4j.AbstractIntegrationTestCase#setUp()
 	 */
 	@Override
-	public void setUp() throws ClassNotFoundException {
+	public void setUp() throws Exception {
 		super.setUp();
 
 		PivotModel model = getPivotModel();
@@ -36,10 +36,11 @@ public abstract class AbstractTransformTestCase<T extends Transform> extends
 	}
 
 	/**
+	 * @throws Exception 
 	 * @see com.eyeq.pivot4j.AbstractIntegrationTestCase#tearDown()
 	 */
 	@Override
-	public void tearDown() {
+	public void tearDown() throws Exception {
 		super.tearDown();
 		this.transform = null;
 	}

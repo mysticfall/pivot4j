@@ -31,7 +31,7 @@ public abstract class AbstractIntegrationTestCase {
 	private TransformFactory transformFactory;
 
 	@Before
-	public void setUp() throws ClassNotFoundException {
+	public void setUp() throws Exception {
 		Class.forName("org.apache.derby.jdbc.ClientDriver");
 
 		this.dataSource = createMondrianDataSource();
@@ -40,7 +40,7 @@ public abstract class AbstractIntegrationTestCase {
 	}
 
 	@After
-	public void tearDown() {
+	public void tearDown() throws Exception {
 		if (model != null && model.isInitialized()) {
 			model.destroy();
 

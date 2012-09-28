@@ -57,10 +57,23 @@ public class SimpleOlapDataSource extends AbstractOlapDataSource {
 	 *      .lang.String, java.lang.String)
 	 */
 	@Override
-	protected OlapConnection createConnection(String username, String password)
+	protected OlapConnection createConnection(String userName, String password)
 			throws SQLException {
-		Connection connection = DriverManager
-				.getConnection(getConnectionString());
+		Properties properties = getConnectionProperties();
+		if (properties == null) {
+			properties = new Properties();
+		}
+
+		if (userName != null) {
+			properties.put("user", userName);
+		}
+
+		if (password != null) {
+			properties.put("password", password);
+		}
+
+		Connection connection = DriverManager.getConnection(
+				getConnectionString(), properties);
 		return connection.unwrap(OlapConnection.class);
 	}
 }

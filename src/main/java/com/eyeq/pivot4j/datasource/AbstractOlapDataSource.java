@@ -71,11 +71,11 @@ public abstract class AbstractOlapDataSource implements OlapDataSource {
 	}
 
 	/**
-	 * @param username
+	 * @param userName
 	 * @param password
 	 * @return
 	 */
-	protected abstract OlapConnection createConnection(String username,
+	protected abstract OlapConnection createConnection(String userName,
 			String password) throws SQLException;
 
 	/**
