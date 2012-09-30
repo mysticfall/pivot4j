@@ -88,7 +88,7 @@
 
 		<faq id="missing-features">
 			<question>
-				What features are missing from JPivot?
+				What JPivot features are missing from Pivot4J?
 			</question>
 			<answer>
 				<p>Currently, drill through and member properties support is missing from the project.

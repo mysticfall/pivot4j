@@ -40,7 +40,7 @@ How to Use Pivot4J
 	Of course, also you can just download the all the related jar files and import them manually. In that case, {{{./dependencies.html}this page}} 
 	might help determining which library files are required.
 
-* Setup a Data Source
+* Setting up a Data Source
 
 	You need to create a data source to connect to the OLAP server. There are several implementations in 
 	{{{./apidocs/com/eyeq/pivot4j/datasource/package-summary.html}com.eyeq.pivot4j.datasource}} package.
