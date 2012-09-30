@@ -6,7 +6,7 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.impl;
+package com.eyeq.pivot4j.datasource;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
