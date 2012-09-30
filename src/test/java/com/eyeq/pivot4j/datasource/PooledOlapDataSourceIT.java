@@ -36,7 +36,7 @@ public class PooledOlapDataSourceIT extends AbstractIntegrationTestCase {
 		config.maxIdle = 3;
 
 		PooledOlapDataSource dataSource = new PooledOlapDataSource(
-				getDataSource());
+				getDataSource(), config);
 		OlapConnection connection1 = dataSource.getConnection();
 		OlapConnection connection2 = dataSource.getConnection();
 		OlapConnection connection3 = dataSource.getConnection();
