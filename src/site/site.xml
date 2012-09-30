@@ -9,6 +9,12 @@
 	</skin>
 
 	<body>
+		<menu name="Overview">
+			<item name="Introduction" href="index.html" />
+			<item name="How to Use" href="usage.html" />
+		 	<item name="For Developers" href="developer.html" />
+		 	<item name="FAQ" href="faq.html" />
+		</menu>
 		<menu ref="reports" />
 		<links>
 			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j"/>

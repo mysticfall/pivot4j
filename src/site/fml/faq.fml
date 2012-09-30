@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs xmlns="http://maven.apache.org/FML/1.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+	title="Frequently Asked Questions" toplink="true">
+	<part id="general">
+		<title>General</title>
+
+		<faq id="purpose">
+			<question>
+				Where can I use Pivot4J?
+			</question>
+			<answer>
+				<p>You can build a pivot grid style GUI frontend to any OLAP server with Pivot4J.</p>
+			</answer>
+		</faq>
+
+		<faq id="difference-with-jpivot">
+			<question>
+				But doesn't JPivot already do that?
+			</question>
+			<answer>
+				<p>Yes. But unfortunately, the project is no longer actively maintained since 2008. 
+				Moreover, <a href="http://jpivot.sourceforge.net/" target="_blank">JPivot</a> started as a 
+				JSP tag library so even its design endeavors to separate the model layer from the presentation 
+				layer, there's still some basic assumptions in the codebase which is no longer appropriate.</p>
+
+				<p>And as the code was written long ago, and never intended to be 
+				used apart from its JSP component, it's not very pleasant to work with and rather hard to 
+				maintain (i.e. no generics, WCF dependency, inconsistent class hierarchy, and cumbersome 
+				build process, and etc).</p>
+			</answer>
+		</faq>
+
+		<faq id="difference-with-olap4j">
+			<question>
+				What about Olap4J?
+			</question>
+			<answer>
+				<p><a href="http://www.olap4j.org" target="_blank">Olap4J</a> has very solid backend design and 
+				implementation from which Pivot4J also benefits greatly.
+
+				And it also has some APIs to do what exactly Pivot4J is intended to do (notably, the org.olap4j.query 
+				and org.olap4j.transform package).</p>
+
+				<p>However, there's no working implementation for query transform operations so in order to 
+				make basic pivot operations like drill down or sort, you need to manipulate the MDX parse tree 
+				yourself.</p>
+
+				<p>Of course, we could just add those missing implementation classes instead of starting a new 
+				project. But writing a robust query transform API is not an easy task, and some of Olap4J's design 
+				choice makes it even harder (i.e. lack of parent node reference, and immutable parse tree).</p>
+
+				<p>On the otherhand, JPivot already has a feature rich and well tested implementation for query 
+				transformation with considerations for various corner cases. So why not just reusing that codebase,
+				after refactoring it to suit the modern design standard?</p>
+			</answer>
+		</faq>
+
+		<faq id="difference-with-saiku">
+			<question>
+				What is the differnce between Pivot4J and Saiku?
+			</question>
+			<answer>
+				<p>Although, both projects intends to provide an alternative for now outdated JPivot, 
+				<a href="http://analytical-labs.com">Saiku</a> is rather like a standalone OLAP analysis 
+				application while Pivot4J aims to be a pivot component model which can be easily integrated 
+				with any other project including Saiku itself.</p>
+			</answer>
+		</faq>
+	</part>
+
+	<part id="usage">
+		<title>Usage</title>
+
+		<faq id="ui-for-pivot4j">
+			<question>
+				Is there any UI component for Pivot4J?
+			</question>
+			<answer>
+				<p>Different from JPivot, Pivot4J does not come with any specific UI implementation. 
+				However, the next version will introduce an intermediate table model API which would 
+				significantly facilitate the UI component building process.</p>
+
+				<p>And a JSF based implementation is planned as a separate project in near 
+				future, so it can be used as a reference in building your own UI component.</p>
+			</answer>
+		</faq>
+
+		<faq id="missing-features">
+			<question>
+				What features are missing from JPivot?
+			</question>
+			<answer>
+				<p>Currently, drill through and member properties support is missing from the project.
+				Both of them are expected to be made available in next few releases.</p>
+
+				<p>Also MDX style expressions which control the cell's appearance like font or color are not 
+				working, but it's intentional and there will be a new concept to cover such an use case.</p>
+			</answer>
+		</faq>
+
+		<faq id="existing-connection-pool">
+			<question>
+				I have an existing connection pool. How can I use it?
+			</question>
+			<answer>
+				<p>If you intend to use an existing connection pool configured in your application server, 
+				just look up the DataSource instance from JNDI or get a DI then wrap it with  
+				the WrappingOlapDataSource class to use it.</p>
+			</answer>
+		</faq>
+
+		<faq id="i-have-a-problem">
+			<question>
+				It does not work!
+			</question>
+			<answer>
+				<p>Sorry for the inconvenience. It's still in very early stage of development so please don't 
+				expect to run flawlessly.
+
+				 If you encounter a bug or having a problem, feel free to ask a question in the 
+				 <a href="http://groups.google.com/d/forum/pivot4j-list" target="_blank">support forum</a>, 
+				 or open a <a href="https://github.com/mysticfall/pivot4j/issues/" target="_blank">bug report.</a></p>
+			</answer>
+		</faq>
+	</part>
+</faqs>

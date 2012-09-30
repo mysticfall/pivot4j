@@ -1,0 +1,161 @@
+            ------
+            Pivot4J
+            ------
+            Xavier Cho
+            ------
+             2012-09-30
+
+How to Use Pivot4J
+
+* Maven Project Setup
+
+	If you're using {{{http://maven.apache.org}Maven}}, update your pom.xml as below :
+
++-----+
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>some-project</groupId>
+    <artifactId>some-project</artifactId>
+    <packaging>jar</packaging>
+    <name>My Project</name>
+    <version>1.0.0</version>
+    <repositories>
+        <repository>
+            <id>eyeq</id>
+            <url>http://dev.eyeq.co.kr/artifactory/libs-release/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>com.eyeq</groupId>
+            <artifactId>pivot4j</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+    </dependencies>
+</project>
++-----+
+
+	Or if you use any other build method which depends on Maven repository, please see {{{./dependency-info.html}this page}}.
+	Of course, also you can just download the all the related jar files and import them manually. In that case, {{{./dependencies.html}this page}} 
+	might help determining which library files are required.
+
+* Setup a Data Source
+
+	You need to create a data source to connect to the OLAP server. There are several implementations in 
+	{{{./apidocs/com/eyeq/pivot4j/datasource/package-summary.html}com.eyeq.pivot4j.datasource}} package.
+
+	For most of the cases, you can use {{{./apidocs/com/eyeq/pivot4j/datasource/SimpleOlapDataSource.html}SimpleOlapDataSource}} as below :
+
++-----+
+SimpleOlapDataSource dataSource = new SimpleOlapDataSource();
+dataSource.setConnectionString("jdbc:mondrian:Jdbc=jdbc:odbc:MondrianFoodMart;Catalog=FoodMart.xml;");
++-----+
+
+	For detailed information on how to configure the connection string, please see the  
+	{{{http://www.olap4j.org/olap4j_fs.html#Connections}Olap4J manual}} for reference. 
+
+	If you have already an active OlapConnection or DataSource instance, then you can use either 
+	{{{./apidocs/com/eyeq/pivot4j/datasource/SingleConnectionOlapDataSource.html}SingleConnectionOlapDataSource}} or 
+	{{{./apidocs/com/eyeq/pivot4j/datasource/WrappingOlapDataSource.html}WrappingOlapDataSource}} to wrap them as 
+	an OlapDataSource.
+
+	For connection pooling, you can use a {{{./apidocs/com/eyeq/pivot4j/datasource/PooledOlapDataSource.html}PooledOlapDataSource}} 
+	as below :
+
++-----+
+GenericObjectPool.Config config = new GenericObjectPool.Config();
+config.maxActive = 3;
+config.maxIdle = 3;
+
+PooledOlapDataSource dataSource = new PooledOlapDataSource(dataSource, config);
++-----+
+
+	For detailed instruction on how to configure the connection pool settings, please see the  
+	{{{http://commons.apache.org/pool/apidocs/org/apache/commons/pool/impl/GenericObjectPool.html}Commons Pool API}} 
+	for reference. 
+
+* Creating a PivotModel
+
+	Create a PivotModel using the default implementation class as below :
+
++-----+
+String initialMdx = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
+
+PivotModel model = new PivotModelImpl(dataSource);
+model.setMdx(initialMdx);
+model.initialize();
++-----+
+
+	Note that <<<initail MDX query should be specified>>> before invoking the <<initialize()>> method. (Except for when you restore the 
+	model's state from the previous session.)
+
+* Executing a Query
+
+	Call {{{./apidocs/com/eyeq/pivot4j/PivotModel.html#getCellSet%28%29}PivotModel.getCellSet()}} method to execute the initial MDX 
+	query and get the query result as below :
+
++-----+
+CellSet cellSet = model.getCellSet();
+
+// Axes of the resulting query.
+List<CellSetAxis> axes = cellSet.getAxes();
+
+// The COLUMNS axis
+CellSetAxis columns = axes.get(0);
+
+// The ROWS axis
+CellSetAxis rows = axes.get(1);
+
+// Member positions of the ROWS axis.
+List<Position> positions = rows.getPositions();
++-----+
+
+	For detailed usage, please refer to the {{{http://www.olap4j.org/head/api/org/olap4j/CellSet.html}Olap4J API document}}.
+
+* Transforming a Query
+
+	There are several query transform operations like swapping the axes, drilling down on position, and so on defined in 
+	{{{./apidocs/com/eyeq/pivot4j/transform/package-summary.html}com.eyeq.pivot4j.transform}} package.
+
+	To perform a transform operation, get a proper Transform instance then invoke the proper methods for each transformation.
+
+	Example code for drill down operation :
+
++-----+
+DrillExpandMember transform = model.getTransform(DrillExpandMember.class);
+transform.expand(member);
+
+// Get the updated result.
+CellSet cellSet = model.getCellSet();
++-----+
+
+* Saving and Restoring the Model State
+
+	In a certain runtime environment, you need to store the current state of the PivotModel instance to be used later.
+	For example, when you deploy on a server which distributes its sessions across the cluster you can't just store the model 
+	instance in a session as it's not serializable.
+	
+	In that case, you need to retrieve state data from the active model to store it then later restore that state to serve 
+	the next client request like below :
+
++-----+
+// From the original request, retrieve the model state and store it as a session attribute
+Serializable bookmark = ((StateHolder) model).bookmarkState();
+
+session.setAttribute("pivotState", bookmark);
+
+...
+
+// From the next request, retrieve the state object from the session and 
+// initialize a new PivotModel instance using that state.
+Serializable bookmark = (Serializable) session.getAttribute("pivotState");
+
+PivotModel model = new PivotModelImpl(dataSource);
+((StateHolder) model).restoreState(bookmark);
+
+// You don't need to call initialize() or setMdx() as you've already 
+// done that in the previous request.
+CellSet cellSet = model.getCellSet();
++-----+
