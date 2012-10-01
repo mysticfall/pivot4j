@@ -114,7 +114,7 @@
             <a href="#"><i class="none"></i>FAQ</a>
           </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                
       <li>
     
                           <a href="project-info.html" title="Project Information">
@@ -165,9 +165,13 @@
 			</a></li></ol><p><b>Usage</b></p><ol style="list-style-type: decimal"><li><a href="#ui-for-pivot4j">
 				Is there any UI component for Pivot4J?
 			</a></li><li><a href="#missing-features">
-				What features are missing from JPivot?
+				What JPivot features are missing from Pivot4J?
 			</a></li><li><a href="#existing-connection-pool">
 				I have an existing connection pool. How can I use it?
+			</a></li><li><a href="#referencing-a-member">
+				How can I get a reference of a member which is not included in the query?
+			</a></li><li><a href="#parsing-a-mdx">
+				How can I manipulate a MDX query manually?
 			</a></li><li><a href="#i-have-a-problem">
 				It does not work!
 			</a></li></ol></div><div class="section"><h2>General<a name="General"></a></h2><dl><dt><a name="purpose">
@@ -223,7 +227,7 @@
 				<p>And a JSF based implementation is planned as a separate project in near 
 				future, so it can be used as a reference in building your own UI component.</p>
 			<p align="right"><a href="#top">[top]</a></p><hr /></dd><dt><a name="missing-features">
-				What features are missing from JPivot?
+				What JPivot features are missing from Pivot4J?
 			</a></dt><dd>
 				<p>Currently, drill through and member properties support is missing from the project.
 				Both of them are expected to be made available in next few releases.</p>
@@ -236,6 +240,26 @@
 				<p>If you intend to use an existing connection pool configured in your application server, 
 				just look up the DataSource instance from JNDI or get a DI then wrap it with  
 				the WrappingOlapDataSource class to use it.</p>
+			<p align="right"><a href="#top">[top]</a></p><hr /></dd><dt><a name="referencing-a-member">
+				How can I get a reference of a member which is not included in the query?
+			</a></dt><dd>
+				<p>If you want to reference a member which is not included in a current CellSet, 
+				the easiest way to do it is using following code :</p>
+				<div class="source"><pre class="prettyprint linenums">Cube cube = model.getCube();
+
+Member member = cube.lookupMember(
+	IdentifierNode.parseIdentifier(&quot;[Time].[1998]&quot;).getSegmentList());</pre></div>
+			<p align="right"><a href="#top">[top]</a></p><hr /></dd><dt><a name="parsing-a-mdx">
+				How can I manipulate a MDX query manually?
+			</a></dt><dd>
+				<p>Currently the QueryAdapter instance and its MDX parse tree is deliberately hidden 
+				from public access. It could be changed later once the related API(com.eyeq.pivot4j.mdx package)
+				gets some refactoring to be more consistent with other parts of the project.</p>
+
+				<p>If you really want to manipulate the parse tree manually, you can parse the current MDX 
+				using either Pivot4J's parser or Olap4J's MdxParser class yourself outside the PivotModel. 
+				Just remember any class under com.eyeq.pivot4j.mdx package is subject to change in 
+				subsequent releases.</p>
 			<p align="right"><a href="#top">[top]</a></p><hr /></dd><dt><a name="i-have-a-problem">
 				It does not work!
 			</a></dt><dd>
