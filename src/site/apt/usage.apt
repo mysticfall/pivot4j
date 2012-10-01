@@ -60,7 +60,7 @@ dataSource.setConnectionString("jdbc:mondrian:Jdbc=jdbc:odbc:MondrianFoodMart;Ca
 	{{{./apidocs/com/eyeq/pivot4j/datasource/WrappingOlapDataSource.html}WrappingOlapDataSource}} to wrap them as 
 	an OlapDataSource.
 
-	For connection pooling, you can use a {{{./apidocs/com/eyeq/pivot4j/datasource/PooledOlapDataSource.html}PooledOlapDataSource}} 
+	For connection pooling, you can use the {{{./apidocs/com/eyeq/pivot4j/datasource/PooledOlapDataSource.html}PooledOlapDataSource}} 
 	as below :
 
 +-----+

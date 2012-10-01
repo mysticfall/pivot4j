@@ -110,6 +110,36 @@
 			</answer>
 		</faq>
 
+		<faq id="referencing-a-member">
+			<question>
+				How can I get a reference of a member which is not included in the query?
+			</question>
+			<answer>
+				<p>If you want to reference a member which is not included in a current CellSet, 
+				the easiest way to do it is using following code :</p>
+				<source>Cube cube = model.getCube();
+
+Member member = cube.lookupMember(
+	IdentifierNode.parseIdentifier("[Time].[1998]").getSegmentList());</source>
+			</answer>
+		</faq>
+
+		<faq id="parsing-a-mdx">
+			<question>
+				How can I manipulate a MDX query manually?
+			</question>
+			<answer>
+				<p>Currently the QueryAdapter instance and its MDX parse tree is deliberately hidden 
+				from public access. It could be changed later once the related API(com.eyeq.pivot4j.mdx package)
+				gets some refactoring to be more consistent with other parts of the project.</p>
+
+				<p>If you really want to manipulate the parse tree manually, you can parse the current MDX 
+				using either Pivot4J's parser or Olap4J's MdxParser class yourself outside the PivotModel. 
+				Just remember any class under com.eyeq.pivot4j.mdx package is subject to change in 
+				subsequent releases.</p>
+			</answer>
+		</faq>
+
 		<faq id="i-have-a-problem">
 			<question>
 				It does not work!
