@@ -98,19 +98,25 @@ public class QueryAxis implements Exp {
 	 */
 	public String toMdx() {
 		StringBuffer sb = new StringBuffer();
-		if (nonEmpty) {
-			sb.append("NON EMPTY ");
-		}
-		sb.append(exp.toMdx());
-		if (dimProps != null && dimProps.size() > 0) {
-			sb.append(" DIMENSION PROPERTIES ");
-			for (int i = 0; i < dimProps.size(); i++) {
-				if (i > 0) {
-					sb.append(',');
+
+		if (exp == null) {
+			sb.append("{}");
+		} else {
+			if (nonEmpty) {
+				sb.append("NON EMPTY ");
+			}
+			sb.append(exp.toMdx());
+			if (dimProps != null && dimProps.size() > 0) {
+				sb.append(" DIMENSION PROPERTIES ");
+				for (int i = 0; i < dimProps.size(); i++) {
+					if (i > 0) {
+						sb.append(',');
+					}
+					sb.append(dimProps.get(i).toMdx());
 				}
-				sb.append(dimProps.get(i).toMdx());
 			}
 		}
+
 		sb.append(" ON ");
 		sb.append(name);
 		return sb.toString();

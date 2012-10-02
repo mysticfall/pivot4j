@@ -590,8 +590,7 @@ public class Quax implements StateHolder {
 		}
 
 		if (posTreeRoot == null) {
-			fireQuaxChanged(hiersChanged);
-			return;
+			this.posTreeRoot = new TreeNode<Exp>(null);
 		}
 
 		posTreeRoot.getChildren().clear();

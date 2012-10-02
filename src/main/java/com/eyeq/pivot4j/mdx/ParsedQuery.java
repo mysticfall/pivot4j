@@ -153,8 +153,9 @@ public class ParsedQuery implements Exp {
 		isFollow = false;
 		for (int i = 0; i < axes.length; i++) {
 			QueryAxis qa = axes[i];
-			if (isFollow)
+			if (isFollow) {
 				mdx.append(", ");
+			}
 			isFollow = true;
 			mdx.append(qa.toMdx());
 		}
