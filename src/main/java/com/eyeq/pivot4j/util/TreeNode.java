@@ -144,7 +144,7 @@ public class TreeNode<T> {
 	 * @param callbackHandler
 	 *            function called on iteration
 	 */
-	public int walkChildren(TreeNodeCallback <T>callbackHandler) {
+	public int walkChildren(TreeNodeCallback<T> callbackHandler) {
 		int code = 0;
 		for (TreeNode<T> child : children) {
 			code = callbackHandler.handleTreeNode(child);
@@ -173,6 +173,14 @@ public class TreeNode<T> {
 	 */
 	public TreeNode<T> getParent() {
 		return parent;
+	}
+
+	public TreeNode<T> getRoot() {
+		if (parent == null) {
+			return this;
+		} else {
+			return parent.getParent();
+		}
 	}
 
 	/**
