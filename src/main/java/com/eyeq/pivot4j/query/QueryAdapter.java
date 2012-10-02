@@ -215,6 +215,10 @@ public class QueryAdapter implements StateHolder {
 			queryAxes[0].setExp(queryAxes[1].getExp());
 			queryAxes[1].setExp(exp);
 
+			Quax quax = quaxes.get(0);
+			quaxes.set(0, quaxes.get(1));
+			quaxes.set(1, quax);
+
 			fireQueryChanged();
 		}
 	}
@@ -259,6 +263,7 @@ public class QueryAdapter implements StateHolder {
 	 */
 	public void setQuaxToSort(Quax quaxToSort) {
 		this.quaxToSort = quaxToSort;
+		updateQuery();
 	}
 
 	protected boolean isSortOnQuery() {
@@ -348,9 +353,9 @@ public class QueryAdapter implements StateHolder {
 					this.parsedQuery = cloneQuery;
 				}
 			}
-
-			addSortToQuery();
 		}
+
+		addSortToQuery();
 
 		return parsedQuery;
 	}
