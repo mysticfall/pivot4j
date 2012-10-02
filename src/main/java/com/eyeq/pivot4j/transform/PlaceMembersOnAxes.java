@@ -25,6 +25,14 @@ public interface PlaceMembersOnAxes extends Transform {
 	void placeMembers(List<Member> members);
 
 	/**
+	 * @param axisOrdinal
+	 *            The target axis ordinal
+	 * @param members
+	 *            a List of Members
+	 */
+	void placeMembers(int axisOrdinal, List<Member> members);
+
+	/**
 	 * Collects all members from the visible axes in the result. If no members
 	 * of the hierarchy are on a visible axis, returns an empty list.
 	 * 

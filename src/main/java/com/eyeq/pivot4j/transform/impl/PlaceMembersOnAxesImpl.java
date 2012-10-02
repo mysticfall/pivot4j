@@ -48,11 +48,26 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 	 *      List)
 	 */
 	public void placeMembers(List<Member> members) {
+		placeMembers(-1, members);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#placeMembers(int,
+	 *      java.util.List)
+	 */
+	@Override
+	public void placeMembers(int axisOrdinal, List<Member> members) {
 		QueryAdapter adapter = getQueryAdapter();
 
 		Map<Quax, List<Hierarchy>> hierarchyMap = new HashMap<Quax, List<Hierarchy>>();
 		for (Member member : members) {
-			Quax quax = adapter.findQuax(member.getDimension());
+			Quax quax;
+
+			if (axisOrdinal < 0) {
+				quax = adapter.findQuax(member.getDimension());
+			} else {
+				quax = adapter.getQuaxes().get(axisOrdinal);
+			}
 
 			if (quax == null) {
 				if (logger.isWarnEnabled()) {
