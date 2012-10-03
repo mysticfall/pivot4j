@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /apidocs/
+Disallow: /testapidocs/
+Disallow: /cobertura/
+Disallow: /xref/
+Disallow: /xref-test/
