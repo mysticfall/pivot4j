@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/DECORATION/1.3.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd"
@@ -9,6 +10,13 @@
 	</skin>
 
 	<body>
+		<links>
+			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j"/>
+			<item name="Download" href="http://github.com/mysticfall/pivot4j/downloads"/>
+			<item name="Support Forum" href="http://groups.google.com/d/forum/pivot4j-list"/>
+			<item name="JPivot Project" href="http://jpivot.sourceforge.net"/>
+			<item name="Olap4J Project" href="http://www.olap4j.org"/>
+		</links>
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
 			<item name="How to Use" href="usage.html" />
@@ -16,11 +24,6 @@
 		 	<item name="FAQ" href="faq.html" />
 		</menu>
 		<menu ref="reports" />
-		<links>
-			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j"/>
-			<item name="JPivot Project" href="http://jpivot.sourceforge.net"/>
-			<item name="Olap4J Project" href="http://www.olap4j.org"/>
-		</links>
 	</body>
 
 	<custom>
@@ -33,6 +36,11 @@
 				<ribbonOrientation>right</ribbonOrientation>
 				<ribbonColor>black</ribbonColor>
 			</gitHub>
+			<twitter>
+				<user>pivot4j</user>
+				<showUser>true</showUser>
+				<showFollowers>true</showFollowers>
+				</twitter>
 			<googleSearch />
 		</fluidoSkin>
 	</custom>
