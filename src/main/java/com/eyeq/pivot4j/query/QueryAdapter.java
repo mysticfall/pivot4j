@@ -1013,7 +1013,5 @@ public class QueryAdapter implements StateHolder {
 				quaxes.get(i).restoreState(quaxStates[i]);
 			}
 		}
-
-		fireQueryChanged();
 	}
 }

@@ -812,5 +812,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		this.cellSet = null;
 
 		queryAdapter.restoreState(states[4]);
+
+		fireModelChanged();
 	}
 }

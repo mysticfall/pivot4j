@@ -20,6 +20,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.SortMode;
 import com.eyeq.pivot4j.transform.DrillExpandPosition;
 
 public class DrillExpandPositionImplIT extends
@@ -57,7 +58,7 @@ public class DrillExpandPositionImplIT extends
 	}
 
 	@Test
-	public void testTransform() {
+	public void testExpandOnPosition() {
 		DrillExpandPosition transform = getTransform();
 
 		PivotModel model = getPivotModel();
@@ -95,6 +96,67 @@ public class DrillExpandPositionImplIT extends
 
 		assertEquals("Unexpected MDX after collapse : ", getInitialQuery(),
 				model.getCurrentMdx());
+
+		assertFalse("[All Media] should not be collapsible after collapse",
+				transform.canCollapse(position, allMedia));
+		assertTrue("[All Media] should be expandable after collapse",
+				transform.canExpand(position, allMedia));
+	}
+
+	@Test
+	public void testExpandWithSort() {
+		DrillExpandPosition transform = getTransform();
+
+		PivotModel model = getPivotModel();
+
+		CellSet cellSet = model.getCellSet();
+		assertNotNull("Unable to execute MDX query : " + getInitialQuery(),
+				cellSet);
+
+		CellSetAxis axis = cellSet.getAxes().get(1);
+		Position position = axis.getPositions().get(0);
+
+		Member allMedia = position.getMembers().get(1);
+
+		assertEquals(
+				"Unexpected member at drill position : "
+						+ allMedia.getCaption(), "All Media",
+				allMedia.getCaption());
+
+		model.setSorting(true);
+		model.setTopBottomCount(3);
+		model.setSortMode(SortMode.BOTTOMCOUNT);
+
+		model.sort(axis, position);
+
+		assertFalse("[All Media] should not be collapsible initially",
+				transform.canCollapse(position, allMedia));
+		assertTrue("[All Media] should be expandable initially",
+				transform.canExpand(position, allMedia));
+
+		transform.expand(position, allMedia);
+
+		assertEquals(
+				"Unexpected MDX after drill down : ",
+				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "BottomCount(Union(Union(CrossJoin({[Time].[1997]}, {[Promotion Media].[All Media]}), "
+						+ "CrossJoin({[Time].[1997]}, [Promotion Media].[All Media].Children)), {([Time].[1998], "
+						+ "[Promotion Media].[All Media])}), 3, ([Time].[1997], [Promotion Media].[All Media])) ON ROWS FROM [Sales]",
+				model.getCurrentMdx());
+
+		assertTrue("[All Media] should be collapsible after drill down",
+				transform.canCollapse(position, allMedia));
+		assertFalse("[All Media] should not be expandable after drill down",
+				transform.canExpand(position, allMedia));
+
+		transform.collapse(position, allMedia);
+
+		assertEquals(
+				"Unexpected MDX after collapse : ",
+				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} "
+						+ "ON COLUMNS, BottomCount({([Time].[1997], [Promotion Media].[All Media]), "
+						+ "([Time].[1998], [Promotion Media].[All Media])}, 3, ([Time].[1997], [Promotion Media].[All Media])) "
+						+ "ON ROWS FROM [Sales]", model.getCurrentMdx());
 
 		assertFalse("[All Media] should not be collapsible after collapse",
 				transform.canCollapse(position, allMedia));
