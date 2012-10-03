@@ -7,16 +7,17 @@
 
 About
 
-	<<Pivot4J>> provides a common API for OLAP servers which can be used to build an analytical service frontend 
-	with pivot style GUI. It aims to leverage mature but now discontinued JPivot project's codebase to make it a general 
-	purpose OLAP API library which is independent of any particular GUI implementation.
+	<<Pivot4J>> provides a common {{{http://www.java.com}Java}} API for OLAP servers which can be used to build an 
+	analytical service frontend with pivot style GUI. It aims to leverage mature but now discontinued 
+	{{{http://jpivot.sourceforge.net}JPivot}} project's	codebase to make it a general	purpose OLAP API library which is 
+	independent of any particular GUI implementation.
 
 
 Motivation
 
-	For a long time {{{http://jpivot.sourceforge.net}JPivot}} has remained as the <de facto> standard for creating a pivot grid style 
-	OLAP frontend application in Java language. However, as the project is no longer actively maintained for now, advance of web 
-	technologies has made its JSP-based approach look quite outdated.
+	For a long time, JPivot has remained as the <de facto> standard for creating a pivot grid style OLAP frontend application 
+	in Java language. However, as the project is no longer actively maintained for now, advance of new web technologies has 
+	made its JSP-based approach look quite outdated.
 
 	Moreover, JPivot was never desiged as a common API for OLAP even it included lot of useful backend implementations for 
 	connecting to and work with XMLA and {{{http://mondrian.pentaho.com}Mondrian}} servers.
@@ -37,13 +38,14 @@ Motivation
 
 System Requirement
 
-	* {{{http://www.java.com}Java}} 1.6 or higher.
+	* Java 1.6 or higher                                                                                          |
 
-	* {{{http://mondrian.pentaho.com}Mondrian}} or any other XMLA based OLAP server which Olap4J supports.
+	* {{{http://mondrian.pentaho.com}Mondrian}} or any other XMLA based OLAP server which is supported by Olap4J.
+
 
 News
 
-	* <<[2012-10-02]>> Pivot4J team will be working together with {{{http://http://analytical-labs.com/}Saiku}} to bring JPivot 
+	* <<[2012-10-02]>> Pivot4J team will be working together with {{{http://analytical-labs.com/}Saiku}} to bring JPivot 
 	features into the project. Initial work has bee already started, and there is new 
 	{{{https://github.com/mysticfall/saiku}Github project}} opened for the task.
 
