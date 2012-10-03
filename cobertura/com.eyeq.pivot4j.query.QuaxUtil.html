@@ -12,7 +12,7 @@
 <div class="separator">&nbsp;</div>
 <table class="report">
 <thead><tr>  <td class="heading">Classes in this File</td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Line Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Branch Coverage</a></td>  <td class="heading"><a class="dfn" href="help.html" onclick="popupwindow('help.html'); return false;">Complexity</a></td></tr></thead>
-  <tr><td><a href="com.eyeq.pivot4j.query.QuaxUtil.html">QuaxUtil</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">33%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:33px"><span class="text">141/423</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">26%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:26px"><span class="text">91/338</span></div></div></td></tr></table></td><td class="value"><span class="hidden">6.555555555555555;</span>6.556</td></tr>
+  <tr><td><a href="com.eyeq.pivot4j.query.QuaxUtil.html">QuaxUtil</a></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">32%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:32px"><span class="text">144/437</span></div></div></td></tr></table></td><td><table cellpadding="0px" cellspacing="0px" class="percentgraph"><tr class="percentgraph"><td align="right" class="percentgraph" width="40">26%</td><td class="percentgraph"><div class="percentgraph"><div class="greenbar" style="width:26px"><span class="text">95/358</span></div></div></td></tr></table></td><td class="value"><span class="hidden">6.555555555555555;</span>6.556</td></tr>
 
 </table>
 <div class="separator">&nbsp;</div>
@@ -101,14 +101,14 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;43</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isMember(Exp oExp) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;44</td>  <td class="nbHitsCovered"><a title="Line 44: Conditional coverage 100% (2/2).">&nbsp;581</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 44: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (oExp <span class="keyword">instanceof</span> ParseTreeNodeExp) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;45</td>  <td class="nbHitsCovered">&nbsp;223</td>  <td class="src"><pre class="src">&nbsp;                        ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;46</td>  <td class="nbHitsCovered">&nbsp;223</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> adapter.getType() <span class="keyword">instanceof</span> MemberType;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;44</td>  <td class="nbHitsCovered"><a title="Line 44: Conditional coverage 100% (2/2).">&nbsp;2633</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 44: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (oExp <span class="keyword">instanceof</span> ParseTreeNodeExp) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;45</td>  <td class="nbHitsCovered">&nbsp;1115</td>  <td class="src"><pre class="src">&nbsp;                        ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;46</td>  <td class="nbHitsCovered">&nbsp;1115</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> adapter.getType() <span class="keyword">instanceof</span> MemberType;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;47</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;48</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;49</td>  <td class="nbHitsCovered">&nbsp;358</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;49</td>  <td class="nbHitsCovered">&nbsp;1518</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;50</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;51</td>  <td class="nbHits">&nbsp;</td>
@@ -123,7 +123,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;56</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isFunCall(Exp oExp) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;57</td>  <td class="nbHitsCovered">&nbsp;528</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (oExp <span class="keyword">instanceof</span> FunCall);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;57</td>  <td class="nbHitsCovered">&nbsp;2187</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> (oExp <span class="keyword">instanceof</span> FunCall);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;58</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;59</td>  <td class="nbHits">&nbsp;</td>
@@ -140,7 +140,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;65</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> equalMember(Exp oExp, Member member) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;66</td>  <td class="nbHitsCovered">&nbsp;40</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> member.equals(memberForExp(oExp));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;66</td>  <td class="nbHitsCovered">&nbsp;287</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> member.equals(memberForExp(oExp));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;67</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;68</td>  <td class="nbHits">&nbsp;</td>
@@ -157,7 +157,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;74</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isFunCallTo(Exp oExp, String function) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;75</td>  <td class="nbHitsUncovered"><a title="Line 75: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;40</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 75: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">                <span class="keyword">return</span> isFunCall(oExp) &amp;&amp; ((FunCall) oExp).isCallTo(function);</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;75</td>  <td class="nbHitsUncovered"><a title="Line 75: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;171</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 75: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">                <span class="keyword">return</span> isFunCall(oExp) &amp;&amp; ((FunCall) oExp).isCallTo(function);</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;76</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;77</td>  <td class="nbHits">&nbsp;</td>
@@ -182,8 +182,8 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;87</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> checkParent(Member pMember, Exp cMembObj) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;64</td>  <td class="src"><pre class="src">&nbsp;                Member child = memberForExp(cMembObj);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;89</td>  <td class="nbHitsUncovered"><a title="Line 89: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">&nbsp;64</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 89: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">                <span class="keyword">return</span> child != <span class="keyword">null</span> &amp;&amp; pMember.equals(child.getParentMember());</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;88</td>  <td class="nbHitsCovered">&nbsp;302</td>  <td class="src"><pre class="src">&nbsp;                Member child = memberForExp(cMembObj);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;89</td>  <td class="nbHitsUncovered"><a title="Line 89: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">&nbsp;302</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 89: Conditional coverage 75% (3/4) [each condition: 50%, 100%].">                <span class="keyword">return</span> child != <span class="keyword">null</span> &amp;&amp; pMember.equals(child.getParentMember());</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;90</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;91</td>  <td class="nbHits">&nbsp;</td>
@@ -257,25 +257,25 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isMemberInFunCall(Exp oExp, Member member)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;127</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> UnknownExpressionException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsUncovered"><a title="Line 128: Conditional coverage 50% (1/2).">&nbsp;241</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 128: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (!isFunCall(oExp)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;128</td>  <td class="nbHitsUncovered"><a title="Line 128: Conditional coverage 50% (1/2).">&nbsp;965</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 128: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (!isFunCall(oExp)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;129</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;130</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;131</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;132</td>  <td class="nbHitsCovered">&nbsp;241</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;132</td>  <td class="nbHitsCovered">&nbsp;965</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;133</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;134</td>  <td class="nbHitsCovered"><a title="Line 134: Conditional coverage 100% (2/2).">&nbsp;241</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 134: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;135</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> isMemberInChildren(f, member);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;136</td>  <td class="nbHitsUncovered"><a title="Line 136: Conditional coverage 50% (1/2).">&nbsp;156</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 136: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;134</td>  <td class="nbHitsCovered"><a title="Line 134: Conditional coverage 100% (2/2).">&nbsp;965</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 134: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;135</td>  <td class="nbHitsCovered">&nbsp;341</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> isMemberInChildren(f, member);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;136</td>  <td class="nbHitsUncovered"><a title="Line 136: Conditional coverage 50% (1/2).">&nbsp;624</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 136: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;137</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> isMemberInDescendants(f, member);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsUncovered"><a title="Line 138: Conditional coverage 50% (1/2).">&nbsp;156</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 138: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Members"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;138</td>  <td class="nbHitsUncovered"><a title="Line 138: Conditional coverage 50% (1/2).">&nbsp;624</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 138: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Members"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;139</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> isMemberInLevel(f, member);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;140</td>  <td class="nbHitsCovered"><a title="Line 140: Conditional coverage 100% (2/2).">&nbsp;156</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 140: Conditional coverage 100% (2/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Union"</span>)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;141</td>  <td class="nbHitsCovered">&nbsp;75</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> isMemberInUnion(f, member);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;142</td>  <td class="nbHitsUncovered"><a title="Line 142: Conditional coverage 50% (1/2).">&nbsp;81</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 142: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"{}"</span>)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsCovered">&nbsp;81</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> isMemberInSet(f, member);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;140</td>  <td class="nbHitsCovered"><a title="Line 140: Conditional coverage 100% (2/2).">&nbsp;624</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 140: Conditional coverage 100% (2/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Union"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;141</td>  <td class="nbHitsCovered">&nbsp;300</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> isMemberInUnion(f, member);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;142</td>  <td class="nbHitsUncovered"><a title="Line 142: Conditional coverage 50% (1/2).">&nbsp;324</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 142: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"{}"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;143</td>  <td class="nbHitsCovered">&nbsp;324</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> isMemberInSet(f, member);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;144</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;145</td>  <td class="nbHits">&nbsp;</td>
@@ -307,18 +307,18 @@
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> UnknownExpressionException {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;159</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// calculated members do not have children</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;160</td>  <td class="nbHitsUncovered"><a title="Line 160: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">&nbsp;209</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 160: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">                <span class="keyword">if</span> (!isFunCall(oExp) || member.isCalculated()) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;160</td>  <td class="nbHitsUncovered"><a title="Line 160: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">&nbsp;899</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 160: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">                <span class="keyword">if</span> (!isFunCall(oExp) || member.isCalculated()) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;161</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;162</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;163</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsCovered">&nbsp;209</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;164</td>  <td class="nbHitsCovered">&nbsp;899</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;165</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered"><a title="Line 166: Conditional coverage 100% (2/2).">&nbsp;209</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 166: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsCovered">&nbsp;35</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> member.equals(memberForExp(f.getArgs()[0]));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsUncovered"><a title="Line 168: Conditional coverage 50% (1/2).">&nbsp;174</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 168: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;166</td>  <td class="nbHitsCovered"><a title="Line 166: Conditional coverage 100% (2/2).">&nbsp;899</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 166: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;167</td>  <td class="nbHitsCovered">&nbsp;143</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> member.equals(memberForExp(f.getArgs()[0]));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;168</td>  <td class="nbHitsUncovered"><a title="Line 168: Conditional coverage 50% (1/2).">&nbsp;756</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 168: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;169</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// true, if f = descendants(m2, level) contains any child of m</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;170</td>  <td class="nbHits">&nbsp;</td>
@@ -350,7 +350,7 @@
 <tr>  <td class="numLineCover">&nbsp;188</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;189</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;190</td>  <td class="nbHitsUncovered"><a title="Line 190: Conditional coverage 50% (1/2).">&nbsp;174</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 190: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Members"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;190</td>  <td class="nbHitsUncovered"><a title="Line 190: Conditional coverage 50% (1/2).">&nbsp;756</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 190: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Members"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;191</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Level level = levelForExp(f.getArgs()[0]);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;192</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Level parentLevel = <span class="keyword">null</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;193</td>  <td class="nbHits">&nbsp;</td>
@@ -375,23 +375,23 @@
 <tr>  <td class="numLineCover">&nbsp;207</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;208</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;209</td>  <td class="nbHitsCovered"><a title="Line 209: Conditional coverage 100% (2/2).">&nbsp;174</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 209: Conditional coverage 100% (2/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Union"</span>)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;210</td>  <td class="nbHitsUncovered"><a title="Line 210: Conditional coverage 50% (1/2).">&nbsp;16</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 210: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (isChildOfMemberInFunCall(f.getArgs()[0], member))</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;209</td>  <td class="nbHitsCovered"><a title="Line 209: Conditional coverage 100% (2/2).">&nbsp;756</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 209: Conditional coverage 100% (2/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Union"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;210</td>  <td class="nbHitsUncovered"><a title="Line 210: Conditional coverage 50% (1/2).">&nbsp;64</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 210: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (isChildOfMemberInFunCall(f.getArgs()[0], member))</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;211</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;212</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">else</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;213</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> isChildOfMemberInFunCall(f.getArgs()[1], member);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;214</td>  <td class="nbHitsUncovered"><a title="Line 214: Conditional coverage 50% (1/2).">&nbsp;158</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 214: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"{}"</span>)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;215</td>  <td class="nbHitsCovered"><a title="Line 215: Conditional coverage 100% (2/2).">&nbsp;572</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 215: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; f.getArgs().length; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsCovered">&nbsp;452</td>  <td class="src"><pre class="src">&nbsp;                                Member mm = memberForExp(f.getArgs()[i]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsCovered">&nbsp;452</td>  <td class="src"><pre class="src">&nbsp;                                Member mmp = mm.getParentMember();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;218</td>  <td class="nbHitsCovered"><a title="Line 218: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;452</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 218: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                                <span class="keyword">if</span> (mmp != <span class="keyword">null</span> &amp;&amp; mmp.equals(member)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;219</td>  <td class="nbHitsCovered">&nbsp;38</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;213</td>  <td class="nbHitsCovered">&nbsp;64</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> isChildOfMemberInFunCall(f.getArgs()[1], member);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;214</td>  <td class="nbHitsUncovered"><a title="Line 214: Conditional coverage 50% (1/2).">&nbsp;692</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 214: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"{}"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;215</td>  <td class="nbHitsCovered"><a title="Line 215: Conditional coverage 100% (2/2).">&nbsp;2570</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 215: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; f.getArgs().length; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;216</td>  <td class="nbHitsCovered">&nbsp;2042</td>  <td class="src"><pre class="src">&nbsp;                                Member mm = memberForExp(f.getArgs()[i]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;217</td>  <td class="nbHitsCovered">&nbsp;2042</td>  <td class="src"><pre class="src">&nbsp;                                Member mmp = mm.getParentMember();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;218</td>  <td class="nbHitsCovered"><a title="Line 218: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">&nbsp;2042</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 218: Conditional coverage 100% (4/4) [each condition: 100%, 100%].">                                <span class="keyword">if</span> (mmp != <span class="keyword">null</span> &amp;&amp; mmp.equals(member)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;219</td>  <td class="nbHitsCovered">&nbsp;164</td>  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;220</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;221</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsCovered">&nbsp;120</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;222</td>  <td class="nbHitsCovered">&nbsp;528</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;223</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;224</td>  <td class="nbHits">&nbsp;</td>
@@ -421,22 +421,22 @@
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> UnknownExpressionException {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;237</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// calculated members do not have children</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;238</td>  <td class="nbHitsUncovered"><a title="Line 238: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">&nbsp;2</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 238: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">                <span class="keyword">if</span> (!isFunCall(oExp) || member.isCalculated()) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;238</td>  <td class="nbHitsUncovered"><a title="Line 238: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">&nbsp;8</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 238: Conditional coverage 50% (2/4) [each condition: 50%, 50%].">                <span class="keyword">if</span> (!isFunCall(oExp) || member.isCalculated()) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;239</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;240</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;241</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;242</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;242</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;243</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;244</td>  <td class="nbHitsUncovered"><a title="Line 244: Conditional coverage 50% (1/2).">&nbsp;2</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 244: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;244</td>  <td class="nbHitsUncovered"><a title="Line 244: Conditional coverage 50% (1/2).">&nbsp;8</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 244: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;245</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// true, if m2.children contains descendants of m</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;246</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// &lt;==&gt; m is equal or ancestor of m2</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;247</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                        Member mExp = memberForExp(f.getArgs()[0]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;248</td>  <td class="nbHitsUncovered"><a title="Line 248: Conditional coverage 25% (1/4) [each condition: 50%, 0%].">&nbsp;2</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 248: Conditional coverage 25% (1/4) [each condition: 50%, 0%].">                        <span class="keyword">return</span> (member.equals(mExp) || isDescendant(member, mExp));</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;247</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;                        Member mExp = memberForExp(f.getArgs()[0]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;248</td>  <td class="nbHitsUncovered"><a title="Line 248: Conditional coverage 25% (1/4) [each condition: 50%, 0%].">&nbsp;8</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 248: Conditional coverage 25% (1/4) [each condition: 50%, 0%].">                        <span class="keyword">return</span> (member.equals(mExp) || isDescendant(member, mExp));</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;249</td>  <td class="nbHitsUncovered"><a title="Line 249: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 249: Conditional coverage 0% (0/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;250</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// true, if descendants(m2) contain descendants of m</span></pre></td></tr>
@@ -483,14 +483,14 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;279</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isDescendant(Member ancestor, Exp descendant) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;280</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                Member member = memberForExp(descendant);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsUncovered"><a title="Line 281: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 281: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (member == <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;280</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                Member member = memberForExp(descendant);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;281</td>  <td class="nbHitsUncovered"><a title="Line 281: Conditional coverage 50% (1/2).">&nbsp;18</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 281: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (member == <span class="keyword">null</span>) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;282</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;283</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;284</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;285</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> isDescendant(ancestor, member);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;285</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> isDescendant(ancestor, member);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;286</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;287</td>  <td class="nbHits">&nbsp;</td>
@@ -513,12 +513,12 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// WITM MEMBER a.b as '..'</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;296</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// a.children does *not* include b</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;297</td>  <td class="nbHitsUncovered"><a title="Line 297: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 297: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (descendant.isCalculated()) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;297</td>  <td class="nbHitsUncovered"><a title="Line 297: Conditional coverage 50% (1/2).">&nbsp;18</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 297: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (descendant.isCalculated()) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;298</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;299</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;300</td>  <td class="nbHitsUncovered"><a title="Line 300: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 300: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (ancestor.equals(descendant)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;301</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;300</td>  <td class="nbHitsUncovered"><a title="Line 300: Conditional coverage 50% (1/2).">&nbsp;18</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 300: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (ancestor.equals(descendant)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;301</td>  <td class="nbHitsCovered">&nbsp;18</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;302</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;303</td>  <td class="nbHits">&nbsp;</td>
@@ -562,17 +562,17 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isFunCallNotTopLevel(Exp oExp)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;326</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> UnknownExpressionException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsUncovered"><a title="Line 327: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 327: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (!isFunCall(oExp)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;327</td>  <td class="nbHitsUncovered"><a title="Line 327: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 327: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (!isFunCall(oExp)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;328</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;329</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;330</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;331</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;332</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsUncovered"><a title="Line 333: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 333: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;334</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>; <span class="comment">// children *not* top level</span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;333</td>  <td class="nbHitsUncovered"><a title="Line 333: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 333: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;334</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>; <span class="comment">// children *not* top level</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;335</td>  <td class="nbHitsUncovered"><a title="Line 335: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 335: Conditional coverage 0% (0/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;336</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>; <span class="comment">// descendants*not* top level</span></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;337</td>  <td class="nbHitsUncovered"><a title="Line 337: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 337: Conditional coverage 0% (0/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Members"</span>)) {</a></span></pre></td></tr>
@@ -642,37 +642,37 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;378</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> canHandle(Exp oExp) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;379</td>  <td class="nbHitsCovered"><a title="Line 379: Conditional coverage 100% (2/2).">&nbsp;12</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 379: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (isMember(oExp)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;380</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;381</td>  <td class="nbHitsUncovered"><a title="Line 381: Conditional coverage 50% (1/2).">&nbsp;8</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 381: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (isFunCall(oExp)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;382</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;                        FunCall f = (FunCall) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;379</td>  <td class="nbHitsCovered"><a title="Line 379: Conditional coverage 100% (2/2).">&nbsp;48</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 379: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (isMember(oExp)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;380</td>  <td class="nbHitsCovered">&nbsp;16</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;381</td>  <td class="nbHitsUncovered"><a title="Line 381: Conditional coverage 50% (1/2).">&nbsp;32</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 381: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (isFunCall(oExp)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;382</td>  <td class="nbHitsCovered">&nbsp;32</td>  <td class="src"><pre class="src">&nbsp;                        FunCall f = (FunCall) oExp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;383</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;384</td>  <td class="nbHitsCovered"><a title="Line 384: Conditional coverage 100% (2/2).">&nbsp;8</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 384: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"children"</span>)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;385</td>  <td class="nbHitsCovered">&nbsp;2</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;384</td>  <td class="nbHitsCovered"><a title="Line 384: Conditional coverage 100% (2/2).">&nbsp;32</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 384: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"children"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;385</td>  <td class="nbHitsCovered">&nbsp;8</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;386</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;387</td>  <td class="nbHitsUncovered"><a title="Line 387: Conditional coverage 50% (1/2).">&nbsp;6</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 387: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"descendants"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;387</td>  <td class="nbHitsUncovered"><a title="Line 387: Conditional coverage 50% (1/2).">&nbsp;24</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 387: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"descendants"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;388</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;389</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;390</td>  <td class="nbHitsUncovered"><a title="Line 390: Conditional coverage 50% (1/2).">&nbsp;6</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 390: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"members"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;390</td>  <td class="nbHitsUncovered"><a title="Line 390: Conditional coverage 50% (1/2).">&nbsp;24</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 390: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"members"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;391</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;392</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;393</td>  <td class="nbHitsCovered"><a title="Line 393: Conditional coverage 100% (2/2).">&nbsp;6</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 393: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"{}"</span>)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;394</td>  <td class="nbHitsCovered">&nbsp;5</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;393</td>  <td class="nbHitsCovered"><a title="Line 393: Conditional coverage 100% (2/2).">&nbsp;24</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 393: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"{}"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;394</td>  <td class="nbHitsCovered">&nbsp;20</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;395</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;396</td>  <td class="nbHitsUncovered"><a title="Line 396: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 396: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"union"</span>)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;397</td>  <td class="nbHitsCovered"><a title="Line 397: Conditional coverage 100% (2/2).">&nbsp;3</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 397: Conditional coverage 100% (2/2).">                                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; f.getArgs().length; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;398</td>  <td class="nbHitsUncovered"><a title="Line 398: Conditional coverage 50% (1/2).">&nbsp;2</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 398: Conditional coverage 50% (1/2).">                                        <span class="keyword">if</span> (!canHandle(f.getArgs()[i])) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;396</td>  <td class="nbHitsUncovered"><a title="Line 396: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 396: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"union"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;397</td>  <td class="nbHitsCovered"><a title="Line 397: Conditional coverage 100% (2/2).">&nbsp;12</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 397: Conditional coverage 100% (2/2).">                                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; f.getArgs().length; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;398</td>  <td class="nbHitsUncovered"><a title="Line 398: Conditional coverage 50% (1/2).">&nbsp;8</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 398: Conditional coverage 50% (1/2).">                                        <span class="keyword">if</span> (!canHandle(f.getArgs()[i])) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;399</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;400</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;401</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;402</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;402</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;403</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;404</td>  <td class="nbHits">&nbsp;</td>
@@ -751,13 +751,13 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;448</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> Member memberForExp(Exp oExp) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;449</td>  <td class="nbHitsUncovered"><a title="Line 449: Conditional coverage 50% (1/2).">&nbsp;913</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 449: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (oExp <span class="keyword">instanceof</span> ParseTreeNodeExp) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;450</td>  <td class="nbHitsCovered">&nbsp;913</td>  <td class="src"><pre class="src">&nbsp;                        ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;449</td>  <td class="nbHitsUncovered"><a title="Line 449: Conditional coverage 50% (1/2).">&nbsp;4146</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 449: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (oExp <span class="keyword">instanceof</span> ParseTreeNodeExp) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;450</td>  <td class="nbHitsCovered">&nbsp;4146</td>  <td class="src"><pre class="src">&nbsp;                        ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;451</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;452</td>  <td class="nbHitsCovered">&nbsp;913</td>  <td class="src"><pre class="src">&nbsp;                        Type type = adapter.getType();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;453</td>  <td class="nbHitsUncovered"><a title="Line 453: Conditional coverage 50% (1/2).">&nbsp;913</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 453: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (type <span class="keyword">instanceof</span> MemberType) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;454</td>  <td class="nbHitsCovered">&nbsp;913</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> ((MemberType) type).getMember();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;452</td>  <td class="nbHitsCovered">&nbsp;4146</td>  <td class="src"><pre class="src">&nbsp;                        Type type = adapter.getType();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;453</td>  <td class="nbHitsUncovered"><a title="Line 453: Conditional coverage 50% (1/2).">&nbsp;4146</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 453: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (type <span class="keyword">instanceof</span> MemberType) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;454</td>  <td class="nbHitsCovered">&nbsp;4146</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> ((MemberType) type).getMember();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;455</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;456</td>  <td class="nbHitsUncovered"><a title="Line 456: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 456: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">                } <span class="keyword">else</span> <span class="keyword">if</span> (oExp <span class="keyword">instanceof</span> FunCall &amp;&amp; isFunCallTo(oExp, <span class="string">"{}"</span>)) {</a></span></pre></td></tr>
@@ -813,17 +813,17 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;487</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> StringBuilder funString(Exp oExp) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;488</td>  <td class="nbHitsCovered">&nbsp;31</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;488</td>  <td class="nbHitsCovered">&nbsp;139</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;489</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;490</td>  <td class="nbHitsCovered">&nbsp;31</td>  <td class="src"><pre class="src">&nbsp;                StringBuilder sb = <span class="keyword">new</span> StringBuilder();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;490</td>  <td class="nbHitsCovered">&nbsp;139</td>  <td class="src"><pre class="src">&nbsp;                StringBuilder sb = <span class="keyword">new</span> StringBuilder();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;491</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;492</td>  <td class="nbHitsCovered"><a title="Line 492: Conditional coverage 100% (2/2).">&nbsp;31</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 492: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;493</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        Member m = memberForExp(f.getArgs()[0]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;494</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(m.getUniqueName());</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;495</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">".Children"</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;496</td>  <td class="nbHitsUncovered"><a title="Line 496: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 496: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;492</td>  <td class="nbHitsCovered"><a title="Line 492: Conditional coverage 100% (2/2).">&nbsp;139</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 492: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;493</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;                        Member m = memberForExp(f.getArgs()[0]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;494</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(m.getUniqueName());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;495</td>  <td class="nbHitsCovered">&nbsp;17</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">".Children"</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;496</td>  <td class="nbHitsUncovered"><a title="Line 496: Conditional coverage 50% (1/2).">&nbsp;99</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 496: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;497</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Member m = memberForExp(f.getArgs()[0]);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;498</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Level lev = levelForExp(f.getArgs()[1]);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;499</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        sb.append(<span class="string">"Descendants("</span>);</span></pre></td></tr>
@@ -831,31 +831,30 @@
 <tr>  <td class="numLineCover">&nbsp;501</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        sb.append(<span class="string">","</span>);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;502</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        sb.append(lev.getUniqueName());</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;503</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        sb.append(<span class="string">")"</span>);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;504</td>  <td class="nbHitsUncovered"><a title="Line 504: Conditional coverage 50% (1/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 504: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"members"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;504</td>  <td class="nbHitsUncovered"><a title="Line 504: Conditional coverage 50% (1/2).">&nbsp;95</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 504: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"members"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;505</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Level lev = levelForExp(f.getArgs()[0]);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;506</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        sb.append(lev.getUniqueName());</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;507</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        sb.append(<span class="string">".Members"</span>);</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;508</td>  <td class="nbHitsUncovered"><a title="Line 508: Conditional coverage 100% (2/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 508: Conditional coverage 100% (2/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Union"</span>)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;509</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">"Union("</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;510</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        FunCall f1 = (FunCall) f.getArgs()[0];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;511</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(funString(f1));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;512</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">","</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;513</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        FunCall f2 = (FunCall) f.getArgs()[1];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;514</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(funString(f2));</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;515</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">")"</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;516</td>  <td class="nbHitsUncovered"><a title="Line 516: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 516: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"{}"</span>)) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;517</td>  <td class="nbHitsCovered">&nbsp;26</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">"{"</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;518</td>  <td class="nbHitsCovered"><a title="Line 518: Conditional coverage 100% (2/2).">&nbsp;107</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 518: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; f.getArgs().length; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;519</td>  <td class="nbHitsCovered"><a title="Line 519: Conditional coverage 100% (2/2).">&nbsp;81</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 519: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (i &gt; 0)</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;520</td>  <td class="nbHitsCovered">&nbsp;55</td>  <td class="src"><pre class="src">&nbsp;                                        sb.append(<span class="string">","</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;521</td>  <td class="nbHitsCovered">&nbsp;81</td>  <td class="src"><pre class="src">&nbsp;                                Member m = memberForExp(f.getArgs()[i]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;522</td>  <td class="nbHitsCovered">&nbsp;81</td>  <td class="src"><pre class="src">&nbsp;                                sb.append(m.getUniqueName());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;508</td>  <td class="nbHitsCovered"><a title="Line 508: Conditional coverage 100% (2/2).">&nbsp;95</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 508: Conditional coverage 100% (2/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Union"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;509</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">"Union("</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;510</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        FunCall f1 = (FunCall) f.getArgs()[0];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;511</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(funString(f1));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;512</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">","</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;513</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        FunCall f2 = (FunCall) f.getArgs()[1];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;514</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(funString(f2));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;515</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">")"</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;516</td>  <td class="nbHitsUncovered"><a title="Line 516: Conditional coverage 50% (1/2).">&nbsp;93</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 516: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"{}"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;517</td>  <td class="nbHitsCovered">&nbsp;118</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">"{"</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;518</td>  <td class="nbHitsCovered"><a title="Line 518: Conditional coverage 100% (2/2).">&nbsp;496</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 518: Conditional coverage 100% (2/2).">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; f.getArgs().length; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;519</td>  <td class="nbHitsCovered"><a title="Line 519: Conditional coverage 100% (2/2).">&nbsp;378</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 519: Conditional coverage 100% (2/2).">                                <span class="keyword">if</span> (i &gt; 0)</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;520</td>  <td class="nbHitsCovered">&nbsp;260</td>  <td class="src"><pre class="src">&nbsp;                                        sb.append(<span class="string">","</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;521</td>  <td class="nbHitsCovered">&nbsp;378</td>  <td class="src"><pre class="src">&nbsp;                                Member m = memberForExp(f.getArgs()[i]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;522</td>  <td class="nbHitsCovered">&nbsp;378</td>  <td class="src"><pre class="src">&nbsp;                                sb.append(m.getUniqueName());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;523</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;524</td>  <td class="nbHitsCovered">&nbsp;26</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">"}"</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;524</td>  <td class="nbHitsCovered">&nbsp;118</td>  <td class="src"><pre class="src">&nbsp;                        sb.append(<span class="string">"}"</span>);</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;525</td>  <td class="nbHitsUncovered"><a title="Line 525: Conditional coverage 0% (0/8) [each condition: 0%, 0%, 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 525: Conditional coverage 0% (0/8) [each condition: 0%, 0%, 0%, 0%].">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"TopCount"</span>) || f.isCallTo(<span class="string">"BottomCount"</span>)</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;526</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                || f.isCallTo(<span class="string">"TopPercent"</span>) || f.isCallTo(<span class="string">"BottomPercent"</span>)) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;526</td>  <td class="nbHitsUncovered"><a title="Line 526: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 526: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">                                || f.isCallTo(<span class="string">"TopPercent"</span>) || f.isCallTo(<span class="string">"BottomPercent"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;527</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// just generate Topcount(set)</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;528</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        sb.append(f.getFunction());</span></pre></td></tr>
@@ -865,7 +864,7 @@
 <tr>  <td class="numLineCover">&nbsp;532</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        sb.append(<span class="string">")"</span>);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;533</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;534</td>  <td class="nbHitsCovered">&nbsp;31</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> sb;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;534</td>  <td class="nbHitsCovered">&nbsp;139</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> sb;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;535</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;536</td>  <td class="nbHits">&nbsp;</td>
@@ -880,8 +879,8 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;541</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> String getMemberUniqueName(Exp oExp) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;542</td>  <td class="nbHitsCovered">&nbsp;51</td>  <td class="src"><pre class="src">&nbsp;                Member member = memberForExp(oExp);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;543</td>  <td class="nbHitsCovered">&nbsp;51</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> member.getUniqueName();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;542</td>  <td class="nbHitsCovered">&nbsp;230</td>  <td class="src"><pre class="src">&nbsp;                Member member = memberForExp(oExp);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;543</td>  <td class="nbHitsCovered">&nbsp;230</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> member.getUniqueName();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;544</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;545</td>  <td class="nbHits">&nbsp;</td>
@@ -900,7 +899,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;552</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> Exp expForMember(Member member) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;553</td>  <td class="nbHitsCovered">&nbsp;110</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> ParseTreeNodeExp(<span class="keyword">new</span> MemberNode(<span class="keyword">null</span>, member));</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;553</td>  <td class="nbHitsCovered">&nbsp;529</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> ParseTreeNodeExp(<span class="keyword">new</span> MemberNode(<span class="keyword">null</span>, member));</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;554</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;555</td>  <td class="nbHits">&nbsp;</td>
@@ -1026,11 +1025,11 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;626</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> levelDepthForMember(Exp oExp) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;627</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                Member member = memberForExp(oExp);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;628</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                Level level = member.getLevel();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;627</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                Member member = memberForExp(oExp);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;628</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                Level level = member.getLevel();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;629</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;630</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> level.getDepth();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;630</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> level.getDepth();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;631</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;632</td>  <td class="nbHits">&nbsp;</td>
@@ -1049,9 +1048,9 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> Hierarchy hierForExp(Exp oExp)</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;639</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> UnknownExpressionException {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;640</td>  <td class="nbHitsCovered"><a title="Line 640: Conditional coverage 100% (2/2).">&nbsp;7</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 640: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (isMember(oExp)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;641</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> memberForExp(oExp).getHierarchy();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;642</td>  <td class="nbHitsUncovered"><a title="Line 642: Conditional coverage 50% (1/2).">&nbsp;6</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 642: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (oExp <span class="keyword">instanceof</span> SetExp) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;640</td>  <td class="nbHitsCovered"><a title="Line 640: Conditional coverage 100% (2/2).">&nbsp;28</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 640: Conditional coverage 100% (2/2).">                <span class="keyword">if</span> (isMember(oExp)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;641</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> memberForExp(oExp).getHierarchy();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;642</td>  <td class="nbHitsUncovered"><a title="Line 642: Conditional coverage 50% (1/2).">&nbsp;24</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 642: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (oExp <span class="keyword">instanceof</span> SetExp) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;643</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// set expression generated by CalcSet extension</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;644</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        SetExp set = (SetExp) oExp;</span></pre></td></tr>
@@ -1062,26 +1061,23 @@
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;648</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// must be FunCall</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;649</td>  <td class="nbHitsCovered">&nbsp;6</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;649</td>  <td class="nbHitsCovered">&nbsp;24</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oExp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;650</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;651</td>  <td class="nbHitsUncovered"><a title="Line 651: Conditional coverage 66% (4/6) [each condition: 50%, 50%, 100%].">&nbsp;6</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 651: Conditional coverage 66% (4/6) [each condition: 50%, 50%, 100%].">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>) || f.isCallTo(<span class="string">"Descendants"</span>)</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;652</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                || f.isCallTo(<span class="string">"{}"</span>)) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;653</td>  <td class="nbHitsCovered">&nbsp;5</td>  <td class="src"><pre class="src">&nbsp;                        Member member = memberForExp(f.getArgs()[0]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;654</td>  <td class="nbHitsCovered">&nbsp;5</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> member.getHierarchy();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;655</td>  <td class="nbHitsUncovered"><a title="Line 655: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 655: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Members"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;651</td>  <td class="nbHitsUncovered"><a title="Line 651: Conditional coverage 66% (4/6) [each condition: 50%, 50%, 100%].">&nbsp;24</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 651: Conditional coverage 66% (4/6) [each condition: 50%, 50%, 100%].">                <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>) || f.isCallTo(<span class="string">"Descendants"</span>)</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;652</td>  <td class="nbHitsCovered"><a title="Line 652: Conditional coverage 100% (2/2).">&nbsp;18</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 652: Conditional coverage 100% (2/2).">                                || f.isCallTo(<span class="string">"{}"</span>)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;653</td>  <td class="nbHitsCovered">&nbsp;20</td>  <td class="src"><pre class="src">&nbsp;                        Member member = memberForExp(f.getArgs()[0]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;654</td>  <td class="nbHitsCovered">&nbsp;20</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> member.getHierarchy();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;655</td>  <td class="nbHitsUncovered"><a title="Line 655: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 655: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Members"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;656</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Level level = levelForExp(f.getArgs()[0]);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;657</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> level.getHierarchy();</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;658</td>  <td class="nbHitsUncovered"><a title="Line 658: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 658: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Union"</span>)) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;658</td>  <td class="nbHitsUncovered"><a title="Line 658: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 658: Conditional coverage 50% (1/2).">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"Union"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;659</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// continue with first set</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;660</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> hierForExp(f.getArgs()[0]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;660</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        <span class="keyword">return</span> hierForExp(f.getArgs()[0]);</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;661</td>  <td class="nbHitsUncovered"><a title="Line 661: Conditional coverage 0% (0/10) [each condition: 0%, 0%, 0%, 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 661: Conditional coverage 0% (0/10) [each condition: 0%, 0%, 0%, 0%, 0%].">                } <span class="keyword">else</span> <span class="keyword">if</span> (f.isCallTo(<span class="string">"TopCount"</span>) || f.isCallTo(<span class="string">"BottomCount"</span>)</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;662</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                || f.isCallTo(<span class="string">"TopPercent"</span>) || f.isCallTo(<span class="string">"BottomPercent"</span>)</pre></td></tr>
-<tr>  <td class="numLine">&nbsp;663</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                || f.isCallTo(<span class="string">"Filter"</span>)) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;662</td>  <td class="nbHitsUncovered"><a title="Line 662: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 662: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">                                || f.isCallTo(<span class="string">"TopPercent"</span>) || f.isCallTo(<span class="string">"BottomPercent"</span>)</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;663</td>  <td class="nbHitsUncovered"><a title="Line 663: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 663: Conditional coverage 0% (0/2).">                                || f.isCallTo(<span class="string">"Filter"</span>)) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;664</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// continue with base set of top bottom function</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;665</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> hierForExp(f.getArgs()[0]);</span></pre></td></tr>
@@ -1112,17 +1108,17 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> Exp topLevelMembers(Hierarchy hierarchy,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;679</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">boolean</span> expandAllMember) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;680</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                Level topLevel = hierarchy.getLevels().get(0);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;680</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                Level topLevel = hierarchy.getLevels().get(0);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;681</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;682</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                Member mAll;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;683</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;684</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        mAll = hierarchy.getDefaultMember();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;684</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        mAll = hierarchy.getDefaultMember();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;685</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;686</td>  <td class="nbHitsUncovered"><a title="Line 686: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 686: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (!mAll.isAll()) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;686</td>  <td class="nbHitsUncovered"><a title="Line 686: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 686: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (!mAll.isAll()) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;687</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                mAll = <span class="keyword">null</span>;</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;688</td>  <td class="nbHitsUncovered"><a title="Line 688: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 688: Conditional coverage 0% (0/2).">                                <span class="keyword">for</span> (Member m : hierarchy.getRootMembers()) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;689</td>  <td class="nbHitsUncovered"><a title="Line 689: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 689: Conditional coverage 0% (0/2).">                                        <span class="keyword">if</span> (m.isAll()) {</a></span></pre></td></tr>
@@ -1142,11 +1138,11 @@
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// if there is an All Member, we will have to expand it</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;700</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// according to expandAllMember flag</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;701</td>  <td class="nbHitsUncovered"><a title="Line 701: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 701: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (mAll != <span class="keyword">null</span>) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;702</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        Exp[] memar = <span class="keyword">new</span> Exp[] { expForMember(mAll) };</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;703</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                        Exp mAllSet = <span class="keyword">new</span> FunCall(<span class="string">"{}"</span>, memar, Syntax.Braces);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;704</td>  <td class="nbHitsUncovered"><a title="Line 704: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 704: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (!expandAllMember) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;705</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> memar[0];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;701</td>  <td class="nbHitsUncovered"><a title="Line 701: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 701: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (mAll != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;702</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        Exp[] memar = <span class="keyword">new</span> Exp[] { expForMember(mAll) };</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;703</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                        Exp mAllSet = <span class="keyword">new</span> FunCall(<span class="string">"{}"</span>, memar, Syntax.Braces);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;704</td>  <td class="nbHitsUncovered"><a title="Line 704: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 704: Conditional coverage 50% (1/2).">                        <span class="keyword">if</span> (!expandAllMember) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;705</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> memar[0];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;706</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;707</td>  <td class="nbHits">&nbsp;</td>
@@ -1157,8 +1153,7 @@
   <td class="src"><pre class="src">&nbsp;                        <span class="comment">// create Union({AllMember}, AllMember.children)</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;710</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Exp mAllChildren = <span class="keyword">new</span> FunCall(<span class="string">"children"</span>, memar, Syntax.Property);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;711</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Exp union = <span class="keyword">new</span> FunCall(<span class="string">"union"</span>,</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;712</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">new</span> Exp[] { mAllSet, mAllChildren }, Syntax.Function);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;712</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        <span class="keyword">new</span> Exp[] { mAllSet, mAllChildren }, Syntax.Function);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;713</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;714</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> union;</span></pre></td></tr>
@@ -1222,14 +1217,14 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;749</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> Exp createFunCall(String function, Exp[] args, Syntax funType) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;750</td>  <td class="nbHitsCovered">&nbsp;98</td>  <td class="src"><pre class="src">&nbsp;                Exp[] expArgs = <span class="keyword">new</span> Exp[args.length];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;751</td>  <td class="nbHitsCovered"><a title="Line 751: Conditional coverage 100% (2/2).">&nbsp;279</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 751: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; expArgs.length; i++) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;752</td>  <td class="nbHitsCovered">&nbsp;181</td>  <td class="src"><pre class="src">&nbsp;                        expArgs[i] = (Exp) args[i];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;750</td>  <td class="nbHitsCovered">&nbsp;431</td>  <td class="src"><pre class="src">&nbsp;                Exp[] expArgs = <span class="keyword">new</span> Exp[args.length];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;751</td>  <td class="nbHitsCovered"><a title="Line 751: Conditional coverage 100% (2/2).">&nbsp;1250</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 751: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; expArgs.length; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;752</td>  <td class="nbHitsCovered">&nbsp;819</td>  <td class="src"><pre class="src">&nbsp;                        expArgs[i] = (Exp) args[i];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;753</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;754</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;755</td>  <td class="nbHitsCovered">&nbsp;98</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> FunCall(function, expArgs, funType);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;755</td>  <td class="nbHitsCovered">&nbsp;431</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">new</span> FunCall(function, expArgs, funType);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;756</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;757</td>  <td class="nbHits">&nbsp;</td>
@@ -1250,8 +1245,8 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;765</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> funCallArgCount(Exp oFun) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;766</td>  <td class="nbHitsCovered">&nbsp;7</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oFun;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;767</td>  <td class="nbHitsCovered">&nbsp;7</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> f.getArgs().length;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;766</td>  <td class="nbHitsCovered">&nbsp;28</td>  <td class="src"><pre class="src">&nbsp;                FunCall f = (FunCall) oFun;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;767</td>  <td class="nbHitsCovered">&nbsp;28</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> f.getArgs().length;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;768</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;769</td>  <td class="nbHits">&nbsp;</td>
@@ -1297,7 +1292,7 @@
   <td class="src"><pre class="src">&nbsp;<span class="comment">         */</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;790</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> Exp funCallArg(Exp oFun, <span class="keyword">int</span> index) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;791</td>  <td class="nbHitsCovered">&nbsp;19</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ((FunCall) oFun).getArgs()[index];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;791</td>  <td class="nbHitsCovered">&nbsp;77</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> ((FunCall) oFun).getArgs()[index];</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;792</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;793</td>  <td class="nbHits">&nbsp;</td>
@@ -1339,8 +1334,7 @@
 <tr>  <td class="numLineCover">&nbsp;816</td>  <td class="nbHitsUncovered"><a title="Line 816: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 816: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (exp <span class="keyword">instanceof</span> FunCall) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;817</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        FunCall f = (FunCall) exp;</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;818</td>  <td class="nbHitsUncovered"><a title="Line 818: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 818: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">                                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;819</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        &amp;&amp; memberForExp(f.getArgs()[0]).equals(grandPa)) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;819</td>  <td class="nbHitsUncovered"><a title="Line 819: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 819: Conditional coverage 0% (0/2).">                                                        &amp;&amp; memberForExp(f.getArgs()[0]).equals(grandPa)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;820</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                <span class="keyword">return</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;821</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
@@ -1350,8 +1344,7 @@
 <tr>  <td class="numLine">&nbsp;824</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;825</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        FunCall uncles = <span class="keyword">new</span> FunCall(<span class="string">"Children"</span>,</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;826</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">new</span> Exp[] { expForMember(grandPa) }, Syntax.Property);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;826</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        <span class="keyword">new</span> Exp[] { expForMember(grandPa) }, Syntax.Property);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;827</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        list.add(uncles);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;828</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -1372,21 +1365,21 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> addMemberSiblings(List&lt;Exp&gt; list, Member member,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;837</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">int</span>[] maxLevel) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;838</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> level = member.getLevel().getDepth();</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;839</td>  <td class="nbHitsUncovered"><a title="Line 839: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 839: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (level &lt; maxLevel[0]) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;838</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">int</span> level = member.getLevel().getDepth();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;839</td>  <td class="nbHitsUncovered"><a title="Line 839: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 839: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (level &lt; maxLevel[0]) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;840</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;841</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;842</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;843</td>  <td class="nbHitsUncovered"><a title="Line 843: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 843: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (level &gt; maxLevel[0]) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;843</td>  <td class="nbHitsUncovered"><a title="Line 843: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 843: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (level &gt; maxLevel[0]) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;844</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        maxLevel[0] = level;</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;845</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        list.clear();</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;846</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;847</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;848</td>  <td class="nbHitsUncovered"><a title="Line 848: Conditional coverage 50% (1/2).">&nbsp;1</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 848: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (level &gt; 0) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;848</td>  <td class="nbHitsUncovered"><a title="Line 848: Conditional coverage 50% (1/2).">&nbsp;4</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 848: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (level &gt; 0) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;849</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        Member parent = member.getParentMember();</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;850</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
@@ -1396,8 +1389,7 @@
 <tr>  <td class="numLineCover">&nbsp;853</td>  <td class="nbHitsUncovered"><a title="Line 853: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 853: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (exp <span class="keyword">instanceof</span> FunCall) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;854</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        FunCall f = (FunCall) exp;</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;855</td>  <td class="nbHitsUncovered"><a title="Line 855: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 855: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">                                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;856</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        &amp;&amp; memberForExp(f.getArgs()[0]).equals(parent)) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;856</td>  <td class="nbHitsUncovered"><a title="Line 856: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 856: Conditional coverage 0% (0/2).">                                                        &amp;&amp; memberForExp(f.getArgs()[0]).equals(parent)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;857</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                <span class="keyword">return</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;858</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
@@ -1407,12 +1399,11 @@
 <tr>  <td class="numLine">&nbsp;861</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;862</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        FunCall siblings = <span class="keyword">new</span> FunCall(<span class="string">"Children"</span>,</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;863</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">new</span> Exp[] { expForMember(parent) }, Syntax.Property);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;863</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        <span class="keyword">new</span> Exp[] { expForMember(parent) }, Syntax.Property);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;864</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        list.add(siblings);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;865</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;866</td>  <td class="nbHitsCovered">&nbsp;1</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;866</td>  <td class="nbHitsCovered">&nbsp;4</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;867</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;868</td>  <td class="nbHits">&nbsp;</td>
@@ -1450,8 +1441,7 @@
 <tr>  <td class="numLineCover">&nbsp;888</td>  <td class="nbHitsUncovered"><a title="Line 888: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 888: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (exp <span class="keyword">instanceof</span> FunCall) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;889</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        FunCall f = (FunCall) exp;</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;890</td>  <td class="nbHitsUncovered"><a title="Line 890: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 890: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">                                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"Children"</span>)</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;891</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        &amp;&amp; memberForExp(f.getArgs()[0]).equals(member)) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;891</td>  <td class="nbHitsUncovered"><a title="Line 891: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 891: Conditional coverage 0% (0/2).">                                                        &amp;&amp; memberForExp(f.getArgs()[0]).equals(member)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;892</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                <span class="keyword">return</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;893</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
@@ -1461,8 +1451,7 @@
 <tr>  <td class="numLine">&nbsp;896</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;897</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        FunCall children = <span class="keyword">new</span> FunCall(<span class="string">"Children"</span>,</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;898</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">new</span> Exp[] { expForMember(member) }, Syntax.Property);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;898</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        <span class="keyword">new</span> Exp[] { expForMember(member) }, Syntax.Property);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;899</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        list.add(children);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;900</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -1506,8 +1495,7 @@
 <tr>  <td class="numLineCover">&nbsp;924</td>  <td class="nbHitsUncovered"><a title="Line 924: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 924: Conditional coverage 0% (0/2).">                                <span class="keyword">if</span> (exp <span class="keyword">instanceof</span> FunCall) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;925</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        FunCall f = (FunCall) exp;</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;926</td>  <td class="nbHitsUncovered"><a title="Line 926: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 926: Conditional coverage 0% (0/4) [each condition: 0%, 0%].">                                        <span class="keyword">if</span> (f.isCallTo(<span class="string">"Descendants"</span>)</a></span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;927</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                                        &amp;&amp; memberForExp(f.getArgs()[0]).equals(member)) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;927</td>  <td class="nbHitsUncovered"><a title="Line 927: Conditional coverage 0% (0/2).">&nbsp;0</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 927: Conditional coverage 0% (0/2).">                                                        &amp;&amp; memberForExp(f.getArgs()[0]).equals(member)) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;928</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                <span class="keyword">return</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;929</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                                        }</pre></td></tr>
@@ -1515,8 +1503,7 @@
   <td class="src"><pre class="src">&nbsp;                                }</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;931</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        }</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;932</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        FunCall children = <span class="keyword">new</span> FunCall(<span class="string">"Descendants"</span>, <span class="keyword">new</span> Exp[] {</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;933</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        expForMember(member), expForLevel(level) }, Syntax.Function);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;933</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        expForMember(member), expForLevel(level) }, Syntax.Function);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;934</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        list.add(children);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;935</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -1567,8 +1554,7 @@
 <tr>  <td class="numLine">&nbsp;965</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;966</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        FunCall members = <span class="keyword">new</span> FunCall(<span class="string">"Members"</span>,</span></pre></td></tr>
-<tr>  <td class="numLine">&nbsp;967</td>  <td class="nbHits">&nbsp;</td>
-  <td class="src"><pre class="src">&nbsp;                                        <span class="keyword">new</span> Exp[] { expForLevel(level) }, Syntax.Property);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;967</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                        <span class="keyword">new</span> Exp[] { expForLevel(level) }, Syntax.Property);</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;968</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        list.add(members);</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;969</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
@@ -1624,14 +1610,14 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isMemberInChildren(FunCall f, Member member) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1000</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// calculated members are not really child</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1001</td>  <td class="nbHitsUncovered"><a title="Line 1001: Conditional coverage 50% (1/2).">&nbsp;85</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 1001: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (member.isCalculated()) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1001</td>  <td class="nbHitsUncovered"><a title="Line 1001: Conditional coverage 50% (1/2).">&nbsp;341</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 1001: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (member.isCalculated()) {</a></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;1002</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                        <span class="keyword">return</span> <span class="keyword">false</span>;</span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1003</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1004</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1005</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                Member parent = memberForExp(f.getArgs()[0]);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1006</td>  <td class="nbHitsCovered">&nbsp;85</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> parent.equals(member.getParentMember());</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1005</td>  <td class="nbHitsCovered">&nbsp;341</td>  <td class="src"><pre class="src">&nbsp;                Member parent = memberForExp(f.getArgs()[0]);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1006</td>  <td class="nbHitsCovered">&nbsp;341</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> parent.equals(member.getParentMember());</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1007</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1008</td>  <td class="nbHits">&nbsp;</td>
@@ -1734,15 +1720,15 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> isMemberInSet(FunCall f, Member member) {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1065</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// set of members expected</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1066</td>  <td class="nbHitsCovered"><a title="Line 1066: Conditional coverage 100% (2/2).">&nbsp;157</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1066: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (Exp arg : f.getArgs()) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1067</td>  <td class="nbHitsCovered">&nbsp;87</td>  <td class="src"><pre class="src">&nbsp;                        Member m = memberForExp(arg);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1068</td>  <td class="nbHitsCovered"><a title="Line 1068: Conditional coverage 100% (2/2).">&nbsp;87</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1068: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (m.equals(member)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1069</td>  <td class="nbHitsCovered">&nbsp;11</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1066</td>  <td class="nbHitsCovered"><a title="Line 1066: Conditional coverage 100% (2/2).">&nbsp;628</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1066: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (Exp arg : f.getArgs()) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1067</td>  <td class="nbHitsCovered">&nbsp;348</td>  <td class="src"><pre class="src">&nbsp;                        Member m = memberForExp(arg);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1068</td>  <td class="nbHitsCovered"><a title="Line 1068: Conditional coverage 100% (2/2).">&nbsp;348</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1068: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (m.equals(member)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1069</td>  <td class="nbHitsCovered">&nbsp;44</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1070</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1071</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1072</td>  <td class="nbHitsCovered">&nbsp;70</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1072</td>  <td class="nbHitsCovered">&nbsp;280</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> <span class="keyword">false</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1073</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1074</td>  <td class="nbHits">&nbsp;</td>
@@ -1769,10 +1755,10 @@
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">throws</span> UnknownExpressionException {</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1085</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                <span class="comment">// Unions may be nested</span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1086</td>  <td class="nbHitsUncovered"><a title="Line 1086: Conditional coverage 50% (1/2).">&nbsp;145</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 1086: Conditional coverage 50% (1/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; 2; i++) {</a></span></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1087</td>  <td class="nbHitsCovered">&nbsp;145</td>  <td class="src"><pre class="src">&nbsp;                        FunCall fChild = (FunCall) f.getArgs()[i];</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1088</td>  <td class="nbHitsCovered"><a title="Line 1088: Conditional coverage 100% (2/2).">&nbsp;145</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1088: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (isMemberInFunCall(fChild, member)) {</a></pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;1089</td>  <td class="nbHitsCovered">&nbsp;75</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1086</td>  <td class="nbHitsCovered"><a title="Line 1086: Conditional coverage 100% (2/2).">&nbsp;580</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1086: Conditional coverage 100% (2/2).">                <span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; 2; i++) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1087</td>  <td class="nbHitsCovered">&nbsp;580</td>  <td class="src"><pre class="src">&nbsp;                        FunCall fChild = (FunCall) f.getArgs()[i];</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1088</td>  <td class="nbHitsCovered"><a title="Line 1088: Conditional coverage 100% (2/2).">&nbsp;580</a></td>  <td class="src"><pre class="src">&nbsp;<a title="Line 1088: Conditional coverage 100% (2/2).">                        <span class="keyword">if</span> (isMemberInFunCall(fChild, member)) {</a></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;1089</td>  <td class="nbHitsCovered">&nbsp;300</td>  <td class="src"><pre class="src">&nbsp;                                <span class="keyword">return</span> <span class="keyword">true</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1090</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;1091</td>  <td class="nbHits">&nbsp;</td>
@@ -1784,6 +1770,6 @@
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12. 10. 1 오후 12:41.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12. 10. 3 오전 11:39.</div>
 </body>
 </html>
