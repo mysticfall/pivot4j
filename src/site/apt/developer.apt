@@ -54,6 +54,9 @@ mvn derby:stop
 mvn verify
 +-----+
 
+	Note that you need to run 'mvn verify' at least once to extract the FoodMart database archive to proper place before you can run unit tests within 
+	Eclipse IDE. This applies also	to the case when you clean the build directory after running 'mvn verify'.
+
 How to Contribute
 
 	If you want to join our project, or want to make a contribution, please feel free to contact us {{{./mailing-lists.html}here}}.
