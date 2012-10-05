@@ -34,13 +34,13 @@ public class HtmlTableBuilder extends
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractTableBuilder#createCell(com.eyeq.pivot4j.
-	 *      ui.BuildContext, com.eyeq.pivot4j.ui.TableModel, int,
-	 *      com.eyeq.pivot4j.ui.TableRow, int, int, int)
+	 * @see com.eyeq.pivot4j.ui.AbstractTableBuilder#createCell(com.eyeq.pivot4j.ui.BuildContext,
+	 *      com.eyeq.pivot4j.ui.TableModel, com.eyeq.pivot4j.ui.TableRow, int,
+	 *      int, int, int)
 	 */
 	@Override
 	protected HtmlTableCell createCell(BuildContext context,
-			HtmlTableModel table, int rowIndex, HtmlTableRow row, int colIndex,
+			HtmlTableModel table, HtmlTableRow row, int colIndex, int rowIndex,
 			int colSpan, int rowSpan) {
 		String label = null;
 
@@ -57,7 +57,7 @@ public class HtmlTableBuilder extends
 		}
 
 		HtmlTableCell cell = new HtmlTableCell();
-		cell.setLabel(colSpan +", " + rowSpan+ " : " +label);
+		cell.setLabel(label);
 		cell.setColSpan(colSpan);
 		cell.setRowSpan(rowSpan);
 		cell.setHeader(header);

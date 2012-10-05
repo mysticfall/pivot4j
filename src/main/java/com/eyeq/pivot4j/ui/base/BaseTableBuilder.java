@@ -34,13 +34,13 @@ public class BaseTableBuilder extends
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractTableBuilder#createCell(com.eyeq.pivot4j.
-	 *      ui.BuildContext, com.eyeq.pivot4j.ui.TableModel, int,
-	 *      com.eyeq.pivot4j.ui.TableRow, int, int, int)
+	 * @see com.eyeq.pivot4j.ui.AbstractTableBuilder#createCell(com.eyeq.pivot4j.ui.BuildContext,
+	 *      com.eyeq.pivot4j.ui.TableModel, com.eyeq.pivot4j.ui.TableRow, int,
+	 *      int, int, int)
 	 */
 	@Override
 	protected BaseTableCell createCell(BuildContext context,
-			BaseTableModel table, int rowIndex, BaseTableRow row, int colIndex,
+			BaseTableModel table, BaseTableRow row, int colIndex, int rowIndex,
 			int colSpan, int rowSpan) {
 		String label = null;
 
