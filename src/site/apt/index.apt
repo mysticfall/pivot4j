@@ -45,6 +45,9 @@ System Requirement
 
 News
 
+	* <<[2012-10-07]>> A JSF sample application is now available! It's called Pivot4J JSF, and has a separate 
+	homepage {{{http://mysticfall.github.com/pivot4j-jsf/}here}}.
+
 	* <<[2012-10-02]>> Pivot4J team will be working together with {{{http://analytical-labs.com/}Saiku}} to bring JPivot 
 	features into the project. Initial work has bee already started, and there is new 
 	{{{https://github.com/mysticfall/saiku}Github project}} opened for the task.

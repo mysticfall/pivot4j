@@ -20,6 +20,7 @@
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
 			<item name="How to Use" href="usage.html" />
+			<item name="Examples" href="example.html"/>
 		 	<item name="For Developers" href="developer.html" />
 		 	<item name="FAQ" href="faq.html" />
 		</menu>

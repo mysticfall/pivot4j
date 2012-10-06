@@ -1,0 +1,25 @@
+            ------
+            Pivot4J - Examples
+            ------
+            Xavier Cho
+            ------
+             2012-10-7
+
+Example Projects
+
+	Below is the list of example projects which is built on Pivot4J API. 
+
+* Java Server Pages
+
+** Pivot4J JSF
+
+	<<PivotJ JSF>> is our own example project which is built on {{{http://http://www.primefaces.org/}PrimeFaces}}.
+
+[./images/screenshot-thumb.jpeg] Screenshot of the application
+
+	* Homepage : http://mysticfall.github.com/pivot4j-jsf
+
+	* License : Common Public License (might be changed).
+
+	* Pivot4J Version : the latest version.
+
