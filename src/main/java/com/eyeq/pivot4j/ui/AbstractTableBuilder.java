@@ -506,7 +506,13 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 			for (Hierarchy hierarchy : hierarchies) {
 				context.setHierarchy(hierarchy);
 
-				int span = rowHeader.getSpans().get(hierarchyIndex);
+				int span;
+
+				if (showParentMembers) {
+					span = rowHeader.getSpans().get(hierarchyIndex);
+				} else {
+					span = 1;
+				}
 
 				TC header = createCell(context, table, firstHeader, colIndex,
 						height - 1, span, 1);
