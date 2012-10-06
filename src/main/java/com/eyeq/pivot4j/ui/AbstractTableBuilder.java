@@ -497,6 +497,8 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 		firstHeader.getCells().add(0, corner);
 
 		if (showDimensionTitle) {
+			context.setAxis(context.getCellSet().getAxes().get(1));
+
 			int colIndex = 0;
 			int hierarchyIndex = 0;
 
