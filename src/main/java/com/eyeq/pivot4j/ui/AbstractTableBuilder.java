@@ -621,6 +621,8 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 			} else if (axis.getAxisOrdinal() == Axis.COLUMNS) {
 				type = CellType.ColumnTitle;
 			}
+		} else {
+			type = CellType.None;
 		}
 
 		TC cell = createCell(context, table, row, type, colIndex, rowIndex,

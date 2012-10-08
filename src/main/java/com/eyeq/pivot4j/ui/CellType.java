@@ -10,5 +10,5 @@ package com.eyeq.pivot4j.ui;
 
 public enum CellType {
 
-	Value, ColumnHeader, RowHeader, ColumnTitle, RowTitle;
+	Value, ColumnHeader, RowHeader, ColumnTitle, RowTitle, None;
 }
