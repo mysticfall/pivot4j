@@ -6,7 +6,7 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.ui;
+package com.eyeq.pivot4j.ui.html;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +24,8 @@ import com.eyeq.pivot4j.ui.html.HtmlTableBuilder;
 import com.eyeq.pivot4j.ui.html.HtmlTableModel;
 
 public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
+
+	private static final String RESOURCE_PREFIX = "/com/eyeq/pivot4j/ui/html/";
 
 	/**
 	 * @param name
@@ -50,7 +52,7 @@ public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 	}
 
 	protected void runTestCase(String name) throws IOException {
-		String mdx = readTestResource("./" + name + "-mdx.txt");
+		String mdx = readTestResource(RESOURCE_PREFIX + name + "-mdx.txt");
 
 		PivotModel model = getPivotModel();
 		model.setMdx(mdx);
@@ -70,7 +72,8 @@ public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 		writer.close();
 
 		String result = writer.toString().trim();
-		String expected = readTestResource("./" + name + "-result.html");
+		String expected = readTestResource(RESOURCE_PREFIX + name
+				+ "-result.html");
 
 		assertEquals(expected, result);
 	}
