@@ -675,6 +675,8 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 		case RowTitle:
 			label = context.getHierarchy().getDimension().getCaption();
 			break;
+		case None:
+			break;
 		default:
 			assert false;
 		}
