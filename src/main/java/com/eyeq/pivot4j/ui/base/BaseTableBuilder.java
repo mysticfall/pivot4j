@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.ui.base;
 
 import com.eyeq.pivot4j.ui.AbstractTableBuilder;
 import com.eyeq.pivot4j.ui.BuildContext;
+import com.eyeq.pivot4j.ui.CellType;
 
 public class BaseTableBuilder extends
 		AbstractTableBuilder<BaseTableModel, BaseTableRow, BaseTableCell> {
@@ -35,25 +36,14 @@ public class BaseTableBuilder extends
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.AbstractTableBuilder#createCell(com.eyeq.pivot4j.ui.BuildContext,
-	 *      com.eyeq.pivot4j.ui.TableModel, com.eyeq.pivot4j.ui.TableRow, int,
-	 *      int, int, int)
+	 *      com.eyeq.pivot4j.ui.TableModel, com.eyeq.pivot4j.ui.TableRow,
+	 *      com.eyeq.pivot4j.ui.CellType, int, int, int, int)
 	 */
 	@Override
 	protected BaseTableCell createCell(BuildContext context,
-			BaseTableModel table, BaseTableRow row, int colIndex, int rowIndex,
-			int colSpan, int rowSpan) {
-		String label = null;
-
-		if (context.getCell() != null) {
-			label = context.getCell().getFormattedValue();
-		} else if (context.getMember() != null) {
-			label = context.getMember().getCaption();
-		} else if (context.getHierarchy() != null) {
-			label = context.getHierarchy().getDimension().getCaption();
-		}
-
-		BaseTableCell cell = new BaseTableCell();
-		cell.setLabel(label);
+			BaseTableModel table, BaseTableRow row, CellType type,
+			int colIndex, int rowIndex, int colSpan, int rowSpan) {
+		BaseTableCell cell = new BaseTableCell(type);
 		cell.setColSpan(colSpan);
 		cell.setRowSpan(rowSpan);
 

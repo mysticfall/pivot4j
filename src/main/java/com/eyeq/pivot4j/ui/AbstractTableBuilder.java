@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
@@ -560,7 +561,7 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 				context.setCell(cell);
 
 				TC tableCell = createCell(context, table, row, colIndex,
-						rowIndex);
+						rowIndex, 1, 1);
 				row.getCells().add(tableCell);
 			}
 		}
@@ -596,11 +597,55 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 	 * @param row
 	 * @param colIndex
 	 * @param rowIndex
+	 * @param colSpan
+	 * @param rowSpan
 	 * @return
 	 */
 	protected TC createCell(BuildContext context, T table, TR row,
-			int colIndex, int rowIndex) {
-		return createCell(context, table, row, colIndex, rowIndex, 1, 1);
+			int colIndex, int rowIndex, int colSpan, int rowSpan) {
+		CellType type = null;
+
+		CellSetAxis axis = context.getAxis();
+
+		if (context.getCell() != null) {
+			type = CellType.Value;
+		} else if (context.getMember() != null) {
+			if (axis.getAxisOrdinal() == Axis.ROWS) {
+				type = CellType.RowHeader;
+			} else if (axis.getAxisOrdinal() == Axis.COLUMNS) {
+				type = CellType.ColumnHeader;
+			}
+		} else if (context.getHierarchy() != null) {
+			if (axis.getAxisOrdinal() == Axis.ROWS) {
+				type = CellType.RowTitle;
+			} else if (axis.getAxisOrdinal() == Axis.COLUMNS) {
+				type = CellType.ColumnTitle;
+			}
+		}
+
+		TC cell = createCell(context, table, row, type, colIndex, rowIndex,
+				colSpan, rowSpan);
+		configureCell(context, table, row, colIndex, rowIndex, cell);
+
+		return cell;
+	}
+
+	protected abstract TC createCell(BuildContext context, T table, TR row,
+			CellType type, int colIndex, int rowIndex, int colSpan, int rowSpan);
+
+	/**
+	 * @param context
+	 * @param table
+	 * @param row
+	 * @param colIndex
+	 * @param rowIndex
+	 * @param cell
+	 * @return
+	 */
+	protected void configureCell(BuildContext context, T table, TR row,
+			int colIndex, int rowIndex, TC cell) {
+		cell.setLabel(getCellLabel(context, table, row, colIndex, rowIndex,
+				cell));
 	}
 
 	/**
@@ -609,12 +654,31 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 	 * @param row
 	 * @param colIndex
 	 * @param rowIndex
-	 * @param colSpan
-	 * @param rowSpan
+	 * @param cell
 	 * @return
 	 */
-	protected abstract TC createCell(BuildContext context, T table, TR row,
-			int colIndex, int rowIndex, int colSpan, int rowSpan);
+	protected String getCellLabel(BuildContext context, T table, TR row,
+			int colIndex, int rowIndex, TC cell) {
+		String label = null;
+
+		switch (cell.getType()) {
+		case Value:
+			label = context.getCell().getFormattedValue();
+			break;
+		case ColumnHeader:
+		case RowHeader:
+			label = context.getMember().getCaption();
+			break;
+		case ColumnTitle:
+		case RowTitle:
+			label = context.getHierarchy().getDimension().getCaption();
+			break;
+		default:
+			assert false;
+		}
+
+		return label;
+	}
 
 	/**
 	 * @param context

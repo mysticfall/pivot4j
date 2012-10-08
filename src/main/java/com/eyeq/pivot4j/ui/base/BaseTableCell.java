@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.ui.base;
 
+import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.TableCell;
 
 public class BaseTableCell implements TableCell {
@@ -19,6 +20,23 @@ public class BaseTableCell implements TableCell {
 	private int rowSpan = 1;
 
 	private String label;
+
+	private CellType type;
+
+	/**
+	 * @param type
+	 */
+	public BaseTableCell(CellType type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the type
+	 * @see com.eyeq.pivot4j.ui.TableCell#getType()
+	 */
+	public CellType getType() {
+		return type;
+	}
 
 	/**
 	 * @return the colSpan

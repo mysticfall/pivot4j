@@ -8,17 +8,7 @@
  */
 package com.eyeq.pivot4j.ui;
 
-import java.io.Serializable;
+public enum CellType {
 
-public interface TableCell extends Serializable {
-
-	int getColSpan();
-
-	int getRowSpan();
-
-	String getLabel();
-
-	void setLabel(String label);
-
-	CellType getType();
+	Value, ColumnHeader, RowHeader, ColumnTitle, RowTitle;
 }

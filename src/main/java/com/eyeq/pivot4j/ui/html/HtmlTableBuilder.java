@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.ui.html;
 
 import com.eyeq.pivot4j.ui.AbstractTableBuilder;
 import com.eyeq.pivot4j.ui.BuildContext;
+import com.eyeq.pivot4j.ui.CellType;
 
 public class HtmlTableBuilder extends
 		AbstractTableBuilder<HtmlTableModel, HtmlTableRow, HtmlTableCell> {
@@ -35,32 +36,17 @@ public class HtmlTableBuilder extends
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.AbstractTableBuilder#createCell(com.eyeq.pivot4j.ui.BuildContext,
-	 *      com.eyeq.pivot4j.ui.TableModel, com.eyeq.pivot4j.ui.TableRow, int,
-	 *      int, int, int)
+	 *      com.eyeq.pivot4j.ui.TableModel, com.eyeq.pivot4j.ui.TableRow,
+	 *      com.eyeq.pivot4j.ui.CellType, int, int, int, int)
 	 */
 	@Override
 	protected HtmlTableCell createCell(BuildContext context,
-			HtmlTableModel table, HtmlTableRow row, int colIndex, int rowIndex,
-			int colSpan, int rowSpan) {
-		String label = null;
-
-		boolean header = false;
-
-		if (context.getCell() != null) {
-			label = context.getCell().getFormattedValue();
-		} else if (context.getMember() != null) {
-			label = context.getMember().getCaption();
-			header = true;
-		} else if (context.getHierarchy() != null) {
-			label = context.getHierarchy().getDimension().getCaption();
-			header = true;
-		}
-
-		HtmlTableCell cell = new HtmlTableCell();
-		cell.setLabel(label);
+			HtmlTableModel table, HtmlTableRow row, CellType type,
+			int colIndex, int rowIndex, int colSpan, int rowSpan) {
+		HtmlTableCell cell = new HtmlTableCell(type);
 		cell.setColSpan(colSpan);
 		cell.setRowSpan(rowSpan);
-		cell.setHeader(header);
+		cell.setHeader(type != CellType.Value);
 
 		return cell;
 	}

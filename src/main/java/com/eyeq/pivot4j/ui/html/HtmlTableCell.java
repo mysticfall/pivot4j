@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.ui.html;
 
 import java.io.PrintWriter;
 
+import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.TableCell;
 
 public class HtmlTableCell extends AbstractHtmlElement implements TableCell {
@@ -17,6 +18,8 @@ public class HtmlTableCell extends AbstractHtmlElement implements TableCell {
 	private static final long serialVersionUID = -1896134719355213839L;
 
 	private String label;
+
+	private CellType type;
 
 	private int colSpan = 1;
 
@@ -31,10 +34,25 @@ public class HtmlTableCell extends AbstractHtmlElement implements TableCell {
 	private boolean header = false;
 
 	/**
+	 * @param type
+	 */
+	public HtmlTableCell(CellType type) {
+		this.type = type;
+	}
+
+	/**
 	 * @return the label
 	 */
 	public String getLabel() {
 		return label;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.TableCell#getType()
+	 */
+	@Override
+	public CellType getType() {
+		return type;
 	}
 
 	/**
