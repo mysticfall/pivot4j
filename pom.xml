@@ -187,7 +187,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<goals>
 							<goal>upload</goal>
 						</goals>
-						<phase>install</phase>
+						<phase>deploy</phase>
 					</execution>
 				</executions>
 			</plugin>
