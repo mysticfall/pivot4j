@@ -30,7 +30,7 @@ How to Use Pivot4J
         <dependency>
             <groupId>com.eyeq</groupId>
             <artifactId>pivot4j</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </dependency>
     </dependencies>
 </project>
@@ -131,6 +131,25 @@ transform.expand(member);
 CellSet cellSet = model.getCellSet();
 +-----+
 
+* Generating HTML source from the PivotModel
+
+	You can use the {{{./apidocs/com/eyeq/pivot4j/ui/html/HtmlTableBuilder.html}HtmlTableBuilder}} class to 
+	generate HTML source out of a PivotModel instance as below example :
+
++-----+
+HtmlTableBuilder builder = new HtmlTableBuilder();
+HtmlTableModel table = builder.build(model);
+
+...
+
+table.writeHtml(new PrintWriter(writer), 0);
+writer.flush();
+writer.close();
++-----+
+
+	You can make your own table builder class which generates an arbitary table structure suitable for your specific 
+	needs by extending the {{{./apidocs/com/eyeq/pivot4j/ui/AbstractTableBuilder.html}HtmlTableBuilder}} class.
+
 * Saving and Restoring the Model State
 
 	In a certain runtime environment, you need to store the current state of the PivotModel instance to be used later.
@@ -158,4 +177,4 @@ PivotModel model = new PivotModelImpl(dataSource);
 // You don't need to call initialize() or setMdx() as you've already 
 // done that in the previous request.
 CellSet cellSet = model.getCellSet();
-+-----+
++-----+.

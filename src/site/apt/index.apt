@@ -38,12 +38,14 @@ Motivation
 
 System Requirement
 
-	* Java 1.6 or higher                                                                                          |
+	* Java 1.6 or higher
 
 	* {{{http://mondrian.pentaho.com}Mondrian}} or any other XMLA based OLAP server which is supported by Olap4J.
 
 
 News
+
+	* <<[2012-10-08]>> Pivot4J 0.0.2 has been released with the new table builder API. 
 
 	* <<[2012-10-07]>> A JSF sample application is now available! It's called Pivot4J JSF, and has a separate 
 	homepage {{{http://mysticfall.github.com/pivot4j-jsf/}here}}.

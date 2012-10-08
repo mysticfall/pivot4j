@@ -6,6 +6,20 @@
 		<author email="fender@eyeq.co.kr">Xavier Cho</author>
 	</properties>
 	<body>
+		<release version="0.0.2" date="2012-10-08" description="Pivot4J 0.0.2 release">
+			<action dev="mysticfall" type="add" issue="6">
+				Added the table builder API to facilliate UI implementation process.
+			</action>
+			<action dev="mysticfall" type="fix" issue="9">
+				 Fixed the sorting problem. 
+			</action>
+			<action dev="mysticfall" type="add">
+				 Support for placing members on a non exisiting hierarchy. 
+			</action>
+			<action dev="mysticfall" type="add">
+				 Improve handling of an empty query axis. 
+			</action>
+		</release>
 		<release version="0.0.1" date="2012-09-28" description="The first public release">
 			<action dev="mysticfall" type="add" issue="2">
 				Finished migration

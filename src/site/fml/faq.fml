@@ -62,7 +62,7 @@
 			</question>
 			<answer>
 				<p>Although, both projects intends to provide an alternative for now outdated JPivot, 
-				<a href="http://analytical-labs.com">Saiku</a> is rather like a standalone OLAP analysis 
+				<a href="http://analytical-labs.com" target="_blank">Saiku</a> is rather like a standalone OLAP analysis 
 				application while Pivot4J aims to be a pivot component model which can be easily integrated 
 				with any other project including Saiku itself.</p>
 			</answer>
@@ -78,11 +78,10 @@
 			</question>
 			<answer>
 				<p>Different from JPivot, Pivot4J does not come with any specific UI implementation. 
-				However, the next version will introduce an intermediate table model API which would 
-				significantly facilitate the UI component building process.</p>
-
-				<p>And a JSF based implementation is planned as a separate project in near 
-				future, so it can be used as a reference in building your own UI component.</p>
+				However, you can use the 
+				<a href="./apidocs/com/eyeq/pivot4j/ui/TableBuilder.html" target="_blank">TableBuilder API</a> 
+				to generate any tabular data structure suitable for building an UI component. Pivot4J also includes a 
+				concrete implementation which generates generic HTML source as well.</p>
 			</answer>
 		</faq>
 
