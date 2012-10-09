@@ -13,7 +13,7 @@ Example Projects
 
 ** Pivot4J JSF
 
-	{{{http://mysticfall.github.com/pivot4j-jsf}PivotJ JSF}} is our own example project which is built on {{{http://http://www.primefaces.org/}PrimeFaces}}.
+	{{{http://mysticfall.github.com/pivot4j-jsf}Pivot4J JSF}} is our own example project which is built on {{{http://www.primefaces.org/}PrimeFaces}}.
 
 [./images/screenshot-thumb.jpeg] Screenshot of the application
 
@@ -21,5 +21,5 @@ Example Projects
 
 	* License : Common Public License (might be changed).
 
-	* Pivot4J Version : the latest version.
+	* Compatible Version : the latest version.
 
