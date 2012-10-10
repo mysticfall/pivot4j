@@ -90,7 +90,7 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 	protected GenericObjectPool<OlapConnection> createPool(
 			PoolableObjectFactory<OlapConnection> factory,
 			GenericObjectPool.Config config) {
-		return new GenericObjectPool<OlapConnection>(factory);
+		return new GenericObjectPool<OlapConnection>(factory, config);
 	}
 
 	/**
