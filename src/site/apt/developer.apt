@@ -9,7 +9,7 @@ How to Build Pivot4J
 
 * Requirements
 
-	* {{{http://www.java.com}Java}} 1.7 or higher.
+	* {{{http://www.java.com}Java}} 1.6 or higher.
 
 	* {{{http://maven.apache.org}Maven}} 3.0.4 or higher.
 

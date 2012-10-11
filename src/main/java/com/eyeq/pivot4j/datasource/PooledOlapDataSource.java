@@ -8,14 +8,21 @@
  */
 package com.eyeq.pivot4j.datasource;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 
 import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PooledOlapDataSource extends AbstractOlapDataSource {
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private GenericObjectPool.Config poolConfig;
 
@@ -59,6 +66,10 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 
 	public synchronized void close() throws SQLException {
 		try {
+			if (logger.isInfoEnabled()) {
+				logger.info("Disposing the connection pool.");
+			}
+
 			this.getPool().close();
 		} catch (SQLException e) {
 			throw e;
@@ -90,6 +101,13 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 	protected GenericObjectPool<OlapConnection> createPool(
 			PoolableObjectFactory<OlapConnection> factory,
 			GenericObjectPool.Config config) {
+		if (logger.isInfoEnabled()) {
+			logger.info("Creating connection pool with following parameters : ");
+			logger.info("	- max active : " + config.maxActive);
+			logger.info("	- max idle : " + config.maxIdle);
+			logger.info("	- min idle: " + config.minIdle);
+			logger.info("	- max wait : " + config.maxWait);
+		}
 		return new GenericObjectPool<OlapConnection>(factory, config);
 	}
 
@@ -116,6 +134,20 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 		} catch (Exception e) {
 			throw new SQLException(e);
 		}
+	}
+
+	/**
+	 * @return the number of active connections
+	 */
+	public int getNumActive() {
+		return pool.getNumActive();
+	}
+
+	/**
+	 * @return the number of idle connections
+	 */
+	public int getNumIdle() {
+		return pool.getNumIdle();
 	}
 
 	/**
@@ -202,7 +234,38 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 		 */
 		@Override
 		public OlapConnection makeObject() throws Exception {
-			return new PooledOlapConnection(super.makeObject(), pool);
+			final OlapConnection connection = super.makeObject();
+
+			InvocationHandler handler = new InvocationHandler() {
+
+				@Override
+				public Object invoke(Object proxy, Method method, Object[] args)
+						throws Throwable {
+
+					if (method.getName().equals("close")) {
+						if (logger.isDebugEnabled()) {
+							logger.debug("Return a connection to the pool : "
+									+ connection);
+						}
+
+						pool.returnObject((OlapConnection) proxy);
+
+						if (logger.isDebugEnabled()) {
+							logger.debug("	- current pool size : "
+									+ pool.getNumActive() + " / "
+									+ pool.getMaxActive());
+						}
+
+						return null;
+					} else {
+						return method.invoke(connection, args);
+					}
+				}
+			};
+
+			return (OlapConnection) Proxy.newProxyInstance(getClass()
+					.getClassLoader(), new Class[] { OlapConnection.class },
+					handler);
 		}
 
 		/**
@@ -211,6 +274,10 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 		 */
 		@Override
 		public void destroyObject(OlapConnection con) throws Exception {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Closing a returned connection object : " + con);
+			}
+
 			super.destroyObject(con);
 			con.unwrap(OlapConnection.class).close();
 		}
