@@ -15,6 +15,8 @@ import com.eyeq.pivot4j.ui.CellType;
 public class HtmlTableBuilder extends
 		AbstractTableBuilder<HtmlTableModel, HtmlTableRow, HtmlTableCell> {
 
+	private String tableId;
+
 	private String tableStyle;
 
 	private String tableStyleClass = "pv-table";
@@ -38,6 +40,21 @@ public class HtmlTableBuilder extends
 	private String cornerStyleClass = "pv-corner";
 
 	private int rowHeaderLevelPadding = 10;
+
+	/**
+	 * @return the tableId
+	 */
+	public String getTableId() {
+		return tableId;
+	}
+
+	/**
+	 * @param tableId
+	 *            the tableId to set
+	 */
+	public void setTableId(String tableId) {
+		this.tableId = tableId;
+	}
 
 	/**
 	 * @return the tableStyle
@@ -226,6 +243,7 @@ public class HtmlTableBuilder extends
 	@Override
 	protected HtmlTableModel createTable(BuildContext context) {
 		HtmlTableModel table = new HtmlTableModel();
+		table.setId(tableId);
 		table.setStyle(tableStyle);
 		table.setStyleClass(tableStyleClass);
 
