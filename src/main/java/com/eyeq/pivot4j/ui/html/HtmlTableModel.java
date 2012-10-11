@@ -31,6 +31,10 @@ public class HtmlTableModel extends AbstractHtmlElement implements
 
 	private Integer cellPadding;
 
+	private String headerStyleClass;
+
+	private String bodyStyleClass;
+
 	/**
 	 * @return the id
 	 */
@@ -124,6 +128,36 @@ public class HtmlTableModel extends AbstractHtmlElement implements
 	}
 
 	/**
+	 * @return the headerStyleClass
+	 */
+	public String getHeaderStyleClass() {
+		return headerStyleClass;
+	}
+
+	/**
+	 * @param headerStyleClass
+	 *            the headerStyleClass to set
+	 */
+	public void setHeaderStyleClass(String headerStyleClass) {
+		this.headerStyleClass = headerStyleClass;
+	}
+
+	/**
+	 * @return the bodyStyleClass
+	 */
+	public String getBodyStyleClass() {
+		return bodyStyleClass;
+	}
+
+	/**
+	 * @param bodyStyleClass
+	 *            the bodyStyleClass to set
+	 */
+	public void setBodyStyleClass(String bodyStyleClass) {
+		this.bodyStyleClass = bodyStyleClass;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.ui.html.HtmlElement#writeHtml(java.io.PrintWriter,
 	 *      int)
 	 */
@@ -144,7 +178,15 @@ public class HtmlTableModel extends AbstractHtmlElement implements
 				writer.print('\t');
 			}
 
-			writer.println("<thead>");
+			writer.print("<thead");
+
+			if (getHeaderStyleClass() != null) {
+				writer.print(" class=\"");
+				writer.print(getHeaderStyleClass());
+				writer.print("\"");
+			}
+
+			writer.println(">");
 
 			indent++;
 			writeHeader(writer, indent);
@@ -162,7 +204,15 @@ public class HtmlTableModel extends AbstractHtmlElement implements
 				writer.print('\t');
 			}
 
-			writer.println("<tbody>");
+			writer.print("<tbody");
+
+			if (getBodyStyleClass() != null) {
+				writer.print(" class=\"");
+				writer.print(getBodyStyleClass());
+				writer.print("\"");
+			}
+
+			writer.println(">");
 
 			indent++;
 			writeBody(writer, indent);
