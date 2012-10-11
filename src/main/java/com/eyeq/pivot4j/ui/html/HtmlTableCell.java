@@ -169,6 +169,24 @@ public class HtmlTableCell extends AbstractHtmlElement implements TableCell {
 			writer.print("<td");
 		}
 
+		writeAttributes(writer);
+		writer.print('>');
+
+		writeContent(writer, indent);
+
+		if (header) {
+			writer.print("</th>");
+		} else {
+			writer.print("</td>");
+		}
+
+		writer.println();
+	}
+
+	/**
+	 * @param writer
+	 */
+	protected void writeAttributes(PrintWriter writer) {
 		if (getStyleClass() != null) {
 			writer.print(" class=\"");
 			writer.print(getStyleClass());
@@ -210,22 +228,18 @@ public class HtmlTableCell extends AbstractHtmlElement implements TableCell {
 			writer.print(title);
 			writer.print("\"");
 		}
-		writer.print(" nowrap");
-		writer.print('>');
+	}
 
+	/**
+	 * @param writer
+	 * @param indent
+	 */
+	protected void writeContent(PrintWriter writer, int indent) {
 		if (label == null) {
 			writer.print("&nbsp;");
 		} else {
 			writer.print(label);
 		}
-
-		if (header) {
-			writer.print("</th>");
-		} else {
-			writer.print("</td>");
-		}
-
-		writer.println();
 	}
 
 	/**

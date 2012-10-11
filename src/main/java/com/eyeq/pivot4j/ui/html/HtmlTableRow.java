@@ -52,7 +52,24 @@ public class HtmlTableRow extends AbstractHtmlElement implements
 		}
 
 		writer.print("<tr");
+		writeAttributes(writer);
+		writer.println('>');
 
+		indent++;
+		writeCells(writer, indent);
+		indent--;
+
+		for (int i = 0; i < indent; i++) {
+			writer.print('\t');
+		}
+
+		writer.println("</tr>");
+	}
+
+	/**
+	 * @param writer
+	 */
+	protected void writeAttributes(PrintWriter writer) {
 		if (getStyleClass() != null) {
 			writer.print(" class=\"");
 			writer.print(getStyleClass());
@@ -64,21 +81,15 @@ public class HtmlTableRow extends AbstractHtmlElement implements
 			writer.print(getStyle());
 			writer.print("\"");
 		}
+	}
 
-		writer.println('>');
-
-		indent++;
-
+	/**
+	 * @param writer
+	 * @param indent
+	 */
+	protected void writeCells(PrintWriter writer, int indent) {
 		for (HtmlTableCell cell : cells) {
 			cell.writeHtml(writer, indent);
 		}
-
-		indent--;
-
-		for (int i = 0; i < indent; i++) {
-			writer.print('\t');
-		}
-
-		writer.println("</tr>");
 	}
 }

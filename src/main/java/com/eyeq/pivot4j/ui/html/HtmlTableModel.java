@@ -23,11 +23,28 @@ public class HtmlTableModel extends AbstractHtmlElement implements
 
 	private List<HtmlTableRow> rows = new ArrayList<HtmlTableRow>();
 
+	private String id;
+
 	private Integer border;
 
 	private Integer cellSpacing;
 
 	private Integer cellPadding;
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.TableModel#getHeaders()
@@ -117,6 +134,59 @@ public class HtmlTableModel extends AbstractHtmlElement implements
 		}
 
 		writer.print("<table");
+		writeAttributes(writer);
+		writer.println('>');
+
+		indent++;
+
+		if (!headers.isEmpty()) {
+			for (int i = 0; i < indent; i++) {
+				writer.print('\t');
+			}
+
+			writer.println("<thead>");
+
+			indent++;
+			writeHeader(writer, indent);
+			indent--;
+
+			for (int i = 0; i < indent; i++) {
+				writer.print('\t');
+			}
+
+			writer.println("</thead>");
+		}
+
+		if (!rows.isEmpty()) {
+			for (int i = 0; i < indent; i++) {
+				writer.print('\t');
+			}
+
+			writer.println("<tbody>");
+
+			indent++;
+			writeBody(writer, indent);
+			indent--;
+
+			for (int i = 0; i < indent; i++) {
+				writer.print('\t');
+			}
+
+			writer.println("</tbody>");
+		}
+
+		writer.println("</table>");
+	}
+
+	/**
+	 * @param writer
+	 */
+	protected void writeAttributes(PrintWriter writer) {
+		if (getId() != null) {
+			writer.print(" id=\"");
+			writer.print(getId());
+			writer.print("\"");
+		}
 
 		if (getStyleClass() != null) {
 			writer.print(" class=\"");
@@ -147,55 +217,25 @@ public class HtmlTableModel extends AbstractHtmlElement implements
 			writer.print(border);
 			writer.print("\"");
 		}
+	}
 
-		writer.println('>');
-
-		indent++;
-
-		if (!headers.isEmpty()) {
-			for (int i = 0; i < indent; i++) {
-				writer.print('\t');
-			}
-
-			writer.println("<thead>");
-
-			indent++;
-
-			for (HtmlTableRow row : getHeaders()) {
-				row.writeHtml(writer, indent);
-			}
-
-			indent--;
-
-			for (int i = 0; i < indent; i++) {
-				writer.print('\t');
-			}
-
-			writer.println("</thead>");
+	/**
+	 * @param writer
+	 * @param indent
+	 */
+	protected void writeHeader(PrintWriter writer, int indent) {
+		for (HtmlTableRow row : getHeaders()) {
+			row.writeHtml(writer, indent);
 		}
+	}
 
-		if (!rows.isEmpty()) {
-			for (int i = 0; i < indent; i++) {
-				writer.print('\t');
-			}
-
-			writer.println("<tbody>");
-
-			indent++;
-
-			for (HtmlTableRow row : getRows()) {
-				row.writeHtml(writer, indent);
-			}
-
-			indent--;
-
-			for (int i = 0; i < indent; i++) {
-				writer.print('\t');
-			}
-
-			writer.println("</tbody>");
+	/**
+	 * @param writer
+	 * @param indent
+	 */
+	protected void writeBody(PrintWriter writer, int indent) {
+		for (HtmlTableRow row : getRows()) {
+			row.writeHtml(writer, indent);
 		}
-
-		writer.println("</table>");
 	}
 }
