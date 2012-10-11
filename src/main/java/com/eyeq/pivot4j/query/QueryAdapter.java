@@ -160,7 +160,10 @@ public class QueryAdapter implements StateHolder {
 		}
 
 		QueryChangeEvent e = new QueryChangeEvent(this);
-		for (QueryChangeListener listener : listeners) {
+
+		List<QueryChangeListener> copiedListeners = new ArrayList<QueryChangeListener>(
+				listeners);
+		for (QueryChangeListener listener : copiedListeners) {
 			listener.queryChanged(e);
 		}
 	}

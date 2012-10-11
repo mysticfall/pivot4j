@@ -135,7 +135,10 @@ public class Quax implements StateHolder {
 	 */
 	protected void fireQuaxChanged(boolean changedByNavigator) {
 		QuaxChangeEvent e = new QuaxChangeEvent(this, changedByNavigator);
-		for (QuaxChangeListener listener : changeListeners) {
+
+		List<QuaxChangeListener> copiedListeners = new ArrayList<QuaxChangeListener>(
+				changeListeners);
+		for (QuaxChangeListener listener : copiedListeners) {
 			listener.quaxChanged(e);
 		}
 

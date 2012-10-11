@@ -472,7 +472,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 	protected void fireModelInitialized() {
 		ModelChangeEvent e = new ModelChangeEvent(this);
-		for (ModelChangeListener listener : listeners) {
+
+		List<ModelChangeListener> copiedListeners = new ArrayList<ModelChangeListener>(
+				listeners);
+		for (ModelChangeListener listener : copiedListeners) {
 			listener.modelInitialized(e);
 		}
 	}
@@ -481,7 +484,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		this.cellSet = null;
 
 		ModelChangeEvent e = new ModelChangeEvent(this);
-		for (ModelChangeListener listener : listeners) {
+
+		List<ModelChangeListener> copiedListeners = new ArrayList<ModelChangeListener>(
+				listeners);
+		for (ModelChangeListener listener : copiedListeners) {
 			listener.modelChanged(e);
 		}
 	}
@@ -490,14 +496,20 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		this.cellSet = null;
 
 		ModelChangeEvent e = new ModelChangeEvent(this);
-		for (ModelChangeListener listener : listeners) {
+
+		List<ModelChangeListener> copiedListeners = new ArrayList<ModelChangeListener>(
+				listeners);
+		for (ModelChangeListener listener : copiedListeners) {
 			listener.structureChanged(e);
 		}
 	}
 
 	protected void fireModelDestroyed() {
 		ModelChangeEvent e = new ModelChangeEvent(this);
-		for (ModelChangeListener listener : listeners) {
+
+		List<ModelChangeListener> copiedListeners = new ArrayList<ModelChangeListener>(
+				listeners);
+		for (ModelChangeListener listener : copiedListeners) {
 			listener.modelDestroyed(e);
 		}
 	}
