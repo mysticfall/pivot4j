@@ -9,8 +9,10 @@
 package com.eyeq.pivot4j.transform.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.olap4j.Axis;
 import org.olap4j.OlapException;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
@@ -40,15 +42,15 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes#placeHierarchies(int,
+	 * @see com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes#placeHierarchies(org.olap4j.Axis,
 	 *      java.util.List, boolean)
 	 */
-	public void placeHierarchies(int axisOrdinal, List<Hierarchy> hierarchies,
+	public void placeHierarchies(Axis axis, List<Hierarchy> hierarchies,
 			boolean expandAllMember) {
 		QueryAdapter adapter = getQueryAdapter();
 
 		// locate the appropriate query axis
-		int iQuax = axisOrdinal;
+		int iQuax = axis.axisOrdinal();
 		if (adapter.isAxesSwapped()) {
 			iQuax = (iQuax + 1) % 2;
 		}
@@ -87,6 +89,26 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 					+ " nDimension=" + nDimension);
 			logger.info("Expression for Axis=" + quax.toString());
 		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes#findVisibleHierarchies
+	 *      (org.olap4j.Axis)
+	 */
+	@Override
+	public List<Hierarchy> findVisibleHierarchies(Axis axis) {
+		QueryAdapter adapter = getQueryAdapter();
+
+		// find the Quax for this hierarchy
+		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+		if (quax == null) {
+			return Collections.emptyList(); // should not occur
+		}
+
+		// Ensure the query result to be available
+		getModel().getCellSet();
+
+		return quax.getHierarchies();
 	}
 
 	/**

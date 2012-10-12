@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
@@ -48,25 +49,25 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 	 *      List)
 	 */
 	public void placeMembers(List<Member> members) {
-		placeMembers(-1, members);
+		placeMembers(null, members);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#placeMembers(int,
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#placeMembers(org.olap4j.Axis,
 	 *      java.util.List)
 	 */
 	@Override
-	public void placeMembers(int axisOrdinal, List<Member> members) {
+	public void placeMembers(Axis axis, List<Member> members) {
 		QueryAdapter adapter = getQueryAdapter();
 
 		Map<Quax, List<Hierarchy>> hierarchyMap = new HashMap<Quax, List<Hierarchy>>();
 		for (Member member : members) {
 			Quax quax;
 
-			if (axisOrdinal < 0) {
+			if (axis == null) {
 				quax = adapter.findQuax(member.getDimension());
 			} else {
-				quax = adapter.getQuaxes().get(axisOrdinal);
+				quax = adapter.getQuaxes().get(axis.axisOrdinal());
 			}
 
 			if (quax == null) {

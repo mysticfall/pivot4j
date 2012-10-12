@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.junit.Test;
+import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 
@@ -130,7 +131,7 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		model.setSortMode(SortMode.BOTTOMCOUNT);
 
 		CellSet cellSet = model.getCellSet();
-		CellSetAxis axis = cellSet.getAxes().get(0);
+		CellSetAxis axis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 
 		model.sort(axis, axis.getPositions().get(0));
 

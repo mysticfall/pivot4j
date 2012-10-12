@@ -124,7 +124,7 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 			return null;
 		}
 
-		CellSetAxis axis = axes.get(0);
+		CellSetAxis axis = axes.get(Axis.COLUMNS.axisOrdinal());
 		context.setAxis(axis);
 
 		HeaderNode axisRoot = createAxisTree(axis);
@@ -318,7 +318,7 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 			return null;
 		}
 
-		CellSetAxis axis = axes.get(1);
+		CellSetAxis axis = axes.get(Axis.ROWS.axisOrdinal());
 		context.setAxis(axis);
 
 		HeaderNode axisRoot = createAxisTree(axis);
@@ -498,7 +498,8 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 		firstHeader.getCells().add(0, corner);
 
 		if (showDimensionTitle) {
-			context.setAxis(context.getCellSet().getAxes().get(1));
+			context.setAxis(context.getCellSet().getAxes()
+					.get(Axis.ROWS.axisOrdinal()));
 
 			int colIndex = 0;
 			int hierarchyIndex = 0;

@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.transform;
 
 import java.util.List;
 
+import org.olap4j.Axis;
 import org.olap4j.metadata.Hierarchy;
 
 /**
@@ -37,14 +38,24 @@ import org.olap4j.metadata.Hierarchy;
 public interface PlaceHierarchiesOnAxes extends Transform {
 
 	/**
-	 * @param axisOrdinal
-	 *            The target axis ordinal
+	 * @param axis
+	 *            The target axis
 	 * @param hierarchies
 	 *            The hierarchies to put
 	 * @param expandAllMember
 	 *            If this flag is set and an "All" member is put onto an axis,
 	 *            the children of the All member will be added as well.
 	 */
-	void placeHierarchies(int axisOrdinal, List<Hierarchy> hierarchies,
+	void placeHierarchies(Axis axis, List<Hierarchy> hierarchies,
 			boolean expandAllMember);
+
+	/**
+	 * Collects all hierarchies on a given axis in the result. If no hierarchies
+	 * are visible, it returns an empty list.
+	 * 
+	 * @param axis
+	 *            the axis to use
+	 * @return A list of hierarchies
+	 */
+	List<Hierarchy> findVisibleHierarchies(Axis axis);
 }

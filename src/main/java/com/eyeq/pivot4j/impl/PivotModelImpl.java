@@ -100,27 +100,13 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @param dataSource
 	 */
 	public PivotModelImpl(OlapDataSource dataSource) {
-		this(dataSource, new TransformFactoryImpl());
-	}
-
-	/**
-	 * @param dataSource
-	 * @param transformFactory
-	 */
-	public PivotModelImpl(OlapDataSource dataSource,
-			TransformFactory transformFactory) {
 		if (dataSource == null) {
 			throw new IllegalArgumentException(
 					"Missing required argument 'dataSource'.");
 		}
 
-		if (transformFactory == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'transformFactory'.");
-		}
-
 		this.dataSource = dataSource;
-		this.transformFactory = transformFactory;
+		this.transformFactory = new TransformFactoryImpl();
 	}
 
 	/**

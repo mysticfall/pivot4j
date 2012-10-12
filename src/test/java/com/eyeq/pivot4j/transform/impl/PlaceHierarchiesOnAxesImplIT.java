@@ -9,11 +9,13 @@
 package com.eyeq.pivot4j.transform.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.olap4j.Axis;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 
@@ -54,7 +56,7 @@ public class PlaceHierarchiesOnAxesImplIT extends
 		hierarchies.add(promotionMedia);
 		hierarchies.add(product);
 
-		transform.placeHierarchies(1, hierarchies, false);
+		transform.placeHierarchies(Axis.ROWS, hierarchies, false);
 
 		assertEquals(
 				"Unexpected MDX query",
@@ -79,7 +81,7 @@ public class PlaceHierarchiesOnAxesImplIT extends
 		hierarchies.add(promotionMedia);
 		hierarchies.add(product);
 
-		transform.placeHierarchies(1, hierarchies, true);
+		transform.placeHierarchies(Axis.ROWS, hierarchies, true);
 
 		assertEquals(
 				"Unexpected MDX query after axes have been swapped",
@@ -89,5 +91,39 @@ public class PlaceHierarchiesOnAxesImplIT extends
 				getPivotModel().getCurrentMdx());
 
 		getPivotModel().getCellSet();
+	}
+
+	@Test
+	public void testFindVisibleHierarchies() {
+		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				+ "CrossJoin(Union({[Promotion Media].[All Media]}, [Promotion Media].[All Media].Children), "
+				+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]";
+
+		getPivotModel().setMdx(query);
+
+		PlaceHierarchiesOnAxes transform = getTransform();
+
+		List<Hierarchy> columnHierarhies = transform
+				.findVisibleHierarchies(Axis.COLUMNS);
+		List<Hierarchy> rowHierarhies = transform
+				.findVisibleHierarchies(Axis.ROWS);
+
+		assertNotNull("Hierarchy list on the column axis should not be null",
+				columnHierarhies);
+		assertEquals("Number of hierarchy on the column axis should be 1", 1,
+				columnHierarhies.size());
+
+		assertEquals("Wrong name for the first hierarchy on the column axis",
+				"Measures", columnHierarhies.get(0).getName());
+
+		assertNotNull("Hierarchy list on the row axis should not be null",
+				rowHierarhies);
+		assertEquals("Number of hierarchies on the column axis should be 2", 2,
+				rowHierarhies.size());
+
+		assertEquals("Wrong name for the first hierarchy on the row axis",
+				"Promotion Media", rowHierarhies.get(0).getName());
+		assertEquals("Wrong name for the seconde hierarchy on the row axis",
+				"Product", rowHierarhies.get(1).getName());
 	}
 }

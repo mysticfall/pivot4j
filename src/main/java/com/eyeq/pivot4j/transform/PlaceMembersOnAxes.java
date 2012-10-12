@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.transform;
 
 import java.util.List;
 
+import org.olap4j.Axis;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 
@@ -30,7 +31,7 @@ public interface PlaceMembersOnAxes extends Transform {
 	 * @param members
 	 *            a List of Members
 	 */
-	void placeMembers(int axisOrdinal, List<Member> members);
+	void placeMembers(Axis axis, List<Member> members);
 
 	/**
 	 * Collects all members from the visible axes in the result. If no members
