@@ -285,6 +285,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 							<report>mailing-list</report>
 							<report>license</report>
 							<report>scm</report>
+							<report>cim</report>
 							<report>issue-tracking</report>
 							<report>dependencies</report>
 							<report>dependency-info</report>
