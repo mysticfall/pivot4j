@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
+import com.eyeq.pivot4j.mdx.MemberExp;
 import com.eyeq.pivot4j.mdx.Syntax;
-import com.eyeq.pivot4j.query.QuaxUtil;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.ChangeSlicer;
@@ -144,7 +144,7 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 					}
 				}
 
-				collectedMemberExpressions.add(QuaxUtil.expForMember(member));
+				collectedMemberExpressions.add(new MemberExp(member));
 			}
 
 			// Add lastly collected member to filters conditions list

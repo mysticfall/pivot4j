@@ -11,7 +11,7 @@ package com.eyeq.pivot4j.mdx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FunCall implements Exp {
+public class FunCall extends AbstractExp {
 
 	private static final long serialVersionUID = -1747077227822699594L;
 

@@ -22,9 +22,9 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
+import com.eyeq.pivot4j.mdx.MemberExp;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.query.Quax;
-import com.eyeq.pivot4j.query.QuaxUtil;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
@@ -105,9 +105,6 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 			return Collections.emptyList(); // should not occur
 		}
 
-		// Ensure the query result to be available
-		getModel().getCellSet();
-
 		return quax.getHierarchies();
 	}
 
@@ -165,12 +162,12 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 				if (allMember != null) {
 					if (!expandAllMember) {
-						return QuaxUtil.expForMember(allMember);
+						return new MemberExp(allMember);
 					}
 
 					// must expand
 					// create Union({AllMember}, AllMember.children)
-					Exp allExp = QuaxUtil.expForMember(allMember);
+					Exp allExp = new MemberExp(allMember);
 					Exp allSet = new FunCall("{}", new Exp[] { allExp },
 							Syntax.Braces);
 
@@ -185,8 +182,8 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 			List<Member> topMembers = hierarchy.getRootMembers();
 			if (topMembers.size() == 1) {
-				return QuaxUtil.expForMember(topMembers.get(0)); // single
-																	// member
+				return new MemberExp(topMembers.get(0)); // single
+															// member
 			} else if (topMembers.isEmpty()) {
 				return null; // possible if access control active
 			}
@@ -194,7 +191,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 			List<Exp> args = new ArrayList<Exp>(topMembers.size());
 			for (Member member : topMembers) {
 				if (member.isVisible()) {
-					args.add(QuaxUtil.expForMember(member));
+					args.add(new MemberExp(member));
 				}
 			}
 

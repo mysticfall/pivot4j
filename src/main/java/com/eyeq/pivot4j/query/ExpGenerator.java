@@ -12,21 +12,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.eyeq.pivot4j.mdx.Exp;
+import com.eyeq.pivot4j.mdx.ExpNode;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.util.TreeNode;
 
 /**
- * Generate MDX expresstin for Tree Node
+ * Generate MDX expression for TreeNode
  */
 public class ExpGenerator {
 
-	private TreeNode<Exp> rootNode;
+	private QuaxUtil quaxUtil;
+
+	private ExpNode rootNode;
 
 	private int nDimension;
 
-	public void init(TreeNode<Exp> rootNode, int nDimension) {
+	/**
+	 * @param rootNode
+	 * @param nDimension
+	 * @param quaxUtil
+	 */
+	public void init(ExpNode rootNode, int nDimension, QuaxUtil quaxUtil) {
 		this.rootNode = rootNode;
 		this.nDimension = nDimension;
+		this.quaxUtil = quaxUtil;
 	}
 
 	/**
@@ -50,13 +59,13 @@ public class ExpGenerator {
 
 			boolean closeOpenSet = false;
 			if (nDimension == 1) {
-				if (QuaxUtil.isMember(expForNode)) {
+				if (quaxUtil.isMember(expForNode)) {
 					openSet.add(expForNode);
 					continue;
 				} else
 					closeOpenSet = true;
 			} else {
-				if (QuaxUtil.isFunCallTo(expForNode, "()")) {
+				if (quaxUtil.isFunCallTo(expForNode, "()")) {
 					openSet.add(expForNode);
 					continue;
 				} else
@@ -67,13 +76,13 @@ public class ExpGenerator {
 				// close open set
 				Exp[] expArray = openSet.toArray(new Exp[openSet.size()]);
 
-				Exp set = QuaxUtil.createFunCall("{}", expArray, Syntax.Braces);
+				Exp set = quaxUtil.createFunCall("{}", expArray, Syntax.Braces);
 
 				if (exp == null) {
 					exp = set;
 				} else {
 					// generate Union
-					exp = QuaxUtil.createFunCall("Union",
+					exp = quaxUtil.createFunCall("Union",
 							new Exp[] { exp, set }, Syntax.Function);
 				}
 
@@ -84,7 +93,7 @@ public class ExpGenerator {
 				exp = expForNode;
 			} else {
 				// generate Union of Exp and expForNode
-				exp = QuaxUtil.createFunCall("Union", new Exp[] { exp,
+				exp = quaxUtil.createFunCall("Union", new Exp[] { exp,
 						expForNode }, Syntax.Function);
 			}
 		}
@@ -92,13 +101,13 @@ public class ExpGenerator {
 		if (!openSet.isEmpty()) {
 			// close open set
 			Exp[] expArray = openSet.toArray(new Exp[openSet.size()]);
-			Exp set = QuaxUtil.createFunCall("{}", expArray, Syntax.Braces);
+			Exp set = quaxUtil.createFunCall("{}", expArray, Syntax.Braces);
 
 			if (exp == null) {
 				exp = set;
 			} else {
 				// generate Union
-				exp = QuaxUtil.createFunCall("Union", new Exp[] { exp, set },
+				exp = quaxUtil.createFunCall("Union", new Exp[] { exp, set },
 						Syntax.Function);
 			}
 
@@ -123,10 +132,11 @@ public class ExpGenerator {
 		// use tuple representation if possible
 		Exp[] tuple = genTuple(node);
 		if (tuple != null) {
-			if (tuple.length == 1)
+			if (tuple.length == 1) {
 				return tuple[0];
-			else
-				return QuaxUtil.createFunCall("()", tuple, Syntax.Parentheses);
+			} else {
+				return quaxUtil.createFunCall("()", tuple, Syntax.Parentheses);
+			}
 		}
 
 		// generate CrossJoin
@@ -137,12 +147,12 @@ public class ExpGenerator {
 			Exp childExp = genExpForNode(childNode, untilIndex);
 
 			Exp eSet;
-			if (!QuaxUtil.isMember(eNode)) {
+			if (!quaxUtil.isMember(eNode)) {
 				// FunCall
 				eSet = eNode;
 			} else {
 				// member
-				eSet = QuaxUtil.createFunCall("{}", new Exp[] { eNode },
+				eSet = quaxUtil.createFunCall("{}", new Exp[] { eNode },
 						Syntax.Braces);
 			}
 
@@ -151,12 +161,12 @@ public class ExpGenerator {
 			} else {
 				Exp childSet = bracesAround(childExp);
 
-				Exp cj = QuaxUtil.createFunCall("CrossJoin", new Exp[] { eSet,
+				Exp cj = quaxUtil.createFunCall("CrossJoin", new Exp[] { eSet,
 						childSet }, Syntax.Function);
 				if (exp == null) {
 					exp = cj;
 				} else {
-					exp = QuaxUtil.createFunCall("Union",
+					exp = quaxUtil.createFunCall("Union",
 							new Exp[] { exp, cj }, Syntax.Function);
 				}
 			}
@@ -173,8 +183,8 @@ public class ExpGenerator {
 	private Exp bracesAround(Exp oExp) {
 		Exp oSet;
 
-		if (QuaxUtil.isMember(oExp) || QuaxUtil.isFunCallTo(oExp, "()")) {
-			oSet = QuaxUtil.createFunCall("{}", new Exp[] { oExp },
+		if (quaxUtil.isMember(oExp) || quaxUtil.isFunCallTo(oExp, "()")) {
+			oSet = quaxUtil.createFunCall("{}", new Exp[] { oExp },
 					Syntax.Braces);
 		} else {
 			oSet = oExp;
@@ -190,7 +200,7 @@ public class ExpGenerator {
 	 * @return
 	 */
 	private Exp[] genTuple(TreeNode<Exp> node) {
-		if (!QuaxUtil.isMember(node.getReference())) {
+		if (!quaxUtil.isMember(node.getReference())) {
 			return null;
 		}
 

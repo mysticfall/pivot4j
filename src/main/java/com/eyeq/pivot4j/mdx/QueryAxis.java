@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * MDX query axis
  */
-public class QueryAxis implements Exp {
+public class QueryAxis extends AbstractExp {
 
 	private static final long serialVersionUID = 9064412375948950770L;
 
@@ -25,11 +25,6 @@ public class QueryAxis implements Exp {
 
 	private List<CompoundId> dimProps; // DIMENSION PROPERTIES
 
-	/**
-	 * c'tor
-	 * 
-	 * @see java.lang.Object#Object()
-	 */
 	public QueryAxis(boolean nonEmpty, Exp exp, String name) {
 		this.nonEmpty = nonEmpty;
 		this.exp = exp;

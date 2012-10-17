@@ -15,7 +15,7 @@ import com.eyeq.pivot4j.query.CalcSetMode;
 /**
  * Wrapper for Set Object to be placed on a query axis
  */
-public class SetExp implements Exp {
+public class SetExp extends AbstractExp {
 
 	private static final long serialVersionUID = 1634345220637156479L;
 
@@ -77,5 +77,13 @@ public class SetExp implements Exp {
 	@Override
 	public SetExp clone() {
 		return new SetExp(mode, expression.clone(), hierarchy);
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return toMdx();
 	}
 }

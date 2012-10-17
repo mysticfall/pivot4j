@@ -13,7 +13,7 @@ import com.eyeq.pivot4j.util.StringUtil;
 /**
  * Formula representing a WITH MEMBER ... or a WITH SET ...
  */
-public class Formula implements Exp {
+public class Formula extends AbstractExp {
 
 	private static final long serialVersionUID = 8119836944328850979L;
 

@@ -14,7 +14,6 @@ import java.util.Locale;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
-import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
@@ -34,8 +33,6 @@ public interface PivotModel {
 	 * Called once when the not used any longer. E.g. close DB connection
 	 */
 	void destroy() throws NotInitializedException;
-
-	Catalog getCatalog() throws NotInitializedException;
 
 	Cube getCube() throws NotInitializedException;
 

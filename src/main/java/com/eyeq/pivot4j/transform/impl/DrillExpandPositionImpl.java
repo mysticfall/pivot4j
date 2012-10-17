@@ -51,7 +51,6 @@ public class DrillExpandPositionImpl extends AbstractTransform implements
 	public boolean canCollapse(Position position, Member member) {
 		List<Member> pathMembers = memberPath(position, member);
 		return getQueryAdapter().canCollapse(pathMembers);
-
 	}
 
 	/**

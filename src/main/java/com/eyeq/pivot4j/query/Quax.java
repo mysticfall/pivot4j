@@ -19,7 +19,8 @@ import java.util.Map;
 
 import org.olap4j.OlapException;
 import org.olap4j.Position;
-import org.olap4j.mdx.parser.MdxParser;
+import org.olap4j.mdx.IdentifierNode;
+import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
@@ -30,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.mdx.Exp;
-import com.eyeq.pivot4j.mdx.ParseTreeNodeExp;
+import com.eyeq.pivot4j.mdx.ExpNode;
 import com.eyeq.pivot4j.mdx.SetExp;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.util.TreeNode;
@@ -40,22 +41,25 @@ public class Quax implements StateHolder {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
-	private MdxParser parser;
+	private Cube cube;
+
+	private QuaxUtil quaxUtil;
 
 	private int nDimension;
 
-	private List<Hierarchy> hiers;
+	private ArrayList<String> hiers;
 
 	// currently, we can handle the following Funcalls
 	// member.children, member.descendants, level.members
 	// other funcalls are "unknown functions"
 	private boolean[] containsUF;
 
-	private List<List<Member>> ufMemberLists; // if there are unknonwn functions
+	private ArrayList<ArrayList<String>> ufMemberLists; // if there are unknonwn
+														// functions
 
 	// private UnknownFunction[] unknownFunctions;
-	private TreeNode<Exp> posTreeRoot = null; // Position tree used in normal
-												// mode
+	private ExpNode posTreeRoot = null; // Position tree used in normal
+										// mode
 
 	private int ordinal; // ordinal of query axis, never changed by swap
 
@@ -76,7 +80,7 @@ public class Quax implements StateHolder {
 
 	private int generateIndex = -1; // we handle generate for only 1 dimension
 
-	private Object expGenerate = null;
+	private Exp expGenerate = null;
 
 	private Collection<QuaxChangeListener> changeListeners = new ArrayList<QuaxChangeListener>();
 
@@ -88,25 +92,37 @@ public class Quax implements StateHolder {
 
 	private Map<List<Member>, Boolean> canCollapsePosMap = new HashMap<List<Member>, Boolean>();
 
+	private Map<String, Member> memberMap = new HashMap<String, Member>();
+
+	private Map<String, Hierarchy> hierarchyMap = new HashMap<String, Hierarchy>();
+
 	/**
 	 * @param ordinal
-	 * @param parser
+	 * @param cube
 	 */
-	public Quax(int ordinal, MdxParser parser) {
-		if (parser == null) {
+	public Quax(int ordinal, Cube cube) {
+		if (cube == null) {
 			throw new IllegalArgumentException(
-					"Missing required argument 'parser'.");
+					"Missing required argument 'cube'.");
 		}
 
 		this.ordinal = ordinal;
-		this.parser = parser;
+		this.cube = cube;
+		this.quaxUtil = new QuaxUtil(cube);
 	}
 
 	/**
-	 * @return the parser
+	 * @return the cube
 	 */
-	protected MdxParser getParser() {
-		return parser;
+	protected Cube getCube() {
+		return cube;
+	}
+
+	/**
+	 * @return the quaxUtil
+	 */
+	protected QuaxUtil getQuaxUtil() {
+		return quaxUtil;
 	}
 
 	/**
@@ -125,6 +141,10 @@ public class Quax implements StateHolder {
 	 */
 	public void removeChangeListener(QuaxChangeListener listener) {
 		changeListeners.remove(listener);
+	}
+
+	public boolean isInitialized() {
+		return hiers != null;
 	}
 
 	/**
@@ -235,7 +255,7 @@ public class Quax implements StateHolder {
 		 */
 
 		// init position tree
-		this.posTreeRoot = new TreeNode<Exp>(null); // root
+		this.posTreeRoot = new ExpNode(null); // root
 		int end = addToPosTree(posMemStart, 0, posMemStart.size(), 0,
 				posTreeRoot);
 		while (end < posMemStart.size()) {
@@ -269,10 +289,10 @@ public class Quax implements StateHolder {
 
 					node.getChildren().clear();
 
-					Exp oFun = QuaxUtil.createFunCall("{}", memArray,
+					Exp oFun = quaxUtil.createFunCall("{}", memArray,
 							Syntax.Braces);
 
-					TreeNode<Exp> newChild = new TreeNode<Exp>(oFun);
+					ExpNode newChild = new ExpNode(oFun);
 					node.addChild(newChild);
 
 					return TreeNodeCallback.CONTINUE_SIBLING; // continue next
@@ -283,7 +303,9 @@ public class Quax implements StateHolder {
 		});
 
 		this.containsUF = new boolean[nDimension]; // init false
-		this.ufMemberLists = new ArrayList<List<Member>>(nDimension);
+		this.ufMemberLists = new ArrayList<ArrayList<String>>(nDimension);
+
+		memberMap.clear();
 
 		for (int i = 0; i < nDimension; i++) {
 			ufMemberLists.add(null);
@@ -313,8 +335,8 @@ public class Quax implements StateHolder {
 			int endIndex, int dimIndex, TreeNode<Exp> parentNode) {
 		Member currentOfDim = posMembers.get(startIndex).get(dimIndex);
 
-		Exp exp = QuaxUtil.expForMember(currentOfDim);
-		TreeNode<Exp> newNode = new TreeNode<Exp>(exp);
+		Exp exp = quaxUtil.expForMember(currentOfDim);
+		ExpNode newNode = new ExpNode(exp);
 		parentNode.addChild(newNode);
 
 		// check range where member of this dimension is constant
@@ -356,15 +378,17 @@ public class Quax implements StateHolder {
 	 * @param posTreeRoot
 	 * @param hiersChanged
 	 */
-	public void setPosTreeRoot(TreeNode<Exp> posTreeRoot, boolean hiersChanged) {
+	public void setPosTreeRoot(ExpNode posTreeRoot, boolean hiersChanged) {
 		this.posTreeRoot = posTreeRoot;
 
 		if (hiersChanged) {
 			// count dimensions, set hierarchies
 			TreeNode<Exp> firstNode = posTreeRoot;
 
-			List<Hierarchy> hiersList = new ArrayList<Hierarchy>();
 			List<TreeNode<Exp>> children = firstNode.getChildren();
+
+			this.hiers = new ArrayList<String>();
+			hierarchyMap.clear();
 
 			while (children.size() > 0) {
 				firstNode = children.get(0);
@@ -372,25 +396,26 @@ public class Quax implements StateHolder {
 
 				Hierarchy hier;
 				try {
-					hier = QuaxUtil.hierForExp(oExp);
+					hier = quaxUtil.hierForExp(oExp);
 				} catch (UnknownExpressionException e) {
 					throw new PivotException(
 							"Could not determine Hierarchy for set : "
 									+ e.getExpression());
 				}
 
-				hiersList.add(hier);
+				hiers.add(hier.getName());
+				hierarchyMap.put(hier.getName(), hier);
 
 				++nDimension;
 				children = firstNode.getChildren();
 			}
 
-			hiers = hiersList;
+			this.nDimension = hiers.size();
 
-			nDimension = hiers.size();
+			this.containsUF = new boolean[nDimension]; // init false
+			this.ufMemberLists = new ArrayList<ArrayList<String>>(nDimension);
 
-			containsUF = new boolean[nDimension]; // init false
-			ufMemberLists = new ArrayList<List<Member>>(nDimension);
+			memberMap.clear();
 
 			for (int i = 0; i < nDimension; i++) {
 				ufMemberLists.add(null);
@@ -407,7 +432,7 @@ public class Quax implements StateHolder {
 					int nodeIndex = node.getLevel() - 1;
 
 					Exp oExp = node.getReference();
-					if (!QuaxUtil.canHandle(oExp)) {
+					if (!quaxUtil.canHandle(oExp)) {
 						// indicate that dimension i contains an unknown
 						// function,
 						// which cannot be handled in some cases.
@@ -513,15 +538,30 @@ public class Quax implements StateHolder {
 	 * @return hierarchies
 	 */
 	public List<Hierarchy> getHierarchies() {
-		return hiers;
+		if (hiers == null) {
+			return Collections.emptyList();
+		}
+
+		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(hiers.size());
+		for (String name : hiers) {
+			hierarchies.add(getHierarchy(name));
+		}
+		return hierarchies;
 	}
 
 	/**
 	 * @param hierarchies
 	 */
 	public void setHierarchies(List<Hierarchy> hierarchies) {
-		this.hiers = hierarchies;
 		this.nDimension = hierarchies.size();
+		this.hiers = new ArrayList<String>(nDimension);
+
+		hierarchyMap.clear();
+
+		for (Hierarchy hierarchy : hierarchies) {
+			hiers.add(hierarchy.getName());
+			hierarchyMap.put(hierarchy.getName(), hierarchy);
+		}
 	}
 
 	/**
@@ -550,7 +590,8 @@ public class Quax implements StateHolder {
 		}
 
 		int i = 0;
-		for (Hierarchy hierarchy : hiers) {
+		for (String name : hiers) {
+			Hierarchy hierarchy = getHierarchy(name);
 			if (hierarchy.getDimension().equals(dim)) {
 				return i;
 			}
@@ -570,11 +611,15 @@ public class Quax implements StateHolder {
 	public void regeneratePosTree(List<Exp> sets, boolean hiersChanged) {
 		if (hiersChanged) {
 			this.nDimension = sets.size();
-			this.hiers = new ArrayList<Hierarchy>(nDimension);
+			this.hiers = new ArrayList<String>(nDimension);
+
+			hierarchyMap.clear();
 
 			for (Exp set : sets) {
 				try {
-					hiers.add(QuaxUtil.hierForExp(set));
+					Hierarchy hierarchy = quaxUtil.hierForExp(set);
+					hiers.add(hierarchy.getName());
+					hierarchyMap.put(hierarchy.getName(), hierarchy);
 				} catch (UnknownExpressionException e) {
 					throw new PivotException("Unknown expression : "
 							+ e.getExpression());
@@ -582,7 +627,9 @@ public class Quax implements StateHolder {
 			}
 
 			this.containsUF = new boolean[nDimension]; // init false
-			this.ufMemberLists = new ArrayList<List<Member>>(nDimension);
+			this.ufMemberLists = new ArrayList<ArrayList<String>>(nDimension);
+
+			memberMap.clear();
 
 			for (int i = 0; i < nDimension; i++) {
 				ufMemberLists.add(null);
@@ -593,7 +640,7 @@ public class Quax implements StateHolder {
 		}
 
 		if (posTreeRoot == null) {
-			this.posTreeRoot = new TreeNode<Exp>(null);
+			this.posTreeRoot = new ExpNode(null);
 		}
 
 		posTreeRoot.getChildren().clear();
@@ -610,12 +657,12 @@ public class Quax implements StateHolder {
 		int nChildrenFound = 0;
 		boolean childrenFound = false;
 		for (int i = 0; i < nDimension; i++) {
-			TreeNode<Exp> newNode;
+			ExpNode newNode;
 
 			Exp set = sets.get(i);
 			if (set instanceof SetExp) {
 				SetExp setx = (SetExp) set;
-				newNode = new TreeNode<Exp>(setx.getExpression());
+				newNode = new ExpNode(setx.getExpression());
 
 				CalcSetMode mode = setx.getMode();
 				if (mode != CalcSetMode.Simple) {
@@ -631,7 +678,7 @@ public class Quax implements StateHolder {
 					nChildrenFound = i + 1;
 				}
 
-				newNode = new TreeNode<Exp>(set);
+				newNode = new ExpNode(set);
 				if (generateIndex == i && generateMode == CalcSetMode.Sticky) {
 					// there was a sticky generate on this hier
 					// reset, if set expression is different now
@@ -643,7 +690,7 @@ public class Quax implements StateHolder {
 			current.addChild(newNode);
 			current = newNode;
 
-			if (!QuaxUtil.canHandle(newNode.getReference())) {
+			if (!quaxUtil.canHandle(newNode.getReference())) {
 				// indicate that dimension i contains an unknown function,
 				// which cannot be handled in some cases.
 				// this will cause the member list of this dimension to be
@@ -666,15 +713,15 @@ public class Quax implements StateHolder {
 	 * Recursively find "children" Funcall
 	 */
 	private boolean findChildrenCall(Exp oExp, int level) {
-		if (!QuaxUtil.isFunCall(oExp))
+		if (!quaxUtil.isFunCall(oExp))
 			return false; // member or level or ...
-		if (level > 0 && QuaxUtil.isFunCallTo(oExp, "children")) {
+		if (level > 0 && quaxUtil.isFunCallTo(oExp, "children")) {
 			return true;
 		}
 
-		int argCount = QuaxUtil.funCallArgCount(oExp);
+		int argCount = quaxUtil.funCallArgCount(oExp);
 		for (int i = 0; i < argCount; i++) {
-			if (findChildrenCall(QuaxUtil.funCallArg(oExp, i), level + 1)) {
+			if (findChildrenCall(quaxUtil.funCallArg(oExp, i), level + 1)) {
 				return true;
 			}
 		}
@@ -766,8 +813,8 @@ public class Quax implements StateHolder {
 
 		TreeNode<Exp> newNode;
 
-		Exp oMember = QuaxUtil.expForMember(memberPath.get(dimIndex));
-		Exp fChildren = QuaxUtil.createFunCall("Children",
+		Exp oMember = quaxUtil.expForMember(memberPath.get(dimIndex));
+		Exp fChildren = quaxUtil.createFunCall("Children",
 				new Exp[] { oMember }, Syntax.Property);
 
 		TreeNode<Exp> parent = bestNode;
@@ -780,8 +827,8 @@ public class Quax implements StateHolder {
 			parent = bestNode.getParent();
 		} else {
 			for (int i = bestNodeIndex + 1; i < memberPath.size() - 1; i++) {
-				oMember = QuaxUtil.expForMember(memberPath.get(i));
-				newNode = new TreeNode<Exp>(oMember);
+				oMember = quaxUtil.expForMember(memberPath.get(i));
+				newNode = new ExpNode(oMember);
 
 				parent.addChild(newNode);
 				parent = newNode;
@@ -795,7 +842,7 @@ public class Quax implements StateHolder {
 			this.nHierExclude = n;
 		}
 
-		newNode = new TreeNode<Exp>(fChildren);
+		newNode = new ExpNode(fChildren);
 		parent.addChild(newNode);
 
 		if (memberPath.size() < nDimension) {
@@ -861,7 +908,7 @@ public class Quax implements StateHolder {
 		this.nHierExclude = 0;
 
 		final int dimIndex = this.dimIdx(member.getDimension());
-		final List<TreeNode<Exp>> nodesForMember = new ArrayList<TreeNode<Exp>>();
+		final List<ExpNode> nodesForMember = new ArrayList<ExpNode>();
 
 		// update the position member tree
 		// wherever we find monMember, expand it
@@ -881,14 +928,14 @@ public class Quax implements StateHolder {
 				// iDimNode == iDim
 				// node Exp must contain children of member[iDim]
 				Exp oExp = node.getReference();
-				if (QuaxUtil.isMember(oExp)) {
-					if (QuaxUtil.equalMember(oExp, member)) {
-						nodesForMember.add(node);
+				if (quaxUtil.isMember(oExp)) {
+					if (quaxUtil.equalMember(oExp, member)) {
+						nodesForMember.add((ExpNode) node);
 					}
 				} else {
 					// must be FunCall
 					if (isMemberInFunCall(oExp, member, dimIndex)) {
-						nodesForMember.add(node);
+						nodesForMember.add((ExpNode) node);
 					}
 				}
 
@@ -898,12 +945,12 @@ public class Quax implements StateHolder {
 		});
 
 		// add children of member to each node in list
-		Exp oMember = QuaxUtil.expForMember(member);
-		Exp fChildren = QuaxUtil.createFunCall("Children",
+		Exp oMember = quaxUtil.expForMember(member);
+		Exp fChildren = quaxUtil.createFunCall("Children",
 				new Exp[] { oMember }, Syntax.Property);
 
-		for (TreeNode<Exp> node : nodesForMember) {
-			TreeNode<Exp> newNode = new TreeNode<Exp>(fChildren);
+		for (ExpNode node : nodesForMember) {
+			ExpNode newNode = new ExpNode(fChildren);
 
 			for (TreeNode<Exp> child : node.getChildren()) {
 				newNode.addChild(child.deepCopy());
@@ -974,10 +1021,10 @@ public class Quax implements StateHolder {
 		int pathSize = memberPath.size();
 
 		// determine FunCall nodes to be split
-		final List<List<TreeNode<Exp>>> splitLists = new ArrayList<List<TreeNode<Exp>>>(
+		final List<List<ExpNode>> splitLists = new ArrayList<List<ExpNode>>(
 				pathSize);
 		for (int i = 0; i < pathSize; i++) {
-			splitLists.add(new ArrayList<TreeNode<Exp>>());
+			splitLists.add(new ArrayList<ExpNode>());
 		}
 
 		posTreeRoot.walkChildren(new TreeNodeCallback<Exp>() {
@@ -993,8 +1040,8 @@ public class Quax implements StateHolder {
 
 				int nodeIndex = node.getLevel() - 1;
 				if (nodeIndex < dimIndex) {
-					if (QuaxUtil.isMember(oExp)) {
-						if (QuaxUtil.equalMember(oExp,
+					if (quaxUtil.isMember(oExp)) {
+						if (quaxUtil.equalMember(oExp,
 								memberPath.get(nodeIndex))) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
@@ -1013,9 +1060,9 @@ public class Quax implements StateHolder {
 				// idi == iDim
 				// oExp *must* be descendant of mPath[iDim] to get deleted
 				boolean found = false;
-				if (QuaxUtil.isMember(oExp)) {
+				if (quaxUtil.isMember(oExp)) {
 					// Member
-					if (QuaxUtil.isDescendant(memberPath.get(dimIndex), oExp)) {
+					if (quaxUtil.isDescendant(memberPath.get(dimIndex), oExp)) {
 						found = true;
 					}
 				} else {
@@ -1033,12 +1080,11 @@ public class Quax implements StateHolder {
 					TreeNode<Exp> currentNode = node;
 					while (level > 0) {
 						Exp o = currentNode.getReference();
-						if (!QuaxUtil.isMember(o)) {
-							List<TreeNode<Exp>> list = splitLists
-									.get(level - 1);
+						if (!quaxUtil.isMember(o)) {
+							List<ExpNode> list = splitLists.get(level - 1);
 							// Funcall
 							if (!list.contains(currentNode)) {
-								list.add(currentNode);
+								list.add((ExpNode) currentNode);
 							}
 						}
 						currentNode = currentNode.getParent();
@@ -1052,9 +1098,9 @@ public class Quax implements StateHolder {
 		// split all FunCall nodes collected in worklist
 		// start with higher levels to avoid dependency conflicts
 		for (int i = pathSize - 1; i >= 0; i--) {
-			List<TreeNode<Exp>> list = splitLists.get(i);
+			List<ExpNode> list = splitLists.get(i);
 			Member member = memberPath.get(i);
-			for (TreeNode<Exp> node : list) {
+			for (ExpNode node : list) {
 				splitFunCall(node, member, i);
 			}
 		}
@@ -1073,8 +1119,8 @@ public class Quax implements StateHolder {
 				Exp oExp = node.getReference();
 				int nodeIndex = node.getLevel() - 1;
 				if (nodeIndex < dimIndex) {
-					if (QuaxUtil.isMember(oExp)) {
-						if (QuaxUtil.equalMember(oExp,
+					if (quaxUtil.isMember(oExp)) {
+						if (quaxUtil.equalMember(oExp,
 								memberPath.get(nodeIndex))) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
@@ -1087,29 +1133,28 @@ public class Quax implements StateHolder {
 					}
 				} else if (nodeIndex == dimIndex) {
 					// *must* be descendant of mPath[iDim] to get deleted
-					if (!QuaxUtil.isMember(oExp)) {
+					if (!quaxUtil.isMember(oExp)) {
 						// FunCall
-						if (QuaxUtil.isFunCallTo(oExp, "Children")) {
-							Exp oMember = QuaxUtil.funCallArg(oExp, 0);
-
-							if (QuaxUtil.expForMember(memberPath.get(dimIndex))
+						if (quaxUtil.isFunCallTo(oExp, "Children")) {
+							Exp oMember = quaxUtil.funCallArg(oExp, 0);
+							if (quaxUtil.expForMember(memberPath.get(dimIndex))
 									.equals(oMember)
-									|| QuaxUtil.isDescendant(
+									|| quaxUtil.isDescendant(
 											memberPath.get(dimIndex), oMember)) {
 								removeList.add(node); // add to delete list
 							}
-						} else if (QuaxUtil.isFunCallTo(oExp, "{}")) {
+						} else if (quaxUtil.isFunCallTo(oExp, "{}")) {
 							// set of members may be there as result of split,
 							// we will remove any descendant member from the
 							// set.
 							// if the set is empty thereafter, we will add the
 							// node
 							// to the remove list.
-							int argCount = QuaxUtil.funCallArgCount(oExp);
+							int argCount = quaxUtil.funCallArgCount(oExp);
 							List<Exp> removeMembers = new ArrayList<Exp>();
 							for (int i = 0; i < argCount; i++) {
-								Exp oSetMember = QuaxUtil.funCallArg(oExp, i);
-								if (QuaxUtil.isDescendant(
+								Exp oSetMember = quaxUtil.funCallArg(oExp, i);
+								if (quaxUtil.isDescendant(
 										memberPath.get(dimIndex), oSetMember)) {
 									removeMembers.add(oSetMember);
 								}
@@ -1124,7 +1169,7 @@ public class Quax implements StateHolder {
 								Exp[] remaining = new Exp[argCount - nRemove];
 								int j = 0;
 								for (int i = 0; i < argCount; i++) {
-									Exp oSetMember = QuaxUtil.funCallArg(oExp,
+									Exp oSetMember = quaxUtil.funCallArg(oExp,
 											i);
 									if (!removeMembers.contains(oSetMember)) {
 										remaining[j++] = oSetMember;
@@ -1135,12 +1180,12 @@ public class Quax implements StateHolder {
 									node.setReference(remaining[0]); // single
 									// member
 								} else {
-									Exp newSet = QuaxUtil.createFunCall("{}",
+									Exp newSet = quaxUtil.createFunCall("{}",
 											remaining, Syntax.Braces);
 									node.setReference(newSet);
 								}
 							}
-						} else if (QuaxUtil.isFunCallTo(oExp, "Union")) {
+						} else if (quaxUtil.isFunCallTo(oExp, "Union")) {
 							// HHTASK Cleanup, always use
 							// removeDescendantsFromFunCall
 							Exp oRemain = removeDescendantsFromFunCall(oExp,
@@ -1152,8 +1197,8 @@ public class Quax implements StateHolder {
 							}
 						}
 						return TreeNodeCallback.CONTINUE_SIBLING;
-					} else if (QuaxUtil.isMember(oExp)) {
-						if (QuaxUtil.isDescendant(memberPath.get(dimIndex),
+					} else if (quaxUtil.isMember(oExp)) {
+						if (quaxUtil.isDescendant(memberPath.get(dimIndex),
 								oExp)) {
 							removeList.add(node);
 						}
@@ -1164,7 +1209,7 @@ public class Quax implements StateHolder {
 					// should never get here
 					throw new PivotException("Unexpected tree node level "
 							+ nodeIndex + " "
-							+ QuaxUtil.memberString(memberPath));
+							+ quaxUtil.memberString(memberPath));
 				}
 			}
 		});
@@ -1256,8 +1301,8 @@ public class Quax implements StateHolder {
 				// iDimNode == iDim
 				// node Exp must contain children of member[iDim]
 				Exp oExp = node.getReference();
-				if (QuaxUtil.isMember(oExp)) {
-					if (QuaxUtil.isDescendant(member, oExp)) {
+				if (quaxUtil.isMember(oExp)) {
+					if (quaxUtil.isDescendant(member, oExp)) {
 						nodesForMember.add(node);
 					}
 				} else {
@@ -1273,7 +1318,7 @@ public class Quax implements StateHolder {
 
 		for (TreeNode<Exp> node : nodesForMember) {
 			Exp oExp = node.getReference();
-			if (QuaxUtil.isMember(oExp)) {
+			if (quaxUtil.isMember(oExp)) {
 				removePathToNode(node);
 			} else {
 				// FunCall
@@ -1314,8 +1359,8 @@ public class Quax implements StateHolder {
 		// collect the Exp's of all dimensions except iDim
 		List<Exp> sets = new ArrayList<Exp>(nDimension);
 
-		Exp oMember = QuaxUtil.expForMember(member);
-		Exp fChildren = QuaxUtil.createFunCall("Children",
+		Exp oMember = quaxUtil.expForMember(member);
+		Exp fChildren = quaxUtil.createFunCall("Children",
 				new Exp[] { oMember }, Syntax.Property);
 
 		for (int i = 0; i < nDimension; i++) {
@@ -1356,7 +1401,7 @@ public class Quax implements StateHolder {
 
 				// iDimNode == workInt
 				Exp oExp = node.getReference();
-				if (!QuaxUtil.isMember(oExp)) {
+				if (!quaxUtil.isMember(oExp)) {
 					// FunCall
 					if (isFunCallNotTopLevel(oExp, nodeIndex)) {
 						return TreeNodeCallback.BREAK; // got it
@@ -1365,7 +1410,7 @@ public class Quax implements StateHolder {
 					}
 				} else {
 					// member
-					if (QuaxUtil.levelDepthForMember(oExp) > 0) {
+					if (quaxUtil.levelDepthForMember(oExp) > 0) {
 						return TreeNodeCallback.BREAK; // got it
 					} else {
 						return TreeNodeCallback.CONTINUE_SIBLING;
@@ -1425,7 +1470,7 @@ public class Quax implements StateHolder {
 
 		if (!genHierarchize) {
 			// no Hierarchize
-			expGenerator.init(posTreeRoot, hiers.size());
+			expGenerator.init(posTreeRoot, hiers.size(), quaxUtil);
 			return expGenerator.generate();
 		}
 
@@ -1433,11 +1478,11 @@ public class Quax implements StateHolder {
 		// this will be true, if nHierExclude > 0
 		if (nHierExclude == 0) {
 			// no special hierarchize needed
-			expGenerator.init(posTreeRoot, hiers.size());
+			expGenerator.init(posTreeRoot, hiers.size(), quaxUtil);
 
 			Exp exp = expGenerator.generate();
 			// Hierarchize around "everything"
-			return QuaxUtil.createFunCall("Hierarchize", new Exp[] { exp },
+			return quaxUtil.createFunCall("Hierarchize", new Exp[] { exp },
 					Syntax.Function);
 		}
 
@@ -1459,17 +1504,17 @@ public class Quax implements StateHolder {
 		// generate left expression to be hierarchized
 		Exp leftExp = null;
 		if (leftDepth > 0) {
-			TreeNode<Exp> leftRoot = posTreeRoot.deepCopyPrune(leftDepth);
+			ExpNode leftRoot = posTreeRoot.deepCopyPrune(leftDepth);
 			leftRoot.setReference(null);
 
 			List<Hierarchy> leftHiers = new ArrayList<Hierarchy>(leftDepth);
 			for (int i = 0; i < leftDepth; i++) {
-				leftHiers.add(hiers.get(i));
+				leftHiers.add(getHierarchy(hiers.get(i)));
 			}
 
-			expGenerator.init(leftRoot, leftHiers.size());
+			expGenerator.init(leftRoot, leftHiers.size(), quaxUtil);
 
-			leftExp = QuaxUtil.createFunCall("Hierarchize",
+			leftExp = quaxUtil.createFunCall("Hierarchize",
 					new Exp[] { expGenerator.generate() }, Syntax.Function);
 		}
 
@@ -1478,14 +1523,14 @@ public class Quax implements StateHolder {
 
 		List<Hierarchy> rightHiers = new ArrayList<Hierarchy>(rightDepth);
 		for (int i = 0; i < rightDepth; i++) {
-			rightHiers.add(hiers.get(leftDepth + i));
+			rightHiers.add(getHierarchy(hiers.get(leftDepth + i)));
 		}
 
 		// go down to the first hier to be excluded from hierarchize
 		// note: the subtree tree under any node of the hierarchy above
 		// is always the same, so we can replicate any subtree under
 		// a node of hierarchy nLeft-1
-		TreeNode<Exp> rightRoot = new TreeNode<Exp>(null);
+		ExpNode rightRoot = new ExpNode(null);
 		TreeNode<Exp> current = posTreeRoot;
 		for (int i = 0; i < leftDepth; i++) {
 			List<TreeNode<Exp>> list = current.getChildren();
@@ -1497,14 +1542,14 @@ public class Quax implements StateHolder {
 			rightRoot.addChild(node.deepCopy());
 		}
 
-		expGenerator.init(rightRoot, rightHiers.size());
+		expGenerator.init(rightRoot, rightHiers.size(), quaxUtil);
 
 		rightExp = expGenerator.generate();
 		if (leftExp == null) {
 			return rightExp;
 		}
 
-		Exp exp = QuaxUtil.createFunCall("CrossJoin", new Exp[] { leftExp,
+		Exp exp = quaxUtil.createFunCall("CrossJoin", new Exp[] { leftExp,
 				rightExp }, Syntax.Function);
 
 		return exp;
@@ -1557,19 +1602,19 @@ public class Quax implements StateHolder {
 
 			leftExp = genLeftRight(expGenerator, leftDepth, rightDepth);
 		} else {
-			TreeNode<Exp> leftRoot = posTreeRoot.deepCopyPrune(generateIndex);
+			ExpNode leftRoot = posTreeRoot.deepCopyPrune(generateIndex);
 			leftRoot.setReference(null);
 
 			List<Hierarchy> leftHiers = new ArrayList<Hierarchy>(generateIndex);
 			for (int i = 0; i < generateIndex; i++) {
-				leftHiers.add(hiers.get(i));
+				leftHiers.add(getHierarchy(hiers.get(i)));
 			}
 
-			expGenerator.init(leftRoot, leftHiers.size());
+			expGenerator.init(leftRoot, leftHiers.size(), quaxUtil);
 			leftExp = expGenerator.generate();
 
 			if (genHierarchize) {
-				leftExp = QuaxUtil.createFunCall("Hierarchize",
+				leftExp = quaxUtil.createFunCall("Hierarchize",
 						new Exp[] { leftExp }, Syntax.Function);
 			}
 		}
@@ -1585,26 +1630,26 @@ public class Quax implements StateHolder {
 
 		Exp topcount = topCountNode.getReference();
 		// we have to replace the "set" of the topcount function
-		Exp origTopcountSet = QuaxUtil.funCallArg(topcount, 0);
+		Exp origTopcountSet = quaxUtil.funCallArg(topcount, 0);
 
 		// generate the Tuple of dimension.currentmember until generateIndex
 		Exp currentMembersTuple = genCurrentTuple();
-		Exp ocj = QuaxUtil.createFunCall("Crossjoin", new Exp[] {
+		Exp ocj = quaxUtil.createFunCall("Crossjoin", new Exp[] {
 				currentMembersTuple, origTopcountSet }, Syntax.Function);
 
 		// replace the topcout original set
-		String fun = QuaxUtil.funCallName(topcount);
+		String fun = quaxUtil.funCallName(topcount);
 
-		int n = QuaxUtil.funCallArgCount(topcount);
+		int n = quaxUtil.funCallArgCount(topcount);
 		Exp[] args = new Exp[n];
 		for (int i = 1; i < n; i++) {
-			args[i] = QuaxUtil.funCallArg(topcount, i);
+			args[i] = quaxUtil.funCallArg(topcount, i);
 		}
 
 		args[0] = ocj;
 
-		Exp newTopcount = QuaxUtil.createFunCall(fun, args, Syntax.Function);
-		Exp oGenerate = QuaxUtil.createFunCall("Generate", new Exp[] { leftExp,
+		Exp newTopcount = quaxUtil.createFunCall(fun, args, Syntax.Function);
+		Exp oGenerate = quaxUtil.createFunCall("Generate", new Exp[] { leftExp,
 				newTopcount }, Syntax.Function);
 
 		if (generateIndex + 1 == nDimension) {
@@ -1616,19 +1661,19 @@ public class Quax implements StateHolder {
 		int nRight = nDimension - generateIndex - 1;
 		Hierarchy[] rightHiers = new Hierarchy[nRight];
 		for (int i = 1; i <= nRight; i++) {
-			rightHiers[nRight - i] = hiers.get(nDimension - i);
+			rightHiers[nRight - i] = getHierarchy(hiers.get(nDimension - i));
 		}
 
-		TreeNode<Exp> root = new TreeNode<Exp>(null);
+		ExpNode root = new ExpNode(null);
 		List<TreeNode<Exp>> list = topCountNode.getChildren();
 		for (TreeNode<Exp> node : list) {
 			root.addChild(node.deepCopy());
 		}
 
-		expGenerator.init(root, rightHiers.length);
+		expGenerator.init(root, rightHiers.length, quaxUtil);
 		Exp rightExp = expGenerator.generate();
 
-		Exp exp = QuaxUtil.createFunCall("CrossJoin", new Exp[] { oGenerate,
+		Exp exp = quaxUtil.createFunCall("CrossJoin", new Exp[] { oGenerate,
 				rightExp }, Syntax.Function);
 
 		return exp;
@@ -1640,22 +1685,23 @@ public class Quax implements StateHolder {
 	private Exp genCurrentTuple() {
 		Exp[] currentsOfDim = new Exp[generateIndex];
 		for (int i = 0; i < currentsOfDim.length; i++) {
-			Dimension dim = hiers.get(i).getDimension();
+			Hierarchy hierarchy = getHierarchy(hiers.get(i));
+			Dimension dim = hierarchy.getDimension();
 
-			currentsOfDim[i] = QuaxUtil.createFunCall("CurrentMember",
-					new Exp[] { QuaxUtil.expForDim(dim) }, Syntax.Property);
+			currentsOfDim[i] = quaxUtil.createFunCall("CurrentMember",
+					new Exp[] { quaxUtil.expForDim(dim) }, Syntax.Property);
 		}
 
 		Exp oTuple;
 		if (generateIndex > 1) {
-			oTuple = QuaxUtil.createFunCall("()", currentsOfDim,
+			oTuple = quaxUtil.createFunCall("()", currentsOfDim,
 					Syntax.Parentheses);
 		} else {
 			oTuple = currentsOfDim[0]; // just dimension.currentmember
 		}
 
 		// generate set braces around tuple
-		Exp oSet = QuaxUtil.createFunCall("{}", new Exp[] { oTuple },
+		Exp oSet = quaxUtil.createFunCall("{}", new Exp[] { oTuple },
 				Syntax.Braces);
 
 		return oSet;
@@ -1678,8 +1724,8 @@ public class Quax implements StateHolder {
 				Exp oExp = node.getReference();
 				if (nodeIndex < dimIndex) {
 					// node Exp must match member[iDim]
-					if (QuaxUtil.isMember(oExp)) {
-						if (QuaxUtil.equalMember(oExp,
+					if (quaxUtil.isMember(oExp)) {
+						if (quaxUtil.equalMember(oExp,
 								memberPath.get(nodeIndex))) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
@@ -1702,8 +1748,8 @@ public class Quax implements StateHolder {
 
 				// iDimNode == iDim
 				// node Exp must contain children of member[iDim]
-				if (QuaxUtil.isMember(oExp)) {
-					if (QuaxUtil.checkParent(memberPath.get(nodeIndex), oExp)) {
+				if (quaxUtil.isMember(oExp)) {
+					if (quaxUtil.checkParent(memberPath.get(nodeIndex), oExp)) {
 						return TreeNodeCallback.BREAK; // found
 					} else {
 						return TreeNodeCallback.CONTINUE_SIBLING; // continue
@@ -1746,7 +1792,7 @@ public class Quax implements StateHolder {
 			public int handleTreeNode(TreeNode<Exp> node) {
 				int nodeIndex = node.getLevel() - 1;
 				Exp oExp = node.getReference();
-				if (!QuaxUtil.isMember(oExp)) {
+				if (!quaxUtil.isMember(oExp)) {
 					// FunCall
 					funToList(oExp, setLists.get(nodeIndex));
 				} else {
@@ -1758,7 +1804,7 @@ public class Quax implements StateHolder {
 		});
 
 		// unions and sets are resolved, now resolve crossjoins
-		this.posTreeRoot = new TreeNode<Exp>(null);
+		this.posTreeRoot = new ExpNode(null);
 		crossJoinTree(setLists, posTreeRoot, 0);
 
 		this.qubonMode = false;
@@ -1782,12 +1828,12 @@ public class Quax implements StateHolder {
 				int nodeIndex = node.getLevel() - 1;
 				Exp oExp = node.getReference();
 
-				if (!QuaxUtil.isMember(oExp)) {
+				if (!quaxUtil.isMember(oExp)) {
 					return TreeNodeCallback.CONTINUE_SIBLING; // continue next
 					// sibling
 				}
 
-				if (QuaxUtil.equalMember(oExp, memberPath.get(nodeIndex))) {
+				if (quaxUtil.equalMember(oExp, memberPath.get(nodeIndex))) {
 					// match
 					if (nodeIndex == dimIndex) {
 						// found exactly matching node
@@ -1827,9 +1873,9 @@ public class Quax implements StateHolder {
 
 				Exp oExp = node.getReference();
 				boolean match = false;
-				if (QuaxUtil.isMember(oExp)) {
+				if (quaxUtil.isMember(oExp)) {
 					// exp is member
-					if (QuaxUtil.equalMember(oExp, memberPath.get(nodeIndex))) {
+					if (quaxUtil.equalMember(oExp, memberPath.get(nodeIndex))) {
 						match = true;
 					}
 				} else {
@@ -1877,8 +1923,8 @@ public class Quax implements StateHolder {
 				// iDimNode == iDim
 				// node Exp must contain children of member[iDim]
 				Exp oExp = node.getReference();
-				if (QuaxUtil.isMember(oExp)) {
-					if (QuaxUtil.checkParent(member, oExp)) {
+				if (quaxUtil.isMember(oExp)) {
+					if (quaxUtil.checkParent(member, oExp)) {
 						return TreeNodeCallback.BREAK; // found
 					}
 				} else {
@@ -1904,7 +1950,7 @@ public class Quax implements StateHolder {
 	private void crossJoinTree(List<List<Exp>> setLists,
 			TreeNode<Exp> currentNode, int dimIndex) {
 		for (Exp oExp : setLists.get(dimIndex)) {
-			TreeNode<Exp> newNode = new TreeNode<Exp>(oExp);
+			ExpNode newNode = new ExpNode(oExp);
 			if (dimIndex < nDimension - 1) {
 				crossJoinTree(setLists, newNode, dimIndex + 1);
 			}
@@ -1916,8 +1962,7 @@ public class Quax implements StateHolder {
 	/**
 	 * Split Funcall to node and complement
 	 */
-	private void splitFunCall(TreeNode<Exp> funCall, Member member,
-			int hierIndex) {
+	private void splitFunCall(ExpNode funCall, Member member, int hierIndex) {
 		Exp oExp = funCall.getReference();
 
 		// it is possible (if the split member is of dimension to be collapsed),
@@ -1932,15 +1977,14 @@ public class Quax implements StateHolder {
 		if (oComplement == null) {
 			// this means, that the set resolves to a single member,
 			// mPath[iDimNode]
-			funCall.setReference(QuaxUtil.expForMember(member));
+			funCall.setReference(quaxUtil.expForMember(member));
 			// nothing to split
 			return;
 		}
 
 		// split the Funcall
-		TreeNode<Exp> newNodeComplement = new TreeNode<Exp>(oComplement);
-		TreeNode<Exp> newNodeMember = new TreeNode<Exp>(
-				QuaxUtil.expForMember(member));
+		ExpNode newNodeComplement = new ExpNode(oComplement);
+		ExpNode newNodeMember = new ExpNode(quaxUtil.expForMember(member));
 
 		// add the children
 		for (TreeNode<Exp> child : funCall.getChildren()) {
@@ -1998,7 +2042,7 @@ public class Quax implements StateHolder {
 			Exp topcount = topCountNode.getReference();
 
 			SetExp setexp = new SetExp(generateMode, topcount,
-					hiers.get(dimIndex));
+					getHierarchy(hiers.get(dimIndex)));
 
 			return setexp;
 		}
@@ -2015,7 +2059,7 @@ public class Quax implements StateHolder {
 		Exp mSet = null;
 		if (memberList.size() > 0) {
 			Exp[] aExp = memberList.toArray(new Exp[0]);
-			mSet = QuaxUtil.createFunCall("{}", aExp, Syntax.Braces);
+			mSet = quaxUtil.createFunCall("{}", aExp, Syntax.Braces);
 		}
 
 		if (funCallList.isEmpty()) {
@@ -2037,7 +2081,7 @@ public class Quax implements StateHolder {
 			start = 1;
 		}
 		for (int j = start; j < funCallList.size(); j++) {
-			set = QuaxUtil.createFunCall("Union",
+			set = quaxUtil.createFunCall("Union",
 					new Exp[] { set, funCallList.get(j) }, Syntax.Function);
 		}
 
@@ -2071,7 +2115,7 @@ public class Quax implements StateHolder {
 			// drillup goes to top level members
 			// we generate an explicit member set rather than level.members
 			// usually, this is a single member "All xy"
-			expForHier = QuaxUtil.topLevelMembers(hierarchy, false);
+			expForHier = quaxUtil.topLevelMembers(hierarchy, false);
 		} else {
 			if (drillupList.size() == 1) {
 				expForHier = drillupList.get(0);
@@ -2081,7 +2125,7 @@ public class Quax implements StateHolder {
 					if (expForHier == null) {
 						expForHier = oExp;
 					} else {
-						expForHier = QuaxUtil.createFunCall("Union", new Exp[] {
+						expForHier = quaxUtil.createFunCall("Union", new Exp[] {
 								expForHier, oExp }, Syntax.Function);
 					}
 				}
@@ -2112,13 +2156,13 @@ public class Quax implements StateHolder {
 
 				// iDimNode == workInt
 				Exp oExp = node.getReference();
-				if (!QuaxUtil.isMember(oExp)) {
+				if (!quaxUtil.isMember(oExp)) {
 					// FunCall
 					addFunCallToDrillup(drillupList, oExp, maxLevel);
 				} else {
 					// member
-					Member m = QuaxUtil.memberForExp(oExp);
-					QuaxUtil.addMemberUncles(drillupList, m, maxLevel);
+					Member m = quaxUtil.memberForExp(oExp);
+					quaxUtil.addMemberUncles(drillupList, m, maxLevel);
 				}
 
 				return TreeNodeCallback.CONTINUE_SIBLING;
@@ -2154,10 +2198,10 @@ public class Quax implements StateHolder {
 
 				// iDimNode == workInt
 				Exp oExp = node.getReference();
-				if (!QuaxUtil.isMember(oExp)) {
+				if (!quaxUtil.isMember(oExp)) {
 					// FunCall need unique representation in order to avoid
 					// doubles
-					String unique = QuaxUtil.funString(oExp).toString();
+					String unique = quaxUtil.funString(oExp).toString();
 					if (!uniqueNames.contains(unique)) {
 						funCalls.add(oExp);
 						uniqueNames.add(unique);
@@ -2185,7 +2229,7 @@ public class Quax implements StateHolder {
 					.hasNext();) {
 				Exp oMember = itMem.next();
 
-				Member m = QuaxUtil.memberForExp(oMember);
+				Member m = quaxUtil.memberForExp(oMember);
 				for (Iterator<Exp> itFun = funCalls.iterator(); itFun.hasNext();) {
 					Exp oFun = itFun.next();
 					if (isMemberInFunCall(oFun, m, dimIndex)) {
@@ -2222,7 +2266,7 @@ public class Quax implements StateHolder {
 
 				// iDimNode == workInt
 				Exp oExp = node.getReference();
-				if (QuaxUtil.isMember(oExp) && !memberList.contains(oExp)) {
+				if (quaxUtil.isMember(oExp) && !memberList.contains(oExp)) {
 					memberList.add(oExp);
 				}
 
@@ -2237,56 +2281,56 @@ public class Quax implements StateHolder {
 	 * Add a Funcall to Drillup list
 	 */
 	private void addFunCallToDrillup(List<Exp> list, Exp oFun, int[] maxLevel) {
-		if (QuaxUtil.isFunCallTo(oFun, "Union")) {
+		if (quaxUtil.isFunCallTo(oFun, "Union")) {
 			for (int i = 0; i < 2; i++) {
-				Exp fExp = QuaxUtil.funCallArg(oFun, i);
+				Exp fExp = quaxUtil.funCallArg(oFun, i);
 				addFunCallToDrillup(list, fExp, maxLevel);
 			}
-		} else if (QuaxUtil.isFunCallTo(oFun, "{}")) {
+		} else if (quaxUtil.isFunCallTo(oFun, "{}")) {
 			// set of members
-			for (int i = 0; i < QuaxUtil.funCallArgCount(oFun); i++) {
-				Exp oMember = QuaxUtil.funCallArg(oFun, i);
-				Member m = QuaxUtil.memberForExp(oMember);
-				QuaxUtil.addMemberUncles(list, m, maxLevel);
+			for (int i = 0; i < quaxUtil.funCallArgCount(oFun); i++) {
+				Exp oMember = quaxUtil.funCallArg(oFun, i);
+				Member m = quaxUtil.memberForExp(oMember);
+				quaxUtil.addMemberUncles(list, m, maxLevel);
 			}
-		} else if (QuaxUtil.isFunCallTo(oFun, "Children")) {
-			Exp oMember = QuaxUtil.funCallArg(oFun, 0);
-			Member m = QuaxUtil.memberForExp(oMember);
-			QuaxUtil.addMemberSiblings(list, m, maxLevel);
-		} else if (QuaxUtil.isFunCallTo(oFun, "Descendants")) {
-			Exp oMember = QuaxUtil.funCallArg(oFun, 0);
-			Member m = QuaxUtil.memberForExp(oMember);
-			Exp oLevel = QuaxUtil.funCallArg(oFun, 1);
-			Level lev = QuaxUtil.levelForExp(oLevel);
+		} else if (quaxUtil.isFunCallTo(oFun, "Children")) {
+			Exp oMember = quaxUtil.funCallArg(oFun, 0);
+			Member m = quaxUtil.memberForExp(oMember);
+			quaxUtil.addMemberSiblings(list, m, maxLevel);
+		} else if (quaxUtil.isFunCallTo(oFun, "Descendants")) {
+			Exp oMember = quaxUtil.funCallArg(oFun, 0);
+			Member m = quaxUtil.memberForExp(oMember);
+			Exp oLevel = quaxUtil.funCallArg(oFun, 1);
+			Level lev = quaxUtil.levelForExp(oLevel);
 
 			int level = m.getLevel().getDepth();
 			int levlev = lev.getDepth();
 			if (levlev == level + 1) {
-				QuaxUtil.addMemberSiblings(list, m, maxLevel); // same as
+				quaxUtil.addMemberSiblings(list, m, maxLevel); // same as
 																// children
 			} else if (levlev == level + 2) {
-				QuaxUtil.addMemberChildren(list, m, maxLevel); // m *is*
+				quaxUtil.addMemberChildren(list, m, maxLevel); // m *is*
 																// grandfather
 			} else {
 				// add descendants of parent level
-				Level parentLevel = QuaxUtil.getParentLevel(lev);
-				QuaxUtil.addMemberDescendants(list, m, parentLevel, maxLevel);
+				Level parentLevel = quaxUtil.getParentLevel(lev);
+				quaxUtil.addMemberDescendants(list, m, parentLevel, maxLevel);
 			}
-		} else if (QuaxUtil.isFunCallTo(oFun, "Members")) {
+		} else if (quaxUtil.isFunCallTo(oFun, "Members")) {
 			// add parent level members
-			Exp oLevel = QuaxUtil.funCallArg(oFun, 0);
-			Level lev = QuaxUtil.levelForExp(oLevel);
+			Exp oLevel = quaxUtil.funCallArg(oFun, 0);
+			Level lev = quaxUtil.levelForExp(oLevel);
 
 			int levlev = lev.getDepth();
 			if (levlev == 0) {
 				return; // cannot drill up
 			}
 
-			Level parentLevel = QuaxUtil.getParentLevel(lev);
-			QuaxUtil.addLevelMembers(list, parentLevel, maxLevel);
+			Level parentLevel = quaxUtil.getParentLevel(lev);
+			quaxUtil.addLevelMembers(list, parentLevel, maxLevel);
 		} else {
 			// must be Top/Bottom Function with arg[0] being base set
-			Exp oFun2 = QuaxUtil.funCallArg(oFun, 0);
+			Exp oFun2 = quaxUtil.funCallArg(oFun, 0);
 			addFunCallToDrillup(list, oFun2, maxLevel); // do not have a better
 														// solution
 		}
@@ -2299,16 +2343,16 @@ public class Quax implements StateHolder {
 	 * @param list
 	 */
 	private void funToList(Exp oFun, List<Exp> list) {
-		if (QuaxUtil.isFunCallTo(oFun, "Union")) {
-			Exp arg0 = QuaxUtil.funCallArg(oFun, 0);
-			Exp arg1 = QuaxUtil.funCallArg(oFun, 1);
+		if (quaxUtil.isFunCallTo(oFun, "Union")) {
+			Exp arg0 = quaxUtil.funCallArg(oFun, 0);
+			Exp arg1 = quaxUtil.funCallArg(oFun, 1);
 
 			funToList(arg0, list);
 			funToList(arg1, list);
-		} else if (QuaxUtil.isFunCallTo(oFun, "{}")) {
-			for (int i = 0; i < QuaxUtil.funCallArgCount(oFun); i++) {
+		} else if (quaxUtil.isFunCallTo(oFun, "{}")) {
+			for (int i = 0; i < quaxUtil.funCallArgCount(oFun); i++) {
 				// member sets are resolved to single members
-				Exp oMember = QuaxUtil.funCallArg(oFun, i);
+				Exp oMember = quaxUtil.funCallArg(oFun, i);
 				list.add(oMember);
 			}
 		} else {
@@ -2328,7 +2372,7 @@ public class Quax implements StateHolder {
 		boolean result = false;
 
 		try {
-			result = QuaxUtil.isMemberInFunCall(oExp, member);
+			result = quaxUtil.isMemberInFunCall(oExp, member);
 		} catch (UnknownExpressionException e) {
 			// it is an Unkown FunCall
 			// assume "true" if the member is in the List for this dimension
@@ -2350,7 +2394,7 @@ public class Quax implements StateHolder {
 		boolean result = false;
 
 		try {
-			result = QuaxUtil.isFunCallNotTopLevel(oExp);
+			result = quaxUtil.isFunCallNotTopLevel(oExp);
 		} catch (UnknownExpressionException e) {
 			// it is an Unkown FunCall
 			// assume "true" if the member is in the List for this dimension
@@ -2360,8 +2404,9 @@ public class Quax implements StateHolder {
 								+ hierIndex + " function=" + e.getExpression());
 			}
 
-			List<Member> members = ufMemberLists.get(hierIndex);
-			for (Member member : members) {
+			List<String> members = ufMemberLists.get(hierIndex);
+			for (String name : members) {
+				Member member = getMember(name);
 				if (member.getLevel().getDepth() > 0) {
 					result = true;
 					break;
@@ -2380,7 +2425,7 @@ public class Quax implements StateHolder {
 		boolean result = false;
 
 		try {
-			result = QuaxUtil.isChildOfMemberInFunCall(oExp, member);
+			result = quaxUtil.isChildOfMemberInFunCall(oExp, member);
 		} catch (UnknownExpressionException e) {
 			// it is an Unkown FunCall
 			// assume "true" if the member List for this dimension contains
@@ -2391,9 +2436,10 @@ public class Quax implements StateHolder {
 								+ hierIndex + " function=" + e.getExpression());
 			}
 
-			List<Member> members = ufMemberLists.get(hierIndex);
-			for (Member m : members) {
-				if (QuaxUtil.checkParent(member, QuaxUtil.expForMember(m))) {
+			List<String> members = ufMemberLists.get(hierIndex);
+			for (String name : members) {
+				Member m = getMember(name);
+				if (quaxUtil.checkParent(member, quaxUtil.expForMember(m))) {
 					result = true;
 					break;
 				}
@@ -2411,7 +2457,7 @@ public class Quax implements StateHolder {
 		boolean result = false;
 
 		try {
-			result = QuaxUtil.isDescendantOfMemberInFunCall(oExp, member);
+			result = quaxUtil.isDescendantOfMemberInFunCall(oExp, member);
 		} catch (UnknownExpressionException e) {
 			// it is an Unkown FunCall
 			// assume "true" if the member List for this dimension contains
@@ -2422,9 +2468,10 @@ public class Quax implements StateHolder {
 								+ hierIndex + " function=" + e.getExpression());
 			}
 
-			List<Member> members = ufMemberLists.get(hierIndex);
-			for (Member m : members) {
-				if (QuaxUtil.checkDescendantM(member, m)) {
+			List<String> members = ufMemberLists.get(hierIndex);
+			for (String name : members) {
+				Member m = getMember(name);
+				if (quaxUtil.checkDescendantM(member, m)) {
 					result = true;
 					break;
 				}
@@ -2449,7 +2496,7 @@ public class Quax implements StateHolder {
 			// latest result
 			// the "Unknown Functions" are probably not properly resolved
 			if (logger.isErrorEnabled()) {
-				logger.error("Unkown FunCall " + QuaxUtil.funCallName(oFun));
+				logger.error("Unkown FunCall " + quaxUtil.funCallName(oFun));
 			}
 
 			if (ufMemberLists.get(hierIndex) == null) {
@@ -2460,14 +2507,15 @@ public class Quax implements StateHolder {
 
 			List<Exp> newList = new ArrayList<Exp>();
 
-			List<Member> members = ufMemberLists.get(hierIndex);
-			for (Member m : members) {
-				if (!QuaxUtil.checkDescendantM(member, m)) {
-					newList.add(QuaxUtil.expForMember(m));
+			List<String> members = ufMemberLists.get(hierIndex);
+			for (String name : members) {
+				Member m = getMember(name);
+				if (!quaxUtil.checkDescendantM(member, m)) {
+					newList.add(quaxUtil.expForMember(m));
 				}
 			}
 
-			return QuaxUtil.createFunCall("{}",
+			return quaxUtil.createFunCall("{}",
 					newList.toArray(new Exp[newList.size()]), Syntax.Braces);
 		}
 	}
@@ -2479,15 +2527,15 @@ public class Quax implements StateHolder {
 	 */
 	private Exp removeDescendantsFromFunCall(Exp oFun, Member member)
 			throws UnknownExpressionException {
-		if (QuaxUtil.isFunCallTo(oFun, "Children")) {
+		if (quaxUtil.isFunCallTo(oFun, "Children")) {
 			// as we know, that there is a descendent of m in x.children,
 			// we know that *all* x.children are descendants of m
 			return null;
-		} else if (QuaxUtil.isFunCallTo(oFun, "Descendants")) {
+		} else if (quaxUtil.isFunCallTo(oFun, "Descendants")) {
 			// as we know, that there is a descendent of m in x.descendants
 			// we know that *all* x.descendants are descendants of m
 			return null;
-		} else if (QuaxUtil.isFunCallTo(oFun, "Members")) {
+		} else if (quaxUtil.isFunCallTo(oFun, "Members")) {
 			Level level = member.getLevel();
 
 			List<Member> members;
@@ -2499,29 +2547,29 @@ public class Quax implements StateHolder {
 
 			List<Member> remainder = new ArrayList<Member>(members.size());
 			for (Member m : members) {
-				if (!QuaxUtil.isDescendant(member, m))
+				if (!quaxUtil.isDescendant(member, m))
 					remainder.add(m);
 			}
 
-			return QuaxUtil.createMemberSet(remainder);
-		} else if (QuaxUtil.isFunCallTo(oFun, "{}")) {
+			return quaxUtil.createMemberSet(remainder);
+		} else if (quaxUtil.isFunCallTo(oFun, "{}")) {
 			List<Member> remainder = new ArrayList<Member>();
 
-			for (int i = 0; i < QuaxUtil.funCallArgCount(oFun); i++) {
-				Exp arg = QuaxUtil.funCallArg(oFun, i);
+			for (int i = 0; i < quaxUtil.funCallArgCount(oFun); i++) {
+				Exp arg = quaxUtil.funCallArg(oFun, i);
 
-				if (!QuaxUtil.isDescendant(member, arg)) {
-					remainder.add(QuaxUtil.memberForExp(arg));
+				if (!quaxUtil.isDescendant(member, arg)) {
+					remainder.add(quaxUtil.memberForExp(arg));
 				}
 			}
 
-			return QuaxUtil.createMemberSet(remainder);
-		} else if (QuaxUtil.isFunCallTo(oFun, "Union")) {
+			return quaxUtil.createMemberSet(remainder);
+		} else if (quaxUtil.isFunCallTo(oFun, "Union")) {
 			Exp[] uargs = new Exp[2];
 			uargs[0] = removeDescendantsFromFunCall(
-					QuaxUtil.funCallArg(oFun, 0), member);
+					quaxUtil.funCallArg(oFun, 0), member);
 			uargs[1] = removeDescendantsFromFunCall(
-					QuaxUtil.funCallArg(oFun, 0), member);
+					quaxUtil.funCallArg(oFun, 0), member);
 
 			if (uargs[0] == null && uargs[1] == null) {
 				return null;
@@ -2535,25 +2583,25 @@ public class Quax implements StateHolder {
 				return uargs[1];
 			}
 
-			if (QuaxUtil.isMember(uargs[0])) {
-				uargs[0] = QuaxUtil.createFunCall("{}", new Exp[] { uargs[0] },
+			if (quaxUtil.isMember(uargs[0])) {
+				uargs[0] = quaxUtil.createFunCall("{}", new Exp[] { uargs[0] },
 						Syntax.Braces);
 			}
 
-			if (QuaxUtil.isMember(uargs[1])) {
-				uargs[1] = QuaxUtil.createFunCall("{}", new Exp[] { uargs[1] },
+			if (quaxUtil.isMember(uargs[1])) {
+				uargs[1] = quaxUtil.createFunCall("{}", new Exp[] { uargs[1] },
 						Syntax.Braces);
 			}
 
-			if (QuaxUtil.isFunCallTo(uargs[0], "{}")
-					&& QuaxUtil.isFunCallTo(uargs[1], "{}")) {
+			if (quaxUtil.isFunCallTo(uargs[0], "{}")
+					&& quaxUtil.isFunCallTo(uargs[1], "{}")) {
 				return unionOfSets(uargs[0], uargs[1]);
 			}
 
-			return QuaxUtil.createFunCall("Union", uargs, Syntax.Function);
+			return quaxUtil.createFunCall("Union", uargs, Syntax.Function);
 		}
 
-		throw new UnknownExpressionException(QuaxUtil.funCallName(oFun));
+		throw new UnknownExpressionException(quaxUtil.funCallName(oFun));
 	}
 
 	/**
@@ -2568,7 +2616,7 @@ public class Quax implements StateHolder {
 			// latest result
 			// the "Unknown Functions" are probably not properly resolved
 			if (logger.isErrorEnabled()) {
-				logger.error("Unkown FunCall " + QuaxUtil.funCallName(oFun));
+				logger.error("Unkown FunCall " + quaxUtil.funCallName(oFun));
 			}
 
 			if (ufMemberLists.get(hierIndex) == null) {
@@ -2579,14 +2627,15 @@ public class Quax implements StateHolder {
 
 			List<Exp> newList = new ArrayList<Exp>();
 
-			List<Member> members = ufMemberLists.get(hierIndex);
-			for (Member m : members) {
+			List<String> members = ufMemberLists.get(hierIndex);
+			for (String name : members) {
+				Member m = getMember(name);
 				if (!member.equals(m)) {
-					newList.add(QuaxUtil.expForMember(m));
+					newList.add(quaxUtil.expForMember(m));
 				}
 			}
 
-			return QuaxUtil.createFunCall("{}",
+			return quaxUtil.createFunCall("{}",
 					newList.toArray(new Exp[newList.size()]), Syntax.Braces);
 		}
 	}
@@ -2598,17 +2647,17 @@ public class Quax implements StateHolder {
 	 */
 	private Exp createComplement(Exp oFun, Member member)
 			throws UnknownExpressionException {
-		if (QuaxUtil.isFunCallTo(oFun, "Children")) {
-			Exp oParent = QuaxUtil.funCallArg(oFun, 0);
+		if (quaxUtil.isFunCallTo(oFun, "Children")) {
+			Exp oParent = quaxUtil.funCallArg(oFun, 0);
 
 			// if member is NOT a child of Funcall arg, then the complement is
 			// the original set
-			Exp oMember = QuaxUtil.expForMember(member);
-			if (!QuaxUtil.checkChild(member, oParent)) {
+			Exp oMember = quaxUtil.expForMember(member);
+			if (!quaxUtil.checkChild(member, oParent)) {
 				return oFun;
 			}
 
-			List<Exp> oChildren = QuaxUtil.getChildMembers(oParent);
+			List<Exp> oChildren = quaxUtil.getChildMembers(oParent);
 			if (oChildren.size() < 2) {
 				return null;
 			}
@@ -2625,17 +2674,17 @@ public class Quax implements StateHolder {
 				return mComplement[0]; // single member
 			}
 
-			Exp oComplement = QuaxUtil.createFunCall("{}", mComplement,
+			Exp oComplement = quaxUtil.createFunCall("{}", mComplement,
 					Syntax.Braces);
 
 			return oComplement;
-		} else if (QuaxUtil.isFunCallTo(oFun, "{}")) {
+		} else if (quaxUtil.isFunCallTo(oFun, "{}")) {
 			int nComp = 0;
-			int nArg = QuaxUtil.funCallArgCount(oFun);
+			int nArg = quaxUtil.funCallArgCount(oFun);
 
-			Exp oMember = QuaxUtil.expForMember(member);
+			Exp oMember = quaxUtil.expForMember(member);
 			for (int i = 0; i < nArg; i++) {
-				Exp o = QuaxUtil.funCallArg(oFun, i);
+				Exp o = quaxUtil.funCallArg(oFun, i);
 				if (!(o.equals(oMember))) {
 					++nComp;
 				}
@@ -2653,7 +2702,7 @@ public class Quax implements StateHolder {
 			Exp[] mComplement = new Exp[nComp];
 			int ii = 0;
 			for (int i = 0; i < nArg; i++) {
-				Exp o = QuaxUtil.funCallArg(oFun, i);
+				Exp o = quaxUtil.funCallArg(oFun, i);
 				if (!(o.equals(oMember)))
 					mComplement[ii++] = o;
 			}
@@ -2662,16 +2711,16 @@ public class Quax implements StateHolder {
 				return mComplement[0]; // single member
 			}
 
-			Exp oComplement = QuaxUtil.createFunCall("{}", mComplement,
+			Exp oComplement = quaxUtil.createFunCall("{}", mComplement,
 					Syntax.Braces);
 
 			return oComplement;
-		} else if (QuaxUtil.isFunCallTo(oFun, "Union")) {
+		} else if (quaxUtil.isFunCallTo(oFun, "Union")) {
 			// Union of FunCalls, recursive
 			// Complement(Union(a,b)) = Union(Complement(a), Complement(b))
 			Exp[] complements = new Exp[2];
 			for (int i = 0; i < 2; i++) {
-				Exp o = QuaxUtil.funCallArg(oFun, i);
+				Exp o = quaxUtil.funCallArg(oFun, i);
 				complements[i] = createComplement(o, member);
 			}
 
@@ -2683,23 +2732,23 @@ public class Quax implements StateHolder {
 				return complements[1]; // No Union needed
 			} else {
 				// complement can be single member
-				if (!QuaxUtil.isFunCall(complements[0])) {
-					complements[0] = QuaxUtil.createFunCall("{}",
+				if (!quaxUtil.isFunCall(complements[0])) {
+					complements[0] = quaxUtil.createFunCall("{}",
 							new Exp[] { complements[0] }, Syntax.Braces);
 				}
 
-				if (!QuaxUtil.isFunCall(complements[1])) {
-					complements[1] = QuaxUtil.createFunCall("{}",
+				if (!quaxUtil.isFunCall(complements[1])) {
+					complements[1] = quaxUtil.createFunCall("{}",
 							new Exp[] { complements[1] }, Syntax.Braces);
 				}
 
-				if (QuaxUtil.isFunCallTo(complements[0], "{}")
-						&& QuaxUtil.isFunCallTo(complements[1], "{}")) {
+				if (quaxUtil.isFunCallTo(complements[0], "{}")
+						&& quaxUtil.isFunCallTo(complements[1], "{}")) {
 					// create single set as union ow two sets
 					return unionOfSets(complements[0], complements[1]);
 				}
 
-				Exp newUnion = QuaxUtil.createFunCall("Union", complements,
+				Exp newUnion = quaxUtil.createFunCall("Union", complements,
 						Syntax.Function);
 
 				return newUnion;
@@ -2707,7 +2756,7 @@ public class Quax implements StateHolder {
 		}
 
 		// the fun call is not supported
-		throw new UnknownExpressionException(QuaxUtil.funCallName(oFun));
+		throw new UnknownExpressionException(quaxUtil.funCallName(oFun));
 	}
 
 	/**
@@ -2715,19 +2764,19 @@ public class Quax implements StateHolder {
 	 */
 	private Exp unionOfSets(Exp set1, Exp set2) {
 		// create single set as union ow two sets
-		int n1 = QuaxUtil.funCallArgCount(set1);
-		int n2 = QuaxUtil.funCallArgCount(set2);
+		int n1 = quaxUtil.funCallArgCount(set1);
+		int n2 = quaxUtil.funCallArgCount(set2);
 
 		Exp[] newSet = new Exp[n1 + n2];
 		int i = 0;
 		for (int j = 0; j < n1; j++) {
-			newSet[i++] = QuaxUtil.funCallArg(set1, j);
+			newSet[i++] = quaxUtil.funCallArg(set1, j);
 		}
 
 		for (int j = 0; j < n2; j++) {
-			newSet[i++] = QuaxUtil.funCallArg(set2, j);
+			newSet[i++] = quaxUtil.funCallArg(set2, j);
 		}
-		return QuaxUtil.createFunCall("{}", newSet, Syntax.Braces);
+		return quaxUtil.createFunCall("{}", newSet, Syntax.Braces);
 	}
 
 	/**
@@ -2737,7 +2786,12 @@ public class Quax implements StateHolder {
 	 *            Member List
 	 */
 	public void setHierMemberList(int iHier, List<Member> list) {
-		ufMemberLists.set(iHier, list);
+		ArrayList<String> members = new ArrayList<String>(list.size());
+		for (Member member : list) {
+			members.add(member.getUniqueName());
+			memberMap.put(member.getUniqueName(), member);
+		}
+		ufMemberLists.set(iHier, members);
 	}
 
 	/**
@@ -2754,7 +2808,7 @@ public class Quax implements StateHolder {
 	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
 	 */
 	public Serializable bookmarkState() {
-		Serializable[] state = new Serializable[8];
+		Serializable[] state = new Serializable[11];
 
 		state[0] = this.qubonMode;
 		state[1] = this.ordinal;
@@ -2763,7 +2817,10 @@ public class Quax implements StateHolder {
 		state[4] = this.generateIndex;
 		state[5] = this.generateMode;
 		state[6] = this.nHierExclude;
-		state[7] = posTreeRoot.getReference();
+		state[7] = this.ufMemberLists;
+		state[8] = this.hiers;
+		state[9] = this.containsUF;
+		state[10] = posTreeRoot;
 
 		return state;
 	}
@@ -2771,6 +2828,7 @@ public class Quax implements StateHolder {
 	/**
 	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
 	 */
+	@SuppressWarnings("unchecked")
 	public void restoreState(Serializable state) {
 		Serializable[] states = (Serializable[]) state;
 
@@ -2781,26 +2839,10 @@ public class Quax implements StateHolder {
 		this.generateIndex = (Integer) states[4];
 		this.generateMode = (CalcSetMode) states[5];
 		this.nHierExclude = (Integer) states[6];
-
-		Exp exp = (Exp) states[7];
-
-		TreeNode<Exp> node = new TreeNode<Exp>(exp);
-		posTreeRoot.walkTree(new TreeNodeCallback<Exp>() {
-
-			/**
-			 * @param node
-			 * @return
-			 */
-			public int handleTreeNode(TreeNode<Exp> node) {
-				if (node.getReference() instanceof ParseTreeNodeExp) {
-					((ParseTreeNodeExp) node.getReference()).restore(parser);
-				}
-
-				return CONTINUE;
-			}
-		});
-
-		this.posTreeRoot = node;
+		this.ufMemberLists = (ArrayList<ArrayList<String>>) states[7];
+		this.hiers = (ArrayList<String>) states[8];
+		this.containsUF = (boolean[]) states[9];
+		this.posTreeRoot = (ExpNode) states[10];
 	}
 
 	/**
@@ -2838,12 +2880,12 @@ public class Quax implements StateHolder {
 				}
 
 				Exp oExp = node.getReference();
-				if (!QuaxUtil.isMember(oExp)) {
+				if (!quaxUtil.isMember(oExp)) {
 					// FunCall
-					builder.append(QuaxUtil.funString(oExp));
+					builder.append(quaxUtil.funString(oExp));
 				} else {
 					// member
-					builder.append(QuaxUtil.getMemberUniqueName(oExp));
+					builder.append(quaxUtil.getMemberUniqueName(oExp));
 				}
 
 				return TreeNodeCallback.CONTINUE;
@@ -2851,5 +2893,39 @@ public class Quax implements StateHolder {
 		});
 
 		return builder.toString();
+	}
+
+	/**
+	 * @param uniqueName
+	 */
+	protected Member getMember(String uniqueName) {
+		Member member = memberMap.get(uniqueName);
+
+		if (member == null) {
+			try {
+				member = cube.lookupMember(IdentifierNode.parseIdentifier(
+						uniqueName).getSegmentList());
+			} catch (OlapException e) {
+				throw new PivotException(e);
+			}
+
+			memberMap.put(uniqueName, member);
+		}
+
+		return member;
+	}
+
+	/**
+	 * @param name
+	 */
+	protected Hierarchy getHierarchy(String name) {
+		Hierarchy hierarchy = hierarchyMap.get(name);
+
+		if (hierarchy == null) {
+			hierarchy = cube.getHierarchies().get(name);
+			hierarchyMap.put(name, hierarchy);
+		}
+
+		return hierarchy;
 	}
 }

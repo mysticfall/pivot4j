@@ -15,15 +15,16 @@ import java.util.List;
 /**
  * can be any MDX object
  */
-public class CompoundId implements Exp {
+public class CompoundId extends AbstractExp {
 
 	private static final long serialVersionUID = 697157412160301933L;
 
 	private List<NamePart> names = new ArrayList<NamePart>();
 
+	private CompoundId() {
+	}
+
 	/**
-	 * c'tor
-	 * 
 	 * @param name
 	 * @param isKey
 	 */
@@ -82,10 +83,6 @@ public class CompoundId implements Exp {
 		}
 
 		return str;
-	}
-
-	private CompoundId() {
-		// default
 	}
 
 	/**

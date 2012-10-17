@@ -24,8 +24,6 @@ import org.olap4j.OlapException;
 import org.olap4j.OlapStatement;
 import org.olap4j.Position;
 import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.mdx.parser.MdxParser;
-import org.olap4j.mdx.parser.MdxParserFactory;
 import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
@@ -60,10 +58,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	private OlapDataSource dataSource;
 
 	private OlapConnection connection;
-
-	private String schemaName;
-
-	private String cubeName;
 
 	private String roleName;
 
@@ -168,12 +162,13 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 			throw new PivotException(e);
 		}
 
-		this.queryAdapter = createQueryAdapter();
-		queryAdapter.updateQuery();
-
-		queryAdapter.addChangeListener(queryChangeListener);
-
 		this.initialized = true;
+
+		this.queryAdapter = createQueryAdapter();
+
+		queryAdapter.initialize();
+		queryAdapter.updateQuery();
+		queryAdapter.addChangeListener(queryChangeListener);
 
 		fireModelInitialized();
 	}
@@ -230,8 +225,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 			this.connection = null;
 		}
 
-		this.cubeName = null;
-		this.schemaName = null;
 		this.sortPosMembers = null;
 		this.sortMode = SortMode.ASC;
 		this.sorting = false;
@@ -270,20 +263,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	}
 
 	/**
-	 * @return the schemaName
-	 */
-	protected String getSchemaName() {
-		return schemaName;
-	}
-
-	/**
-	 * @return the cubeName
-	 */
-	protected String getCubeName() {
-		return cubeName;
-	}
-
-	/**
 	 * @see com.eyeq.pivot4j.PivotModel#getCatalog()
 	 */
 	public Catalog getCatalog() throws NotInitializedException {
@@ -300,8 +279,13 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.PivotModel#getCube()
 	 */
 	public Cube getCube() throws NotInitializedException {
+		checkInitialization();
+
 		try {
-			return getCellSet().getMetaData().getCube();
+			String cubeName = queryAdapter.getCubeName();
+
+			Schema schema = connection.getOlapSchema();
+			return schema.getCubes().get(cubeName);
 		} catch (OlapException e) {
 			throw new PivotException(e);
 		}
@@ -331,11 +315,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 		try {
 			this.cellSet = executeMdx(connection, mdx);
-
-			Cube cube = cellSet.getMetaData().getCube();
-
-			this.cubeName = cube.getName();
-			this.schemaName = cube.getSchema().getName();
 		} catch (OlapException e) {
 			throw new PivotException(e);
 		}
@@ -427,10 +406,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	}
 
 	protected QueryAdapter createQueryAdapter() {
-		MdxParserFactory factory = getConnection().getParserFactory();
-		MdxParser parser = factory.createMdxParser(connection);
-
-		return new QueryAdapter(this, parser);
+		return new QueryAdapter(this);
 	}
 
 	/**
@@ -721,14 +697,12 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
 	 */
 	public synchronized Serializable bookmarkState() {
-		Serializable[] state = new Serializable[5];
+		Serializable[] state = new Serializable[3];
 
 		state[0] = getCurrentMdx();
-		state[1] = cubeName;
-		state[2] = schemaName;
 
 		if (sortPosMembers == null) {
-			state[3] = null;
+			state[1] = null;
 		} else {
 			Serializable[] sortState = new Serializable[4];
 
@@ -742,10 +716,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 			sortState[2] = getSortMode();
 			sortState[3] = isSorting();
 
-			state[3] = sortState;
+			state[1] = sortState;
 		}
 
-		state[4] = getQueryAdapter().bookmarkState();
+		state[2] = getQueryAdapter().bookmarkState();
 
 		return state;
 	}
@@ -758,22 +732,18 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 		setMdx((String) states[0]);
 
-		this.cubeName = (String) states[1];
-		this.schemaName = (String) states[2];
-
 		if (!isInitialized()) {
 			initialize();
 		}
 
 		// sorting
-		if (states[3] == null || cubeName == null || schemaName == null) {
+		if (states[1] == null) {
 			this.sortPosMembers = null;
 		} else {
 			try {
-				Schema schema = getCatalog().getSchemas().get(schemaName);
-				Cube cube = schema.getCubes().get(cubeName);
+				Cube cube = getCube();
 
-				Serializable[] sortStates = (Serializable[]) states[3];
+				Serializable[] sortStates = (Serializable[]) states[1];
 
 				String[] sortPosUniqueNames = (String[]) sortStates[0];
 				if (sortPosUniqueNames == null) {
@@ -809,7 +779,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 		this.cellSet = null;
 
-		queryAdapter.restoreState(states[4]);
+		queryAdapter.restoreState(states[2]);
 
 		fireModelChanged();
 	}

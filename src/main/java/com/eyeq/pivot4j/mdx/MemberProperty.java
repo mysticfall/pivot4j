@@ -11,7 +11,7 @@ package com.eyeq.pivot4j.mdx;
 /**
  * member property implementation
  */
-public class MemberProperty implements Exp {
+public class MemberProperty extends AbstractExp {
 
 	private static final long serialVersionUID = 519325113391951347L;
 
@@ -42,7 +42,6 @@ public class MemberProperty implements Exp {
 	}
 
 	/**
-	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public MemberProperty clone() {

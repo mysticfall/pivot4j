@@ -22,7 +22,6 @@ import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
-import org.olap4j.mdx.parser.MdxParser;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
@@ -36,6 +35,7 @@ import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Lexer;
 import com.eyeq.pivot4j.mdx.Literal;
+import com.eyeq.pivot4j.mdx.MemberExp;
 import com.eyeq.pivot4j.mdx.ParsedQuery;
 import com.eyeq.pivot4j.mdx.Parser;
 import com.eyeq.pivot4j.mdx.QueryAxis;
@@ -49,8 +49,6 @@ public class QueryAdapter implements StateHolder {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PivotModel model;
-
-	private MdxParser parser;
 
 	private List<Quax> quaxes; // Array of query axis state object
 
@@ -77,21 +75,13 @@ public class QueryAdapter implements StateHolder {
 	 * @param model
 	 * @param parser
 	 */
-	public QueryAdapter(PivotModel model, MdxParser parser) {
+	public QueryAdapter(PivotModel model) {
 		if (model == null) {
 			throw new IllegalArgumentException(
 					"Missing required argument 'model'.");
 		}
 
-		if (parser == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'parser'.");
-		}
-
 		this.model = model;
-		this.parser = parser;
-
-		initialize();
 	}
 
 	public void initialize() {
@@ -109,11 +99,25 @@ public class QueryAdapter implements StateHolder {
 		int ordinal = 0;
 		for (@SuppressWarnings("unused")
 		QueryAxis queryAxis : queryAxes) {
-			Quax quax = new Quax(ordinal++, parser);
+			Quax quax = new Quax(ordinal++, model.getCube());
 			quax.addChangeListener(quaxListener);
 
 			quaxes.add(quax);
 		}
+	}
+
+	public boolean isInitialized() {
+		if (quaxes == null || quaxes.isEmpty()) {
+			return false;
+		}
+
+		for (Quax quax : quaxes) {
+			if (!quax.isInitialized()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -123,11 +127,8 @@ public class QueryAdapter implements StateHolder {
 		return model;
 	}
 
-	/**
-	 * @return the parser
-	 */
-	public MdxParser getMdxParser() {
-		return parser;
+	public String getCubeName() {
+		return parsedQuery.getCube();
 	}
 
 	/**
@@ -183,6 +184,10 @@ public class QueryAdapter implements StateHolder {
 	 * @return
 	 */
 	public List<Quax> getQuaxes() {
+		if (!isInitialized()) {
+			getModel().getCellSet();
+		}
+
 		return Collections.unmodifiableList(quaxes);
 	}
 
@@ -209,7 +214,6 @@ public class QueryAdapter implements StateHolder {
 			this.axesSwapped = axesSwapped;
 
 			if (logger.isInfoEnabled()) {
-				logger.info("swapAxes : " + axesSwapped);
 			}
 
 			QueryAxis[] queryAxes = parsedQuery.getAxes();
@@ -293,6 +297,10 @@ public class QueryAdapter implements StateHolder {
 	 * @return Quax containg dimension
 	 */
 	public Quax findQuax(Dimension dim) {
+		if (!isInitialized()) {
+			getModel().getCellSet();
+		}
+
 		for (Quax quax : quaxes) {
 			if (quax.dimIdx(dim) >= 0) {
 				return quax;
@@ -417,12 +425,12 @@ public class QueryAdapter implements StateHolder {
 		if (sortPosMembers.size() > 1) {
 			Exp[] memberExp = new Exp[sortPosMembers.size()];
 			for (int i = 0; i < memberExp.length; i++) {
-				memberExp[i] = QuaxUtil.expForMember(sortPosMembers.get(i));
+				memberExp[i] = new MemberExp(sortPosMembers.get(i));
 			}
 
 			sortExp = new FunCall("()", memberExp, Syntax.Parentheses);
 		} else {
-			sortExp = QuaxUtil.expForMember(sortPosMembers.get(0));
+			sortExp = new MemberExp(sortPosMembers.get(0));
 		}
 
 		args[1] = sortExp;
@@ -454,11 +462,11 @@ public class QueryAdapter implements StateHolder {
 		if (sortPosMembers.size() > 1) {
 			Exp[] memberExp = new Exp[sortPosMembers.size()];
 			for (int i = 0; i < memberExp.length; i++) {
-				memberExp[i] = QuaxUtil.expForMember(sortPosMembers.get(i));
+				memberExp[i] = new MemberExp(sortPosMembers.get(i));
 			}
 			sortExp = new FunCall("()", memberExp, Syntax.Parentheses);
 		} else {
-			sortExp = QuaxUtil.expForMember(sortPosMembers.get(0));
+			sortExp = new MemberExp(sortPosMembers.get(0));
 		}
 
 		Exp[] args = new Exp[3];
@@ -619,7 +627,7 @@ public class QueryAdapter implements StateHolder {
 
 		int i = 0;
 		for (Member member : members) {
-			exps[i++] = QuaxUtil.expForMember(member);
+			exps[i++] = new MemberExp(member);
 		}
 
 		return new FunCall("{}", exps, Syntax.Braces);
@@ -650,6 +658,7 @@ public class QueryAdapter implements StateHolder {
 
 		Dimension dim = member.getLevel().getHierarchy().getDimension();
 		Quax quax = findQuax(dim);
+
 		return (quax == null) ? false : quax.canExpand(member);
 	}
 
@@ -735,8 +744,6 @@ public class QueryAdapter implements StateHolder {
 		}
 
 		quax.expand(member);
-
-		fireQueryChanged();
 	}
 
 	/**
@@ -750,7 +757,7 @@ public class QueryAdapter implements StateHolder {
 		Dimension dim = member.getLevel().getHierarchy().getDimension();
 		Quax quax = findQuax(dim);
 
-		if (logger.isDebugEnabled()) {
+		if (logger.isInfoEnabled()) {
 			logger.info("Expand path" + getPositionString(pathMembers, null));
 		}
 
@@ -761,8 +768,6 @@ public class QueryAdapter implements StateHolder {
 		}
 
 		quax.expand(pathMembers);
-
-		fireQueryChanged();
 	}
 
 	/**
@@ -785,8 +790,6 @@ public class QueryAdapter implements StateHolder {
 		}
 
 		quax.collapse(member);
-
-		fireQueryChanged();
 	}
 
 	/**
@@ -810,8 +813,6 @@ public class QueryAdapter implements StateHolder {
 		}
 
 		quax.collapse(pathMembers);
-
-		fireQueryChanged();
 	}
 
 	/**
@@ -862,8 +863,6 @@ public class QueryAdapter implements StateHolder {
 		// replace dimension iDim by monMember.children
 		quax.drillDown(member);
 
-		fireQueryChanged();
-
 		if (logger.isInfoEnabled()) {
 			logger.info("Drill down " + getPositionString(null, member));
 		}
@@ -881,9 +880,8 @@ public class QueryAdapter implements StateHolder {
 					+ hierarchy.getCaption();
 			throw new PivotException(msg);
 		}
-		quax.drillUp(hierarchy);
 
-		fireQueryChanged();
+		quax.drillUp(hierarchy);
 
 		if (logger.isInfoEnabled())
 			logger.info("Drill up hierarchy " + hierarchy.getCaption());

@@ -23,7 +23,7 @@ import com.eyeq.pivot4j.PivotException;
 /**
  * this is the result of parsing an MDX
  */
-public class ParsedQuery implements Exp {
+public class ParsedQuery extends AbstractExp {
 
 	private static final long serialVersionUID = 8608792548174831908L;
 

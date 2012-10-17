@@ -13,47 +13,57 @@ import java.util.Collections;
 import java.util.List;
 
 import org.olap4j.OlapException;
-import org.olap4j.mdx.DimensionNode;
-import org.olap4j.mdx.LevelNode;
-import org.olap4j.mdx.MemberNode;
+import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
-import org.olap4j.type.LevelType;
-import org.olap4j.type.MemberType;
-import org.olap4j.type.Type;
 
 import com.eyeq.pivot4j.PivotException;
+import com.eyeq.pivot4j.mdx.DimensionExp;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
-import com.eyeq.pivot4j.mdx.ParseTreeNodeExp;
+import com.eyeq.pivot4j.mdx.LevelExp;
+import com.eyeq.pivot4j.mdx.MemberExp;
 import com.eyeq.pivot4j.mdx.SetExp;
 import com.eyeq.pivot4j.mdx.Syntax;
 
 public class QuaxUtil {
 
-	private QuaxUtil() {
+	private Cube cube;
+
+	/**
+	 * @param cube
+	 */
+	public QuaxUtil(Cube cube) {
+		if (cube == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'cube'.");
+		}
+
+		this.cube = cube;
+	}
+
+	/**
+	 * @return cube
+	 */
+	protected Cube getCube() {
+		return cube;
 	}
 
 	/**
 	 * @param oExp
 	 * @return true if oExp is a member expression
 	 */
-	public static boolean isMember(Exp oExp) {
-		if (oExp instanceof ParseTreeNodeExp) {
-			ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;
-			return adapter.getType() instanceof MemberType;
-		}
-
-		return false;
+	public boolean isMember(Exp oExp) {
+		return oExp instanceof MemberExp;
 	}
 
 	/**
 	 * @param oExp
 	 * @return true if oExp is a FunCall expression
 	 */
-	public static boolean isFunCall(Exp oExp) {
+	public boolean isFunCall(Exp oExp) {
 		return (oExp instanceof FunCall);
 	}
 
@@ -62,7 +72,7 @@ public class QuaxUtil {
 	 * @param member
 	 * @return true if oExp is equal to member
 	 */
-	public static boolean equalMember(Exp oExp, Member member) {
+	public boolean equalMember(Exp oExp, Member member) {
 		return member.equals(memberForExp(oExp));
 	}
 
@@ -71,7 +81,7 @@ public class QuaxUtil {
 	 * @param function
 	 * @return true if oExp is a specific function call
 	 */
-	public static boolean isFunCallTo(Exp oExp, String function) {
+	public boolean isFunCallTo(Exp oExp, String function) {
 		return isFunCall(oExp) && ((FunCall) oExp).isCallTo(function);
 	}
 
@@ -84,7 +94,7 @@ public class QuaxUtil {
 	 *            (child)
 	 * @return true if cMember (2.arg) is child of pMember (1.arg)
 	 */
-	public static boolean checkParent(Member pMember, Exp cMembObj) {
+	public boolean checkParent(Member pMember, Exp cMembObj) {
 		Member child = memberForExp(cMembObj);
 		return child != null && pMember.equals(child.getParentMember());
 	}
@@ -98,7 +108,7 @@ public class QuaxUtil {
 	 *            (parent)
 	 * @return true if cMember (1.arg) is child of pMember (2.arg)
 	 */
-	public static boolean checkChild(Member cMember, Exp pMembObj) {
+	public boolean checkChild(Member cMember, Exp pMembObj) {
 		Member parent = memberForExp(pMembObj);
 		return parent != null && parent.equals(cMember.getParentMember());
 	}
@@ -112,7 +122,7 @@ public class QuaxUtil {
 	 *            (descendant)
 	 * @return true if dMember (2.arg) is descendant of aMember (1.arg)
 	 */
-	public static boolean checkDescendantM(Member aMember, Member dMember) {
+	public boolean checkDescendantM(Member aMember, Member dMember) {
 		return dMember.getAncestorMembers().contains(dMember);
 	}
 
@@ -123,7 +133,7 @@ public class QuaxUtil {
 	 * @param m
 	 * @return true if FunCall contains member
 	 */
-	public static boolean isMemberInFunCall(Exp oExp, Member member)
+	public boolean isMemberInFunCall(Exp oExp, Member member)
 			throws UnknownExpressionException {
 		if (!isFunCall(oExp)) {
 			return false;
@@ -154,7 +164,7 @@ public class QuaxUtil {
 	 * @return true, if FunCall contains member's child
 	 * @throws UnknownExpressionException
 	 */
-	public static boolean isChildOfMemberInFunCall(Exp oExp, Member member)
+	public boolean isChildOfMemberInFunCall(Exp oExp, Member member)
 			throws UnknownExpressionException {
 		// calculated members do not have children
 		if (!isFunCall(oExp) || member.isCalculated()) {
@@ -232,7 +242,7 @@ public class QuaxUtil {
 	 * @param m
 	 * @return true if FunCall contains descendant of member
 	 */
-	public static boolean isDescendantOfMemberInFunCall(Exp oExp, Member member)
+	public boolean isDescendantOfMemberInFunCall(Exp oExp, Member member)
 			throws UnknownExpressionException {
 		// calculated members do not have children
 		if (!isFunCall(oExp) || member.isCalculated()) {
@@ -276,7 +286,7 @@ public class QuaxUtil {
 	 * @param ancestor
 	 * @param descendant
 	 */
-	public static boolean isDescendant(Member ancestor, Exp descendant) {
+	public boolean isDescendant(Member ancestor, Exp descendant) {
 		Member member = memberForExp(descendant);
 		if (member == null) {
 			return false;
@@ -289,7 +299,7 @@ public class QuaxUtil {
 	 * @param ancestor
 	 * @param descendant
 	 */
-	public static boolean isDescendant(Member ancestor, Member descendant) {
+	public boolean isDescendant(Member ancestor, Member descendant) {
 		// a calculated member, even if defined under "ancestor" is *not*
 		// descendant,
 		// WITM MEMBER a.b as '..'
@@ -322,7 +332,7 @@ public class QuaxUtil {
 	 * @return true, if any member of the set defined by funcall is NOT top
 	 *         level
 	 */
-	public static boolean isFunCallNotTopLevel(Exp oExp)
+	public boolean isFunCallNotTopLevel(Exp oExp)
 			throws UnknownExpressionException {
 		if (!isFunCall(oExp)) {
 			return false;
@@ -361,7 +371,7 @@ public class QuaxUtil {
 	 *            - member to be checked
 	 * @return true - if member is on top level
 	 */
-	public static boolean isMemberOnToplevel(Exp oMem) {
+	public boolean isMemberOnToplevel(Exp oMem) {
 		Member member = memberForExp(oMem);
 		if (member.getLevel().getDepth() > 0) {
 			return false;
@@ -375,7 +385,7 @@ public class QuaxUtil {
 	 * basically handle following FunCalls member.children, member.descendants,
 	 * level.members
 	 */
-	public static boolean canHandle(Exp oExp) {
+	public boolean canHandle(Exp oExp) {
 		if (isMember(oExp)) {
 			return true;
 		} else if (isFunCall(oExp)) {
@@ -410,7 +420,7 @@ public class QuaxUtil {
 	 * @param oExp
 	 * @return
 	 */
-	public static Member getParentMember(Exp oExp) {
+	public Member getParentMember(Exp oExp) {
 		return memberForExp(oExp).getParentMember();
 	}
 
@@ -418,7 +428,7 @@ public class QuaxUtil {
 	 * @param oParent
 	 * @return
 	 */
-	public static List<Exp> getChildMembers(Exp oParent) {
+	public List<Exp> getChildMembers(Exp oParent) {
 		Member parent = memberForExp(oParent);
 
 		if (parent == null) {
@@ -445,14 +455,9 @@ public class QuaxUtil {
 	 * @param oExp
 	 * @return
 	 */
-	public static Member memberForExp(Exp oExp) {
-		if (oExp instanceof ParseTreeNodeExp) {
-			ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;
-
-			Type type = adapter.getType();
-			if (type instanceof MemberType) {
-				return ((MemberType) type).getMember();
-			}
+	public Member memberForExp(Exp oExp) {
+		if (oExp instanceof MemberExp) {
+			return ((MemberExp) oExp).getMetadata(cube);
 		} else if (oExp instanceof FunCall && isFunCallTo(oExp, "{}")) {
 			FunCall func = (FunCall) oExp;
 			if (func.getArgs().length == 1) {
@@ -467,14 +472,9 @@ public class QuaxUtil {
 	 * @param oLevel
 	 * @return
 	 */
-	public static Level levelForExp(Exp oExp) {
-		if (oExp instanceof ParseTreeNodeExp) {
-			ParseTreeNodeExp adapter = (ParseTreeNodeExp) oExp;
-
-			Type type = adapter.getType();
-			if (type instanceof LevelType) {
-				return ((LevelType) type).getLevel();
-			}
+	public Level levelForExp(Exp oExp) {
+		if (oExp instanceof DimensionExp) {
+			return ((LevelExp) oExp).getMetadata(cube);
 		}
 
 		return null;
@@ -484,7 +484,7 @@ public class QuaxUtil {
 	 * @param oExp
 	 * @return
 	 */
-	public static StringBuilder funString(Exp oExp) {
+	public StringBuilder funString(Exp oExp) {
 		FunCall f = (FunCall) oExp;
 
 		StringBuilder sb = new StringBuilder();
@@ -538,7 +538,7 @@ public class QuaxUtil {
 	 * @param oExp
 	 * @return
 	 */
-	public static String getMemberUniqueName(Exp oExp) {
+	public String getMemberUniqueName(Exp oExp) {
 		Member member = memberForExp(oExp);
 		return member.getUniqueName();
 	}
@@ -549,8 +549,8 @@ public class QuaxUtil {
 	 * @param member
 	 * @return Expression Object
 	 */
-	public static Exp expForMember(Member member) {
-		return new ParseTreeNodeExp(new MemberNode(null, member));
+	public Exp expForMember(Member member) {
+		return new MemberExp(member);
 	}
 
 	/**
@@ -559,8 +559,8 @@ public class QuaxUtil {
 	 * @param dimension
 	 * @return Expression Object
 	 */
-	public static Exp expForDim(Dimension dimension) {
-		return new ParseTreeNodeExp(new DimensionNode(null, dimension));
+	public Exp expForDim(Dimension dimension) {
+		return new DimensionExp(dimension);
 	}
 
 	/**
@@ -569,15 +569,15 @@ public class QuaxUtil {
 	 * @param level
 	 * @return Expression Object
 	 */
-	public static Exp expForLevel(Level level) {
-		return new ParseTreeNodeExp(new LevelNode(null, level));
+	public Exp expForLevel(Level level) {
+		return new LevelExp(level);
 	}
 
 	/**
 	 * @param path
 	 * @return
 	 */
-	public static String memberString(List<Member> path) {
+	public String memberString(List<Member> path) {
 		if (path == null || path.isEmpty()) {
 			return "";
 		}
@@ -602,7 +602,7 @@ public class QuaxUtil {
 	 *            list of members
 	 * @return null for empty list, single member or set function otherwise
 	 */
-	public static Exp createMemberSet(List<Member> members) {
+	public Exp createMemberSet(List<Member> members) {
 		if (members == null || members.isEmpty()) {
 			return null;
 		} else if (members.size() == 1) {
@@ -623,7 +623,7 @@ public class QuaxUtil {
 	 *            - member
 	 * @return depth
 	 */
-	public static int levelDepthForMember(Exp oExp) {
+	public int levelDepthForMember(Exp oExp) {
 		Member member = memberForExp(oExp);
 		Level level = member.getLevel();
 
@@ -635,8 +635,7 @@ public class QuaxUtil {
 	 * @return hierarchy for Exp
 	 * @throws UnknownExpressionException
 	 */
-	public static Hierarchy hierForExp(Exp oExp)
-			throws UnknownExpressionException {
+	public Hierarchy hierForExp(Exp oExp) throws UnknownExpressionException {
 		if (isMember(oExp)) {
 			return memberForExp(oExp).getHierarchy();
 		} else if (oExp instanceof SetExp) {
@@ -675,8 +674,7 @@ public class QuaxUtil {
 	 *            if true, an "All" member will be expanded
 	 * @return a set for the top level members of an hierarchy
 	 */
-	public static Exp topLevelMembers(Hierarchy hierarchy,
-			boolean expandAllMember) {
+	public Exp topLevelMembers(Hierarchy hierarchy, boolean expandAllMember) {
 		Level topLevel = hierarchy.getLevels().get(0);
 
 		Member mAll;
@@ -746,7 +744,7 @@ public class QuaxUtil {
 	 *            FUNTYPE
 	 * @return function object
 	 */
-	public static Exp createFunCall(String function, Exp[] args, Syntax funType) {
+	public Exp createFunCall(String function, Exp[] args, Syntax funType) {
 		Exp[] expArgs = new Exp[args.length];
 		for (int i = 0; i < expArgs.length; i++) {
 			expArgs[i] = (Exp) args[i];
@@ -762,7 +760,7 @@ public class QuaxUtil {
 	 *            funcall expression
 	 * @return number of args
 	 */
-	public static int funCallArgCount(Exp oFun) {
+	public int funCallArgCount(Exp oFun) {
 		FunCall f = (FunCall) oFun;
 		return f.getArgs().length;
 	}
@@ -774,7 +772,7 @@ public class QuaxUtil {
 	 *            funcall expression
 	 * @return function name
 	 */
-	public static String funCallName(Exp oFun) {
+	public String funCallName(Exp oFun) {
 		return ((FunCall) oFun).getFunction();
 	}
 
@@ -787,7 +785,7 @@ public class QuaxUtil {
 	 *            index of argument
 	 * @return argument object
 	 */
-	public static Exp funCallArg(Exp oFun, int index) {
+	public Exp funCallArg(Exp oFun, int index) {
 		return ((FunCall) oFun).getArgs()[index];
 	}
 
@@ -796,8 +794,7 @@ public class QuaxUtil {
 	 * @param member
 	 * @param maxLevel
 	 */
-	public static void addMemberUncles(List<Exp> list, Member member,
-			int[] maxLevel) {
+	public void addMemberUncles(List<Exp> list, Member member, int[] maxLevel) {
 		int parentLevel = member.getLevel().getDepth() - 1;
 
 		if (parentLevel < maxLevel[0])
@@ -833,8 +830,7 @@ public class QuaxUtil {
 	 * @param member
 	 * @param maxLevel
 	 */
-	public static void addMemberSiblings(List<Exp> list, Member member,
-			int[] maxLevel) {
+	public void addMemberSiblings(List<Exp> list, Member member, int[] maxLevel) {
 		int level = member.getLevel().getDepth();
 		if (level < maxLevel[0]) {
 			return;
@@ -870,8 +866,7 @@ public class QuaxUtil {
 	 * @param member
 	 * @param maxLevel
 	 */
-	public static void addMemberChildren(List<Exp> list, Member member,
-			int[] maxLevel) {
+	public void addMemberChildren(List<Exp> list, Member member, int[] maxLevel) {
 		int childLevel = member.getLevel().getDepth() + 1;
 		if (childLevel < maxLevel[0]) {
 			return;
@@ -906,7 +901,7 @@ public class QuaxUtil {
 	 * @param level
 	 * @param maxLevel
 	 */
-	public static void addMemberDescendants(List<Exp> list, Member member,
+	public void addMemberDescendants(List<Exp> list, Member member,
 			Level level, int[] maxLevel) {
 		int parentLevel = member.getLevel().getDepth() - 1;
 		if (parentLevel < maxLevel[0]) {
@@ -940,8 +935,7 @@ public class QuaxUtil {
 	 * @param level
 	 * @param maxLevel
 	 */
-	public static void addLevelMembers(List<Exp> list, Level level,
-			int[] maxLevel) {
+	public void addLevelMembers(List<Exp> list, Level level, int[] maxLevel) {
 		int depth = level.getDepth();
 		if (depth < maxLevel[0]) {
 			return;
@@ -973,7 +967,7 @@ public class QuaxUtil {
 	 * @param level
 	 * @return
 	 */
-	public static Level getParentLevel(Level level) {
+	public Level getParentLevel(Level level) {
 		Level parent = null;
 
 		if (level.getDepth() > 0) {
@@ -996,7 +990,7 @@ public class QuaxUtil {
 	 *            member to search for
 	 * @return true if member mSearch is in set of children function
 	 */
-	public static boolean isMemberInChildren(FunCall f, Member member) {
+	public boolean isMemberInChildren(FunCall f, Member member) {
 		// calculated members are not really child
 		if (member.isCalculated()) {
 			return false;
@@ -1013,7 +1007,7 @@ public class QuaxUtil {
 	 *            member to search for
 	 * @return true if member mSearch is in set of Descendants function
 	 */
-	public static boolean isMemberInDescendants(FunCall f, Member member) {
+	public boolean isMemberInDescendants(FunCall f, Member member) {
 		// calculated members are not really child
 		if (member.isCalculated()) {
 			return false;
@@ -1049,7 +1043,7 @@ public class QuaxUtil {
 	 *            member to search for
 	 * @return true if member mSearch is in set of Members function
 	 */
-	public static boolean isMemberInLevel(FunCall f, Member member) {
+	public boolean isMemberInLevel(FunCall f, Member member) {
 		Level level = levelForExp(f.getArgs()[0]);
 		return level.equals(member.getLevel());
 	}
@@ -1061,7 +1055,7 @@ public class QuaxUtil {
 	 *            member to search for
 	 * @return true if member mSearch is in set function
 	 */
-	public static boolean isMemberInSet(FunCall f, Member member) {
+	public boolean isMemberInSet(FunCall f, Member member) {
 		// set of members expected
 		for (Exp arg : f.getArgs()) {
 			Member m = memberForExp(arg);
@@ -1080,7 +1074,7 @@ public class QuaxUtil {
 	 * @return true if member mSearch is in set function
 	 * @throws UnknownExpressionException
 	 */
-	public static boolean isMemberInUnion(FunCall f, Member member)
+	public boolean isMemberInUnion(FunCall f, Member member)
 			throws UnknownExpressionException {
 		// Unions may be nested
 		for (int i = 0; i < 2; i++) {

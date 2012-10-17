@@ -11,7 +11,7 @@ package com.eyeq.pivot4j.mdx;
 /**
  * MDX parser Literal Expressions
  */
-public class Literal implements Exp {
+public class Literal extends AbstractExp {
 
 	private static final long serialVersionUID = 3137892085820716628L;
 

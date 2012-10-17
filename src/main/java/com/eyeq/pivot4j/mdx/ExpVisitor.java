@@ -8,10 +8,6 @@
  */
 package com.eyeq.pivot4j.mdx;
 
-import org.olap4j.metadata.Dimension;
-import org.olap4j.metadata.Hierarchy;
-import org.olap4j.metadata.Level;
-import org.olap4j.metadata.Member;
 
 /**
  * Visitor for MDX parse expressions
@@ -32,11 +28,11 @@ public interface ExpVisitor {
 
 	void visitQueryAxis(QueryAxis visio);
 
-	void visitDimension(Dimension visio);
+	void visitDimension(DimensionExp visio);
 
-	void visitHierarchy(Hierarchy visio);
+	void visitHierarchy(HierarchyExp visio);
 
-	void visitLevel(Level visio);
+	void visitLevel(LevelExp visio);
 
-	void visitMember(Member visio);
+	void visitMember(MemberExp visio);
 }
