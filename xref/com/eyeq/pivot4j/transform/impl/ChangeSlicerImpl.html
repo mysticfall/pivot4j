@@ -32,8 +32,8 @@
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.NotInitializedException;
 <a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.Exp;
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.FunCall;
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.Syntax;
-<a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.query.QuaxUtil;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.MemberExp;
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.Syntax;
 <a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.query.QueryAdapter;
 <a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.transform.AbstractTransform;
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.transform.ChangeSlicer;
@@ -154,7 +154,7 @@
 <a class="jxr_linenumber" name="144" href="#144">144</a> 					}
 <a class="jxr_linenumber" name="145" href="#145">145</a> 				}
 <a class="jxr_linenumber" name="146" href="#146">146</a> 
-<a class="jxr_linenumber" name="147" href="#147">147</a> 				collectedMemberExpressions.add(QuaxUtil.expForMember(member));
+<a class="jxr_linenumber" name="147" href="#147">147</a> 				collectedMemberExpressions.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/MemberExp.html">MemberExp</a>(member));
 <a class="jxr_linenumber" name="148" href="#148">148</a> 			}
 <a class="jxr_linenumber" name="149" href="#149">149</a> 
 <a class="jxr_linenumber" name="150" href="#150">150</a> 			<em class="jxr_comment">// Add lastly collected member to filters conditions list</em>

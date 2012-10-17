@@ -20,44 +20,55 @@
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
 <a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="12" href="#12">12</a>  
-<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.Hierarchy;
-<a class="jxr_linenumber" name="14" href="#14">14</a>  
-<a class="jxr_linenumber" name="15" href="#15">15</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_javadoccomment"> * Allows to place hierarchies on the visible query axes.</em>
-<a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_javadoccomment"> * Use Case.</em>
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;The GUI will examine the result of the olap query to find out which</em>
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_javadoccomment"> * hierarchies are currently displayed on what axes. It will use</em>
-<a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_javadoccomment"> * Axis.getHierarchies() for this</em>
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;Then it will find out what Hierarchies exist by calling</em>
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment"> * OlapModel.getDimensions() and Dimension.getHierarchies().</em>
-<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;The Information will be presented to the user and he will be allowed to</em>
-<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> * change the mapping between axes and hierarchies.</em>
-<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;For every Hierarchy that the user selected for display on an axis, the</em>
-<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment"> * GUI will call createMemberExpression().</em>
-<a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment"> * </em>
-<a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;For each axis the system will build the the array of memberExpressions</em>
-<a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment"> * and call setAxis once.</em>
-<a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="37" href="#37">37</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../com/eyeq/pivot4j/transform/PlaceHierarchiesOnAxes.html">PlaceHierarchiesOnAxes</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../com/eyeq/pivot4j/transform/Transform.html">Transform</a> {
-<a class="jxr_linenumber" name="38" href="#38">38</a>  
-<a class="jxr_linenumber" name="39" href="#39">39</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">	 * @param axisOrdinal</em>
-<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">	 *            The target axis ordinal</em>
-<a class="jxr_linenumber" name="42" href="#42">42</a>  <em class="jxr_javadoccomment">	 * @param hierarchies</em>
-<a class="jxr_linenumber" name="43" href="#43">43</a>  <em class="jxr_javadoccomment">	 *            The hierarchies to put</em>
-<a class="jxr_linenumber" name="44" href="#44">44</a>  <em class="jxr_javadoccomment">	 * @param expandAllMember</em>
-<a class="jxr_linenumber" name="45" href="#45">45</a>  <em class="jxr_javadoccomment">	 *            If this flag is set and an "All" member is put onto an axis,</em>
-<a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment">	 *            the children of the All member will be added as well.</em>
-<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="48" href="#48">48</a>  	<strong class="jxr_keyword">void</strong> placeHierarchies(<strong class="jxr_keyword">int</strong> axisOrdinal, List&lt;Hierarchy&gt; hierarchies,
-<a class="jxr_linenumber" name="49" href="#49">49</a>  			<strong class="jxr_keyword">boolean</strong> expandAllMember);
-<a class="jxr_linenumber" name="50" href="#50">50</a>  }
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> org.olap4j.Axis;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.Hierarchy;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_javadoccomment"> * Allows to place hierarchies on the visible query axes.</em>
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_javadoccomment"> * Use Case.</em>
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;The GUI will examine the result of the olap query to find out which</em>
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_javadoccomment"> * hierarchies are currently displayed on what axes. It will use</em>
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_javadoccomment"> * Axis.getHierarchies() for this</em>
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;Then it will find out what Hierarchies exist by calling</em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment"> * OlapModel.getDimensions() and Dimension.getHierarchies().</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;The Information will be presented to the user and he will be allowed to</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> * change the mapping between axes and hierarchies.</em>
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;For every Hierarchy that the user selected for display on an axis, the</em>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment"> * GUI will call createMemberExpression().</em>
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment"> * &lt;li&gt;For each axis the system will build the the array of memberExpressions</em>
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment"> * and call setAxis once.</em>
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="38" href="#38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../com/eyeq/pivot4j/transform/PlaceHierarchiesOnAxes.html">PlaceHierarchiesOnAxes</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../com/eyeq/pivot4j/transform/Transform.html">Transform</a> {
+<a class="jxr_linenumber" name="39" href="#39">39</a>  
+<a class="jxr_linenumber" name="40" href="#40">40</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">	 * @param axis</em>
+<a class="jxr_linenumber" name="42" href="#42">42</a>  <em class="jxr_javadoccomment">	 *            The target axis</em>
+<a class="jxr_linenumber" name="43" href="#43">43</a>  <em class="jxr_javadoccomment">	 * @param hierarchies</em>
+<a class="jxr_linenumber" name="44" href="#44">44</a>  <em class="jxr_javadoccomment">	 *            The hierarchies to put</em>
+<a class="jxr_linenumber" name="45" href="#45">45</a>  <em class="jxr_javadoccomment">	 * @param expandAllMember</em>
+<a class="jxr_linenumber" name="46" href="#46">46</a>  <em class="jxr_javadoccomment">	 *            If this flag is set and an "All" member is put onto an axis,</em>
+<a class="jxr_linenumber" name="47" href="#47">47</a>  <em class="jxr_javadoccomment">	 *            the children of the All member will be added as well.</em>
+<a class="jxr_linenumber" name="48" href="#48">48</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="49" href="#49">49</a>  	<strong class="jxr_keyword">void</strong> placeHierarchies(Axis axis, List&lt;Hierarchy&gt; hierarchies,
+<a class="jxr_linenumber" name="50" href="#50">50</a>  			<strong class="jxr_keyword">boolean</strong> expandAllMember);
+<a class="jxr_linenumber" name="51" href="#51">51</a>  
+<a class="jxr_linenumber" name="52" href="#52">52</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">	 * Collects all hierarchies on a given axis in the result. If no hierarchies</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">	 * are visible, it returns an empty list.</em>
+<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">	 * @param axis</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment">	 *            the axis to use</em>
+<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">	 * @return A list of hierarchies</em>
+<a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="60" href="#60">60</a>  	List&lt;Hierarchy&gt; findVisibleHierarchies(Axis axis);
+<a class="jxr_linenumber" name="61" href="#61">61</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
