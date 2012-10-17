@@ -50,6 +50,10 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<connection>scm:git:git://github.com/mysticfall/pivot4j.git</connection>
 		<developerConnection>scm:git:git@github.com:mysticfall/pivot4j.git</developerConnection>
 	</scm>
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://ci.analytical-labs.com/job/pivot4j/</url>
+	</ciManagement>
 
 	<mailingLists>
 		<mailingList>
