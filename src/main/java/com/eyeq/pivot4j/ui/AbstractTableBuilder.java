@@ -17,6 +17,7 @@ import java.util.Map;
 import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
+import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
@@ -557,17 +558,38 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 		for (int rowIndex = 0; rowIndex < height; rowIndex++) {
 			TR row = headers.get(rowIndex);
 
+			CellSet cellSet = context.getCellSet();
+
+			CellSetAxis columnAxis = cellSet.getAxes().get(
+					Axis.COLUMNS.axisOrdinal());
+			CellSetAxis rowAxis = cellSet.getAxes()
+					.get(Axis.ROWS.axisOrdinal());
+
 			for (int colIndex = 0; colIndex < width; colIndex++) {
-				Cell cell = context.getCellSet().getCell(ordinal++);
+				Cell cell = cellSet.getCell(ordinal);
 				context.setCell(cell);
+
+				List<Integer> coords = cellSet.ordinalToCoordinates(ordinal);
+
+				Position columnPosition = columnAxis.getPositions().get(
+						coords.get(Axis.COLUMNS.axisOrdinal()));
+				context.setColumnPosition(columnPosition);
+
+				Position rowPosition = rowAxis.getPositions().get(
+						coords.get(Axis.ROWS.axisOrdinal()));
+				context.setRowPosition(rowPosition);
 
 				TC tableCell = createCell(context, table, row, colIndex,
 						rowIndex, 1, 1);
 				row.getCells().add(tableCell);
+
+				ordinal++;
 			}
 		}
 
 		context.setCell(null);
+		context.setColumnPosition(null);
+		context.setRowPosition(null);
 	}
 
 	/**
