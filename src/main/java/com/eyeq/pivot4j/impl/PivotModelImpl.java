@@ -553,7 +553,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		}
 
 		if (logger.isInfoEnabled()) {
-			logger.info("change topBottomCount from " + this.sortMode + " to "
+			logger.info("Change sort mode from " + this.sortMode + " to "
 					+ sortMode);
 		}
 
@@ -632,14 +632,14 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	}
 
 	/**
-	 * @param membersToSort
+	 * @param axisToSort
 	 *            Axis containing the members to be sorted
 	 * @param position
 	 *            Position on "other axis" defining the members by which the
 	 *            membersToSort are sorted
 	 */
-	public void sort(CellSetAxis membersToSort, Position position) {
-		List<Position> positions = membersToSort.getPositions();
+	public void sort(CellSetAxis axisToSort, Position position) {
+		List<Position> positions = axisToSort.getPositions();
 
 		// if the axis to sort does not contain any positions - sorting is not
 		// posssible

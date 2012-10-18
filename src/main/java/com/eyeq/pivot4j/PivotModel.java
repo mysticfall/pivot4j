@@ -115,12 +115,12 @@ public interface PivotModel {
 	 * <code>BOTTOMCOUNT</code> the current value of <code>topBottomCount</code>
 	 * will be used.
 	 * 
-	 * @param membersToSort
+	 * @param axisToSort
 	 *            the axis to sort. Its one of the "other" axes, that do not
 	 *            contain position
 	 * @param position
 	 *            the sort criteria
 	 */
-	void sort(CellSetAxis membersToSort, Position position)
+	void sort(CellSetAxis axisToSort, Position position)
 			throws NotInitializedException;
 }
