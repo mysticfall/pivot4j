@@ -50,6 +50,37 @@ public interface PlaceHierarchiesOnAxes extends Transform {
 			boolean expandAllMember);
 
 	/**
+	 * @param axis
+	 *            The target axis
+	 * @param hierarchy
+	 *            The hierarchy to add
+	 * @param expandAllMember
+	 * @param position
+	 *            The position index where to add the hierarchy. Any value less
+	 *            than zero will put the hierarchy at the end of the axis.
+	 */
+	void addHierarchy(Axis axis, Hierarchy hierarchy, boolean expandAllMember,
+			int position);
+
+	/**
+	 * @param axis
+	 *            The target axis
+	 * @param hierarchy
+	 *            The hierarchy to remove
+	 */
+	void removeHierarchy(Axis axis, Hierarchy hierarchy);
+
+	/**
+	 * @param axis
+	 *            The target axis
+	 * @param hierarchy
+	 *            The hierarchy to move
+	 * @param index
+	 *            New hierarchy position
+	 */
+	void moveHierarchy(Axis axis, Hierarchy hierarchy, int position);
+
+	/**
 	 * Collects all hierarchies on a given axis in the result. If no hierarchies
 	 * are visible, it returns an empty list.
 	 * 

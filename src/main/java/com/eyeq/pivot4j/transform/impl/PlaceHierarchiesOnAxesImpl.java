@@ -92,6 +92,87 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes#addHierarchy(org.olap4j.Axis,
+	 *      org.olap4j.metadata.Hierarchy, boolean, int)
+	 */
+	@Override
+	public void addHierarchy(Axis axis, Hierarchy hierarchy,
+			boolean expandAllMember, int position) {
+		List<Hierarchy> hierarchies = findVisibleHierarchies(axis);
+
+		if (hierarchies.contains(hierarchy)) {
+			moveHierarchy(axis, hierarchy, position);
+			return;
+		}
+
+		hierarchies = new ArrayList<Hierarchy>(hierarchies);
+
+		if (position < 0 || position >= hierarchies.size()) {
+			hierarchies.add(hierarchy);
+		} else {
+			hierarchies.add(position, hierarchy);
+		}
+
+		placeHierarchies(axis, hierarchies, expandAllMember);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes#moveHierarchy(org.olap4j
+	 *      .Axis, org.olap4j.metadata.Hierarchy, int)
+	 */
+	@Override
+	public void moveHierarchy(Axis axis, Hierarchy hierarchy, int position) {
+		List<Hierarchy> hierarchies = findVisibleHierarchies(axis);
+
+		if (!hierarchies.contains(hierarchy)) {
+			if (logger.isWarnEnabled()) {
+				logger.warn("The specified axis does not contain the hierarhcy to be moved.");
+			}
+			return;
+		}
+
+		hierarchies = new ArrayList<Hierarchy>(hierarchies);
+
+		if (position < 0 || position >= hierarchies.size()) {
+			hierarchies.remove(hierarchy);
+			hierarchies.add(hierarchy);
+		} else {
+			int index = hierarchies.indexOf(hierarchy);
+
+			if (position < index) {
+				hierarchies.remove(hierarchy);
+				hierarchies.add(position, hierarchy);
+			} else if (position > index) {
+				hierarchies.add(position, hierarchy);
+				hierarchies.remove(index);
+			}
+		}
+
+		placeHierarchies(axis, hierarchies, false);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes#removeHierarchy(org
+	 *      .olap4j.Axis, org.olap4j.metadata.Hierarchy)
+	 */
+	@Override
+	public void removeHierarchy(Axis axis, Hierarchy hierarchy) {
+		List<Hierarchy> hierarchies = findVisibleHierarchies(axis);
+
+		if (!hierarchies.contains(hierarchy)) {
+			if (logger.isWarnEnabled()) {
+				logger.warn("The specified axis does not contain the hierarhcy to be moved.");
+			}
+			return;
+		}
+
+		hierarchies = new ArrayList<Hierarchy>(hierarchies);
+		hierarchies.remove(hierarchy);
+
+		placeHierarchies(axis, hierarchies, false);
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes#findVisibleHierarchies
 	 *      (org.olap4j.Axis)
 	 */

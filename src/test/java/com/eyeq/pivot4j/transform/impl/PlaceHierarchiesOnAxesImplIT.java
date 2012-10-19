@@ -44,7 +44,7 @@ public class PlaceHierarchiesOnAxesImplIT extends
 	}
 
 	@Test
-	public void testTransform() {
+	public void testPlaceHierarchies() {
 		PlaceHierarchiesOnAxes transform = getTransform();
 
 		Cube cube = getPivotModel().getCube();
@@ -69,7 +69,7 @@ public class PlaceHierarchiesOnAxesImplIT extends
 	}
 
 	@Test
-	public void testTransformExpandAllMembers() {
+	public void testExpandAllMembers() {
 		PlaceHierarchiesOnAxes transform = getTransform();
 
 		Cube cube = getPivotModel().getCube();
@@ -84,10 +84,129 @@ public class PlaceHierarchiesOnAxesImplIT extends
 		transform.placeHierarchies(Axis.ROWS, hierarchies, true);
 
 		assertEquals(
-				"Unexpected MDX query after axes have been swapped",
+				"Unexpected MDX query after set hierarchies on axis",
 				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin(Union({[Promotion Media].[All Media]}, [Promotion Media].[All Media].Children), "
 						+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]",
+				getPivotModel().getCurrentMdx());
+
+		getPivotModel().getCellSet();
+	}
+
+	@Test
+	public void testAddHierarchyAtIndexMinusOne() {
+		PlaceHierarchiesOnAxes transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Hierarchy gender = cube.getHierarchies().get("Gender");
+
+		transform.addHierarchy(Axis.ROWS, gender, false, -1);
+
+		assertEquals(
+				"Unexpected MDX query after adding a new hierarchy",
+				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS"
+						+ ", CrossJoin({[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}, "
+						+ "{[Gender].[All Gender]}) ON ROWS FROM [Sales]",
+				getPivotModel().getCurrentMdx());
+
+		getPivotModel().getCellSet();
+	}
+
+	@Test
+	public void testAddHierarchyAtIndexTwo() {
+		PlaceHierarchiesOnAxes transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Hierarchy gender = cube.getHierarchies().get("Gender");
+
+		transform.addHierarchy(Axis.ROWS, gender, false, 2);
+
+		assertEquals(
+				"Unexpected MDX query after adding a new hierarchy",
+				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS"
+						+ ", CrossJoin({[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}, "
+						+ "{[Gender].[All Gender]}) ON ROWS FROM [Sales]",
+				getPivotModel().getCurrentMdx());
+
+		getPivotModel().getCellSet();
+	}
+
+	@Test
+	public void testAddHierarchyAtIndexZero() {
+		PlaceHierarchiesOnAxes transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Hierarchy gender = cube.getHierarchies().get("Gender");
+
+		transform.addHierarchy(Axis.ROWS, gender, false, 0);
+
+		assertEquals(
+				"Unexpected MDX query after adding a new hierarchy",
+				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "CrossJoin({[Gender].[All Gender]}, {[Product].[All Products], [Product].[Drink], [Product].[Food], "
+						+ "[Product].[Non-Consumable]}) ON ROWS FROM [Sales]",
+				getPivotModel().getCurrentMdx());
+
+		getPivotModel().getCellSet();
+	}
+
+	@Test
+	public void testMoveHierarchy() {
+		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				+ "CrossJoin(Union({[Promotion Media].[All Media]}, [Promotion Media].[All Media].Children), "
+				+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]";
+
+		getPivotModel().setMdx(query);
+
+		PlaceHierarchiesOnAxes transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Hierarchy product = cube.getHierarchies().get("Product");
+
+		transform.moveHierarchy(Axis.ROWS, product, 0);
+
+		assertEquals(
+				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "CrossJoin({[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}, "
+						+ "{[Promotion Media].[All Media], [Promotion Media].[Bulk Mail], [Promotion Media].[Cash Register Handout], "
+						+ "[Promotion Media].[Daily Paper], [Promotion Media].[Daily Paper, Radio], [Promotion Media].[Daily Paper, Radio, TV], "
+						+ "[Promotion Media].[In-Store Coupon], [Promotion Media].[No Media], [Promotion Media].[Product Attachment], "
+						+ "[Promotion Media].[Radio], [Promotion Media].[Street Handout], [Promotion Media].[Sunday Paper], "
+						+ "[Promotion Media].[Sunday Paper, Radio], [Promotion Media].[Sunday Paper, Radio, TV], "
+						+ "[Promotion Media].[TV]}) ON ROWS FROM [Sales]",
+				getPivotModel().getCurrentMdx());
+
+		getPivotModel().getCellSet();
+	}
+
+	@Test
+	public void testRemoveHierarchy() {
+		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				+ "CrossJoin(Union({[Promotion Media].[All Media]}, [Promotion Media].[All Media].Children), "
+				+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]";
+
+		getPivotModel().setMdx(query);
+
+		PlaceHierarchiesOnAxes transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Hierarchy product = cube.getHierarchies().get("Product");
+
+		transform.removeHierarchy(Axis.ROWS, product);
+
+		assertEquals(
+				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "{[Promotion Media].[All Media], [Promotion Media].[Bulk Mail], [Promotion Media].[Cash Register Handout], "
+						+ "[Promotion Media].[Daily Paper], [Promotion Media].[Daily Paper, Radio], [Promotion Media].[Daily Paper, Radio, TV], "
+						+ "[Promotion Media].[In-Store Coupon], [Promotion Media].[No Media], [Promotion Media].[Product Attachment], "
+						+ "[Promotion Media].[Radio], [Promotion Media].[Street Handout], [Promotion Media].[Sunday Paper], "
+						+ "[Promotion Media].[Sunday Paper, Radio], [Promotion Media].[Sunday Paper, Radio, TV], "
+						+ "[Promotion Media].[TV]} ON ROWS FROM [Sales]",
 				getPivotModel().getCurrentMdx());
 
 		getPivotModel().getCellSet();
