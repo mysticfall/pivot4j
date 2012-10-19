@@ -45,11 +45,33 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#placeMembers(java.util.
-	 *      List)
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#placeMembers(org.olap4j.metadata.Hierarchy,
+	 *      java.util.List)
 	 */
-	public void placeMembers(List<Member> members) {
-		placeMembers(null, members);
+	@Override
+	public void placeMembers(Hierarchy hierarchy, List<Member> members) {
+		QueryAdapter adapter = getQueryAdapter();
+
+		Quax quax = adapter.findQuax(hierarchy.getDimension());
+		if (quax == null) {
+			throw new IllegalArgumentException(
+					"Cannot find the specified hierarchy on any axis.");
+		}
+
+		List<Member> selection = new ArrayList<Member>();
+
+		List<Hierarchy> hierarchies = quax.getHierarchies();
+		for (Hierarchy hier : hierarchies) {
+			if (hier.equals(hierarchy)) {
+				selection.addAll(members);
+			} else {
+				selection.addAll(findVisibleMembers(hierarchy));
+			}
+		}
+
+		Axis axis = Axis.Factory.forOrdinal(quax.getOrdinal());
+
+		placeMembers(axis, members);
 	}
 
 	/**
@@ -60,67 +82,166 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 	public void placeMembers(Axis axis, List<Member> members) {
 		QueryAdapter adapter = getQueryAdapter();
 
-		Map<Quax, List<Hierarchy>> hierarchyMap = new HashMap<Quax, List<Hierarchy>>();
+		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+
+		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(members.size());
+		Map<Hierarchy, List<Member>> memberMap = new HashMap<Hierarchy, List<Member>>(
+				hierarchies.size());
+
 		for (Member member : members) {
-			Quax quax;
+			Hierarchy hierarchy = member.getHierarchy();
 
-			if (axis == null) {
-				quax = adapter.findQuax(member.getDimension());
+			if (!hierarchies.contains(hierarchy)) {
+				hierarchies.add(hierarchy);
+			}
+
+			List<Member> selection = memberMap.get(hierarchy);
+			if (selection == null) {
+				selection = new ArrayList<Member>(members.size());
+				memberMap.put(hierarchy, selection);
+			}
+
+			if (!selection.contains(member)) {
+				selection.add(member);
+			}
+		}
+
+		List<Exp> expressions = new ArrayList<Exp>(hierarchies.size());
+
+		for (Hierarchy hierarchy : hierarchies) {
+			List<Member> selection = memberMap.get(hierarchy);
+
+			List<Exp> sets = new ArrayList<Exp>(selection.size());
+
+			if (selection.size() == 1) {
+				expressions.add(new MemberExp(selection.get(0)));
 			} else {
-				quax = adapter.getQuaxes().get(axis.axisOrdinal());
-			}
-
-			if (quax == null) {
-				if (logger.isWarnEnabled()) {
-					logger.warn("Unable to find query axis for dimension : "
-							+ member.getDimension().getUniqueName());
+				for (Member member : selection) {
+					sets.add(new MemberExp(member));
 				}
 
-				continue;
-			}
-
-			List<Hierarchy> hierarchies = hierarchyMap.get(quax);
-			if (hierarchies == null) {
-				hierarchies = new ArrayList<Hierarchy>();
-				hierarchyMap.put(quax, hierarchies);
-			}
-
-			if (!hierarchies.contains(member.getHierarchy())) {
-				hierarchies.add(member.getHierarchy());
+				expressions.add(new FunCall("{}", sets.toArray(new Exp[sets
+						.size()]), Syntax.Braces));
 			}
 		}
 
-		for (Quax quax : hierarchyMap.keySet()) {
-			List<Hierarchy> hierarchies = hierarchyMap.get(quax);
+		// generate the crossjoins
+		quax.regeneratePosTree(expressions, true);
 
-			List<Exp> expressions = new ArrayList<Exp>(hierarchies.size());
+		if (logger.isInfoEnabled()) {
+			logger.info("setQueryAxis axis=" + quax.getOrdinal()
+					+ " nDimension=" + hierarchies.size());
+			logger.info("Expression for Axis=" + quax.toString());
+		}
+	}
 
-			for (Hierarchy hierarchy : hierarchies) {
-				List<Exp> sets = new ArrayList<Exp>(members.size());
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.metadata
+	 *      .Member, int)
+	 */
+	@Override
+	public void addMember(Member member, int position) {
+		Hierarchy hierarchy = member.getHierarchy();
 
-				for (Member member : members) {
-					if (hierarchy.equals(member.getHierarchy())) {
-						sets.add(new MemberExp(member));
-					}
-				}
+		List<Member> selection = new ArrayList<Member>(
+				findVisibleMembers(hierarchy));
+		if (selection.contains(member)) {
+			moveMember(member, position);
+			return;
+		}
 
-				if (sets.size() == 1) {
-					expressions.add(sets.get(0));
-				} else {
-					expressions.add(new FunCall("{}", sets.toArray(new Exp[sets
-							.size()]), Syntax.Braces));
-				}
-			}
+		if (position < 0 || position >= selection.size()) {
+			selection.add(member);
+		} else {
+			selection.add(position, member);
+		}
 
-			// generate the crossjoins
-			quax.regeneratePosTree(expressions, true);
+		placeMembers(hierarchy, selection);
+	}
 
-			if (logger.isInfoEnabled()) {
-				logger.info("setQueryAxis axis=" + quax.getOrdinal()
-						+ " nDimension=" + hierarchies.size());
-				logger.info("Expression for Axis=" + quax.toString());
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMembers(org.olap4j.metadata.Hierarchy,
+	 *      java.util.List)
+	 */
+	@Override
+	public void addMembers(Hierarchy hierarchy, List<Member> members) {
+		if (members.isEmpty()) {
+			return;
+		}
+
+		List<Member> selection = new ArrayList<Member>(
+				findVisibleMembers(hierarchy));
+		for (Member member : members) {
+			if (!selection.contains(member)) {
+				selection.add(member);
 			}
 		}
+
+		placeMembers(hierarchy, selection);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#removeMember(org.olap4j
+	 *      .metadata.Member)
+	 */
+	@Override
+	public void removeMember(Member member) {
+		Hierarchy hierarchy = member.getHierarchy();
+
+		List<Member> members = new ArrayList<Member>(
+				findVisibleMembers(hierarchy));
+		members.remove(member);
+
+		placeMembers(hierarchy, members);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#removeMembers(org.olap4j.metadata.Hierarchy,
+	 *      java.util.List)
+	 */
+	@Override
+	public void removeMembers(Hierarchy hierarchy, List<Member> members) {
+		List<Member> selection = new ArrayList<Member>(
+				findVisibleMembers(hierarchy));
+		selection.removeAll(members);
+
+		placeMembers(hierarchy, selection);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#moveMember(org.olap4j.metadata
+	 *      .Member, int)
+	 */
+	@Override
+	public void moveMember(Member member, int position) {
+		Hierarchy hierarchy = member.getHierarchy();
+
+		List<Member> selection = new ArrayList<Member>(
+				findVisibleMembers(hierarchy));
+		if (!selection.contains(member)) {
+			if (logger.isWarnEnabled()) {
+				logger.warn("The specified member is not visible on the current result : "
+						+ member.getUniqueName());
+			}
+			return;
+		}
+
+		if (position < 0 || position >= selection.size()) {
+			selection.remove(member);
+			selection.add(member);
+		} else {
+			int index = selection.indexOf(member);
+
+			if (position < index) {
+				selection.remove(member);
+				selection.add(position, member);
+			} else if (position > index) {
+				selection.add(position, member);
+				selection.remove(index);
+			}
+		}
+
+		placeMembers(hierarchy, selection);
 	}
 
 	/**
