@@ -3,7 +3,7 @@
             ------
             Xavier Cho
             ------
-             2012-09-21
+             2012-10-20
 
 About
 
@@ -44,6 +44,9 @@ System Requirement
 
 
 News
+
+	* <<[2012-10-20]>> Pivot4J 0.0.3 has been released with various bug fixes and some new features.
+	Please see the {{{./changes-report.html}changes note}} for details. 
 
 	* <<[2012-10-08]>> Pivot4J 0.0.2 has been released with the new table builder API. 
 

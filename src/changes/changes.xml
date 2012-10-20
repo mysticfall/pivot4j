@@ -6,6 +6,32 @@
 		<author email="fender@eyeq.co.kr">Xavier Cho</author>
 	</properties>
 	<body>
+		<release version="0.0.3" date="2012-10-20" description="Pivot4J 0.0.3 release">
+			<action dev="mysticfall" type="fix" issue="13">
+				Fixed a bug which made config parameters to be ignored in PooledOlapDataSource class.
+			</action>
+			<action dev="mysticfall" type="update" issue="14">
+				 Remove JDBC 4.0 API dependency to make it compile on Java 6.
+			</action>
+			<action dev="mysticfall" type="update" issue="15">
+				 Improved query transform API with more convenient methods. 
+			</action>
+			<action dev="mysticfall" type="fix" issue="18">
+				 Model state serialization code has been rewritten to fix a problem with PivotModel.restoreState(). 
+			</action>
+			<action dev="mysticfall" type="add" issue="21">
+				Provide easier way to implement sort headers.
+			</action>
+			<action dev="mysticfall" type="add" issue="21">
+				Provide an easier way to implement sort headers.
+			</action>
+			<action dev="mysticfall" type="update" issue="22">
+				Made TableBuilder API to generate missing level headers on row axis.
+			</action>
+			<action dev="mysticfall" type="fix" issue="23">
+				Fixed a bug in TableBuilder which generates incorrect table layout for non-contiguous level members. 
+			</action>
+		</release>
 		<release version="0.0.2" date="2012-10-08" description="Pivot4J 0.0.2 release">
 			<action dev="mysticfall" type="add" issue="6">
 				Added the table builder API to facilliate UI implementation process.
