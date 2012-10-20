@@ -13,6 +13,7 @@ import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
@@ -30,6 +31,8 @@ public class BuildContext {
 	private Hierarchy hierarchy;
 
 	private Member member;
+
+	private Level level;
 
 	private Cell cell;
 
@@ -98,6 +101,21 @@ public class BuildContext {
 	 */
 	public void setMember(Member member) {
 		this.member = member;
+	}
+
+	/**
+	 * @return the level
+	 */
+	public Level getLevel() {
+		return level;
+	}
+
+	/**
+	 * @param level
+	 *            the level to set
+	 */
+	public void setLevel(Level level) {
+		this.level = level;
 	}
 
 	/**

@@ -49,7 +49,31 @@ public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 		return writer.toString().trim();
 	}
 
+	/**
+	 * @param name
+	 * @throws IOException
+	 */
 	protected void runTestCase(String name) throws IOException {
+		runTestCase(name, true, true, true);
+		runTestCase(name, true, true, false);
+		runTestCase(name, true, false, false);
+		runTestCase(name, true, false, true);
+		runTestCase(name, false, true, true);
+		runTestCase(name, false, true, false);
+		runTestCase(name, false, false, true);
+		runTestCase(name, false, false, false);
+	}
+
+	/**
+	 * @param name
+	 * @param hideSpans
+	 * @param showDimensionTitle
+	 * @param showParentMembers
+	 * @throws IOException
+	 */
+	protected void runTestCase(String name, boolean hideSpans,
+			boolean showDimensionTitle, boolean showParentMembers)
+			throws IOException {
 		String mdx = readTestResource(RESOURCE_PREFIX + name + "-mdx.txt");
 
 		PivotModel model = getPivotModel();
@@ -57,12 +81,24 @@ public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 		model.initialize();
 
 		HtmlTableBuilder builder = new HtmlTableBuilder();
-		builder.setHideSpans(false);
-		builder.setShowDimensionTitle(true);
-		builder.setShowParentMembers(true);
+		builder.setHideSpans(hideSpans);
+		builder.setShowDimensionTitle(showDimensionTitle);
+		builder.setShowParentMembers(showParentMembers);
 
 		HtmlTableModel table = builder.build(model);
 		table.setBorder(1);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(name);
+		sb.append("-");
+		sb.append(Boolean.toString(hideSpans));
+		sb.append("-");
+		sb.append(Boolean.toString(showDimensionTitle));
+		sb.append("-");
+		sb.append(Boolean.toString(showParentMembers));
+		sb.append("-result.html");
+
+		String fileName = sb.toString();
 
 		StringWriter writer = new StringWriter();
 		table.writeHtml(new PrintWriter(writer), 0);
@@ -70,10 +106,12 @@ public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 		writer.close();
 
 		String result = writer.toString().trim();
-		String expected = readTestResource(RESOURCE_PREFIX + name
-				+ "-result.html");
+		String expected = readTestResource(RESOURCE_PREFIX + fileName);
 
-		assertEquals(expected, result);
+		String message = String
+				.format("Unexpected result : %s, hideSpans=%s, showDimensionTitle=%s, showParentMembers=%s",
+						name, hideSpans, showDimensionTitle, showParentMembers);
+		assertEquals(message, expected, result);
 	}
 
 	@Test

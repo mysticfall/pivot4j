@@ -21,9 +21,11 @@ import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.transform.PlaceLevelsOnAxes;
 import com.eyeq.pivot4j.util.TreeNode;
 import com.eyeq.pivot4j.util.TreeNodeCallback;
 
@@ -408,6 +410,7 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 				Position position = memberNode.getPosition();
 
 				context.setMember(member);
+				context.setLevel(member.getLevel());
 				context.setRowPosition(position);
 
 				int maxSpan = maxSpanMap.get(hierarchy);
@@ -467,6 +470,7 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 				}
 
 				context.setMember(null);
+				context.setLevel(null);
 				context.setRowPosition(null);
 
 				return CONTINUE;
@@ -493,10 +497,17 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 
 		if (showDimensionTitle) {
 			height--;
+
+			if (showParentMembers) {
+				height--;
+			}
 		}
 
-		TC corner = createCell(context, table, firstHeader, 0, 0, width, height);
-		firstHeader.getCells().add(0, corner);
+		if (height > 0) {
+			TC corner = createCell(context, table, firstHeader, 0, 0, width,
+					height);
+			firstHeader.getCells().add(0, corner);
+		}
 
 		if (showDimensionTitle) {
 			context.setAxis(context.getCellSet().getAxes()
@@ -507,7 +518,10 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 
 			List<Hierarchy> hierarchies = rowHeader.getHierarchies();
 
-			List<TC> cells = new ArrayList<TC>(hierarchies.size());
+			List<TC> hierarchyCells = new ArrayList<TC>(hierarchies.size());
+
+			int offset = showParentMembers ? 2 : 1;
+
 			for (Hierarchy hierarchy : hierarchies) {
 				context.setHierarchy(hierarchy);
 
@@ -520,20 +534,58 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 				}
 
 				TC header = createCell(context, table, firstHeader, colIndex,
-						height - 1, span, 1);
-				cells.add(header);
+						height - offset, span, 1);
+				hierarchyCells.add(header);
 
 				hierarchyIndex++;
 				colIndex += span;
 			}
 
-			Collections.reverse(cells);
+			Collections.reverse(hierarchyCells);
 
-			TR lastHeader = columnHeader.getHeaders().get(
-					columnHeader.getHeaders().size() - 1);
+			TR hierarchyHeader = columnHeader.getHeaders().get(
+					columnHeader.getHeaders().size() - offset);
 
-			for (TC cell : cells) {
-				lastHeader.getCells().add(0, cell);
+			for (TC cell : hierarchyCells) {
+				hierarchyHeader.getCells().add(0, cell);
+			}
+
+			if (showParentMembers) {
+				List<TC> levelCells = new ArrayList<TC>();
+
+				colIndex = 0;
+
+				PlaceLevelsOnAxes transform = context.getModel().getTransform(
+						PlaceLevelsOnAxes.class);
+
+				for (Hierarchy hierarchy : hierarchies) {
+					context.setHierarchy(hierarchy);
+
+					List<Level> levels = transform.findVisibleLevels(hierarchy);
+
+					for (Level level : levels) {
+						context.setLevel(level);
+
+						TC header = createCell(context, table, firstHeader,
+								colIndex, height - offset + 1, 1, 1);
+						levelCells.add(header);
+
+						colIndex++;
+					}
+
+					context.setLevel(null);
+
+					hierarchyIndex++;
+				}
+
+				Collections.reverse(levelCells);
+
+				TR levelHeader = columnHeader.getHeaders().get(
+						columnHeader.getHeaders().size() - offset + 1);
+
+				for (TC cell : levelCells) {
+					levelHeader.getCells().add(0, cell);
+				}
 			}
 
 			context.setHierarchy(null);
@@ -696,7 +748,11 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 			break;
 		case ColumnTitle:
 		case RowTitle:
-			label = context.getHierarchy().getDimension().getCaption();
+			if (context.getLevel() == null) {
+				label = context.getHierarchy().getDimension().getCaption();
+			} else {
+				label = context.getLevel().getCaption();
+			}
 			break;
 		case None:
 			break;
