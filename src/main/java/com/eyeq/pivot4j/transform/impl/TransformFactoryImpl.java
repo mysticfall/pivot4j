@@ -20,6 +20,7 @@ import com.eyeq.pivot4j.transform.DrillExpandPosition;
 import com.eyeq.pivot4j.transform.DrillReplace;
 import com.eyeq.pivot4j.transform.NonEmpty;
 import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
+import com.eyeq.pivot4j.transform.PlaceLevelsOnAxes;
 import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
 import com.eyeq.pivot4j.transform.SwapAxes;
 import com.eyeq.pivot4j.transform.Transform;
@@ -57,6 +58,7 @@ public class TransformFactoryImpl implements TransformFactory {
 		transforms.put(PlaceHierarchiesOnAxes.class,
 				PlaceHierarchiesOnAxesImpl.class);
 		transforms.put(PlaceMembersOnAxes.class, PlaceMembersOnAxesImpl.class);
+		transforms.put(PlaceLevelsOnAxes.class, PlaceLevelsOnAxesImpl.class);
 		transforms.put(ChangeSlicer.class, ChangeSlicerImpl.class);
 	}
 

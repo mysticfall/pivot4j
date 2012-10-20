@@ -65,13 +65,13 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 			if (hier.equals(hierarchy)) {
 				selection.addAll(members);
 			} else {
-				selection.addAll(findVisibleMembers(hierarchy));
+				selection.addAll(findVisibleMembers(hier));
 			}
 		}
 
 		Axis axis = Axis.Factory.forOrdinal(quax.getOrdinal());
 
-		placeMembers(axis, members);
+		placeMembers(axis, selection);
 	}
 
 	/**
@@ -169,8 +169,12 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 			return;
 		}
 
+		PlaceMembersOnAxes transform = getQueryAdapter().getModel()
+				.getTransform(PlaceMembersOnAxes.class);
+
 		List<Member> selection = new ArrayList<Member>(
-				findVisibleMembers(hierarchy));
+				transform.findVisibleMembers(hierarchy));
+
 		for (Member member : members) {
 			if (!selection.contains(member)) {
 				selection.add(member);
@@ -242,6 +246,43 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		}
 
 		placeMembers(hierarchy, selection);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findVisibleMembers(org.olap4j.Axis)
+	 */
+	public List<Member> findVisibleMembers(Axis axis) {
+		List<Member> visibleMembers = new ArrayList<Member>();
+
+		QueryAdapter adapter = getQueryAdapter();
+
+		// find the Quax for this hierarchy
+		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+		if (quax == null) {
+			return Collections.emptyList(); // should not occur
+		}
+
+		CellSet cellSet = adapter.getModel().getCellSet();
+
+		// locate the appropriate result axis
+		int iAx = quax.getOrdinal();
+		if (adapter.isAxesSwapped()) {
+			iAx = (iAx + 1) % 2;
+		}
+
+		CellSetAxis cellAxis = cellSet.getAxes().get(iAx);
+
+		List<Position> positions = cellAxis.getPositions();
+		for (Position position : positions) {
+			List<Member> members = position.getMembers();
+			for (Member member : members) {
+				if (member != null && !visibleMembers.contains(member)) {
+					visibleMembers.add(member);
+				}
+			}
+		}
+
+		return visibleMembers;
 	}
 
 	/**

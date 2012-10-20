@@ -68,6 +68,16 @@ public interface PlaceMembersOnAxes extends Transform {
 	 * Collects all members from the visible axes in the result. If no members
 	 * of the hierarchy are on a visible axis, returns an empty list.
 	 * 
+	 * @param axis
+	 *            the axis
+	 * @return A list of Members
+	 */
+	List<Member> findVisibleMembers(Axis axis);
+
+	/**
+	 * Collects all members from the visible axes in the result. If no members
+	 * of the hierarchy are on a visible axis, returns an empty list.
+	 * 
 	 * @param hierarchy
 	 *            the Hierarchy
 	 * @return A list of Members
