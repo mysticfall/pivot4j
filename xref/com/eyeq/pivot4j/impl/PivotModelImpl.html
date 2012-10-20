@@ -563,7 +563,7 @@
 <a class="jxr_linenumber" name="553" href="#553">553</a> 		}
 <a class="jxr_linenumber" name="554" href="#554">554</a> 
 <a class="jxr_linenumber" name="555" href="#555">555</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
-<a class="jxr_linenumber" name="556" href="#556">556</a> 			logger.info(<span class="jxr_string">"change topBottomCount from "</span> + <strong class="jxr_keyword">this</strong>.sortMode + <span class="jxr_string">" to "</span>
+<a class="jxr_linenumber" name="556" href="#556">556</a> 			logger.info(<span class="jxr_string">"Change sort mode from "</span> + <strong class="jxr_keyword">this</strong>.sortMode + <span class="jxr_string">" to "</span>
 <a class="jxr_linenumber" name="557" href="#557">557</a> 					+ sortMode);
 <a class="jxr_linenumber" name="558" href="#558">558</a> 		}
 <a class="jxr_linenumber" name="559" href="#559">559</a> 
@@ -642,14 +642,14 @@
 <a class="jxr_linenumber" name="632" href="#632">632</a> 	}
 <a class="jxr_linenumber" name="633" href="#633">633</a> 
 <a class="jxr_linenumber" name="634" href="#634">634</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="635" href="#635">635</a> <em class="jxr_javadoccomment">	 * @param membersToSort</em>
+<a class="jxr_linenumber" name="635" href="#635">635</a> <em class="jxr_javadoccomment">	 * @param axisToSort</em>
 <a class="jxr_linenumber" name="636" href="#636">636</a> <em class="jxr_javadoccomment">	 *            Axis containing the members to be sorted</em>
 <a class="jxr_linenumber" name="637" href="#637">637</a> <em class="jxr_javadoccomment">	 * @param position</em>
 <a class="jxr_linenumber" name="638" href="#638">638</a> <em class="jxr_javadoccomment">	 *            Position on "other axis" defining the members by which the</em>
 <a class="jxr_linenumber" name="639" href="#639">639</a> <em class="jxr_javadoccomment">	 *            membersToSort are sorted</em>
 <a class="jxr_linenumber" name="640" href="#640">640</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="641" href="#641">641</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sort(CellSetAxis membersToSort, Position position) {
-<a class="jxr_linenumber" name="642" href="#642">642</a> 		List&lt;Position&gt; positions = membersToSort.getPositions();
+<a class="jxr_linenumber" name="641" href="#641">641</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sort(CellSetAxis axisToSort, Position position) {
+<a class="jxr_linenumber" name="642" href="#642">642</a> 		List&lt;Position&gt; positions = axisToSort.getPositions();
 <a class="jxr_linenumber" name="643" href="#643">643</a> 
 <a class="jxr_linenumber" name="644" href="#644">644</a> 		<em class="jxr_comment">// if the axis to sort does not contain any positions - sorting is not</em>
 <a class="jxr_linenumber" name="645" href="#645">645</a> 		<em class="jxr_comment">// posssible</em>

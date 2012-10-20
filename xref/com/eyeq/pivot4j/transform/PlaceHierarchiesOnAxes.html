@@ -60,15 +60,46 @@
 <a class="jxr_linenumber" name="50" href="#50">50</a>  			<strong class="jxr_keyword">boolean</strong> expandAllMember);
 <a class="jxr_linenumber" name="51" href="#51">51</a>  
 <a class="jxr_linenumber" name="52" href="#52">52</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">	 * Collects all hierarchies on a given axis in the result. If no hierarchies</em>
-<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">	 * are visible, it returns an empty list.</em>
-<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">	 * </em>
-<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">	 * @param axis</em>
-<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment">	 *            the axis to use</em>
-<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">	 * @return A list of hierarchies</em>
-<a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="60" href="#60">60</a>  	List&lt;Hierarchy&gt; findVisibleHierarchies(Axis axis);
-<a class="jxr_linenumber" name="61" href="#61">61</a>  }
+<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">	 * @param axis</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">	 *            The target axis</em>
+<a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">	 * @param hierarchy</em>
+<a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">	 *            The hierarchy to add</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>  <em class="jxr_javadoccomment">	 * @param expandAllMember</em>
+<a class="jxr_linenumber" name="58" href="#58">58</a>  <em class="jxr_javadoccomment">	 * @param position</em>
+<a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">	 *            The position index where to add the hierarchy. Any value less</em>
+<a class="jxr_linenumber" name="60" href="#60">60</a>  <em class="jxr_javadoccomment">	 *            than zero will put the hierarchy at the end of the axis.</em>
+<a class="jxr_linenumber" name="61" href="#61">61</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="62" href="#62">62</a>  	<strong class="jxr_keyword">void</strong> addHierarchy(Axis axis, Hierarchy hierarchy, <strong class="jxr_keyword">boolean</strong> expandAllMember,
+<a class="jxr_linenumber" name="63" href="#63">63</a>  			<strong class="jxr_keyword">int</strong> position);
+<a class="jxr_linenumber" name="64" href="#64">64</a>  
+<a class="jxr_linenumber" name="65" href="#65">65</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="66" href="#66">66</a>  <em class="jxr_javadoccomment">	 * @param axis</em>
+<a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment">	 *            The target axis</em>
+<a class="jxr_linenumber" name="68" href="#68">68</a>  <em class="jxr_javadoccomment">	 * @param hierarchy</em>
+<a class="jxr_linenumber" name="69" href="#69">69</a>  <em class="jxr_javadoccomment">	 *            The hierarchy to remove</em>
+<a class="jxr_linenumber" name="70" href="#70">70</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="71" href="#71">71</a>  	<strong class="jxr_keyword">void</strong> removeHierarchy(Axis axis, Hierarchy hierarchy);
+<a class="jxr_linenumber" name="72" href="#72">72</a>  
+<a class="jxr_linenumber" name="73" href="#73">73</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="74" href="#74">74</a>  <em class="jxr_javadoccomment">	 * @param axis</em>
+<a class="jxr_linenumber" name="75" href="#75">75</a>  <em class="jxr_javadoccomment">	 *            The target axis</em>
+<a class="jxr_linenumber" name="76" href="#76">76</a>  <em class="jxr_javadoccomment">	 * @param hierarchy</em>
+<a class="jxr_linenumber" name="77" href="#77">77</a>  <em class="jxr_javadoccomment">	 *            The hierarchy to move</em>
+<a class="jxr_linenumber" name="78" href="#78">78</a>  <em class="jxr_javadoccomment">	 * @param index</em>
+<a class="jxr_linenumber" name="79" href="#79">79</a>  <em class="jxr_javadoccomment">	 *            New hierarchy position</em>
+<a class="jxr_linenumber" name="80" href="#80">80</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="81" href="#81">81</a>  	<strong class="jxr_keyword">void</strong> moveHierarchy(Axis axis, Hierarchy hierarchy, <strong class="jxr_keyword">int</strong> position);
+<a class="jxr_linenumber" name="82" href="#82">82</a>  
+<a class="jxr_linenumber" name="83" href="#83">83</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="84" href="#84">84</a>  <em class="jxr_javadoccomment">	 * Collects all hierarchies on a given axis in the result. If no hierarchies</em>
+<a class="jxr_linenumber" name="85" href="#85">85</a>  <em class="jxr_javadoccomment">	 * are visible, it returns an empty list.</em>
+<a class="jxr_linenumber" name="86" href="#86">86</a>  <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="87" href="#87">87</a>  <em class="jxr_javadoccomment">	 * @param axis</em>
+<a class="jxr_linenumber" name="88" href="#88">88</a>  <em class="jxr_javadoccomment">	 *            the axis to use</em>
+<a class="jxr_linenumber" name="89" href="#89">89</a>  <em class="jxr_javadoccomment">	 * @return A list of hierarchies</em>
+<a class="jxr_linenumber" name="90" href="#90">90</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="91" href="#91">91</a>  	List&lt;Hierarchy&gt; findVisibleHierarchies(Axis axis);
+<a class="jxr_linenumber" name="92" href="#92">92</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
