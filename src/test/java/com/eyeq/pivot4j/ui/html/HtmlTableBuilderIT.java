@@ -20,8 +20,6 @@ import org.junit.Test;
 
 import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.ui.html.HtmlTableBuilder;
-import com.eyeq.pivot4j.ui.html.HtmlTableModel;
 
 public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 
@@ -96,5 +94,10 @@ public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 	@Test
 	public void testInsaneRows() throws IOException {
 		runTestCase("insane-rows");
+	}
+
+	@Test
+	public void testSkippingLevel() throws IOException {
+		runTestCase("skipping-level");
 	}
 }

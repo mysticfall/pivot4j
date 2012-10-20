@@ -236,11 +236,11 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 			for (HeaderNode node : children) {
 				if (node.isSiblingParent()) {
 					int depth = node.getMaxSiblingDepth()
-							- node.getReference().getDepth() + 1;
+							- node.getSiblingDepth() + 1;
 					maxSpan = Math.max(maxSpan, depth);
 				}
 
-				minDepth = Math.min(minDepth, node.getReference().getDepth());
+				minDepth = Math.min(minDepth, node.getSiblingDepth());
 			}
 		}
 
@@ -376,7 +376,7 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 
 				if (memberNode.isSiblingParent()) {
 					int span = memberNode.getMaxSiblingDepth()
-							- node.getReference().getDepth() + 1;
+							- memberNode.getSiblingDepth() + 1;
 					maxSpan = Math.max(maxSpan, span);
 				}
 
@@ -388,7 +388,7 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 				}
 
 				minDepthMap.put(hierarchy,
-						Math.min(minDepth, node.getReference().getDepth()));
+						Math.min(minDepth, memberNode.getSiblingDepth()));
 
 				return CONTINUE;
 			}
@@ -943,6 +943,14 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 			}
 		}
 
+		protected int getSiblingDepth() {
+			if (siblingParent == null) {
+				return 0;
+			} else {
+				return siblingParent.getSiblingDepth() + 1;
+			}
+		}
+
 		protected List<HeaderNode> getSiblingChildren() {
 			return siblingChildren;
 		}
@@ -979,15 +987,11 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 
 		protected Integer getMaxSiblingDepth() {
 			if (siblingMaxDepth == null) {
-				siblingMaxDepth = 0;
+				siblingMaxDepth = getSiblingDepth();
 
-				if (siblingMaxDepth != null) {
-					siblingMaxDepth = getReference().getDepth();
-
-					for (HeaderNode sibling : siblingChildren) {
-						siblingMaxDepth = Math.max(siblingMaxDepth,
-								sibling.getMaxSiblingDepth());
-					}
+				for (HeaderNode sibling : siblingChildren) {
+					siblingMaxDepth = Math.max(siblingMaxDepth,
+							sibling.getMaxSiblingDepth());
 				}
 			}
 
@@ -1013,9 +1017,12 @@ public abstract class AbstractTableBuilder<T extends TableModel<TR>, TR extends 
 				child = new HeaderNode(member, position);
 
 				if (getChildren() != null && !getChildren().isEmpty()) {
-					for (TreeNode<Member> node : getChildren()) {
-						if (ObjectUtils.equals(node.getReference(),
-								member.getParentMember())) {
+					int size = getChildren().size();
+
+					for (int i = size - 1; i > -1; i--) {
+						TreeNode<Member> node = getChildren().get(i);
+						if (member.getAncestorMembers().contains(
+								node.getReference())) {
 							((HeaderNode) node).addSiblingChild(child);
 							break;
 						}
