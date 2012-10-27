@@ -138,6 +138,10 @@ CellSet cellSet = model.getCellSet();
 
 +-----+
 HtmlRenderer renderer = new HtmlTableBuilder(writer);
+
+model.setShowDimensionTitle(false); // Optionally hide the dimension title headers.
+model.setShowParentMembers(true); // Optionally make the parent members visible.
+
 model.render(renderer);
 
 writer.flush();
@@ -145,9 +149,10 @@ writer.close();
 +-----+
 
 	You can make your own renderer class to generate a markup output of the pivot model in a suitable format. It can also be 
-	used to build a custom table model instead of writing the output immediately. Customizing the layout structure is also possible 
-	with the  {{{./apidocs/com/eyeq/pivot4j/ui/RenderStrategy.html}RenderStrategy}} interface, but this feature is still 
-	experimental and might be changed in a future version.
+	used to build a custom table model instead of writing the output immediately. Customizing the layout structure (i.e. adding 
+	arbitary headers) is also possible by implementing the  {{{./apidocs/com/eyeq/pivot4j/ui/RenderStrategy.html}RenderStrategy}} 
+	interface, or extending one of its concrete implementations. But this feature is still experimental and might be changed in a 
+	future version.
 
 * Saving and Restoring the Model State
 
