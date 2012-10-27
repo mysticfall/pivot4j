@@ -6,6 +6,12 @@
 		<author email="fender@eyeq.co.kr">Xavier Cho</author>
 	</properties>
 	<body>
+		<release version="0.0.4" date="2012-10-28" description="Pivot4J 0.0.4 release">
+			<action dev="mysticfall" type="update" issue="24">
+				Major refactoring on the UI related API. Replaced the TableBuilder interface with 
+				a callback style PivotRenderer interface for flexibility.
+			</action>
+		</release>
 		<release version="0.0.3" date="2012-10-20" description="Pivot4J 0.0.3 release">
 			<action dev="mysticfall" type="fix" issue="13">
 				Fixed a bug which made config parameters to be ignored in PooledOlapDataSource class.
