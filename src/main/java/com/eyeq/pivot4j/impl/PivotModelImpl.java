@@ -47,6 +47,9 @@ import com.eyeq.pivot4j.query.QueryChangeListener;
 import com.eyeq.pivot4j.transform.Transform;
 import com.eyeq.pivot4j.transform.TransformFactory;
 import com.eyeq.pivot4j.transform.impl.TransformFactoryImpl;
+import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.RenderStrategy;
+import com.eyeq.pivot4j.ui.impl.RendererStrategyImpl;
 
 /**
  * The pivot model represents all (meta-)data for an MDX query.
@@ -70,6 +73,8 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	private QueryAdapter queryAdapter;
 
 	private TransformFactory transformFactory;
+
+	private RenderStrategy renderStrategy;
 
 	private int topBottomCount = 10;
 
@@ -100,7 +105,8 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		}
 
 		this.dataSource = dataSource;
-		this.transformFactory = new TransformFactoryImpl();
+		this.transformFactory = createTransformFactory();
+		this.renderStrategy = createRenderStrategy();
 	}
 
 	/**
@@ -409,6 +415,14 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		return new QueryAdapter(this);
 	}
 
+	protected TransformFactory createTransformFactory() {
+		return new TransformFactoryImpl();
+	}
+
+	protected RenderStrategy createRenderStrategy() {
+		return new RendererStrategyImpl();
+	}
+
 	/**
 	 * Returns the queryAdapter.
 	 * 
@@ -416,6 +430,20 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 */
 	protected QueryAdapter getQueryAdapter() {
 		return queryAdapter;
+	}
+
+	/**
+	 * @return the transformFactory
+	 */
+	protected TransformFactory getTransformFactory() {
+		return transformFactory;
+	}
+
+	/**
+	 * @return the renderStrategy
+	 */
+	protected RenderStrategy getRenderStrategy() {
+		return renderStrategy;
 	}
 
 	/**
@@ -694,10 +722,66 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getHideSpans()
+	 */
+	@Override
+	public boolean getHideSpans() {
+		return renderStrategy.getHideSpans();
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#setHideSpans(boolean)
+	 */
+	@Override
+	public void setHideSpans(boolean hideSpans) {
+		renderStrategy.setHideSpans(hideSpans);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getShowParentMembers()
+	 */
+	@Override
+	public boolean getShowParentMembers() {
+		return renderStrategy.getShowParentMembers();
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#setShowParentMembers(boolean)
+	 */
+	@Override
+	public void setShowParentMembers(boolean showParentMembers) {
+		renderStrategy.setShowParentMembers(showParentMembers);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getShowDimensionTitle()
+	 */
+	@Override
+	public boolean getShowDimensionTitle() {
+		return renderStrategy.getShowDimensionTitle();
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#setShowDimensionTitle(boolean)
+	 */
+	@Override
+	public void setShowDimensionTitle(boolean showDimensionTitle) {
+		renderStrategy.setShowDimensionTitle(showDimensionTitle);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#render(com.eyeq.pivot4j.ui.PivotRenderer)
+	 */
+	@Override
+	public void render(PivotRenderer renderer) {
+		renderStrategy.render(this, renderer);
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
 	 */
 	public synchronized Serializable bookmarkState() {
-		Serializable[] state = new Serializable[3];
+		Serializable[] state = new Serializable[6];
 
 		state[0] = getCurrentMdx();
 
@@ -720,6 +804,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		}
 
 		state[2] = getQueryAdapter().bookmarkState();
+
+		state[3] = renderStrategy.getHideSpans();
+		state[4] = renderStrategy.getShowParentMembers();
+		state[5] = renderStrategy.getShowDimensionTitle();
 
 		return state;
 	}
@@ -780,6 +868,10 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		this.cellSet = null;
 
 		queryAdapter.restoreState(states[2]);
+
+		setHideSpans((Boolean) states[3]);
+		setShowParentMembers((Boolean) states[4]);
+		setShowDimensionTitle((Boolean) states[5]);
 
 		fireModelChanged();
 	}

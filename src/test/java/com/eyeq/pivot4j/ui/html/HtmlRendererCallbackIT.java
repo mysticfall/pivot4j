@@ -13,7 +13,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.junit.Test;
@@ -21,7 +20,7 @@ import org.junit.Test;
 import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
 
-public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
+public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
 
 	private static final String RESOURCE_PREFIX = "/com/eyeq/pivot4j/ui/html/";
 
@@ -78,15 +77,11 @@ public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 
 		PivotModel model = getPivotModel();
 		model.setMdx(mdx);
+		model.setHideSpans(hideSpans);
+		model.setShowDimensionTitle(showDimensionTitle);
+		model.setShowParentMembers(showParentMembers);
+
 		model.initialize();
-
-		HtmlTableBuilder builder = new HtmlTableBuilder();
-		builder.setHideSpans(hideSpans);
-		builder.setShowDimensionTitle(showDimensionTitle);
-		builder.setShowParentMembers(showParentMembers);
-
-		HtmlTableModel table = builder.build(model);
-		table.setBorder(1);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(name);
@@ -101,7 +96,12 @@ public class HtmlTableBuilderIT extends AbstractIntegrationTestCase {
 		String fileName = sb.toString();
 
 		StringWriter writer = new StringWriter();
-		table.writeHtml(new PrintWriter(writer), 0);
+
+		HtmlRenderer renderer = new HtmlRenderer(writer);
+		renderer.setBorder(1);
+
+		model.render(renderer);
+
 		writer.flush();
 		writer.close();
 

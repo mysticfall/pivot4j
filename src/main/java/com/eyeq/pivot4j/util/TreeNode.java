@@ -9,6 +9,7 @@
 package com.eyeq.pivot4j.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,6 +55,10 @@ public class TreeNode<T> {
 		}
 	}
 
+	public void clear() {
+		children.clear();
+	}
+
 	/**
 	 * add child node
 	 * 
@@ -61,9 +66,23 @@ public class TreeNode<T> {
 	 *            node to be added
 	 */
 	public void addChild(TreeNode<T> child) {
-		child.parent = this;
 		if (!children.contains(child)) {
+			child.parent = this;
 			children.add(child);
+		}
+	}
+
+	/**
+	 * add child node
+	 * 
+	 * @param index
+	 * @param child
+	 *            node to be added
+	 */
+	public void addChild(int index, TreeNode<T> child) {
+		if (!children.contains(child)) {
+			child.parent = this;
+			children.add(index, child);
 		}
 	}
 
@@ -116,6 +135,33 @@ public class TreeNode<T> {
 		return level;
 	}
 
+	public int getMaxDescendantLevel() {
+		int level;
+
+		if (getChildCount() == 0) {
+			level = getLevel();
+		} else {
+			level = 0;
+			for (TreeNode<T> child : getChildren()) {
+				level = Math.max(level, child.getMaxDescendantLevel());
+			}
+		}
+
+		return level;
+	}
+
+	public int getWidth() {
+		int width = 0;
+
+		if (getChildCount() > 0) {
+			for (TreeNode<T> child : getChildren()) {
+				width += child.getWidth();
+			}
+		}
+
+		return Math.max(1, width);
+	}
+
 	/**
 	 * walk through subtree of this node
 	 * 
@@ -165,7 +211,14 @@ public class TreeNode<T> {
 	 * @return List of children
 	 */
 	public List<TreeNode<T>> getChildren() {
-		return children;
+		return Collections.unmodifiableList(children);
+	}
+
+	public int getChildCount() {
+		if (children == null) {
+			return 0;
+		}
+		return children.size();
 	}
 
 	/**
@@ -179,7 +232,7 @@ public class TreeNode<T> {
 		if (parent == null) {
 			return this;
 		} else {
-			return parent.getParent();
+			return parent.getRoot();
 		}
 	}
 

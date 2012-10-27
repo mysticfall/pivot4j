@@ -287,7 +287,7 @@ public class Quax implements StateHolder {
 						memArray[i++] = child.getReference();
 					}
 
-					node.getChildren().clear();
+					node.clear();
 
 					Exp oFun = quaxUtil.createFunCall("{}", memArray,
 							Syntax.Braces);
@@ -643,7 +643,7 @@ public class Quax implements StateHolder {
 			this.posTreeRoot = new ExpNode(null);
 		}
 
-		posTreeRoot.getChildren().clear();
+		posTreeRoot.clear();
 
 		TreeNode<Exp> current = posTreeRoot;
 

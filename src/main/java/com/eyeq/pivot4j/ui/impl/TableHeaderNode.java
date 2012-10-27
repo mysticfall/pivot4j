@@ -1,0 +1,488 @@
+/*
+ * ====================================================================
+ * This software is subject to the terms of the Common Public License
+ * Agreement, available at the following URL:
+ *   http://www.opensource.org/licenses/cpl.html .
+ * You must accept the terms of that agreement to use this software.
+ * ====================================================================
+ */
+package com.eyeq.pivot4j.ui.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.olap4j.Position;
+import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Member;
+
+import com.eyeq.pivot4j.util.TreeNode;
+import com.eyeq.pivot4j.util.TreeNodeCallback;
+
+public class TableHeaderNode extends TreeNode<TableAxisContext> {
+
+	private Position position;
+
+	private Member member;
+
+	private Hierarchy hierarchy;
+
+	private Integer colSpan;
+
+	private Integer rowSpan;
+
+	private Integer colIndex;
+
+	private Integer rowIndex;
+
+	private boolean freezed = false;
+
+	/**
+	 * @param context
+	 */
+	public TableHeaderNode(TableAxisContext context) {
+		super(context);
+	}
+
+	/**
+	 * @return the position
+	 */
+	public Position getPosition() {
+		return position;
+	}
+
+	/**
+	 * @param position
+	 *            the position to set
+	 */
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	/**
+	 * @return the member
+	 */
+	public Member getMember() {
+		return member;
+	}
+
+	/**
+	 * @param member
+	 *            the member to set
+	 */
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	/**
+	 * @return the hierarchy
+	 */
+	public Hierarchy getHierarchy() {
+		return hierarchy;
+	}
+
+	/**
+	 * @param hierarchy
+	 *            the hierarchy to set
+	 */
+	public void setHierarchy(Hierarchy hierarchy) {
+		this.hierarchy = hierarchy;
+	}
+
+	/**
+	 * @return the freezed
+	 */
+	public boolean isFreezed() {
+		return freezed;
+	}
+
+	/**
+	 * @param freezed
+	 *            the freezed to set
+	 */
+	public void setFreezed(boolean freezed) {
+		if (freezed && !this.freezed) {
+			clearCache();
+			this.freezed = freezed;
+		}
+	}
+
+	public void clearCache() {
+		this.colIndex = null;
+		this.rowIndex = null;
+		this.colSpan = null;
+		this.rowSpan = null;
+	}
+
+	public int getHierarchyIndex() {
+		if (hierarchy == null) {
+			return -1;
+		}
+		return getReference().getHierarchies().indexOf(hierarchy);
+	}
+
+	public Level getRootLevel() {
+		int index = getHierarchyIndex();
+		if (index < 0) {
+			return null;
+		}
+
+		return getReference().getLevels(getHierarchy()).get(0);
+	}
+
+	public int getMaxRowIndex() {
+		int rowIndex;
+
+		if (getChildCount() == 0) {
+			rowIndex = getRowIndex();
+		} else {
+			rowIndex = 0;
+			for (TreeNode<TableAxisContext> child : getChildren()) {
+				TableHeaderNode nodeChild = (TableHeaderNode) child;
+				rowIndex = Math.max(rowIndex, nodeChild.getMaxRowIndex());
+			}
+		}
+
+		return rowIndex;
+	}
+
+	void addHierarhcyHeaders() {
+		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(
+				getChildren());
+
+		for (TreeNode<TableAxisContext> child : children) {
+			TableHeaderNode nodeChild = (TableHeaderNode) child;
+
+			Hierarchy childHierarchy = nodeChild.getHierarchy();
+
+			if (childHierarchy != null) {
+				if (!ObjectUtils.equals(hierarchy, childHierarchy)) {
+					int index = getChildren().indexOf(child);
+
+					removeChild(child);
+
+					TableHeaderNode hierarchyNode = new TableHeaderNode(
+							getReference());
+					hierarchyNode.setHierarchy(childHierarchy);
+
+					addChild(index, hierarchyNode);
+					hierarchyNode.addChild(child);
+				}
+			}
+
+			nodeChild.addHierarhcyHeaders();
+		}
+	}
+
+	void addParentMemberHeaders() {
+		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(
+				getChildren());
+
+		for (TreeNode<TableAxisContext> child : children) {
+			TableHeaderNode nodeChild = (TableHeaderNode) child;
+
+			Member member = nodeChild.getMember();
+			if (member != null) {
+				Level rootLevel = nodeChild.getRootLevel();
+
+				if (!member.getLevel().equals(rootLevel)) {
+					int index = getChildren().indexOf(child);
+
+					removeChild(child);
+
+					List<Level> levels = getReference().getLevels(
+							nodeChild.getHierarchy());
+
+					TreeNode<TableAxisContext> childNode = child;
+
+					Member parent = member;
+					while (parent != null
+							&& !rootLevel.equals(parent.getLevel())) {
+						parent = parent.getParentMember();
+
+						if (!levels.contains(parent.getLevel())) {
+							continue;
+						}
+
+						TableHeaderNode parentNode = new TableHeaderNode(
+								getReference());
+						parentNode.setPosition(position);
+						parentNode.setHierarchy(parent.getHierarchy());
+						parentNode.setMember(parent);
+						parentNode.addChild(childNode);
+
+						childNode = parentNode;
+					}
+
+					addChild(index, childNode);
+				}
+			}
+
+			nodeChild.addParentMemberHeaders();
+		}
+	}
+
+	void mergeChildren() {
+		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(
+				getChildren());
+
+		TableHeaderNode lastChild = null;
+
+		for (TreeNode<TableAxisContext> child : children) {
+			TableHeaderNode headerNode = (TableHeaderNode) child;
+
+			if (lastChild == null) {
+				lastChild = headerNode;
+				continue;
+			}
+
+			if (lastChild.canMergeWith(headerNode)) {
+				for (TreeNode<TableAxisContext> c : child.getChildren()) {
+					lastChild.addChild(c);
+				}
+
+				removeChild(child);
+			} else {
+				lastChild = headerNode;
+			}
+		}
+
+		for (TreeNode<TableAxisContext> child : getChildren()) {
+			TableHeaderNode headerNode = (TableHeaderNode) child;
+			headerNode.mergeChildren();
+		}
+	}
+
+	/**
+	 * @param sibling
+	 * @return
+	 */
+	protected boolean canMergeWith(TableHeaderNode sibling) {
+		if (ObjectUtils.equals(hierarchy, sibling.getHierarchy())) {
+			if (ObjectUtils.equals(member, sibling.getMember())) {
+				return getRowSpan() == sibling.getRowSpan();
+			}
+		}
+
+		return false;
+	}
+
+	public int getColIndex() {
+		if (colIndex == null) {
+			if (getParent() == null) {
+				this.colIndex = 0;
+				return colIndex;
+			}
+
+			int index = ((TableHeaderNode) getParent()).getColIndex();
+			int childIndex = getParent().getChildren().indexOf(this);
+
+			for (int i = 0; i < childIndex; i++) {
+				index += getParent().getChildren().get(i).getWidth();
+			}
+
+			this.colIndex = index;
+		}
+
+		return colIndex;
+	}
+
+	public int getRowIndex() {
+		if (!freezed || rowIndex == null) {
+			if (getParent() == null) {
+				this.rowIndex = 0;
+				return rowIndex;
+			} else {
+				TableHeaderNode headerParent = (TableHeaderNode) getParent();
+				this.rowIndex = headerParent.getRowIndex()
+						+ headerParent.getRowSpan();
+			}
+		}
+		return rowIndex;
+	}
+
+	public int getColSpan() {
+		if (!freezed || colSpan == null) {
+			this.colSpan = getWidth();
+		}
+
+		return colSpan;
+	}
+
+	public int getRowSpan() {
+		if (!freezed || rowSpan == null) {
+			if (member == null) {
+				this.rowSpan = 1;
+				return rowSpan;
+			}
+
+			final int[] childSpan = new int[] { 0 };
+			final int[] maxSpan = new int[] { 0 };
+
+			walkChildrenAtColIndex(new TreeNodeCallback<TableAxisContext>() {
+
+				@Override
+				public int handleTreeNode(TreeNode<TableAxisContext> node) {
+					TableHeaderNode nodeChild = (TableHeaderNode) node;
+
+					if (nodeChild == TableHeaderNode.this) {
+						return TreeNodeCallback.CONTINUE;
+					} else if (!ObjectUtils.equals(hierarchy,
+							nodeChild.getHierarchy())) {
+						return TreeNodeCallback.BREAK;
+					}
+
+					childSpan[0] += nodeChild.getRowSpan();
+
+					return TreeNodeCallback.CONTINUE;
+				}
+			}, getColIndex());
+
+			getRoot().walkTree(new TreeNodeCallback<TableAxisContext>() {
+
+				@Override
+				public int handleTreeNode(TreeNode<TableAxisContext> node) {
+					TableHeaderNode nodeChild = (TableHeaderNode) node;
+
+					if (nodeChild.getMember() != null
+							&& ObjectUtils.equals(member.getLevel(), nodeChild
+									.getMember().getLevel())) {
+						maxSpan[0] = Math.max(maxSpan[0],
+								nodeChild.getHierarchyDescendents());
+					}
+
+					return TreeNodeCallback.CONTINUE;
+				}
+			});
+
+			this.rowSpan = Math.max(1, maxSpan[0] - childSpan[0]);
+		}
+		return rowSpan;
+	}
+
+	public TableHeaderNode getHierarchyRoot() {
+		TableHeaderNode parent = this;
+		while (true) {
+			TableHeaderNode node = (TableHeaderNode) parent.getParent();
+
+			if (node != null
+					&& ObjectUtils.equals(hierarchy, node.getHierarchy())) {
+				parent = node;
+			} else {
+				break;
+			}
+		}
+		return parent;
+	}
+
+	public int getHierarchyDescendents() {
+		if (member == null || getChildCount() == 0) {
+			return 1;
+		}
+
+		int height = 1;
+		for (TreeNode<TableAxisContext> child : getChildren()) {
+			TableHeaderNode nodeChild = (TableHeaderNode) child;
+			if (ObjectUtils.equals(hierarchy, nodeChild.getHierarchy())) {
+				height = Math.max(height,
+						1 + nodeChild.getHierarchyDescendents());
+			}
+		}
+
+		return height;
+	}
+
+	/**
+	 * @param callbackHandler
+	 * @param rowIndex
+	 * @return
+	 */
+	public int walkChildrenAtRowIndex(
+			TreeNodeCallback<TableAxisContext> callbackHandler, int rowIndex) {
+		int code = 0;
+		for (TreeNode<TableAxisContext> child : getChildren()) {
+			TableHeaderNode nodeChild = (TableHeaderNode) child;
+			int childIndex = nodeChild.getRowIndex();
+
+			if (rowIndex == childIndex) {
+				code = callbackHandler.handleTreeNode(child);
+				if (code >= TreeNodeCallback.CONTINUE_PARENT) {
+					return code;
+				}
+			} else if (rowIndex > child.getLevel()) {
+				nodeChild.walkChildrenAtRowIndex(callbackHandler, rowIndex);
+			}
+		}
+		return code;
+	}
+
+	/**
+	 * @param colIndex
+	 * @return
+	 */
+	public TableHeaderNode getLeafNodeAtColIndex(int colIndex) {
+		if (getChildCount() == 0 && getColIndex() == colIndex) {
+			return this;
+		}
+
+		for (TreeNode<TableAxisContext> child : getChildren()) {
+			TableHeaderNode nodeChild = (TableHeaderNode) child;
+
+			int startIndex = nodeChild.getColIndex();
+			int endIndex = startIndex + nodeChild.getColSpan();
+
+			if (colIndex >= startIndex && colIndex < endIndex) {
+				return nodeChild.getLeafNodeAtColIndex(colIndex);
+			} else if (endIndex > colIndex) {
+				break;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param callbackHandler
+	 * @param colIndex
+	 */
+	public int walkChildrenAtColIndex(
+			TreeNodeCallback<TableAxisContext> callbackHandler, int colIndex) {
+		int code = 0;
+
+		if (getColIndex() == colIndex) {
+			code = callbackHandler.handleTreeNode(this);
+			if (code >= TreeNodeCallback.CONTINUE_PARENT) {
+				return code;
+			}
+		}
+
+		for (TreeNode<TableAxisContext> child : getChildren()) {
+			TableHeaderNode nodeChild = (TableHeaderNode) child;
+			int startIndex = nodeChild.getColIndex();
+			int endIndex = startIndex + nodeChild.getColSpan();
+
+			if (colIndex >= startIndex && colIndex < endIndex) {
+				code = nodeChild.walkChildrenAtColIndex(callbackHandler,
+						colIndex);
+				break;
+			} else if (endIndex > colIndex) {
+				break;
+			}
+		}
+		return code;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		if (member != null) {
+			return member.getCaption();
+		} else if (hierarchy != null) {
+			return hierarchy.getCaption();
+		} else {
+			return super.toString();
+		}
+	}
+}

@@ -10,7 +10,23 @@ package com.eyeq.pivot4j.ui;
 
 import com.eyeq.pivot4j.PivotModel;
 
-public interface TableBuilder<T extends TableModel<?>> {
+public interface RenderStrategy {
 
-	T build(PivotModel model);
+	boolean getHideSpans();
+
+	void setHideSpans(boolean hideSpans);
+
+	boolean getShowParentMembers();
+
+	void setShowParentMembers(boolean showParentMembers);
+
+	boolean getShowDimensionTitle();
+
+	void setShowDimensionTitle(boolean showDimensionTitle);
+
+	/**
+	 * @param model
+	 * @param renderer
+	 */
+	void render(PivotModel model, PivotRenderer renderer);
 }
