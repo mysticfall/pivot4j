@@ -67,23 +67,6 @@
 				with any other project including Saiku itself.</p>
 			</answer>
 		</faq>
-	</part>
-
-	<part id="usage">
-		<title>Usage</title>
-
-		<faq id="ui-for-pivot4j">
-			<question>
-				Is there any UI component for Pivot4J?
-			</question>
-			<answer>
-				<p>Different from JPivot, Pivot4J does not come with any specific UI implementation. 
-				However, you can use the 
-				<a href="./apidocs/com/eyeq/pivot4j/ui/package-summary.html" target="_blank">renderer API</a> 
-				to generate any tabular data structure suitable for building an UI component. Pivot4J also includes a 
-				concrete implementation which generates generic HTML source as well.</p>
-			</answer>
-		</faq>
 
 		<faq id="current-status">
 			<question>
@@ -108,6 +91,23 @@
 
 				<p>Also MDX style expressions which control the cell's appearance like font or color are not 
 				working, but it's intentional and there will be a new concept to cover such an use case.</p>
+			</answer>
+		</faq>
+	</part>
+
+	<part id="usage">
+		<title>Usage</title>
+
+		<faq id="ui-for-pivot4j">
+			<question>
+				Is there any UI component for Pivot4J?
+			</question>
+			<answer>
+				<p>Different from JPivot, Pivot4J does not come with any specific UI implementation. 
+				However, you can use the 
+				<a href="./apidocs/com/eyeq/pivot4j/ui/package-summary.html" target="_blank">renderer API</a> 
+				to generate any tabular data structure suitable for building an UI component. Pivot4J also includes a 
+				concrete implementation which generates generic HTML source as well.</p>
 			</answer>
 		</faq>
 
