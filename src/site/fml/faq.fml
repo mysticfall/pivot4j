@@ -79,9 +79,22 @@
 			<answer>
 				<p>Different from JPivot, Pivot4J does not come with any specific UI implementation. 
 				However, you can use the 
-				<a href="./apidocs/com/eyeq/pivot4j/ui/TableBuilder.html" target="_blank">TableBuilder API</a> 
+				<a href="./apidocs/com/eyeq/pivot4j/ui/package-summary.html" target="_blank">renderer API</a> 
 				to generate any tabular data structure suitable for building an UI component. Pivot4J also includes a 
 				concrete implementation which generates generic HTML source as well.</p>
+			</answer>
+		</faq>
+
+		<faq id="current-status">
+			<question>
+				The version number is so low. Is it usable yet?
+			</question>
+			<answer>
+				<p>Of course! Actually, most of the JPivot's core features are ported and working already.</p>
+
+				<p>However, as Pivot4J aims to provide many additional features and improvement also, 
+				the codebase is under constant change. So we decided to use low version numbers until 
+				the core API is stabilized.</p>
 			</answer>
 		</faq>
 
@@ -91,7 +104,7 @@
 			</question>
 			<answer>
 				<p>Currently, drill through and member properties support is missing from the project.
-				Both of them are expected to be made available in next few releases.</p>
+				Both of them are expected to be made available in the next few releases.</p>
 
 				<p>Also MDX style expressions which control the cell's appearance like font or color are not 
 				working, but it's intentional and there will be a new concept to cover such an use case.</p>

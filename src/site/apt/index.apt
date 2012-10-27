@@ -45,6 +45,9 @@ System Requirement
 
 News
 
+	* <<[2012-10-28]>> Pivot4J 0.0.4 has been released. The rendering API has been re-implemented from the 
+	scratch to make it more flexible and easier to extend.
+
 	* <<[2012-10-20]>> Pivot4J 0.0.3 has been released with various bug fixes and some new features.
 	Please see the {{{./changes-report.html}changes note}} for details. 
 

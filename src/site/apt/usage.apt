@@ -30,7 +30,7 @@ How to Use Pivot4J
         <dependency>
             <groupId>com.eyeq</groupId>
             <artifactId>pivot4j</artifactId>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </dependency>
     </dependencies>
 </project>
@@ -133,22 +133,21 @@ CellSet cellSet = model.getCellSet();
 
 * Generating HTML source from the PivotModel
 
-	You can use the {{{./apidocs/com/eyeq/pivot4j/ui/html/HtmlTableBuilder.html}HtmlTableBuilder}} class to 
+	You can use the {{{./apidocs/com/eyeq/pivot4j/ui/html/HtmlRenderer.html}HtmlRenderer}} class to 
 	generate HTML source out of a PivotModel instance as below example :
 
 +-----+
-HtmlTableBuilder builder = new HtmlTableBuilder();
-HtmlTableModel table = builder.build(model);
+HtmlRenderer renderer = new HtmlTableBuilder(writer);
+model.render(renderer);
 
-...
-
-table.writeHtml(new PrintWriter(writer), 0);
 writer.flush();
 writer.close();
 +-----+
 
-	You can make your own table builder class which generates an arbitary table structure suitable for your specific 
-	needs by extending the {{{./apidocs/com/eyeq/pivot4j/ui/AbstractTableBuilder.html}HtmlTableBuilder}} class.
+	You can make your own renderer class to generate a markup output of the pivot model in a suitable format. It can also be 
+	used to build a custom table model instead of writing the output immediately. Customizing the layout structure is also possible 
+	with the  {{{./apidocs/com/eyeq/pivot4j/ui/RenderStrategy.html}RenderStrategy}} interface, but this feature is still 
+	experimental and might be changed in a future version.
 
 * Saving and Restoring the Model State
 
