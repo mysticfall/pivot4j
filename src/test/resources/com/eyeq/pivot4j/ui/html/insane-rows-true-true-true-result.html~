@@ -1,8 +1,58 @@
 <table border="1" class="pv-table">
 	<thead>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-corner" colspan="11">
-				&nbsp;
+			<th class="pv-row-hdr" colspan="2">
+				Promotion Media
+			</th>
+			<th class="pv-row-hdr" colspan="7">
+				Product
+			</th>
+			<th class="pv-row-hdr" colspan="2">
+				Gender
+			</th>
+			<th class="pv-col-hdr">
+				Measures
+			</th>
+			<th class="pv-col-hdr">
+				Measures
+			</th>
+			<th class="pv-col-hdr">
+				Measures
+			</th>
+		</tr>
+		<tr class="pv-row pv-row-odd">
+			<th class="pv-row-hdr">
+				(All)
+			</th>
+			<th class="pv-row-hdr">
+				Media Type
+			</th>
+			<th class="pv-row-hdr">
+				(All)
+			</th>
+			<th class="pv-row-hdr">
+				Product Family
+			</th>
+			<th class="pv-row-hdr">
+				Product Department
+			</th>
+			<th class="pv-row-hdr">
+				Product Category
+			</th>
+			<th class="pv-row-hdr">
+				Product Subcategory
+			</th>
+			<th class="pv-row-hdr">
+				Brand Name
+			</th>
+			<th class="pv-row-hdr">
+				Product Name
+			</th>
+			<th class="pv-row-hdr">
+				(All)
+			</th>
+			<th class="pv-row-hdr">
+				Gender
 			</th>
 			<th class="pv-col-hdr">
 				Unit Sales
@@ -2843,13 +2893,13 @@
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
@@ -6094,13 +6144,13 @@
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
@@ -6132,13 +6182,13 @@
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
@@ -8358,13 +8408,13 @@
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
@@ -10394,13 +10444,13 @@
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
@@ -11431,13 +11481,13 @@
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">

@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.olap4j.Position;
@@ -91,8 +92,7 @@ public class DrillExpandPositionImpl extends AbstractTransform implements
 
 		int index = posMembers.indexOf(member);
 		if (index < 0) {
-			throw new IllegalArgumentException(
-					"Position does not contains the specified member.");
+			return Collections.emptyList();
 		}
 
 		return posMembers.subList(0, index + 1);

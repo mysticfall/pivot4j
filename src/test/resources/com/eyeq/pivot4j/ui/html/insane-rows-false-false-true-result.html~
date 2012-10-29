@@ -1,22 +1,8 @@
 <table border="1" class="pv-table">
 	<thead>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-corner" colspan="3">
+			<th class="pv-corner" colspan="11">
 				&nbsp;
-			</th>
-			<th class="pv-col-hdr" colspan="3">
-				Measures
-			</th>
-		</tr>
-		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr">
-				Promotion Media
-			</th>
-			<th class="pv-row-hdr">
-				Product
-			</th>
-			<th class="pv-row-hdr">
-				Gender
 			</th>
 			<th class="pv-col-hdr">
 				Unit Sales
@@ -31,13 +17,13 @@
 	</thead>
 	<tbody>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" rowspan="74" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" rowspan="74" style="padding-left: 10px;">
 				All Media
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -51,10 +37,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="73" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -68,10 +57,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -85,10 +74,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="65" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -102,10 +94,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -119,10 +111,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" rowspan="3" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="28" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" rowspan="3" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -136,6 +131,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -164,10 +162,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -181,10 +179,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="24" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -198,10 +199,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" rowspan="3" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" rowspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -215,6 +216,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -243,10 +247,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -260,10 +264,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" rowspan="3" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="16" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" rowspan="3" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -277,6 +284,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -305,10 +315,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 60px;">
+				BBB Best
+			</th>
 			<th class="pv-row-hdr" rowspan="3" style="padding-left: 70px;">
 				BBB Best Chunky Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -322,6 +335,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -353,7 +369,7 @@
 			<th class="pv-row-hdr" rowspan="3" style="padding-left: 70px;">
 				BBB Best Creamy Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -367,6 +383,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -398,7 +417,7 @@
 			<th class="pv-row-hdr" rowspan="3" style="padding-left: 70px;">
 				BBB Best Extra Chunky Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -412,6 +431,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -440,10 +462,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -457,10 +479,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -474,10 +496,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -491,10 +513,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -508,10 +530,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" rowspan="3" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" rowspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -525,6 +547,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -553,10 +578,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -570,10 +595,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -587,10 +612,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="14" style="padding-left: 30px;">
+				Canned Foods
+			</th>
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Canned Anchovies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -604,10 +632,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Canned Clams
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -621,10 +649,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="6" style="padding-left: 40px;">
+				Canned Clams
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Clams
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -638,10 +669,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Clams
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Better
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -655,10 +689,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Blue Label
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -672,10 +706,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Bravo
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -689,10 +723,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Just Right
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -706,10 +740,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Pleasant
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -723,10 +757,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Canned Oysters
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -740,10 +774,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Canned Sardines
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -757,10 +791,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Canned Shrimp
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -774,10 +808,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Canned Soup
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -791,10 +825,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Canned Tuna
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -808,10 +842,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Vegetables
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -825,10 +859,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -842,10 +876,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -859,10 +893,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -876,10 +910,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="8" style="padding-left: 30px;">
+				Deli
+			</th>
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -893,10 +930,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="6" style="padding-left: 40px;">
+				Meat
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Bologna
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -910,10 +950,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" rowspan="3" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" rowspan="3" style="padding-left: 50px;">
 				Deli Meats
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -927,6 +967,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -955,10 +998,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Fresh Chicken
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -972,10 +1015,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Hot Dogs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -989,10 +1032,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Side Dishes
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1006,10 +1049,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1023,10 +1066,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1040,10 +1083,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1057,10 +1100,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1074,10 +1117,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1091,10 +1134,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1108,10 +1151,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1125,10 +1168,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1142,10 +1185,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1159,10 +1202,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1176,10 +1222,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1193,10 +1239,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1210,10 +1256,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1227,10 +1273,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1244,13 +1290,16 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
+			<th class="pv-row-hdr" rowspan="322" style="padding-left: 10px;">
+				All Media
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				Bulk Mail
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1267,10 +1316,10 @@
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				Cash Register Handout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1287,10 +1336,10 @@
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				Daily Paper
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1307,10 +1356,10 @@
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				Daily Paper, Radio
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1327,10 +1376,10 @@
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				Daily Paper, Radio, TV
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1347,10 +1396,10 @@
 			<th class="pv-row-hdr" rowspan="37" style="padding-left: 20px;">
 				In-Store Coupon
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1364,10 +1413,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="36" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1381,10 +1433,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1398,10 +1450,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="28" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1415,10 +1470,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1432,10 +1487,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1449,10 +1507,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1466,10 +1524,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1483,10 +1544,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1500,10 +1561,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1517,10 +1578,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1534,10 +1598,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1551,27 +1615,27 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1585,10 +1649,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1602,10 +1666,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1619,10 +1683,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" rowspan="3" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" rowspan="3" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1636,6 +1700,9 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
+			<th class="pv-row-hdr" rowspan="2" style="padding-left: 10px;">
+				All Gender
+			</th>
 			<th class="pv-row-hdr" style="padding-left: 20px;">
 				F
 			</th>
@@ -1664,10 +1731,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1681,10 +1748,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1698,10 +1765,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1715,10 +1782,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1732,10 +1799,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1749,10 +1816,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1766,10 +1833,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1783,10 +1850,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1800,10 +1867,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1817,10 +1884,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1834,10 +1901,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1851,10 +1918,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1868,10 +1935,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1885,10 +1952,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1902,10 +1972,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1919,10 +1989,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1936,10 +2006,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1953,10 +2023,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1973,10 +2043,10 @@
 			<th class="pv-row-hdr" rowspan="35" style="padding-left: 20px;">
 				No Media
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -1990,10 +2060,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="34" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2007,10 +2080,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2024,10 +2097,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="26" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2041,10 +2117,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2058,10 +2134,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2075,10 +2154,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2092,10 +2171,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2109,10 +2191,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2126,10 +2208,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2143,10 +2225,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2160,10 +2245,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2177,10 +2262,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2194,10 +2279,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2211,10 +2296,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2228,10 +2313,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2245,10 +2330,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2262,10 +2347,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2279,10 +2364,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2296,10 +2381,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2313,10 +2398,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2330,10 +2415,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2347,10 +2432,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2364,10 +2449,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2381,10 +2466,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2398,10 +2483,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2415,10 +2500,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2432,10 +2517,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2449,10 +2534,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2466,10 +2551,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2483,10 +2568,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2500,10 +2588,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2517,10 +2605,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2534,10 +2622,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2551,10 +2639,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2571,10 +2659,10 @@
 			<th class="pv-row-hdr" rowspan="35" style="padding-left: 20px;">
 				Product Attachment
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2588,10 +2676,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="34" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2605,10 +2696,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2622,10 +2713,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="26" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2639,10 +2733,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2656,10 +2750,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2673,10 +2770,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2690,10 +2787,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2707,10 +2807,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2724,10 +2824,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2741,10 +2841,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2758,10 +2861,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2775,10 +2878,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2792,10 +2895,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2809,10 +2912,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2826,10 +2929,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2843,10 +2946,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2860,10 +2963,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2877,10 +2980,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2894,10 +2997,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2911,10 +3014,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2928,10 +3031,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2945,10 +3048,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2962,10 +3065,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2979,10 +3082,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -2996,10 +3099,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3013,10 +3116,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3030,10 +3133,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3047,10 +3150,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3064,10 +3167,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3081,10 +3184,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3098,10 +3204,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3115,10 +3221,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3132,10 +3238,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3149,10 +3255,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3169,10 +3275,10 @@
 			<th class="pv-row-hdr" rowspan="35" style="padding-left: 20px;">
 				Radio
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3186,10 +3292,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="34" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3203,10 +3312,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3220,10 +3329,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="26" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3237,10 +3349,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3254,10 +3366,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3271,10 +3386,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3288,10 +3403,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3305,10 +3423,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3322,10 +3440,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3339,10 +3457,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3356,44 +3477,44 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3407,10 +3528,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3424,10 +3545,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3441,10 +3562,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3458,10 +3579,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3475,10 +3596,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3492,10 +3613,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3509,10 +3630,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3526,10 +3647,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3543,10 +3664,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3560,10 +3681,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3577,10 +3698,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3594,10 +3715,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3611,10 +3732,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3628,10 +3749,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3645,10 +3766,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3662,10 +3783,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3679,10 +3800,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3696,10 +3820,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3713,10 +3837,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3730,10 +3854,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3747,10 +3871,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3767,10 +3891,10 @@
 			<th class="pv-row-hdr" rowspan="35" style="padding-left: 20px;">
 				Street Handout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3784,10 +3908,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="34" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3801,10 +3928,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3818,10 +3945,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="26" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3835,10 +3965,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3852,10 +3982,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3869,10 +4002,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3886,10 +4019,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3903,10 +4039,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3920,10 +4056,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3937,10 +4073,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3954,10 +4093,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3971,10 +4110,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -3988,10 +4127,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4005,10 +4144,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4022,10 +4161,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4039,10 +4178,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4056,10 +4195,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4073,10 +4212,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4090,10 +4229,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4107,10 +4246,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4124,10 +4263,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4141,10 +4280,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4158,10 +4297,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4175,10 +4314,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4192,10 +4331,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4209,10 +4348,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4226,10 +4365,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4243,10 +4382,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4260,10 +4399,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4277,10 +4416,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4294,10 +4436,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4311,10 +4453,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4328,10 +4470,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4345,10 +4487,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4365,10 +4507,10 @@
 			<th class="pv-row-hdr" rowspan="35" style="padding-left: 20px;">
 				Sunday Paper
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4382,10 +4524,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="34" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4399,10 +4544,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4416,10 +4561,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="26" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4433,10 +4581,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4450,10 +4598,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4467,10 +4618,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4484,10 +4635,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4501,10 +4655,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4518,10 +4672,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4535,10 +4689,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4552,10 +4709,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4569,10 +4726,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4586,10 +4743,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4603,27 +4760,27 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4637,10 +4794,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4654,10 +4811,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4671,10 +4828,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4688,10 +4845,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4705,10 +4862,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4722,10 +4879,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4739,10 +4896,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4756,10 +4913,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4773,10 +4930,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4790,10 +4947,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4807,10 +4964,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4824,10 +4981,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4841,10 +4998,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4858,10 +5015,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4875,10 +5032,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4892,10 +5052,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4909,10 +5069,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4926,10 +5086,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4943,10 +5103,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4963,10 +5123,10 @@
 			<th class="pv-row-hdr" rowspan="35" style="padding-left: 20px;">
 				Sunday Paper, Radio
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4980,10 +5140,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="34" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -4997,10 +5160,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5014,10 +5177,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="26" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5031,10 +5197,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5048,10 +5214,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5065,10 +5234,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5082,10 +5251,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5099,10 +5271,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5116,10 +5288,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5133,10 +5305,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5150,10 +5325,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5167,10 +5342,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5184,10 +5359,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5201,10 +5376,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5218,10 +5393,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5235,10 +5410,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5252,10 +5427,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5269,10 +5444,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5286,10 +5461,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5303,10 +5478,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5320,10 +5495,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5337,10 +5512,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5354,10 +5529,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5371,10 +5546,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5388,10 +5563,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5405,10 +5580,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5422,10 +5597,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5439,10 +5614,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5456,10 +5631,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5473,10 +5648,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5490,10 +5668,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5507,10 +5685,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5524,10 +5702,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5541,10 +5719,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5561,10 +5739,10 @@
 			<th class="pv-row-hdr" rowspan="35" style="padding-left: 20px;">
 				Sunday Paper, Radio, TV
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5578,10 +5756,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="34" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5595,10 +5776,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5612,10 +5793,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="26" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5629,10 +5813,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5646,10 +5830,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5663,10 +5850,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5680,10 +5867,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5697,10 +5887,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5714,10 +5904,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5731,10 +5921,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5748,27 +5941,27 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5782,10 +5975,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5799,10 +5992,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5816,10 +6009,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5833,10 +6026,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5850,10 +6043,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5867,10 +6060,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5884,10 +6077,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5901,10 +6094,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5918,10 +6111,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5935,10 +6128,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5952,10 +6145,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5969,10 +6162,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -5986,10 +6179,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6003,10 +6196,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6020,10 +6213,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6037,10 +6230,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6054,10 +6247,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6071,10 +6264,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6088,10 +6284,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6105,10 +6301,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6122,10 +6318,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6139,10 +6335,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6159,10 +6355,10 @@
 			<th class="pv-row-hdr" rowspan="35" style="padding-left: 20px;">
 				TV
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="7" style="padding-left: 10px;">
 				All Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6176,10 +6372,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" rowspan="34" style="padding-left: 10px;">
+				All Products
+			</th>
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Drink
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6193,10 +6392,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Food
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6210,10 +6409,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="26" style="padding-left: 20px;">
+				Food
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baked Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6227,10 +6429,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6244,10 +6446,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" rowspan="11" style="padding-left: 30px;">
 				Baking Goods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
+				Baking Goods
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6261,10 +6466,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 40px;">
+			<th class="pv-row-hdr" colspan="4" style="padding-left: 40px;">
 				Jams and Jellies
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6278,10 +6483,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" rowspan="9" style="padding-left: 40px;">
+				Jams and Jellies
+			</th>
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jam
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6295,10 +6503,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Jelly
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6312,10 +6520,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Peanut Butter
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6329,27 +6537,30 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 50px;">
+				Peanut Butter
+			</th>
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				BBB Best
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 			<td class="pv-cell">
-				&nbsp;
+				
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				CDR
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6363,10 +6574,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Landslide
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6380,10 +6591,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Plato
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6397,10 +6608,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 60px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 60px;">
 				Super
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6414,10 +6625,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 50px;">
+			<th class="pv-row-hdr" colspan="3" style="padding-left: 50px;">
 				Preserves
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6431,10 +6642,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Breakfast Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6448,10 +6659,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6465,10 +6676,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Canned Products
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6482,10 +6693,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Dairy
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6499,10 +6710,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Deli
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6516,10 +6727,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Eggs
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6533,10 +6744,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Frozen Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6550,10 +6761,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Meat
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6567,10 +6778,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Produce
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6584,10 +6795,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Seafood
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6601,10 +6812,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snack Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6618,10 +6829,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Snacks
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6635,10 +6846,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Starchy Foods
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6652,10 +6863,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 20px;">
+			<th class="pv-row-hdr" colspan="6" style="padding-left: 20px;">
 				Non-Consumable
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6669,10 +6880,13 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" rowspan="5" style="padding-left: 20px;">
+				Non-Consumable
+			</th>
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Carousel
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6686,10 +6900,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Checkout
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6703,10 +6917,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Health and Hygiene
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6720,10 +6934,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-even">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Household
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">
@@ -6737,10 +6951,10 @@
 			</td>
 		</tr>
 		<tr class="pv-row pv-row-odd">
-			<th class="pv-row-hdr" style="padding-left: 30px;">
+			<th class="pv-row-hdr" colspan="5" style="padding-left: 30px;">
 				Periodicals
 			</th>
-			<th class="pv-row-hdr" style="padding-left: 10px;">
+			<th class="pv-row-hdr" colspan="2" style="padding-left: 10px;">
 				All Gender
 			</th>
 			<td class="pv-cell">

@@ -8,9 +8,15 @@
  */
 package com.eyeq.pivot4j;
 
-public abstract class SortModeCycle {
+import java.io.Serializable;
+
+public abstract class SortModeCycle implements Serializable {
+
+	private static final long serialVersionUID = 3571398856078189701L;
 
 	public static final SortModeCycle BASIC = new SortModeCycle() {
+
+		private static final long serialVersionUID = 3622337346091896703L;
 
 		@Override
 		public SortMode nextMode(SortMode mode) {
@@ -26,6 +32,8 @@ public abstract class SortModeCycle {
 
 	public static final SortModeCycle BREAKING = new SortModeCycle() {
 
+		private static final long serialVersionUID = 7472926285648718374L;
+
 		@Override
 		public SortMode nextMode(SortMode mode) {
 			if (mode == null) {
@@ -39,6 +47,8 @@ public abstract class SortModeCycle {
 	};
 
 	public static final SortModeCycle COUNT = new SortModeCycle() {
+
+		private static final long serialVersionUID = -3751113668954135001L;
 
 		@Override
 		public SortMode nextMode(SortMode mode) {

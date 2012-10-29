@@ -668,6 +668,10 @@ public class QueryAdapter implements StateHolder {
 	 * @return true if the member can be expanded
 	 */
 	public boolean canExpand(List<Member> pathMembers) {
+		if (pathMembers.isEmpty()) {
+			return false;
+		}
+
 		Member member = pathMembers.get(pathMembers.size() - 1);
 		// a calculated member cannot be expanded
 		if (member.isCalculated()) {
@@ -711,6 +715,10 @@ public class QueryAdapter implements StateHolder {
 	 * @return true if the position can be collapsed
 	 */
 	public boolean canCollapse(List<Member> pathMembers) {
+		if (pathMembers.isEmpty()) {
+			return false;
+		}
+
 		Member member = pathMembers.get(pathMembers.size() - 1);
 		// a calculated member cannot be expanded
 		if (member.isCalculated()) {

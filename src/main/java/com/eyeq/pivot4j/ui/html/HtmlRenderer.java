@@ -9,11 +9,16 @@
 package com.eyeq.pivot4j.ui.html;
 
 import java.io.Writer;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.eyeq.pivot4j.ui.AbstractMarkupRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
+import com.eyeq.pivot4j.ui.command.CellCommand;
 
 public class HtmlRenderer extends AbstractMarkupRenderer {
 
@@ -46,6 +51,8 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	private String cornerStyleClass = "pv-corner";
 
 	private int rowHeaderLevelPadding = 10;
+
+	private Set<CellCommand> commands;
 
 	/**
 	 * @param writer
@@ -285,6 +292,14 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	 */
 	@Override
 	public void startTable(RenderContext context) {
+		startElement(context, "table", getTableAttributes(context));
+	}
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	protected Map<String, String> getTableAttributes(RenderContext context) {
 		Map<String, String> attributes = new TreeMap<String, String>();
 
 		if (tableId != null) {
@@ -307,7 +322,7 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 			attributes.put("border", Integer.toString(border));
 		}
 
-		startElement(context, "table", attributes);
+		return attributes;
 	}
 
 	/**
@@ -316,7 +331,7 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	 */
 	@Override
 	public void startHeader(RenderContext context) {
-		startElement(context, "thead", null);
+		startElement(context, "thead", getHeaderAttributes(context));
 	}
 
 	/**
@@ -329,12 +344,20 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	}
 
 	/**
+	 * @param context
+	 * @return
+	 */
+	protected Map<String, String> getHeaderAttributes(RenderContext context) {
+		return Collections.emptyMap();
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.ui.PivotRenderer#startBody(com.eyeq.pivot4j.ui
 	 *      .RenderContext)
 	 */
 	@Override
 	public void startBody(RenderContext context) {
-		startElement(context, "tbody", null);
+		startElement(context, "tbody", getBodyAttributes(context));
 	}
 
 	/**
@@ -344,6 +367,14 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	@Override
 	public void endBody(RenderContext context) {
 		endElement(context, "tbody");
+	}
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	protected Map<String, String> getBodyAttributes(RenderContext context) {
+		return Collections.emptyMap();
 	}
 
 	/**
@@ -361,6 +392,23 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	 */
 	@Override
 	public void startRow(RenderContext context) {
+		startElement(context, "tr", getRowAttributes(context));
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endRow(com.eyeq.pivot4j.ui.
+	 *      RenderContext)
+	 */
+	@Override
+	public void endRow(RenderContext context) {
+		endElement(context, "tr");
+	}
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	protected Map<String, String> getRowAttributes(RenderContext context) {
 		Map<String, String> attributes = new TreeMap<String, String>();
 
 		int index = context.getRowIndex() - context.getColumnHeaderCount();
@@ -401,33 +449,77 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 			attributes.put("class", builder.toString());
 		}
 
-		startElement(context, "tr", attributes);
+		return attributes;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endRow(com.eyeq.pivot4j.ui.
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#startCell(com.eyeq.pivot4j.ui.RenderContext,
+	 *      java.util.Set)
+	 */
+	@Override
+	public void startCell(RenderContext context, Set<CellCommand> commands) {
+		boolean header;
+
+		switch (context.getCellType()) {
+		case ColumnHeader:
+		case RowHeader:
+		case ColumnTitle:
+		case RowTitle:
+		case None:
+			header = true;
+			break;
+		default:
+			header = false;
+			break;
+		}
+
+		String name = header ? "th" : "td";
+
+		startElement(context, name, getCellAttributes(context));
+
+		this.commands = commands;
+
+		if (commands != null && !commands.isEmpty()) {
+			startCommand(context, commands);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endCell(com.eyeq.pivot4j.ui.
 	 *      RenderContext)
 	 */
 	@Override
-	public void endRow(RenderContext context) {
-		endElement(context, "tr");
+	public void endCell(RenderContext context) {
+		if (commands != null && !commands.isEmpty()) {
+			endCommand(context, commands);
+			this.commands = null;
+		}
+
+		switch (context.getCellType()) {
+		case ColumnHeader:
+		case RowHeader:
+		case ColumnTitle:
+		case RowTitle:
+		case None:
+			endElement(context, "th");
+			break;
+		default:
+			endElement(context, "td");
+			break;
+		}
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#startCell(com.eyeq.pivot4j.ui
-	 *      .RenderContext)
+	 * @param context
+	 * @return
 	 */
-	@Override
-	public void startCell(RenderContext context) {
-		boolean header = false;
-
+	protected Map<String, String> getCellAttributes(RenderContext context) {
 		String styleClass = null;
 		String style = null;
 
 		switch (context.getCellType()) {
 		case ColumnHeader:
 			styleClass = columnHeaderStyleClass;
-			header = true;
 			break;
 		case RowHeader:
 			styleClass = rowHeaderStyleClass;
@@ -438,30 +530,24 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 				style = "padding-left: " + padding + "px;";
 			}
 
-			header = true;
 			break;
 		case ColumnTitle:
 			styleClass = columnTitleStyleClass;
-			header = true;
 			break;
 		case RowTitle:
 			styleClass = rowTitleStyleClass;
-			header = true;
 			break;
 		case Value:
 			styleClass = cellStyleClass;
 			break;
 		case None:
 			styleClass = cornerStyleClass;
-			header = true;
 			break;
 		default:
 			assert false;
 		}
 
 		Map<String, String> attributes = new TreeMap<String, String>();
-
-		String name = header ? "th" : "td";
 
 		if (styleClass != null) {
 			attributes.put("class", styleClass);
@@ -479,55 +565,29 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 			attributes.put("rowspan", Integer.toString(context.getRowSpan()));
 		}
 
-		startElement(context, name, attributes);
+		return attributes;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#cellContent(com.eyeq.pivot4j.ui.RenderContext)
+	 * @param context
+	 * @param commands
 	 */
-	@Override
-	public void cellContent(RenderContext context) {
-		switch (context.getCellType()) {
-		case ColumnHeader:
-		case RowHeader:
-			writeContent(context, context.getMember().getCaption());
-			break;
-		case ColumnTitle:
-		case RowTitle:
-			if (context.getLevel() != null) {
-				writeContent(context, context.getLevel().getCaption());
-			} else if (context.getHierarchy() != null) {
-				writeContent(context, context.getHierarchy().getCaption());
-			} else {
-				writeContent(context, "&nbsp;");
-			}
-			break;
-		case Value:
-			writeContent(context, context.getCell().getFormattedValue());
-			break;
-		default:
-			writeContent(context, "&nbsp;");
-			break;
-		}
+	public void startCommand(RenderContext context, Set<CellCommand> commands) {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endCell(com.eyeq.pivot4j.ui.
-	 *      RenderContext)
+	 * @param context
+	 * @param commands
+	 */
+	public void endCommand(RenderContext context, Set<CellCommand> commands) {
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#getCellLabel(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
-	public void endCell(RenderContext context) {
-		switch (context.getCellType()) {
-		case ColumnHeader:
-		case RowHeader:
-		case ColumnTitle:
-		case RowTitle:
-		case None:
-			endElement(context, "th");
-			break;
-		default:
-			endElement(context, "td");
-			break;
-		}
+	protected String getCellLabel(RenderContext context) {
+		return StringUtils
+				.defaultIfEmpty(super.getCellLabel(context), "&nbsp;");
 	}
 }

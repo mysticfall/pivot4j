@@ -14,7 +14,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-public abstract class AbstractMarkupRenderer implements PivotRenderer {
+public abstract class AbstractMarkupRenderer extends AbstractPivotRenderer {
 
 	private PrintWriter writer;
 
@@ -197,5 +197,22 @@ public abstract class AbstractMarkupRenderer implements PivotRenderer {
 		if (formatOutput) {
 			writer.println();
 		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#cellContent(com.eyeq.pivot4j.ui.RenderContext,
+	 *      java.lang.String)
+	 */
+	@Override
+	public void cellContent(RenderContext context, String label) {
+		writeContent(context, label);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#getCellLabel(com.eyeq.pivot4j.ui.RenderContext)
+	 */
+	@Override
+	protected String getCellLabel(RenderContext context) {
+		return StringUtils.trimToEmpty(super.getCellLabel(context));
 	}
 }

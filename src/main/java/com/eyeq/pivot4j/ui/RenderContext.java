@@ -185,6 +185,20 @@ public class RenderContext {
 		this.cell = cell;
 	}
 
+	public Position getPosition() {
+		if (axis == null) {
+			return null;
+		}
+
+		if (axis.equals(Axis.COLUMNS)) {
+			return columnPosition;
+		} else if (axis.equals(Axis.ROWS)) {
+			return rowPosition;
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * @return the columnPosition
 	 */
