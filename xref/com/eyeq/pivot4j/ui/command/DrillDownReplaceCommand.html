@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>DrillDownReplaceCommand xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/com/eyeq/pivot4j/ui/command/DrillDownReplaceCommand.html">View Javadoc</a></div><pre>
+
+<a class="jxr_linenumber" name="1" href="#1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="2" href="#2">2</a>   <em class="jxr_comment"> * ====================================================================</em>
+<a class="jxr_linenumber" name="3" href="#3">3</a>   <em class="jxr_comment"> * This software is subject to the terms of the Common Public License</em>
+<a class="jxr_linenumber" name="4" href="#4">4</a>   <em class="jxr_comment"> * Agreement, available at the following URL:</em>
+<a class="jxr_linenumber" name="5" href="#5">5</a>   <em class="jxr_comment"> *   <a href="http://www.opensource.org/licenses/cpl.html" target="alexandria_uri">http://www.opensource.org/licenses/cpl.html</a> .</em>
+<a class="jxr_linenumber" name="6" href="#6">6</a>   <em class="jxr_comment"> * You must accept the terms of that agreement to use this software.</em>
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <em class="jxr_comment"> * ====================================================================</em>
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">package</strong> com.eyeq.pivot4j.ui.command;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> org.olap4j.CellSet;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> org.olap4j.CellSetAxis;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> org.olap4j.Position;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.Member;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.PivotModel;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.transform.DrillReplace;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.RenderContext;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/DrillDownReplaceCommand.html">DrillDownReplaceCommand</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/DrillDownCommand.html">DrillDownCommand</a> {
+<a class="jxr_linenumber" name="21" href="#21">21</a>  
+<a class="jxr_linenumber" name="22" href="#22">22</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NAME = <span class="jxr_string">"drillDown"</span>;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  
+<a class="jxr_linenumber" name="24" href="#24">24</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getName()</em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  	@Override
+<a class="jxr_linenumber" name="28" href="#28">28</a>  	<strong class="jxr_keyword">public</strong> String getName() {
+<a class="jxr_linenumber" name="29" href="#29">29</a>  		<strong class="jxr_keyword">return</strong> NAME;
+<a class="jxr_linenumber" name="30" href="#30">30</a>  	}
+<a class="jxr_linenumber" name="31" href="#31">31</a>  
+<a class="jxr_linenumber" name="32" href="#32">32</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="33" href="#33">33</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui</em>
+<a class="jxr_linenumber" name="34" href="#34">34</a>  <em class="jxr_javadoccomment">	 *      .RenderContext)</em>
+<a class="jxr_linenumber" name="35" href="#35">35</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="36" href="#36">36</a>  	@Override
+<a class="jxr_linenumber" name="37" href="#37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExecute(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
+<a class="jxr_linenumber" name="38" href="#38">38</a>  		PivotModel model = context.getModel();
+<a class="jxr_linenumber" name="39" href="#39">39</a>  
+<a class="jxr_linenumber" name="40" href="#40">40</a>  		DrillReplace transform = model.getTransform(DrillReplace.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="41" href="#41">41</a>  
+<a class="jxr_linenumber" name="42" href="#42">42</a>  		Member member = context.getMember();
+<a class="jxr_linenumber" name="43" href="#43">43</a>  		<strong class="jxr_keyword">if</strong> (member == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="44" href="#44">44</a>  			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="45" href="#45">45</a>  		}
+<a class="jxr_linenumber" name="46" href="#46">46</a>  
+<a class="jxr_linenumber" name="47" href="#47">47</a>  		<strong class="jxr_keyword">return</strong> transform.canDrillDown(member);
+<a class="jxr_linenumber" name="48" href="#48">48</a>  	}
+<a class="jxr_linenumber" name="49" href="#49">49</a>  
+<a class="jxr_linenumber" name="50" href="#50">50</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="51" href="#51">51</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.CellCommand#createParameters(com.eyeq.pivot4j</em>
+<a class="jxr_linenumber" name="52" href="#52">52</a>  <em class="jxr_javadoccomment">	 *      .ui.RenderContext)</em>
+<a class="jxr_linenumber" name="53" href="#53">53</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="54" href="#54">54</a>  	@Override
+<a class="jxr_linenumber" name="55" href="#55">55</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/CellParameters.html">CellParameters</a> createParameters(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
+<a class="jxr_linenumber" name="56" href="#56">56</a>  		CellParameters parameters = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/CellParameters.html">CellParameters</a>();
+<a class="jxr_linenumber" name="57" href="#57">57</a>  		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
+<a class="jxr_linenumber" name="58" href="#58">58</a>  		parameters.setMemberUniqueName(context.getMember().getUniqueName());
+<a class="jxr_linenumber" name="59" href="#59">59</a>  		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
+<a class="jxr_linenumber" name="60" href="#60">60</a>  
+<a class="jxr_linenumber" name="61" href="#61">61</a>  		<strong class="jxr_keyword">return</strong> parameters;
+<a class="jxr_linenumber" name="62" href="#62">62</a>  	}
+<a class="jxr_linenumber" name="63" href="#63">63</a>  
+<a class="jxr_linenumber" name="64" href="#64">64</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="65" href="#65">65</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.CellCommand#execute(com.eyeq.pivot4j.PivotModel</em>
+<a class="jxr_linenumber" name="66" href="#66">66</a>  <em class="jxr_javadoccomment">	 *      , com.eyeq.pivot4j.ui.command.CellParameters)</em>
+<a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="68" href="#68">68</a>  	@Override
+<a class="jxr_linenumber" name="69" href="#69">69</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute(<a href="../../../../../com/eyeq/pivot4j/PivotModel.html">PivotModel</a> model, <a href="../../../../../com/eyeq/pivot4j/ui/command/CellParameters.html">CellParameters</a> parameters) {
+<a class="jxr_linenumber" name="70" href="#70">70</a>  		CellSet cellSet = model.getCellSet();
+<a class="jxr_linenumber" name="71" href="#71">71</a>  
+<a class="jxr_linenumber" name="72" href="#72">72</a>  		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
+<a class="jxr_linenumber" name="73" href="#73">73</a>  		Position position = axis.getPositions().get(
+<a class="jxr_linenumber" name="74" href="#74">74</a>  				parameters.getPositionOrdinal());
+<a class="jxr_linenumber" name="75" href="#75">75</a>  
+<a class="jxr_linenumber" name="76" href="#76">76</a>  		Member member = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="77" href="#77">77</a>  
+<a class="jxr_linenumber" name="78" href="#78">78</a>  		<strong class="jxr_keyword">for</strong> (Member m : position.getMembers()) {
+<a class="jxr_linenumber" name="79" href="#79">79</a>  			<strong class="jxr_keyword">if</strong> (m.getUniqueName().equals(parameters.getMemberUniqueName())) {
+<a class="jxr_linenumber" name="80" href="#80">80</a>  				member = m;
+<a class="jxr_linenumber" name="81" href="#81">81</a>  				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="82" href="#82">82</a>  			}
+<a class="jxr_linenumber" name="83" href="#83">83</a>  		}
+<a class="jxr_linenumber" name="84" href="#84">84</a>  
+<a class="jxr_linenumber" name="85" href="#85">85</a>  		DrillReplace transform = model.getTransform(DrillReplace.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="86" href="#86">86</a>  		transform.drillDown(member);
+<a class="jxr_linenumber" name="87" href="#87">87</a>  	}
+<a class="jxr_linenumber" name="88" href="#88">88</a>  }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+
