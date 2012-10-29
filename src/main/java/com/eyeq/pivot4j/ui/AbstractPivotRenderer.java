@@ -12,12 +12,20 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.olap4j.Axis;
+
 import com.eyeq.pivot4j.SortModeCycle;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.DrillDownMode;
 import com.eyeq.pivot4j.ui.command.ToggleSortCommand;
 
 public abstract class AbstractPivotRenderer implements PivotRenderer {
+
+	private boolean enableColumnDrillDown = true;
+
+	private boolean enableRowDrillDown = true;
+
+	private boolean enableSort = true;
 
 	private SortModeCycle sortCycle = SortModeCycle.BASIC;
 
@@ -58,6 +66,51 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 	}
 
 	/**
+	 * @return the enableColumnDrillDown
+	 */
+	public boolean getEnableColumnDrillDown() {
+		return enableColumnDrillDown;
+	}
+
+	/**
+	 * @param enableColumnDrillDown
+	 *            the enableColumnDrillDown to set
+	 */
+	public void setEnableColumnDrillDown(boolean enableColumnDrillDown) {
+		this.enableColumnDrillDown = enableColumnDrillDown;
+	}
+
+	/**
+	 * @return the enableRowDrillDown
+	 */
+	public boolean getEnableRowDrillDown() {
+		return enableRowDrillDown;
+	}
+
+	/**
+	 * @param enableRowDrillDown
+	 *            the enableRowDrillDown to set
+	 */
+	public void setEnableRowDrillDown(boolean enableRowDrillDown) {
+		this.enableRowDrillDown = enableRowDrillDown;
+	}
+
+	/**
+	 * @return the enableSort
+	 */
+	public boolean getEnableSort() {
+		return enableSort;
+	}
+
+	/**
+	 * @param enableSort
+	 *            the enableSort to set
+	 */
+	public void setEnableSort(boolean enableSort) {
+		this.enableSort = enableSort;
+	}
+
+	/**
 	 * @param context
 	 * @return
 	 */
@@ -67,19 +120,55 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 		}
 
 		Set<CellCommand> commands = new HashSet<CellCommand>();
-		if (drillDownMode != null) {
-			for (CellCommand command : drillDownMode.getCommands()) {
+
+		if (Axis.COLUMNS.equals(context.getAxis()) && enableColumnDrillDown
+				|| Axis.ROWS.equals(context.getAxis()) && enableRowDrillDown) {
+			for (CellCommand command : createDrillDownCommands(context)) {
 				if (command.canExecute(context)) {
 					commands.add(command);
 				}
 			}
 		}
 
-		if (sortCycle != null) {
-			commands.add(new ToggleSortCommand(sortCycle));
+		if (getEnableSort()) {
+			CellCommand sortCommand = createSortCommand(context);
+			if (sortCommand != null) {
+				commands.add(sortCommand);
+			}
 		}
 
 		return commands;
+	}
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	protected Set<CellCommand> createDrillDownCommands(RenderContext context) {
+		if (drillDownMode == null) {
+			return Collections.emptySet();
+		}
+
+		Set<CellCommand> commands = new HashSet<CellCommand>();
+		for (CellCommand command : drillDownMode.getCommands()) {
+			if (command.canExecute(context)) {
+				commands.add(command);
+			}
+		}
+
+		return commands;
+	}
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	protected CellCommand createSortCommand(RenderContext context) {
+		if (sortCycle == null) {
+			return null;
+		}
+
+		return new ToggleSortCommand(sortCycle);
 	}
 
 	/**
