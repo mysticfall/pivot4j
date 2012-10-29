@@ -8,15 +8,17 @@
  */
 package com.eyeq.pivot4j.ui;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.olap4j.Axis;
 
 import com.eyeq.pivot4j.SortModeCycle;
 import com.eyeq.pivot4j.ui.command.CellCommand;
+import com.eyeq.pivot4j.ui.command.DrillDownCommand;
 import com.eyeq.pivot4j.ui.command.DrillDownMode;
+import com.eyeq.pivot4j.ui.command.SortCommand;
 import com.eyeq.pivot4j.ui.command.ToggleSortCommand;
 
 public abstract class AbstractPivotRenderer implements PivotRenderer {
@@ -111,32 +113,46 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 	}
 
 	/**
+	 * @param name
+	 * @return
+	 */
+	public CellCommand getCommand(String name) {
+		for (CellCommand command : getCommands()) {
+			if (name.equals(command.getName())) {
+				return command;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * @param context
 	 * @return
 	 */
-	protected Set<CellCommand> getCommands(RenderContext context) {
+	protected List<CellCommand> getCommands(RenderContext context) {
 		if (!isInteractive()) {
-			return Collections.emptySet();
+			return Collections.emptyList();
 		}
 
-		Set<CellCommand> commands = new HashSet<CellCommand>();
-
-		if (Axis.COLUMNS.equals(context.getAxis()) && enableColumnDrillDown
-				|| Axis.ROWS.equals(context.getAxis()) && enableRowDrillDown) {
-			for (CellCommand command : createDrillDownCommands(context)) {
-				if (command.canExecute(context)) {
+		List<CellCommand> commands = new ArrayList<CellCommand>();
+		for (CellCommand command : getCommands()) {
+			if (command instanceof DrillDownCommand) {
+				if (Axis.COLUMNS.equals(context.getAxis())
+						&& enableColumnDrillDown
+						|| Axis.ROWS.equals(context.getAxis())
+						&& enableRowDrillDown) {
+					if (command.canExecute(context)) {
+						commands.add(command);
+					}
+				}
+			} else if (command instanceof SortCommand) {
+				if (enableSort && command.canExecute(context)) {
 					commands.add(command);
 				}
 			}
 		}
 
-		if (getEnableSort()) {
-			CellCommand sortCommand = createSortCommand(context);
-			if (sortCommand != null) {
-				commands.add(sortCommand);
-			}
-		}
-
 		return commands;
 	}
 
@@ -144,31 +160,20 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 	 * @param context
 	 * @return
 	 */
-	protected Set<CellCommand> createDrillDownCommands(RenderContext context) {
-		if (drillDownMode == null) {
-			return Collections.emptySet();
-		}
+	protected List<CellCommand> getCommands() {
+		List<CellCommand> commands = new ArrayList<CellCommand>();
 
-		Set<CellCommand> commands = new HashSet<CellCommand>();
-		for (CellCommand command : drillDownMode.getCommands()) {
-			if (command.canExecute(context)) {
+		if (drillDownMode != null) {
+			for (CellCommand command : drillDownMode.getCommands()) {
 				commands.add(command);
 			}
 		}
 
-		return commands;
-	}
-
-	/**
-	 * @param context
-	 * @return
-	 */
-	protected CellCommand createSortCommand(RenderContext context) {
-		if (sortCycle == null) {
-			return null;
+		if (sortCycle != null) {
+			commands.add(new ToggleSortCommand(sortCycle));
 		}
 
-		return new ToggleSortCommand(sortCycle);
+		return commands;
 	}
 
 	/**
@@ -176,7 +181,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 	 */
 	@Override
 	public void startCell(RenderContext context) {
-		Set<CellCommand> commands = getCommands(context);
+		List<CellCommand> commands = getCommands(context);
 		startCell(context, commands);
 	}
 
@@ -185,7 +190,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 	 * @param commands
 	 */
 	public abstract void startCell(RenderContext context,
-			Set<CellCommand> commands);
+			List<CellCommand> commands);
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#cellContent(com.eyeq.pivot4j.ui.RenderContext)

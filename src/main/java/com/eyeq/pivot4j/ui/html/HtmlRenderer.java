@@ -10,8 +10,8 @@ package com.eyeq.pivot4j.ui.html;
 
 import java.io.Writer;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -52,7 +52,7 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 
 	private int rowHeaderLevelPadding = 10;
 
-	private Set<CellCommand> commands;
+	private List<CellCommand> commands;
 
 	/**
 	 * @param writer
@@ -457,7 +457,7 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	 *      java.util.Set)
 	 */
 	@Override
-	public void startCell(RenderContext context, Set<CellCommand> commands) {
+	public void startCell(RenderContext context, List<CellCommand> commands) {
 		boolean header;
 
 		switch (context.getCellType()) {
@@ -572,14 +572,14 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	 * @param context
 	 * @param commands
 	 */
-	public void startCommand(RenderContext context, Set<CellCommand> commands) {
+	public void startCommand(RenderContext context, List<CellCommand> commands) {
 	}
 
 	/**
 	 * @param context
 	 * @param commands
 	 */
-	public void endCommand(RenderContext context, Set<CellCommand> commands) {
+	public void endCommand(RenderContext context, List<CellCommand> commands) {
 	}
 
 	/**

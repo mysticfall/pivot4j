@@ -16,7 +16,7 @@ import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.SortModeCycle;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class ToggleSortCommand implements CellCommand {
+public class ToggleSortCommand implements SortCommand {
 
 	public static final String NAME = "sort";
 
