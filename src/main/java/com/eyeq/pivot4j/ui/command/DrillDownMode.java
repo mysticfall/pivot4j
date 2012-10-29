@@ -12,16 +12,18 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public abstract class DrillDownMode implements Serializable {
 
 	private static final long serialVersionUID = -4715289686127729961L;
 
-	public abstract Set<DrillDownCommand> getCommands();
-
 	public static final DrillDownMode POSITION = new DrillDownMode() {
 
 		private static final long serialVersionUID = 8476006057196756345L;
+
+		@Override
+		public String getName() {
+			return "position";
+		}
 
 		@Override
 		public Set<DrillDownCommand> getCommands() {
@@ -37,6 +39,11 @@ public abstract class DrillDownMode implements Serializable {
 		private static final long serialVersionUID = 4379908352253055398L;
 
 		@Override
+		public String getName() {
+			return "member";
+		}
+
+		@Override
 		public Set<DrillDownCommand> getCommands() {
 			Set<DrillDownCommand> commands = new HashSet<DrillDownCommand>(2);
 			commands.add(new DrillExpandMemberCommand());
@@ -50,6 +57,11 @@ public abstract class DrillDownMode implements Serializable {
 		private static final long serialVersionUID = -1064522759713078988L;
 
 		@Override
+		public String getName() {
+			return "replace";
+		}
+
+		@Override
 		public Set<DrillDownCommand> getCommands() {
 			Set<DrillDownCommand> commands = new HashSet<DrillDownCommand>(2);
 			commands.add(new DrillDownReplaceCommand());
@@ -57,4 +69,8 @@ public abstract class DrillDownMode implements Serializable {
 			return commands;
 		}
 	};
+
+	public abstract String getName();
+
+	public abstract Set<DrillDownCommand> getCommands();
 }

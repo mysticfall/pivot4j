@@ -19,6 +19,11 @@ public abstract class SortModeCycle implements Serializable {
 		private static final long serialVersionUID = 3622337346091896703L;
 
 		@Override
+		public String getName() {
+			return "basic";
+		}
+
+		@Override
 		public SortMode nextMode(SortMode mode) {
 			if (mode == null) {
 				return SortMode.ASC;
@@ -33,6 +38,11 @@ public abstract class SortModeCycle implements Serializable {
 	public static final SortModeCycle BREAKING = new SortModeCycle() {
 
 		private static final long serialVersionUID = 7472926285648718374L;
+
+		@Override
+		public String getName() {
+			return "breaking";
+		}
 
 		@Override
 		public SortMode nextMode(SortMode mode) {
@@ -51,6 +61,11 @@ public abstract class SortModeCycle implements Serializable {
 		private static final long serialVersionUID = -3751113668954135001L;
 
 		@Override
+		public String getName() {
+			return "count";
+		}
+
+		@Override
 		public SortMode nextMode(SortMode mode) {
 			if (mode == null) {
 				return SortMode.TOPCOUNT;
@@ -61,6 +76,8 @@ public abstract class SortModeCycle implements Serializable {
 			}
 		}
 	};
+
+	public abstract String getName();
 
 	public abstract SortMode nextMode(SortMode mode);
 
