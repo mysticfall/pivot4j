@@ -38,10 +38,10 @@ public class DrillExpandMemberCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode()
+	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
-	public String getMode() {
+	public String getMode(RenderContext context) {
 		return MODE_MEMBER;
 	}
 

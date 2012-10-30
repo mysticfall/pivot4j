@@ -30,19 +30,15 @@ public abstract class AbstractDrillDownCommand extends AbstractCellCommand
 	 */
 	@Override
 	public boolean canExecute(RenderContext context) {
-		boolean enabled = ObjectUtils.equals(getMode(), getRenderer()
-				.getDrillDownMode());
+		boolean enabled = ObjectUtils.equals(getMode(context), getRenderer()
+				.getDrillDownMode())
+				&& context.getAxis() != null;
 
 		if (enabled) {
-			enabled &= getRenderer().getEnableColumnDrillDown()
-					&& context.getAxis() != null
-					&& context.getAxis().equals(Axis.COLUMNS);
-		}
-
-		if (enabled) {
-			enabled &= getRenderer().getEnableRowDrillDown()
-					&& context.getAxis() != null
-					&& context.getAxis().equals(Axis.ROWS);
+			enabled = (getRenderer().getEnableColumnDrillDown() && context
+					.getAxis().equals(Axis.COLUMNS))
+					|| (getRenderer().getEnableRowDrillDown() && context
+							.getAxis().equals(Axis.ROWS));
 		}
 
 		return enabled;

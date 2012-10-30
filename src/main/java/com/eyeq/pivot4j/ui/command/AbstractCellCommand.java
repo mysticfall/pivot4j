@@ -9,6 +9,7 @@
 package com.eyeq.pivot4j.ui.command;
 
 import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.RenderContext;
 
 public abstract class AbstractCellCommand implements CellCommand {
 
@@ -43,10 +44,10 @@ public abstract class AbstractCellCommand implements CellCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getModeName()
+	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
-	public String getMode() {
+	public String getMode(RenderContext context) {
 		return null;
 	}
 }

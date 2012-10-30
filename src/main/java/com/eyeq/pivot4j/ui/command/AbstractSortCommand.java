@@ -23,16 +23,34 @@ public abstract class AbstractSortCommand extends AbstractCellCommand implements
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode()
+	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
-	public String getMode() {
+	public String getMode(RenderContext context) {
+		StringBuilder builder = new StringBuilder();
+
 		SortMode mode = getRenderer().getSortMode();
 		if (mode != null) {
-			return mode.getName();
+			builder.append(mode.getName());
+			builder.append('-');
 		}
 
-		return super.getMode();
+		switch (context.getModel().getSortCriteria()) {
+		case ASC:
+		case BASC:
+		case TOPCOUNT:
+			builder.append("up");
+			break;
+		case DESC:
+		case BDESC:
+		case BOTTOMCOUNT:
+			builder.append("down");
+			break;
+		default:
+			assert false;
+		}
+
+		return builder.toString();
 	}
 
 	/**
