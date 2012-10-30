@@ -633,9 +633,10 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 		this.rowHeaderStyleClass = (String) states[8];
 		this.rowTitleStyleClass = (String) states[9];
 		this.cornerStyleClass = (String) states[10];
-		this.evenRowStyleClass = (String) states[11];
-		this.oddRowStyleClass = (String) states[12];
-		this.cellStyleClass = (String) states[13];
-		this.rowHeaderLevelPadding = (Integer) states[14];
+		this.rowStyleClass = (String) states[11];
+		this.evenRowStyleClass = (String) states[12];
+		this.oddRowStyleClass = (String) states[13];
+		this.cellStyleClass = (String) states[14];
+		this.rowHeaderLevelPadding = (Integer) states[15];
 	}
 }
