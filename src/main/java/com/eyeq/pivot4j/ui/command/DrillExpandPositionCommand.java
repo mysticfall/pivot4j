@@ -15,11 +15,19 @@ import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillExpandPosition;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class DrillExpandPositionCommand implements DrillDownCommand {
+public class DrillExpandPositionCommand extends AbstractDrillDownCommand {
 
 	public static final String NAME = "expandPosition";
+
+	/**
+	 * @param renderer
+	 */
+	public DrillExpandPositionCommand(PivotRenderer renderer) {
+		super(renderer);
+	}
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getName()
@@ -30,11 +38,23 @@ public class DrillExpandPositionCommand implements DrillDownCommand {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode()
+	 */
+	@Override
+	public String getMode() {
+		return MODE_POSITION;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui
 	 *      .RenderContext)
 	 */
 	@Override
 	public boolean canExecute(RenderContext context) {
+		if (!super.canExecute(context)) {
+			return false;
+		}
+
 		PivotModel model = context.getModel();
 
 		DrillExpandPosition transform = model

@@ -376,7 +376,7 @@ public class QueryAdapter implements StateHolder {
 	 */
 	public void addSortToQuery() {
 		if (isSortOnQuery()) {
-			switch (model.getSortMode()) {
+			switch (model.getSortCriteria()) {
 			case ASC:
 			case DESC:
 			case BASC:
@@ -434,7 +434,7 @@ public class QueryAdapter implements StateHolder {
 		}
 
 		args[1] = sortExp;
-		args[2] = Literal.createString(model.getSortMode().name());
+		args[2] = Literal.createString(model.getSortCriteria().name());
 
 		FunCall order = new FunCall("Order", args, Syntax.Function);
 		qa.setExp(order);

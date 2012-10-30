@@ -13,25 +13,18 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.SortModeCycle;
-import com.eyeq.pivot4j.ui.RenderContext;
+import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.SortMode;
 
-public class ToggleSortCommand implements SortCommand {
+public class ToggleSortCommand extends AbstractSortCommand {
 
 	public static final String NAME = "sort";
 
-	private SortModeCycle sortCycle;
-
 	/**
-	 * @param sortCycle
+	 * @param renderer
 	 */
-	public ToggleSortCommand(SortModeCycle sortCycle) {
-		if (sortCycle == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'sortCycle'.");
-		}
-
-		this.sortCycle = sortCycle;
+	public ToggleSortCommand(PivotRenderer renderer) {
+		super(renderer);
 	}
 
 	/**
@@ -40,36 +33,6 @@ public class ToggleSortCommand implements SortCommand {
 	@Override
 	public String getName() {
 		return NAME;
-	}
-
-	/**
-	 * @return the sortCycle
-	 */
-	public SortModeCycle getSortCycle() {
-		return sortCycle;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui
-	 *      .RenderContext)
-	 */
-	@Override
-	public boolean canExecute(RenderContext context) {
-		return context.getPosition() != null
-				&& context.getModel().isSortable(context.getPosition());
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#createParameters(com.eyeq.pivot4j
-	 *      .ui.RenderContext)
-	 */
-	@Override
-	public CellParameters createParameters(RenderContext context) {
-		CellParameters parameters = new CellParameters();
-		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
-		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
-
-		return parameters;
 	}
 
 	/**
@@ -87,7 +50,12 @@ public class ToggleSortCommand implements SortCommand {
 		Position position = axis.getPositions().get(
 				parameters.getPositionOrdinal());
 
-		sortCycle.toggleSort(model);
+		SortMode mode = getRenderer().getSortMode();
+
+		if (mode != null) {
+			mode.toggleSort(model);
+		}
+
 		model.sort(otherAxis, position);
 	}
 }

@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.ui.html;
 
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
@@ -59,6 +60,15 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	 */
 	public HtmlRenderer(Writer writer) {
 		super(writer);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractMarkupRenderer#initialize()
+	 */
+	@Override
+	public void initialize() {
+		super.initialize();
+		this.commands = null;
 	}
 
 	/**
@@ -589,5 +599,43 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	protected String getCellLabel(RenderContext context) {
 		return StringUtils
 				.defaultIfEmpty(super.getCellLabel(context), "&nbsp;");
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#bookmarkState()
+	 */
+	@Override
+	public Serializable bookmarkState() {
+		return new Serializable[] { super.bookmarkState(), tableId, border,
+				cellSpacing, cellPadding, tableStyleClass,
+				columnHeaderStyleClass, columnTitleStyleClass,
+				rowHeaderStyleClass, rowTitleStyleClass, cornerStyleClass,
+				rowStyleClass, evenRowStyleClass, oddRowStyleClass,
+				cellStyleClass, rowHeaderLevelPadding };
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#restoreState(java.io.Serializable)
+	 */
+	@Override
+	public void restoreState(Serializable state) {
+		Serializable[] states = (Serializable[]) state;
+
+		super.restoreState(states[0]);
+
+		this.tableId = (String) states[1];
+		this.border = (Integer) states[2];
+		this.cellSpacing = (Integer) states[3];
+		this.cellPadding = (Integer) states[4];
+		this.tableStyleClass = (String) states[5];
+		this.columnHeaderStyleClass = (String) states[6];
+		this.columnTitleStyleClass = (String) states[7];
+		this.rowHeaderStyleClass = (String) states[8];
+		this.rowTitleStyleClass = (String) states[9];
+		this.cornerStyleClass = (String) states[10];
+		this.evenRowStyleClass = (String) states[11];
+		this.oddRowStyleClass = (String) states[12];
+		this.cellStyleClass = (String) states[13];
+		this.rowHeaderLevelPadding = (Integer) states[14];
 	}
 }

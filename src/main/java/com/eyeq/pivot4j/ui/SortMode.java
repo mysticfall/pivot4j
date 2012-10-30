@@ -6,15 +6,18 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j;
+package com.eyeq.pivot4j.ui;
 
 import java.io.Serializable;
 
-public abstract class SortModeCycle implements Serializable {
+import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.SortCriteria;
+
+public abstract class SortMode implements Serializable {
 
 	private static final long serialVersionUID = 3571398856078189701L;
 
-	public static final SortModeCycle BASIC = new SortModeCycle() {
+	public static final SortMode BASIC = new SortMode() {
 
 		private static final long serialVersionUID = 3622337346091896703L;
 
@@ -24,18 +27,18 @@ public abstract class SortModeCycle implements Serializable {
 		}
 
 		@Override
-		public SortMode nextMode(SortMode mode) {
+		public SortCriteria nextMode(SortCriteria mode) {
 			if (mode == null) {
-				return SortMode.ASC;
-			} else if (mode == SortMode.ASC) {
-				return SortMode.DESC;
+				return SortCriteria.ASC;
+			} else if (mode == SortCriteria.ASC) {
+				return SortCriteria.DESC;
 			} else {
 				return null;
 			}
 		}
 	};
 
-	public static final SortModeCycle BREAKING = new SortModeCycle() {
+	public static final SortMode BREAKING = new SortMode() {
 
 		private static final long serialVersionUID = 7472926285648718374L;
 
@@ -45,18 +48,18 @@ public abstract class SortModeCycle implements Serializable {
 		}
 
 		@Override
-		public SortMode nextMode(SortMode mode) {
+		public SortCriteria nextMode(SortCriteria mode) {
 			if (mode == null) {
-				return SortMode.BASC;
-			} else if (mode == SortMode.BASC) {
-				return SortMode.BDESC;
+				return SortCriteria.BASC;
+			} else if (mode == SortCriteria.BASC) {
+				return SortCriteria.BDESC;
 			} else {
 				return null;
 			}
 		}
 	};
 
-	public static final SortModeCycle COUNT = new SortModeCycle() {
+	public static final SortMode COUNT = new SortMode() {
 
 		private static final long serialVersionUID = -3751113668954135001L;
 
@@ -66,11 +69,11 @@ public abstract class SortModeCycle implements Serializable {
 		}
 
 		@Override
-		public SortMode nextMode(SortMode mode) {
+		public SortCriteria nextMode(SortCriteria mode) {
 			if (mode == null) {
-				return SortMode.TOPCOUNT;
-			} else if (mode == SortMode.TOPCOUNT) {
-				return SortMode.BOTTOMCOUNT;
+				return SortCriteria.TOPCOUNT;
+			} else if (mode == SortCriteria.TOPCOUNT) {
+				return SortCriteria.BOTTOMCOUNT;
 			} else {
 				return null;
 			}
@@ -79,7 +82,7 @@ public abstract class SortModeCycle implements Serializable {
 
 	public abstract String getName();
 
-	public abstract SortMode nextMode(SortMode mode);
+	public abstract SortCriteria nextMode(SortCriteria mode);
 
 	/**
 	 * @param model
@@ -90,17 +93,17 @@ public abstract class SortModeCycle implements Serializable {
 					"Missing required argument 'model'.");
 		}
 
-		SortMode currentMode = null;
+		SortCriteria currentCriteria = null;
 		if (model.isSorting()) {
-			currentMode = model.getSortMode();
+			currentCriteria = model.getSortCriteria();
 		}
 
-		SortMode mode = nextMode(currentMode);
-		if (mode == null) {
+		SortCriteria criteria = nextMode(currentCriteria);
+		if (criteria == null) {
 			model.setSorting(false);
 		} else {
 			model.setSorting(true);
-			model.setSortMode(mode);
+			model.setSortCriteria(criteria);
 		}
 	}
 }

@@ -25,7 +25,7 @@ import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.SortMode;
+import com.eyeq.pivot4j.SortCriteria;
 import com.eyeq.pivot4j.StateHolder;
 
 public class PivotModelImplIT extends AbstractIntegrationTestCase {
@@ -128,7 +128,7 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 
 		model.setSorting(true);
 		model.setTopBottomCount(3);
-		model.setSortMode(SortMode.BOTTOMCOUNT);
+		model.setSortCriteria(SortCriteria.BOTTOMCOUNT);
 
 		CellSet cellSet = model.getCellSet();
 		CellSetAxis axis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
@@ -163,6 +163,6 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 				3, newModel.getTopBottomCount());
 		assertEquals(
 				"Property 'sortMode' has been changed after the state restoration",
-				SortMode.BOTTOMCOUNT, newModel.getSortMode());
+				SortCriteria.BOTTOMCOUNT, newModel.getSortCriteria());
 	}
 }

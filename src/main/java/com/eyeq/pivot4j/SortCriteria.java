@@ -8,7 +8,7 @@
  */
 package com.eyeq.pivot4j;
 
-public enum SortMode {
+public enum SortCriteria {
 
 	/** sort hierarchically ascending */
 	ASC,

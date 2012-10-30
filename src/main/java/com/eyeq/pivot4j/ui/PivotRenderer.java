@@ -8,7 +8,11 @@
  */
 package com.eyeq.pivot4j.ui;
 
+import com.eyeq.pivot4j.ui.command.CellCommand;
+
 public interface PivotRenderer {
+
+	void initialize();
 
 	void startTable(RenderContext context);
 
@@ -31,4 +35,30 @@ public interface PivotRenderer {
 	void cellContent(RenderContext context);
 
 	void endCell(RenderContext context);
+
+	SortMode getSortMode();
+
+	void setSortMode(SortMode mode);
+
+	String getDrillDownMode();
+
+	void setDrillDownMode(String mode);
+
+	CellCommand getCommand(String name);
+
+	void addCommand(CellCommand command);
+
+	void removeCommand(String name);
+
+	boolean getEnableColumnDrillDown();
+
+	void setEnableColumnDrillDown(boolean enableColumnDrillDown);
+
+	boolean getEnableRowDrillDown();
+
+	void setEnableRowDrillDown(boolean enableRowDrillDown);
+
+	boolean getEnableSort();
+
+	void setEnableSort(boolean enableSort);
 }

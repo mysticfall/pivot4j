@@ -9,6 +9,7 @@
 package com.eyeq.pivot4j.ui;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.Map;
 
@@ -43,6 +44,15 @@ public abstract class AbstractMarkupRenderer extends AbstractPivotRenderer {
 	 */
 	public PrintWriter getWriter() {
 		return writer;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#initialize()
+	 */
+	@Override
+	public void initialize() {
+		super.initialize();
+		this.indent = 0;
 	}
 
 	/**
@@ -214,5 +224,29 @@ public abstract class AbstractMarkupRenderer extends AbstractPivotRenderer {
 	@Override
 	protected String getCellLabel(RenderContext context) {
 		return StringUtils.trimToEmpty(super.getCellLabel(context));
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#bookmarkState()
+	 */
+	@Override
+	public Serializable bookmarkState() {
+		return new Serializable[] { super.bookmarkState(), formatOutput,
+				indent, indentCharacter, indentSize };
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#restoreState(java.io.Serializable)
+	 */
+	@Override
+	public void restoreState(Serializable state) {
+		Serializable[] states = (Serializable[]) state;
+
+		super.restoreState(states[0]);
+
+		this.formatOutput = (Boolean) states[1];
+		this.indent = (Integer) states[2];
+		this.indentCharacter = (Character) states[3];
+		this.indentSize = (Integer) states[4];
 	}
 }

@@ -20,7 +20,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.SortMode;
+import com.eyeq.pivot4j.SortCriteria;
 import com.eyeq.pivot4j.transform.DrillExpandPosition;
 
 public class DrillExpandPositionImplIT extends
@@ -125,7 +125,7 @@ public class DrillExpandPositionImplIT extends
 
 		model.setSorting(true);
 		model.setTopBottomCount(3);
-		model.setSortMode(SortMode.BOTTOMCOUNT);
+		model.setSortCriteria(SortCriteria.BOTTOMCOUNT);
 
 		model.sort(axis, position);
 

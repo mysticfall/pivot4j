@@ -82,6 +82,20 @@ public interface PivotModel {
 	 */
 	<T extends Transform> T getTransform(Class<T> type);
 
+	/**
+	 * Changes current sorting. If <code>mode</code> is <code>TOPCOUNT</code> or
+	 * <code>BOTTOMCOUNT</code> the current value of <code>topBottomCount</code>
+	 * will be used.
+	 * 
+	 * @param axisToSort
+	 *            the axis to sort. Its one of the "other" axes, that do not
+	 *            contain position
+	 * @param position
+	 *            the sort criteria
+	 */
+	void sort(CellSetAxis axisToSort, Position position)
+			throws NotInitializedException;
+
 	boolean isSorting();
 
 	/**
@@ -98,9 +112,9 @@ public interface PivotModel {
 	 */
 	boolean isSortable(Position position);
 
-	SortMode getSortMode();
+	SortCriteria getSortCriteria();
 
-	void setSortMode(SortMode mode);
+	void setSortCriteria(SortCriteria criteria);
 
 	List<Member> getSortPosMembers();
 
@@ -110,20 +124,6 @@ public interface PivotModel {
 	int getTopBottomCount();
 
 	void setTopBottomCount(int topBottomCount);
-
-	/**
-	 * Changes current sorting. If <code>mode</code> is <code>TOPCOUNT</code> or
-	 * <code>BOTTOMCOUNT</code> the current value of <code>topBottomCount</code>
-	 * will be used.
-	 * 
-	 * @param axisToSort
-	 *            the axis to sort. Its one of the "other" axes, that do not
-	 *            contain position
-	 * @param position
-	 *            the sort criteria
-	 */
-	void sort(CellSetAxis axisToSort, Position position)
-			throws NotInitializedException;
 
 	boolean getHideSpans();
 

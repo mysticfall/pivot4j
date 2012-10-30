@@ -15,6 +15,16 @@ public interface CellCommand {
 
 	String getName();
 
+	String getDescription();
+
+	/**
+	 * For commands that have a state that should be represented differently in
+	 * UI (i.e. different icons for each sort modes)
+	 * 
+	 * @return
+	 */
+	String getMode();
+
 	boolean canExecute(RenderContext context);
 
 	CellParameters createParameters(RenderContext context);

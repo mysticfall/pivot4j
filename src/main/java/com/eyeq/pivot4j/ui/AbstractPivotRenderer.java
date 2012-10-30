@@ -8,50 +8,65 @@
  */
 package com.eyeq.pivot4j.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.olap4j.Axis;
-
-import com.eyeq.pivot4j.SortModeCycle;
+import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.ui.command.CellCommand;
+import com.eyeq.pivot4j.ui.command.DrillCollapseMemberCommand;
+import com.eyeq.pivot4j.ui.command.DrillCollapsePositionCommand;
 import com.eyeq.pivot4j.ui.command.DrillDownCommand;
-import com.eyeq.pivot4j.ui.command.DrillDownMode;
-import com.eyeq.pivot4j.ui.command.SortCommand;
+import com.eyeq.pivot4j.ui.command.DrillDownReplaceCommand;
+import com.eyeq.pivot4j.ui.command.DrillExpandMemberCommand;
+import com.eyeq.pivot4j.ui.command.DrillExpandPositionCommand;
+import com.eyeq.pivot4j.ui.command.DrillUpReplaceCommand;
 import com.eyeq.pivot4j.ui.command.ToggleSortCommand;
 
-public abstract class AbstractPivotRenderer implements PivotRenderer {
+public abstract class AbstractPivotRenderer implements PivotRenderer,
+		StateHolder {
 
-	private boolean enableColumnDrillDown = true;
+	private boolean enableColumnDrillDown;
 
-	private boolean enableRowDrillDown = true;
+	private boolean enableRowDrillDown;
 
 	private boolean enableSort = true;
 
-	private SortModeCycle sortCycle = SortModeCycle.BASIC;
+	private SortMode sortMode = SortMode.BASIC;
 
-	private DrillDownMode drillDownMode = DrillDownMode.POSITION;
+	private String drillDownMode = DrillDownCommand.MODE_POSITION;
+
+	private Map<String, CellCommand> commands = new HashMap<String, CellCommand>();
 
 	/**
-	 * @return the sortCycle
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#initialize()
 	 */
-	public SortModeCycle getSortCycle() {
-		return sortCycle;
+	public void initialize() {
+		registerCommands();
 	}
 
 	/**
-	 * @param sortCycle
-	 *            the sortCycle to set
+	 * @return the sortMode
 	 */
-	public void setSortCycle(SortModeCycle sortCycle) {
-		this.sortCycle = sortCycle;
+	public SortMode getSortMode() {
+		return sortMode;
+	}
+
+	/**
+	 * @param sortMode
+	 *            the sortMode to set
+	 */
+	public void setSortMode(SortMode sortMode) {
+		this.sortMode = sortMode;
 	}
 
 	/**
 	 * @return the drillDownMode
 	 */
-	public DrillDownMode getDrillDownMode() {
+	public String getDrillDownMode() {
 		return drillDownMode;
 	}
 
@@ -59,7 +74,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 	 * @param drillDownMode
 	 *            the drillDownMode to set
 	 */
-	public void setDrillDownMode(DrillDownMode drillDownMode) {
+	public void setDrillDownMode(String drillDownMode) {
 		this.drillDownMode = drillDownMode;
 	}
 
@@ -112,18 +127,39 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 		this.enableSort = enableSort;
 	}
 
+	protected void registerCommands() {
+		addCommand(new DrillExpandPositionCommand(this));
+		addCommand(new DrillCollapsePositionCommand(this));
+		addCommand(new DrillExpandMemberCommand(this));
+		addCommand(new DrillCollapseMemberCommand(this));
+		addCommand(new DrillDownReplaceCommand(this));
+		addCommand(new DrillUpReplaceCommand(this));
+		addCommand(new ToggleSortCommand(this));
+	}
+
 	/**
 	 * @param name
-	 * @return
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getCommand(java.lang.String)
 	 */
 	public CellCommand getCommand(String name) {
-		for (CellCommand command : getCommands()) {
-			if (name.equals(command.getName())) {
-				return command;
-			}
-		}
+		return commands.get(name);
+	}
 
-		return null;
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#addCommand(com.eyeq.pivot4j.ui.command
+	 *      .CellCommand)
+	 */
+	@Override
+	public void addCommand(CellCommand command) {
+		commands.put(command.getName(), command);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#removeCommand(java.lang.String)
+	 */
+	@Override
+	public void removeCommand(String name) {
+		commands.remove(name);
 	}
 
 	/**
@@ -135,45 +171,15 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 			return Collections.emptyList();
 		}
 
-		List<CellCommand> commands = new ArrayList<CellCommand>();
-		for (CellCommand command : getCommands()) {
-			if (command instanceof DrillDownCommand) {
-				if (Axis.COLUMNS.equals(context.getAxis())
-						&& enableColumnDrillDown
-						|| Axis.ROWS.equals(context.getAxis())
-						&& enableRowDrillDown) {
-					if (command.canExecute(context)) {
-						commands.add(command);
-					}
-				}
-			} else if (command instanceof SortCommand) {
-				if (enableSort && command.canExecute(context)) {
-					commands.add(command);
-				}
+		List<CellCommand> availableCommands = new ArrayList<CellCommand>(
+				commands.size());
+		for (CellCommand command : commands.values()) {
+			if (command.canExecute(context)) {
+				availableCommands.add(command);
 			}
 		}
 
-		return commands;
-	}
-
-	/**
-	 * @param context
-	 * @return
-	 */
-	protected List<CellCommand> getCommands() {
-		List<CellCommand> commands = new ArrayList<CellCommand>();
-
-		if (drillDownMode != null) {
-			for (CellCommand command : drillDownMode.getCommands()) {
-				commands.add(command);
-			}
-		}
-
-		if (sortCycle != null) {
-			commands.add(new ToggleSortCommand(sortCycle));
-		}
-
-		return commands;
+		return availableCommands;
 	}
 
 	/**
@@ -182,6 +188,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 	@Override
 	public void startCell(RenderContext context) {
 		List<CellCommand> commands = getCommands(context);
+
 		startCell(context, commands);
 	}
 
@@ -233,5 +240,28 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 		}
 
 		return label;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
+	 */
+	@Override
+	public Serializable bookmarkState() {
+		return new Serializable[] { drillDownMode, enableColumnDrillDown,
+				enableRowDrillDown, enableSort, sortMode };
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
+	 */
+	@Override
+	public void restoreState(Serializable state) {
+		Serializable[] states = (Serializable[]) state;
+
+		this.drillDownMode = (String) states[0];
+		this.enableColumnDrillDown = (Boolean) states[1];
+		this.enableRowDrillDown = (Boolean) states[2];
+		this.enableSort = (Boolean) states[3];
+		this.sortMode = (SortMode) states[4];
 	}
 }

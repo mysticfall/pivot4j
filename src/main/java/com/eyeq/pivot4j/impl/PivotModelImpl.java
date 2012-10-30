@@ -38,7 +38,7 @@ import com.eyeq.pivot4j.ModelChangeListener;
 import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.SortMode;
+import com.eyeq.pivot4j.SortCriteria;
 import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
@@ -78,7 +78,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 	private int topBottomCount = 10;
 
-	private SortMode sortMode = SortMode.ASC;
+	private SortCriteria sortCriteria = SortCriteria.ASC;
 
 	private boolean sorting = false;
 
@@ -232,7 +232,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		}
 
 		this.sortPosMembers = null;
-		this.sortMode = SortMode.ASC;
+		this.sortCriteria = SortCriteria.ASC;
 		this.sorting = false;
 		this.cellSet = null;
 		this.initialized = false;
@@ -401,7 +401,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 		this.cellSet = null;
 		this.topBottomCount = 10;
-		this.sortMode = SortMode.ASC;
+		this.sortCriteria = SortCriteria.ASC;
 		this.sorting = false;
 		this.sortPosMembers = null;
 
@@ -565,27 +565,27 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	}
 
 	/**
-	 * @return sort mode (ASC,DESC,BASC,BDESC,TOPCOUNT,BOTTOMCOUNT)
+	 * @return sort criteria (ASC,DESC,BASC,BDESC,TOPCOUNT,BOTTOMCOUNT)
 	 */
-	public SortMode getSortMode() {
-		return sortMode;
+	public SortCriteria getSortCriteria() {
+		return sortCriteria;
 	}
 
 	/**
 	 * @param sort
-	 *            mode (ASC,DESC,BASC,BDESC)
+	 *            criteria (ASC,DESC,BASC,BDESC)
 	 */
-	public void setSortMode(SortMode sortMode) {
-		if (this.sortMode == sortMode) {
+	public void setSortCriteria(SortCriteria sortCriteria) {
+		if (this.sortCriteria == sortCriteria) {
 			return;
 		}
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Change sort mode from " + this.sortMode + " to "
-					+ sortMode);
+			logger.info("Change sort mode from " + this.sortCriteria + " to "
+					+ sortCriteria);
 		}
 
-		this.sortMode = sortMode;
+		this.sortCriteria = sortCriteria;
 
 		if (isSortOnQuery()) {
 			fireModelChanged();
@@ -654,7 +654,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 		if (sorting
 				&& sortPosMembers != null
-				&& (sortMode == SortMode.TOPCOUNT || sortMode == SortMode.BOTTOMCOUNT)) {
+				&& (sortCriteria == SortCriteria.TOPCOUNT || sortCriteria == SortCriteria.BOTTOMCOUNT)) {
 			fireModelChanged();
 		}
 	}
@@ -797,7 +797,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 
 			sortState[0] = uniqueNames;
 			sortState[1] = getTopBottomCount();
-			sortState[2] = getSortMode();
+			sortState[2] = getSortCriteria();
 			sortState[3] = isSorting();
 
 			state[1] = sortState;
@@ -857,7 +857,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 					}
 
 					this.topBottomCount = (Integer) sortStates[1];
-					this.sortMode = (SortMode) sortStates[2];
+					this.sortCriteria = (SortCriteria) sortStates[2];
 					this.sorting = (Boolean) sortStates[3];
 				}
 			} catch (OlapException e) {

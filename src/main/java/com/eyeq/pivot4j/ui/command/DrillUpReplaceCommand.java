@@ -17,11 +17,19 @@ import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillReplace;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class DrillUpReplaceCommand implements DrillDownCommand {
+public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 
 	public static final String NAME = "drillUp";
+
+	/**
+	 * @param renderer
+	 */
+	public DrillUpReplaceCommand(PivotRenderer renderer) {
+		super(renderer);
+	}
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getName()
@@ -32,11 +40,23 @@ public class DrillUpReplaceCommand implements DrillDownCommand {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode()
+	 */
+	@Override
+	public String getMode() {
+		return MODE_REPLACE;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui
 	 *      .RenderContext)
 	 */
 	@Override
 	public boolean canExecute(RenderContext context) {
+		if (!super.canExecute(context)) {
+			return false;
+		}
+
 		PivotModel model = context.getModel();
 
 		DrillReplace transform = model.getTransform(DrillReplace.class);
