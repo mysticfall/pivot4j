@@ -386,7 +386,7 @@
 <a class="jxr_linenumber" name="376" href="#376">376</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="377" href="#377">377</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addSortToQuery() {
 <a class="jxr_linenumber" name="378" href="#378">378</a> 		<strong class="jxr_keyword">if</strong> (isSortOnQuery()) {
-<a class="jxr_linenumber" name="379" href="#379">379</a> 			<strong class="jxr_keyword">switch</strong> (model.getSortMode()) {
+<a class="jxr_linenumber" name="379" href="#379">379</a> 			<strong class="jxr_keyword">switch</strong> (model.getSortCriteria()) {
 <a class="jxr_linenumber" name="380" href="#380">380</a> 			<strong class="jxr_keyword">case</strong> ASC:
 <a class="jxr_linenumber" name="381" href="#381">381</a> 			<strong class="jxr_keyword">case</strong> DESC:
 <a class="jxr_linenumber" name="382" href="#382">382</a> 			<strong class="jxr_keyword">case</strong> BASC:
@@ -444,7 +444,7 @@
 <a class="jxr_linenumber" name="434" href="#434">434</a> 		}
 <a class="jxr_linenumber" name="435" href="#435">435</a> 
 <a class="jxr_linenumber" name="436" href="#436">436</a> 		args[1] = sortExp;
-<a class="jxr_linenumber" name="437" href="#437">437</a> 		args[2] = Literal.createString(model.getSortMode().name());
+<a class="jxr_linenumber" name="437" href="#437">437</a> 		args[2] = Literal.createString(model.getSortCriteria().name());
 <a class="jxr_linenumber" name="438" href="#438">438</a> 
 <a class="jxr_linenumber" name="439" href="#439">439</a> 		FunCall order = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"Order"</span>, args, Syntax.Function);
 <a class="jxr_linenumber" name="440" href="#440">440</a> 		qa.setExp(order);

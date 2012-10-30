@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.Member;
 <a class="jxr_linenumber" name="21" href="#21">21</a>  
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.PivotModel;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.SortMode;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.SortCriteria;
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.transform.DrillExpandPosition;
 <a class="jxr_linenumber" name="25" href="#25">25</a>  
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/transform/impl/DrillExpandPositionImplIT.html">DrillExpandPositionImplIT</a> <strong class="jxr_keyword">extends</strong>
@@ -135,7 +135,7 @@
 <a class="jxr_linenumber" name="125" href="#125">125</a> 
 <a class="jxr_linenumber" name="126" href="#126">126</a> 		model.setSorting(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="127" href="#127">127</a> 		model.setTopBottomCount(3);
-<a class="jxr_linenumber" name="128" href="#128">128</a> 		model.setSortMode(SortMode.BOTTOMCOUNT);
+<a class="jxr_linenumber" name="128" href="#128">128</a> 		model.setSortCriteria(SortCriteria.BOTTOMCOUNT);
 <a class="jxr_linenumber" name="129" href="#129">129</a> 
 <a class="jxr_linenumber" name="130" href="#130">130</a> 		model.sort(axis, position);
 <a class="jxr_linenumber" name="131" href="#131">131</a> 
