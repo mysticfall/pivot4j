@@ -8,14 +8,15 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
+import java.util.List;
+
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
-import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
-import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillReplace;
+import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
 import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
@@ -61,7 +62,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 		DrillReplace transform = model.getTransform(DrillReplace.class);
 
 		Hierarchy hierarchy = context.getHierarchy();
-		if (hierarchy == null || context.getMember() != null) {
+		if (hierarchy == null) {
 			return false;
 		}
 
@@ -74,11 +75,16 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	 */
 	@Override
 	public CellParameters createParameters(RenderContext context) {
+		PlaceHierarchiesOnAxes transform = context.getModel().getTransform(
+				PlaceHierarchiesOnAxes.class);
+
+		List<Hierarchy> hierarchies = transform.findVisibleHierarchies(context
+				.getAxis());
+
 		CellParameters parameters = new CellParameters();
 		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
-		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
-		parameters.setMemberOrdinal(context.getPosition().getMembers()
-				.indexOf(context.getMember()));
+		parameters.setHierarchyOrdinal(hierarchies.indexOf(context
+				.getHierarchy()));
 
 		return parameters;
 	}
@@ -92,13 +98,16 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 		CellSet cellSet = model.getCellSet();
 
 		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
-		Position position = axis.getPositions().get(
-				parameters.getPositionOrdinal());
 
-		Member member = position.getMembers()
-				.get(parameters.getMemberOrdinal());
+		PlaceHierarchiesOnAxes transform = model
+				.getTransform(PlaceHierarchiesOnAxes.class);
 
-		DrillReplace transform = model.getTransform(DrillReplace.class);
-		transform.drillUp(member.getHierarchy());
+		List<Hierarchy> hierarchies = transform.findVisibleHierarchies(axis
+				.getAxisOrdinal());
+
+		Hierarchy hierarchy = hierarchies.get(parameters.getHierarchyOrdinal());
+
+		DrillReplace drillTransform = model.getTransform(DrillReplace.class);
+		drillTransform.drillUp(hierarchy);
 	}
 }
