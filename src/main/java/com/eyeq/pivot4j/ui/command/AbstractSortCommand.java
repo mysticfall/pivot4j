@@ -35,19 +35,32 @@ public abstract class AbstractSortCommand extends AbstractCellCommand implements
 			builder.append('-');
 		}
 
-		switch (context.getModel().getSortCriteria()) {
-		case ASC:
-		case BASC:
-		case TOPCOUNT:
-			builder.append("up");
-			break;
-		case DESC:
-		case BDESC:
-		case BOTTOMCOUNT:
-			builder.append("down");
-			break;
-		default:
-			assert false;
+		if (context.getModel().isSorting()) {
+			if (context.getPosition() == null
+					|| !context.getModel().isSorting(context.getPosition())) {
+				builder.append("other");
+			} else {
+				builder.append("current");
+			}
+
+			builder.append('-');
+
+			switch (context.getModel().getSortCriteria()) {
+			case ASC:
+			case BASC:
+			case TOPCOUNT:
+				builder.append("up");
+				break;
+			case DESC:
+			case BDESC:
+			case BOTTOMCOUNT:
+				builder.append("down");
+				break;
+			default:
+				assert false;
+			}
+		} else {
+			builder.append("natural");
 		}
 
 		return builder.toString();
