@@ -78,8 +78,9 @@ public class DrillExpandPositionCommand extends AbstractDrillDownCommand {
 	public CellParameters createParameters(RenderContext context) {
 		CellParameters parameters = new CellParameters();
 		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
-		parameters.setMemberUniqueName(context.getMember().getUniqueName());
 		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
+		parameters.setMemberOrdinal(context.getPosition().getMembers()
+				.indexOf(context.getMember()));
 
 		return parameters;
 	}
@@ -96,14 +97,8 @@ public class DrillExpandPositionCommand extends AbstractDrillDownCommand {
 		Position position = axis.getPositions().get(
 				parameters.getPositionOrdinal());
 
-		Member member = null;
-
-		for (Member m : position.getMembers()) {
-			if (m.getUniqueName().equals(parameters.getMemberUniqueName())) {
-				member = m;
-				break;
-			}
-		}
+		Member member = position.getMembers()
+				.get(parameters.getMemberOrdinal());
 
 		DrillExpandPosition transform = model
 				.getTransform(DrillExpandPosition.class);

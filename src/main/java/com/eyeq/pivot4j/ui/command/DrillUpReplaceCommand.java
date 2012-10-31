@@ -8,10 +8,9 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
-import java.util.List;
-
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
+import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 
@@ -62,7 +61,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 		DrillReplace transform = model.getTransform(DrillReplace.class);
 
 		Hierarchy hierarchy = context.getHierarchy();
-		if (hierarchy == null) {
+		if (hierarchy == null || context.getMember() != null) {
 			return false;
 		}
 
@@ -77,8 +76,9 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	public CellParameters createParameters(RenderContext context) {
 		CellParameters parameters = new CellParameters();
 		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
-		parameters.setHierarchyUniqueName(context.getHierarchy()
-				.getUniqueName());
+		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
+		parameters.setMemberOrdinal(context.getPosition().getMembers()
+				.indexOf(context.getMember()));
 
 		return parameters;
 	}
@@ -92,19 +92,13 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 		CellSet cellSet = model.getCellSet();
 
 		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
+		Position position = axis.getPositions().get(
+				parameters.getPositionOrdinal());
 
-		List<Member> members = axis.getPositions().get(0).getMembers();
-
-		Hierarchy hierarchy = null;
-		for (Member m : members) {
-			if (m.getHierarchy().getUniqueName()
-					.equals(parameters.getHierarchyUniqueName())) {
-				hierarchy = m.getHierarchy();
-				break;
-			}
-		}
+		Member member = position.getMembers()
+				.get(parameters.getMemberOrdinal());
 
 		DrillReplace transform = model.getTransform(DrillReplace.class);
-		transform.drillUp(hierarchy);
+		transform.drillUp(member.getHierarchy());
 	}
 }

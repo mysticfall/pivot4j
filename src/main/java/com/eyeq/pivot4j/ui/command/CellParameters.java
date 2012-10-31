@@ -10,9 +10,11 @@ public class CellParameters implements Serializable {
 
 	private int positionOrdinal;
 
-	private String memberUniqueName;
+	private int memberOrdinal;
 
-	private String hierarchyUniqueName;
+	private int hierarchyOrdinal;
+
+	private int cellOrdinal;
 
 	/**
 	 * @return the axisOrdinal
@@ -45,32 +47,44 @@ public class CellParameters implements Serializable {
 	}
 
 	/**
-	 * @return the memberUniqueName
+	 * @return the memberOrdinal
 	 */
-	public String getMemberUniqueName() {
-		return memberUniqueName;
+	public int getMemberOrdinal() {
+		return memberOrdinal;
 	}
 
 	/**
-	 * @param memberUniqueName
-	 *            the memberUniqueName to set
+	 * @param memberOrdinal the memberOrdinal to set
 	 */
-	public void setMemberUniqueName(String memberUniqueName) {
-		this.memberUniqueName = memberUniqueName;
+	public void setMemberOrdinal(int memberOrdinal) {
+		this.memberOrdinal = memberOrdinal;
 	}
 
 	/**
-	 * @return the hierarchyUniqueName
+	 * @return the hierarchyOrdinal
 	 */
-	public String getHierarchyUniqueName() {
-		return hierarchyUniqueName;
+	public int getHierarchyOrdinal() {
+		return hierarchyOrdinal;
 	}
 
 	/**
-	 * @param hierarchyUniqueName
-	 *            the hierarchyUniqueName to set
+	 * @param hierarchyOrdinal the hierarchyOrdinal to set
 	 */
-	public void setHierarchyUniqueName(String hierarchyUniqueName) {
-		this.hierarchyUniqueName = hierarchyUniqueName;
+	public void setHierarchyOrdinal(int hierarchyOrdinal) {
+		this.hierarchyOrdinal = hierarchyOrdinal;
+	}
+
+	/**
+	 * @return the cellOrdinal
+	 */
+	public int getCellOrdinal() {
+		return cellOrdinal;
+	}
+
+	/**
+	 * @param cellOrdinal the cellOrdinal to set
+	 */
+	public void setCellOrdinal(int cellOrdinal) {
+		this.cellOrdinal = cellOrdinal;
 	}
 }
