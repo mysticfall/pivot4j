@@ -394,13 +394,15 @@ public class RendererStrategyImpl implements RenderStrategy {
 						}
 					}, 0);
 
+			context.setAxis(Axis.ROWS);
+			context.setRowSpan(1);
+			context.setCellType(CellType.RowTitle);
+
 			for (Hierarchy hierarchy : rowRoot.getReference().getHierarchies()) {
 				int span = spans.get(hierarchy);
 
 				context.setColSpan(span);
-				context.setRowSpan(1);
 				context.setHierarchy(hierarchy);
-				context.setCellType(CellType.RowTitle);
 
 				callback.startCell(context);
 				callback.cellContent(context);
@@ -428,10 +430,13 @@ public class RendererStrategyImpl implements RenderStrategy {
 				}
 			});
 
+			context.setAxis(Axis.ROWS);
+			context.setColSpan(1);
+			context.setRowSpan(1);
+			context.setCellType(CellType.RowTitle);
+
 			for (int i = 0; i < context.getRowHeaderCount(); i++) {
-				context.setColSpan(1);
-				context.setRowSpan(1);
-				context.setColIndex(1);
+				context.setColIndex(i);
 
 				Level level = levels.get(i);
 
@@ -442,7 +447,6 @@ public class RendererStrategyImpl implements RenderStrategy {
 					context.setHierarchy(level.getHierarchy());
 					context.setLevel(level);
 				}
-				context.setCellType(CellType.RowTitle);
 
 				callback.startCell(context);
 				callback.cellContent(context);
