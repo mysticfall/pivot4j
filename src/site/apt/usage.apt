@@ -30,7 +30,7 @@ How to Use Pivot4J
         <dependency>
             <groupId>com.eyeq</groupId>
             <artifactId>pivot4j</artifactId>
-            <version>0.0.4</version>
+            <version>0.0.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -139,10 +139,10 @@ CellSet cellSet = model.getCellSet();
 +-----+
 HtmlRenderer renderer = new HtmlTableBuilder(writer);
 
-model.setShowDimensionTitle(false); // Optionally hide the dimension title headers.
-model.setShowParentMembers(true); // Optionally make the parent members visible.
+renderer.setShowDimensionTitle(false); // Optionally hide the dimension title headers.
+renderer.setShowParentMembers(true); // Optionally make the parent members visible.
 
-model.render(renderer);
+renderer.render(model);
 
 writer.flush();
 writer.close();

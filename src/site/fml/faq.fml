@@ -106,8 +106,24 @@
 				<p>Different from JPivot, Pivot4J does not come with any specific UI implementation. 
 				However, you can use the 
 				<a href="./apidocs/com/eyeq/pivot4j/ui/package-summary.html" target="_blank">renderer API</a> 
-				to generate any tabular data structure suitable for building an UI component. Pivot4J also includes a 
-				concrete implementation which generates generic HTML source as well.</p>
+				to build the actual grid UI of a given PivotModel instance. It's very flexible so you can easily create your 
+				own renderer class to generate output data in a format suitable for your specific need.
+				</p> 
+				<p>Pivot4J also includes a concrete implementation which generates generic HTML source as well.</p>
+			</answer>
+		</faq>
+
+		<faq id="ui-command">
+			<question>
+				How can I add drill down or sort buttons to the generated HTML? 
+			</question>
+			<answer>
+				<p>Override the <a href="./apidocs/com/eyeq/pivot4j/ui/AbstractPivotRenderer.html#startCell%28com.eyeq.pivot4j.ui.RenderContext,%20java.util.List%29">startCell</a>
+				method of <a href="./apidocs/com/eyeq/pivot4j/ui/AbstractPivotRenderer.html">AbstractPivotRenderer</a> class then 
+				write suitable event handling code(write an 'a' tag, adding an 'onclick' attribute or whatever) using the 
+				<a href="./apidocs/com/eyeq/pivot4j/ui/command/CellCommand.html">CellCommand</a> and 
+				<a href="./apidocs/com/eyeq/pivot4j/ui/command/CellParameters.html">CellParameters</a> class. 
+				Generally, you don't have to write separate code for different operations.</p>
 			</answer>
 		</faq>
 
