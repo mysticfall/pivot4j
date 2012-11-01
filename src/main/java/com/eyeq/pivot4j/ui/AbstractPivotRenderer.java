@@ -72,7 +72,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			throw new IllegalStateException("Renderer was not initialized yet.");
 		}
 
-		renderStrategy.render(model, this);
+		renderStrategy.render(model, this, this);
 	}
 
 	/**

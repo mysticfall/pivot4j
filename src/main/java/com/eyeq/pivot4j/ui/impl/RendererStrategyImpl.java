@@ -25,7 +25,8 @@ import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.ui.CellType;
-import com.eyeq.pivot4j.ui.AbstractPivotRenderer;
+import com.eyeq.pivot4j.ui.PivotLayoutCallback;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.RenderStrategy;
 import com.eyeq.pivot4j.util.TreeNode;
@@ -36,10 +37,13 @@ public class RendererStrategyImpl implements RenderStrategy {
 	/**
 	 * @param model
 	 * @param renderer
+	 * @param callback
 	 * @see com.eyeq.pivot4j.ui.RenderStrategy#render(com.eyeq.pivot4j.PivotModel,
-	 *      com.eyeq.pivot4j.ui.AbstractPivotRenderer)
+	 *      com.eyeq.pivot4j.ui.PivotRenderer,
+	 *      com.eyeq.pivot4j.ui.PivotLayoutCallback)
 	 */
-	public void render(PivotModel model, AbstractPivotRenderer renderer) {
+	public void render(PivotModel model, PivotRenderer renderer,
+			PivotLayoutCallback callback) {
 		if (model == null) {
 			throw new IllegalArgumentException(
 					"Missing required argument 'model'.");
@@ -74,12 +78,12 @@ public class RendererStrategyImpl implements RenderStrategy {
 		RenderContext context = createRenderContext(model, renderer,
 				columnRoot, rowRoot);
 
-		renderer.startTable(context);
+		callback.startTable(context);
 
-		renderHeader(context, columnRoot, rowRoot, renderer);
-		renderBody(context, columnRoot, rowRoot, renderer);
+		renderHeader(context, columnRoot, rowRoot, callback);
+		renderBody(context, columnRoot, rowRoot, callback);
 
-		renderer.endTable(context);
+		callback.endTable(context);
 	}
 
 	/**
@@ -90,7 +94,7 @@ public class RendererStrategyImpl implements RenderStrategy {
 	 * @return
 	 */
 	protected RenderContext createRenderContext(PivotModel model,
-			AbstractPivotRenderer renderer, TableHeaderNode columnRoot,
+			PivotRenderer renderer, TableHeaderNode columnRoot,
 			TableHeaderNode rowRoot) {
 		int columnHeaderCount = columnRoot.getMaxRowIndex();
 		int rowHeaderCount = rowRoot.getMaxRowIndex();
@@ -110,7 +114,7 @@ public class RendererStrategyImpl implements RenderStrategy {
 	 */
 	protected void renderHeader(final RenderContext context,
 			final TableHeaderNode columnRoot, final TableHeaderNode rowRoot,
-			final AbstractPivotRenderer callback) {
+			final PivotLayoutCallback callback) {
 
 		callback.startHeader(context);
 
@@ -177,7 +181,7 @@ public class RendererStrategyImpl implements RenderStrategy {
 	 */
 	protected void renderBody(final RenderContext context,
 			final TableHeaderNode columnRoot, final TableHeaderNode rowRoot,
-			final AbstractPivotRenderer callback) {
+			final PivotLayoutCallback callback) {
 		callback.startBody(context);
 
 		int count = rowRoot.getColSpan();
@@ -247,7 +251,7 @@ public class RendererStrategyImpl implements RenderStrategy {
 	 */
 	protected void renderDataRow(RenderContext context,
 			TableHeaderNode columnRoot, TableHeaderNode rowRoot,
-			TableHeaderNode rowNode, AbstractPivotRenderer callback) {
+			TableHeaderNode rowNode, PivotLayoutCallback callback) {
 		context.setCellType(CellType.Value);
 
 		for (int i = 0; i < context.getColumnCount(); i++) {
@@ -282,7 +286,7 @@ public class RendererStrategyImpl implements RenderStrategy {
 	 */
 	protected void renderHeaderCorner(RenderContext context,
 			TableHeaderNode columnRoot, TableHeaderNode rowRoot,
-			AbstractPivotRenderer callback) {
+			PivotLayoutCallback callback) {
 		boolean showParentMembers = context.getRenderer()
 				.getShowParentMembers();
 		boolean showDimensionTitle = context.getRenderer()
@@ -484,8 +488,7 @@ public class RendererStrategyImpl implements RenderStrategy {
 	 * @param axis
 	 * @param node
 	 */
-	protected void configureAxisTree(PivotModel model,
-			AbstractPivotRenderer renderer,
+	protected void configureAxisTree(PivotModel model, PivotRenderer renderer,
 			Axis axis, TableHeaderNode node) {
 		if (renderer.getShowDimensionTitle() && axis.equals(Axis.COLUMNS)) {
 			node.addHierarhcyHeaders();
