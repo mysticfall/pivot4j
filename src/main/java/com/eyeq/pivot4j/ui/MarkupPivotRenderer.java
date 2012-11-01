@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-public abstract class AbstractMarkupRenderer extends AbstractPivotRenderer {
+public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
 
 	private PrintWriter writer;
 
@@ -30,7 +30,7 @@ public abstract class AbstractMarkupRenderer extends AbstractPivotRenderer {
 	/**
 	 * @param writer
 	 */
-	public AbstractMarkupRenderer(Writer writer) {
+	public MarkupPivotRenderer(Writer writer) {
 		if (writer == null) {
 			throw new IllegalArgumentException(
 					"Missing required argument 'writer'.");

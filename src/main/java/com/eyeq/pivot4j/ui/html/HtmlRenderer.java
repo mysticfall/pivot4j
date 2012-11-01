@@ -17,11 +17,11 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.eyeq.pivot4j.ui.AbstractMarkupRenderer;
+import com.eyeq.pivot4j.ui.MarkupPivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 
-public class HtmlRenderer extends AbstractMarkupRenderer {
+public class HtmlRenderer extends MarkupPivotRenderer {
 
 	private String tableId;
 
@@ -63,7 +63,7 @@ public class HtmlRenderer extends AbstractMarkupRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractMarkupRenderer#initialize()
+	 * @see com.eyeq.pivot4j.ui.MarkupPivotRenderer#initialize()
 	 */
 	@Override
 	public void initialize() {
