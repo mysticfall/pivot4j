@@ -18,7 +18,6 @@ import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.transform.Transform;
-import com.eyeq.pivot4j.ui.PivotRenderer;
 
 /**
  * Provides access to result and metadata. It does not specify what data are
@@ -124,11 +123,4 @@ public interface PivotModel extends StateHolder {
 	int getTopBottomCount();
 
 	void setTopBottomCount(int topBottomCount);
-
-	/**
-	 * Render the pivot model using the specified renderer
-	 * 
-	 * @param renderer
-	 */
-	void render(PivotRenderer renderer);
 }

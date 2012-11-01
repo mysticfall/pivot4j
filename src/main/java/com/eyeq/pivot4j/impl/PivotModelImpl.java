@@ -46,9 +46,6 @@ import com.eyeq.pivot4j.query.QueryChangeListener;
 import com.eyeq.pivot4j.transform.Transform;
 import com.eyeq.pivot4j.transform.TransformFactory;
 import com.eyeq.pivot4j.transform.impl.TransformFactoryImpl;
-import com.eyeq.pivot4j.ui.PivotRenderer;
-import com.eyeq.pivot4j.ui.RenderStrategy;
-import com.eyeq.pivot4j.ui.impl.RendererStrategyImpl;
 
 /**
  * The pivot model represents all (meta-)data for an MDX query.
@@ -72,8 +69,6 @@ public class PivotModelImpl implements PivotModel {
 	private QueryAdapter queryAdapter;
 
 	private TransformFactory transformFactory;
-
-	private RenderStrategy renderStrategy;
 
 	private int topBottomCount = 10;
 
@@ -105,7 +100,6 @@ public class PivotModelImpl implements PivotModel {
 
 		this.dataSource = dataSource;
 		this.transformFactory = createTransformFactory();
-		this.renderStrategy = createRenderStrategy();
 	}
 
 	/**
@@ -418,10 +412,6 @@ public class PivotModelImpl implements PivotModel {
 		return new TransformFactoryImpl();
 	}
 
-	protected RenderStrategy createRenderStrategy() {
-		return new RendererStrategyImpl();
-	}
-
 	/**
 	 * Returns the queryAdapter.
 	 * 
@@ -436,13 +426,6 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	protected TransformFactory getTransformFactory() {
 		return transformFactory;
-	}
-
-	/**
-	 * @return the renderStrategy
-	 */
-	protected RenderStrategy getRenderStrategy() {
-		return renderStrategy;
 	}
 
 	/**
@@ -718,14 +701,6 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		fireModelChanged();
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#render(com.eyeq.pivot4j.ui.PivotRenderer)
-	 */
-	@Override
-	public void render(PivotRenderer renderer) {
-		renderStrategy.render(this, renderer);
 	}
 
 	/**

@@ -101,7 +101,7 @@ public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
 		renderer.setShowDimensionTitle(showDimensionTitle);
 		renderer.setShowParentMembers(showParentMembers);
 
-		model.render(renderer);
+		renderer.render(model);
 
 		writer.flush();
 		writer.close();

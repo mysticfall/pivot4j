@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.DrillCollapseMemberCommand;
 import com.eyeq.pivot4j.ui.command.DrillCollapsePositionCommand;
@@ -26,7 +27,8 @@ import com.eyeq.pivot4j.ui.command.DrillUpReplaceCommand;
 import com.eyeq.pivot4j.ui.command.ToggleSortCommand;
 import com.eyeq.pivot4j.ui.impl.RendererStrategyImpl;
 
-public abstract class AbstractPivotRenderer implements PivotRenderer {
+public abstract class AbstractPivotRenderer implements PivotRenderer,
+		PivotLayoutCallback {
 
 	private boolean enableColumnDrillDown;
 
@@ -54,6 +56,23 @@ public abstract class AbstractPivotRenderer implements PivotRenderer {
 	public void initialize() {
 		registerCommands();
 		this.renderStrategy = createRenderStrategy();
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#render(com.eyeq.pivot4j.PivotModel)
+	 */
+	@Override
+	public void render(PivotModel model) {
+		if (model == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'model'.");
+		}
+
+		if (renderStrategy == null) {
+			throw new IllegalStateException("Renderer was not initialized yet.");
+		}
+
+		renderStrategy.render(model, this);
 	}
 
 	/**

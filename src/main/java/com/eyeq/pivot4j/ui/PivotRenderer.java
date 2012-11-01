@@ -8,12 +8,15 @@
  */
 package com.eyeq.pivot4j.ui;
 
+import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 
-public interface PivotRenderer extends PivotLayoutCallback, StateHolder {
+public interface PivotRenderer extends StateHolder {
 
 	void initialize();
+
+	void render(PivotModel model);
 
 	CellCommand getCommand(String name);
 

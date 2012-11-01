@@ -16,5 +16,5 @@ public interface RenderStrategy {
 	 * @param model
 	 * @param renderer
 	 */
-	void render(PivotModel model, PivotRenderer renderer);
+	void render(PivotModel model, AbstractPivotRenderer renderer);
 }
