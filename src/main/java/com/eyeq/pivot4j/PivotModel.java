@@ -125,18 +125,6 @@ public interface PivotModel {
 
 	void setTopBottomCount(int topBottomCount);
 
-	boolean getHideSpans();
-
-	void setHideSpans(boolean hideSpans);
-
-	boolean getShowParentMembers();
-
-	void setShowParentMembers(boolean showParentMembers);
-
-	boolean getShowDimensionTitle();
-
-	void setShowDimensionTitle(boolean showDimensionTitle);
-
 	/**
 	 * Render the pivot model using the specified renderer
 	 * 

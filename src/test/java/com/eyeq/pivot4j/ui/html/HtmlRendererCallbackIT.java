@@ -77,10 +77,6 @@ public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
 
 		PivotModel model = getPivotModel();
 		model.setMdx(mdx);
-		model.setHideSpans(hideSpans);
-		model.setShowDimensionTitle(showDimensionTitle);
-		model.setShowParentMembers(showParentMembers);
-
 		model.initialize();
 
 		StringBuilder sb = new StringBuilder();
@@ -99,7 +95,11 @@ public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
 
 		HtmlRenderer renderer = new HtmlRenderer(writer);
 		renderer.initialize();
+
 		renderer.setBorder(1);
+		renderer.setHideSpans(hideSpans);
+		renderer.setShowDimensionTitle(showDimensionTitle);
+		renderer.setShowParentMembers(showParentMembers);
 
 		model.render(renderer);
 

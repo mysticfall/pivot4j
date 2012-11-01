@@ -12,18 +12,6 @@ import com.eyeq.pivot4j.PivotModel;
 
 public interface RenderStrategy {
 
-	boolean getHideSpans();
-
-	void setHideSpans(boolean hideSpans);
-
-	boolean getShowParentMembers();
-
-	void setShowParentMembers(boolean showParentMembers);
-
-	boolean getShowDimensionTitle();
-
-	void setShowDimensionTitle(boolean showDimensionTitle);
-
 	/**
 	 * @param model
 	 * @param renderer

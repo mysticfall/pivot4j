@@ -33,63 +33,6 @@ import com.eyeq.pivot4j.util.TreeNodeCallback;
 
 public class RendererStrategyImpl implements RenderStrategy {
 
-	private boolean hideSpans = false;
-
-	private boolean showParentMembers = false;
-
-	private boolean showDimensionTitle = true;
-
-	/**
-	 * @return the hideSpans
-	 * @see com.eyeq.pivot4j.ui.RenderStrategy#getHideSpans()
-	 */
-	public boolean getHideSpans() {
-		return hideSpans;
-	}
-
-	/**
-	 * @param hideSpans
-	 *            the hideSpans to set
-	 * @see com.eyeq.pivot4j.ui.RenderStrategy#setHideSpans(boolean)
-	 */
-	public void setHideSpans(boolean hideSpans) {
-		this.hideSpans = hideSpans;
-	}
-
-	/**
-	 * @return the showParentMembers
-	 * @see com.eyeq.pivot4j.ui.RenderStrategy#getShowParentMembers()
-	 */
-	public boolean getShowParentMembers() {
-		return showParentMembers;
-	}
-
-	/**
-	 * @param showParentMembers
-	 *            the showParentMembers to set
-	 * @see com.eyeq.pivot4j.ui.RenderStrategy#setShowParentMembers(boolean)
-	 */
-	public void setShowParentMembers(boolean showParentMembers) {
-		this.showParentMembers = showParentMembers;
-	}
-
-	/**
-	 * @return the showDimensionTitle
-	 * @see com.eyeq.pivot4j.ui.RenderStrategy#getShowDimensionTitle()
-	 */
-	public boolean getShowDimensionTitle() {
-		return showDimensionTitle;
-	}
-
-	/**
-	 * @param showDimensionTitle
-	 *            the showDimensionTitle to set
-	 * @see com.eyeq.pivot4j.ui.RenderStrategy#setShowDimensionTitle(boolean)
-	 */
-	public void setShowDimensionTitle(boolean showDimensionTitle) {
-		this.showDimensionTitle = showDimensionTitle;
-	}
-
 	/**
 	 * @param model
 	 * @param renderer
@@ -122,13 +65,14 @@ public class RendererStrategyImpl implements RenderStrategy {
 			return;
 		}
 
-		configureAxisTree(model, Axis.COLUMNS, columnRoot);
-		configureAxisTree(model, Axis.ROWS, rowRoot);
+		configureAxisTree(model, renderer, Axis.COLUMNS, columnRoot);
+		configureAxisTree(model, renderer, Axis.ROWS, rowRoot);
 
 		freezeAxisTree(model, Axis.COLUMNS, columnRoot);
 		freezeAxisTree(model, Axis.ROWS, rowRoot);
 
-		RenderContext context = createRenderContext(model, columnRoot, rowRoot);
+		RenderContext context = createRenderContext(model, renderer,
+				columnRoot, rowRoot);
 
 		renderer.startTable(context);
 
@@ -140,19 +84,21 @@ public class RendererStrategyImpl implements RenderStrategy {
 
 	/**
 	 * @param model
+	 * @param renderer
 	 * @param columnRoot
 	 * @param rowRoot
 	 * @return
 	 */
 	protected RenderContext createRenderContext(PivotModel model,
-			TableHeaderNode columnRoot, TableHeaderNode rowRoot) {
+			PivotRenderer renderer, TableHeaderNode columnRoot,
+			TableHeaderNode rowRoot) {
 		int columnHeaderCount = columnRoot.getMaxRowIndex();
 		int rowHeaderCount = rowRoot.getMaxRowIndex();
 
 		int columnCount = columnRoot.getWidth();
 		int rowCount = rowRoot.getWidth();
 
-		return new RenderContext(model, columnCount, rowCount,
+		return new RenderContext(model, renderer, columnCount, rowCount,
 				columnHeaderCount, rowHeaderCount);
 	}
 
@@ -337,9 +283,14 @@ public class RendererStrategyImpl implements RenderStrategy {
 	protected void renderHeaderCorner(RenderContext context,
 			TableHeaderNode columnRoot, TableHeaderNode rowRoot,
 			PivotRenderer callback) {
+		boolean showParentMembers = context.getRenderer()
+				.getShowParentMembers();
+		boolean showDimensionTitle = context.getRenderer()
+				.getShowDimensionTitle();
+
 		int offset = 0;
 
-		if (showDimensionTitle) {
+		if (context.getRenderer().getShowDimensionTitle()) {
 			offset = showParentMembers ? 2 : 1;
 		}
 
@@ -529,20 +480,21 @@ public class RendererStrategyImpl implements RenderStrategy {
 
 	/**
 	 * @param model
+	 * @param renderer
 	 * @param axis
 	 * @param node
 	 */
-	protected void configureAxisTree(PivotModel model, Axis axis,
-			TableHeaderNode node) {
-		if (showDimensionTitle && axis.equals(Axis.COLUMNS)) {
+	protected void configureAxisTree(PivotModel model, PivotRenderer renderer,
+			Axis axis, TableHeaderNode node) {
+		if (renderer.getShowDimensionTitle() && axis.equals(Axis.COLUMNS)) {
 			node.addHierarhcyHeaders();
 		}
 
-		if (showParentMembers) {
+		if (renderer.getShowParentMembers()) {
 			node.addParentMemberHeaders();
 		}
 
-		if (!hideSpans) {
+		if (!renderer.getHideSpans()) {
 			node.mergeChildren();
 		}
 	}

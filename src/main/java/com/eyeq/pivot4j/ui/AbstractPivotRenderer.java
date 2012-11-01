@@ -25,6 +25,7 @@ import com.eyeq.pivot4j.ui.command.DrillExpandMemberCommand;
 import com.eyeq.pivot4j.ui.command.DrillExpandPositionCommand;
 import com.eyeq.pivot4j.ui.command.DrillUpReplaceCommand;
 import com.eyeq.pivot4j.ui.command.ToggleSortCommand;
+import com.eyeq.pivot4j.ui.impl.RendererStrategyImpl;
 
 public abstract class AbstractPivotRenderer implements PivotRenderer,
 		StateHolder {
@@ -35,21 +36,31 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	private boolean enableSort = true;
 
+	private boolean hideSpans = false;
+
+	private boolean showParentMembers = false;
+
+	private boolean showDimensionTitle = true;
+
 	private SortMode sortMode = SortMode.BASIC;
 
 	private String drillDownMode = DrillDownCommand.MODE_POSITION;
 
 	private Map<String, CellCommand> commands = new HashMap<String, CellCommand>();
 
+	private RenderStrategy renderStrategy;
+
 	/**
 	 * @see com.eyeq.pivot4j.ui.PivotRenderer#initialize()
 	 */
 	public void initialize() {
 		registerCommands();
+		this.renderStrategy = createRenderStrategy();
 	}
 
 	/**
 	 * @return the sortMode
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getSortMode()
 	 */
 	public SortMode getSortMode() {
 		return sortMode;
@@ -58,6 +69,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	/**
 	 * @param sortMode
 	 *            the sortMode to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setSortMode(com.eyeq.pivot4j.ui.SortMode)
 	 */
 	public void setSortMode(SortMode sortMode) {
 		this.sortMode = sortMode;
@@ -65,6 +77,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	/**
 	 * @return the drillDownMode
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getDrillDownMode()
 	 */
 	public String getDrillDownMode() {
 		return drillDownMode;
@@ -73,17 +86,15 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	/**
 	 * @param drillDownMode
 	 *            the drillDownMode to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setDrillDownMode(java.lang.String)
 	 */
 	public void setDrillDownMode(String drillDownMode) {
 		this.drillDownMode = drillDownMode;
 	}
 
-	protected boolean isInteractive() {
-		return true;
-	}
-
 	/**
 	 * @return the enableColumnDrillDown
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getEnableColumnDrillDown()
 	 */
 	public boolean getEnableColumnDrillDown() {
 		return enableColumnDrillDown;
@@ -92,6 +103,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	/**
 	 * @param enableColumnDrillDown
 	 *            the enableColumnDrillDown to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setEnableColumnDrillDown(boolean)
 	 */
 	public void setEnableColumnDrillDown(boolean enableColumnDrillDown) {
 		this.enableColumnDrillDown = enableColumnDrillDown;
@@ -99,6 +111,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	/**
 	 * @return the enableRowDrillDown
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getEnableRowDrillDown()
 	 */
 	public boolean getEnableRowDrillDown() {
 		return enableRowDrillDown;
@@ -107,6 +120,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	/**
 	 * @param enableRowDrillDown
 	 *            the enableRowDrillDown to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setEnableRowDrillDown(boolean)
 	 */
 	public void setEnableRowDrillDown(boolean enableRowDrillDown) {
 		this.enableRowDrillDown = enableRowDrillDown;
@@ -114,6 +128,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	/**
 	 * @return the enableSort
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getEnableSort()
 	 */
 	public boolean getEnableSort() {
 		return enableSort;
@@ -122,9 +137,79 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	/**
 	 * @param enableSort
 	 *            the enableSort to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setEnableSort(boolean)
 	 */
 	public void setEnableSort(boolean enableSort) {
 		this.enableSort = enableSort;
+	}
+
+	/**
+	 * @return the hideSpans
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getHideSpans()
+	 */
+	public boolean getHideSpans() {
+		return hideSpans;
+	}
+
+	/**
+	 * @param hideSpans
+	 *            the hideSpans to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setHideSpans(boolean)
+	 */
+	public void setHideSpans(boolean hideSpans) {
+		this.hideSpans = hideSpans;
+	}
+
+	/**
+	 * @return the showParentMembers
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getShowParentMembers()
+	 */
+	public boolean getShowParentMembers() {
+		return showParentMembers;
+	}
+
+	/**
+	 * @param showParentMembers
+	 *            the showParentMembers to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setShowParentMembers(boolean)
+	 */
+	public void setShowParentMembers(boolean showParentMembers) {
+		this.showParentMembers = showParentMembers;
+	}
+
+	/**
+	 * @return the showDimensionTitle
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getShowDimensionTitle()
+	 */
+	public boolean getShowDimensionTitle() {
+		return showDimensionTitle;
+	}
+
+	/**
+	 * @param showDimensionTitle
+	 *            the showDimensionTitle to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setShowDimensionTitle(boolean)
+	 */
+	public void setShowDimensionTitle(boolean showDimensionTitle) {
+		this.showDimensionTitle = showDimensionTitle;
+	}
+
+	protected boolean isInteractive() {
+		return true;
+	}
+
+	/**
+	 * @return renderStrategy
+	 */
+	protected RenderStrategy getRenderStrategy() {
+		return renderStrategy;
+	}
+
+	/**
+	 * @return
+	 */
+	protected RenderStrategy createRenderStrategy() {
+		return new RendererStrategyImpl();
 	}
 
 	protected void registerCommands() {
@@ -248,7 +333,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	@Override
 	public Serializable bookmarkState() {
 		return new Serializable[] { drillDownMode, enableColumnDrillDown,
-				enableRowDrillDown, enableSort, sortMode };
+				enableRowDrillDown, enableSort, sortMode, showDimensionTitle,
+				showParentMembers, hideSpans };
 	}
 
 	/**
@@ -263,5 +349,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		this.enableRowDrillDown = (Boolean) states[2];
 		this.enableSort = (Boolean) states[3];
 		this.sortMode = (SortMode) states[4];
+		this.showDimensionTitle = (Boolean) states[5];
+		this.showParentMembers = (Boolean) states[6];
+		this.hideSpans = (Boolean) states[7];
 	}
 }

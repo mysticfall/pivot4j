@@ -722,54 +722,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.PivotModel#getHideSpans()
-	 */
-	@Override
-	public boolean getHideSpans() {
-		return renderStrategy.getHideSpans();
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#setHideSpans(boolean)
-	 */
-	@Override
-	public void setHideSpans(boolean hideSpans) {
-		renderStrategy.setHideSpans(hideSpans);
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#getShowParentMembers()
-	 */
-	@Override
-	public boolean getShowParentMembers() {
-		return renderStrategy.getShowParentMembers();
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#setShowParentMembers(boolean)
-	 */
-	@Override
-	public void setShowParentMembers(boolean showParentMembers) {
-		renderStrategy.setShowParentMembers(showParentMembers);
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#getShowDimensionTitle()
-	 */
-	@Override
-	public boolean getShowDimensionTitle() {
-		return renderStrategy.getShowDimensionTitle();
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#setShowDimensionTitle(boolean)
-	 */
-	@Override
-	public void setShowDimensionTitle(boolean showDimensionTitle) {
-		renderStrategy.setShowDimensionTitle(showDimensionTitle);
-	}
-
-	/**
 	 * @see com.eyeq.pivot4j.PivotModel#render(com.eyeq.pivot4j.ui.PivotRenderer)
 	 */
 	@Override
@@ -781,7 +733,7 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
 	 */
 	public synchronized Serializable bookmarkState() {
-		Serializable[] state = new Serializable[6];
+		Serializable[] state = new Serializable[3];
 
 		state[0] = getCurrentMdx();
 
@@ -804,10 +756,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		}
 
 		state[2] = getQueryAdapter().bookmarkState();
-
-		state[3] = renderStrategy.getHideSpans();
-		state[4] = renderStrategy.getShowParentMembers();
-		state[5] = renderStrategy.getShowDimensionTitle();
 
 		return state;
 	}
@@ -868,10 +816,6 @@ public class PivotModelImpl implements PivotModel, StateHolder {
 		this.cellSet = null;
 
 		queryAdapter.restoreState(states[2]);
-
-		setHideSpans((Boolean) states[3]);
-		setShowParentMembers((Boolean) states[4]);
-		setShowDimensionTitle((Boolean) states[5]);
 
 		fireModelChanged();
 	}

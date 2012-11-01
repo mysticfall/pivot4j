@@ -23,6 +23,8 @@ public class RenderContext {
 
 	private PivotModel model;
 
+	private PivotRenderer renderer;
+
 	private Axis axis;
 
 	private Position columnPosition;
@@ -57,16 +59,23 @@ public class RenderContext {
 
 	/**
 	 * @param model
+	 * @param renderer
 	 * @param columnCount
 	 * @param rowCount
 	 * @param columnHeaderCount
 	 * @param rowHeaderCount
 	 */
-	public RenderContext(PivotModel model, int columnCount, int rowCount,
-			int columnHeaderCount, int rowHeaderCount) {
+	public RenderContext(PivotModel model, PivotRenderer renderer,
+			int columnCount, int rowCount, int columnHeaderCount,
+			int rowHeaderCount) {
 		if (model == null) {
 			throw new IllegalArgumentException(
 					"Missing required argument 'model'.");
+		}
+
+		if (renderer == null) {
+			throw new IllegalArgumentException(
+					"Missing required argument 'renderer'.");
 		}
 
 		if (columnCount < 0) {
@@ -90,6 +99,7 @@ public class RenderContext {
 		}
 
 		this.model = model;
+		this.renderer = renderer;
 		this.columnCount = columnCount;
 		this.rowCount = rowCount;
 		this.columnHeaderCount = columnHeaderCount;
@@ -101,6 +111,13 @@ public class RenderContext {
 	 */
 	public PivotModel getModel() {
 		return model;
+	}
+
+	/**
+	 * @return the renderer
+	 */
+	public PivotRenderer getRenderer() {
+		return renderer;
 	}
 
 	/**
