@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.DrillCollapseMemberCommand;
 import com.eyeq.pivot4j.ui.command.DrillCollapsePositionCommand;
@@ -27,8 +26,7 @@ import com.eyeq.pivot4j.ui.command.DrillUpReplaceCommand;
 import com.eyeq.pivot4j.ui.command.ToggleSortCommand;
 import com.eyeq.pivot4j.ui.impl.RendererStrategyImpl;
 
-public abstract class AbstractPivotRenderer implements PivotRenderer,
-		StateHolder {
+public abstract class AbstractPivotRenderer implements PivotRenderer {
 
 	private boolean enableColumnDrillDown;
 

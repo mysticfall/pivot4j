@@ -26,7 +26,6 @@ import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.SortCriteria;
-import com.eyeq.pivot4j.StateHolder;
 
 public class PivotModelImplIT extends AbstractIntegrationTestCase {
 
@@ -137,12 +136,12 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 
 		String mdx = model.getCurrentMdx();
 
-		Serializable bookmark = ((StateHolder) model).bookmarkState();
+		Serializable bookmark = model.bookmarkState();
 
 		assertNotNull("Bookmarked state should not be null", bookmark);
 
 		PivotModel newModel = new PivotModelImpl(getDataSource());
-		((StateHolder) newModel).restoreState(bookmark);
+		newModel.restoreState(bookmark);
 
 		newModel.getCellSet();
 

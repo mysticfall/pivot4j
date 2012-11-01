@@ -165,7 +165,7 @@ writer.close();
 
 +-----+
 // From the original request, retrieve the model state and store it as a session attribute
-Serializable bookmark = ((StateHolder) model).bookmarkState();
+Serializable bookmark = model.bookmarkState();
 
 session.setAttribute("pivotState", bookmark);
 
@@ -176,7 +176,7 @@ session.setAttribute("pivotState", bookmark);
 Serializable bookmark = (Serializable) session.getAttribute("pivotState");
 
 PivotModel model = new PivotModelImpl(dataSource);
-((StateHolder) model).restoreState(bookmark);
+model.restoreState(bookmark);
 
 // You don't need to call initialize() or setMdx() as you've already 
 // done that in the previous request.

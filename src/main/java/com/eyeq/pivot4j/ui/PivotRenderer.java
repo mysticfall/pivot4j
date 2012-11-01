@@ -8,9 +8,10 @@
  */
 package com.eyeq.pivot4j.ui;
 
+import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 
-public interface PivotRenderer {
+public interface PivotRenderer extends PivotLayoutCallback, StateHolder {
 
 	void initialize();
 
@@ -51,26 +52,4 @@ public interface PivotRenderer {
 	String getDrillDownMode();
 
 	void setDrillDownMode(String mode);
-
-	void startTable(RenderContext context);
-
-	void startHeader(RenderContext context);
-
-	void endHeader(RenderContext context);
-
-	void startBody(RenderContext context);
-
-	void endBody(RenderContext context);
-
-	void endTable(RenderContext context);
-
-	void startRow(RenderContext context);
-
-	void endRow(RenderContext context);
-
-	void startCell(RenderContext context);
-
-	void cellContent(RenderContext context);
-
-	void endCell(RenderContext context);
 }

@@ -24,7 +24,7 @@ import com.eyeq.pivot4j.ui.PivotRenderer;
  * Provides access to result and metadata. It does not specify what data are
  * displayed (the query).
  */
-public interface PivotModel {
+public interface PivotModel extends StateHolder {
 
 	void initialize();
 

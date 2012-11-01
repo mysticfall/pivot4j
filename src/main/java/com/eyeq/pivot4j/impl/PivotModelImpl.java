@@ -39,7 +39,6 @@ import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.SortCriteria;
-import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.query.QueryChangeEvent;
@@ -54,7 +53,7 @@ import com.eyeq.pivot4j.ui.impl.RendererStrategyImpl;
 /**
  * The pivot model represents all (meta-)data for an MDX query.
  */
-public class PivotModelImpl implements PivotModel, StateHolder {
+public class PivotModelImpl implements PivotModel {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
