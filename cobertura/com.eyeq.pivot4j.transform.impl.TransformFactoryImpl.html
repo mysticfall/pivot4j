@@ -97,12 +97,12 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">private</span> Map&lt;Class&lt;? <span class="keyword">extends</span> Transform&gt;, Class&lt;? <span class="keyword">extends</span> Transform&gt;&gt; transforms;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;40</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;41</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> TransformFactoryImpl() {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;42</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.transforms = <span class="keyword">new</span> HashMap&lt;Class&lt;? <span class="keyword">extends</span> Transform&gt;, Class&lt;? <span class="keyword">extends</span> Transform&gt;&gt;();</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;41</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> TransformFactoryImpl() {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;42</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">this</span>.transforms = <span class="keyword">new</span> HashMap&lt;Class&lt;? <span class="keyword">extends</span> Transform&gt;, Class&lt;? <span class="keyword">extends</span> Transform&gt;&gt;();</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;43</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;44</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                registerDefaultTransforms(transforms);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;45</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;44</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                registerDefaultTransforms(transforms);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;45</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;46</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;47</td>  <td class="nbHits">&nbsp;</td>
@@ -115,18 +115,18 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">protected</span> <span class="keyword">void</span> registerDefaultTransforms(</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;51</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        Map&lt;Class&lt;? <span class="keyword">extends</span> Transform&gt;, Class&lt;? <span class="keyword">extends</span> Transform&gt;&gt; transforms) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;52</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(DrillExpandMember.<span class="keyword">class</span>, DrillExpandMemberImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;53</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                transforms</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;54</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                                .put(DrillExpandPosition.<span class="keyword">class</span>, DrillExpandPositionImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;55</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(DrillReplace.<span class="keyword">class</span>, DrillReplaceImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;56</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(NonEmpty.<span class="keyword">class</span>, NonEmptyImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;57</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(SwapAxes.<span class="keyword">class</span>, SwapAxesImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;58</td>  <td class="nbHitsCovered">&nbsp;1225</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(PlaceHierarchiesOnAxes.<span class="keyword">class</span>,</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;59</td>  <td class="nbHitsCovered">&nbsp;588</td>  <td class="src"><pre class="src">&nbsp;                                PlaceHierarchiesOnAxesImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;60</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(PlaceMembersOnAxes.<span class="keyword">class</span>, PlaceMembersOnAxesImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;61</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(PlaceLevelsOnAxes.<span class="keyword">class</span>, PlaceLevelsOnAxesImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;62</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(ChangeSlicer.<span class="keyword">class</span>, ChangeSlicerImpl.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;63</td>  <td class="nbHitsCovered">&nbsp;637</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;52</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(DrillExpandMember.<span class="keyword">class</span>, DrillExpandMemberImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;53</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                transforms</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;54</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                                .put(DrillExpandPosition.<span class="keyword">class</span>, DrillExpandPositionImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;55</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(DrillReplace.<span class="keyword">class</span>, DrillReplaceImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;56</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(NonEmpty.<span class="keyword">class</span>, NonEmptyImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;57</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(SwapAxes.<span class="keyword">class</span>, SwapAxesImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;58</td>  <td class="nbHitsCovered">&nbsp;1699</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(PlaceHierarchiesOnAxes.<span class="keyword">class</span>,</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;59</td>  <td class="nbHitsCovered">&nbsp;825</td>  <td class="src"><pre class="src">&nbsp;                                PlaceHierarchiesOnAxesImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;60</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(PlaceMembersOnAxes.<span class="keyword">class</span>, PlaceMembersOnAxesImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;61</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(PlaceLevelsOnAxes.<span class="keyword">class</span>, PlaceLevelsOnAxesImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;62</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;                transforms.put(ChangeSlicer.<span class="keyword">class</span>, ChangeSlicerImpl.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;63</td>  <td class="nbHitsCovered">&nbsp;874</td>  <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;64</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;65</td>  <td class="nbHits">&nbsp;</td>
@@ -141,21 +141,21 @@
   <td class="src"><pre class="src">&nbsp;        <span class="keyword">public</span> &lt;T <span class="keyword">extends</span> Transform&gt; T createTransform(Class&lt;T&gt; type,</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;70</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        QueryAdapter queryAdapter) {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsCovered">&nbsp;77954</td>  <td class="src"><pre class="src">&nbsp;                T transform = <span class="keyword">null</span>;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;71</td>  <td class="nbHitsCovered">&nbsp;78184</td>  <td class="src"><pre class="src">&nbsp;                T transform = <span class="keyword">null</span>;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;72</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;73</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                @SuppressWarnings(<span class="string">"unchecked"</span>)</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;74</td>  <td class="nbHitsCovered">&nbsp;77954</td>  <td class="src"><pre class="src">&nbsp;                Class&lt;T&gt; implementationType = (Class&lt;T&gt;) transforms.get(type);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;74</td>  <td class="nbHitsCovered">&nbsp;78184</td>  <td class="src"><pre class="src">&nbsp;                Class&lt;T&gt; implementationType = (Class&lt;T&gt;) transforms.get(type);</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;75</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;76</td>  <td class="nbHitsUncovered"><a title="Line 76: Conditional coverage 50% (1/2).">&nbsp;77954</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 76: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (implementationType != <span class="keyword">null</span>) {</a></span></pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;76</td>  <td class="nbHitsUncovered"><a title="Line 76: Conditional coverage 50% (1/2).">&nbsp;78184</a></td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;<a title="Line 76: Conditional coverage 50% (1/2).">                <span class="keyword">if</span> (implementationType != <span class="keyword">null</span>) {</a></span></pre></td></tr>
 <tr>  <td class="numLine">&nbsp;77</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;                        <span class="keyword">try</span> {</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;78</td>  <td class="nbHitsCovered">&nbsp;155862</td>  <td class="src"><pre class="src">&nbsp;                                Constructor&lt;T&gt; constructor = implementationType</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsCovered">&nbsp;77954</td>  <td class="src"><pre class="src">&nbsp;                                                .getConstructor(QueryAdapter.<span class="keyword">class</span>);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;77954</td>  <td class="src"><pre class="src">&nbsp;                                transform = constructor.newInstance(queryAdapter);</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsCovered">&nbsp;77908</td>  <td class="src"><pre class="src">&nbsp;                        } <span class="keyword">catch</span> (NoSuchMethodException e) {</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;78</td>  <td class="nbHitsCovered">&nbsp;156322</td>  <td class="src"><pre class="src">&nbsp;                                Constructor&lt;T&gt; constructor = implementationType</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;79</td>  <td class="nbHitsCovered">&nbsp;78184</td>  <td class="src"><pre class="src">&nbsp;                                                .getConstructor(QueryAdapter.<span class="keyword">class</span>);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;80</td>  <td class="nbHitsCovered">&nbsp;78184</td>  <td class="src"><pre class="src">&nbsp;                                transform = constructor.newInstance(queryAdapter);</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;81</td>  <td class="nbHitsCovered">&nbsp;78138</td>  <td class="src"><pre class="src">&nbsp;                        } <span class="keyword">catch</span> (NoSuchMethodException e) {</pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;82</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                String msg = <span class="string">"The registered implementation class does not have a suitable constructor : "</span></span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;83</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                                + implementationType;</span></pre></td></tr>
 <tr>  <td class="numLineCover">&nbsp;84</td>  <td class="nbHitsUncovered">&nbsp;0</td>  <td class="src"><pre class="src"><span class="srcUncovered">&nbsp;                                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(msg);</span></pre></td></tr>
@@ -170,13 +170,13 @@
   <td class="src"><pre class="src">&nbsp;                }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;93</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;</pre></td></tr>
-<tr>  <td class="numLineCover">&nbsp;94</td>  <td class="nbHitsCovered">&nbsp;77954</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> transform;</pre></td></tr>
+<tr>  <td class="numLineCover">&nbsp;94</td>  <td class="nbHitsCovered">&nbsp;78184</td>  <td class="src"><pre class="src">&nbsp;                <span class="keyword">return</span> transform;</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;95</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;        }</pre></td></tr>
 <tr>  <td class="numLine">&nbsp;96</td>  <td class="nbHits">&nbsp;</td>
   <td class="src"><pre class="src">&nbsp;}</pre></td></tr>
 </table>
 
-<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12. 11. 1 오후 6:12.</div>
+<div class="footer">Report generated by <a href="http://cobertura.sourceforge.net/" target="_top">Cobertura</a> 1.9.4.1 on 12. 11. 1 오후 6:52.</div>
 </body>
 </html>
