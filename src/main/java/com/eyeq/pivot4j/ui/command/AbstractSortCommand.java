@@ -75,6 +75,8 @@ public abstract class AbstractSortCommand extends AbstractCellCommand implements
 		CellParameters parameters = new CellParameters();
 		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
 		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
+		parameters.setMemberOrdinal(context.getPosition().getMembers()
+				.indexOf(context.getMember()));
 
 		return parameters;
 	}
@@ -85,7 +87,12 @@ public abstract class AbstractSortCommand extends AbstractCellCommand implements
 	 */
 	@Override
 	public boolean canExecute(RenderContext context) {
-		return getRenderer().getEnableSort() && context.getPosition() != null
+		return getRenderer().getEnableSort()
+				&& context.getPosition() != null
+				&& context.getMember() != null
+				&& context.getPosition().getMembers()
+						.indexOf(context.getMember()) == context.getPosition()
+						.getMembers().size() - 1
 				&& context.getModel().isSortable(context.getPosition());
 	}
 }
