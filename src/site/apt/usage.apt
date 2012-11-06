@@ -23,7 +23,7 @@ How to Use Pivot4J
     <repositories>
         <repository>
             <id>eyeq</id>
-            <url>http://dev.eyeq.co.kr/artifactory/libs-release/</url>
+            <url>http://dev.eyeq.co.kr/artifactory/libs-snapshot/</url>
         </repository>
     </repositories>
     <dependencies>
