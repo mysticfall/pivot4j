@@ -510,7 +510,7 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	protected void fireQueryExecuted(Date start, long duration, String mdx) {
-		QueryEvent e = new QueryEvent(this, start, duration, mdx);
+		QueryEvent e = new QueryEvent(this, start, duration, mdx, cellSet);
 
 		List<QueryListener> copiedListeners = new ArrayList<QueryListener>(
 				queryListeners);
