@@ -77,6 +77,16 @@ public interface PivotModel extends StateHolder {
 	void removeModelChangeListener(ModelChangeListener listener);
 
 	/**
+	 * Adds a query listener
+	 */
+	void addQueryListener(QueryListener listener);
+
+	/**
+	 * Removes a query listener
+	 */
+	void removeQueryListener(QueryListener listener);
+
+	/**
 	 * Returns the registered transform instance for the given type.
 	 */
 	<T extends Transform> T getTransform(Class<T> type);

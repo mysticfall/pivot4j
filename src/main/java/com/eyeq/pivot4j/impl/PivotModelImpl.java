@@ -9,6 +9,7 @@
 package com.eyeq.pivot4j.impl;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +39,8 @@ import com.eyeq.pivot4j.ModelChangeListener;
 import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.QueryEvent;
+import com.eyeq.pivot4j.QueryListener;
 import com.eyeq.pivot4j.SortCriteria;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
@@ -64,7 +67,9 @@ public class PivotModelImpl implements PivotModel {
 
 	private boolean initialized = false;
 
-	private Collection<ModelChangeListener> listeners = new ArrayList<ModelChangeListener>();
+	private Collection<ModelChangeListener> modelListeners = new ArrayList<ModelChangeListener>();
+
+	private Collection<QueryListener> queryListeners = new ArrayList<QueryListener>();
 
 	private QueryAdapter queryAdapter;
 
@@ -300,17 +305,11 @@ public class PivotModelImpl implements PivotModel {
 			return cellSet;
 		}
 
-		long t1 = System.currentTimeMillis();
-
 		if (queryAdapter == null) {
 			throw new IllegalStateException("Initial MDX is not specified.");
 		}
 
 		String mdx = normalizeMdx(getCurrentMdx());
-
-		if (logger.isDebugEnabled()) {
-			logger.debug(mdx);
-		}
 
 		try {
 			this.cellSet = executeMdx(connection, mdx);
@@ -319,11 +318,6 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		queryAdapter.afterExecute(cellSet);
-
-		if (logger.isInfoEnabled()) {
-			long t2 = System.currentTimeMillis();
-			logger.info("Query execution time " + (t2 - t1) + " ms");
-		}
 
 		return cellSet;
 	}
@@ -336,8 +330,23 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	protected CellSet executeMdx(OlapConnection connection, String mdx)
 			throws OlapException {
+		if (logger.isDebugEnabled()) {
+			logger.debug(mdx);
+		}
+
+		Date start = new Date(System.currentTimeMillis());
+
 		OlapStatement stmt = connection.createStatement();
-		return stmt.executeOlapQuery(mdx);
+		CellSet cellSet = stmt.executeOlapQuery(mdx);
+
+		long duration = System.currentTimeMillis() - start.getTime();
+		if (logger.isInfoEnabled()) {
+			logger.info(String.format("Query execution time : %d ms", duration));
+		}
+
+		fireQueryExecuted(start, duration, mdx);
+
+		return cellSet;
 	}
 
 	protected String normalizeMdx(String mdx) {
@@ -432,21 +441,21 @@ public class PivotModelImpl implements PivotModel {
 	 * @see com.eyeq.pivot4j.tonbeller.jpivot.core.Model#addModelChangeListener(ModelChangeListener)
 	 */
 	public void addModelChangeListener(ModelChangeListener listener) {
-		listeners.add(listener);
+		modelListeners.add(listener);
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.tonbeller.jpivot.core.Model#removeModelChangeListener(ModelChangeListener)
 	 */
 	public void removeModelChangeListener(ModelChangeListener listener) {
-		listeners.remove(listener);
+		modelListeners.remove(listener);
 	}
 
 	protected void fireModelInitialized() {
 		ModelChangeEvent e = new ModelChangeEvent(this);
 
 		List<ModelChangeListener> copiedListeners = new ArrayList<ModelChangeListener>(
-				listeners);
+				modelListeners);
 		for (ModelChangeListener listener : copiedListeners) {
 			listener.modelInitialized(e);
 		}
@@ -458,7 +467,7 @@ public class PivotModelImpl implements PivotModel {
 		ModelChangeEvent e = new ModelChangeEvent(this);
 
 		List<ModelChangeListener> copiedListeners = new ArrayList<ModelChangeListener>(
-				listeners);
+				modelListeners);
 		for (ModelChangeListener listener : copiedListeners) {
 			listener.modelChanged(e);
 		}
@@ -470,7 +479,7 @@ public class PivotModelImpl implements PivotModel {
 		ModelChangeEvent e = new ModelChangeEvent(this);
 
 		List<ModelChangeListener> copiedListeners = new ArrayList<ModelChangeListener>(
-				listeners);
+				modelListeners);
 		for (ModelChangeListener listener : copiedListeners) {
 			listener.structureChanged(e);
 		}
@@ -480,9 +489,33 @@ public class PivotModelImpl implements PivotModel {
 		ModelChangeEvent e = new ModelChangeEvent(this);
 
 		List<ModelChangeListener> copiedListeners = new ArrayList<ModelChangeListener>(
-				listeners);
+				modelListeners);
 		for (ModelChangeListener listener : copiedListeners) {
 			listener.modelDestroyed(e);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#addQueryListener(com.eyeq.pivot4j.QueryListener)
+	 */
+	public void addQueryListener(QueryListener listener) {
+		queryListeners.add(listener);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#removeQueryListener(com.eyeq.pivot4j.QueryListener)
+	 */
+	public void removeQueryListener(QueryListener listener) {
+		queryListeners.remove(listener);
+	}
+
+	protected void fireQueryExecuted(Date start, long duration, String mdx) {
+		QueryEvent e = new QueryEvent(this, start, duration, mdx);
+
+		List<QueryListener> copiedListeners = new ArrayList<QueryListener>(
+				queryListeners);
+		for (QueryListener listener : copiedListeners) {
+			listener.queryExecuted(e);
 		}
 	}
 
