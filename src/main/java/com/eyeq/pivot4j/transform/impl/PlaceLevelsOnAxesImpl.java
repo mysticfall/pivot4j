@@ -9,6 +9,7 @@
 package com.eyeq.pivot4j.transform.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,8 +152,7 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 			List<Member> selection = new ArrayList<Member>();
 
 			for (Hierarchy hier : hierarchies) {
-				selection
-						.addAll(membersTransform.findVisibleMembers(hier));
+				selection.addAll(membersTransform.findVisibleMembers(hier));
 
 				if (hier.equals(hierarchy)) {
 					List<Member> members;
@@ -219,8 +219,16 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 
 		List<Position> positions = cellAxis.getPositions();
 
-		for (Position position : positions) {
-			for (Member member : position.getMembers()) {
+		if (positions.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		int size = positions.get(0).getMembers().size();
+
+		for (int i = 0; i < size; i++) {
+			for (Position position : positions) {
+				Member member = position.getMembers().get(i);
+
 				if (!visibleLevels.contains(member.getLevel())) {
 					visibleLevels.add(member.getLevel());
 				}
