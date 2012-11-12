@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -176,7 +177,53 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 				transform.findVisibleMembers(hierarchy));
 
 		for (Member member : members) {
-			if (!selection.contains(member)) {
+			if (selection.contains(member)) {
+				continue;
+			}
+
+			Member sibling = null;
+			Member ancestor = null;
+
+			Member firstDescendent = null;
+			Member lastDescendent = null;
+
+			for (Member m : selection) {
+				if (member.getAncestorMembers().contains(m)) {
+					if (ancestor == null || ancestor.getDepth() < m.getDepth()) {
+						ancestor = m;
+					}
+				} else if (ObjectUtils.equals(member.getParentMember(),
+						m.getParentMember())) {
+					sibling = m;
+				}
+
+				List<Member> ancestors = m.getAncestorMembers();
+				if (ancestor != null && ancestors.contains(ancestor)) {
+					lastDescendent = m;
+				}
+
+				if (ancestors.contains(member)) {
+					if (firstDescendent == null
+							|| m.getDepth() < firstDescendent.getDepth()) {
+						firstDescendent = m;
+					}
+				}
+			}
+
+			if (firstDescendent != null) {
+				selection.add(selection.indexOf(firstDescendent), member);
+			} else if (sibling != null) {
+				selection.add(selection.indexOf(sibling) + 1, member);
+			} else if (ancestor != null) {
+				if (lastDescendent == null
+						|| !lastDescendent.getAncestorMembers().contains(
+								ancestor)) {
+					selection.add(selection.indexOf(ancestor) + 1, member);
+				} else {
+					selection
+							.add(selection.indexOf(lastDescendent) + 1, member);
+				}
+			} else {
 				selection.add(member);
 			}
 		}
