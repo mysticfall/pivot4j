@@ -271,7 +271,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 			List<Exp> args = new ArrayList<Exp>(topMembers.size());
 			for (Member member : topMembers) {
-				if (member.isVisible()) {
+				if (!member.isHidden()) {
 					args.add(new MemberExp(member));
 				}
 			}
