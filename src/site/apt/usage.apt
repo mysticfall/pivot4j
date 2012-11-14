@@ -137,7 +137,7 @@ CellSet cellSet = model.getCellSet();
 	generate HTML source out of a PivotModel instance as below example :
 
 +-----+
-HtmlRenderer renderer = new HtmlTableBuilder(writer);
+HtmlRenderer renderer = new HtmlRenderer(writer);
 
 renderer.setShowDimensionTitle(false); // Optionally hide the dimension title headers.
 renderer.setShowParentMembers(true); // Optionally make the parent members visible.
