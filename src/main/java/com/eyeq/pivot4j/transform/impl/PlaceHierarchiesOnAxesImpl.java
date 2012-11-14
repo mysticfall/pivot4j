@@ -49,19 +49,13 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 			boolean expandAllMember) {
 		QueryAdapter adapter = getQueryAdapter();
 
-		// locate the appropriate query axis
-		int iQuax = axis.axisOrdinal();
-		if (adapter.isAxesSwapped()) {
-			iQuax = (iQuax + 1) % 2;
-		}
-
 		List<Exp> memberExpressions = new ArrayList<Exp>();
 		for (Hierarchy hierarchy : hierarchies) {
 			memberExpressions.add(createMemberExpression(hierarchy,
 					expandAllMember));
 		}
 
-		Quax quax = adapter.getQuaxes().get(iQuax);
+		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
 
 		int nDimension = 0;
 		for (Exp memberExpression : memberExpressions) {

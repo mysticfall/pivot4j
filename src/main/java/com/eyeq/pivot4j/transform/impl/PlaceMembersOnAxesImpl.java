@@ -70,7 +70,12 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 			}
 		}
 
-		Axis axis = Axis.Factory.forOrdinal(quax.getOrdinal());
+		int iAx = quax.getOrdinal();
+		if (adapter.isAxesSwapped()) {
+			iAx = (iAx + 1) % 2;
+		}
+
+		Axis axis = Axis.Factory.forOrdinal(iAx);
 
 		placeMembers(axis, selection);
 	}
