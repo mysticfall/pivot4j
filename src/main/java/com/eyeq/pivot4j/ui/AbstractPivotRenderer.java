@@ -25,7 +25,7 @@ import com.eyeq.pivot4j.ui.command.DrillExpandMemberCommand;
 import com.eyeq.pivot4j.ui.command.DrillExpandPositionCommand;
 import com.eyeq.pivot4j.ui.command.DrillUpReplaceCommand;
 import com.eyeq.pivot4j.ui.command.ToggleSortCommand;
-import com.eyeq.pivot4j.ui.impl.RendererStrategyImpl;
+import com.eyeq.pivot4j.ui.impl.RenderStrategyImpl;
 
 public abstract class AbstractPivotRenderer implements PivotRenderer,
 		PivotLayoutCallback {
@@ -226,7 +226,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 * @return
 	 */
 	protected RenderStrategy createRenderStrategy() {
-		return new RendererStrategyImpl();
+		return new RenderStrategyImpl();
 	}
 
 	protected void registerCommands() {

@@ -32,7 +32,7 @@ import com.eyeq.pivot4j.ui.RenderStrategy;
 import com.eyeq.pivot4j.util.TreeNode;
 import com.eyeq.pivot4j.util.TreeNodeCallback;
 
-public class RendererStrategyImpl implements RenderStrategy {
+public class RenderStrategyImpl implements RenderStrategy {
 
 	/**
 	 * @param model
