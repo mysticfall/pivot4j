@@ -72,8 +72,8 @@ public class RenderStrategyImpl implements RenderStrategy {
 		configureAxisTree(model, renderer, Axis.COLUMNS, columnRoot);
 		configureAxisTree(model, renderer, Axis.ROWS, rowRoot);
 
-		freezeAxisTree(model, Axis.COLUMNS, columnRoot);
-		freezeAxisTree(model, Axis.ROWS, rowRoot);
+		invalidateAxisTree(model, Axis.COLUMNS, columnRoot);
+		invalidateAxisTree(model, Axis.ROWS, rowRoot);
 
 		RenderContext context = createRenderContext(model, renderer,
 				columnRoot, rowRoot);
@@ -508,14 +508,14 @@ public class RenderStrategyImpl implements RenderStrategy {
 	 * @param axis
 	 * @param node
 	 */
-	protected void freezeAxisTree(PivotModel model, Axis axis,
+	protected void invalidateAxisTree(PivotModel model, Axis axis,
 			TableHeaderNode node) {
 		node.walkChildren(new TreeNodeCallback<TableAxisContext>() {
 
 			@Override
 			public int handleTreeNode(TreeNode<TableAxisContext> node) {
 				TableHeaderNode headerNode = (TableHeaderNode) node;
-				headerNode.setFreezed(true);
+				headerNode.clearCache();
 				return TreeNodeCallback.CONTINUE;
 			}
 		});

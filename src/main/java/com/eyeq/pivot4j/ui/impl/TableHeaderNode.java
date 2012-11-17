@@ -16,6 +16,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
+import org.olap4j.metadata.Property;
 
 import com.eyeq.pivot4j.util.TreeNode;
 import com.eyeq.pivot4j.util.TreeNodeCallback;
@@ -25,6 +26,8 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	private Position position;
 
 	private Member member;
+
+	private Property property;
 
 	private Hierarchy hierarchy;
 
@@ -36,7 +39,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 	private Integer rowIndex;
 
-	private boolean freezed = false;
+	private Integer maxRowIndex;
 
 	/**
 	 * @param context
@@ -91,21 +94,18 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	/**
-	 * @return the freezed
+	 * @return the property
 	 */
-	public boolean isFreezed() {
-		return freezed;
+	public Property getProperty() {
+		return property;
 	}
 
 	/**
-	 * @param freezed
-	 *            the freezed to set
+	 * @param property
+	 *            the property to set
 	 */
-	public void setFreezed(boolean freezed) {
-		if (freezed && !this.freezed) {
-			clearCache();
-			this.freezed = freezed;
-		}
+	public void setProperty(Property property) {
+		this.property = property;
 	}
 
 	public void clearCache() {
@@ -113,6 +113,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 		this.rowIndex = null;
 		this.colSpan = null;
 		this.rowSpan = null;
+		this.maxRowIndex = null;
 	}
 
 	public int getHierarchyIndex() {
@@ -132,19 +133,21 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	public int getMaxRowIndex() {
-		int rowIndex;
+		if (maxRowIndex == null) {
+			if (getChildCount() == 0) {
+				this.maxRowIndex = getRowIndex();
+			} else {
+				this.maxRowIndex = 0;
 
-		if (getChildCount() == 0) {
-			rowIndex = getRowIndex();
-		} else {
-			rowIndex = 0;
-			for (TreeNode<TableAxisContext> child : getChildren()) {
-				TableHeaderNode nodeChild = (TableHeaderNode) child;
-				rowIndex = Math.max(rowIndex, nodeChild.getMaxRowIndex());
+				for (TreeNode<TableAxisContext> child : getChildren()) {
+					TableHeaderNode nodeChild = (TableHeaderNode) child;
+					maxRowIndex = Math.max(maxRowIndex,
+							nodeChild.getMaxRowIndex());
+				}
 			}
 		}
 
-		return rowIndex;
+		return maxRowIndex;
 	}
 
 	void addHierarhcyHeaders() {
@@ -289,7 +292,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	public int getRowIndex() {
-		if (!freezed || rowIndex == null) {
+		if (rowIndex == null) {
 			if (getParent() == null) {
 				this.rowIndex = 0;
 				return rowIndex;
@@ -303,7 +306,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	public int getColSpan() {
-		if (!freezed || colSpan == null) {
+		if (colSpan == null) {
 			this.colSpan = getWidth();
 		}
 
@@ -311,8 +314,8 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	public int getRowSpan() {
-		if (!freezed || rowSpan == null) {
-			if (member == null) {
+		if (rowSpan == null) {
+			if (member == null || property != null) {
 				this.rowSpan = 1;
 				return rowSpan;
 			}
