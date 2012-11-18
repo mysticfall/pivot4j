@@ -3,7 +3,7 @@
             ------
             Xavier Cho
             ------
-             2012-10-20
+             2012-11-18
 
 About
 
@@ -44,6 +44,9 @@ System Requirement
 
 
 News
+
+	* <<[2012-11-18]>> Pivot4J 0.0.5 has been released with new features and various bug fixes! The new command API 
+	brings buit-in drill down and sorting support to PivotRenderer interface.
 
 	* <<[2012-10-28]>> Pivot4J 0.0.4 has been released. The rendering API has been re-implemented from the 
 	scratch to make it more flexible and easier to extend.

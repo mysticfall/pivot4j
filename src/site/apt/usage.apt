@@ -3,7 +3,7 @@
             ------
             Xavier Cho
             ------
-             2012-09-30
+             2012-11-18
 
 How to Use Pivot4J
 
@@ -23,14 +23,14 @@ How to Use Pivot4J
     <repositories>
         <repository>
             <id>eyeq</id>
-            <url>http://dev.eyeq.co.kr/artifactory/libs-snapshot/</url>
+            <url>http://dev.eyeq.co.kr/artifactory/libs-release/</url>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>com.eyeq</groupId>
             <artifactId>pivot4j</artifactId>
-            <version>0.0.5-SNAPSHOT</version>
+            <version>0.0.5</version>
         </dependency>
     </dependencies>
 </project>
