@@ -22,6 +22,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
+import org.olap4j.metadata.Property;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.ui.CellType;
@@ -59,12 +60,13 @@ public class RenderStrategyImpl implements RenderStrategy {
 			return;
 		}
 
-		TableHeaderNode columnRoot = createAxisTree(model, Axis.COLUMNS);
+		TableHeaderNode columnRoot = createAxisTree(model, renderer,
+				Axis.COLUMNS);
 		if (columnRoot == null) {
 			return;
 		}
 
-		TableHeaderNode rowRoot = createAxisTree(model, Axis.ROWS);
+		TableHeaderNode rowRoot = createAxisTree(model, renderer, Axis.ROWS);
 		if (rowRoot == null) {
 			return;
 		}
@@ -146,6 +148,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 							context.setRowSpan(headerNode.getRowSpan());
 
 							context.setMember(headerNode.getMember());
+							context.setProperty(headerNode.getProperty());
 							context.setHierarchy(headerNode.getHierarchy());
 							context.setColumnPosition(headerNode.getPosition());
 
@@ -210,6 +213,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 							context.setRowSpan(headerNode.getColSpan());
 
 							context.setMember(headerNode.getMember());
+							context.setProperty(headerNode.getProperty());
 							context.setHierarchy(headerNode.getHierarchy());
 							context.setRowPosition(headerNode.getPosition());
 
@@ -303,6 +307,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 		context.setHierarchy(null);
 		context.setLevel(null);
 		context.setMember(null);
+		context.setProperty(null);
 
 		context.setCell(null);
 		context.setCellType(CellType.None);
@@ -327,6 +332,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 			callback.endCell(context);
 		} else if (renderDimensionTitle) {
 			final Map<Hierarchy, Integer> spans = new HashMap<Hierarchy, Integer>();
+			final Map<Hierarchy, List<Property>> propertyMap = new HashMap<Hierarchy, List<Property>>();
 
 			rowRoot.walkChildrenAtColIndex(
 					new TreeNodeCallback<TableAxisContext>() {
@@ -335,16 +341,31 @@ public class RenderStrategyImpl implements RenderStrategy {
 						public int handleTreeNode(
 								TreeNode<TableAxisContext> node) {
 							TableHeaderNode headerNode = (TableHeaderNode) node;
-							if (headerNode.getHierarchy() != null) {
-								Integer span = spans.get(headerNode
-										.getHierarchy());
+							if (headerNode.getHierarchy() == null) {
+								return TreeNodeCallback.CONTINUE;
+							}
+
+							Hierarchy hierarchy = headerNode.getHierarchy();
+
+							if (headerNode.getProperty() == null) {
+								Integer span = spans.get(hierarchy);
 								if (span == null) {
 									span = 0;
 								}
 
 								span += headerNode.getRowSpan();
 								spans.put(headerNode.getHierarchy(), span);
+							} else {
+								List<Property> properties = propertyMap
+										.get(hierarchy);
+								if (properties == null) {
+									properties = new ArrayList<Property>();
+									propertyMap.put(hierarchy, properties);
+								}
+
+								properties.add(headerNode.getProperty());
 							}
+
 							return TreeNodeCallback.CONTINUE;
 						}
 					}, 0);
@@ -354,7 +375,10 @@ public class RenderStrategyImpl implements RenderStrategy {
 			context.setCellType(CellType.RowTitle);
 
 			for (Hierarchy hierarchy : rowRoot.getReference().getHierarchies()) {
-				int span = spans.get(hierarchy);
+				Integer span = spans.get(hierarchy);
+				if (span == null) {
+					span = 1;
+				}
 
 				context.setColSpan(span);
 				context.setHierarchy(hierarchy);
@@ -364,23 +388,41 @@ public class RenderStrategyImpl implements RenderStrategy {
 				callback.endCell(context);
 
 				context.setColIndex(context.getColIndex() + span);
+
+				List<Property> properties = propertyMap.get(hierarchy);
+				if (properties != null) {
+					for (Property property : properties) {
+						context.setColSpan(1);
+						context.setColIndex(context.getColIndex() + 1);
+						context.setProperty(property);
+
+						callback.startCell(context);
+						callback.cellContent(context);
+						callback.endCell(context);
+					}
+				}
 			}
 		} else if (renderLevelTitle) {
 			final Map<Integer, Level> levels = new HashMap<Integer, Level>();
+			final Map<Integer, Property> properties = new HashMap<Integer, Property>();
 
 			rowRoot.walkChildren(new TreeNodeCallback<TableAxisContext>() {
 
 				@Override
 				public int handleTreeNode(TreeNode<TableAxisContext> node) {
 					TableHeaderNode headerNode = (TableHeaderNode) node;
-					if (headerNode.getMember() != null) {
-						int colIndex = headerNode.getRowIndex() - 1;
+					int colIndex = headerNode.getRowIndex() - 1;
 
-						if (!levels.containsKey(colIndex)) {
-							levels.put(colIndex, headerNode.getMember()
-									.getLevel());
-						}
+					if (headerNode.getMember() != null
+							&& !levels.containsKey(colIndex)) {
+						levels.put(colIndex, headerNode.getMember().getLevel());
 					}
+
+					if (headerNode.getProperty() != null
+							&& !properties.containsKey(colIndex)) {
+						properties.put(colIndex, headerNode.getProperty());
+					}
+
 					return TreeNodeCallback.CONTINUE;
 				}
 			});
@@ -403,6 +445,8 @@ public class RenderStrategyImpl implements RenderStrategy {
 					context.setLevel(level);
 				}
 
+				context.setProperty(properties.get(i));
+
 				callback.startCell(context);
 				callback.cellContent(context);
 				callback.endCell(context);
@@ -414,10 +458,12 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 	/**
 	 * @param model
+	 * @param renderer
 	 * @param axis
 	 * @return
 	 */
-	protected TableHeaderNode createAxisTree(PivotModel model, Axis axis) {
+	protected TableHeaderNode createAxisTree(PivotModel model,
+			PivotRenderer renderer, Axis axis) {
 		CellSetAxis cellSetAxis = model.getCellSet().getAxes()
 				.get(axis.axisOrdinal());
 
@@ -430,7 +476,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 		Map<Hierarchy, List<Level>> levelsMap = new HashMap<Hierarchy, List<Level>>();
 
 		TableAxisContext nodeContext = new TableAxisContext(axis, hierarchies,
-				levelsMap);
+				levelsMap, renderer);
 
 		TableHeaderNode axisRoot = new TableHeaderNode(nodeContext);
 
@@ -500,6 +546,10 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 		if (!renderer.getHideSpans()) {
 			node.mergeChildren();
+		}
+
+		if (renderer.getPropertyCollector() != null) {
+			node.addMemberProperties();
 		}
 	}
 

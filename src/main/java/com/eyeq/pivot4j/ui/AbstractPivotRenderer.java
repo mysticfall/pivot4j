@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.olap4j.OlapException;
+
+import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.DrillCollapseMemberCommand;
@@ -45,6 +48,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	private SortMode sortMode = SortMode.BASIC;
 
 	private String drillDownMode = DrillDownCommand.MODE_POSITION;
+
+	private PropertyCollector propertyCollector;
 
 	private Map<String, CellCommand> commands = new HashMap<String, CellCommand>();
 
@@ -211,6 +216,21 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		this.showDimensionTitle = showDimensionTitle;
 	}
 
+	/**
+	 * @return the propertyCollector
+	 */
+	public PropertyCollector getPropertyCollector() {
+		return propertyCollector;
+	}
+
+	/**
+	 * @param propertyCollector
+	 *            the propertyCollector to set
+	 */
+	public void setPropertyCollector(PropertyCollector propertyCollector) {
+		this.propertyCollector = propertyCollector;
+	}
+
 	protected boolean isInteractive() {
 		return true;
 	}
@@ -320,11 +340,22 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		switch (context.getCellType()) {
 		case ColumnHeader:
 		case RowHeader:
-			label = context.getMember().getCaption();
+			if (context.getProperty() == null) {
+				label = context.getMember().getCaption();
+			} else {
+				try {
+					label = context.getMember().getPropertyFormattedValue(
+							context.getProperty());
+				} catch (OlapException e) {
+					throw new PivotException(e);
+				}
+			}
 			break;
 		case ColumnTitle:
 		case RowTitle:
-			if (context.getLevel() != null) {
+			if (context.getProperty() != null) {
+				label = context.getProperty().getCaption();
+			} else if (context.getLevel() != null) {
 				label = context.getLevel().getCaption();
 			} else if (context.getHierarchy() != null) {
 				label = context.getHierarchy().getCaption();

@@ -16,6 +16,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
+import org.olap4j.metadata.Property;
 
 import com.eyeq.pivot4j.PivotModel;
 
@@ -34,6 +35,8 @@ public class RenderContext {
 	private Hierarchy hierarchy;
 
 	private Member member;
+
+	private Property property;
 
 	private Level level;
 
@@ -170,6 +173,21 @@ public class RenderContext {
 	 */
 	public void setMember(Member member) {
 		this.member = member;
+	}
+
+	/**
+	 * @return the property
+	 */
+	public Property getProperty() {
+		return property;
+	}
+
+	/**
+	 * @param property
+	 *            the property to set
+	 */
+	public void setProperty(Property property) {
+		this.property = property;
 	}
 
 	/**

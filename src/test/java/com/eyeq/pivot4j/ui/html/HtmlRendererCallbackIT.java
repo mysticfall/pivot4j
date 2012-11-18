@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.ui.impl.NonInternalPropertyCollector;
 
 public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
 
@@ -100,6 +101,7 @@ public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
 		renderer.setHideSpans(hideSpans);
 		renderer.setShowDimensionTitle(showDimensionTitle);
 		renderer.setShowParentMembers(showParentMembers);
+		renderer.setPropertyCollector(new NonInternalPropertyCollector());
 
 		renderer.render(model);
 
@@ -107,6 +109,7 @@ public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
 		writer.close();
 
 		String result = writer.toString().trim();
+
 		String expected = readTestResource(RESOURCE_PREFIX + fileName);
 
 		String message = String
@@ -138,5 +141,15 @@ public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
 	@Test
 	public void testSkippingLevel() throws IOException {
 		runTestCase("skipping-level");
+	}
+
+	@Test
+	public void testMemberProperties() throws IOException {
+		runTestCase("member-properties");
+	}
+
+	@Test
+	public void testComplexMemberProperties() throws IOException {
+		runTestCase("complex-member-properties");
 	}
 }

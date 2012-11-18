@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.olap4j.Axis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
@@ -226,6 +227,65 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 		}
 	}
 
+	/**
+	 * @param collector
+	 */
+	void addMemberProperties() {
+		if (getReference().getAxis() != Axis.ROWS) {
+			return;
+		}
+
+		List<TreeNode<TableAxisContext>> children = null;
+
+		if (getMember() != null) {
+			List<Level> levels = getReference().getLevels(getHierarchy());
+
+			int index = levels.indexOf(getMember().getLevel());
+			int endIndex = getReference().getPivotRenderer()
+					.getShowParentMembers() ? index + 1 : levels.size();
+
+			List<Level> lowerLevels = levels.subList(index, endIndex);
+
+			for (Level level : lowerLevels) {
+				List<Property> properties = getReference().getProperties(level);
+
+				if (!properties.isEmpty()) {
+					children = new ArrayList<TreeNode<TableAxisContext>>(
+							getChildren());
+					clear();
+
+					TableHeaderNode parentNode = this;
+
+					for (Property property : properties) {
+						TableHeaderNode propertyNode = new TableHeaderNode(
+								getReference());
+						propertyNode.setPosition(position);
+						propertyNode.setHierarchy(getHierarchy());
+						propertyNode.setMember(getMember());
+						propertyNode.setProperty(property);
+
+						parentNode.addChild(propertyNode);
+
+						parentNode = propertyNode;
+					}
+
+					for (TreeNode<TableAxisContext> child : children) {
+						parentNode.addChild(child);
+					}
+				}
+			}
+		}
+
+		if (children == null) {
+			children = getChildren();
+		}
+
+		for (TreeNode<TableAxisContext> child : children) {
+			TableHeaderNode nodeChild = (TableHeaderNode) child;
+			nodeChild.addMemberProperties();
+		}
+	}
+
 	void mergeChildren() {
 		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(
 				getChildren());
@@ -264,7 +324,9 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	protected boolean canMergeWith(TableHeaderNode sibling) {
 		if (ObjectUtils.equals(hierarchy, sibling.getHierarchy())) {
 			if (ObjectUtils.equals(member, sibling.getMember())) {
-				return getRowSpan() == sibling.getRowSpan();
+				if (ObjectUtils.equals(property, sibling.getProperty())) {
+					return getRowSpan() == sibling.getRowSpan();
+				}
 			}
 		}
 

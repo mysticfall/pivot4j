@@ -55,4 +55,8 @@ public interface PivotRenderer extends StateHolder {
 	String getDrillDownMode();
 
 	void setDrillDownMode(String mode);
+
+	PropertyCollector getPropertyCollector();
+	
+	void setPropertyCollector(PropertyCollector collector);
 }
