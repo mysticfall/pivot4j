@@ -217,13 +217,14 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @param member
-	 * @param selection
+	 * @param members
 	 * @return
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findPositionToAdd(org.olap4j.metadata.Member, java.util.List)
 	 */
-	protected int findPositionToAdd(Member member, List<Member> selection) {
+	public int findPositionToAdd(Member member, List<Member> members) {
 		int position = -1;
 
-		if (selection.contains(member)) {
+		if (members.contains(member)) {
 			return position;
 		}
 
@@ -233,7 +234,7 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		Member firstDescendent = null;
 		Member lastDescendent = null;
 
-		for (Member m : selection) {
+		for (Member m : members) {
 			if (member.getAncestorMembers().contains(m)) {
 				if (ancestor == null || ancestor.getDepth() < m.getDepth()) {
 					ancestor = m;
@@ -257,15 +258,15 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		}
 
 		if (firstDescendent != null) {
-			position = selection.indexOf(firstDescendent);
+			position = members.indexOf(firstDescendent);
 		} else if (sibling != null) {
-			position = selection.indexOf(sibling) + 1;
+			position = members.indexOf(sibling) + 1;
 		} else if (ancestor != null) {
 			if (lastDescendent == null
 					|| !lastDescendent.getAncestorMembers().contains(ancestor)) {
-				position = selection.indexOf(ancestor) + 1;
+				position = members.indexOf(ancestor) + 1;
 			} else {
-				position = selection.indexOf(lastDescendent) + 1;
+				position = members.indexOf(lastDescendent) + 1;
 			}
 		}
 

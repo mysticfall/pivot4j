@@ -102,4 +102,11 @@ public interface PlaceMembersOnAxes extends Transform {
 	 * @return The most reasonable position to add the specified member
 	 */
 	int findPositionToAdd(Member member);
+
+	/**
+	 * @param member
+	 * @param members
+	 * @return
+	 */
+	int findPositionToAdd(Member member, List<Member> members);
 }
