@@ -143,6 +143,15 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.metadata
+	 *      .Member)
+	 */
+	@Override
+	public void addMember(Member member) {
+		addMember(member, findPositionToAdd(member));
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.metadata
 	 *      .Member, int)
 	 */
 	@Override
@@ -186,54 +195,81 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 				continue;
 			}
 
-			Member sibling = null;
-			Member ancestor = null;
+			int position = findPositionToAdd(member, selection);
 
-			Member firstDescendent = null;
-			Member lastDescendent = null;
-
-			for (Member m : selection) {
-				if (member.getAncestorMembers().contains(m)) {
-					if (ancestor == null || ancestor.getDepth() < m.getDepth()) {
-						ancestor = m;
-					}
-				} else if (ObjectUtils.equals(member.getParentMember(),
-						m.getParentMember())) {
-					sibling = m;
-				}
-
-				List<Member> ancestors = m.getAncestorMembers();
-				if (ancestor != null && ancestors.contains(ancestor)) {
-					lastDescendent = m;
-				}
-
-				if (ancestors.contains(member)) {
-					if (firstDescendent == null
-							|| m.getDepth() < firstDescendent.getDepth()) {
-						firstDescendent = m;
-					}
-				}
-			}
-
-			if (firstDescendent != null) {
-				selection.add(selection.indexOf(firstDescendent), member);
-			} else if (sibling != null) {
-				selection.add(selection.indexOf(sibling) + 1, member);
-			} else if (ancestor != null) {
-				if (lastDescendent == null
-						|| !lastDescendent.getAncestorMembers().contains(
-								ancestor)) {
-					selection.add(selection.indexOf(ancestor) + 1, member);
-				} else {
-					selection
-							.add(selection.indexOf(lastDescendent) + 1, member);
-				}
+			if (position > -1) {
+				selection.add(position, member);
 			} else {
 				selection.add(member);
 			}
 		}
 
 		placeMembers(hierarchy, selection);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findPositionToAdd(org.olap4j.metadata.Member)
+	 */
+	public int findPositionToAdd(Member member) {
+		List<Member> selection = findVisibleMembers(member.getHierarchy());
+		return findPositionToAdd(member, selection);
+	}
+
+	/**
+	 * @param member
+	 * @param selection
+	 * @return
+	 */
+	protected int findPositionToAdd(Member member, List<Member> selection) {
+		int position = -1;
+
+		if (selection.contains(member)) {
+			return position;
+		}
+
+		Member sibling = null;
+		Member ancestor = null;
+
+		Member firstDescendent = null;
+		Member lastDescendent = null;
+
+		for (Member m : selection) {
+			if (member.getAncestorMembers().contains(m)) {
+				if (ancestor == null || ancestor.getDepth() < m.getDepth()) {
+					ancestor = m;
+				}
+			} else if (ObjectUtils.equals(member.getParentMember(),
+					m.getParentMember())) {
+				sibling = m;
+			}
+
+			List<Member> ancestors = m.getAncestorMembers();
+			if (ancestor != null && ancestors.contains(ancestor)) {
+				lastDescendent = m;
+			}
+
+			if (ancestors.contains(member)) {
+				if (firstDescendent == null
+						|| m.getDepth() < firstDescendent.getDepth()) {
+					firstDescendent = m;
+				}
+			}
+		}
+
+		if (firstDescendent != null) {
+			position = selection.indexOf(firstDescendent);
+		} else if (sibling != null) {
+			position = selection.indexOf(sibling) + 1;
+		} else if (ancestor != null) {
+			if (lastDescendent == null
+					|| !lastDescendent.getAncestorMembers().contains(ancestor)) {
+				position = selection.indexOf(ancestor) + 1;
+			} else {
+				position = selection.indexOf(lastDescendent) + 1;
+			}
+		}
+
+		return position;
 	}
 
 	/**
