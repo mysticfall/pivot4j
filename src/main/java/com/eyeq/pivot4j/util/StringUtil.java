@@ -10,6 +10,9 @@ package com.eyeq.pivot4j.util;
 
 public class StringUtil {
 
+	private StringUtil() {
+	}
+
 	/**
 	 * Put brackets around string, if not yet there
 	 * 
@@ -88,8 +91,9 @@ public class StringUtil {
 	public static String parentFromUName(String uName) {
 		String[] strs = splitUniqueName(uName);
 		int n = strs.length;
-		if (n < 3)
+		if (n < 3) {
 			return null; // at least 3 parts required, if a parent exists
+		}
 		return createUName(strs, n - 1);
 	}
 }
