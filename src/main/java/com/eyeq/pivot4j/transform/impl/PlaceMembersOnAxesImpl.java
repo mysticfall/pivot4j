@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -32,6 +31,7 @@ import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
+import com.eyeq.pivot4j.util.MemberSelection;
 
 public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		PlaceMembersOnAxes {
@@ -143,15 +143,6 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.metadata
-	 *      .Member)
-	 */
-	@Override
-	public void addMember(Member member) {
-		addMember(member, findPositionToAdd(member));
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.metadata
 	 *      .Member, int)
 	 */
 	@Override
@@ -187,90 +178,11 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		PlaceMembersOnAxes transform = getQueryAdapter().getModel()
 				.getTransform(PlaceMembersOnAxes.class);
 
-		List<Member> selection = new ArrayList<Member>(
+		MemberSelection selection = new MemberSelection(
 				transform.findVisibleMembers(hierarchy));
+		selection.addMembers(members);
 
-		for (Member member : members) {
-			if (selection.contains(member)) {
-				continue;
-			}
-
-			int position = findPositionToAdd(member, selection);
-
-			if (position > -1) {
-				selection.add(position, member);
-			} else {
-				selection.add(member);
-			}
-		}
-
-		placeMembers(hierarchy, selection);
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findPositionToAdd(org.olap4j.metadata.Member)
-	 */
-	public int findPositionToAdd(Member member) {
-		List<Member> selection = findVisibleMembers(member.getHierarchy());
-		return findPositionToAdd(member, selection);
-	}
-
-	/**
-	 * @param member
-	 * @param members
-	 * @return
-	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findPositionToAdd(org.olap4j.metadata.Member, java.util.List)
-	 */
-	public int findPositionToAdd(Member member, List<Member> members) {
-		int position = -1;
-
-		if (members.contains(member)) {
-			return position;
-		}
-
-		Member sibling = null;
-		Member ancestor = null;
-
-		Member firstDescendent = null;
-		Member lastDescendent = null;
-
-		for (Member m : members) {
-			if (member.getAncestorMembers().contains(m)) {
-				if (ancestor == null || ancestor.getDepth() < m.getDepth()) {
-					ancestor = m;
-				}
-			} else if (ObjectUtils.equals(member.getParentMember(),
-					m.getParentMember())) {
-				sibling = m;
-			}
-
-			List<Member> ancestors = m.getAncestorMembers();
-			if (ancestor != null && ancestors.contains(ancestor)) {
-				lastDescendent = m;
-			}
-
-			if (ancestors.contains(member)) {
-				if (firstDescendent == null
-						|| m.getDepth() < firstDescendent.getDepth()) {
-					firstDescendent = m;
-				}
-			}
-		}
-
-		if (firstDescendent != null) {
-			position = members.indexOf(firstDescendent);
-		} else if (sibling != null) {
-			position = members.indexOf(sibling) + 1;
-		} else if (ancestor != null) {
-			if (lastDescendent == null
-					|| !lastDescendent.getAncestorMembers().contains(ancestor)) {
-				position = members.indexOf(ancestor) + 1;
-			} else {
-				position = members.indexOf(lastDescendent) + 1;
-			}
-		}
-
-		return position;
+		placeMembers(hierarchy, selection.getMembers());
 	}
 
 	/**

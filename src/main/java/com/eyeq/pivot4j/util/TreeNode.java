@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.ObjectUtils;
+
 /**
  * Tree Node for the for a general tree of Objects
  */
@@ -251,5 +253,45 @@ public class TreeNode<T> {
 	 */
 	public void setReference(T object) {
 		reference = object;
+	}
+
+	/**
+	 * @param reference
+	 * @return
+	 */
+	public TreeNode<T> findNode(T reference) {
+		TreeNode<T> node = null;
+
+		if (ObjectUtils.equals(getReference(), reference)) {
+			node = this;
+		} else {
+			for (TreeNode<T> child : getChildren()) {
+				node = child.findNode(reference);
+
+				if (node != null) {
+					break;
+				}
+			}
+		}
+
+		return node;
+	}
+
+	/**
+	 * @param reference
+	 * @return
+	 */
+	public TreeNode<T> findChild(T reference) {
+		TreeNode<T> node = null;
+
+		for (TreeNode<T> child : getChildren()) {
+			node = child.findNode(reference);
+
+			if (node != null) {
+				break;
+			}
+		}
+
+		return node;
 	}
 }

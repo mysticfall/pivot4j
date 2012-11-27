@@ -36,14 +36,6 @@ public interface PlaceMembersOnAxes extends Transform {
 	void placeMembers(Axis axis, List<Member> members);
 
 	/**
-	 * Adds the member at the default position.
-	 * 
-	 * @param member
-	 * @see #findPositionToAdd(Member)
-	 */
-	void addMember(Member member);
-
-	/**
 	 * @param member
 	 * @param position
 	 */
@@ -91,22 +83,4 @@ public interface PlaceMembersOnAxes extends Transform {
 	 * @return A list of Members
 	 */
 	List<Member> findVisibleMembers(Hierarchy hierarchy);
-
-	/**
-	 * Finds suitable position to add the specified member. If there's a sibling
-	 * existing, it will be added after it. Else if there's a member with the
-	 * same level, it will be added after descendant members of that member.
-	 * Otherwise, it will be added as the last member of the current selection.
-	 * 
-	 * @param member
-	 * @return The most reasonable position to add the specified member
-	 */
-	int findPositionToAdd(Member member);
-
-	/**
-	 * @param member
-	 * @param members
-	 * @return
-	 */
-	int findPositionToAdd(Member member, List<Member> members);
 }
