@@ -52,7 +52,7 @@ public class MemberSelection extends TreeNode<Member> {
 			TreeNode<Member> node = findChild(ancestor);
 
 			if (node == null) {
-				node = new SelectionNode(member, false);
+				node = new SelectionNode(ancestor, false);
 				parent.addChild(node);
 			}
 
