@@ -186,6 +186,73 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.Axis,
+	 *      org.olap4j.metadata.Member, int)
+	 */
+	@Override
+	public void addMember(Axis axis, Member member, int position) {
+		QueryAdapter adapter = getQueryAdapter();
+
+		Quax quax = adapter.findQuax(member.getDimension());
+		if (quax == null) {
+			quax = adapter.getQuaxes().get(axis.axisOrdinal());
+
+			List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(
+					quax.getHierarchies());
+
+			if (position < 0 || position >= hierarchies.size()) {
+				hierarchies.add(member.getHierarchy());
+			} else {
+				hierarchies.add(position, member.getHierarchy());
+			}
+
+			List<Member> members = new ArrayList<Member>();
+			for (Hierarchy hierarchy : hierarchies) {
+				if (member.getHierarchy().equals(hierarchy)) {
+					members.add(member);
+				} else {
+					members.addAll(findVisibleMembers(hierarchy));
+				}
+			}
+
+			placeMembers(axis, members);
+		} else {
+			addMember(member, position);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMembers(org.olap4j.Axis,
+	 *      java.util.List,int)
+	 */
+	@Override
+	public void addMembers(Axis axis, List<Member> members, int position) {
+		QueryAdapter adapter = getQueryAdapter();
+
+		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+
+		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(
+				quax.getHierarchies());
+
+		if (position < 0 || position >= hierarchies.size()) {
+			hierarchies.add(null);
+		} else {
+			hierarchies.add(position, null);
+		}
+
+		List<Member> memberList = new ArrayList<Member>();
+		for (Hierarchy hierarchy : hierarchies) {
+			if (hierarchy == null) {
+				memberList.addAll(members);
+			} else {
+				memberList.addAll(findVisibleMembers(hierarchy));
+			}
+		}
+
+		placeMembers(axis, members);
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#removeMember(org.olap4j
 	 *      .metadata.Member)
 	 */

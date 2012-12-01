@@ -48,6 +48,20 @@ public interface PlaceMembersOnAxes extends Transform {
 	void addMembers(Hierarchy hierarchy, List<Member> members);
 
 	/**
+	 * @param axis
+	 * @param member
+	 * @param position
+	 */
+	void addMember(Axis axis, Member member, int position);
+
+	/**
+	 * @param axis
+	 * @param members
+	 * @param position
+	 */
+	void addMembers(Axis axis, List<Member> members, int position);
+
+	/**
 	 * @param member
 	 */
 	void removeMember(Member member);
