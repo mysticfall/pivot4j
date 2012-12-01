@@ -90,7 +90,7 @@ public class PivotModelImpl implements PivotModel {
 	private QueryChangeListener queryChangeListener = new QueryChangeListener() {
 
 		public void queryChanged(QueryChangeEvent e) {
-			fireModelChanged();
+			fireStructureChanged();
 		}
 	};
 
@@ -823,7 +823,5 @@ public class PivotModelImpl implements PivotModel {
 		this.cellSet = null;
 
 		queryAdapter.restoreState(states[2]);
-
-		fireModelChanged();
 	}
 }
