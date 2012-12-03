@@ -168,6 +168,11 @@ public class PivotModelImpl implements PivotModel {
 
 		this.initialized = true;
 
+		Logger log = LoggerFactory.getLogger(getClass());
+		if (log.isDebugEnabled()) {
+			log.debug("Initializing model with MDX : " + mdxQuery);
+		}
+
 		this.queryAdapter = createQueryAdapter();
 
 		queryAdapter.initialize();

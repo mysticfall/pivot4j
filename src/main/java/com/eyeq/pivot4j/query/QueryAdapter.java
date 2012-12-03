@@ -490,10 +490,9 @@ public class QueryAdapter implements StateHolder {
 		try {
 			Symbol parseTree = parser.parse();
 			parsedQuery = (ParsedQuery) parseTree.value;
-		} catch (RuntimeException e) {
-			throw e;
 		} catch (Exception e) {
-			throw new PivotException(e);
+			String msg = "Failed to parse MDX query : " + mdxQuery;
+			throw new PivotException(msg, e);
 		}
 
 		parsedQuery.afterParse();
