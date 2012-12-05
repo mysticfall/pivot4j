@@ -124,12 +124,17 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 				"[Time].[1997]").getSegmentList());
 		assertNotNull("Cannot look up member [Time].[1997]", year1997);
 
+		Member year1998 = cube.lookupMember(IdentifierNode.parseIdentifier(
+				"[Time].[1998]").getSegmentList());
+		assertNotNull("Cannot look up member [Time].[1998]", year1998);
+
 		Member genderM = cube.lookupMember(IdentifierNode.parseIdentifier(
 				"[Gender].[M]").getSegmentList());
 
 		assertNotNull("Cannot look up member [Gender].[M]", genderM);
 
 		members.add(year1997);
+		members.add(year1998);
 		members.add(genderM);
 
 		transform.setSlicer(members);
@@ -140,7 +145,41 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 				"",
 				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] "
-						+ "WHERE Crossjoin({[Time].[1997]}, {[Gender].[M]})",
+						+ "WHERE CrossJoin({[Time].[1997], [Time].[1998]}, [Gender].[M])",
+				getPivotModel().getCurrentMdx());
+	}
+
+	@Test
+	public void testSetSlicerWithHierarchy() throws OlapException {
+		ChangeSlicer transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Member year1997 = cube.lookupMember(IdentifierNode.parseIdentifier(
+				"[Time].[1997]").getSegmentList());
+		assertNotNull("Cannot look up member [Time].[1997]", year1997);
+
+		Member genderM = cube.lookupMember(IdentifierNode.parseIdentifier(
+				"[Gender].[M]").getSegmentList());
+
+		assertNotNull("Cannot look up member [Gender].[M]", genderM);
+
+		List<Member> timeMembers = new ArrayList<Member>(1);
+		timeMembers.add(year1997);
+
+		List<Member> genderMembers = new ArrayList<Member>(1);
+		genderMembers.add(genderM);
+
+		transform.setSlicer(year1997.getHierarchy(), timeMembers);
+		transform.setSlicer(genderM.getHierarchy(), genderMembers);
+
+		getPivotModel().getCellSet();
+
+		assertEquals(
+				"",
+				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] "
+						+ "WHERE CrossJoin([Time].[1997], [Gender].[M])",
 				getPivotModel().getCurrentMdx());
 	}
 }

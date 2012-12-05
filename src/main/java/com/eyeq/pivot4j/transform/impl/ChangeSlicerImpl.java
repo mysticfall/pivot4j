@@ -10,16 +10,16 @@ package com.eyeq.pivot4j.transform.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
+import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.MemberExp;
@@ -30,8 +30,6 @@ import com.eyeq.pivot4j.transform.ChangeSlicer;
 
 public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
-
 	/**
 	 * @param queryAdapter
 	 */
@@ -40,18 +38,30 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.transform.ChangeSlicer#getSlicer()
+	 * @see com.eyeq.pivot4j.transform.ChangeSlicer#getHierarchies()
 	 */
-	public List<Member> getSlicer() {
-		// Use result rather than query
-		CellSet cellSet;
-
-		try {
-			cellSet = getQueryAdapter().getModel().getCellSet();
-		} catch (NotInitializedException e) {
+	@Override
+	public List<Hierarchy> getHierarchies() {
+		if (!getModel().isInitialized()) {
 			return Collections.emptyList();
 		}
 
+		CellSet cellSet = getModel().getCellSet();
+		CellSetAxis slicer = cellSet.getFilterAxis();
+
+		return slicer.getAxisMetaData().getHierarchies();
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.ChangeSlicer#getSlicer()
+	 */
+	public List<Member> getSlicer() {
+		if (!getModel().isInitialized()) {
+			return Collections.emptyList();
+		}
+
+		// Use result rather than query
+		CellSet cellSet = getModel().getCellSet();
 		CellSetAxis slicer = cellSet.getFilterAxis();
 
 		List<Position> positions = slicer.getPositions();
@@ -70,113 +80,172 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.transform.ChangeSlicer#setSlicer(java.util.List)
+	 * @see com.eyeq.pivot4j.transform.ChangeSlicer#getSlicer(org.olap4j.metadata
+	 *      .Hierarchy)
 	 */
-	public void setSlicer(List<Member> members) {
-		Exp slicerExp = null;
+	@Override
+	public List<Member> getSlicer(Hierarchy hierarchy) {
+		if (hierarchy == null) {
+			return getSlicer();
+		}
 
-		if (members.isEmpty()) {
-			if (logger.isInfoEnabled()) {
-				logger.info("Slicer set to null.");
-			}
-		} else {
-			List<Exp> collectedMemberExpressions = new ArrayList<Exp>();
-			List<Exp> conditions = new ArrayList<Exp>();
+		CellSet cellSet = getModel().getCellSet();
+		CellSetAxis slicer = cellSet.getFilterAxis();
 
-			String hierarchyName = "";
-			String prevHierarchyName = "";
+		List<Position> positions = slicer.getPositions();
+		List<Member> members = new ArrayList<Member>();
 
-			FunCall func = null;
-
-			boolean firstCondition = true;
-
-			for (Member member : members) {
-				String uniqueName = member.getUniqueName();
-
-				hierarchyName = uniqueName
-						.substring(1, uniqueName.indexOf("]"));
-
-				if (!hierarchyName.equals(prevHierarchyName)) {
-					if (!collectedMemberExpressions.isEmpty()) {
-						if (firstCondition) {
-							func = new FunCall(
-									"{}",
-									collectedMemberExpressions
-											.toArray(new Exp[collectedMemberExpressions
-													.size()]), Syntax.Braces);
-						} else {
-							conditions
-									.add(new FunCall(
-											"{}",
-											collectedMemberExpressions
-													.toArray(new Exp[collectedMemberExpressions
-															.size()]),
-											Syntax.Braces));
-							func = new FunCall("CrossJoin",
-									conditions.toArray(new Exp[conditions
-											.size()]), Syntax.Function);
-							conditions.clear();
-						}
-
-						conditions.add(func);
-						firstCondition = false;
-
-						if (logger.isInfoEnabled()) {
-							logger.info("Added a new filter condition for Hierarchy: "
-									+ prevHierarchyName
-									+ ", Conditions number: "
-									+ collectedMemberExpressions.size());
-						}
-
-						collectedMemberExpressions.clear();
-
-						if (logger.isInfoEnabled()) {
-							logger.info("Clear conditions list. Size = "
-									+ collectedMemberExpressions.size());
-						}
-					}
-
-					prevHierarchyName = hierarchyName;
-
-					if (logger.isInfoEnabled()) {
-						logger.info("Collecting filters on member: "
-								+ hierarchyName);
-					}
+		for (Position position : positions) {
+			List<Member> posMembers = position.getMembers();
+			for (Member posMember : posMembers) {
+				if (posMember.getHierarchy().equals(hierarchy)
+						&& !members.contains(posMember)) {
+					members.add(posMember);
 				}
-
-				collectedMemberExpressions.add(new MemberExp(member));
-			}
-
-			// Add lastly collected member to filters conditions list
-			if (!collectedMemberExpressions.isEmpty()) {
-				if (members.size() == 1) {
-					conditions.add(collectedMemberExpressions.get(0));
-				} else {
-					conditions.add(new FunCall("{}",
-							collectedMemberExpressions
-									.toArray(new Exp[collectedMemberExpressions
-											.size()]), Syntax.Braces));
-				}
-
-				if (logger.isInfoEnabled()) {
-					logger.info("Added a new filter condition for Hierarchy: "
-							+ hierarchyName);
-				}
-			}
-
-			if (conditions.size() == 1) {
-				slicerExp = conditions.get(0);
-			} else {
-				// SeraSoft - More dimensions selected. Build a CrossJoin
-				// function
-				FunCall intersectConditions = new FunCall("Crossjoin",
-						conditions.toArray(new Exp[conditions.size()]),
-						Syntax.Function);
-
-				slicerExp = intersectConditions;
 			}
 		}
 
-		getQueryAdapter().changeSlicer(slicerExp);
+		return members;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.ChangeSlicer#setSlicer(java.util.List)
+	 */
+	public void setSlicer(List<Member> members) {
+		Exp exp = null;
+
+		if (members != null && !members.isEmpty()) {
+			List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(
+					members.size());
+
+			Map<Hierarchy, List<Member>> memberMap = new HashMap<Hierarchy, List<Member>>();
+			for (Member member : members) {
+				Hierarchy hierarchy = member.getHierarchy();
+
+				if (!hierarchies.contains(hierarchy)) {
+					hierarchies.add(hierarchy);
+				}
+
+				List<Member> hierarchyMembers = memberMap.get(hierarchy);
+				if (hierarchyMembers == null) {
+					hierarchyMembers = new ArrayList<Member>(members.size());
+					memberMap.put(hierarchy, hierarchyMembers);
+				}
+
+				hierarchyMembers.add(member);
+			}
+
+			if (hierarchies.size() == 1) {
+				Hierarchy hierarchy = hierarchies.get(0);
+				exp = createMemberSetExpression(hierarchy,
+						memberMap.get(hierarchy));
+			} else {
+				Exp[] sets = new Exp[hierarchies.size()];
+
+				int index = 0;
+				for (Hierarchy hierarchy : hierarchies) {
+					Exp set = createMemberSetExpression(hierarchy,
+							memberMap.get(hierarchy));
+					if (set != null) {
+						sets[index++] = set;
+					}
+				}
+
+				exp = new FunCall("CrossJoin", sets, Syntax.Function);
+			}
+		}
+
+		getQueryAdapter().changeSlicer(exp);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.transform.ChangeSlicer#setSlicer(org.olap4j.metadata
+	 *      .Hierarchy, java.util.List)
+	 */
+	@Override
+	public void setSlicer(Hierarchy hierarchy, List<Member> members) {
+		if (hierarchy == null) {
+			setSlicer(members);
+			return;
+		}
+
+		Exp exp = null;
+
+		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>();
+
+		Map<Hierarchy, List<Member>> memberMap = new HashMap<Hierarchy, List<Member>>();
+
+		List<Member> membersOnSlicer = getSlicer();
+
+		if (membersOnSlicer != null && !membersOnSlicer.isEmpty()) {
+			for (Member member : membersOnSlicer) {
+				Hierarchy memberHierarchy = member.getHierarchy();
+
+				if (!hierarchies.contains(memberHierarchy)) {
+					hierarchies.add(memberHierarchy);
+				}
+
+				if (!memberHierarchy.equals(hierarchy)) {
+					List<Member> hierarchyMembers = memberMap
+							.get(memberHierarchy);
+					if (hierarchyMembers == null) {
+						hierarchyMembers = new ArrayList<Member>(members.size());
+						memberMap.put(memberHierarchy, hierarchyMembers);
+					}
+
+					hierarchyMembers.add(member);
+				}
+			}
+		}
+
+		if (members == null || members.isEmpty()) {
+			hierarchies.remove(hierarchy);
+		} else {
+			if (!hierarchies.contains(hierarchy)) {
+				hierarchies.add(hierarchy);
+			}
+
+			memberMap.put(hierarchy, members);
+		}
+
+		if (hierarchies.size() == 1) {
+			exp = createMemberSetExpression(hierarchy, memberMap.get(hierarchy));
+		} else {
+			Exp[] sets = new Exp[hierarchies.size()];
+
+			int index = 0;
+			for (Hierarchy hier : hierarchies) {
+				Exp set = createMemberSetExpression(hier, memberMap.get(hier));
+				if (set != null) {
+					sets[index++] = set;
+				}
+			}
+
+			exp = new FunCall("CrossJoin", sets, Syntax.Function);
+		}
+
+		getQueryAdapter().changeSlicer(exp);
+	}
+
+	/**
+	 * @param hierachy
+	 * @param members
+	 * @return
+	 */
+	protected Exp createMemberSetExpression(Hierarchy hierachy,
+			List<Member> members) {
+		if (members.isEmpty()) {
+			return null;
+		} else if (members.size() == 1) {
+			return new MemberExp(members.get(0));
+		}
+
+		List<Exp> expressions = new ArrayList<Exp>(members.size());
+		for (Member member : members) {
+			expressions.add(new MemberExp(member));
+		}
+
+		return new FunCall("{}",
+				expressions.toArray(new Exp[expressions.size()]), Syntax.Braces);
 	}
 }
