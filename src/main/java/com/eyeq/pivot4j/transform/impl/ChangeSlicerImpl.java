@@ -189,7 +189,7 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 					List<Member> hierarchyMembers = memberMap
 							.get(memberHierarchy);
 					if (hierarchyMembers == null) {
-						hierarchyMembers = new ArrayList<Member>(members.size());
+						hierarchyMembers = new ArrayList<Member>();
 						memberMap.put(memberHierarchy, hierarchyMembers);
 					}
 
@@ -209,7 +209,8 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 		}
 
 		if (hierarchies.size() == 1) {
-			exp = createMemberSetExpression(hierarchy, memberMap.get(hierarchy));
+			Hierarchy hier = hierarchies.get(0);
+			exp = createMemberSetExpression(hier, memberMap.get(hier));
 		} else {
 			Exp[] sets = new Exp[hierarchies.size()];
 
@@ -234,7 +235,7 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 	 */
 	protected Exp createMemberSetExpression(Hierarchy hierachy,
 			List<Member> members) {
-		if (members.isEmpty()) {
+		if (members == null || members.isEmpty()) {
 			return null;
 		} else if (members.size() == 1) {
 			return new MemberExp(members.get(0));
