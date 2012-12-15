@@ -10,11 +10,15 @@ package com.eyeq.pivot4j.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.olap4j.metadata.Member;
 
 public class MemberSelection extends TreeNode<Member> {
+
+	private Set<Member> selection = new HashSet<Member>();
 
 	public MemberSelection() {
 		super(null);
@@ -67,6 +71,10 @@ public class MemberSelection extends TreeNode<Member> {
 		} else {
 			((SelectionNode) node).setSelected(true);
 		}
+
+		if (!isSelected(member)) {
+			selection.add(member);
+		}
 	}
 
 	/**
@@ -81,6 +89,18 @@ public class MemberSelection extends TreeNode<Member> {
 		}
 
 		node.getParent().removeChild(node);
+
+		if (isSelected(member)) {
+			selection.remove(member);
+		}
+	}
+
+	/**
+	 * @param member
+	 * @return
+	 */
+	public boolean isSelected(Member member) {
+		return selection.contains(member);
 	}
 
 	public List<Member> getMembers() {
