@@ -208,10 +208,11 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 			memberMap.put(hierarchy, members);
 		}
 
-		if (hierarchies.size() == 1) {
+		int size = hierarchies.size();
+		if (size == 1) {
 			Hierarchy hier = hierarchies.get(0);
 			exp = createMemberSetExpression(hier, memberMap.get(hier));
-		} else {
+		} else if (size > 1) {
 			Exp[] sets = new Exp[hierarchies.size()];
 
 			int index = 0;
