@@ -94,7 +94,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	 *      , com.eyeq.pivot4j.ui.command.CellParameters)
 	 */
 	@Override
-	public void execute(PivotModel model, CellParameters parameters) {
+	public Void execute(PivotModel model, CellParameters parameters) {
 		CellSet cellSet = model.getCellSet();
 
 		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
@@ -109,5 +109,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 
 		DrillReplace drillTransform = model.getTransform(DrillReplace.class);
 		drillTransform.drillUp(hierarchy);
+
+		return null;
 	}
 }

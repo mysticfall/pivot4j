@@ -8,5 +8,5 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
-public interface SortCommand extends CellCommand {
+public interface SortCommand extends CellCommand<Void> {
 }

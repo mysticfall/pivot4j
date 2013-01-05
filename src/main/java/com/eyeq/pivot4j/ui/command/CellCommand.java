@@ -11,7 +11,7 @@ package com.eyeq.pivot4j.ui.command;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public interface CellCommand {
+public interface CellCommand<T> {
 
 	String getName();
 
@@ -30,5 +30,5 @@ public interface CellCommand {
 
 	CellParameters createParameters(RenderContext context);
 
-	void execute(PivotModel model, CellParameters parameters);
+	T execute(PivotModel model, CellParameters parameters);
 }

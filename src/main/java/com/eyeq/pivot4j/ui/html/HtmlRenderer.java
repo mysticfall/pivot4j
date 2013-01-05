@@ -53,7 +53,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 
 	private int rowHeaderLevelPadding = 10;
 
-	private List<CellCommand> commands;
+	private List<CellCommand<?>> commands;
 
 	/**
 	 * @param writer
@@ -467,7 +467,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 *      java.util.Set)
 	 */
 	@Override
-	public void startCell(RenderContext context, List<CellCommand> commands) {
+	public void startCell(RenderContext context, List<CellCommand<?>> commands) {
 		boolean header;
 
 		switch (context.getCellType()) {
@@ -582,14 +582,14 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 * @param context
 	 * @param commands
 	 */
-	public void startCommand(RenderContext context, List<CellCommand> commands) {
+	public void startCommand(RenderContext context, List<CellCommand<?>> commands) {
 	}
 
 	/**
 	 * @param context
 	 * @param commands
 	 */
-	public void endCommand(RenderContext context, List<CellCommand> commands) {
+	public void endCommand(RenderContext context, List<CellCommand<?>> commands) {
 	}
 
 	/**

@@ -12,7 +12,7 @@ import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.SortMode;
 
-public abstract class AbstractSortCommand extends AbstractCellCommand implements
+public abstract class AbstractSortCommand extends AbstractCellCommand<Void> implements
 		SortCommand {
 
 	/**

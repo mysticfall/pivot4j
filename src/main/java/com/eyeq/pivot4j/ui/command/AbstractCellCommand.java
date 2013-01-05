@@ -11,7 +11,7 @@ package com.eyeq.pivot4j.ui.command;
 import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public abstract class AbstractCellCommand implements CellCommand {
+public abstract class AbstractCellCommand<T> implements CellCommand<T> {
 
 	private PivotRenderer renderer;
 

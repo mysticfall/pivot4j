@@ -18,9 +18,9 @@ public interface PivotRenderer extends StateHolder {
 
 	void render(PivotModel model);
 
-	CellCommand getCommand(String name);
+	CellCommand<?> getCommand(String name);
 
-	void addCommand(CellCommand command);
+	void addCommand(CellCommand<?> command);
 
 	void removeCommand(String name);
 
@@ -47,6 +47,10 @@ public interface PivotRenderer extends StateHolder {
 	boolean getEnableSort();
 
 	void setEnableSort(boolean enableSort);
+
+	boolean getEnableDrillThrough();
+
+	void setEnableDrillThrough(boolean enableDrillThrough);
 
 	SortMode getSortMode();
 

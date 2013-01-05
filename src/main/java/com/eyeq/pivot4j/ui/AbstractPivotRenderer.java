@@ -19,6 +19,7 @@ import org.olap4j.OlapException;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.DrillCollapseMemberCommand;
 import com.eyeq.pivot4j.ui.command.DrillCollapsePositionCommand;
@@ -39,6 +40,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	private boolean enableSort = true;
 
+	private boolean enableDrillThrough = false;
+
 	private boolean hideSpans = false;
 
 	private boolean showParentMembers = false;
@@ -51,7 +54,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	private PropertyCollector propertyCollector;
 
-	private Map<String, CellCommand> commands = new HashMap<String, CellCommand>();
+	private Map<String, CellCommand<?>> commands = new HashMap<String, CellCommand<?>>();
 
 	private RenderStrategy renderStrategy;
 
@@ -166,6 +169,23 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	}
 
 	/**
+	 * @return the enableDrillThrough
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getEnableDrillThrough()
+	 */
+	public boolean getEnableDrillThrough() {
+		return enableDrillThrough;
+	}
+
+	/**
+	 * @param enableDrillThrough
+	 *            the enableDrillThrough to set
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setEnableDrillThrough(boolean)
+	 */
+	public void setEnableDrillThrough(boolean enableDrillThrough) {
+		this.enableDrillThrough = enableDrillThrough;
+	}
+
+	/**
 	 * @return the hideSpans
 	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getHideSpans()
 	 */
@@ -257,13 +277,14 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		addCommand(new DrillDownReplaceCommand(this));
 		addCommand(new DrillUpReplaceCommand(this));
 		addCommand(new ToggleSortCommand(this));
+		addCommand(new BasicDrillThroughCommand(this));
 	}
 
 	/**
 	 * @param name
 	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getCommand(java.lang.String)
 	 */
-	public CellCommand getCommand(String name) {
+	public CellCommand<?> getCommand(String name) {
 		return commands.get(name);
 	}
 
@@ -272,7 +293,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 *      .CellCommand)
 	 */
 	@Override
-	public void addCommand(CellCommand command) {
+	public void addCommand(CellCommand<?> command) {
 		commands.put(command.getName(), command);
 	}
 
@@ -288,14 +309,14 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 * @param context
 	 * @return
 	 */
-	protected List<CellCommand> getCommands(RenderContext context) {
+	protected List<CellCommand<?>> getCommands(RenderContext context) {
 		if (!isInteractive()) {
 			return Collections.emptyList();
 		}
 
-		List<CellCommand> availableCommands = new ArrayList<CellCommand>(
+		List<CellCommand<?>> availableCommands = new ArrayList<CellCommand<?>>(
 				commands.size());
-		for (CellCommand command : commands.values()) {
+		for (CellCommand<?> command : commands.values()) {
 			if (command.canExecute(context)) {
 				availableCommands.add(command);
 			}
@@ -309,7 +330,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 */
 	@Override
 	public void startCell(RenderContext context) {
-		List<CellCommand> commands = getCommands(context);
+		List<CellCommand<?>> commands = getCommands(context);
 
 		startCell(context, commands);
 	}
@@ -319,7 +340,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 * @param commands
 	 */
 	public abstract void startCell(RenderContext context,
-			List<CellCommand> commands);
+			List<CellCommand<?>> commands);
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#cellContent(com.eyeq.pivot4j.ui.RenderContext)
@@ -381,8 +402,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	@Override
 	public Serializable bookmarkState() {
 		return new Serializable[] { drillDownMode, enableColumnDrillDown,
-				enableRowDrillDown, enableSort, sortMode, showDimensionTitle,
-				showParentMembers, hideSpans };
+				enableRowDrillDown, enableSort, enableDrillThrough, sortMode,
+				showDimensionTitle, showParentMembers, hideSpans };
 	}
 
 	/**
@@ -396,9 +417,10 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		this.enableColumnDrillDown = (Boolean) states[1];
 		this.enableRowDrillDown = (Boolean) states[2];
 		this.enableSort = (Boolean) states[3];
-		this.sortMode = (SortMode) states[4];
-		this.showDimensionTitle = (Boolean) states[5];
-		this.showParentMembers = (Boolean) states[6];
-		this.hideSpans = (Boolean) states[7];
+		this.enableDrillThrough = (Boolean) states[4];
+		this.sortMode = (SortMode) states[5];
+		this.showDimensionTitle = (Boolean) states[6];
+		this.showParentMembers = (Boolean) states[7];
+		this.hideSpans = (Boolean) states[8];
 	}
 }

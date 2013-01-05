@@ -8,11 +8,7 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
-public interface DrillDownCommand extends CellCommand<Void> {
+import java.sql.ResultSet;
 
-	String MODE_POSITION = "position";
-
-	String MODE_MEMBER = "member";
-
-	String MODE_REPLACE = "replace";
+public interface DrillThroughCommand extends CellCommand<ResultSet> {
 }

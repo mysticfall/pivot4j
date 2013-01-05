@@ -14,7 +14,7 @@ import org.olap4j.Axis;
 import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public abstract class AbstractDrillDownCommand extends AbstractCellCommand
+public abstract class AbstractDrillDownCommand extends AbstractCellCommand<Void>
 		implements DrillDownCommand {
 
 	/**

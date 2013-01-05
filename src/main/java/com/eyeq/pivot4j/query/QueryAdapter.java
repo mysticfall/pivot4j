@@ -213,9 +213,6 @@ public class QueryAdapter implements StateHolder {
 				&& axesSwapped != this.axesSwapped) {
 			this.axesSwapped = axesSwapped;
 
-			if (logger.isInfoEnabled()) {
-			}
-
 			QueryAxis[] queryAxes = parsedQuery.getAxes();
 
 			Exp exp = queryAxes[0].getExp();
