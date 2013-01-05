@@ -416,6 +416,8 @@ public class PivotModelImpl implements PivotModel {
 			queryAdapter.initialize();
 			queryAdapter.updateQuery();
 		}
+
+		fireStructureChanged();
 	}
 
 	protected QueryAdapter createQueryAdapter() {
