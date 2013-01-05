@@ -151,6 +151,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 							context.setProperty(headerNode.getProperty());
 							context.setHierarchy(headerNode.getHierarchy());
 							context.setColumnPosition(headerNode.getPosition());
+							context.setCell(null);
 
 							if (context.getMember() == null) {
 								if (context.getHierarchy() == null) {
@@ -216,6 +217,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 							context.setProperty(headerNode.getProperty());
 							context.setHierarchy(headerNode.getHierarchy());
 							context.setRowPosition(headerNode.getPosition());
+							context.setCell(null);
 
 							if (context.getMember() == null) {
 								if (context.getHierarchy() == null) {
