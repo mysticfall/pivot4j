@@ -401,6 +401,9 @@ public class PivotModelImpl implements PivotModel {
 		}
 	}
 
+	/**
+	 * @param mdx
+	 */
 	protected void onMdxChanged(String mdx) {
 		if (logger.isInfoEnabled()) {
 			logger.info("setMdx: " + mdx);
