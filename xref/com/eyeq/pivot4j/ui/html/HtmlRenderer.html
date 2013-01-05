@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="53" href="#53">53</a>  
 <a class="jxr_linenumber" name="54" href="#54">54</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> rowHeaderLevelPadding = 10;
 <a class="jxr_linenumber" name="55" href="#55">55</a>  
-<a class="jxr_linenumber" name="56" href="#56">56</a>  	<strong class="jxr_keyword">private</strong> List&lt;CellCommand&gt; commands;
+<a class="jxr_linenumber" name="56" href="#56">56</a>  	<strong class="jxr_keyword">private</strong> List&lt;CellCommand&lt;?&gt;&gt; commands;
 <a class="jxr_linenumber" name="57" href="#57">57</a>  
 <a class="jxr_linenumber" name="58" href="#58">58</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="59" href="#59">59</a>  <em class="jxr_javadoccomment">	 * @param writer</em>
@@ -477,7 +477,7 @@
 <a class="jxr_linenumber" name="467" href="#467">467</a> <em class="jxr_javadoccomment">	 *      java.util.Set)</em>
 <a class="jxr_linenumber" name="468" href="#468">468</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="469" href="#469">469</a> 	@Override
-<a class="jxr_linenumber" name="470" href="#470">470</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> startCell(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context, List&lt;CellCommand&gt; commands) {
+<a class="jxr_linenumber" name="470" href="#470">470</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> startCell(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context, List&lt;CellCommand&lt;?&gt;&gt; commands) {
 <a class="jxr_linenumber" name="471" href="#471">471</a> 		<strong class="jxr_keyword">boolean</strong> header;
 <a class="jxr_linenumber" name="472" href="#472">472</a> 
 <a class="jxr_linenumber" name="473" href="#473">473</a> 		<strong class="jxr_keyword">switch</strong> (context.getCellType()) {
@@ -592,14 +592,14 @@
 <a class="jxr_linenumber" name="582" href="#582">582</a> <em class="jxr_javadoccomment">	 * @param context</em>
 <a class="jxr_linenumber" name="583" href="#583">583</a> <em class="jxr_javadoccomment">	 * @param commands</em>
 <a class="jxr_linenumber" name="584" href="#584">584</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="585" href="#585">585</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> startCommand(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context, List&lt;CellCommand&gt; commands) {
+<a class="jxr_linenumber" name="585" href="#585">585</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> startCommand(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context, List&lt;CellCommand&lt;?&gt;&gt; commands) {
 <a class="jxr_linenumber" name="586" href="#586">586</a> 	}
 <a class="jxr_linenumber" name="587" href="#587">587</a> 
 <a class="jxr_linenumber" name="588" href="#588">588</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="589" href="#589">589</a> <em class="jxr_javadoccomment">	 * @param context</em>
 <a class="jxr_linenumber" name="590" href="#590">590</a> <em class="jxr_javadoccomment">	 * @param commands</em>
 <a class="jxr_linenumber" name="591" href="#591">591</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="592" href="#592">592</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> endCommand(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context, List&lt;CellCommand&gt; commands) {
+<a class="jxr_linenumber" name="592" href="#592">592</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> endCommand(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context, List&lt;CellCommand&lt;?&gt;&gt; commands) {
 <a class="jxr_linenumber" name="593" href="#593">593</a> 	}
 <a class="jxr_linenumber" name="594" href="#594">594</a> 
 <a class="jxr_linenumber" name="595" href="#595">595</a> 	<em class="jxr_javadoccomment">/**</em>
