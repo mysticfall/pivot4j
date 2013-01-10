@@ -43,8 +43,7 @@ public class ParsedQuery extends AbstractExp {
 
 	boolean axesSwapped = false;
 
-	// TODO implement proper node for SAP variable expressions.
-	List<String> sapVariables = new ArrayList<String>();
+	List<SapVariable> sapVariables = new ArrayList<SapVariable>();
 
 	private QueryAxis[] axes = new QueryAxis[0];
 
@@ -117,7 +116,7 @@ public class ParsedQuery extends AbstractExp {
 	/**
 	 * @return the sapVariables
 	 */
-	public List<String> getSapVariables() {
+	public List<SapVariable> getSapVariables() {
 		return sapVariables;
 	}
 
@@ -125,7 +124,7 @@ public class ParsedQuery extends AbstractExp {
 	 * @param sapVariables
 	 *            the sapVariables to set
 	 */
-	public void setSapVariables(List<String> sapVariables) {
+	public void setSapVariables(List<SapVariable> sapVariables) {
 		this.sapVariables = sapVariables;
 	}
 

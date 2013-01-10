@@ -126,7 +126,7 @@ non terminal slicer_def;
 non terminal cell_prop_def, cell_prop_list;
 non terminal with_clause;
 non terminal sel_clause;
-non terminal sap_var_def,sap_var_list,sap_var_incl,sap_var_opt,sap_var_spec,sap_var_value;
+non terminal sap_var_def,sap_var_list,sap_var_incl,sap_var_opt,sap_var_spec,sap_var_value,sap_var_value_set;
 non terminal ArrayList formula_spec;
 non terminal Formula single_formula_spec, member_spec, set_spec;
 non terminal ArrayList axis_def, axis_spec_list;
@@ -194,21 +194,23 @@ cell_prop_list ::= identifier:id {: pQuery.cellProps.add(new CompoundId(id)); :}
 sap_var_def ::= /* empty */ {: pQuery.sapVariables.clear(); :}
     | SAP VARIABLES sap_var_list;
 
-sap_var_list ::= sap_var_spec:s {: pQuery.sapVariables.add((String) s); :}
-	| sap_var_spec:s COMMA sap_var_list {: pQuery.sapVariables.add((String) s); :};
+sap_var_list ::= sap_var_spec:s {: pQuery.sapVariables.add((SapVariable) s); :}
+	| sap_var_spec:s COMMA sap_var_list {: pQuery.sapVariables.add(0, (SapVariable) s); :};
 
 sap_var_incl ::= INCLUDING | EXCLUDING;
 
 sap_var_opt ::= /* empty */ | comp_op;
 
-sap_var_spec ::= identifier:id sap_var_incl:inc sap_var_opt:opt sap_var_value:v {: RESULT = id + " " + inc + ((opt == null)?"":(" " + opt)) + " " + v; :};
+sap_var_spec ::= identifier:id sap_var_value_set:v {: RESULT = new SapVariable(id, (List) v); :};
 
-sap_var_value ::= NUMBER:v {: RESULT=v; :}
-	| compound_id:v {: RESULT=v.toMdx(); :}
-	| STRING:v {: RESULT=v; :}
-	| NUMBER:v1 COLON NUMBER:v2 {: RESULT=v1 + ":" + v2; :}
-	| STRING:v1 COLON STRING:v2 {: RESULT=v1 + ":" + v2; :}
-	| compound_id:v1 COLON compound_id:v2 {: RESULT=v1.toMdx() + ":" + v2.toMdx(); :};
+sap_var_value_set ::= sap_var_value:v  {: List lst = new ArrayList(); lst.add(v); RESULT = lst; :} | sap_var_value:v1 sap_var_value:v2 {: List lst = new ArrayList(); lst.add(v1); lst.add(v2); RESULT = lst; :};
+
+sap_var_value ::= sap_var_incl:i sap_var_opt:o NUMBER:v {: RESULT = new SapVariable.Value(Literal.create((Double) v), (Boolean) i, (String) o); :}
+	| sap_var_incl:i sap_var_opt:o compound_id:v {: RESULT = new SapVariable.Value(v, (Boolean) i, (String) o); :}
+	| sap_var_incl:i sap_var_opt:o STRING:v {: RESULT = new SapVariable.Value(Literal.createString((String) v), (Boolean) i, (String) o); :}
+	| sap_var_incl:i sap_var_opt:o NUMBER:v1 COLON NUMBER:v2 {: RESULT = new SapVariable.Value(Literal.create((Double) v1), Literal.create((Double) v2), (Boolean) i, (String) o); :}
+	| sap_var_incl:i sap_var_opt:o STRING:v1 COLON STRING:v2 {: RESULT = new SapVariable.Value(Literal.createString((String) v1), Literal.createString((String) v2), (Boolean) i, (String) o); :}
+	| sap_var_incl:i sap_var_opt:o compound_id:v1 COLON compound_id:v2 {: RESULT = new SapVariable.Value(v1, v2, (Boolean) i, (String) o); :};
 
 formula_spec ::= single_formula_spec:e
 	{: RESULT = new ArrayList();  RESULT.add(e); :}
