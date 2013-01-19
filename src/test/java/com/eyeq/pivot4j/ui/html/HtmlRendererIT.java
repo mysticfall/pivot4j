@@ -21,7 +21,7 @@ import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.ui.impl.NonInternalPropertyCollector;
 
-public class HtmlRendererCallbackIT extends AbstractIntegrationTestCase {
+public class HtmlRendererIT extends AbstractIntegrationTestCase {
 
 	private static final String RESOURCE_PREFIX = "/com/eyeq/pivot4j/ui/html/";
 
