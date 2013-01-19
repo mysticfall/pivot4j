@@ -1,5 +1,7 @@
 com.eyeq.pivot4j
 com.eyeq.pivot4j.datasource
+com.eyeq.pivot4j.export
+com.eyeq.pivot4j.export.poi
 com.eyeq.pivot4j.impl
 com.eyeq.pivot4j.mdx
 com.eyeq.pivot4j.query

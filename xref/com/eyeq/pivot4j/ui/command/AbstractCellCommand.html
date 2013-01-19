@@ -18,17 +18,17 @@
 <a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">package</strong> com.eyeq.pivot4j.ui.command;
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PivotRenderer;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PivotUIRenderer;
 <a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.RenderContext;
 <a class="jxr_linenumber" name="13" href="#13">13</a>  
 <a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> AbstractCellCommand&lt;T&gt; <strong class="jxr_keyword">implements</strong> CellCommand&lt;T&gt; {
 <a class="jxr_linenumber" name="15" href="#15">15</a>  
-<a class="jxr_linenumber" name="16" href="#16">16</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../com/eyeq/pivot4j/ui/PivotRenderer.html">PivotRenderer</a> renderer;
+<a class="jxr_linenumber" name="16" href="#16">16</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../com/eyeq/pivot4j/ui/PivotUIRenderer.html">PivotUIRenderer</a> renderer;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  
 <a class="jxr_linenumber" name="18" href="#18">18</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="19" href="#19">19</a>  <em class="jxr_javadoccomment">	 * @param renderer</em>
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="21" href="#21">21</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/AbstractCellCommand.html">AbstractCellCommand</a>(<a href="../../../../../com/eyeq/pivot4j/ui/PivotRenderer.html">PivotRenderer</a> renderer) {
+<a class="jxr_linenumber" name="21" href="#21">21</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/AbstractCellCommand.html">AbstractCellCommand</a>(<a href="../../../../../com/eyeq/pivot4j/ui/PivotUIRenderer.html">PivotUIRenderer</a> renderer) {
 <a class="jxr_linenumber" name="22" href="#22">22</a>  		<strong class="jxr_keyword">if</strong> (renderer == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="23" href="#23">23</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
 <a class="jxr_linenumber" name="24" href="#24">24</a>  					<span class="jxr_string">"Missing required argument 'renderer'."</span>);
@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="30" href="#30">30</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">	 * @return the renderer</em>
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="33" href="#33">33</a>  	<strong class="jxr_keyword">protected</strong> <a href="../../../../../com/eyeq/pivot4j/ui/PivotRenderer.html">PivotRenderer</a> getRenderer() {
+<a class="jxr_linenumber" name="33" href="#33">33</a>  	<strong class="jxr_keyword">protected</strong> <a href="../../../../../com/eyeq/pivot4j/ui/PivotUIRenderer.html">PivotUIRenderer</a> getRenderer() {
 <a class="jxr_linenumber" name="34" href="#34">34</a>  		<strong class="jxr_keyword">return</strong> renderer;
 <a class="jxr_linenumber" name="35" href="#35">35</a>  	}
 <a class="jxr_linenumber" name="36" href="#36">36</a>  
