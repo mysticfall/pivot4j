@@ -15,7 +15,7 @@ import org.olap4j.OlapException;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class BasicDrillThroughCommand extends AbstractCellCommand<ResultSet>
@@ -26,7 +26,7 @@ public class BasicDrillThroughCommand extends AbstractCellCommand<ResultSet>
 	/**
 	 * @param renderer
 	 */
-	public BasicDrillThroughCommand(PivotRenderer renderer) {
+	public BasicDrillThroughCommand(PivotUIRenderer renderer) {
 		super(renderer);
 	}
 

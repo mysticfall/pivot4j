@@ -11,7 +11,7 @@ package com.eyeq.pivot4j.ui.command;
 import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
 
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public abstract class AbstractDrillDownCommand extends AbstractCellCommand<Void>
@@ -20,7 +20,7 @@ public abstract class AbstractDrillDownCommand extends AbstractCellCommand<Void>
 	/**
 	 * @param renderer
 	 */
-	public AbstractDrillDownCommand(PivotRenderer renderer) {
+	public AbstractDrillDownCommand(PivotUIRenderer renderer) {
 		super(renderer);
 	}
 

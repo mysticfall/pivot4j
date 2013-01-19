@@ -8,7 +8,7 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.SortMode;
 
@@ -18,7 +18,7 @@ public abstract class AbstractSortCommand extends AbstractCellCommand<Void> impl
 	/**
 	 * @param renderer
 	 */
-	public AbstractSortCommand(PivotRenderer renderer) {
+	public AbstractSortCommand(PivotUIRenderer renderer) {
 		super(renderer);
 	}
 

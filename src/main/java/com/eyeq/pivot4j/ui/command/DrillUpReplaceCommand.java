@@ -17,7 +17,7 @@ import org.olap4j.metadata.Hierarchy;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillReplace;
 import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
@@ -27,7 +27,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	/**
 	 * @param renderer
 	 */
-	public DrillUpReplaceCommand(PivotRenderer renderer) {
+	public DrillUpReplaceCommand(PivotUIRenderer renderer) {
 		super(renderer);
 	}
 

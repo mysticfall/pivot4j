@@ -10,19 +10,12 @@ package com.eyeq.pivot4j.ui;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.StateHolder;
-import com.eyeq.pivot4j.ui.command.CellCommand;
 
 public interface PivotRenderer extends StateHolder {
 
 	void initialize();
 
 	void render(PivotModel model);
-
-	CellCommand<?> getCommand(String name);
-
-	void addCommand(CellCommand<?> command);
-
-	void removeCommand(String name);
 
 	boolean getHideSpans();
 
@@ -35,30 +28,6 @@ public interface PivotRenderer extends StateHolder {
 	boolean getShowDimensionTitle();
 
 	void setShowDimensionTitle(boolean showDimensionTitle);
-
-	boolean getEnableColumnDrillDown();
-
-	void setEnableColumnDrillDown(boolean enableColumnDrillDown);
-
-	boolean getEnableRowDrillDown();
-
-	void setEnableRowDrillDown(boolean enableRowDrillDown);
-
-	boolean getEnableSort();
-
-	void setEnableSort(boolean enableSort);
-
-	boolean getEnableDrillThrough();
-
-	void setEnableDrillThrough(boolean enableDrillThrough);
-
-	SortMode getSortMode();
-
-	void setSortMode(SortMode mode);
-
-	String getDrillDownMode();
-
-	void setDrillDownMode(String mode);
 
 	PropertyCollector getPropertyCollector();
 	

@@ -13,7 +13,7 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.SortMode;
 
 public class ToggleSortCommand extends AbstractSortCommand {
@@ -23,7 +23,7 @@ public class ToggleSortCommand extends AbstractSortCommand {
 	/**
 	 * @param renderer
 	 */
-	public ToggleSortCommand(PivotRenderer renderer) {
+	public ToggleSortCommand(PivotUIRenderer renderer) {
 		super(renderer);
 	}
 

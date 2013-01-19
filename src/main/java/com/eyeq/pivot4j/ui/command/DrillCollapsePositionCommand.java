@@ -15,7 +15,7 @@ import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillExpandPosition;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class DrillCollapsePositionCommand extends AbstractDrillDownCommand {
@@ -25,7 +25,7 @@ public class DrillCollapsePositionCommand extends AbstractDrillDownCommand {
 	/**
 	 * @param renderer
 	 */
-	public DrillCollapsePositionCommand(PivotRenderer renderer) {
+	public DrillCollapsePositionCommand(PivotUIRenderer renderer) {
 		super(renderer);
 	}
 

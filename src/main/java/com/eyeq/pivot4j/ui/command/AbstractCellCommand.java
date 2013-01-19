@@ -8,17 +8,17 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public abstract class AbstractCellCommand<T> implements CellCommand<T> {
 
-	private PivotRenderer renderer;
+	private PivotUIRenderer renderer;
 
 	/**
 	 * @param renderer
 	 */
-	public AbstractCellCommand(PivotRenderer renderer) {
+	public AbstractCellCommand(PivotUIRenderer renderer) {
 		if (renderer == null) {
 			throw new IllegalArgumentException(
 					"Missing required argument 'renderer'.");
@@ -30,7 +30,7 @@ public abstract class AbstractCellCommand<T> implements CellCommand<T> {
 	/**
 	 * @return the renderer
 	 */
-	protected PivotRenderer getRenderer() {
+	protected PivotUIRenderer getRenderer() {
 		return renderer;
 	}
 

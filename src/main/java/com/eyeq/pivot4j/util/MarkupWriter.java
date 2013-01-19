@@ -6,16 +6,15 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.ui;
+package com.eyeq.pivot4j.util;
 
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.io.Writer;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
+public class MarkupWriter {
 
 	private PrintWriter writer;
 
@@ -30,7 +29,7 @@ public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
 	/**
 	 * @param writer
 	 */
-	public MarkupPivotRenderer(Writer writer) {
+	public MarkupWriter(Writer writer) {
 		if (writer == null) {
 			throw new IllegalArgumentException(
 					"Missing required argument 'writer'.");
@@ -44,15 +43,6 @@ public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
 	 */
 	public PrintWriter getWriter() {
 		return writer;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#initialize()
-	 */
-	@Override
-	public void initialize() {
-		super.initialize();
-		this.indent = 0;
 	}
 
 	/**
@@ -118,21 +108,19 @@ public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
 	/**
 	 * @param context
 	 */
-	protected void writeIndent(RenderContext context) {
+	protected void writeIndent() {
 		for (int i = 0; i < indent * indentSize; i++) {
 			writer.print(indentCharacter);
 		}
 	}
 
 	/**
-	 * @param context
 	 * @param name
 	 * @param attributes
 	 */
-	protected void startElement(RenderContext context, String name,
-			Map<String, String> attributes) {
+	public void startElement(String name, Map<String, String> attributes) {
 		if (formatOutput) {
-			writeIndent(context);
+			writeIndent();
 			indent++;
 		}
 
@@ -141,13 +129,12 @@ public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
 
 		if (attributes != null) {
 			if (attributes.containsKey("id")) {
-				writeAttribute(context, "id", attributes.get("id"));
+				writeAttribute("id", attributes.get("id"));
 			}
 
 			for (String attributeName : attributes.keySet()) {
 				if (!"id".equals(attributeName)) {
-					writeAttribute(context, attributeName,
-							attributes.get(attributeName));
+					writeAttribute(attributeName, attributes.get(attributeName));
 				}
 			}
 		}
@@ -160,12 +147,10 @@ public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
 	}
 
 	/**
-	 * @param context
 	 * @param attributeName
 	 * @param attributeValue
 	 */
-	protected void writeAttribute(RenderContext context, String attributeName,
-			String attributeValue) {
+	public void writeAttribute(String attributeName, String attributeValue) {
 		writer.print(' ');
 		writer.print(attributeName);
 		writer.print("=\"");
@@ -174,14 +159,27 @@ public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
 	}
 
 	/**
-	 * @param context
-	 * @param name
-	 * @param attributes
+	 * @param content
 	 */
-	protected void endElement(RenderContext context, String name) {
+	public void writeContent(String content) {
+		if (formatOutput) {
+			writeIndent();
+		}
+
+		writer.print(StringUtils.trimToEmpty(content));
+
+		if (formatOutput) {
+			writer.println();
+		}
+	}
+
+	/**
+	 * @param name
+	 */
+	public void endElement(String name) {
 		if (formatOutput) {
 			indent--;
-			writeIndent(context);
+			writeIndent();
 		}
 
 		writer.print("</");
@@ -191,62 +189,5 @@ public abstract class MarkupPivotRenderer extends AbstractPivotRenderer {
 		if (formatOutput) {
 			writer.println();
 		}
-	}
-
-	/**
-	 * @param context
-	 * @param content
-	 */
-	protected void writeContent(RenderContext context, String content) {
-		if (formatOutput) {
-			writeIndent(context);
-		}
-
-		writer.print(content);
-
-		if (formatOutput) {
-			writer.println();
-		}
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#cellContent(com.eyeq.pivot4j.ui.RenderContext,
-	 *      java.lang.String)
-	 */
-	@Override
-	public void cellContent(RenderContext context, String label) {
-		writeContent(context, label);
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#getCellLabel(com.eyeq.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	protected String getCellLabel(RenderContext context) {
-		return StringUtils.trimToEmpty(super.getCellLabel(context));
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#bookmarkState()
-	 */
-	@Override
-	public Serializable bookmarkState() {
-		return new Serializable[] { super.bookmarkState(), formatOutput,
-				indent, indentCharacter, indentSize };
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#restoreState(java.io.Serializable)
-	 */
-	@Override
-	public void restoreState(Serializable state) {
-		Serializable[] states = (Serializable[]) state;
-
-		super.restoreState(states[0]);
-
-		this.formatOutput = (Boolean) states[1];
-		this.indent = (Integer) states[2];
-		this.indentCharacter = (Character) states[3];
-		this.indentSize = (Integer) states[4];
 	}
 }

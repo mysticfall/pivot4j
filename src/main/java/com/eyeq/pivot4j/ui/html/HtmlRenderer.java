@@ -17,11 +17,12 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.eyeq.pivot4j.ui.MarkupPivotRenderer;
+import com.eyeq.pivot4j.ui.AbstractPivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.command.CellCommand;
+import com.eyeq.pivot4j.util.MarkupWriter;
 
-public class HtmlRenderer extends MarkupPivotRenderer {
+public class HtmlRenderer extends AbstractPivotUIRenderer {
 
 	private String tableId;
 
@@ -55,15 +56,24 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 
 	private List<CellCommand<?>> commands;
 
+	private MarkupWriter writer;
+
 	/**
 	 * @param writer
 	 */
 	public HtmlRenderer(Writer writer) {
-		super(writer);
+		this.writer = new MarkupWriter(writer);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.MarkupPivotRenderer#initialize()
+	 * @return writer
+	 */
+	protected MarkupWriter getWriter() {
+		return writer;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.util.MarkupWriter#initialize()
 	 */
 	@Override
 	public void initialize() {
@@ -302,7 +312,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 */
 	@Override
 	public void startTable(RenderContext context) {
-		startElement(context, "table", getTableAttributes(context));
+		writer.startElement("table", getTableAttributes(context));
 	}
 
 	/**
@@ -341,7 +351,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 */
 	@Override
 	public void startHeader(RenderContext context) {
-		startElement(context, "thead", getHeaderAttributes(context));
+		writer.startElement("thead", getHeaderAttributes(context));
 	}
 
 	/**
@@ -350,7 +360,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 */
 	@Override
 	public void endHeader(RenderContext context) {
-		endElement(context, "thead");
+		writer.endElement("thead");
 	}
 
 	/**
@@ -367,7 +377,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 */
 	@Override
 	public void startBody(RenderContext context) {
-		startElement(context, "tbody", getBodyAttributes(context));
+		writer.startElement("tbody", getBodyAttributes(context));
 	}
 
 	/**
@@ -376,7 +386,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 */
 	@Override
 	public void endBody(RenderContext context) {
-		endElement(context, "tbody");
+		writer.endElement("tbody");
 	}
 
 	/**
@@ -393,7 +403,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 */
 	@Override
 	public void endTable(RenderContext context) {
-		endElement(context, "table");
+		writer.endElement("table");
 	}
 
 	/**
@@ -402,7 +412,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 */
 	@Override
 	public void startRow(RenderContext context) {
-		startElement(context, "tr", getRowAttributes(context));
+		writer.startElement("tr", getRowAttributes(context));
 	}
 
 	/**
@@ -411,7 +421,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 */
 	@Override
 	public void endRow(RenderContext context) {
-		endElement(context, "tr");
+		writer.endElement("tr");
 	}
 
 	/**
@@ -485,7 +495,7 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 
 		String name = header ? "th" : "td";
 
-		startElement(context, name, getCellAttributes(context));
+		writer.startElement(name, getCellAttributes(context));
 
 		this.commands = commands;
 
@@ -511,10 +521,10 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 		case ColumnTitle:
 		case RowTitle:
 		case None:
-			endElement(context, "th");
+			writer.endElement("th");
 			break;
 		default:
-			endElement(context, "td");
+			writer.endElement("td");
 			break;
 		}
 	}
@@ -582,7 +592,8 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 * @param context
 	 * @param commands
 	 */
-	public void startCommand(RenderContext context, List<CellCommand<?>> commands) {
+	public void startCommand(RenderContext context,
+			List<CellCommand<?>> commands) {
 	}
 
 	/**
@@ -590,6 +601,15 @@ public class HtmlRenderer extends MarkupPivotRenderer {
 	 * @param commands
 	 */
 	public void endCommand(RenderContext context, List<CellCommand<?>> commands) {
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#cellContent(com.eyeq.pivot4j.ui.RenderContext,
+	 *      java.lang.String)
+	 */
+	@Override
+	public void cellContent(RenderContext context, String label) {
+		writer.writeContent(label);
 	}
 
 	/**

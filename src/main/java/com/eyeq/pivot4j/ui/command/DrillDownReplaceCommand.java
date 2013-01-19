@@ -15,7 +15,7 @@ import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillReplace;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
@@ -25,7 +25,7 @@ public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
 	/**
 	 * @param renderer
 	 */
-	public DrillDownReplaceCommand(PivotRenderer renderer) {
+	public DrillDownReplaceCommand(PivotUIRenderer renderer) {
 		super(renderer);
 	}
 
