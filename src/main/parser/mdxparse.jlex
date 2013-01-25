@@ -9,8 +9,15 @@
 package com.eyeq.pivot4j.mdx;
 
 import java_cup.runtime.Symbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("unused")
 %%
+
+%{
+  protected Logger logger = LoggerFactory.getLogger(getClass());
+%}
 
 %eofval{
   return new Symbol(Symbols.EOF, null);
@@ -58,6 +65,7 @@ FLOAT = ({DIGIT}+\.{DIGIT}*{EXP}?|{DIGIT}*\.{DIGIT}+{EXP}?|{DIGIT}+{EXP})
 
 %cup
 %unicode
+%public
 
 %state AFTER_AS1
 %state AFTER_AS2
@@ -118,4 +126,4 @@ FLOAT = ({DIGIT}+\.{DIGIT}*{EXP}?|{DIGIT}*\.{DIGIT}+{EXP}?|{DIGIT}+{EXP})
 "\""{INSTRING}*"\"" { return new Symbol(Symbols.STRING, yytext()); }
 <YYINITIAL> "'"{INSTRING2}*"'" { return new Symbol(Symbols.STRING, yytext()); }
 {WHITESPACE} { /* ignore white space. */ }
-. { System.out.println("Unmatched input: " + yytext()); return new Symbol(Symbols.UNKNOWN, yytext()); }
+. {	if (logger.isWarnEnabled()) logger.warn("Unmatched input: " + yytext()); return new Symbol(Symbols.UNKNOWN, yytext()); }

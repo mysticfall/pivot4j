@@ -28,12 +28,10 @@ public class ParserTest {
 	 */
 	protected ParsedQuery parseQuery(String mdxQuery) throws Exception {
 		Reader reader = new StringReader(mdxQuery);
-		Parser parser = new Parser(new Lexer(reader));
+		Parser parser = new Parser(reader);
 
 		Symbol parseTree = parser.parse();
-
 		ParsedQuery parsedQuery = (ParsedQuery) parseTree.value;
-		parsedQuery.afterParse();
 
 		return parsedQuery;
 	}

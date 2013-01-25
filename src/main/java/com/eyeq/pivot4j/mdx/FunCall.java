@@ -73,12 +73,6 @@ public class FunCall extends AbstractExp {
 	 * format to MDX
 	 */
 	public String toMdx() {
-		if ((this.isCallTo("Parameter") || this.isCallTo("ParamRef"))
-				&& (pQuery.getParaMap().size() > 0)) {
-			// parameters are evaluated to MDX
-			return evaluateParameter();
-		}
-
 		StringBuffer sb = new StringBuffer();
 
 		// "+" instead of Union yields much better readable MDX
@@ -195,35 +189,6 @@ public class FunCall extends AbstractExp {
 	 */
 	public String getFunction() {
 		return function;
-	}
-
-	/**
-	 * put parameter value to MDX
-	 */
-	private String evaluateParameter() {
-		Literal eName = (Literal) args[0];
-		String paraName = eName.stringValue();
-		Parameter param = (Parameter) pQuery.paraMap
-				.get(paraName.toUpperCase());
-		if (param == null) {
-			// should not occur
-			logger.error("could not find parameter " + paraName);
-			return ("Parameter( \"" + paraName + "\" )"); // MDX parse will fail
-															// here
-		}
-		int type = param.getType();
-		if (type == Parameter.TYPE_NUMERIC) {
-			Object value = param.getOValue();
-			return value.toString(); // Integer or double
-		} else if (type == Parameter.TYPE_STRING) {
-			String str = (String) param.getOValue();
-			return "\"" + str + "\"";
-		} else {
-			// member assumed
-			String str = (String) param.getOValue();
-			return str;
-
-		}
 	}
 
 	/**

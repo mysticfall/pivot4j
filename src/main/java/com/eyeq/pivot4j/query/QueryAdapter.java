@@ -33,11 +33,11 @@ import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
-import com.eyeq.pivot4j.mdx.Lexer;
 import com.eyeq.pivot4j.mdx.Literal;
 import com.eyeq.pivot4j.mdx.MemberExp;
 import com.eyeq.pivot4j.mdx.ParsedQuery;
 import com.eyeq.pivot4j.mdx.Parser;
+import com.eyeq.pivot4j.mdx.ParseException;
 import com.eyeq.pivot4j.mdx.QueryAxis;
 import com.eyeq.pivot4j.mdx.Syntax;
 
@@ -128,7 +128,14 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	public String getCubeName() {
-		return parsedQuery.getCube();
+		String cube = parsedQuery.getCube();
+
+		if (cube != null && cube.charAt(0) == '['
+				&& cube.charAt(cube.length() - 1) == ']') {
+			cube = cube.substring(1, cube.length() - 1);
+		}
+
+		return cube;
 	}
 
 	/**
@@ -480,19 +487,19 @@ public class QueryAdapter implements StateHolder {
 	 */
 	protected ParsedQuery parseQuery(String mdxQuery) {
 		Reader reader = new StringReader(mdxQuery);
-		Parser parser = new Parser(new Lexer(reader));
+		Parser parser = new Parser(reader);
 
 		ParsedQuery parsedQuery;
 
 		try {
 			Symbol parseTree = parser.parse();
 			parsedQuery = (ParsedQuery) parseTree.value;
+		} catch (PivotException e) {
+			throw e;
 		} catch (Exception e) {
 			String msg = "Failed to parse MDX query : " + mdxQuery;
-			throw new PivotException(msg, e);
+			throw new ParseException(msg, e);
 		}
-
-		parsedQuery.afterParse();
 
 		return parsedQuery;
 	}

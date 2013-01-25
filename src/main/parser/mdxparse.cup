@@ -10,20 +10,24 @@ package com.eyeq.pivot4j.mdx;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.io.Reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java_cup.runtime.Symbol;
 
-action code {: ParsedQuery pQuery = new ParsedQuery();  :};
+action code {:
+  private ParsedQuery pQuery = new ParsedQuery();
+:};
 
 parser code {: 
   static Logger logger = LoggerFactory.getLogger(Parser.class);
-    
-  /**
-   * report_error
-   */ 
+
+  public Parser(Reader reader) {
+    super(new Yylex(reader));
+  }
+
+  @Override
   public void report_error(String message, Object info) {
-    logger.warn("Parsing MDX:" +message);
     if (info instanceof Symbol) {
 	  if (((Symbol)info).left != -1) {
 	  	 if (logger.isWarnEnabled()) {
@@ -32,29 +36,24 @@ parser code {:
 	  }
 	}
   }
-	
-  /**
-   * report_fatal_error
-   */ 
-  public void report_fatal_error(String message, Object info) throws Exception {
-    String err;
-    err = "Fatal error parsing MDX:" +message;
-    if (info instanceof Symbol) {
-	  if (((Symbol)info).left != -1) {
-	     err += "\n at character " + ((Symbol)info).left +  " of input";
-	  } else {
-	    err += "\n invalid symbol \"" + ((Symbol)info).value +"\"";
-	  }
-	} else {
-	  err += "\n" + info.toString();
-	}
-	if (logger.isErrorEnabled()) {
-	  logger.error("Fatal error parsing MDX:" +err);
-	}
-	throw new Exception(err);
-  }
 
-            :};
+  @Override 
+  public void report_fatal_error(String message, Object info) throws ParseException {
+    String err = "Fatal error parsing MDX:" + message;
+
+    if (info instanceof Symbol) {
+      if (((Symbol)info).left != -1) {
+        err += "\n at character " + ((Symbol)info).left +  " of input";
+      } else {
+        err += "\n invalid symbol \"" + ((Symbol)info).value +"\"";
+       }
+    } else {
+      err += "\n" + info.toString();
+     }
+
+    throw new ParseException(err);
+  }
+:};
 
 /* Terminals (tokens returned by the scanner). */
 // a. Keywords.
@@ -122,6 +121,8 @@ terminal String UNKNOWN; // a token the lexer doesn't like!
 non terminal ParsedQuery mdx_statement;
 
 non terminal cube_def;
+non terminal List<QueryAxis> axis_def, axis_spec_list;
+non terminal QueryAxis axis_spec;
 non terminal slicer_def;
 non terminal cell_prop_def, cell_prop_list;
 non terminal with_clause;
@@ -129,8 +130,6 @@ non terminal sel_clause;
 non terminal sap_var_def,sap_var_list,sap_var_incl,sap_var_opt,sap_var_spec,sap_var_value,sap_var_value_set;
 non terminal ArrayList formula_spec;
 non terminal Formula single_formula_spec, member_spec, set_spec;
-non terminal ArrayList axis_def, axis_spec_list;
-non terminal QueryAxis axis_spec;
 non terminal Exp expression, value_expression, value_expression_opt, case_expression;
 non terminal Exp value_expression_primary, term5, term4, term3, term2, term, factor;
 non terminal Exp else_clause_opt;
@@ -153,13 +152,13 @@ sel_clause ::= SELECT | DRILLTHROUGH SELECT;
 mdx_statement ::= with_clause sel_clause axis_def FROM cube_def slicer_def cell_prop_def sap_var_def
 	{: RESULT = pQuery; :};
 
-with_clause ::= {: pQuery.formulas = new ArrayList(); /* empty */  :}
-	| WITH formula_spec:f {: pQuery.formulas = f; :} ;
+with_clause ::= {: pQuery.getFormulas().clear(); /* empty */  :}
+	| WITH formula_spec:f {: pQuery.getFormulas().clear(); pQuery.getFormulas().addAll(f); :} ;
 
-axis_def ::= /* empty */ {: pQuery.axisDef = new ArrayList(); :}
-	| axis_spec_list:l {: pQuery.axisDef = l; :};
+axis_def ::= /* empty */ {: pQuery.setAxes(new QueryAxis[0]); :}
+	| axis_spec_list:l {: pQuery.setAxes((QueryAxis[]) l.toArray(new QueryAxis[l.size()])); :};
 
-axis_spec_list ::= axis_spec:i {: RESULT = new ArrayList(); RESULT.add(i); :}
+axis_spec_list ::= axis_spec:i {: RESULT = new ArrayList<QueryAxis>(); RESULT.add(i); :}
 	| axis_spec:e COMMA axis_spec_list : list {: list.add(0, e); RESULT = list; :};
 
 axis_spec ::= non_empty_opt:b expression:s dim_props:dprops ON axis_name:a
@@ -174,28 +173,28 @@ dim_prop_list ::= compound_id:cid {: List lst = new ArrayList();
     |  compound_id:cid2 COMMA dim_prop_list:dpl 
       {: RESULT = dpl; dpl.add(cid2); :};
 
-non_empty_opt ::= {:RESULT = new Boolean(false); :} /* empty */ 
-	| NON EMPTY {: RESULT = new Boolean(true); :};
+non_empty_opt ::= {:RESULT = false; :} /* empty */ 
+	| NON EMPTY {: RESULT = true; :};
 
 axis_name ::= identifier:x {: RESULT = x; :};
 
 cube_def ::= identifier:x {: pQuery.setCube(x); :};
 
-slicer_def ::= /* empty */ {: pQuery.slicer = null; :}
-	| WHERE expression:x {: pQuery.slicer = x; :};
+slicer_def ::= /* empty */ {: pQuery.setSlicer(null); :}
+	| WHERE expression:x {: pQuery.setSlicer(x); :};
 
-cell_prop_def ::= /* empty */ {: pQuery.cellProps.clear() ; :}
+cell_prop_def ::= /* empty */ {: pQuery.getCellProperties().clear(); :}
     | CELL PROPERTIES cell_prop_list;
 
-cell_prop_list ::= identifier:id {: pQuery.cellProps.add(new CompoundId(id)); :}
-	| identifier:id {: pQuery.cellProps.add(new CompoundId(id)); :}
+cell_prop_list ::= identifier:id {: pQuery.getCellProperties().add(new CompoundId(id)); :}
+	| identifier:id {: pQuery.getCellProperties().add(new CompoundId(id)); :}
 	  COMMA cell_prop_list:cl;
 
-sap_var_def ::= /* empty */ {: pQuery.sapVariables.clear(); :}
+sap_var_def ::= /* empty */ {: pQuery.getSapVariables().clear(); :}
     | SAP VARIABLES sap_var_list;
 
-sap_var_list ::= sap_var_spec:s {: pQuery.sapVariables.add((SapVariable) s); :}
-	| sap_var_spec:s COMMA sap_var_list {: pQuery.sapVariables.add(0, (SapVariable) s); :};
+sap_var_list ::= sap_var_spec:s {: pQuery.getSapVariables().add((SapVariable) s); :}
+	| sap_var_spec:s COMMA sap_var_list {: pQuery.getSapVariables().add(0, (SapVariable) s); :};
 
 sap_var_incl ::= INCLUDING | EXCLUDING;
 
