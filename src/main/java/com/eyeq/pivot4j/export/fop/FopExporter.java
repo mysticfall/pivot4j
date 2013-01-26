@@ -432,10 +432,15 @@ public class FopExporter extends AbstractPivotExporter {
 	protected AttributesImpl createRegionBodyAttributes(PivotModel model) {
 		AttributesImpl attributes = new AttributesImpl();
 
-		attributes.addAttribute("", "margin-top", "margin-top", "CDATA",
-				"1.5cm");
-		attributes.addAttribute("", "margin-bottom", "margin-bottom", "CDATA",
-				"1.5cm");
+		if (getShowHeader()) {
+			attributes.addAttribute("", "margin-top", "margin-top", "CDATA",
+					"1.5cm");
+		}
+
+		if (getShowFooter()) {
+			attributes.addAttribute("", "margin-bottom", "margin-bottom",
+					"CDATA", "1.5cm");
+		}
 
 		return attributes;
 	}
@@ -773,10 +778,6 @@ public class FopExporter extends AbstractPivotExporter {
 				"2mm");
 		attributes.addAttribute("", "padding-bottom", "padding-bottom",
 				"CDATA", "2mm");
-
-		attributes.addAttribute("", "font-size", "font-size", "CDATA", "8pt");
-		attributes.addAttribute("", "font-weight", "font-weight", "CDATA",
-				"bold");
 
 		return attributes;
 	}
