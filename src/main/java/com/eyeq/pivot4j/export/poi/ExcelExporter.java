@@ -65,18 +65,18 @@ public class ExcelExporter extends AbstractPivotExporter {
 	}
 
 	/**
+	 * @param out
+	 */
+	public ExcelExporter(OutputStream out) {
+		super(out);
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.export.PivotExporter#getContentType()
 	 */
 	@Override
 	public String getContentType() {
 		return "application/vnd.ms-excel";
-	}
-
-	/**
-	 * @param out
-	 */
-	public ExcelExporter(OutputStream out) {
-		super(out);
 	}
 
 	/**
