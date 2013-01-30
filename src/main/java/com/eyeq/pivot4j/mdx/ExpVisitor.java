@@ -8,31 +8,32 @@
  */
 package com.eyeq.pivot4j.mdx;
 
-
 /**
  * Visitor for MDX parse expressions
  */
 public interface ExpVisitor {
 
-	void visitCompoundId(CompoundId visio);
+	void visitCompoundId(CompoundId exp);
 
-	void visitFormula(Formula visio);
+	void visitFormula(Formula exp);
 
-	void visitFunCall(FunCall visio);
+	void visitFunCall(FunCall exp);
 
-	void visitLiteral(Literal visio);
+	void visitLiteral(Literal exp);
 
-	void visitMemberProperty(MemberProperty visio);
+	void visitMdxQuery(MdxQuery exp);
 
-	void visitParsedQuery(ParsedQuery visio);
+	void visitQueryAxis(QueryAxis exp);
 
-	void visitQueryAxis(QueryAxis visio);
+	void visitDimension(DimensionExp exp);
 
-	void visitDimension(DimensionExp visio);
+	void visitHierarchy(HierarchyExp exp);
 
-	void visitHierarchy(HierarchyExp visio);
+	void visitLevel(LevelExp exp);
 
-	void visitLevel(LevelExp visio);
+	void visitMember(MemberExp exp);
 
-	void visitMember(MemberExp visio);
+	void visitSapVariable(SapVariable exp);
+
+	void visitMemberProperty(MemberProperty exp);
 }

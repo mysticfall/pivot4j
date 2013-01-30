@@ -23,7 +23,7 @@ public class FunCall extends AbstractExp {
 
 	private Exp[] args;
 
-	ParsedQuery pQuery = null; // needed by Parameter FunCall
+	MdxQuery pQuery = null; // needed by Parameter FunCall
 
 	/**
 	 * @param fun

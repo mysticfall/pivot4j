@@ -8,7 +8,10 @@
  */
 package com.eyeq.pivot4j.mdx;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.olap4j.Axis;
 
 /**
  * MDX query axis
@@ -17,18 +20,34 @@ public class QueryAxis extends AbstractExp {
 
 	private static final long serialVersionUID = 9064412375948950770L;
 
-	private String name;
-
-	private boolean nonEmpty;
+	private Axis axis;
 
 	private Exp exp;
 
-	private List<CompoundId> dimProps; // DIMENSION PROPERTIES
+	private boolean nonEmpty;
 
-	public QueryAxis(boolean nonEmpty, Exp exp, String name) {
-		this.nonEmpty = nonEmpty;
+	private List<CompoundId> dimensionProperties = new ArrayList<CompoundId>();
+
+	public QueryAxis() {
+	}
+
+	/**
+	 * @param axis
+	 * @param exp
+	 */
+	public QueryAxis(Axis axis, Exp exp) {
+		this(axis, exp, false);
+	}
+
+	/**
+	 * @param axis
+	 * @param exp
+	 * @param nonEmpty
+	 */
+	public QueryAxis(Axis axis, Exp exp, boolean nonEmpty) {
+		this.axis = axis;
 		this.exp = exp;
-		this.name = name;
+		this.nonEmpty = nonEmpty;
 	}
 
 	/**
@@ -41,12 +60,12 @@ public class QueryAxis extends AbstractExp {
 	}
 
 	/**
-	 * Returns the name.
+	 * Returns the axis.
 	 * 
-	 * @return String
+	 * @return Axis
 	 */
-	public String getName() {
-		return name;
+	public Axis getAxis() {
+		return axis;
 	}
 
 	/**
@@ -69,13 +88,13 @@ public class QueryAxis extends AbstractExp {
 	}
 
 	/**
-	 * Sets the name.
+	 * Sets the axis.
 	 * 
-	 * @param name
-	 *            The name to set
+	 * @param axis
+	 *            The axis to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setAxis(Axis axis) {
+		this.axis = axis;
 	}
 
 	/**
@@ -89,10 +108,17 @@ public class QueryAxis extends AbstractExp {
 	}
 
 	/**
+	 * @return
+	 */
+	public List<CompoundId> getDimensionProperties() {
+		return dimensionProperties;
+	}
+
+	/**
 	 * format to MDX
 	 */
 	public String toMdx() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		if (exp == null) {
 			sb.append("{}");
@@ -100,20 +126,25 @@ public class QueryAxis extends AbstractExp {
 			if (nonEmpty) {
 				sb.append("NON EMPTY ");
 			}
+
 			sb.append(exp.toMdx());
-			if (dimProps != null && dimProps.size() > 0) {
+
+			if (!dimensionProperties.isEmpty()) {
 				sb.append(" DIMENSION PROPERTIES ");
-				for (int i = 0; i < dimProps.size(); i++) {
+
+				for (int i = 0; i < dimensionProperties.size(); i++) {
 					if (i > 0) {
 						sb.append(',');
 					}
-					sb.append(dimProps.get(i).toMdx());
+
+					sb.append(dimensionProperties.get(i).toMdx());
 				}
 			}
 		}
 
 		sb.append(" ON ");
-		sb.append(name);
+		sb.append(axis.name());
+
 		return sb.toString();
 	}
 
@@ -122,23 +153,13 @@ public class QueryAxis extends AbstractExp {
 	 * @see java.lang.Object#clone()
 	 */
 	public QueryAxis clone() {
-		QueryAxis qa = new QueryAxis(nonEmpty, (Exp) exp.clone(), name);
-		qa.setDimProps(dimProps);
+		QueryAxis qa = new QueryAxis(axis, exp.clone(), nonEmpty);
+
+		for (CompoundId property : dimensionProperties) {
+			qa.dimensionProperties.add(property.clone());
+		}
+
 		return qa;
-	}
-
-	/**
-	 * @return
-	 */
-	public List<CompoundId> getDimProps() {
-		return dimProps;
-	}
-
-	/**
-	 * @param dimProps
-	 */
-	public void setDimProps(List<CompoundId> dimProps) {
-		this.dimProps = dimProps;
 	}
 
 	/**

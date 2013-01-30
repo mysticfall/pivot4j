@@ -14,6 +14,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<github.global.server>github</github.global.server>
 	</properties>
 
@@ -80,7 +81,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<configuration>
 					<cupDefinition>${basedir}/src/main/parser/mdxparse.cup</cupDefinition>
 					<outputDirectory>${project.build.directory}/generated-sources/parser</outputDirectory>
-					<className>Parser</className>
+					<className>CupParser</className>
 					<symbolsName>Symbols</symbolsName>
 				</configuration>
 			</plugin>

@@ -19,9 +19,31 @@ public class MemberProperty extends AbstractExp {
 
 	private Exp exp;
 
+	public MemberProperty() {
+	}
+
+	/**
+	 * @param name
+	 * @param exp
+	 */
 	public MemberProperty(String name, Exp exp) {
 		this.name = name;
 		this.exp = exp;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -32,20 +54,25 @@ public class MemberProperty extends AbstractExp {
 	}
 
 	/**
+	 * @param exp
+	 *            the exp to set
+	 */
+	public void setExp(Exp exp) {
+		this.exp = exp;
+	}
+
+	/**
 	 * format to MDX
 	 */
 	public String toMdx() {
-		String str = name;
-		str += " = ";
-		str += exp.toMdx();
-		return str;
+		return name + " = " + exp.toMdx();
 	}
 
 	/**
 	 * @see java.lang.Object#clone()
 	 */
 	public MemberProperty clone() {
-		return new MemberProperty(name, (Exp) exp.clone());
+		return new MemberProperty(name, exp.clone());
 	}
 
 	/**

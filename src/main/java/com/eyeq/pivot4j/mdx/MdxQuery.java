@@ -12,13 +12,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.olap4j.Axis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * This is the result of parsing an MDX query.
  */
-public class ParsedQuery extends AbstractExp {
+public class MdxQuery extends AbstractExp {
 
 	private static final long serialVersionUID = 8608792548174831908L;
 
@@ -26,7 +27,7 @@ public class ParsedQuery extends AbstractExp {
 
 	private List<Formula> formulas = new ArrayList<Formula>();
 
-	private QueryAxis[] axes = new QueryAxis[0];
+	private List<QueryAxis> axes = new ArrayList<QueryAxis>();
 
 	private Exp slicer;
 
@@ -40,18 +41,10 @@ public class ParsedQuery extends AbstractExp {
 
 	/**
 	 * 
-	 * @return QueryAxis[]
+	 * @return axes
 	 */
-	public QueryAxis[] getAxes() {
+	public List<QueryAxis> getAxes() {
 		return this.axes;
-	}
-
-	/**
-	 * 
-	 * @param axes
-	 */
-	public void setAxes(QueryAxis[] axes) {
-		this.axes = axes;
 	}
 
 	/**
@@ -67,6 +60,45 @@ public class ParsedQuery extends AbstractExp {
 	 */
 	public void setAxesSwapped(boolean axesSwapped) {
 		this.axesSwapped = axesSwapped;
+	}
+
+	/**
+	 * @param axis
+	 * @return
+	 */
+	public QueryAxis getAxis(Axis axis) {
+		QueryAxis result = null;
+
+		for (QueryAxis ax : axes) {
+			if (axis == ax.getAxis()) {
+				result = ax;
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * @param axis
+	 * @return
+	 */
+	public void setAxis(QueryAxis axis) {
+		removeAxis(axis.getAxis());
+		axes.add(axis);
+	}
+
+	/**
+	 * @param axis
+	 */
+	public void removeAxis(Axis axis) {
+		Iterator<QueryAxis> it = axes.iterator();
+		while (it.hasNext()) {
+			QueryAxis ax = it.next();
+			if (ax.getAxis() == axis) {
+				it.remove();
+			}
+		}
 	}
 
 	/**
@@ -86,6 +118,22 @@ public class ParsedQuery extends AbstractExp {
 	 */
 	public void setCube(String cube) {
 		this.cube = cube;
+	}
+
+	/**
+	 * @return sliecer exp
+	 */
+	public Exp getSlicer() {
+		return slicer;
+	}
+
+	/**
+	 * set the slicer exp
+	 * 
+	 * @param exp
+	 */
+	public void setSlicer(Exp exp) {
+		this.slicer = exp;
 	}
 
 	/**
@@ -130,13 +178,15 @@ public class ParsedQuery extends AbstractExp {
 			mdx.append(' ');
 		}
 
-		mdx.append("SELECT ");
+		mdx.append("SELECT");
 
 		isFollow = false;
 
 		for (QueryAxis qa : axes) {
 			if (isFollow) {
 				mdx.append(", ");
+			} else {
+				mdx.append(' ');
 			}
 
 			isFollow = true;
@@ -191,87 +241,63 @@ public class ParsedQuery extends AbstractExp {
 	/**
 	 * @see java.lang.Object#clone()
 	 */
-	public ParsedQuery clone() {
-		ParsedQuery cloned = new ParsedQuery();
+	public MdxQuery clone() {
+		MdxQuery clone = new MdxQuery();
 
-		if (!formulas.isEmpty()) {
-			List<Formula> clonedFormulas = new ArrayList<Formula>();
+		clone.axes = new ArrayList<QueryAxis>(axes.size());
 
-			for (Formula form : formulas) {
-				clonedFormulas.add(form.clone());
-			}
-
-			cloned.formulas = clonedFormulas;
+		for (QueryAxis axis : axes) {
+			clone.axes.add(axis);
 		}
 
-		if (axes.length > 0) {
-			QueryAxis[] clonedAxes = new QueryAxis[axes.length];
+		clone.cube = this.cube;
 
-			for (int i = 0; i < clonedAxes.length; i++) {
-				clonedAxes[i] = axes[i].clone();
+		if (slicer != null) {
+			clone.slicer = this.slicer.clone();
+		}
+
+		if (!formulas.isEmpty()) {
+			clone.formulas = new ArrayList<Formula>(formulas.size());
+
+			for (Formula form : formulas) {
+				clone.formulas.add(form.clone());
 			}
-			cloned.setAxes(clonedAxes);
+		}
+
+		if (!cellProperties.isEmpty()) {
+			clone.cellProperties = new ArrayList<CompoundId>(
+					cellProperties.size());
+
+			for (CompoundId property : cellProperties) {
+				clone.cellProperties.add(property.clone());
+			}
+		}
+
+		if (!sapVariables.isEmpty()) {
+			clone.sapVariables = new ArrayList<SapVariable>(sapVariables.size());
+
+			for (SapVariable variable : sapVariables) {
+				clone.sapVariables.add(variable.clone());
+			}
+		}
+
+		clone.axesSwapped = this.axesSwapped;
+
+		return clone;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
+	 */
+	public void accept(ExpVisitor visitor) {
+		visitor.visitMdxQuery(this);
+
+		for (QueryAxis axis : axes) {
+			axis.accept(visitor);
 		}
 
 		if (slicer != null) {
-			cloned.slicer = this.slicer.clone();
+			slicer.accept(visitor);
 		}
-
-		cloned.setCube(this.getCube());
-
-		return cloned;
-	}
-
-	/**
-	 * @return sliecer exp
-	 */
-	public Exp getSlicer() {
-		return slicer;
-	}
-
-	/**
-	 * set the slicer exp
-	 * 
-	 * @param exp
-	 */
-	public void setSlicer(Exp exp) {
-		this.slicer = exp;
-	}
-
-	/**
-	 * add a formula for a member
-	 */
-	public void addFormula(String[] names, Exp exp,
-			MemberProperty[] memberProperties) {
-		Formula newFormula = new Formula(names, exp, memberProperties);
-		formulas.add(newFormula);
-	}
-
-	/**
-	 * add a formula for a set
-	 */
-	public void addFormula(String[] names, Exp exp) {
-		Formula newFormula = new Formula(names, exp);
-		formulas.add(newFormula);
-	}
-
-	/**
-	 * remove a formula
-	 */
-	public void removeFormula(String uniqueName) {
-		for (Iterator<Formula> iter = formulas.iterator(); iter.hasNext();) {
-			Formula formula = iter.next();
-
-			if (uniqueName.equals(formula.getUniqeName())) {
-				iter.remove();
-			}
-		}
-	}
-
-	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
-	 */
-	public void accept(ExpVisitor visitor) {
-		visitor.visitParsedQuery(this);
 	}
 }

@@ -15,7 +15,7 @@ public class SapVariable implements Exp {
 
 	private static final long serialVersionUID = 6766264897810191295L;
 
-	private String name;
+	private CompoundId name;
 
 	private List<Value> values;
 
@@ -24,7 +24,7 @@ public class SapVariable implements Exp {
 	 * @param value
 	 * @param including
 	 */
-	public SapVariable(String name, List<Value> values) {
+	public SapVariable(CompoundId name, List<Value> values) {
 		this.name = name;
 		this.values = values;
 	}
@@ -32,7 +32,7 @@ public class SapVariable implements Exp {
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public CompoundId getName() {
 		return name;
 	}
 
@@ -92,6 +92,7 @@ public class SapVariable implements Exp {
 	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
 	 */
 	public void accept(ExpVisitor visitor) {
+		visitor.visitSapVariable(this);
 	}
 
 	public static class Value implements Exp {

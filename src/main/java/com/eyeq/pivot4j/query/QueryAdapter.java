@@ -8,16 +8,13 @@
  */
 package com.eyeq.pivot4j.query;
 
-import java.io.Reader;
 import java.io.Serializable;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import java_cup.runtime.Symbol;
-
+import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapException;
@@ -34,12 +31,12 @@ import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Literal;
+import com.eyeq.pivot4j.mdx.MdxParser;
 import com.eyeq.pivot4j.mdx.MemberExp;
-import com.eyeq.pivot4j.mdx.ParsedQuery;
-import com.eyeq.pivot4j.mdx.Parser;
-import com.eyeq.pivot4j.mdx.ParseException;
+import com.eyeq.pivot4j.mdx.MdxQuery;
 import com.eyeq.pivot4j.mdx.QueryAxis;
 import com.eyeq.pivot4j.mdx.Syntax;
+import com.eyeq.pivot4j.mdx.impl.MdxParserImpl;
 
 /**
  * Adapt the MDX query to the model
@@ -58,9 +55,9 @@ public class QueryAdapter implements StateHolder {
 
 	private Quax quaxToSort; // this is the Quax to be sorted
 
-	private ParsedQuery parsedQuery;
+	private MdxQuery mdxQuery;
 
-	private ParsedQuery cloneQuery;
+	private MdxQuery cloneQuery;
 
 	private Collection<QueryChangeListener> listeners = new ArrayList<QueryChangeListener>();
 
@@ -89,12 +86,12 @@ public class QueryAdapter implements StateHolder {
 		this.axesSwapped = false;
 		this.quaxToSort = null;
 
-		this.parsedQuery = parseQuery(model.getMdx());
+		this.mdxQuery = parseQuery(model.getMdx());
 		this.cloneQuery = null;
 
-		QueryAxis[] queryAxes = parsedQuery.getAxes();
+		List<QueryAxis> queryAxes = mdxQuery.getAxes();
 
-		this.quaxes = new ArrayList<Quax>(queryAxes.length);
+		this.quaxes = new ArrayList<Quax>(queryAxes.size());
 
 		int ordinal = 0;
 		for (@SuppressWarnings("unused")
@@ -128,7 +125,7 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	public String getCubeName() {
-		String cube = parsedQuery.getCube();
+		String cube = mdxQuery.getCube();
 
 		if (cube != null && cube.charAt(0) == '['
 				&& cube.charAt(cube.length() - 1) == ']') {
@@ -179,12 +176,12 @@ public class QueryAdapter implements StateHolder {
 	/**
 	 * @return the XMLA Query object
 	 */
-	protected ParsedQuery getParsedQuery() {
-		return parsedQuery;
+	protected MdxQuery getParsedQuery() {
+		return mdxQuery;
 	}
 
 	public String getCurrentMdx() {
-		return parsedQuery.toMdx();
+		return mdxQuery.toMdx();
 	}
 
 	/**
@@ -216,33 +213,39 @@ public class QueryAdapter implements StateHolder {
 	 * @param axesSwapped
 	 */
 	public void setAxesSwapped(boolean axesSwapped) {
-		if (parsedQuery.getAxes().length >= 2
-				&& axesSwapped != this.axesSwapped) {
-			this.axesSwapped = axesSwapped;
+		if (axesSwapped != this.axesSwapped) {
+			QueryAxis columnAxis = mdxQuery.getAxis(Axis.COLUMNS);
+			QueryAxis rowAxis = mdxQuery.getAxis(Axis.ROWS);
 
-			QueryAxis[] queryAxes = parsedQuery.getAxes();
+			if (columnAxis != null && rowAxis != null) {
+				this.axesSwapped = axesSwapped;
 
-			Exp exp = queryAxes[0].getExp();
-			queryAxes[0].setExp(queryAxes[1].getExp());
-			queryAxes[1].setExp(exp);
+				Exp exp = columnAxis.getExp();
+				columnAxis.setExp(rowAxis.getExp());
+				rowAxis.setExp(exp);
 
-			Quax quax = quaxes.get(0);
-			quaxes.set(0, quaxes.get(1));
-			quaxes.set(1, quax);
+				int columnAxisOrdinal = mdxQuery.getAxes().indexOf(
+						columnAxis);
+				int rowAxisOrdinal = mdxQuery.getAxes().indexOf(rowAxis);
 
-			fireQueryChanged();
+				Quax quax = quaxes.get(columnAxisOrdinal);
+				quaxes.set(columnAxisOrdinal, quaxes.get(rowAxisOrdinal));
+				quaxes.set(rowAxisOrdinal, quax);
+
+				fireQueryChanged();
+			}
 		}
 	}
 
 	public boolean isNonEmpty() {
 		boolean nonEmpty = true;
 
-		QueryAxis[] queryAxes = parsedQuery.getAxes();
+		List<QueryAxis> queryAxes = mdxQuery.getAxes();
 		for (QueryAxis axis : queryAxes) {
 			nonEmpty &= axis.isNonEmpty();
 		}
 
-		return queryAxes.length > 0 && nonEmpty;
+		return !queryAxes.isEmpty() && nonEmpty;
 	}
 
 	/**
@@ -252,7 +255,7 @@ public class QueryAdapter implements StateHolder {
 		boolean changed = nonEmpty != isNonEmpty();
 
 		if (changed) {
-			QueryAxis[] queryAxes = parsedQuery.getAxes();
+			List<QueryAxis> queryAxes = mdxQuery.getAxes();
 			for (QueryAxis axis : queryAxes) {
 				axis.setNonEmpty(nonEmpty);
 			}
@@ -318,12 +321,12 @@ public class QueryAdapter implements StateHolder {
 	 * the original query - adding the drilldown groups - apply pending swap
 	 * axes - apply pending sorts.
 	 */
-	public ParsedQuery updateQuery() {
+	public MdxQuery updateQuery() {
 		// if quax is to be used, generate axes from quax
 		if (useQuax) {
 			int iQuaxToSort = activeQuaxToSort();
 
-			QueryAxis[] qAxes = parsedQuery.getAxes();
+			List<QueryAxis> qAxes = mdxQuery.getAxes();
 
 			int i = 0;
 			for (Quax quax : quaxes) {
@@ -341,7 +344,7 @@ public class QueryAdapter implements StateHolder {
 				}
 
 				Exp eSet = quax.genExp(doHierarchize);
-				qAxes[i].setExp(eSet);
+				qAxes.get(i).setExp(eSet);
 
 				i++;
 			}
@@ -358,21 +361,21 @@ public class QueryAdapter implements StateHolder {
 			// functions.
 			if (cloneQuery == null) {
 				if (isSortOnQuery()) {
-					this.cloneQuery = parsedQuery.clone();
+					this.cloneQuery = mdxQuery.clone();
 				}
 			} else {
 				// reset to original state
 				if (isSortOnQuery()) {
-					this.parsedQuery = cloneQuery.clone();
+					this.mdxQuery = cloneQuery.clone();
 				} else {
-					this.parsedQuery = cloneQuery;
+					this.mdxQuery = cloneQuery;
 				}
 			}
 		}
 
 		addSortToQuery();
 
-		return parsedQuery;
+		return mdxQuery;
 	}
 
 	/**
@@ -386,13 +389,13 @@ public class QueryAdapter implements StateHolder {
 			case BASC:
 			case BDESC:
 				// call sort
-				orderAxis(parsedQuery);
+				orderAxis(mdxQuery);
 				break;
 			case TOPCOUNT:
-				topBottomAxis(parsedQuery, "TopCount");
+				topBottomAxis(mdxQuery, "TopCount");
 				break;
 			case BOTTOMCOUNT:
-				topBottomAxis(parsedQuery, "BottomCount");
+				topBottomAxis(mdxQuery, "BottomCount");
 				break;
 			default:
 				return; // do nothing
@@ -406,10 +409,10 @@ public class QueryAdapter implements StateHolder {
 	 * @param monAx
 	 * @param monSortMode
 	 */
-	protected void orderAxis(ParsedQuery pq) {
+	protected void orderAxis(MdxQuery pq) {
 		// Order(TopCount) is allowed, Order(Order) is not permitted
-		QueryAxis[] queryAxes = pq.getAxes();
-		QueryAxis qa = queryAxes[quaxToSort.getOrdinal()];
+		List<QueryAxis> queryAxes = pq.getAxes();
+		QueryAxis qa = queryAxes.get(quaxToSort.getOrdinal());
 
 		Exp setForAx = qa.getExp();
 
@@ -450,10 +453,11 @@ public class QueryAdapter implements StateHolder {
 	 * @param monAx
 	 * @param nShow
 	 */
-	protected void topBottomAxis(ParsedQuery pq, String function) {
+	protected void topBottomAxis(MdxQuery pq, String function) {
 		// TopCount(TopCount) and TopCount(Order) is not permitted
-		QueryAxis[] queryAxes = pq.getAxes();
-		QueryAxis qa = queryAxes[quaxToSort.getOrdinal()];
+		List<QueryAxis> queryAxes = pq.getAxes();
+
+		QueryAxis qa = queryAxes.get(quaxToSort.getOrdinal());
 		Exp setForAx = qa.getExp();
 		Exp sortExp;
 
@@ -485,23 +489,10 @@ public class QueryAdapter implements StateHolder {
 	/**
 	 * @param mdxQuery
 	 */
-	protected ParsedQuery parseQuery(String mdxQuery) {
-		Reader reader = new StringReader(mdxQuery);
-		Parser parser = new Parser(reader);
+	protected MdxQuery parseQuery(String mdxQuery) {
+		MdxParser parser = new MdxParserImpl();
 
-		ParsedQuery parsedQuery;
-
-		try {
-			Symbol parseTree = parser.parse();
-			parsedQuery = (ParsedQuery) parseTree.value;
-		} catch (PivotException e) {
-			throw e;
-		} catch (Exception e) {
-			String msg = "Failed to parse MDX query : " + mdxQuery;
-			throw new ParseException(msg, e);
-		}
-
-		return parsedQuery;
+		return parser.parse(mdxQuery);
 	}
 
 	/**
@@ -902,7 +893,7 @@ public class QueryAdapter implements StateHolder {
 	 * @param slicerExp
 	 */
 	public void changeSlicer(Exp exp) {
-		parsedQuery.setSlicer(exp);
+		mdxQuery.setSlicer(exp);
 		fireQueryChanged(false);
 	}
 

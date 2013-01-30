@@ -6,23 +6,25 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.mdx;
+package com.eyeq.pivot4j.mdx.impl;
 
+import com.eyeq.pivot4j.mdx.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Reader;
+import org.olap4j.Axis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java_cup.runtime.Symbol;
 
 action code {:
-  private ParsedQuery pQuery = new ParsedQuery();
+  private MdxQuery pQuery = new MdxQuery();
 :};
 
 parser code {: 
-  static Logger logger = LoggerFactory.getLogger(Parser.class);
+  protected Logger logger = LoggerFactory.getLogger(getClass());
 
-  public Parser(Reader reader) {
+  public CupParser(Reader reader) {
     super(new Yylex(reader));
   }
 
@@ -118,7 +120,7 @@ terminal String STRING;
 terminal String UNKNOWN; // a token the lexer doesn't like!
 
 /* Non terminals */
-non terminal ParsedQuery mdx_statement;
+non terminal MdxQuery mdx_statement;
 
 non terminal cube_def;
 non terminal List<QueryAxis> axis_def, axis_spec_list;
@@ -127,8 +129,13 @@ non terminal slicer_def;
 non terminal cell_prop_def, cell_prop_list;
 non terminal with_clause;
 non terminal sel_clause;
-non terminal sap_var_def,sap_var_list,sap_var_incl,sap_var_opt,sap_var_spec,sap_var_value,sap_var_value_set;
-non terminal ArrayList formula_spec;
+non terminal sap_var_def,sap_var_opt;
+non terminal Boolean sap_var_incl;
+non terminal List<SapVariable> sap_var_list;
+non terminal SapVariable sap_var_spec;
+non terminal SapVariable.Value sap_var_value;
+non terminal List<SapVariable.Value> sap_var_value_set;
+non terminal List<Formula> formula_spec;
 non terminal Formula single_formula_spec, member_spec, set_spec;
 non terminal Exp expression, value_expression, value_expression_opt, case_expression;
 non terminal Exp value_expression_primary, term5, term4, term3, term2, term, factor;
@@ -139,9 +146,9 @@ non terminal String identifier, axis_name;
 non terminal ArrayList comma_member_property_def_list_opt, member_property_def_list;
 non terminal ArrayList exp_list_opt, exp_list, when_list;
 non terminal MemberProperty member_property_definition;
-non terminal CompoundId  compound_id;
+non terminal CompoundId compound_id;
 non terminal String comp_op;
-non terminal List dim_props, dim_prop_list;
+non terminal List<CompoundId> dim_props, dim_prop_list;
 
 /* The grammar */
 
@@ -155,20 +162,20 @@ mdx_statement ::= with_clause sel_clause axis_def FROM cube_def slicer_def cell_
 with_clause ::= {: pQuery.getFormulas().clear(); /* empty */  :}
 	| WITH formula_spec:f {: pQuery.getFormulas().clear(); pQuery.getFormulas().addAll(f); :} ;
 
-axis_def ::= /* empty */ {: pQuery.setAxes(new QueryAxis[0]); :}
-	| axis_spec_list:l {: pQuery.setAxes((QueryAxis[]) l.toArray(new QueryAxis[l.size()])); :};
+axis_def ::= /* empty */ {: pQuery.getAxes().clear(); :}
+	| axis_spec_list:l {: pQuery.getAxes().clear(); pQuery.getAxes().addAll(l); :};
 
 axis_spec_list ::= axis_spec:i {: RESULT = new ArrayList<QueryAxis>(); RESULT.add(i); :}
 	| axis_spec:e COMMA axis_spec_list : list {: list.add(0, e); RESULT = list; :};
 
 axis_spec ::= non_empty_opt:b expression:s dim_props:dprops ON axis_name:a
-		{: RESULT = new QueryAxis(b.booleanValue(), s, a); 
-		   RESULT.setDimProps(dprops); :};
+		{: RESULT = new QueryAxis(Axis.Standard.valueOf(a), s, b.booleanValue()); 
+		   if (dprops !=null) RESULT.getDimensionProperties().addAll(dprops); :};
 
-dim_props ::= /* empty */ {: RESULT = new ArrayList(); :}
+dim_props ::= /* empty */ {: RESULT = new ArrayList<CompoundId>(); :}
     | DIMENSION PROPERTIES dim_prop_list:dplist {: RESULT = dplist; :};
 
-dim_prop_list ::= compound_id:cid {: List lst = new ArrayList();
+dim_prop_list ::= compound_id:cid {: List<CompoundId> lst = new ArrayList<CompoundId>();
                                    lst.add(cid); RESULT = lst; :}
     |  compound_id:cid2 COMMA dim_prop_list:dpl 
       {: RESULT = dpl; dpl.add(cid2); :};
@@ -193,16 +200,17 @@ cell_prop_list ::= identifier:id {: pQuery.getCellProperties().add(new CompoundI
 sap_var_def ::= /* empty */ {: pQuery.getSapVariables().clear(); :}
     | SAP VARIABLES sap_var_list;
 
-sap_var_list ::= sap_var_spec:s {: pQuery.getSapVariables().add((SapVariable) s); :}
-	| sap_var_spec:s COMMA sap_var_list {: pQuery.getSapVariables().add(0, (SapVariable) s); :};
+sap_var_list ::= sap_var_spec:s {: pQuery.getSapVariables().add(s); :}
+	| sap_var_spec:s COMMA sap_var_list {: pQuery.getSapVariables().add(0, s); :};
 
-sap_var_incl ::= INCLUDING | EXCLUDING;
+sap_var_incl ::= INCLUDING {: RESULT = true; :} | EXCLUDING {: RESULT = false; :};
 
 sap_var_opt ::= /* empty */ | comp_op;
 
-sap_var_spec ::= identifier:id sap_var_value_set:v {: RESULT = new SapVariable(id, (List) v); :};
+sap_var_spec ::= compound_id:id sap_var_value_set:v {: RESULT = new SapVariable(id, v); :};
 
-sap_var_value_set ::= sap_var_value:v  {: List lst = new ArrayList(); lst.add(v); RESULT = lst; :} | sap_var_value:v1 sap_var_value:v2 {: List lst = new ArrayList(); lst.add(v1); lst.add(v2); RESULT = lst; :};
+sap_var_value_set ::= sap_var_value:v {: List<SapVariable.Value> lst = new ArrayList<SapVariable.Value>(); lst.add(v); RESULT = lst; :} 
+	| sap_var_value:v1 sap_var_value:v2 {: List<SapVariable.Value> lst = new ArrayList<SapVariable.Value>(); lst.add(v1); lst.add(v2); RESULT = lst; :};
 
 sap_var_value ::= sap_var_incl:i sap_var_opt:o NUMBER:v {: RESULT = new SapVariable.Value(Literal.create((Double) v), (Boolean) i, (String) o); :}
 	| sap_var_incl:i sap_var_opt:o compound_id:v {: RESULT = new SapVariable.Value(v, (Boolean) i, (String) o); :}
@@ -212,17 +220,17 @@ sap_var_value ::= sap_var_incl:i sap_var_opt:o NUMBER:v {: RESULT = new SapVaria
 	| sap_var_incl:i sap_var_opt:o compound_id:v1 COLON compound_id:v2 {: RESULT = new SapVariable.Value(v1, v2, (Boolean) i, (String) o); :};
 
 formula_spec ::= single_formula_spec:e
-	{: RESULT = new ArrayList();  RESULT.add(e); :}
-	| single_formula_spec:hd formula_spec:tl {: tl.add(0, hd);  RESULT = tl; :};
+	{: RESULT = new ArrayList<Formula>(); RESULT.add(e); :}
+	| single_formula_spec:hd formula_spec:tl {: tl.add(0, hd); RESULT = tl; :};
 
 single_formula_spec ::= member_spec:m {: RESULT = m; :} 
 	| set_spec:s {: RESULT = s; :};
 
 member_spec ::=
   	MEMBER compound_id:m AS QUOTE value_expression:e QUOTE comma_member_property_def_list_opt:l
-  	{: RESULT = new Formula(m.toStringArray(), e, (MemberProperty[]) l.toArray(new MemberProperty[0])); :}
+  	{: RESULT = new Formula(m, e, (MemberProperty[]) l.toArray(new MemberProperty[0])); :}
 	| MEMBER compound_id:m AS value_expression:e comma_member_property_def_list_opt:l
-		{: RESULT = new Formula(m.toStringArray(), e, (MemberProperty[]) l.toArray(new MemberProperty[0])); :};
+		{: RESULT = new Formula(m, e, (MemberProperty[]) l.toArray(new MemberProperty[0])); :};
 
 comma_member_property_def_list_opt ::= /* empty */ {:RESULT = new ArrayList(); :}
 	| COMMA member_property_def_list:l {: RESULT = l; :};
@@ -230,18 +238,18 @@ comma_member_property_def_list_opt ::= /* empty */ {:RESULT = new ArrayList(); :
 member_property_def_list ::= member_property_definition:m
 	{: RESULT = new ArrayList();  RESULT.add(m);  :}
 	| member_property_definition:hd COMMA member_property_def_list:tl
-	{: RESULT = tl;  RESULT.add(0, hd); :};
+	{: RESULT = tl; RESULT.add(0, hd); :};
 
 member_property_definition ::= identifier:id EQ value_expression:e 
 	{: RESULT = new MemberProperty(id, e); :};
 
 set_spec ::= SET compound_id:s AS QUOTE expression:e QUOTE 
-	{: RESULT = new Formula(s.toStringArray(), e); :}
- | SET compound_id:s AS expression:e {:RESULT = new Formula(s.toStringArray(), e); :};
+	{: RESULT = new Formula(s, e); :}
+ | SET compound_id:s AS expression:e {:RESULT = new Formula(s, e); :};
 
 compound_id ::= identifier:i {: RESULT = new CompoundId(i); :}
 	| compound_id:hd DOT identifier:tl 
-		{: hd.append(tl);  RESULT = hd; :};
+		{: hd.append(tl); RESULT = hd; :};
 
 identifier ::= ID:x {: RESULT=x; :} 
 	| QUOTED_ID:y {: RESULT=y; :};
@@ -314,7 +322,7 @@ value_expression_primary ::= STRING:s
 	| value_expression_primary:i DOT AMP_QUOTED_ID:j
 		{:
 		  if (i instanceof CompoundId) {
-		    ((CompoundId) i).append(j, true);
+		    ((CompoundId) i).append(j.substring(1), true);
 		    RESULT = i;
 		  } else {
 		    RESULT = new FunCall(j, new Exp[] { i }, Syntax.PropertyAmpQuoted);
@@ -337,7 +345,7 @@ value_expression_primary ::= STRING:s
 	| case_expression;
 
 case_expression ::= CASE value_expression_opt:x when_list:y else_clause_opt:z END 
-	{: ArrayList v = new ArrayList();
+	{: ArrayList<Exp> v = new ArrayList<Exp>();
   	if (x != null) {
     	v.add(x);
   	}
