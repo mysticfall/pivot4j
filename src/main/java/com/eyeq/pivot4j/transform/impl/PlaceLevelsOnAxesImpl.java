@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
-import com.eyeq.pivot4j.mdx.MemberExp;
 import com.eyeq.pivot4j.mdx.Syntax;
+import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
@@ -101,8 +101,7 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 						sets.add(new MemberExp(member));
 					}
 
-					expressions.add(new FunCall("{}", sets.toArray(new Exp[sets
-							.size()]), Syntax.Braces));
+					expressions.add(new FunCall("{}", Syntax.Braces, sets));
 				}
 			}
 

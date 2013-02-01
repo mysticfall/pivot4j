@@ -6,11 +6,13 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.mdx;
+package com.eyeq.pivot4j.query;
 
 import org.olap4j.metadata.Hierarchy;
 
-import com.eyeq.pivot4j.query.CalcSetMode;
+import com.eyeq.pivot4j.mdx.AbstractExp;
+import com.eyeq.pivot4j.mdx.Exp;
+import com.eyeq.pivot4j.mdx.ExpVisitor;
 
 /**
  * Wrapper for Set Object to be placed on a query axis
@@ -61,6 +63,10 @@ public class SetExp extends AbstractExp {
 	 * @see com.eyeq.pivot4j.mdx.Exp#toMdx()
 	 */
 	public String toMdx() {
+		if (expression == null) {
+			return null;
+		}
+
 		return expression.toMdx();
 	}
 
@@ -68,7 +74,9 @@ public class SetExp extends AbstractExp {
 	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
-		expression.accept(visitor);
+		if (expression != null) {
+			expression.accept(visitor);
+		}
 	}
 
 	/**
@@ -77,13 +85,5 @@ public class SetExp extends AbstractExp {
 	@Override
 	public SetExp clone() {
 		return new SetExp(mode, expression.clone(), hierarchy);
-	}
-
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return toMdx();
 	}
 }

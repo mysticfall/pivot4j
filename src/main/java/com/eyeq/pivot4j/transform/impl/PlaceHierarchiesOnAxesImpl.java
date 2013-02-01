@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
-import com.eyeq.pivot4j.mdx.MemberExp;
 import com.eyeq.pivot4j.mdx.Syntax;
+import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
@@ -243,13 +243,17 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 					// must expand
 					// create Union({AllMember}, AllMember.children)
 					Exp allExp = new MemberExp(allMember);
-					Exp allSet = new FunCall("{}", new Exp[] { allExp },
-							Syntax.Braces);
 
-					Exp mAllChildren = new FunCall("Children",
-							new Exp[] { allExp }, Syntax.Property);
-					Exp union = new FunCall("Union", new Exp[] { allSet,
-							mAllChildren }, Syntax.Function);
+					FunCall allSet = new FunCall("{}", Syntax.Braces);
+					allSet.getArgs().add(allExp);
+
+					FunCall mAllChildren = new FunCall("Children",
+							Syntax.Property);
+					mAllChildren.getArgs().add(allExp);
+
+					FunCall union = new FunCall("Union", Syntax.Function);
+					union.getArgs().add(allSet);
+					union.getArgs().add(mAllChildren);
 
 					return union;
 				}
@@ -270,8 +274,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 				}
 			}
 
-			return new FunCall("{}", args.toArray(new Exp[args.size()]),
-					Syntax.Braces);
+			return new FunCall("{}", Syntax.Braces, args);
 		} catch (OlapException e) {
 			throw new PivotException(e);
 		}

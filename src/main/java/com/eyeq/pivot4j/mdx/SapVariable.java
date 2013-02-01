@@ -11,22 +11,24 @@ package com.eyeq.pivot4j.mdx;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SapVariable implements Exp {
+public class SapVariable extends AbstractExp {
 
 	private static final long serialVersionUID = 6766264897810191295L;
 
 	private CompoundId name;
 
-	private List<Value> values;
+	private List<Value> values = new ArrayList<Value>();
+
+	public SapVariable() {
+	}
 
 	/**
 	 * @param name
 	 * @param value
 	 * @param including
 	 */
-	public SapVariable(CompoundId name, List<Value> values) {
+	public SapVariable(CompoundId name) {
 		this.name = name;
-		this.values = values;
 	}
 
 	/**
@@ -34,6 +36,14 @@ public class SapVariable implements Exp {
 	 */
 	public CompoundId getName() {
 		return name;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(CompoundId name) {
+		this.name = name;
 	}
 
 	/**
@@ -47,13 +57,16 @@ public class SapVariable implements Exp {
 	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#toMdx()
 	 */
 	public String toMdx() {
-		if (values == null || values.isEmpty()) {
+		if (values.isEmpty()) {
 			return "";
 		}
 
 		StringBuilder builder = new StringBuilder();
-		builder.append(name);
-		builder.append(' ');
+
+		if (name != null) {
+			builder.append(name.toMdx());
+			builder.append(' ');
+		}
 
 		boolean first = true;
 
@@ -75,17 +88,17 @@ public class SapVariable implements Exp {
 	 * @see java.lang.Object#clone()
 	 */
 	public SapVariable clone() {
-		List<Value> clonedValues = null;
+		SapVariable clone = new SapVariable();
 
-		if (this.values != null) {
-			clonedValues = new ArrayList<Value>();
-
-			for (Value value : values) {
-				clonedValues.add((Value) value.clone());
-			}
+		if (name != null) {
+			clone.name = name.clone();
 		}
 
-		return new SapVariable(name, clonedValues);
+		for (Value value : values) {
+			clone.values.add(value.clone());
+		}
+
+		return clone;
 	}
 
 	/**
@@ -93,9 +106,17 @@ public class SapVariable implements Exp {
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitSapVariable(this);
+
+		if (name != null) {
+			name.accept(visitor);
+		}
+
+		for (Value value : values) {
+			value.accept(visitor);
+		}
 	}
 
-	public static class Value implements Exp {
+	public static class Value extends AbstractExp {
 
 		private static final long serialVersionUID = -5532029488482311594L;
 
@@ -108,6 +129,9 @@ public class SapVariable implements Exp {
 		private boolean interval = false;
 
 		private String option;
+
+		public Value() {
+		}
 
 		/**
 		 * @param value
@@ -183,26 +207,36 @@ public class SapVariable implements Exp {
 		 * @see java.lang.Object#clone()
 		 */
 		public Value clone() {
-			if (isInterval()) {
-				Exp clonedHighValue = highValue == null ? null
-						: (Exp) highValue.clone();
-				Exp clonedLowValue = lowValue == null ? null : (Exp) lowValue
-						.clone();
+			Value clone = new Value();
 
-				return new Value(clonedLowValue, clonedHighValue,
-						isIncluding(), getOption());
-			} else {
-				Exp clonedLowValue = lowValue == null ? null : (Exp) lowValue
-						.clone();
-
-				return new Value(clonedLowValue, isIncluding(), getOption());
+			if (highValue != null) {
+				clone.highValue = highValue.clone();
 			}
+
+			if (lowValue != null) {
+				clone.lowValue = lowValue.clone();
+			}
+
+			clone.including = including;
+			clone.interval = interval;
+			clone.option = option;
+
+			return clone;
 		}
 
 		/**
 		 * @param visitor
 		 */
 		public void accept(ExpVisitor visitor) {
+			visitor.visitSapVariableValue(this);
+
+			if (highValue != null) {
+				highValue.accept(visitor);
+			}
+
+			if (lowValue != null) {
+				lowValue.accept(visitor);
+			}
 		}
 
 		/**

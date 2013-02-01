@@ -14,8 +14,8 @@ import java_cup.runtime.Symbol;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.mdx.MdxParser;
+import com.eyeq.pivot4j.mdx.MdxStatement;
 import com.eyeq.pivot4j.mdx.ParseException;
-import com.eyeq.pivot4j.mdx.MdxQuery;
 
 public class MdxParserImpl implements MdxParser {
 
@@ -23,19 +23,19 @@ public class MdxParserImpl implements MdxParser {
 	 * @see com.eyeq.pivot4j.mdx.MdxParser#parse(java.lang.String)
 	 */
 	@Override
-	public MdxQuery parse(String mdx) {
+	public MdxStatement parse(String mdx) {
 		if (mdx == null) {
 			throw new IllegalArgumentException(
 					"MDX query argument cannot be null.");
 		}
 
-		MdxQuery query;
+		MdxStatement query;
 
 		try {
 			CupParser parser = new CupParser(new StringReader(mdx));
 			Symbol parseTree = parser.parse();
 
-			query = (MdxQuery) parseTree.value;
+			query = (MdxStatement) parseTree.value;
 		} catch (PivotException e) {
 			throw e;
 		} catch (Exception e) {

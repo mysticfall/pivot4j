@@ -20,13 +20,12 @@ import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotException;
-import com.eyeq.pivot4j.mdx.DimensionExp;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
-import com.eyeq.pivot4j.mdx.LevelExp;
-import com.eyeq.pivot4j.mdx.MemberExp;
-import com.eyeq.pivot4j.mdx.SetExp;
 import com.eyeq.pivot4j.mdx.Syntax;
+import com.eyeq.pivot4j.mdx.metadata.DimensionExp;
+import com.eyeq.pivot4j.mdx.metadata.LevelExp;
+import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 
 public class QuaxUtil {
 
@@ -174,13 +173,13 @@ public class QuaxUtil {
 		FunCall f = (FunCall) oExp;
 
 		if (f.isCallTo("Children")) {
-			return member.equals(memberForExp(f.getArgs()[0]));
+			return member.equals(memberForExp(f.getArgs().get(0)));
 		} else if (f.isCallTo("Descendants")) {
 			// true, if f = descendants(m2, level) contains any child of m
 			// so level must be parent-level of m
-			Member ancestor = memberForExp(f.getArgs()[0]);
+			Member ancestor = memberForExp(f.getArgs().get(0));
 
-			Level level = levelForExp(f.getArgs()[1]);
+			Level level = levelForExp(f.getArgs().get(1));
 			Level parentLevel = getParentLevel(level);
 
 			if (parentLevel != null && member.getLevel().equals(parentLevel)) {
@@ -198,7 +197,7 @@ public class QuaxUtil {
 				return false;
 			}
 		} else if (f.isCallTo("Members")) {
-			Level level = levelForExp(f.getArgs()[0]);
+			Level level = levelForExp(f.getArgs().get(0));
 			Level parentLevel = null;
 
 			if (level.getDepth() > 0) {
@@ -217,13 +216,15 @@ public class QuaxUtil {
 				return false;
 			}
 		} else if (f.isCallTo("Union")) {
-			if (isChildOfMemberInFunCall(f.getArgs()[0], member))
+			if (isChildOfMemberInFunCall(f.getArgs().get(0), member)) {
 				return true;
-			else
-				return isChildOfMemberInFunCall(f.getArgs()[1], member);
+			} else {
+				return isChildOfMemberInFunCall(f.getArgs().get(1), member);
+			}
 		} else if (f.isCallTo("{}")) {
-			for (int i = 0; i < f.getArgs().length; i++) {
-				Member mm = memberForExp(f.getArgs()[i]);
+			for (Exp exp : f.getArgs()) {
+				Member mm = memberForExp(exp);
+
 				Member mmp = mm.getParentMember();
 				if (mmp != null && mmp.equals(member)) {
 					return true;
@@ -254,21 +255,21 @@ public class QuaxUtil {
 		if (f.isCallTo("Children")) {
 			// true, if m2.children contains descendants of m
 			// <==> m is equal or ancestor of m2
-			Member mExp = memberForExp(f.getArgs()[0]);
+			Member mExp = memberForExp(f.getArgs().get(0));
 			return (member.equals(mExp) || isDescendant(member, mExp));
 		} else if (f.isCallTo("Descendants")) {
 			// true, if descendants(m2) contain descendants of m
 			// <==> m is equal or ancestor of m2
-			Member mExp = memberForExp(f.getArgs()[0]);
+			Member mExp = memberForExp(f.getArgs().get(0));
 			return (member.equals(mExp) || isDescendant(member, mExp));
 		} else if (f.isCallTo("Members")) {
-			Level levExp = levelForExp(f.getArgs()[0]);
+			Level levExp = levelForExp(f.getArgs().get(0));
 			return levExp.getDepth() > member.getLevel().getDepth();
 		} else if (f.isCallTo("Union")) {
-			if (isDescendantOfMemberInFunCall(f.getArgs()[0], member)) {
+			if (isDescendantOfMemberInFunCall(f.getArgs().get(0), member)) {
 				return true;
 			} else {
-				return isDescendantOfMemberInFunCall(f.getArgs()[1], member);
+				return isDescendantOfMemberInFunCall(f.getArgs().get(1), member);
 			}
 		} else if (f.isCallTo("{}")) {
 			for (Exp arg : f.getArgs()) {
@@ -345,16 +346,16 @@ public class QuaxUtil {
 		} else if (f.isCallTo("Descendants")) {
 			return true; // descendants*not* top level
 		} else if (f.isCallTo("Members")) {
-			Level level = levelForExp(f.getArgs()[0]);
+			Level level = levelForExp(f.getArgs().get(0));
 			return (level.getDepth() > 0);
 		} else if (f.isCallTo("Union")) {
-			if (isFunCallNotTopLevel(f.getArgs()[0])) {
+			if (isFunCallNotTopLevel(f.getArgs().get(0))) {
 				return true;
 			}
-			return isFunCallNotTopLevel(f.getArgs()[1]);
+			return isFunCallNotTopLevel(f.getArgs().get(1));
 		} else if (f.isCallTo("{}")) {
-			for (int i = 0; i < f.getArgs().length; i++) {
-				if (!isMemberOnToplevel(f.getArgs()[i])) {
+			for (Exp exp : f.getArgs()) {
+				if (!isMemberOnToplevel(exp)) {
 					return true;
 				}
 			}
@@ -404,8 +405,8 @@ public class QuaxUtil {
 				return true;
 			}
 			if (f.isCallTo("union")) {
-				for (int i = 0; i < f.getArgs().length; i++) {
-					if (!canHandle(f.getArgs()[i])) {
+				for (Exp exp : f.getArgs()) {
+					if (!canHandle(exp)) {
 						return false;
 					}
 				}
@@ -460,8 +461,8 @@ public class QuaxUtil {
 			return ((MemberExp) oExp).getMetadata(cube);
 		} else if (oExp instanceof FunCall && isFunCallTo(oExp, "{}")) {
 			FunCall func = (FunCall) oExp;
-			if (func.getArgs().length == 1) {
-				return memberForExp(func.getArgs()[0]);
+			if (!func.getArgs().isEmpty()) {
+				return memberForExp(func.getArgs().get(0));
 			}
 		}
 
@@ -490,35 +491,41 @@ public class QuaxUtil {
 		StringBuilder sb = new StringBuilder();
 
 		if (f.isCallTo("Children")) {
-			Member m = memberForExp(f.getArgs()[0]);
+			Member m = memberForExp(f.getArgs().get(0));
 			sb.append(m.getUniqueName());
 			sb.append(".Children");
 		} else if (f.isCallTo("Descendants")) {
-			Member m = memberForExp(f.getArgs()[0]);
-			Level lev = levelForExp(f.getArgs()[1]);
+			Member m = memberForExp(f.getArgs().get(0));
+			Level lev = levelForExp(f.getArgs().get(1));
 			sb.append("Descendants(");
 			sb.append(m.getUniqueName());
 			sb.append(",");
 			sb.append(lev.getUniqueName());
 			sb.append(")");
 		} else if (f.isCallTo("members")) {
-			Level lev = levelForExp(f.getArgs()[0]);
+			Level lev = levelForExp(f.getArgs().get(0));
 			sb.append(lev.getUniqueName());
 			sb.append(".Members");
 		} else if (f.isCallTo("Union")) {
 			sb.append("Union(");
-			FunCall f1 = (FunCall) f.getArgs()[0];
+			FunCall f1 = (FunCall) f.getArgs().get(0);
 			sb.append(funString(f1));
 			sb.append(",");
-			FunCall f2 = (FunCall) f.getArgs()[1];
+			FunCall f2 = (FunCall) f.getArgs().get(1);
 			sb.append(funString(f2));
 			sb.append(")");
 		} else if (f.isCallTo("{}")) {
 			sb.append("{");
-			for (int i = 0; i < f.getArgs().length; i++) {
-				if (i > 0)
+
+			boolean isFollow = false;
+			for (Exp exp : f.getArgs()) {
+				if (isFollow) {
 					sb.append(",");
-				Member m = memberForExp(f.getArgs()[i]);
+				} else {
+					isFollow = true;
+				}
+
+				Member m = memberForExp(exp);
 				sb.append(m.getUniqueName());
 			}
 			sb.append("}");
@@ -527,7 +534,7 @@ public class QuaxUtil {
 			// just generate Topcount(set)
 			sb.append(f.getFunction());
 			sb.append("(");
-			FunCall f1 = (FunCall) f.getArgs()[0];
+			FunCall f1 = (FunCall) f.getArgs().get(0);
 			sb.append(funString(f1));
 			sb.append(")");
 		}
@@ -608,11 +615,13 @@ public class QuaxUtil {
 		} else if (members.size() == 1) {
 			return expForMember(members.get(0));
 		} else {
-			Exp[] remExps = new Exp[members.size()];
-			for (int i = 0; i < remExps.length; i++) {
-				remExps[i] = expForMember(members.get(i));
+			List<Exp> remExps = new ArrayList<Exp>(members.size());
+
+			for (Member member : members) {
+				remExps.add(expForMember(member));
 			}
-			return new FunCall("{}", remExps, Syntax.Braces);
+
+			return new FunCall("{}", Syntax.Braces, remExps);
 		}
 	}
 
@@ -649,19 +658,19 @@ public class QuaxUtil {
 
 		if (f.isCallTo("Children") || f.isCallTo("Descendants")
 				|| f.isCallTo("{}")) {
-			Member member = memberForExp(f.getArgs()[0]);
+			Member member = memberForExp(f.getArgs().get(0));
 			return member.getHierarchy();
 		} else if (f.isCallTo("Members")) {
-			Level level = levelForExp(f.getArgs()[0]);
+			Level level = levelForExp(f.getArgs().get(0));
 			return level.getHierarchy();
 		} else if (f.isCallTo("Union")) {
 			// continue with first set
-			return hierForExp(f.getArgs()[0]);
+			return hierForExp(f.getArgs().get(0));
 		} else if (f.isCallTo("TopCount") || f.isCallTo("BottomCount")
 				|| f.isCallTo("TopPercent") || f.isCallTo("BottomPercent")
 				|| f.isCallTo("Filter")) {
 			// continue with base set of top bottom function
-			return hierForExp(f.getArgs()[0]);
+			return hierForExp(f.getArgs().get(0));
 		}
 
 		throw new UnknownExpressionException(f.getFunction());
@@ -697,17 +706,21 @@ public class QuaxUtil {
 		// if there is an All Member, we will have to expand it
 		// according to expandAllMember flag
 		if (mAll != null) {
-			Exp[] memar = new Exp[] { expForMember(mAll) };
-			Exp mAllSet = new FunCall("{}", memar, Syntax.Braces);
+			List<Exp> memar = new ArrayList<Exp>();
+			memar.add(expForMember(mAll));
+
+			Exp mAllSet = new FunCall("{}", Syntax.Braces, memar);
 			if (!expandAllMember) {
-				return memar[0];
+				return memar.get(0);
 			}
 
 			// must expand
 			// create Union({AllMember}, AllMember.children)
-			Exp mAllChildren = new FunCall("children", memar, Syntax.Property);
-			Exp union = new FunCall("union",
-					new Exp[] { mAllSet, mAllChildren }, Syntax.Function);
+			Exp mAllChildren = new FunCall("children", Syntax.Property, memar);
+
+			FunCall union = new FunCall("Union", Syntax.Function);
+			union.getArgs().add(mAllSet);
+			union.getArgs().add(mAllChildren);
 
 			return union;
 		}
@@ -720,37 +733,17 @@ public class QuaxUtil {
 			throw new PivotException(e);
 		}
 
-		Exp[] topExp = new Exp[topMembers.size()];
+		List<Exp> topExp = new ArrayList<Exp>(topMembers.size());
 
-		for (int i = 0; i < topExp.length; i++) {
-			topExp[i] = expForMember(topMembers.get(i));
+		for (Member member : topMembers) {
+			topExp.add(expForMember(member));
 		}
 
-		if (topExp.length == 1) {
-			return topExp[0]; // single member
+		if (topExp.size() == 1) {
+			return topExp.get(0); // single member
 		}
 
-		return new FunCall("{}", topExp, Syntax.Braces);
-	}
-
-	/**
-	 * generation of FunCalls
-	 * 
-	 * @param function
-	 *            name
-	 * @param args
-	 *            arguments
-	 * @param funType
-	 *            FUNTYPE
-	 * @return function object
-	 */
-	public Exp createFunCall(String function, Exp[] args, Syntax funType) {
-		Exp[] expArgs = new Exp[args.length];
-		for (int i = 0; i < expArgs.length; i++) {
-			expArgs[i] = (Exp) args[i];
-		}
-
-		return new FunCall(function, expArgs, funType);
+		return new FunCall("{}", Syntax.Braces, topExp);
 	}
 
 	/**
@@ -762,7 +755,7 @@ public class QuaxUtil {
 	 */
 	public int funCallArgCount(Exp oFun) {
 		FunCall f = (FunCall) oFun;
-		return f.getArgs().length;
+		return f.getArgs().size();
 	}
 
 	/**
@@ -786,7 +779,7 @@ public class QuaxUtil {
 	 * @return argument object
 	 */
 	public Exp funCallArg(Exp oFun, int index) {
-		return ((FunCall) oFun).getArgs()[index];
+		return ((FunCall) oFun).getArgs().get(index);
 	}
 
 	/**
@@ -813,14 +806,15 @@ public class QuaxUtil {
 				if (exp instanceof FunCall) {
 					FunCall f = (FunCall) exp;
 					if (f.isCallTo("Children")
-							&& memberForExp(f.getArgs()[0]).equals(grandPa)) {
+							&& memberForExp(f.getArgs().get(0)).equals(grandPa)) {
 						return;
 					}
 				}
 			}
 
-			FunCall uncles = new FunCall("Children",
-					new Exp[] { expForMember(grandPa) }, Syntax.Property);
+			FunCall uncles = new FunCall("Children", Syntax.Property);
+			uncles.getArgs().add(expForMember(grandPa));
+
 			list.add(uncles);
 		}
 	}
@@ -849,14 +843,15 @@ public class QuaxUtil {
 				if (exp instanceof FunCall) {
 					FunCall f = (FunCall) exp;
 					if (f.isCallTo("Children")
-							&& memberForExp(f.getArgs()[0]).equals(parent)) {
+							&& memberForExp(f.getArgs().get(0)).equals(parent)) {
 						return;
 					}
 				}
 			}
 
-			FunCall siblings = new FunCall("Children",
-					new Exp[] { expForMember(parent) }, Syntax.Property);
+			FunCall siblings = new FunCall("Children", Syntax.Property);
+			siblings.getArgs().add(expForMember(parent));
+
 			list.add(siblings);
 		}
 	}
@@ -883,14 +878,15 @@ public class QuaxUtil {
 				if (exp instanceof FunCall) {
 					FunCall f = (FunCall) exp;
 					if (f.isCallTo("Children")
-							&& memberForExp(f.getArgs()[0]).equals(member)) {
+							&& memberForExp(f.getArgs().get(0)).equals(member)) {
 						return;
 					}
 				}
 			}
 
-			FunCall children = new FunCall("Children",
-					new Exp[] { expForMember(member) }, Syntax.Property);
+			FunCall children = new FunCall("Children", Syntax.Property);
+			children.getArgs().add(expForMember(member));
+
 			list.add(children);
 		}
 	}
@@ -919,13 +915,17 @@ public class QuaxUtil {
 				if (exp instanceof FunCall) {
 					FunCall f = (FunCall) exp;
 					if (f.isCallTo("Descendants")
-							&& memberForExp(f.getArgs()[0]).equals(member)) {
+							&& memberForExp(f.getArgs().get(0)).equals(member)) {
 						return;
 					}
 				}
 			}
-			FunCall children = new FunCall("Descendants", new Exp[] {
-					expForMember(member), expForLevel(level) }, Syntax.Function);
+
+			FunCall children = new FunCall("Descendants", Syntax.Function);
+
+			children.getArgs().add(expForMember(member));
+			children.getArgs().add(expForLevel(level));
+
 			list.add(children);
 		}
 	}
@@ -957,8 +957,9 @@ public class QuaxUtil {
 				}
 			}
 
-			FunCall members = new FunCall("Members",
-					new Exp[] { expForLevel(level) }, Syntax.Property);
+			FunCall members = new FunCall("Members", Syntax.Property);
+			members.getArgs().add(expForLevel(level));
+
 			list.add(members);
 		}
 	}
@@ -996,7 +997,7 @@ public class QuaxUtil {
 			return false;
 		}
 
-		Member parent = memberForExp(f.getArgs()[0]);
+		Member parent = memberForExp(f.getArgs().get(0));
 		return parent.equals(member.getParentMember());
 	}
 
@@ -1013,9 +1014,9 @@ public class QuaxUtil {
 			return false;
 		}
 
-		Member ancestor = memberForExp(f.getArgs()[0]);
+		Member ancestor = memberForExp(f.getArgs().get(0));
 
-		Level level = levelForExp(f.getArgs()[1]);
+		Level level = levelForExp(f.getArgs().get(1));
 		Level mLevel = member.getLevel();
 
 		if (!mLevel.equals(level)) {
@@ -1044,7 +1045,7 @@ public class QuaxUtil {
 	 * @return true if member mSearch is in set of Members function
 	 */
 	public boolean isMemberInLevel(FunCall f, Member member) {
-		Level level = levelForExp(f.getArgs()[0]);
+		Level level = levelForExp(f.getArgs().get(0));
 		return level.equals(member.getLevel());
 	}
 
@@ -1078,7 +1079,7 @@ public class QuaxUtil {
 			throws UnknownExpressionException {
 		// Unions may be nested
 		for (int i = 0; i < 2; i++) {
-			FunCall fChild = (FunCall) f.getArgs()[i];
+			FunCall fChild = (FunCall) f.getArgs().get(i);
 			if (isMemberInFunCall(fChild, member)) {
 				return true;
 			}

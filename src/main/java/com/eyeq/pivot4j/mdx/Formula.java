@@ -8,107 +8,262 @@
  */
 package com.eyeq.pivot4j.mdx;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Formula representing a WITH MEMBER ... or a WITH SET ...
+ * Formula representing a named set or calculated member definition (WITH
+ * expression).
  */
 public class Formula extends AbstractExp {
 
-	private static final long serialVersionUID = 8119836944328850979L;
+	private static final long serialVersionUID = 4575864552263862759L;
 
-	private boolean isMember;
+	public enum Type {
+		MEMBER, SET
+	}
 
 	private CompoundId name;
 
 	private Exp exp;
 
-	private MemberProperty[] memberProperties;
+	private Type type;
 
-	/** Construct formula specifying a set. */
-	public Formula(CompoundId name, Exp exp) {
-		this(false, name, exp, new MemberProperty[0]);
+	private List<Property> properties = new ArrayList<Property>();
+
+	public Formula() {
 	}
 
-	/** Construct a formula specifying a member. */
-	public Formula(CompoundId name, Exp exp, MemberProperty[] memberProperties) {
-		this(true, name, exp, memberProperties);
-	}
-
-	private Formula(boolean isMember, CompoundId name, Exp exp,
-			MemberProperty[] memberProperties) {
-		this.isMember = isMember;
+	/**
+	 * @param name
+	 * @param exp
+	 * @param type
+	 */
+	public Formula(CompoundId name, Exp exp, Type type) {
 		this.name = name;
 		this.exp = exp;
-		this.memberProperties = memberProperties;
+		this.type = type;
 	}
 
 	/**
-	 * Returns the isMember.
-	 * 
-	 * @return boolean
-	 */
-	public boolean isMember() {
-		return isMember;
-	}
-
-	/**
-	 * @return target element(member or set) for the formula
+	 * @return name
 	 */
 	public CompoundId getName() {
 		return name;
 	}
 
 	/**
-	 * @return Exp for formula
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(CompoundId name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return exp
 	 */
 	public Exp getExp() {
 		return exp;
 	}
 
 	/**
+	 * @param exp
+	 *            the exp to set
+	 */
+	public void setExp(Exp exp) {
+		this.exp = exp;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public Type getType() {
+		return type;
+	}
+
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the properties
+	 */
+	public List<Property> getProperties() {
+		return properties;
+	}
+
+	/**
 	 * format to MDX
 	 */
 	public String toMdx() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
-		if (isMember) {
-			sb.append("MEMBER ");
-		} else {
-			sb.append("SET ");
+		if (type != null) {
+			sb.append(type.name());
+			sb.append(' ');
 		}
 
-		sb.append(name.toMdx());
+		if (name != null) {
+			sb.append(name.toMdx());
+		}
+
 		sb.append(" AS '");
-		sb.append(exp.toMdx());
+
+		if (exp != null) {
+			sb.append(exp.toMdx());
+		}
+
 		sb.append('\'');
 
-		for (int i = 0; i < memberProperties.length; i++) {
+		for (Property property : properties) {
 			sb.append(',');
-			sb.append(memberProperties[i].toMdx());
+			sb.append(property.toMdx());
 		}
 
 		return sb.toString();
 	}
 
 	/**
-	 * 
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.AbstractExp#clone()
 	 */
+	@Override
 	public Formula clone() {
-		MemberProperty[] cloneMemberProperties = new MemberProperty[memberProperties.length];
-		for (int i = 0; i < cloneMemberProperties.length; i++) {
-			cloneMemberProperties[i] = (MemberProperty) memberProperties[i]
-					.clone();
+		Formula clone = new Formula();
+
+		clone.type = type;
+
+		if (name != null) {
+			clone.name = name.clone();
 		}
 
-		return new Formula(isMember, name.clone(), exp.clone(),
-				cloneMemberProperties);
+		if (exp != null) {
+			clone.exp = exp.clone();
+		}
+
+		for (Property property : properties) {
+			clone.properties.add(property.clone());
+		}
+
+		return clone;
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
+	@Override
 	public void accept(ExpVisitor visitor) {
 		visitor.visitFormula(this);
+
+		if (name != null) {
+			name.accept(visitor);
+		}
+
+		if (exp != null) {
+			exp.accept(visitor);
+		}
+
+		for (Property property : properties) {
+			property.accept(visitor);
+		}
+	}
+
+	public static class Property extends AbstractExp {
+
+		private static final long serialVersionUID = 519325113391951347L;
+
+		private String name;
+
+		private Exp exp;
+
+		public Property() {
+		}
+
+		/**
+		 * @param name
+		 * @param exp
+		 */
+		public Property(String name, Exp exp) {
+			this.name = name;
+			this.exp = exp;
+		}
+
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * @param name
+		 *            the name to set
+		 */
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		/**
+		 * @return The expression that makes up the value of the member property
+		 */
+		public Exp getExp() {
+			return exp;
+		}
+
+		/**
+		 * @param exp
+		 *            the exp to set
+		 */
+		public void setExp(Exp exp) {
+			this.exp = exp;
+		}
+
+		/**
+		 * format to MDX
+		 */
+		public String toMdx() {
+			StringBuilder sb = new StringBuilder();
+
+			if (name != null) {
+				sb.append(name);
+			}
+
+			sb.append(" = ");
+
+			if (exp != null) {
+				sb.append(exp.toMdx());
+			}
+
+			return sb.toString();
+		}
+
+		/**
+		 * @see java.lang.Object#clone()
+		 */
+		public Property clone() {
+			Property clone = new Property();
+			clone.name = name;
+
+			if (exp != null) {
+				clone.exp = exp.clone();
+			}
+
+			return clone;
+		}
+
+		/**
+		 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+		 */
+		public void accept(ExpVisitor visitor) {
+			visitor.visitFormulaProperty(this);
+
+			if (exp != null) {
+				exp.accept(visitor);
+			}
+		}
 	}
 }

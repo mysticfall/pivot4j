@@ -9,10 +9,12 @@
 package com.eyeq.pivot4j.query;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.ExpNode;
+import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.util.TreeNode;
 
@@ -74,16 +76,17 @@ public class ExpGenerator {
 
 			if (closeOpenSet && !openSet.isEmpty()) {
 				// close open set
-				Exp[] expArray = openSet.toArray(new Exp[openSet.size()]);
-
-				Exp set = quaxUtil.createFunCall("{}", expArray, Syntax.Braces);
+				Exp set = new FunCall("{}", Syntax.Braces, openSet);
 
 				if (exp == null) {
 					exp = set;
 				} else {
 					// generate Union
-					exp = quaxUtil.createFunCall("Union",
-							new Exp[] { exp, set }, Syntax.Function);
+					FunCall call = new FunCall("Union", Syntax.Function);
+					call.getArgs().add(exp);
+					call.getArgs().add(set);
+
+					exp = call;
 				}
 
 				openSet.clear();
@@ -93,22 +96,27 @@ public class ExpGenerator {
 				exp = expForNode;
 			} else {
 				// generate Union of Exp and expForNode
-				exp = quaxUtil.createFunCall("Union", new Exp[] { exp,
-						expForNode }, Syntax.Function);
+				FunCall call = new FunCall("Union", Syntax.Function);
+				call.getArgs().add(exp);
+				call.getArgs().add(expForNode);
+
+				exp = call;
 			}
 		}
 
 		if (!openSet.isEmpty()) {
 			// close open set
-			Exp[] expArray = openSet.toArray(new Exp[openSet.size()]);
-			Exp set = quaxUtil.createFunCall("{}", expArray, Syntax.Braces);
+			Exp set = new FunCall("{}", Syntax.Braces, openSet);
 
 			if (exp == null) {
 				exp = set;
 			} else {
 				// generate Union
-				exp = quaxUtil.createFunCall("Union", new Exp[] { exp, set },
-						Syntax.Function);
+				FunCall call = new FunCall("Union", Syntax.Function);
+				call.getArgs().add(exp);
+				call.getArgs().add(set);
+
+				exp = call;
 			}
 
 			openSet.clear();
@@ -135,7 +143,8 @@ public class ExpGenerator {
 			if (tuple.length == 1) {
 				return tuple[0];
 			} else {
-				return quaxUtil.createFunCall("()", tuple, Syntax.Parentheses);
+				return new FunCall("()", Syntax.Parentheses,
+						Arrays.asList(tuple));
 			}
 		}
 
@@ -152,8 +161,10 @@ public class ExpGenerator {
 				eSet = eNode;
 			} else {
 				// member
-				eSet = quaxUtil.createFunCall("{}", new Exp[] { eNode },
-						Syntax.Braces);
+				FunCall call = new FunCall("{}", Syntax.Braces);
+				call.getArgs().add(eNode);
+
+				eSet = call;
 			}
 
 			if (childExp == null) {
@@ -161,13 +172,18 @@ public class ExpGenerator {
 			} else {
 				Exp childSet = bracesAround(childExp);
 
-				Exp cj = quaxUtil.createFunCall("CrossJoin", new Exp[] { eSet,
-						childSet }, Syntax.Function);
+				FunCall cj = new FunCall("CrossJoin", Syntax.Function);
+				cj.getArgs().add(eSet);
+				cj.getArgs().add(childSet);
+
 				if (exp == null) {
 					exp = cj;
 				} else {
-					exp = quaxUtil.createFunCall("Union",
-							new Exp[] { exp, cj }, Syntax.Function);
+					FunCall call = new FunCall("Union", Syntax.Function);
+					call.getArgs().add(exp);
+					call.getArgs().add(cj);
+
+					exp = call;
 				}
 			}
 		}
@@ -184,8 +200,10 @@ public class ExpGenerator {
 		Exp oSet;
 
 		if (quaxUtil.isMember(oExp) || quaxUtil.isFunCallTo(oExp, "()")) {
-			oSet = quaxUtil.createFunCall("{}", new Exp[] { oExp },
-					Syntax.Braces);
+			FunCall call = new FunCall("{}", Syntax.Braces);
+			call.getArgs().add(oExp);
+
+			oSet = call;
 		} else {
 			oSet = oExp;
 		}

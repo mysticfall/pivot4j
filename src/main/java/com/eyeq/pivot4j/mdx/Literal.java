@@ -16,16 +16,23 @@ public class Literal extends AbstractExp {
 	private static final long serialVersionUID = 3137892085820716628L;
 
 	public int type;
+
 	private Object o;
 
 	public static final Literal emptyString = new Literal("", false);
+
 	public static final Literal zero = new Literal(new Integer(0));
+
 	public static final Literal one = new Literal(new Integer(1));
+
 	public static final Literal doubleZero = new Literal(new Double(0.0));
+
 	public static final Literal doubleOne = new Literal(new Double(1.0));
 
 	public static final int TYPE_SYMBOL = 1;
+
 	public static final int TYPE_STRING = 2;
+
 	public static final int TYPE_NUMERIC = 3;
 
 	private Literal(String s, boolean isSymbol) {

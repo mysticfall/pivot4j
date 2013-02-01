@@ -27,7 +27,7 @@ public class MdxParserTest {
 	 * @return
 	 * @throws Exception
 	 */
-	protected MdxQuery parseQuery(String mdxQuery) throws Exception {
+	protected MdxStatement parseQuery(String mdxQuery) throws Exception {
 		MdxParser parser = new MdxParserImpl();
 
 		return parser.parse(mdxQuery);
@@ -37,7 +37,7 @@ public class MdxParserTest {
 	public void testParseEmptyAxis() throws Exception {
 		String mdx = "SELECT FROM DummyCube";
 
-		MdxQuery query = parseQuery(mdx);
+		MdxStatement query = parseQuery(mdx);
 
 		assertNotNull("Failed to parse : " + mdx, query);
 		assertNotNull("Axes should not be null.", query.getAxes());
@@ -48,8 +48,8 @@ public class MdxParserTest {
 	public void testGenerateEmptyAxis() throws Exception {
 		String mdx = "SELECT FROM DummyCube";
 
-		MdxQuery query = new MdxQuery();
-		query.setCube("DummyCube");
+		MdxStatement query = new MdxStatement();
+		query.setCube(new CompoundId("DummyCube"));
 
 		assertEquals("Unexpected MDX query.", mdx, query.toMdx());
 	}
@@ -58,7 +58,7 @@ public class MdxParserTest {
 	public void testParseSingleAxis() throws Exception {
 		String mdx = "SELECT [AAA] ON COLUMNS FROM DummyCube";
 
-		MdxQuery query = parseQuery(mdx);
+		MdxStatement query = parseQuery(mdx);
 
 		assertNotNull("Failed to parse : " + mdx, query);
 		assertNotNull("Axes should not be null.", query.getAxes());
@@ -86,11 +86,11 @@ public class MdxParserTest {
 	public void testGenerateSingleAxis() throws Exception {
 		String mdx = "SELECT [AAA] ON COLUMNS FROM [DummyCube]";
 
-		MdxQuery query = new MdxQuery();
+		MdxStatement query = new MdxStatement();
 
 		QueryAxis axis = new QueryAxis(Axis.COLUMNS, new CompoundId("[AAA]"));
 		query.setAxis(axis);
-		query.setCube("[DummyCube]");
+		query.setCube(new CompoundId("[DummyCube]"));
 
 		assertEquals("Unexpected MDX query.", mdx, query.toMdx());
 	}
@@ -99,7 +99,7 @@ public class MdxParserTest {
 	public void testParseKeyIdentifier() throws Exception {
 		String mdx = "SELECT [AAA].&[BBB] ON COLUMNS, [CCC].&[DDD].[EEE] ON ROWS FROM DummyCube";
 
-		MdxQuery query = parseQuery(mdx);
+		MdxStatement query = parseQuery(mdx);
 
 		assertNotNull("Failed to parse : " + mdx, query);
 		assertNotNull("Axes should not be null.", query.getAxes());
@@ -155,7 +155,7 @@ public class MdxParserTest {
 	public void testGenerateKeyIdentifier() throws Exception {
 		String mdx = "SELECT [AAA].&[BBB] ON COLUMNS, [CCC].&[DDD].[EEE] ON ROWS FROM DummyCube";
 
-		MdxQuery query = new MdxQuery();
+		MdxStatement query = new MdxStatement();
 
 		CompoundId columnId = new CompoundId().append("[AAA]").append("[BBB]",
 				true);
@@ -165,7 +165,7 @@ public class MdxParserTest {
 		query.setAxis(new QueryAxis(Axis.COLUMNS, columnId));
 		query.setAxis(new QueryAxis(Axis.ROWS, rowId));
 
-		query.setCube("DummyCube");
+		query.setCube(new CompoundId("DummyCube"));
 
 		assertEquals("Unexpected MDX query.", mdx, query.toMdx());
 	}
@@ -175,7 +175,7 @@ public class MdxParserTest {
 		String mdx = "SELECT [Measures].members ON COLUMNS, NON EMPTY [ODB_CUST].members ON ROWS "
 				+ "FROM [ODBOSCEN1/MKTBRANCH] SAP VARIABLES [ODBBRANC] INCLUDING [ODB_BRANC].[CHEM]";
 
-		MdxQuery query = parseQuery(mdx);
+		MdxStatement query = parseQuery(mdx);
 
 		assertNotNull("Failed to parse : " + mdx, query);
 		assertNotNull("SAP varaible list should not be null.",
@@ -218,7 +218,7 @@ public class MdxParserTest {
 	public void testParseOpeningBracket() throws Exception {
 		String mdx = "SELECT [AA[BB].[CC] ON COLUMNS, [DD].[[AAB] ON ROWS FROM DummyCube";
 
-		MdxQuery query = parseQuery(mdx);
+		MdxStatement query = parseQuery(mdx);
 
 		assertNotNull("Failed to parse : " + mdx, query);
 		assertNotNull("Axes should not be null.", query.getAxes());
@@ -268,8 +268,7 @@ public class MdxParserTest {
 	public void testParseBracketEscape() throws Exception {
 		String mdx = "SELECT [AA[BB]]].[CC] ON COLUMNS, [DD].[AA]]B] ON ROWS FROM DummyCube";
 
-		MdxQuery query = parseQuery(mdx);
-		assertNotNull("Failed to parse : " + mdx, query);
+		MdxStatement query = parseQuery(mdx);
 
 		assertNotNull("Failed to parse : " + mdx, query);
 		assertNotNull("Axes should not be null.", query.getAxes());
@@ -319,7 +318,7 @@ public class MdxParserTest {
 	public void testGenerateBracketEscape() throws Exception {
 		String mdx = "SELECT [AA[BB]]].[CC] ON COLUMNS, [DD].[AA]]B] ON ROWS FROM DummyCube";
 
-		MdxQuery query = new MdxQuery();
+		MdxStatement query = new MdxStatement();
 
 		CompoundId columnId = new CompoundId().append("[AA[BB]]]").append(
 				"[CC]");
@@ -328,8 +327,43 @@ public class MdxParserTest {
 		query.setAxis(new QueryAxis(Axis.COLUMNS, columnId));
 		query.setAxis(new QueryAxis(Axis.ROWS, rowId));
 
-		query.setCube("DummyCube");
+		query.setCube(new CompoundId("DummyCube"));
 
 		assertEquals("Unexpected MDX query.", mdx, query.toMdx());
+	}
+
+	@Test
+	public void testParseWithMember() throws Exception {
+		String mdx = "WITH MEMBER [Measures].[Special Discount] AS [Measures].[Discount Amount] * 1.5 "
+				+ "MEMBER [Measures].[Premium Discount] AS [Measures].[Discount Amount] * 2.0 "
+				+ "SELECT [Measures].[Special Discount] on COLUMNS, NON EMPTY [Product].[Product].MEMBERS ON ROWS "
+				+ "FROM [Adventure Works] WHERE [Product].[Category].[Bikes]";
+
+		MdxStatement query = parseQuery(mdx);
+		assertNotNull("Failed to parse : " + mdx, query);
+
+		List<Formula> formulas = query.getFormulas();
+
+		assertNotNull("Formula list not be null.", formulas);
+		assertEquals("Number of formula should be 2.", 2, formulas.size());
+
+		Formula formula = formulas.get(0);
+
+		assertEquals("Wrong formula type.", Formula.Type.MEMBER,
+				formula.getType());
+		assertEquals("Wrong calculated member name.",
+				"[Measures].[Special Discount]", formula.getName().toMdx());
+
+		formula = formulas.get(1);
+
+		Exp arg = formula.getExp();
+
+		assertTrue("Wrong argument type.", arg instanceof FunCall);
+
+		FunCall func = (FunCall) arg;
+
+		assertEquals("Wrong function type.", Syntax.Infix, func.getType());
+		assertEquals("Wrong number of function arguments.", 2, func.getArgs()
+				.size());
 	}
 }

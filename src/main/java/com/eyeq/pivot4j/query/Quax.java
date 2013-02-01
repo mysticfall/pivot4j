@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.query;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.ExpNode;
-import com.eyeq.pivot4j.mdx.SetExp;
+import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.util.TreeNode;
 import com.eyeq.pivot4j.util.TreeNodeCallback;
@@ -281,16 +282,16 @@ public class Quax implements StateHolder {
 					// sibling
 					// more than one child in last dimension
 					// create a single set function node
-					Exp[] memArray = new Exp[node.getChildren().size()];
-					int i = 0;
+					List<Exp> memArray = new ArrayList<Exp>(node.getChildren()
+							.size());
+
 					for (TreeNode<Exp> child : node.getChildren()) {
-						memArray[i++] = child.getReference();
+						memArray.add(child.getReference());
 					}
 
 					node.clear();
 
-					Exp oFun = quaxUtil.createFunCall("{}", memArray,
-							Syntax.Braces);
+					Exp oFun = new FunCall("{}", Syntax.Braces, memArray);
 
 					ExpNode newChild = new ExpNode(oFun);
 					node.addChild(newChild);
@@ -814,8 +815,8 @@ public class Quax implements StateHolder {
 		TreeNode<Exp> newNode;
 
 		Exp oMember = quaxUtil.expForMember(memberPath.get(dimIndex));
-		Exp fChildren = quaxUtil.createFunCall("Children",
-				new Exp[] { oMember }, Syntax.Property);
+		FunCall fChildren = new FunCall("Children", Syntax.Property);
+		fChildren.getArgs().add(oMember);
 
 		TreeNode<Exp> parent = bestNode;
 
@@ -946,8 +947,8 @@ public class Quax implements StateHolder {
 
 		// add children of member to each node in list
 		Exp oMember = quaxUtil.expForMember(member);
-		Exp fChildren = quaxUtil.createFunCall("Children",
-				new Exp[] { oMember }, Syntax.Property);
+		FunCall fChildren = new FunCall("Children", Syntax.Property);
+		fChildren.getArgs().add(oMember);
 
 		for (ExpNode node : nodesForMember) {
 			ExpNode newNode = new ExpNode(fChildren);
@@ -1180,8 +1181,12 @@ public class Quax implements StateHolder {
 									node.setReference(remaining[0]); // single
 									// member
 								} else {
-									Exp newSet = quaxUtil.createFunCall("{}",
-											remaining, Syntax.Braces);
+									FunCall newSet = new FunCall("{}",
+											Syntax.Braces);
+									for (Exp arg : remaining) {
+										newSet.getArgs().add(arg);
+									}
+
 									node.setReference(newSet);
 								}
 							}
@@ -1360,8 +1365,8 @@ public class Quax implements StateHolder {
 		List<Exp> sets = new ArrayList<Exp>(nDimension);
 
 		Exp oMember = quaxUtil.expForMember(member);
-		Exp fChildren = quaxUtil.createFunCall("Children",
-				new Exp[] { oMember }, Syntax.Property);
+		FunCall fChildren = new FunCall("Children", Syntax.Property);
+		fChildren.getArgs().add(oMember);
 
 		for (int i = 0; i < nDimension; i++) {
 			if (i == dimIndex) {
@@ -1482,8 +1487,10 @@ public class Quax implements StateHolder {
 
 			Exp exp = expGenerator.generate();
 			// Hierarchize around "everything"
-			return quaxUtil.createFunCall("Hierarchize", new Exp[] { exp },
-					Syntax.Function);
+			FunCall call = new FunCall("Hierarchize", Syntax.Function);
+			call.getArgs().add(exp);
+
+			return call;
 		}
 
 		// special hierarchize to be generated
@@ -1514,8 +1521,9 @@ public class Quax implements StateHolder {
 
 			expGenerator.init(leftRoot, leftHiers.size(), quaxUtil);
 
-			leftExp = quaxUtil.createFunCall("Hierarchize",
-					new Exp[] { expGenerator.generate() }, Syntax.Function);
+			leftExp = new FunCall("Hierarchize", Syntax.Function);
+
+			((FunCall) leftExp).getArgs().add(expGenerator.generate());
 		}
 
 		// generate the right expression, not to be hierarchized
@@ -1549,8 +1557,9 @@ public class Quax implements StateHolder {
 			return rightExp;
 		}
 
-		Exp exp = quaxUtil.createFunCall("CrossJoin", new Exp[] { leftExp,
-				rightExp }, Syntax.Function);
+		FunCall exp = new FunCall("CrossJoin", Syntax.Function);
+		exp.getArgs().add(leftExp);
+		exp.getArgs().add(rightExp);
 
 		return exp;
 	}
@@ -1614,8 +1623,8 @@ public class Quax implements StateHolder {
 			leftExp = expGenerator.generate();
 
 			if (genHierarchize) {
-				leftExp = quaxUtil.createFunCall("Hierarchize",
-						new Exp[] { leftExp }, Syntax.Function);
+				leftExp = new FunCall("Hierarchize", Syntax.Function);
+				((FunCall) leftExp).getArgs().add(leftExp);
 			}
 		}
 
@@ -1634,23 +1643,28 @@ public class Quax implements StateHolder {
 
 		// generate the Tuple of dimension.currentmember until generateIndex
 		Exp currentMembersTuple = genCurrentTuple();
-		Exp ocj = quaxUtil.createFunCall("Crossjoin", new Exp[] {
-				currentMembersTuple, origTopcountSet }, Syntax.Function);
+
+		FunCall ocj = new FunCall("Crossjoin", Syntax.Function);
+		ocj.getArgs().add(currentMembersTuple);
+		ocj.getArgs().add(origTopcountSet);
 
 		// replace the topcout original set
 		String fun = quaxUtil.funCallName(topcount);
 
 		int n = quaxUtil.funCallArgCount(topcount);
-		Exp[] args = new Exp[n];
+
+		List<Exp> args = new ArrayList<Exp>(n);
+		args.add(ocj);
+
 		for (int i = 1; i < n; i++) {
-			args[i] = quaxUtil.funCallArg(topcount, i);
+			args.add(quaxUtil.funCallArg(topcount, i));
 		}
 
-		args[0] = ocj;
+		Exp newTopCount = new FunCall(fun, Syntax.Function, args);
 
-		Exp newTopcount = quaxUtil.createFunCall(fun, args, Syntax.Function);
-		Exp oGenerate = quaxUtil.createFunCall("Generate", new Exp[] { leftExp,
-				newTopcount }, Syntax.Function);
+		FunCall oGenerate = new FunCall("Generate", Syntax.Function);
+		oGenerate.getArgs().add(leftExp);
+		oGenerate.getArgs().add(newTopCount);
 
 		if (generateIndex + 1 == nDimension) {
 			return oGenerate;
@@ -1673,8 +1687,9 @@ public class Quax implements StateHolder {
 		expGenerator.init(root, rightHiers.length, quaxUtil);
 		Exp rightExp = expGenerator.generate();
 
-		Exp exp = quaxUtil.createFunCall("CrossJoin", new Exp[] { oGenerate,
-				rightExp }, Syntax.Function);
+		FunCall exp = new FunCall("CrossJoin", Syntax.Function);
+		exp.getArgs().add(oGenerate);
+		exp.getArgs().add(rightExp);
 
 		return exp;
 	}
@@ -1683,26 +1698,28 @@ public class Quax implements StateHolder {
 	 * Generate {(dim1.Currentmember, dim2.Currentmember, ... )}
 	 */
 	private Exp genCurrentTuple() {
-		Exp[] currentsOfDim = new Exp[generateIndex];
-		for (int i = 0; i < currentsOfDim.length; i++) {
-			Hierarchy hierarchy = getHierarchy(hiers.get(i));
+		List<Exp> currentsOfDim = new ArrayList<Exp>(generateIndex);
+
+		for (String name : hiers) {
+			Hierarchy hierarchy = getHierarchy(name);
 			Dimension dim = hierarchy.getDimension();
 
-			currentsOfDim[i] = quaxUtil.createFunCall("CurrentMember",
-					new Exp[] { quaxUtil.expForDim(dim) }, Syntax.Property);
+			FunCall call = new FunCall("CurrentMember", Syntax.Property);
+			call.getArgs().add(quaxUtil.expForDim(dim));
+
+			currentsOfDim.add(call);
 		}
 
 		Exp oTuple;
 		if (generateIndex > 1) {
-			oTuple = quaxUtil.createFunCall("()", currentsOfDim,
-					Syntax.Parentheses);
+			oTuple = new FunCall("()", Syntax.Parentheses, currentsOfDim);
 		} else {
-			oTuple = currentsOfDim[0]; // just dimension.currentmember
+			oTuple = currentsOfDim.get(0); // just dimension.currentmember
 		}
 
 		// generate set braces around tuple
-		Exp oSet = quaxUtil.createFunCall("{}", new Exp[] { oTuple },
-				Syntax.Braces);
+		FunCall oSet = new FunCall("{}", Syntax.Braces);
+		oSet.getArgs().add(oTuple);
 
 		return oSet;
 	}
@@ -2057,9 +2074,8 @@ public class Quax implements StateHolder {
 		}
 
 		Exp mSet = null;
-		if (memberList.size() > 0) {
-			Exp[] aExp = memberList.toArray(new Exp[0]);
-			mSet = quaxUtil.createFunCall("{}", aExp, Syntax.Braces);
+		if (!memberList.isEmpty()) {
+			mSet = new FunCall("{}", Syntax.Braces, memberList);
 		}
 
 		if (funCallList.isEmpty()) {
@@ -2080,9 +2096,13 @@ public class Quax implements StateHolder {
 			set = funCallList.get(0);
 			start = 1;
 		}
+
 		for (int j = start; j < funCallList.size(); j++) {
-			set = quaxUtil.createFunCall("Union",
-					new Exp[] { set, funCallList.get(j) }, Syntax.Function);
+			FunCall call = new FunCall("Union", Syntax.Function);
+			call.getArgs().add(set);
+			call.getArgs().add(funCallList.get(j));
+
+			set = call;
 		}
 
 		return set;
@@ -2125,8 +2145,11 @@ public class Quax implements StateHolder {
 					if (expForHier == null) {
 						expForHier = oExp;
 					} else {
-						expForHier = quaxUtil.createFunCall("Union", new Exp[] {
-								expForHier, oExp }, Syntax.Function);
+						FunCall call = new FunCall("Union", Syntax.Function);
+						call.getArgs().add(expForHier);
+						call.getArgs().add(oExp);
+
+						expForHier = call;
 					}
 				}
 			}
@@ -2515,8 +2538,7 @@ public class Quax implements StateHolder {
 				}
 			}
 
-			return quaxUtil.createFunCall("{}",
-					newList.toArray(new Exp[newList.size()]), Syntax.Braces);
+			return new FunCall("{}", Syntax.Braces, newList);
 		}
 	}
 
@@ -2584,13 +2606,17 @@ public class Quax implements StateHolder {
 			}
 
 			if (quaxUtil.isMember(uargs[0])) {
-				uargs[0] = quaxUtil.createFunCall("{}", new Exp[] { uargs[0] },
-						Syntax.Braces);
+				FunCall call = new FunCall("{}", Syntax.Braces);
+				call.getArgs().add(uargs[0]);
+
+				uargs[0] = call;
 			}
 
 			if (quaxUtil.isMember(uargs[1])) {
-				uargs[1] = quaxUtil.createFunCall("{}", new Exp[] { uargs[1] },
-						Syntax.Braces);
+				FunCall call = new FunCall("{}", Syntax.Braces);
+				call.getArgs().add(uargs[1]);
+
+				uargs[1] = call;
 			}
 
 			if (quaxUtil.isFunCallTo(uargs[0], "{}")
@@ -2598,7 +2624,7 @@ public class Quax implements StateHolder {
 				return unionOfSets(uargs[0], uargs[1]);
 			}
 
-			return quaxUtil.createFunCall("Union", uargs, Syntax.Function);
+			return new FunCall("Union", Syntax.Function, Arrays.asList(uargs));
 		}
 
 		throw new UnknownExpressionException(quaxUtil.funCallName(oFun));
@@ -2635,8 +2661,7 @@ public class Quax implements StateHolder {
 				}
 			}
 
-			return quaxUtil.createFunCall("{}",
-					newList.toArray(new Exp[newList.size()]), Syntax.Braces);
+			return new FunCall("{}", Syntax.Braces, newList);
 		}
 	}
 
@@ -2662,20 +2687,19 @@ public class Quax implements StateHolder {
 				return null;
 			}
 
-			Exp[] mComplement = new Exp[oChildren.size() - 1];
-			int ii = 0;
+			List<Exp> mComplement = new ArrayList<Exp>(oChildren.size() - 1);
+
 			for (Exp child : oChildren) {
 				if (!child.equals(oMember)) {
-					mComplement[ii++] = child;
+					mComplement.add(child);
 				}
 			}
 
-			if (mComplement.length == 1) {
-				return mComplement[0]; // single member
+			if (mComplement.size() == 1) {
+				return mComplement.get(0); // single member
 			}
 
-			Exp oComplement = quaxUtil.createFunCall("{}", mComplement,
-					Syntax.Braces);
+			Exp oComplement = new FunCall("{}", Syntax.Braces, mComplement);
 
 			return oComplement;
 		} else if (quaxUtil.isFunCallTo(oFun, "{}")) {
@@ -2699,20 +2723,19 @@ public class Quax implements StateHolder {
 				return oFun;
 			}
 
-			Exp[] mComplement = new Exp[nComp];
-			int ii = 0;
+			List<Exp> mComplement = new ArrayList<Exp>(nComp);
+
 			for (int i = 0; i < nArg; i++) {
 				Exp o = quaxUtil.funCallArg(oFun, i);
 				if (!(o.equals(oMember)))
-					mComplement[ii++] = o;
+					mComplement.add(o);
 			}
 
-			if (mComplement.length == 1) {
-				return mComplement[0]; // single member
+			if (mComplement.size() == 1) {
+				return mComplement.get(0); // single member
 			}
 
-			Exp oComplement = quaxUtil.createFunCall("{}", mComplement,
-					Syntax.Braces);
+			Exp oComplement = new FunCall("{}", Syntax.Braces, mComplement);
 
 			return oComplement;
 		} else if (quaxUtil.isFunCallTo(oFun, "Union")) {
@@ -2733,13 +2756,17 @@ public class Quax implements StateHolder {
 			} else {
 				// complement can be single member
 				if (!quaxUtil.isFunCall(complements[0])) {
-					complements[0] = quaxUtil.createFunCall("{}",
-							new Exp[] { complements[0] }, Syntax.Braces);
+					FunCall call = new FunCall("{}", Syntax.Braces);
+					call.getArgs().add(complements[0]);
+
+					complements[0] = call;
 				}
 
 				if (!quaxUtil.isFunCall(complements[1])) {
-					complements[1] = quaxUtil.createFunCall("{}",
-							new Exp[] { complements[1] }, Syntax.Braces);
+					FunCall call = new FunCall("{}", Syntax.Braces);
+					call.getArgs().add(complements[1]);
+
+					complements[1] = call;
 				}
 
 				if (quaxUtil.isFunCallTo(complements[0], "{}")
@@ -2748,8 +2775,8 @@ public class Quax implements StateHolder {
 					return unionOfSets(complements[0], complements[1]);
 				}
 
-				Exp newUnion = quaxUtil.createFunCall("Union", complements,
-						Syntax.Function);
+				Exp newUnion = new FunCall("Union", Syntax.Function,
+						Arrays.asList(complements));
 
 				return newUnion;
 			}
@@ -2776,7 +2803,8 @@ public class Quax implements StateHolder {
 		for (int j = 0; j < n2; j++) {
 			newSet[i++] = quaxUtil.funCallArg(set2, j);
 		}
-		return quaxUtil.createFunCall("{}", newSet, Syntax.Braces);
+
+		return new FunCall("{}", Syntax.Braces, Arrays.asList(newSet));
 	}
 
 	/**

@@ -6,16 +6,20 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.mdx;
+package com.eyeq.pivot4j.mdx.metadata;
 
-import org.olap4j.metadata.Cube;
-import org.olap4j.metadata.MetadataElement;
+import com.eyeq.pivot4j.mdx.ExpVisitor;
 
-public interface MetadataElementExp<T extends MetadataElement> extends Exp {
+/**
+ * Visitor for metadata expressions
+ */
+public interface MetadataExpVisitor extends ExpVisitor {
 
-	String getName();
+	void visitDimension(DimensionExp exp);
 
-	String getUniqueName();
+	void visitHierarchy(HierarchyExp exp);
 
-	T getMetadata(Cube cube);
+	void visitLevel(LevelExp exp);
+
+	void visitMember(MemberExp exp);
 }

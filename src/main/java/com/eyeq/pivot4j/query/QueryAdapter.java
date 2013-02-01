@@ -28,15 +28,16 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.StateHolder;
+import com.eyeq.pivot4j.mdx.CompoundId;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Literal;
 import com.eyeq.pivot4j.mdx.MdxParser;
-import com.eyeq.pivot4j.mdx.MemberExp;
-import com.eyeq.pivot4j.mdx.MdxQuery;
+import com.eyeq.pivot4j.mdx.MdxStatement;
 import com.eyeq.pivot4j.mdx.QueryAxis;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.mdx.impl.MdxParserImpl;
+import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 
 /**
  * Adapt the MDX query to the model
@@ -55,9 +56,9 @@ public class QueryAdapter implements StateHolder {
 
 	private Quax quaxToSort; // this is the Quax to be sorted
 
-	private MdxQuery mdxQuery;
+	private MdxStatement parsedQuery;
 
-	private MdxQuery cloneQuery;
+	private MdxStatement cloneQuery;
 
 	private Collection<QueryChangeListener> listeners = new ArrayList<QueryChangeListener>();
 
@@ -86,10 +87,10 @@ public class QueryAdapter implements StateHolder {
 		this.axesSwapped = false;
 		this.quaxToSort = null;
 
-		this.mdxQuery = parseQuery(model.getMdx());
+		this.parsedQuery = parseQuery(model.getMdx());
 		this.cloneQuery = null;
 
-		List<QueryAxis> queryAxes = mdxQuery.getAxes();
+		List<QueryAxis> queryAxes = parsedQuery.getAxes();
 
 		this.quaxes = new ArrayList<Quax>(queryAxes.size());
 
@@ -125,14 +126,13 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	public String getCubeName() {
-		String cube = mdxQuery.getCube();
+		CompoundId cube = parsedQuery.getCube();
 
-		if (cube != null && cube.charAt(0) == '['
-				&& cube.charAt(cube.length() - 1) == ']') {
-			cube = cube.substring(1, cube.length() - 1);
+		if (cube != null && !cube.getNames().isEmpty()) {
+			return cube.getNames().get(0).getUnquotedName();
 		}
 
-		return cube;
+		return null;
 	}
 
 	/**
@@ -176,12 +176,12 @@ public class QueryAdapter implements StateHolder {
 	/**
 	 * @return the XMLA Query object
 	 */
-	protected MdxQuery getParsedQuery() {
-		return mdxQuery;
+	protected MdxStatement getParsedQuery() {
+		return parsedQuery;
 	}
 
 	public String getCurrentMdx() {
-		return mdxQuery.toMdx();
+		return parsedQuery.toMdx();
 	}
 
 	/**
@@ -214,8 +214,8 @@ public class QueryAdapter implements StateHolder {
 	 */
 	public void setAxesSwapped(boolean axesSwapped) {
 		if (axesSwapped != this.axesSwapped) {
-			QueryAxis columnAxis = mdxQuery.getAxis(Axis.COLUMNS);
-			QueryAxis rowAxis = mdxQuery.getAxis(Axis.ROWS);
+			QueryAxis columnAxis = parsedQuery.getAxis(Axis.COLUMNS);
+			QueryAxis rowAxis = parsedQuery.getAxis(Axis.ROWS);
 
 			if (columnAxis != null && rowAxis != null) {
 				this.axesSwapped = axesSwapped;
@@ -224,9 +224,9 @@ public class QueryAdapter implements StateHolder {
 				columnAxis.setExp(rowAxis.getExp());
 				rowAxis.setExp(exp);
 
-				int columnAxisOrdinal = mdxQuery.getAxes().indexOf(
+				int columnAxisOrdinal = parsedQuery.getAxes().indexOf(
 						columnAxis);
-				int rowAxisOrdinal = mdxQuery.getAxes().indexOf(rowAxis);
+				int rowAxisOrdinal = parsedQuery.getAxes().indexOf(rowAxis);
 
 				Quax quax = quaxes.get(columnAxisOrdinal);
 				quaxes.set(columnAxisOrdinal, quaxes.get(rowAxisOrdinal));
@@ -240,7 +240,7 @@ public class QueryAdapter implements StateHolder {
 	public boolean isNonEmpty() {
 		boolean nonEmpty = true;
 
-		List<QueryAxis> queryAxes = mdxQuery.getAxes();
+		List<QueryAxis> queryAxes = parsedQuery.getAxes();
 		for (QueryAxis axis : queryAxes) {
 			nonEmpty &= axis.isNonEmpty();
 		}
@@ -255,7 +255,7 @@ public class QueryAdapter implements StateHolder {
 		boolean changed = nonEmpty != isNonEmpty();
 
 		if (changed) {
-			List<QueryAxis> queryAxes = mdxQuery.getAxes();
+			List<QueryAxis> queryAxes = parsedQuery.getAxes();
 			for (QueryAxis axis : queryAxes) {
 				axis.setNonEmpty(nonEmpty);
 			}
@@ -321,12 +321,12 @@ public class QueryAdapter implements StateHolder {
 	 * the original query - adding the drilldown groups - apply pending swap
 	 * axes - apply pending sorts.
 	 */
-	public MdxQuery updateQuery() {
+	public MdxStatement updateQuery() {
 		// if quax is to be used, generate axes from quax
 		if (useQuax) {
 			int iQuaxToSort = activeQuaxToSort();
 
-			List<QueryAxis> qAxes = mdxQuery.getAxes();
+			List<QueryAxis> qAxes = parsedQuery.getAxes();
 
 			int i = 0;
 			for (Quax quax : quaxes) {
@@ -361,21 +361,21 @@ public class QueryAdapter implements StateHolder {
 			// functions.
 			if (cloneQuery == null) {
 				if (isSortOnQuery()) {
-					this.cloneQuery = mdxQuery.clone();
+					this.cloneQuery = parsedQuery.clone();
 				}
 			} else {
 				// reset to original state
 				if (isSortOnQuery()) {
-					this.mdxQuery = cloneQuery.clone();
+					this.parsedQuery = cloneQuery.clone();
 				} else {
-					this.mdxQuery = cloneQuery;
+					this.parsedQuery = cloneQuery;
 				}
 			}
 		}
 
 		addSortToQuery();
 
-		return mdxQuery;
+		return parsedQuery;
 	}
 
 	/**
@@ -389,13 +389,13 @@ public class QueryAdapter implements StateHolder {
 			case BASC:
 			case BDESC:
 				// call sort
-				orderAxis(mdxQuery);
+				orderAxis(parsedQuery);
 				break;
 			case TOPCOUNT:
-				topBottomAxis(mdxQuery, "TopCount");
+				topBottomAxis(parsedQuery, "TopCount");
 				break;
 			case BOTTOMCOUNT:
-				topBottomAxis(mdxQuery, "BottomCount");
+				topBottomAxis(parsedQuery, "BottomCount");
 				break;
 			default:
 				return; // do nothing
@@ -409,7 +409,7 @@ public class QueryAdapter implements StateHolder {
 	 * @param monAx
 	 * @param monSortMode
 	 */
-	protected void orderAxis(MdxQuery pq) {
+	protected void orderAxis(MdxStatement pq) {
 		// Order(TopCount) is allowed, Order(Order) is not permitted
 		List<QueryAxis> queryAxes = pq.getAxes();
 		QueryAxis qa = queryAxes.get(quaxToSort.getOrdinal());
@@ -418,8 +418,8 @@ public class QueryAdapter implements StateHolder {
 
 		// setForAx is the top level Exp of the axis
 		// put an Order FunCall around
-		Exp[] args = new Exp[3];
-		args[0] = setForAx; // the set to be sorted is the set representing the
+		List<Exp> args = new ArrayList<Exp>(3);
+		args.add(setForAx); // the set to be sorted is the set representing the
 							// query axis
 		// if we got more than 1 position member, generate a tuple for the 2.arg
 		Exp sortExp;
@@ -430,20 +430,21 @@ public class QueryAdapter implements StateHolder {
 		}
 
 		if (sortPosMembers.size() > 1) {
-			Exp[] memberExp = new Exp[sortPosMembers.size()];
-			for (int i = 0; i < memberExp.length; i++) {
-				memberExp[i] = new MemberExp(sortPosMembers.get(i));
+			List<Exp> memberExp = new ArrayList<Exp>(sortPosMembers.size());
+
+			for (Member member : sortPosMembers) {
+				memberExp.add(new MemberExp(member));
 			}
 
-			sortExp = new FunCall("()", memberExp, Syntax.Parentheses);
+			sortExp = new FunCall("()", Syntax.Parentheses, memberExp);
 		} else {
 			sortExp = new MemberExp(sortPosMembers.get(0));
 		}
 
-		args[1] = sortExp;
-		args[2] = Literal.createString(model.getSortCriteria().name());
+		args.add(sortExp);
+		args.add(Literal.createString(model.getSortCriteria().name()));
 
-		FunCall order = new FunCall("Order", args, Syntax.Function);
+		FunCall order = new FunCall("Order", Syntax.Function, args);
 		qa.setExp(order);
 	}
 
@@ -453,7 +454,7 @@ public class QueryAdapter implements StateHolder {
 	 * @param monAx
 	 * @param nShow
 	 */
-	protected void topBottomAxis(MdxQuery pq, String function) {
+	protected void topBottomAxis(MdxStatement pq, String function) {
 		// TopCount(TopCount) and TopCount(Order) is not permitted
 		List<QueryAxis> queryAxes = pq.getAxes();
 
@@ -468,28 +469,31 @@ public class QueryAdapter implements StateHolder {
 
 		// if we got more than 1 position member, generate a tuple
 		if (sortPosMembers.size() > 1) {
-			Exp[] memberExp = new Exp[sortPosMembers.size()];
-			for (int i = 0; i < memberExp.length; i++) {
-				memberExp[i] = new MemberExp(sortPosMembers.get(i));
+			List<Exp> memberExp = new ArrayList<Exp>(sortPosMembers.size());
+
+			for (Member member : sortPosMembers) {
+				memberExp.add(new MemberExp(member));
 			}
-			sortExp = new FunCall("()", memberExp, Syntax.Parentheses);
+
+			sortExp = new FunCall("()", Syntax.Parentheses, memberExp);
 		} else {
 			sortExp = new MemberExp(sortPosMembers.get(0));
 		}
 
-		Exp[] args = new Exp[3];
-		args[0] = setForAx; // the set representing the query axis
-		args[1] = Literal.create(model.getTopBottomCount());
-		args[2] = sortExp;
+		List<Exp> args = new ArrayList<Exp>(3);
 
-		FunCall topbottom = new FunCall(function, args, Syntax.Function);
+		args.add(setForAx); // the set representing the query axis
+		args.add(Literal.create(model.getTopBottomCount()));
+		args.add(sortExp);
+
+		FunCall topbottom = new FunCall(function, Syntax.Function, args);
 		qa.setExp(topbottom);
 	}
 
 	/**
-	 * @param mdxQuery
+	 * @param parsedQuery
 	 */
-	protected MdxQuery parseQuery(String mdxQuery) {
+	protected MdxStatement parseQuery(String mdxQuery) {
 		MdxParser parser = new MdxParserImpl();
 
 		return parser.parse(mdxQuery);
@@ -617,14 +621,13 @@ public class QueryAdapter implements StateHolder {
 	 * @return set expression
 	 */
 	protected Object createMemberSet(List<Member> members) {
-		Exp[] exps = new Exp[members.size()];
+		List<Exp> exps = new ArrayList<Exp>(members.size());
 
-		int i = 0;
 		for (Member member : members) {
-			exps[i++] = new MemberExp(member);
+			exps.add(new MemberExp(member));
 		}
 
-		return new FunCall("{}", exps, Syntax.Braces);
+		return new FunCall("{}", Syntax.Braces, exps);
 	}
 
 	/**
@@ -893,7 +896,7 @@ public class QueryAdapter implements StateHolder {
 	 * @param slicerExp
 	 */
 	public void changeSlicer(Exp exp) {
-		mdxQuery.setSlicer(exp);
+		parsedQuery.setSlicer(exp);
 		fireQueryChanged(false);
 	}
 

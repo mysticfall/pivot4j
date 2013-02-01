@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This is the result of parsing an MDX query.
  */
-public class MdxQuery extends AbstractExp {
+public class MdxStatement extends AbstractExp {
 
 	private static final long serialVersionUID = 8608792548174831908L;
 
@@ -31,13 +31,20 @@ public class MdxQuery extends AbstractExp {
 
 	private Exp slicer;
 
-	private String cube;
+	private CompoundId cube;
 
 	private List<CompoundId> cellProperties = new ArrayList<CompoundId>();
 
 	private List<SapVariable> sapVariables = new ArrayList<SapVariable>();
 
 	private boolean axesSwapped = false;
+
+	/**
+	 * @return the formulas
+	 */
+	public List<Formula> getFormulas() {
+		return formulas;
+	}
 
 	/**
 	 * 
@@ -106,7 +113,7 @@ public class MdxQuery extends AbstractExp {
 	 * 
 	 * @return String
 	 */
-	public String getCube() {
+	public CompoundId getCube() {
 		return cube;
 	}
 
@@ -116,7 +123,7 @@ public class MdxQuery extends AbstractExp {
 	 * @param cube
 	 *            The cube to set
 	 */
-	public void setCube(String cube) {
+	public void setCube(CompoundId cube) {
 		this.cube = cube;
 	}
 
@@ -134,15 +141,6 @@ public class MdxQuery extends AbstractExp {
 	 */
 	public void setSlicer(Exp exp) {
 		this.slicer = exp;
-	}
-
-	/**
-	 * get the formulas of this query
-	 * 
-	 * @return formulars
-	 */
-	public List<Formula> getFormulas() {
-		return formulas;
 	}
 
 	/**
@@ -168,11 +166,11 @@ public class MdxQuery extends AbstractExp {
 		boolean isFollow;
 
 		if (!formulas.isEmpty()) {
-			mdx.append("WITH ");
+			mdx.append("WITH");
 
-			for (Formula form : formulas) {
+			for (Formula element : formulas) {
 				mdx.append(' ');
-				mdx.append(form.toMdx());
+				mdx.append(element.toMdx());
 			}
 
 			mdx.append(' ');
@@ -241,8 +239,16 @@ public class MdxQuery extends AbstractExp {
 	/**
 	 * @see java.lang.Object#clone()
 	 */
-	public MdxQuery clone() {
-		MdxQuery clone = new MdxQuery();
+	public MdxStatement clone() {
+		MdxStatement clone = new MdxStatement();
+
+		if (!formulas.isEmpty()) {
+			clone.formulas = new ArrayList<Formula>(formulas.size());
+
+			for (Formula element : formulas) {
+				clone.formulas.add(element.clone());
+			}
+		}
 
 		clone.axes = new ArrayList<QueryAxis>(axes.size());
 
@@ -250,35 +256,20 @@ public class MdxQuery extends AbstractExp {
 			clone.axes.add(axis);
 		}
 
-		clone.cube = this.cube;
+		if (cube != null) {
+			clone.cube = this.cube.clone();
+		}
 
 		if (slicer != null) {
 			clone.slicer = this.slicer.clone();
 		}
 
-		if (!formulas.isEmpty()) {
-			clone.formulas = new ArrayList<Formula>(formulas.size());
-
-			for (Formula form : formulas) {
-				clone.formulas.add(form.clone());
-			}
+		for (CompoundId property : cellProperties) {
+			clone.cellProperties.add(property.clone());
 		}
 
-		if (!cellProperties.isEmpty()) {
-			clone.cellProperties = new ArrayList<CompoundId>(
-					cellProperties.size());
-
-			for (CompoundId property : cellProperties) {
-				clone.cellProperties.add(property.clone());
-			}
-		}
-
-		if (!sapVariables.isEmpty()) {
-			clone.sapVariables = new ArrayList<SapVariable>(sapVariables.size());
-
-			for (SapVariable variable : sapVariables) {
-				clone.sapVariables.add(variable.clone());
-			}
+		for (SapVariable variable : sapVariables) {
+			clone.sapVariables.add(variable.clone());
 		}
 
 		clone.axesSwapped = this.axesSwapped;
@@ -290,14 +281,30 @@ public class MdxQuery extends AbstractExp {
 	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
-		visitor.visitMdxQuery(this);
+		visitor.visitStatement(this);
+
+		for (Formula element : formulas) {
+			element.accept(visitor);
+		}
 
 		for (QueryAxis axis : axes) {
 			axis.accept(visitor);
 		}
 
+		if (cube != null) {
+			cube.accept(visitor);
+		}
+
 		if (slicer != null) {
 			slicer.accept(visitor);
+		}
+
+		for (CompoundId property : cellProperties) {
+			property.accept(visitor);
+		}
+
+		for (SapVariable variable : sapVariables) {
+			variable.accept(visitor);
 		}
 	}
 }

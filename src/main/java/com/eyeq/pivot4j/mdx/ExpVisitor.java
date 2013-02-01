@@ -15,25 +15,19 @@ public interface ExpVisitor {
 
 	void visitCompoundId(CompoundId exp);
 
-	void visitFormula(Formula exp);
+	void visitLiteral(Literal exp);
 
 	void visitFunCall(FunCall exp);
 
-	void visitLiteral(Literal exp);
-
-	void visitMdxQuery(MdxQuery exp);
+	void visitStatement(MdxStatement exp);
 
 	void visitQueryAxis(QueryAxis exp);
 
-	void visitDimension(DimensionExp exp);
+	void visitFormula(Formula exp);
 
-	void visitHierarchy(HierarchyExp exp);
-
-	void visitLevel(LevelExp exp);
-
-	void visitMember(MemberExp exp);
+	void visitFormulaProperty(Formula.Property exp);
 
 	void visitSapVariable(SapVariable exp);
 
-	void visitMemberProperty(MemberProperty exp);
+	void visitSapVariableValue(SapVariable.Value exp);
 }

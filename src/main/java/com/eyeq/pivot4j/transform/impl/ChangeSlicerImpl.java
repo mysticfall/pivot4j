@@ -9,6 +9,7 @@
 package com.eyeq.pivot4j.transform.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +23,8 @@ import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
-import com.eyeq.pivot4j.mdx.MemberExp;
 import com.eyeq.pivot4j.mdx.Syntax;
+import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.ChangeSlicer;
@@ -151,7 +152,8 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 					}
 				}
 
-				exp = new FunCall("CrossJoin", sets, Syntax.Function);
+				exp = new FunCall("CrossJoin", Syntax.Function,
+						Arrays.asList(sets));
 			}
 		}
 
@@ -223,7 +225,7 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 				}
 			}
 
-			exp = new FunCall("CrossJoin", sets, Syntax.Function);
+			exp = new FunCall("CrossJoin", Syntax.Function, Arrays.asList(sets));
 		}
 
 		getQueryAdapter().changeSlicer(exp);
@@ -247,7 +249,6 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 			expressions.add(new MemberExp(member));
 		}
 
-		return new FunCall("{}",
-				expressions.toArray(new Exp[expressions.size()]), Syntax.Braces);
+		return new FunCall("{}", Syntax.Braces, expressions);
 	}
 }

@@ -6,14 +6,19 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.mdx;
+package com.eyeq.pivot4j.mdx.metadata;
 
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 
-public class DimensionExp extends AbstractMetadataElementExp<Dimension> {
+import com.eyeq.pivot4j.mdx.ExpVisitor;
+
+public class DimensionExp extends AbstractMetadataExp<Dimension> {
 
 	private static final long serialVersionUID = 1343874529354268937L;
+
+	public DimensionExp() {
+	}
 
 	/**
 	 * @param dimension
@@ -31,11 +36,21 @@ public class DimensionExp extends AbstractMetadataElementExp<Dimension> {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.mdx.metadata.AbstractMetadataExp#lookupMetadata(org.olap4j.metadata.Cube)
+	 */
+	@Override
+	protected Dimension lookupMetadata(Cube cube) {
+		return cube.getDimensions().get(getName());
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	@Override
 	public void accept(ExpVisitor visitor) {
-		visitor.visitDimension(this);
+		if (visitor instanceof MetadataExpVisitor) {
+			((MetadataExpVisitor) visitor).visitDimension(this);
+		}
 	}
 
 	/**
@@ -44,13 +59,5 @@ public class DimensionExp extends AbstractMetadataElementExp<Dimension> {
 	@Override
 	public DimensionExp clone() {
 		return new DimensionExp(getName(), getUniqueName());
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.mdx.AbstractMetadataElementExp#lookupMetadata(org.olap4j.metadata.Cube)
-	 */
-	@Override
-	protected Dimension lookupMetadata(Cube cube) {
-		return cube.getDimensions().get(getName());
 	}
 }

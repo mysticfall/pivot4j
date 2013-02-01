@@ -6,13 +6,20 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.mdx;
+package com.eyeq.pivot4j.mdx.metadata;
 
-public interface MdxParser {
+import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.MetadataElement;
 
-	/**
-	 * @param mdx
-	 * @return
-	 */
-	MdxStatement parse(String mdx);
+import com.eyeq.pivot4j.mdx.Exp;
+
+public interface MetadataExp<T extends MetadataElement> extends Exp {
+
+	String getName();
+
+	String getUniqueName();
+
+	T getMetadata(Cube cube);
+
+	void setMetadata(T element);
 }

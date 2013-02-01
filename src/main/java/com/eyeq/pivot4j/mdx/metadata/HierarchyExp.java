@@ -6,14 +6,19 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.mdx;
+package com.eyeq.pivot4j.mdx.metadata;
 
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 
-public class HierarchyExp extends AbstractMetadataElementExp<Hierarchy> {
+import com.eyeq.pivot4j.mdx.ExpVisitor;
+
+public class HierarchyExp extends AbstractMetadataExp<Hierarchy> {
 
 	private static final long serialVersionUID = 3116369522934630935L;
+
+	public HierarchyExp() {
+	}
 
 	/**
 	 * @param hierarchy
@@ -31,11 +36,21 @@ public class HierarchyExp extends AbstractMetadataElementExp<Hierarchy> {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.mdx.metadata.AbstractMetadataExp#lookupMetadata(org.olap4j.metadata.Cube)
+	 */
+	@Override
+	protected Hierarchy lookupMetadata(Cube cube) {
+		return cube.getHierarchies().get(getName());
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	@Override
 	public void accept(ExpVisitor visitor) {
-		visitor.visitHierarchy(this);
+		if (visitor instanceof MetadataExpVisitor) {
+			((MetadataExpVisitor) visitor).visitHierarchy(this);
+		}
 	}
 
 	/**
@@ -44,13 +59,5 @@ public class HierarchyExp extends AbstractMetadataElementExp<Hierarchy> {
 	@Override
 	public HierarchyExp clone() {
 		return new HierarchyExp(getName(), getUniqueName());
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.mdx.AbstractMetadataElementExp#lookupMetadata(org.olap4j.metadata.Cube)
-	 */
-	@Override
-	protected Hierarchy lookupMetadata(Cube cube) {
-		return cube.getHierarchies().get(getName());
 	}
 }

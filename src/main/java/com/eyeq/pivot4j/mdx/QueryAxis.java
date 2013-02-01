@@ -127,23 +127,32 @@ public class QueryAxis extends AbstractExp {
 				sb.append("NON EMPTY ");
 			}
 
-			sb.append(exp.toMdx());
+			if (exp != null) {
+				sb.append(exp.toMdx());
+			}
 
 			if (!dimensionProperties.isEmpty()) {
 				sb.append(" DIMENSION PROPERTIES ");
 
-				for (int i = 0; i < dimensionProperties.size(); i++) {
-					if (i > 0) {
+				boolean isFollow = false;
+
+				for (CompoundId property : dimensionProperties) {
+					if (isFollow) {
 						sb.append(',');
+					} else {
+						isFollow = true;
 					}
 
-					sb.append(dimensionProperties.get(i).toMdx());
+					sb.append(property.toMdx());
 				}
 			}
 		}
 
 		sb.append(" ON ");
-		sb.append(axis.name());
+
+		if (axis != null) {
+			sb.append(axis.name());
+		}
 
 		return sb.toString();
 	}
@@ -153,13 +162,19 @@ public class QueryAxis extends AbstractExp {
 	 * @see java.lang.Object#clone()
 	 */
 	public QueryAxis clone() {
-		QueryAxis qa = new QueryAxis(axis, exp.clone(), nonEmpty);
+		QueryAxis clone = new QueryAxis();
+		clone.axis = axis;
+		clone.nonEmpty = nonEmpty;
 
-		for (CompoundId property : dimensionProperties) {
-			qa.dimensionProperties.add(property.clone());
+		if (exp != null) {
+			clone.exp = exp.clone();
 		}
 
-		return qa;
+		for (CompoundId property : dimensionProperties) {
+			clone.dimensionProperties.add(property.clone());
+		}
+
+		return clone;
 	}
 
 	/**
@@ -167,5 +182,13 @@ public class QueryAxis extends AbstractExp {
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitQueryAxis(this);
+
+		if (exp != null) {
+			exp.accept(visitor);
+		}
+
+		for (CompoundId property : dimensionProperties) {
+			property.accept(visitor);
+		}
 	}
 }

@@ -106,6 +106,22 @@ public class CompoundId extends AbstractExp {
 			this.name = name;
 		}
 
+		public String getQuotedName() {
+			if (name == null || isQuoted()) {
+				return name;
+			} else {
+				return name = "[" + name + "]";
+			}
+		}
+
+		public String getUnquotedName() {
+			if (name == null || !isQuoted()) {
+				return name;
+			} else {
+				return name.substring(1, name.length() - 1);
+			}
+		}
+
 		/**
 		 * @return the key
 		 */
@@ -119,6 +135,10 @@ public class CompoundId extends AbstractExp {
 		 */
 		public void setKey(boolean key) {
 			this.key = key;
+		}
+
+		public boolean isQuoted() {
+			return name != null && name.startsWith("[") && name.endsWith("]");
 		}
 	}
 

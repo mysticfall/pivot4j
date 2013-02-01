@@ -8,149 +8,97 @@
  */
 package com.eyeq.pivot4j.mdx;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FunCall extends AbstractExp {
 
 	private static final long serialVersionUID = -1747077227822699594L;
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
-
-	private Syntax syntacticType;
+	private Syntax type;
 
 	private String function;
 
-	private Exp[] args;
+	private List<Exp> args = new ArrayList<Exp>();
 
-	MdxQuery pQuery = null; // needed by Parameter FunCall
+	public FunCall() {
+	}
 
 	/**
-	 * @param fun
-	 * @param args
+	 * @param function
 	 */
-	public FunCall(String fun, Exp[] args) {
-		this(fun, args, Syntax.Function);
+	public FunCall(String function) {
+		this(function, Syntax.Function);
+	}
+
+	/**
+	 * @param function
+	 * @param type
+	 */
+	public FunCall(String function, Syntax type) {
+		this(function, type, null);
 	}
 
 	/**
 	 * @param fun
+	 * @param type
 	 * @param args
-	 * @param syntacticCode
 	 */
-	public FunCall(String fun, Exp[] args, int syntacticCode) {
-		this.function = fun;
-		this.args = args;
+	public FunCall(String function, Syntax type, List<Exp> args) {
+		this.function = function;
+		this.type = type;
 
-		Syntax type = null;
-		for (Syntax t : Syntax.values()) {
-			if (syntacticCode == t.getCode()) {
-				type = t;
-				break;
-			}
+		if (args != null) {
+			this.args.addAll(args);
 		}
-
-		if (type == null) {
-			throw new IllegalArgumentException("Unknown syntactic code : "
-					+ syntacticCode);
-		}
-
-		this.syntacticType = type;
 	}
 
 	/**
-	 * @param fun
-	 * @param args
-	 * @param syntacticType
+	 * @return
 	 */
-	public FunCall(String fun, Exp[] args, Syntax syntacticType) {
-		this.function = fun;
-		this.args = args;
-		this.syntacticType = syntacticType;
+	public String getFunction() {
+		return function;
 	}
 
 	/**
-	 * format to MDX
+	 * @param function
+	 *            the function to set
+	 */
+	public void setFunction(String function) {
+		this.function = function;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public Syntax getType() {
+		return type;
+	}
+
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(Syntax type) {
+		this.type = type;
+	}
+
+	/**
+	 * Returns the args.
+	 * 
+	 * @return Exp[]
+	 */
+	public List<Exp> getArgs() {
+		return args;
+	}
+
+	/**
+	 * Format to MDX
+	 * 
+	 * @see com.eyeq.pivot4j.mdx.Exp#toMdx()
 	 */
 	public String toMdx() {
-		StringBuffer sb = new StringBuffer();
-
-		// "+" instead of Union yields much better readable MDX
-		// however
-		// - does not work with SAP
-		// - is not compatible with Mondrian
-		/*
-		 * sorry if (this.isCallTo("Union")) { // render Union as "+"
-		 * sb.append(args[0].toMdx()); sb.append(" + ");
-		 * sb.append(args[1].toMdx()); return sb.toString(); }
-		 */
-
-		boolean isFollow = false;
-
-		switch (syntacticType) {
-		case Function: // f(a, b, c)
-			sb.append(function);
-			sb.append("(");
-			for (int i = 0; i < args.length; i++) {
-				if (isFollow)
-					sb.append(", ");
-				isFollow = true;
-				sb.append(args[i].toMdx());
-			}
-			sb.append(")");
-			break;
-		case Braces: // { a, b, c }
-			sb.append("{");
-			for (int i = 0; i < args.length; i++) {
-				if (isFollow)
-					sb.append(", ");
-				isFollow = true;
-				sb.append(args[i].toMdx());
-			}
-			sb.append("}");
-			break;
-		case Parentheses: // (a, b, c)
-			sb.append("(");
-			for (int i = 0; i < args.length; i++) {
-				if (isFollow)
-					sb.append(", ");
-				isFollow = true;
-				sb.append(args[i].toMdx());
-			}
-			sb.append(")");
-			break;
-		case Prefix: // NOT a
-			sb.append(function);
-			sb.append(" ");
-			sb.append(args[0].toMdx());
-			break;
-		case Infix: // a + b
-			sb.append(args[0].toMdx());
-			sb.append(" ");
-			sb.append(function);
-			sb.append(" ");
-			sb.append(args[1].toMdx());
-			break;
-		case Property: // a.b
-		case PropertyQuoted:
-		case PropertyAmpQuoted:
-			sb.append(args[0].toMdx());
-			sb.append(".");
-			sb.append(function);
-			break;
-		case Method:
-			sb.append(args[0].toMdx());
-			sb.append(".");
-			sb.append(function);
-			sb.append("(");
-			sb.append(args[1].toMdx());
-			sb.append(")");
-			break;
-		default:
-			throw new IllegalArgumentException(
-					"unexpected FunCall syntatic type");
-		}
-		return sb.toString();
+		return type.toMdx(function, args);
 	}
 
 	/**
@@ -158,11 +106,13 @@ public class FunCall extends AbstractExp {
 	 * @see java.lang.Object#clone()
 	 */
 	public FunCall clone() {
-		Exp[] cloneArgs = new Exp[args.length];
-		for (int i = 0; i < cloneArgs.length; i++) {
-			cloneArgs[i] = (Exp) args[i].clone();
+		List<Exp> cloneArgs = new ArrayList<Exp>(args.size());
+
+		for (Exp arg : args) {
+			cloneArgs.add(arg.clone());
 		}
-		return new FunCall(function, cloneArgs, syntacticType);
+
+		return new FunCall(function, type, cloneArgs);
 	}
 
 	/**
@@ -176,25 +126,13 @@ public class FunCall extends AbstractExp {
 	}
 
 	/**
-	 * Returns the args.
-	 * 
-	 * @return Exp[]
-	 */
-	public Exp[] getArgs() {
-		return args;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getFunction() {
-		return function;
-	}
-
-	/**
 	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitFunCall(this);
+
+		for (Exp arg : args) {
+			arg.accept(visitor);
+		}
 	}
 }
