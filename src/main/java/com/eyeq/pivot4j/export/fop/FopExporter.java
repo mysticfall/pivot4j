@@ -739,7 +739,12 @@ public class FopExporter extends AbstractPivotExporter {
 
 		attributes.addAttribute("", "border-bottom", "border-bottom", "CDATA",
 				"1pt solid black");
-		attributes.addAttribute("", "font-size", "font-size", "CDATA", "8pt");
+
+		if (fontSize != null) {
+			attributes.addAttribute("", "font-size", "font-size", "CDATA",
+					fontSize);
+		}
+
 		attributes.addAttribute("", "font-weight", "font-weight", "CDATA",
 				"bold");
 		attributes.addAttribute("", "padding-top", "padding-top", "CDATA",
