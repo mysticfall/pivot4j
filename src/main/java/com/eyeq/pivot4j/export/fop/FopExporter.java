@@ -243,6 +243,36 @@ public class FopExporter extends AbstractPivotExporter {
 	}
 
 	/**
+	 * @return the footerFontSize
+	 */
+	public String getFooterFontSize() {
+		return footerFontSize;
+	}
+
+	/**
+	 * @param footerFontSize
+	 *            the footerFontSize to set
+	 */
+	public void setFooterFontSize(String footerFontSize) {
+		this.footerFontSize = footerFontSize;
+	}
+
+	/**
+	 * @return the footerFontFamily
+	 */
+	public String getFooterFontFamily() {
+		return footerFontFamily;
+	}
+
+	/**
+	 * @param footerFontFamily
+	 *            the footerFontFamily to set
+	 */
+	public void setFooterFontFamily(String footerFontFamily) {
+		this.footerFontFamily = footerFontFamily;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#initialize()
 	 */
 	@Override
