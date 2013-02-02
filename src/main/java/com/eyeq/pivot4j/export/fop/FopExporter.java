@@ -1000,8 +1000,10 @@ public class FopExporter extends AbstractPivotExporter {
 		try {
 			this.documentHandler.startElement(FOElementMapping.URI, "block",
 					"block", createCellContentAttributes(context));
-			this.documentHandler.characters(label.toCharArray(), 0,
-					label.length());
+			if (label != null) {
+				this.documentHandler.characters(label.toCharArray(), 0,
+						label.length());
+			}
 			this.documentHandler.endElement(FOElementMapping.URI, "block",
 					"block");
 		} catch (SAXException e) {
