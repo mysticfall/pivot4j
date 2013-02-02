@@ -8,7 +8,6 @@
  */
 package com.eyeq.pivot4j.export.fop;
 
-import java.awt.PageAttributes.OrientationRequestedType;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.util.Date;
@@ -16,6 +15,7 @@ import java.util.Date;
 import javax.print.attribute.Size2DSyntax;
 import javax.print.attribute.standard.MediaSize;
 import javax.print.attribute.standard.MediaSizeName;
+import javax.print.attribute.standard.OrientationRequested;
 
 import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.FOUserAgent;
@@ -65,7 +65,7 @@ public class FopExporter extends AbstractPivotExporter {
 
 	private String footerFontFamily = "Verdana, Geneva, Arial, Helvetica, sans-serif";
 
-	private OrientationRequestedType orientation = OrientationRequestedType.PORTRAIT;
+	private OrientationRequested orientation = OrientationRequested.PORTRAIT;
 
 	public FopExporter() {
 	}
@@ -110,7 +110,7 @@ public class FopExporter extends AbstractPivotExporter {
 	/**
 	 * @return the orientation
 	 */
-	public OrientationRequestedType getOrientation() {
+	public OrientationRequested getOrientation() {
 		return orientation;
 	}
 
@@ -118,7 +118,7 @@ public class FopExporter extends AbstractPivotExporter {
 	 * @param orientation
 	 *            the orientation to set
 	 */
-	public void setOrientation(OrientationRequestedType orientation) {
+	public void setOrientation(OrientationRequested orientation) {
 		this.orientation = orientation;
 	}
 
@@ -382,12 +382,14 @@ public class FopExporter extends AbstractPivotExporter {
 		String width = mediaSize.getX(Size2DSyntax.MM) + "mm";
 		String height = mediaSize.getY(Size2DSyntax.MM) + "mm";
 
-		if (orientation.equals(OrientationRequestedType.LANDSCAPE)) {
+		if (orientation.equals(OrientationRequested.LANDSCAPE)
+				|| orientation.equals(OrientationRequested.REVERSE_LANDSCAPE)) {
 			attributes.addAttribute("", "page-width", "page-width", "CDATA",
 					height);
 			attributes.addAttribute("", "page-height", "page-height", "CDATA",
 					width);
-		} else if (orientation.equals(OrientationRequestedType.PORTRAIT)) {
+		} else if (orientation.equals(OrientationRequested.PORTRAIT)
+				|| orientation.equals(OrientationRequested.REVERSE_PORTRAIT)) {
 			attributes.addAttribute("", "page-width", "page-width", "CDATA",
 					width);
 			attributes.addAttribute("", "page-height", "page-height", "CDATA",

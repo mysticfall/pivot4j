@@ -8,11 +8,12 @@ package com.eyeq.pivot4j.export.poi;
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-import java.awt.PageAttributes.OrientationRequestedType;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import javax.print.attribute.standard.OrientationRequested;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -61,7 +62,7 @@ public class FopExporterIT extends AbstractIntegrationTestCase {
 			exporter.setShowDimensionTitle(true);
 			exporter.setHideSpans(false);
 
-			exporter.setOrientation(OrientationRequestedType.LANDSCAPE);
+			exporter.setOrientation(OrientationRequested.LANDSCAPE);
 
 			exporter.initialize();
 			exporter.render(getPivotModel());
