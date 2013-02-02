@@ -259,9 +259,9 @@ public class QueryAdapter implements StateHolder {
 			for (QueryAxis axis : queryAxes) {
 				axis.setNonEmpty(nonEmpty);
 			}
-		}
 
-		fireQueryChanged(false);
+			fireQueryChanged(false);
+		}
 	}
 
 	/**
