@@ -6,6 +6,26 @@
 		<author email="fender@eyeq.co.kr">Xavier Cho</author>
 	</properties>
 	<body>
+		<release version="0.6" date="2013-02-02" description="Pivot4J 0.6 release">
+			<action dev="mysticfall" type="add" issue="26">
+				Implemented PDF export feature.
+			</action>
+			<action dev="mysticfall" type="add" issue="25">
+				Implemented Microsoft Excel export feature.
+			</action>
+			<action dev="mysticfall" type="update" issue="40">
+				Upgrade to Olap4J 1.1.0.
+			</action>
+			<action dev="mysticfall" type="add" issue="38">
+				New public MDX parser API.
+			</action>
+			<action dev="mysticfall" type="update" issue="33">
+				New convenient API for manipulating order of members in a hierarchy.
+			</action>
+			<action dev="mysticfall" type="update" issue="35">
+				Improved slicer axis manipulation.
+			</action>
+		</release>
 		<release version="0.0.5" date="2012-11-18" description="Pivot4J 0.0.5 release">
 			<action dev="mysticfall" type="add" issue="5">
 				Basic member properties support.
