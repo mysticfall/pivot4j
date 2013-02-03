@@ -48,7 +48,8 @@
 
 				<p>Of course, we could just add those missing implementation classes instead of starting a new 
 				project. But writing a robust query transform API is not an easy task, and some of Olap4J's design 
-				choice makes it even harder (i.e. lack of parent node reference, and immutable parse tree).</p>
+				choices - i.e. lack of parent node reference, immutable parse tree, and etc - makes it even harder 
+				to replicate JPivot's core functionalities while preserving the MDX query structure.</p>
 
 				<p>On the otherhand, JPivot already has a feature rich and well tested implementation for query 
 				transformation with considerations for various corner cases. So why not just reusing that codebase,
@@ -78,19 +79,6 @@
 				<p>However, as Pivot4J aims to provide many additional features and improvement also, 
 				the codebase is under constant change. So we decided to use low version numbers until 
 				the core API is stabilized.</p>
-			</answer>
-		</faq>
-
-		<faq id="missing-features">
-			<question>
-				What JPivot features are missing from Pivot4J?
-			</question>
-			<answer>
-				<p>Currently, drill through and member properties support is missing from the project.
-				Both of them are expected to be made available in the next few releases.</p>
-
-				<p>Also MDX style expressions which control the cell's appearance like font or color are not 
-				working, but it's intentional and there will be a new concept to cover such an use case.</p>
 			</answer>
 		</faq>
 	</part>
@@ -152,28 +140,12 @@ Member member = cube.lookupMember(
 			</answer>
 		</faq>
 
-		<faq id="parsing-a-mdx">
-			<question>
-				How can I manipulate a MDX query manually?
-			</question>
-			<answer>
-				<p>Currently the QueryAdapter instance and its MDX parse tree is deliberately hidden 
-				from public access. It could be changed later once the related API(com.eyeq.pivot4j.mdx package)
-				gets some refactoring to be more consistent with other parts of the project.</p>
-
-				<p>If you really want to manipulate the parse tree manually, you can parse the current MDX 
-				using either Pivot4J's parser or Olap4J's MdxParser class yourself outside the PivotModel. 
-				Just remember any class under com.eyeq.pivot4j.mdx package is subject to change in 
-				subsequent releases.</p>
-			</answer>
-		</faq>
-
 		<faq id="i-have-a-problem">
 			<question>
 				It does not work!
 			</question>
 			<answer>
-				<p>Sorry for the inconvenience. It's still in very early stage of development so please don't 
+				<p>Sorry for the inconvenience. It's still in an early stage of development so please don't 
 				expect to run flawlessly.
 
 				 If you encounter a bug or having a problem, feel free to ask a question in the 

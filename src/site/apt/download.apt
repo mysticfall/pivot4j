@@ -1,0 +1,36 @@
+            ------
+            Pivot4J - Downloads
+            ------
+            Xavier Cho
+            ------
+             2013-02-02
+
+Download
+
+* Pivot4J Version 0.6
+
+** Stable Release
+
+	* Library Jar : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j/0.6/pivot4j-0.6.jar}pivot4j-0.6.jar}}
+
+	* JavaDoc API : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j/0.6/pivot4j-0.6-javadoc.jar}pivot4j-0.6-javadoc.jar}}
+
+	* Source Archive : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j/0.6/pivot4j-0.6-sources.jar}pivot4j-0.6-sources.jar}}
+
+** Development Snapshot
+
+	* The unstable snapshot builds of the project are available {{{http://dev.eyeq.co.kr/artifactory/libs-snapshot/com/eyeq/pivot4j/0.7-SNAPSHOT/}here}}.
+
+* Sample Application
+
+** Stable Release
+
+	* Web Archive (.war) : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-jsf/0.6/pivot4j.war}pivot4j.war}}
+
+	* JavaDoc API : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j/0.6-jsf/pivot4j-jsf-0.6-javadoc.jar}pivot4j-jsf-0.6-javadoc.jar}}
+
+	* Source Archive : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j/0.6-jsf/pivot4j-jsf-0.6-sources.jar}pivot4j-jsf-0.6-sources.jar}}
+
+** Development Snapshot
+
+	* The unstable snapshot builds of the project are available {{{http://dev.eyeq.co.kr/artifactory/libs-snapshot/com/eyeq/pivot4j-jsr/0.7-SNAPSHOT/}here}}.

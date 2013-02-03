@@ -1,11 +1,13 @@
             ------
-            Pivot4J - Introduction
+            Pivot4J - A New UI Independent JPivot Replacement
             ------
             Xavier Cho
             ------
-             2012-11-18
+             2013-02-02
 
-About
+A New UI Independent JPivot Replacement
+
+* About
 
 	<<Pivot4J>> provides a common {{{http://www.java.com}Java}} API for OLAP servers which can be used to build an 
 	analytical service frontend with pivot style GUI. It aims to leverage mature but now discontinued 
@@ -13,60 +15,66 @@ About
 	independent of any particular GUI implementation.
 
 
-Motivation
+* Motivation
 
-	For a long time, JPivot has remained as the <de facto> standard for creating a pivot grid style OLAP frontend application 
+	For a long time, JPivot has remained as a <de facto> standard for creating a pivot grid style OLAP frontend application 
 	in Java language. However, as the project is no longer actively maintained for now, advance of new web technologies has 
 	made its JSP-based approach look quite outdated.
 
-	Moreover, JPivot was never desiged as a common API for OLAP even it included lot of useful backend implementations for 
+	Moreover, JPivot was never designed as a common API for OLAP even it included lot of useful backend implementations for 
 	connecting to and work with XMLA and {{{http://mondrian.pentaho.com}Mondrian}} servers.
 
 	As many BI developers felt the need for more modern and generic API for OLAP in Java, {{{http://www.olap4j.org}Olap4J}} has 
 	emerged as a combined effort by various commercial and open source projects to fill this gap.
 
-	However, as it is still in very early stage of development, it proved quite challenging to build a working pivot grid GUI component 
-	over the current release due to its lacking any substantial implmentation for query transformation or generation API which is 
-	essential for operation like drill down, sort, and etc.
-
 	Pivot4J project has been started as a fork and major refactoring effort of JPivot to combine the best parts of both libraries. 
 	It replaced JPivot's legacy backend implementation with Olap4J while leveraging its mature query transform API. And also 
-	Pivot4J has done extensive refactorings to make the codebase more modern and maintainable.
+	Pivot4J has done extensive refactorings to make its codebase more modern and maintainable.
 
-	Pivot4J does not contain any concrete GUI implementation for now. However, it's designed as an easy to use model API for 
-	creating pivot GUI component using any web technologies like JSP, JSF, GWT, and more.
+	Pivot4J itself does not mandate to use any specific technology to build an UI application with it. Rather. it's designed as 
+	an easy to use model and abstract UI layer for creating such applications using any technologies like JSP, JSF, GWT, or even 
+	client side graphical toolkits like SWT or Swing.
 
-System Requirement
+* Features
 
-	* Java 1.6 or higher
+	* Supports most of the original JPivot's features, like drill down, drill through, sort, and more.
 
-	* {{{http://mondrian.pentaho.com}Mondrian}} or any other XMLA based OLAP server which is supported by Olap4J.
+	* Supports any OLAP backend which has an Olap4J driver implementation available.
 
+	* Easy to use and very extensible renderer API including a concrete base implementation for web applications. 
 
-News
+	* Built-in PDF and Excel exporters. 
 
-	* <<[2012-11-18]>> Pivot4J 0.0.5 has been released with new features and various bug fixes! The new command API 
+	* A fully functional {{{./example.html}sample application}} based on Java Server Faces. 
+
+* News
+
+	* <<[2013-02-02]>> Decided to bump the version a little bit, so instead of 0.0.6, <<Pivot4J 0.6>> has been released. 
+	New features include PDF, Excel export support, and public MDX parser API. And we no longer maintain a separate 
+	homepage for the sample application project.
+
+	* <<[2012-11-18]>> <<Pivot4J 0.0.5>> has been released with new features and various bug fixes! The new command API 
 	brings buit-in drill down and sorting support to PivotRenderer interface.
 
-	* <<[2012-10-28]>> Pivot4J 0.0.4 has been released. The rendering API has been re-implemented from the 
+	* <<[2012-10-28]>> <<Pivot4J 0.0.4>> has been released. The rendering API has been re-implemented from the 
 	scratch to make it more flexible and easier to extend.
 
-	* <<[2012-10-20]>> Pivot4J 0.0.3 has been released with various bug fixes and some new features.
+	* <<[2012-10-20]>> <<Pivot4J 0.0.3>> has been released with various bug fixes and some new features.
 	Please see the {{{./changes-report.html}changes note}} for details. 
 
-	* <<[2012-10-08]>> Pivot4J 0.0.2 has been released with the new table builder API. 
+	* <<[2012-10-08]>> <<Pivot4J 0.0.2>> has been released with the new table builder API. 
 
-	* <<[2012-10-07]>> A JSF sample application is now available! It's called Pivot4J JSF, and has a separate 
-	homepage {{{http://mysticfall.github.com/pivot4j-jsf/}here}}.
+	* <<[2012-10-07]>> A JSF based sample application is now available! It's called <<Pivot4J JSF>>, and has a separate 
+	project page {{{http://mysticfall.github.com/pivot4j-jsf/}here}}.
 
 	* <<[2012-10-02]>> Pivot4J team will be working together with {{{http://analytical-labs.com/}Saiku}} to bring JPivot 
 	features into the project. Initial work has bee already started, and there is new 
 	{{{https://github.com/mysticfall/saiku}Github project}} opened for the task.
 
-	* <<[2012-09-28]>> Pivot4J 0.0.1 has been released. You can download it from 
+	* <<[2012-09-28]>> <<Pivot4J 0.0.1>> has been released. You can download it from 
 	{{{https://github.com/mysticfall/pivot4j/downloads}here}}.
 
-Contact
+* Contact
 
 	If you have any question or suggestion for the project, please leave your message at 
 	{{{http://groups.google.com/d/forum/pivot4j-list}the support forum}}.

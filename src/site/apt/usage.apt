@@ -7,6 +7,12 @@
 
 How to Use Pivot4J
 
+* System Requirement
+
+	* Java 1.6 or higher
+
+	* {{{http://mondrian.pentaho.com}Mondrian}} or any other XMLA based OLAP server which is supported by Olap4J.
+
 * Maven Project Setup
 
 	If you're using {{{http://maven.apache.org}Maven}}, update your pom.xml as below :
@@ -30,7 +36,7 @@ How to Use Pivot4J
         <dependency>
             <groupId>com.eyeq</groupId>
             <artifactId>pivot4j</artifactId>
-            <version>0.0.5</version>
+            <version>0.6</version>
         </dependency>
     </dependencies>
 </project>
