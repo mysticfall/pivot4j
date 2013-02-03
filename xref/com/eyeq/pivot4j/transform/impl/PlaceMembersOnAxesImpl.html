@@ -35,8 +35,8 @@
 <a class="jxr_linenumber" name="25" href="#25">25</a>  
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.Exp;
 <a class="jxr_linenumber" name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.FunCall;
-<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.MemberExp;
-<a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.Syntax;
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.Syntax;
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.metadata.MemberExp;
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.query.Quax;
 <a class="jxr_linenumber" name="31" href="#31">31</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.query.QueryAdapter;
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.transform.AbstractTransform;
@@ -130,285 +130,284 @@
 <a class="jxr_linenumber" name="120" href="#120">120</a> 			List&lt;Exp&gt; sets = <strong class="jxr_keyword">new</strong> ArrayList&lt;Exp&gt;(selection.size());
 <a class="jxr_linenumber" name="121" href="#121">121</a> 
 <a class="jxr_linenumber" name="122" href="#122">122</a> 			<strong class="jxr_keyword">if</strong> (selection.size() == 1) {
-<a class="jxr_linenumber" name="123" href="#123">123</a> 				expressions.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/MemberExp.html">MemberExp</a>(selection.get(0)));
+<a class="jxr_linenumber" name="123" href="#123">123</a> 				expressions.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(selection.get(0)));
 <a class="jxr_linenumber" name="124" href="#124">124</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="125" href="#125">125</a> 				<strong class="jxr_keyword">for</strong> (Member member : selection) {
-<a class="jxr_linenumber" name="126" href="#126">126</a> 					sets.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/MemberExp.html">MemberExp</a>(member));
+<a class="jxr_linenumber" name="126" href="#126">126</a> 					sets.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(member));
 <a class="jxr_linenumber" name="127" href="#127">127</a> 				}
 <a class="jxr_linenumber" name="128" href="#128">128</a> 
-<a class="jxr_linenumber" name="129" href="#129">129</a> 				expressions.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"{}"</span>, sets.toArray(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a>[sets
-<a class="jxr_linenumber" name="130" href="#130">130</a> 						.size()]), Syntax.Braces));
-<a class="jxr_linenumber" name="131" href="#131">131</a> 			}
-<a class="jxr_linenumber" name="132" href="#132">132</a> 		}
-<a class="jxr_linenumber" name="133" href="#133">133</a> 
-<a class="jxr_linenumber" name="134" href="#134">134</a> 		<em class="jxr_comment">// generate the crossjoins</em>
-<a class="jxr_linenumber" name="135" href="#135">135</a> 		quax.regeneratePosTree(expressions, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="136" href="#136">136</a> 
-<a class="jxr_linenumber" name="137" href="#137">137</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
-<a class="jxr_linenumber" name="138" href="#138">138</a> 			logger.info(<span class="jxr_string">"setQueryAxis axis="</span> + quax.getOrdinal()
-<a class="jxr_linenumber" name="139" href="#139">139</a> 					+ <span class="jxr_string">" nDimension="</span> + hierarchies.size());
-<a class="jxr_linenumber" name="140" href="#140">140</a> 			logger.info(<span class="jxr_string">"Expression for Axis="</span> + quax.toString());
-<a class="jxr_linenumber" name="141" href="#141">141</a> 		}
-<a class="jxr_linenumber" name="142" href="#142">142</a> 	}
-<a class="jxr_linenumber" name="143" href="#143">143</a> 
-<a class="jxr_linenumber" name="144" href="#144">144</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="145" href="#145">145</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.metadata</em>
-<a class="jxr_linenumber" name="146" href="#146">146</a> <em class="jxr_javadoccomment">	 *      .Member, int)</em>
-<a class="jxr_linenumber" name="147" href="#147">147</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="148" href="#148">148</a> 	@Override
-<a class="jxr_linenumber" name="149" href="#149">149</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addMember(Member member, <strong class="jxr_keyword">int</strong> position) {
-<a class="jxr_linenumber" name="150" href="#150">150</a> 		Hierarchy hierarchy = member.getHierarchy();
-<a class="jxr_linenumber" name="151" href="#151">151</a> 
-<a class="jxr_linenumber" name="152" href="#152">152</a> 		List&lt;Member&gt; selection = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
-<a class="jxr_linenumber" name="153" href="#153">153</a> 				findVisibleMembers(hierarchy));
-<a class="jxr_linenumber" name="154" href="#154">154</a> 		<strong class="jxr_keyword">if</strong> (selection.contains(member)) {
-<a class="jxr_linenumber" name="155" href="#155">155</a> 			moveMember(member, position);
-<a class="jxr_linenumber" name="156" href="#156">156</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="157" href="#157">157</a> 		}
-<a class="jxr_linenumber" name="158" href="#158">158</a> 
-<a class="jxr_linenumber" name="159" href="#159">159</a> 		<strong class="jxr_keyword">if</strong> (position &lt; 0 || position &gt;= selection.size()) {
-<a class="jxr_linenumber" name="160" href="#160">160</a> 			selection.add(member);
-<a class="jxr_linenumber" name="161" href="#161">161</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="162" href="#162">162</a> 			selection.add(position, member);
-<a class="jxr_linenumber" name="163" href="#163">163</a> 		}
-<a class="jxr_linenumber" name="164" href="#164">164</a> 
-<a class="jxr_linenumber" name="165" href="#165">165</a> 		placeMembers(hierarchy, selection);
-<a class="jxr_linenumber" name="166" href="#166">166</a> 	}
-<a class="jxr_linenumber" name="167" href="#167">167</a> 
-<a class="jxr_linenumber" name="168" href="#168">168</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="169" href="#169">169</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMembers(org.olap4j.metadata.Hierarchy,</em>
-<a class="jxr_linenumber" name="170" href="#170">170</a> <em class="jxr_javadoccomment">	 *      java.util.List)</em>
-<a class="jxr_linenumber" name="171" href="#171">171</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="172" href="#172">172</a> 	@Override
-<a class="jxr_linenumber" name="173" href="#173">173</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addMembers(Hierarchy hierarchy, List&lt;Member&gt; members) {
-<a class="jxr_linenumber" name="174" href="#174">174</a> 		<strong class="jxr_keyword">if</strong> (members.isEmpty()) {
-<a class="jxr_linenumber" name="175" href="#175">175</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="176" href="#176">176</a> 		}
-<a class="jxr_linenumber" name="177" href="#177">177</a> 
-<a class="jxr_linenumber" name="178" href="#178">178</a> 		PlaceMembersOnAxes transform = getQueryAdapter().getModel()
-<a class="jxr_linenumber" name="179" href="#179">179</a> 				.getTransform(PlaceMembersOnAxes.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="180" href="#180">180</a> 
-<a class="jxr_linenumber" name="181" href="#181">181</a> 		MemberSelection selection = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/util/MemberSelection.html">MemberSelection</a>(
-<a class="jxr_linenumber" name="182" href="#182">182</a> 				transform.findVisibleMembers(hierarchy));
-<a class="jxr_linenumber" name="183" href="#183">183</a> 		selection.addMembers(members);
-<a class="jxr_linenumber" name="184" href="#184">184</a> 
-<a class="jxr_linenumber" name="185" href="#185">185</a> 		placeMembers(hierarchy, selection.getMembers());
-<a class="jxr_linenumber" name="186" href="#186">186</a> 	}
-<a class="jxr_linenumber" name="187" href="#187">187</a> 
-<a class="jxr_linenumber" name="188" href="#188">188</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="189" href="#189">189</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.Axis,</em>
-<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_javadoccomment">	 *      org.olap4j.metadata.Member, int)</em>
-<a class="jxr_linenumber" name="191" href="#191">191</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="192" href="#192">192</a> 	@Override
-<a class="jxr_linenumber" name="193" href="#193">193</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addMember(Axis axis, Member member, <strong class="jxr_keyword">int</strong> position) {
-<a class="jxr_linenumber" name="194" href="#194">194</a> 		QueryAdapter adapter = getQueryAdapter();
-<a class="jxr_linenumber" name="195" href="#195">195</a> 
-<a class="jxr_linenumber" name="196" href="#196">196</a> 		Quax quax = adapter.findQuax(member.getDimension());
-<a class="jxr_linenumber" name="197" href="#197">197</a> 		<strong class="jxr_keyword">if</strong> (quax == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="198" href="#198">198</a> 			quax = adapter.getQuaxes().get(axis.axisOrdinal());
-<a class="jxr_linenumber" name="199" href="#199">199</a> 
-<a class="jxr_linenumber" name="200" href="#200">200</a> 			List&lt;Hierarchy&gt; hierarchies = <strong class="jxr_keyword">new</strong> ArrayList&lt;Hierarchy&gt;(
-<a class="jxr_linenumber" name="201" href="#201">201</a> 					quax.getHierarchies());
-<a class="jxr_linenumber" name="202" href="#202">202</a> 
-<a class="jxr_linenumber" name="203" href="#203">203</a> 			<strong class="jxr_keyword">if</strong> (position &lt; 0 || position &gt;= hierarchies.size()) {
-<a class="jxr_linenumber" name="204" href="#204">204</a> 				hierarchies.add(member.getHierarchy());
-<a class="jxr_linenumber" name="205" href="#205">205</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="206" href="#206">206</a> 				hierarchies.add(position, member.getHierarchy());
-<a class="jxr_linenumber" name="207" href="#207">207</a> 			}
-<a class="jxr_linenumber" name="208" href="#208">208</a> 
-<a class="jxr_linenumber" name="209" href="#209">209</a> 			List&lt;Member&gt; members = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;();
-<a class="jxr_linenumber" name="210" href="#210">210</a> 			<strong class="jxr_keyword">for</strong> (Hierarchy hierarchy : hierarchies) {
-<a class="jxr_linenumber" name="211" href="#211">211</a> 				<strong class="jxr_keyword">if</strong> (member.getHierarchy().equals(hierarchy)) {
-<a class="jxr_linenumber" name="212" href="#212">212</a> 					members.add(member);
-<a class="jxr_linenumber" name="213" href="#213">213</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="214" href="#214">214</a> 					members.addAll(findVisibleMembers(hierarchy));
-<a class="jxr_linenumber" name="215" href="#215">215</a> 				}
-<a class="jxr_linenumber" name="216" href="#216">216</a> 			}
-<a class="jxr_linenumber" name="217" href="#217">217</a> 
-<a class="jxr_linenumber" name="218" href="#218">218</a> 			placeMembers(axis, members);
-<a class="jxr_linenumber" name="219" href="#219">219</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="220" href="#220">220</a> 			addMember(member, position);
-<a class="jxr_linenumber" name="221" href="#221">221</a> 		}
-<a class="jxr_linenumber" name="222" href="#222">222</a> 	}
-<a class="jxr_linenumber" name="223" href="#223">223</a> 
-<a class="jxr_linenumber" name="224" href="#224">224</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="225" href="#225">225</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMembers(org.olap4j.Axis,</em>
-<a class="jxr_linenumber" name="226" href="#226">226</a> <em class="jxr_javadoccomment">	 *      java.util.List,int)</em>
-<a class="jxr_linenumber" name="227" href="#227">227</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="228" href="#228">228</a> 	@Override
-<a class="jxr_linenumber" name="229" href="#229">229</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addMembers(Axis axis, List&lt;Member&gt; members, <strong class="jxr_keyword">int</strong> position) {
-<a class="jxr_linenumber" name="230" href="#230">230</a> 		QueryAdapter adapter = getQueryAdapter();
-<a class="jxr_linenumber" name="231" href="#231">231</a> 
-<a class="jxr_linenumber" name="232" href="#232">232</a> 		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
-<a class="jxr_linenumber" name="233" href="#233">233</a> 
-<a class="jxr_linenumber" name="234" href="#234">234</a> 		List&lt;Hierarchy&gt; hierarchies = <strong class="jxr_keyword">new</strong> ArrayList&lt;Hierarchy&gt;(
-<a class="jxr_linenumber" name="235" href="#235">235</a> 				quax.getHierarchies());
-<a class="jxr_linenumber" name="236" href="#236">236</a> 
-<a class="jxr_linenumber" name="237" href="#237">237</a> 		<strong class="jxr_keyword">if</strong> (position &lt; 0 || position &gt;= hierarchies.size()) {
-<a class="jxr_linenumber" name="238" href="#238">238</a> 			hierarchies.add(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="239" href="#239">239</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="240" href="#240">240</a> 			hierarchies.add(position, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="241" href="#241">241</a> 		}
-<a class="jxr_linenumber" name="242" href="#242">242</a> 
-<a class="jxr_linenumber" name="243" href="#243">243</a> 		List&lt;Member&gt; memberList = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;();
-<a class="jxr_linenumber" name="244" href="#244">244</a> 		<strong class="jxr_keyword">for</strong> (Hierarchy hierarchy : hierarchies) {
-<a class="jxr_linenumber" name="245" href="#245">245</a> 			<strong class="jxr_keyword">if</strong> (hierarchy == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="246" href="#246">246</a> 				memberList.addAll(members);
-<a class="jxr_linenumber" name="247" href="#247">247</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="248" href="#248">248</a> 				memberList.addAll(findVisibleMembers(hierarchy));
-<a class="jxr_linenumber" name="249" href="#249">249</a> 			}
-<a class="jxr_linenumber" name="250" href="#250">250</a> 		}
-<a class="jxr_linenumber" name="251" href="#251">251</a> 
-<a class="jxr_linenumber" name="252" href="#252">252</a> 		placeMembers(axis, members);
-<a class="jxr_linenumber" name="253" href="#253">253</a> 	}
-<a class="jxr_linenumber" name="254" href="#254">254</a> 
-<a class="jxr_linenumber" name="255" href="#255">255</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="256" href="#256">256</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#removeMember(org.olap4j</em>
-<a class="jxr_linenumber" name="257" href="#257">257</a> <em class="jxr_javadoccomment">	 *      .metadata.Member)</em>
-<a class="jxr_linenumber" name="258" href="#258">258</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="259" href="#259">259</a> 	@Override
-<a class="jxr_linenumber" name="260" href="#260">260</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeMember(Member member) {
-<a class="jxr_linenumber" name="261" href="#261">261</a> 		Hierarchy hierarchy = member.getHierarchy();
-<a class="jxr_linenumber" name="262" href="#262">262</a> 
-<a class="jxr_linenumber" name="263" href="#263">263</a> 		List&lt;Member&gt; members = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
-<a class="jxr_linenumber" name="264" href="#264">264</a> 				findVisibleMembers(hierarchy));
-<a class="jxr_linenumber" name="265" href="#265">265</a> 		members.remove(member);
-<a class="jxr_linenumber" name="266" href="#266">266</a> 
-<a class="jxr_linenumber" name="267" href="#267">267</a> 		placeMembers(hierarchy, members);
-<a class="jxr_linenumber" name="268" href="#268">268</a> 	}
-<a class="jxr_linenumber" name="269" href="#269">269</a> 
-<a class="jxr_linenumber" name="270" href="#270">270</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="271" href="#271">271</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#removeMembers(org.olap4j.metadata.Hierarchy,</em>
-<a class="jxr_linenumber" name="272" href="#272">272</a> <em class="jxr_javadoccomment">	 *      java.util.List)</em>
-<a class="jxr_linenumber" name="273" href="#273">273</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="274" href="#274">274</a> 	@Override
-<a class="jxr_linenumber" name="275" href="#275">275</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeMembers(Hierarchy hierarchy, List&lt;Member&gt; members) {
-<a class="jxr_linenumber" name="276" href="#276">276</a> 		List&lt;Member&gt; selection = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
-<a class="jxr_linenumber" name="277" href="#277">277</a> 				findVisibleMembers(hierarchy));
-<a class="jxr_linenumber" name="278" href="#278">278</a> 		selection.removeAll(members);
-<a class="jxr_linenumber" name="279" href="#279">279</a> 
-<a class="jxr_linenumber" name="280" href="#280">280</a> 		placeMembers(hierarchy, selection);
-<a class="jxr_linenumber" name="281" href="#281">281</a> 	}
-<a class="jxr_linenumber" name="282" href="#282">282</a> 
-<a class="jxr_linenumber" name="283" href="#283">283</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="284" href="#284">284</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#moveMember(org.olap4j.metadata</em>
-<a class="jxr_linenumber" name="285" href="#285">285</a> <em class="jxr_javadoccomment">	 *      .Member, int)</em>
-<a class="jxr_linenumber" name="286" href="#286">286</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="287" href="#287">287</a> 	@Override
-<a class="jxr_linenumber" name="288" href="#288">288</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> moveMember(Member member, <strong class="jxr_keyword">int</strong> position) {
-<a class="jxr_linenumber" name="289" href="#289">289</a> 		Hierarchy hierarchy = member.getHierarchy();
-<a class="jxr_linenumber" name="290" href="#290">290</a> 
-<a class="jxr_linenumber" name="291" href="#291">291</a> 		List&lt;Member&gt; selection = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
-<a class="jxr_linenumber" name="292" href="#292">292</a> 				findVisibleMembers(hierarchy));
-<a class="jxr_linenumber" name="293" href="#293">293</a> 		<strong class="jxr_keyword">if</strong> (!selection.contains(member)) {
-<a class="jxr_linenumber" name="294" href="#294">294</a> 			<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
-<a class="jxr_linenumber" name="295" href="#295">295</a> 				logger.warn(<span class="jxr_string">"The specified member is not visible on the current result : "</span>
-<a class="jxr_linenumber" name="296" href="#296">296</a> 						+ member.getUniqueName());
-<a class="jxr_linenumber" name="297" href="#297">297</a> 			}
-<a class="jxr_linenumber" name="298" href="#298">298</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="299" href="#299">299</a> 		}
-<a class="jxr_linenumber" name="300" href="#300">300</a> 
-<a class="jxr_linenumber" name="301" href="#301">301</a> 		<strong class="jxr_keyword">if</strong> (position &lt; 0 || position &gt;= selection.size()) {
-<a class="jxr_linenumber" name="302" href="#302">302</a> 			selection.remove(member);
-<a class="jxr_linenumber" name="303" href="#303">303</a> 			selection.add(member);
-<a class="jxr_linenumber" name="304" href="#304">304</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="305" href="#305">305</a> 			<strong class="jxr_keyword">int</strong> index = selection.indexOf(member);
-<a class="jxr_linenumber" name="306" href="#306">306</a> 
-<a class="jxr_linenumber" name="307" href="#307">307</a> 			<strong class="jxr_keyword">if</strong> (position &lt; index) {
-<a class="jxr_linenumber" name="308" href="#308">308</a> 				selection.remove(member);
-<a class="jxr_linenumber" name="309" href="#309">309</a> 				selection.add(position, member);
-<a class="jxr_linenumber" name="310" href="#310">310</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (position &gt; index) {
-<a class="jxr_linenumber" name="311" href="#311">311</a> 				selection.add(position, member);
-<a class="jxr_linenumber" name="312" href="#312">312</a> 				selection.remove(index);
-<a class="jxr_linenumber" name="313" href="#313">313</a> 			}
-<a class="jxr_linenumber" name="314" href="#314">314</a> 		}
-<a class="jxr_linenumber" name="315" href="#315">315</a> 
-<a class="jxr_linenumber" name="316" href="#316">316</a> 		placeMembers(hierarchy, selection);
-<a class="jxr_linenumber" name="317" href="#317">317</a> 	}
-<a class="jxr_linenumber" name="318" href="#318">318</a> 
-<a class="jxr_linenumber" name="319" href="#319">319</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="320" href="#320">320</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findVisibleMembers(org.olap4j.Axis)</em>
-<a class="jxr_linenumber" name="321" href="#321">321</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="322" href="#322">322</a> 	<strong class="jxr_keyword">public</strong> List&lt;Member&gt; findVisibleMembers(Axis axis) {
-<a class="jxr_linenumber" name="323" href="#323">323</a> 		List&lt;Member&gt; visibleMembers = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;();
-<a class="jxr_linenumber" name="324" href="#324">324</a> 
-<a class="jxr_linenumber" name="325" href="#325">325</a> 		QueryAdapter adapter = getQueryAdapter();
-<a class="jxr_linenumber" name="326" href="#326">326</a> 
-<a class="jxr_linenumber" name="327" href="#327">327</a> 		<em class="jxr_comment">// find the Quax for this hierarchy</em>
-<a class="jxr_linenumber" name="328" href="#328">328</a> 		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
-<a class="jxr_linenumber" name="329" href="#329">329</a> 		<strong class="jxr_keyword">if</strong> (quax == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="330" href="#330">330</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList(); <em class="jxr_comment">// should not occur</em>
-<a class="jxr_linenumber" name="331" href="#331">331</a> 		}
-<a class="jxr_linenumber" name="332" href="#332">332</a> 
-<a class="jxr_linenumber" name="333" href="#333">333</a> 		CellSet cellSet = adapter.getModel().getCellSet();
-<a class="jxr_linenumber" name="334" href="#334">334</a> 
-<a class="jxr_linenumber" name="335" href="#335">335</a> 		<em class="jxr_comment">// locate the appropriate result axis</em>
-<a class="jxr_linenumber" name="336" href="#336">336</a> 		<strong class="jxr_keyword">int</strong> iAx = quax.getOrdinal();
-<a class="jxr_linenumber" name="337" href="#337">337</a> 		<strong class="jxr_keyword">if</strong> (adapter.isAxesSwapped()) {
-<a class="jxr_linenumber" name="338" href="#338">338</a> 			iAx = (iAx + 1) % 2;
-<a class="jxr_linenumber" name="339" href="#339">339</a> 		}
-<a class="jxr_linenumber" name="340" href="#340">340</a> 
-<a class="jxr_linenumber" name="341" href="#341">341</a> 		CellSetAxis cellAxis = cellSet.getAxes().get(iAx);
-<a class="jxr_linenumber" name="342" href="#342">342</a> 
-<a class="jxr_linenumber" name="343" href="#343">343</a> 		List&lt;Position&gt; positions = cellAxis.getPositions();
-<a class="jxr_linenumber" name="344" href="#344">344</a> 		<strong class="jxr_keyword">for</strong> (Position position : positions) {
-<a class="jxr_linenumber" name="345" href="#345">345</a> 			List&lt;Member&gt; members = position.getMembers();
-<a class="jxr_linenumber" name="346" href="#346">346</a> 			<strong class="jxr_keyword">for</strong> (Member member : members) {
-<a class="jxr_linenumber" name="347" href="#347">347</a> 				<strong class="jxr_keyword">if</strong> (member != <strong class="jxr_keyword">null</strong> &amp;&amp; !visibleMembers.contains(member)) {
-<a class="jxr_linenumber" name="348" href="#348">348</a> 					visibleMembers.add(member);
-<a class="jxr_linenumber" name="349" href="#349">349</a> 				}
-<a class="jxr_linenumber" name="350" href="#350">350</a> 			}
-<a class="jxr_linenumber" name="351" href="#351">351</a> 		}
-<a class="jxr_linenumber" name="352" href="#352">352</a> 
-<a class="jxr_linenumber" name="353" href="#353">353</a> 		<strong class="jxr_keyword">return</strong> visibleMembers;
-<a class="jxr_linenumber" name="354" href="#354">354</a> 	}
-<a class="jxr_linenumber" name="355" href="#355">355</a> 
-<a class="jxr_linenumber" name="356" href="#356">356</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="357" href="#357">357</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findVisibleMembers(org.</em>
-<a class="jxr_linenumber" name="358" href="#358">358</a> <em class="jxr_javadoccomment">	 *      olap4j.metadata.Hierarchy)</em>
-<a class="jxr_linenumber" name="359" href="#359">359</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="360" href="#360">360</a> 	<strong class="jxr_keyword">public</strong> List&lt;Member&gt; findVisibleMembers(Hierarchy hierarchy) {
-<a class="jxr_linenumber" name="361" href="#361">361</a> 		List&lt;Member&gt; visibleMembers = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;();
-<a class="jxr_linenumber" name="362" href="#362">362</a> 
-<a class="jxr_linenumber" name="363" href="#363">363</a> 		QueryAdapter adapter = getQueryAdapter();
-<a class="jxr_linenumber" name="364" href="#364">364</a> 
-<a class="jxr_linenumber" name="365" href="#365">365</a> 		<em class="jxr_comment">// find the Quax for this hierarchy</em>
-<a class="jxr_linenumber" name="366" href="#366">366</a> 		Quax quax = adapter.findQuax(hierarchy.getDimension());
-<a class="jxr_linenumber" name="367" href="#367">367</a> 		<strong class="jxr_keyword">if</strong> (quax == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="368" href="#368">368</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList(); <em class="jxr_comment">// should not occur</em>
-<a class="jxr_linenumber" name="369" href="#369">369</a> 		}
-<a class="jxr_linenumber" name="370" href="#370">370</a> 
-<a class="jxr_linenumber" name="371" href="#371">371</a> 		<strong class="jxr_keyword">int</strong> iDim = quax.dimIdx(hierarchy.getDimension());
-<a class="jxr_linenumber" name="372" href="#372">372</a> 
-<a class="jxr_linenumber" name="373" href="#373">373</a> 		<em class="jxr_comment">// use result</em>
-<a class="jxr_linenumber" name="374" href="#374">374</a> 		<em class="jxr_comment">// problem: if NON EMPTY is on the axis then a member, which is excluded</em>
-<a class="jxr_linenumber" name="375" href="#375">375</a> 		<em class="jxr_comment">// by Non Empty,</em>
-<a class="jxr_linenumber" name="376" href="#376">376</a> 		<em class="jxr_comment">// will not be visible.</em>
-<a class="jxr_linenumber" name="377" href="#377">377</a> 		<em class="jxr_comment">// It would be possible to add it (again) to the axis, which must be</em>
-<a class="jxr_linenumber" name="378" href="#378">378</a> 		<em class="jxr_comment">// avoided</em>
-<a class="jxr_linenumber" name="379" href="#379">379</a> 
-<a class="jxr_linenumber" name="380" href="#380">380</a> 		CellSet cellSet = adapter.getModel().getCellSet();
-<a class="jxr_linenumber" name="381" href="#381">381</a> 
-<a class="jxr_linenumber" name="382" href="#382">382</a> 		<em class="jxr_comment">// locate the appropriate result axis</em>
-<a class="jxr_linenumber" name="383" href="#383">383</a> 		<strong class="jxr_keyword">int</strong> iAx = quax.getOrdinal();
-<a class="jxr_linenumber" name="384" href="#384">384</a> 		<strong class="jxr_keyword">if</strong> (adapter.isAxesSwapped()) {
-<a class="jxr_linenumber" name="385" href="#385">385</a> 			iAx = (iAx + 1) % 2;
-<a class="jxr_linenumber" name="386" href="#386">386</a> 		}
-<a class="jxr_linenumber" name="387" href="#387">387</a> 
-<a class="jxr_linenumber" name="388" href="#388">388</a> 		CellSetAxis axis = cellSet.getAxes().get(iAx);
-<a class="jxr_linenumber" name="389" href="#389">389</a> 
-<a class="jxr_linenumber" name="390" href="#390">390</a> 		List&lt;Position&gt; positions = axis.getPositions();
-<a class="jxr_linenumber" name="391" href="#391">391</a> 		<strong class="jxr_keyword">for</strong> (Position position : positions) {
-<a class="jxr_linenumber" name="392" href="#392">392</a> 			List&lt;Member&gt; members = position.getMembers();
-<a class="jxr_linenumber" name="393" href="#393">393</a> 			Member member = members.get(iDim);
-<a class="jxr_linenumber" name="394" href="#394">394</a> 			<strong class="jxr_keyword">if</strong> (member != <strong class="jxr_keyword">null</strong> &amp;&amp; !visibleMembers.contains(member)) {
-<a class="jxr_linenumber" name="395" href="#395">395</a> 				visibleMembers.add(member);
-<a class="jxr_linenumber" name="396" href="#396">396</a> 			}
-<a class="jxr_linenumber" name="397" href="#397">397</a> 		}
-<a class="jxr_linenumber" name="398" href="#398">398</a> 
-<a class="jxr_linenumber" name="399" href="#399">399</a> 		<strong class="jxr_keyword">return</strong> visibleMembers;
-<a class="jxr_linenumber" name="400" href="#400">400</a> 	}
-<a class="jxr_linenumber" name="401" href="#401">401</a> }
+<a class="jxr_linenumber" name="129" href="#129">129</a> 				expressions.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"{}"</span>, Syntax.Braces, sets));
+<a class="jxr_linenumber" name="130" href="#130">130</a> 			}
+<a class="jxr_linenumber" name="131" href="#131">131</a> 		}
+<a class="jxr_linenumber" name="132" href="#132">132</a> 
+<a class="jxr_linenumber" name="133" href="#133">133</a> 		<em class="jxr_comment">// generate the crossjoins</em>
+<a class="jxr_linenumber" name="134" href="#134">134</a> 		quax.regeneratePosTree(expressions, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="135" href="#135">135</a> 
+<a class="jxr_linenumber" name="136" href="#136">136</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
+<a class="jxr_linenumber" name="137" href="#137">137</a> 			logger.info(<span class="jxr_string">"setQueryAxis axis="</span> + quax.getOrdinal()
+<a class="jxr_linenumber" name="138" href="#138">138</a> 					+ <span class="jxr_string">" nDimension="</span> + hierarchies.size());
+<a class="jxr_linenumber" name="139" href="#139">139</a> 			logger.info(<span class="jxr_string">"Expression for Axis="</span> + quax.toString());
+<a class="jxr_linenumber" name="140" href="#140">140</a> 		}
+<a class="jxr_linenumber" name="141" href="#141">141</a> 	}
+<a class="jxr_linenumber" name="142" href="#142">142</a> 
+<a class="jxr_linenumber" name="143" href="#143">143</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="144" href="#144">144</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.metadata</em>
+<a class="jxr_linenumber" name="145" href="#145">145</a> <em class="jxr_javadoccomment">	 *      .Member, int)</em>
+<a class="jxr_linenumber" name="146" href="#146">146</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="147" href="#147">147</a> 	@Override
+<a class="jxr_linenumber" name="148" href="#148">148</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addMember(Member member, <strong class="jxr_keyword">int</strong> position) {
+<a class="jxr_linenumber" name="149" href="#149">149</a> 		Hierarchy hierarchy = member.getHierarchy();
+<a class="jxr_linenumber" name="150" href="#150">150</a> 
+<a class="jxr_linenumber" name="151" href="#151">151</a> 		List&lt;Member&gt; selection = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
+<a class="jxr_linenumber" name="152" href="#152">152</a> 				findVisibleMembers(hierarchy));
+<a class="jxr_linenumber" name="153" href="#153">153</a> 		<strong class="jxr_keyword">if</strong> (selection.contains(member)) {
+<a class="jxr_linenumber" name="154" href="#154">154</a> 			moveMember(member, position);
+<a class="jxr_linenumber" name="155" href="#155">155</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="156" href="#156">156</a> 		}
+<a class="jxr_linenumber" name="157" href="#157">157</a> 
+<a class="jxr_linenumber" name="158" href="#158">158</a> 		<strong class="jxr_keyword">if</strong> (position &lt; 0 || position &gt;= selection.size()) {
+<a class="jxr_linenumber" name="159" href="#159">159</a> 			selection.add(member);
+<a class="jxr_linenumber" name="160" href="#160">160</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="161" href="#161">161</a> 			selection.add(position, member);
+<a class="jxr_linenumber" name="162" href="#162">162</a> 		}
+<a class="jxr_linenumber" name="163" href="#163">163</a> 
+<a class="jxr_linenumber" name="164" href="#164">164</a> 		placeMembers(hierarchy, selection);
+<a class="jxr_linenumber" name="165" href="#165">165</a> 	}
+<a class="jxr_linenumber" name="166" href="#166">166</a> 
+<a class="jxr_linenumber" name="167" href="#167">167</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="168" href="#168">168</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMembers(org.olap4j.metadata.Hierarchy,</em>
+<a class="jxr_linenumber" name="169" href="#169">169</a> <em class="jxr_javadoccomment">	 *      java.util.List)</em>
+<a class="jxr_linenumber" name="170" href="#170">170</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="171" href="#171">171</a> 	@Override
+<a class="jxr_linenumber" name="172" href="#172">172</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addMembers(Hierarchy hierarchy, List&lt;Member&gt; members) {
+<a class="jxr_linenumber" name="173" href="#173">173</a> 		<strong class="jxr_keyword">if</strong> (members.isEmpty()) {
+<a class="jxr_linenumber" name="174" href="#174">174</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="175" href="#175">175</a> 		}
+<a class="jxr_linenumber" name="176" href="#176">176</a> 
+<a class="jxr_linenumber" name="177" href="#177">177</a> 		PlaceMembersOnAxes transform = getQueryAdapter().getModel()
+<a class="jxr_linenumber" name="178" href="#178">178</a> 				.getTransform(PlaceMembersOnAxes.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="179" href="#179">179</a> 
+<a class="jxr_linenumber" name="180" href="#180">180</a> 		MemberSelection selection = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/util/MemberSelection.html">MemberSelection</a>(
+<a class="jxr_linenumber" name="181" href="#181">181</a> 				transform.findVisibleMembers(hierarchy));
+<a class="jxr_linenumber" name="182" href="#182">182</a> 		selection.addMembers(members);
+<a class="jxr_linenumber" name="183" href="#183">183</a> 
+<a class="jxr_linenumber" name="184" href="#184">184</a> 		placeMembers(hierarchy, selection.getMembers());
+<a class="jxr_linenumber" name="185" href="#185">185</a> 	}
+<a class="jxr_linenumber" name="186" href="#186">186</a> 
+<a class="jxr_linenumber" name="187" href="#187">187</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="188" href="#188">188</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMember(org.olap4j.Axis,</em>
+<a class="jxr_linenumber" name="189" href="#189">189</a> <em class="jxr_javadoccomment">	 *      org.olap4j.metadata.Member, int)</em>
+<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="191" href="#191">191</a> 	@Override
+<a class="jxr_linenumber" name="192" href="#192">192</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addMember(Axis axis, Member member, <strong class="jxr_keyword">int</strong> position) {
+<a class="jxr_linenumber" name="193" href="#193">193</a> 		QueryAdapter adapter = getQueryAdapter();
+<a class="jxr_linenumber" name="194" href="#194">194</a> 
+<a class="jxr_linenumber" name="195" href="#195">195</a> 		Quax quax = adapter.findQuax(member.getDimension());
+<a class="jxr_linenumber" name="196" href="#196">196</a> 		<strong class="jxr_keyword">if</strong> (quax == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="197" href="#197">197</a> 			quax = adapter.getQuaxes().get(axis.axisOrdinal());
+<a class="jxr_linenumber" name="198" href="#198">198</a> 
+<a class="jxr_linenumber" name="199" href="#199">199</a> 			List&lt;Hierarchy&gt; hierarchies = <strong class="jxr_keyword">new</strong> ArrayList&lt;Hierarchy&gt;(
+<a class="jxr_linenumber" name="200" href="#200">200</a> 					quax.getHierarchies());
+<a class="jxr_linenumber" name="201" href="#201">201</a> 
+<a class="jxr_linenumber" name="202" href="#202">202</a> 			<strong class="jxr_keyword">if</strong> (position &lt; 0 || position &gt;= hierarchies.size()) {
+<a class="jxr_linenumber" name="203" href="#203">203</a> 				hierarchies.add(member.getHierarchy());
+<a class="jxr_linenumber" name="204" href="#204">204</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="205" href="#205">205</a> 				hierarchies.add(position, member.getHierarchy());
+<a class="jxr_linenumber" name="206" href="#206">206</a> 			}
+<a class="jxr_linenumber" name="207" href="#207">207</a> 
+<a class="jxr_linenumber" name="208" href="#208">208</a> 			List&lt;Member&gt; members = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;();
+<a class="jxr_linenumber" name="209" href="#209">209</a> 			<strong class="jxr_keyword">for</strong> (Hierarchy hierarchy : hierarchies) {
+<a class="jxr_linenumber" name="210" href="#210">210</a> 				<strong class="jxr_keyword">if</strong> (member.getHierarchy().equals(hierarchy)) {
+<a class="jxr_linenumber" name="211" href="#211">211</a> 					members.add(member);
+<a class="jxr_linenumber" name="212" href="#212">212</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="213" href="#213">213</a> 					members.addAll(findVisibleMembers(hierarchy));
+<a class="jxr_linenumber" name="214" href="#214">214</a> 				}
+<a class="jxr_linenumber" name="215" href="#215">215</a> 			}
+<a class="jxr_linenumber" name="216" href="#216">216</a> 
+<a class="jxr_linenumber" name="217" href="#217">217</a> 			placeMembers(axis, members);
+<a class="jxr_linenumber" name="218" href="#218">218</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="219" href="#219">219</a> 			addMember(member, position);
+<a class="jxr_linenumber" name="220" href="#220">220</a> 		}
+<a class="jxr_linenumber" name="221" href="#221">221</a> 	}
+<a class="jxr_linenumber" name="222" href="#222">222</a> 
+<a class="jxr_linenumber" name="223" href="#223">223</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="224" href="#224">224</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#addMembers(org.olap4j.Axis,</em>
+<a class="jxr_linenumber" name="225" href="#225">225</a> <em class="jxr_javadoccomment">	 *      java.util.List,int)</em>
+<a class="jxr_linenumber" name="226" href="#226">226</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="227" href="#227">227</a> 	@Override
+<a class="jxr_linenumber" name="228" href="#228">228</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addMembers(Axis axis, List&lt;Member&gt; members, <strong class="jxr_keyword">int</strong> position) {
+<a class="jxr_linenumber" name="229" href="#229">229</a> 		QueryAdapter adapter = getQueryAdapter();
+<a class="jxr_linenumber" name="230" href="#230">230</a> 
+<a class="jxr_linenumber" name="231" href="#231">231</a> 		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+<a class="jxr_linenumber" name="232" href="#232">232</a> 
+<a class="jxr_linenumber" name="233" href="#233">233</a> 		List&lt;Hierarchy&gt; hierarchies = <strong class="jxr_keyword">new</strong> ArrayList&lt;Hierarchy&gt;(
+<a class="jxr_linenumber" name="234" href="#234">234</a> 				quax.getHierarchies());
+<a class="jxr_linenumber" name="235" href="#235">235</a> 
+<a class="jxr_linenumber" name="236" href="#236">236</a> 		<strong class="jxr_keyword">if</strong> (position &lt; 0 || position &gt;= hierarchies.size()) {
+<a class="jxr_linenumber" name="237" href="#237">237</a> 			hierarchies.add(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="238" href="#238">238</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="239" href="#239">239</a> 			hierarchies.add(position, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="240" href="#240">240</a> 		}
+<a class="jxr_linenumber" name="241" href="#241">241</a> 
+<a class="jxr_linenumber" name="242" href="#242">242</a> 		List&lt;Member&gt; memberList = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;();
+<a class="jxr_linenumber" name="243" href="#243">243</a> 		<strong class="jxr_keyword">for</strong> (Hierarchy hierarchy : hierarchies) {
+<a class="jxr_linenumber" name="244" href="#244">244</a> 			<strong class="jxr_keyword">if</strong> (hierarchy == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="245" href="#245">245</a> 				memberList.addAll(members);
+<a class="jxr_linenumber" name="246" href="#246">246</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="247" href="#247">247</a> 				memberList.addAll(findVisibleMembers(hierarchy));
+<a class="jxr_linenumber" name="248" href="#248">248</a> 			}
+<a class="jxr_linenumber" name="249" href="#249">249</a> 		}
+<a class="jxr_linenumber" name="250" href="#250">250</a> 
+<a class="jxr_linenumber" name="251" href="#251">251</a> 		placeMembers(axis, members);
+<a class="jxr_linenumber" name="252" href="#252">252</a> 	}
+<a class="jxr_linenumber" name="253" href="#253">253</a> 
+<a class="jxr_linenumber" name="254" href="#254">254</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="255" href="#255">255</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#removeMember(org.olap4j</em>
+<a class="jxr_linenumber" name="256" href="#256">256</a> <em class="jxr_javadoccomment">	 *      .metadata.Member)</em>
+<a class="jxr_linenumber" name="257" href="#257">257</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="258" href="#258">258</a> 	@Override
+<a class="jxr_linenumber" name="259" href="#259">259</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeMember(Member member) {
+<a class="jxr_linenumber" name="260" href="#260">260</a> 		Hierarchy hierarchy = member.getHierarchy();
+<a class="jxr_linenumber" name="261" href="#261">261</a> 
+<a class="jxr_linenumber" name="262" href="#262">262</a> 		List&lt;Member&gt; members = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
+<a class="jxr_linenumber" name="263" href="#263">263</a> 				findVisibleMembers(hierarchy));
+<a class="jxr_linenumber" name="264" href="#264">264</a> 		members.remove(member);
+<a class="jxr_linenumber" name="265" href="#265">265</a> 
+<a class="jxr_linenumber" name="266" href="#266">266</a> 		placeMembers(hierarchy, members);
+<a class="jxr_linenumber" name="267" href="#267">267</a> 	}
+<a class="jxr_linenumber" name="268" href="#268">268</a> 
+<a class="jxr_linenumber" name="269" href="#269">269</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="270" href="#270">270</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#removeMembers(org.olap4j.metadata.Hierarchy,</em>
+<a class="jxr_linenumber" name="271" href="#271">271</a> <em class="jxr_javadoccomment">	 *      java.util.List)</em>
+<a class="jxr_linenumber" name="272" href="#272">272</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="273" href="#273">273</a> 	@Override
+<a class="jxr_linenumber" name="274" href="#274">274</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeMembers(Hierarchy hierarchy, List&lt;Member&gt; members) {
+<a class="jxr_linenumber" name="275" href="#275">275</a> 		List&lt;Member&gt; selection = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
+<a class="jxr_linenumber" name="276" href="#276">276</a> 				findVisibleMembers(hierarchy));
+<a class="jxr_linenumber" name="277" href="#277">277</a> 		selection.removeAll(members);
+<a class="jxr_linenumber" name="278" href="#278">278</a> 
+<a class="jxr_linenumber" name="279" href="#279">279</a> 		placeMembers(hierarchy, selection);
+<a class="jxr_linenumber" name="280" href="#280">280</a> 	}
+<a class="jxr_linenumber" name="281" href="#281">281</a> 
+<a class="jxr_linenumber" name="282" href="#282">282</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="283" href="#283">283</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#moveMember(org.olap4j.metadata</em>
+<a class="jxr_linenumber" name="284" href="#284">284</a> <em class="jxr_javadoccomment">	 *      .Member, int)</em>
+<a class="jxr_linenumber" name="285" href="#285">285</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="286" href="#286">286</a> 	@Override
+<a class="jxr_linenumber" name="287" href="#287">287</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> moveMember(Member member, <strong class="jxr_keyword">int</strong> position) {
+<a class="jxr_linenumber" name="288" href="#288">288</a> 		Hierarchy hierarchy = member.getHierarchy();
+<a class="jxr_linenumber" name="289" href="#289">289</a> 
+<a class="jxr_linenumber" name="290" href="#290">290</a> 		List&lt;Member&gt; selection = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
+<a class="jxr_linenumber" name="291" href="#291">291</a> 				findVisibleMembers(hierarchy));
+<a class="jxr_linenumber" name="292" href="#292">292</a> 		<strong class="jxr_keyword">if</strong> (!selection.contains(member)) {
+<a class="jxr_linenumber" name="293" href="#293">293</a> 			<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
+<a class="jxr_linenumber" name="294" href="#294">294</a> 				logger.warn(<span class="jxr_string">"The specified member is not visible on the current result : "</span>
+<a class="jxr_linenumber" name="295" href="#295">295</a> 						+ member.getUniqueName());
+<a class="jxr_linenumber" name="296" href="#296">296</a> 			}
+<a class="jxr_linenumber" name="297" href="#297">297</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="298" href="#298">298</a> 		}
+<a class="jxr_linenumber" name="299" href="#299">299</a> 
+<a class="jxr_linenumber" name="300" href="#300">300</a> 		<strong class="jxr_keyword">if</strong> (position &lt; 0 || position &gt;= selection.size()) {
+<a class="jxr_linenumber" name="301" href="#301">301</a> 			selection.remove(member);
+<a class="jxr_linenumber" name="302" href="#302">302</a> 			selection.add(member);
+<a class="jxr_linenumber" name="303" href="#303">303</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="304" href="#304">304</a> 			<strong class="jxr_keyword">int</strong> index = selection.indexOf(member);
+<a class="jxr_linenumber" name="305" href="#305">305</a> 
+<a class="jxr_linenumber" name="306" href="#306">306</a> 			<strong class="jxr_keyword">if</strong> (position &lt; index) {
+<a class="jxr_linenumber" name="307" href="#307">307</a> 				selection.remove(member);
+<a class="jxr_linenumber" name="308" href="#308">308</a> 				selection.add(position, member);
+<a class="jxr_linenumber" name="309" href="#309">309</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (position &gt; index) {
+<a class="jxr_linenumber" name="310" href="#310">310</a> 				selection.add(position, member);
+<a class="jxr_linenumber" name="311" href="#311">311</a> 				selection.remove(index);
+<a class="jxr_linenumber" name="312" href="#312">312</a> 			}
+<a class="jxr_linenumber" name="313" href="#313">313</a> 		}
+<a class="jxr_linenumber" name="314" href="#314">314</a> 
+<a class="jxr_linenumber" name="315" href="#315">315</a> 		placeMembers(hierarchy, selection);
+<a class="jxr_linenumber" name="316" href="#316">316</a> 	}
+<a class="jxr_linenumber" name="317" href="#317">317</a> 
+<a class="jxr_linenumber" name="318" href="#318">318</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="319" href="#319">319</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findVisibleMembers(org.olap4j.Axis)</em>
+<a class="jxr_linenumber" name="320" href="#320">320</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="321" href="#321">321</a> 	<strong class="jxr_keyword">public</strong> List&lt;Member&gt; findVisibleMembers(Axis axis) {
+<a class="jxr_linenumber" name="322" href="#322">322</a> 		List&lt;Member&gt; visibleMembers = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;();
+<a class="jxr_linenumber" name="323" href="#323">323</a> 
+<a class="jxr_linenumber" name="324" href="#324">324</a> 		QueryAdapter adapter = getQueryAdapter();
+<a class="jxr_linenumber" name="325" href="#325">325</a> 
+<a class="jxr_linenumber" name="326" href="#326">326</a> 		<em class="jxr_comment">// find the Quax for this hierarchy</em>
+<a class="jxr_linenumber" name="327" href="#327">327</a> 		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+<a class="jxr_linenumber" name="328" href="#328">328</a> 		<strong class="jxr_keyword">if</strong> (quax == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="329" href="#329">329</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList(); <em class="jxr_comment">// should not occur</em>
+<a class="jxr_linenumber" name="330" href="#330">330</a> 		}
+<a class="jxr_linenumber" name="331" href="#331">331</a> 
+<a class="jxr_linenumber" name="332" href="#332">332</a> 		CellSet cellSet = adapter.getModel().getCellSet();
+<a class="jxr_linenumber" name="333" href="#333">333</a> 
+<a class="jxr_linenumber" name="334" href="#334">334</a> 		<em class="jxr_comment">// locate the appropriate result axis</em>
+<a class="jxr_linenumber" name="335" href="#335">335</a> 		<strong class="jxr_keyword">int</strong> iAx = quax.getOrdinal();
+<a class="jxr_linenumber" name="336" href="#336">336</a> 		<strong class="jxr_keyword">if</strong> (adapter.isAxesSwapped()) {
+<a class="jxr_linenumber" name="337" href="#337">337</a> 			iAx = (iAx + 1) % 2;
+<a class="jxr_linenumber" name="338" href="#338">338</a> 		}
+<a class="jxr_linenumber" name="339" href="#339">339</a> 
+<a class="jxr_linenumber" name="340" href="#340">340</a> 		CellSetAxis cellAxis = cellSet.getAxes().get(iAx);
+<a class="jxr_linenumber" name="341" href="#341">341</a> 
+<a class="jxr_linenumber" name="342" href="#342">342</a> 		List&lt;Position&gt; positions = cellAxis.getPositions();
+<a class="jxr_linenumber" name="343" href="#343">343</a> 		<strong class="jxr_keyword">for</strong> (Position position : positions) {
+<a class="jxr_linenumber" name="344" href="#344">344</a> 			List&lt;Member&gt; members = position.getMembers();
+<a class="jxr_linenumber" name="345" href="#345">345</a> 			<strong class="jxr_keyword">for</strong> (Member member : members) {
+<a class="jxr_linenumber" name="346" href="#346">346</a> 				<strong class="jxr_keyword">if</strong> (member != <strong class="jxr_keyword">null</strong> &amp;&amp; !visibleMembers.contains(member)) {
+<a class="jxr_linenumber" name="347" href="#347">347</a> 					visibleMembers.add(member);
+<a class="jxr_linenumber" name="348" href="#348">348</a> 				}
+<a class="jxr_linenumber" name="349" href="#349">349</a> 			}
+<a class="jxr_linenumber" name="350" href="#350">350</a> 		}
+<a class="jxr_linenumber" name="351" href="#351">351</a> 
+<a class="jxr_linenumber" name="352" href="#352">352</a> 		<strong class="jxr_keyword">return</strong> visibleMembers;
+<a class="jxr_linenumber" name="353" href="#353">353</a> 	}
+<a class="jxr_linenumber" name="354" href="#354">354</a> 
+<a class="jxr_linenumber" name="355" href="#355">355</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="356" href="#356">356</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.transform.PlaceMembersOnAxes#findVisibleMembers(org.</em>
+<a class="jxr_linenumber" name="357" href="#357">357</a> <em class="jxr_javadoccomment">	 *      olap4j.metadata.Hierarchy)</em>
+<a class="jxr_linenumber" name="358" href="#358">358</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="359" href="#359">359</a> 	<strong class="jxr_keyword">public</strong> List&lt;Member&gt; findVisibleMembers(Hierarchy hierarchy) {
+<a class="jxr_linenumber" name="360" href="#360">360</a> 		List&lt;Member&gt; visibleMembers = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;();
+<a class="jxr_linenumber" name="361" href="#361">361</a> 
+<a class="jxr_linenumber" name="362" href="#362">362</a> 		QueryAdapter adapter = getQueryAdapter();
+<a class="jxr_linenumber" name="363" href="#363">363</a> 
+<a class="jxr_linenumber" name="364" href="#364">364</a> 		<em class="jxr_comment">// find the Quax for this hierarchy</em>
+<a class="jxr_linenumber" name="365" href="#365">365</a> 		Quax quax = adapter.findQuax(hierarchy.getDimension());
+<a class="jxr_linenumber" name="366" href="#366">366</a> 		<strong class="jxr_keyword">if</strong> (quax == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="367" href="#367">367</a> 			<strong class="jxr_keyword">return</strong> Collections.emptyList(); <em class="jxr_comment">// should not occur</em>
+<a class="jxr_linenumber" name="368" href="#368">368</a> 		}
+<a class="jxr_linenumber" name="369" href="#369">369</a> 
+<a class="jxr_linenumber" name="370" href="#370">370</a> 		<strong class="jxr_keyword">int</strong> iDim = quax.dimIdx(hierarchy.getDimension());
+<a class="jxr_linenumber" name="371" href="#371">371</a> 
+<a class="jxr_linenumber" name="372" href="#372">372</a> 		<em class="jxr_comment">// use result</em>
+<a class="jxr_linenumber" name="373" href="#373">373</a> 		<em class="jxr_comment">// problem: if NON EMPTY is on the axis then a member, which is excluded</em>
+<a class="jxr_linenumber" name="374" href="#374">374</a> 		<em class="jxr_comment">// by Non Empty,</em>
+<a class="jxr_linenumber" name="375" href="#375">375</a> 		<em class="jxr_comment">// will not be visible.</em>
+<a class="jxr_linenumber" name="376" href="#376">376</a> 		<em class="jxr_comment">// It would be possible to add it (again) to the axis, which must be</em>
+<a class="jxr_linenumber" name="377" href="#377">377</a> 		<em class="jxr_comment">// avoided</em>
+<a class="jxr_linenumber" name="378" href="#378">378</a> 
+<a class="jxr_linenumber" name="379" href="#379">379</a> 		CellSet cellSet = adapter.getModel().getCellSet();
+<a class="jxr_linenumber" name="380" href="#380">380</a> 
+<a class="jxr_linenumber" name="381" href="#381">381</a> 		<em class="jxr_comment">// locate the appropriate result axis</em>
+<a class="jxr_linenumber" name="382" href="#382">382</a> 		<strong class="jxr_keyword">int</strong> iAx = quax.getOrdinal();
+<a class="jxr_linenumber" name="383" href="#383">383</a> 		<strong class="jxr_keyword">if</strong> (adapter.isAxesSwapped()) {
+<a class="jxr_linenumber" name="384" href="#384">384</a> 			iAx = (iAx + 1) % 2;
+<a class="jxr_linenumber" name="385" href="#385">385</a> 		}
+<a class="jxr_linenumber" name="386" href="#386">386</a> 
+<a class="jxr_linenumber" name="387" href="#387">387</a> 		CellSetAxis axis = cellSet.getAxes().get(iAx);
+<a class="jxr_linenumber" name="388" href="#388">388</a> 
+<a class="jxr_linenumber" name="389" href="#389">389</a> 		List&lt;Position&gt; positions = axis.getPositions();
+<a class="jxr_linenumber" name="390" href="#390">390</a> 		<strong class="jxr_keyword">for</strong> (Position position : positions) {
+<a class="jxr_linenumber" name="391" href="#391">391</a> 			List&lt;Member&gt; members = position.getMembers();
+<a class="jxr_linenumber" name="392" href="#392">392</a> 			Member member = members.get(iDim);
+<a class="jxr_linenumber" name="393" href="#393">393</a> 			<strong class="jxr_keyword">if</strong> (member != <strong class="jxr_keyword">null</strong> &amp;&amp; !visibleMembers.contains(member)) {
+<a class="jxr_linenumber" name="394" href="#394">394</a> 				visibleMembers.add(member);
+<a class="jxr_linenumber" name="395" href="#395">395</a> 			}
+<a class="jxr_linenumber" name="396" href="#396">396</a> 		}
+<a class="jxr_linenumber" name="397" href="#397">397</a> 
+<a class="jxr_linenumber" name="398" href="#398">398</a> 		<strong class="jxr_keyword">return</strong> visibleMembers;
+<a class="jxr_linenumber" name="399" href="#399">399</a> 	}
+<a class="jxr_linenumber" name="400" href="#400">400</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
