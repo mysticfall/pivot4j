@@ -3,6 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd"
 	name="Pivot4J">
+	<googleAnalyticsAccountId>UA-38197551-1</googleAnalyticsAccountId>
+
 	<skin>
 		<groupId>org.apache.maven.skins</groupId>
 		<artifactId>maven-fluido-skin</artifactId>
@@ -15,19 +17,19 @@
 		</head>
 
 		<links>
-			<item name="Issue Tracker" href="https://github.com/mysticfall/pivot4j/issues"/>
-			<item name="Discussions" href="http://groups.google.com/d/forum/pivot4j-list"/>
-			<item name="JPivot Project" href="http://jpivot.sourceforge.net"/>
-			<item name="Olap4J Project" href="http://www.olap4j.org"/>
-			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j"/>
+			<item name="Issue Tracker" href="https://github.com/mysticfall/pivot4j/issues" />
+			<item name="Discussions" href="http://groups.google.com/d/forum/pivot4j-list" />
+			<item name="JPivot Project" href="http://jpivot.sourceforge.net" />
+			<item name="Olap4J Project" href="http://www.olap4j.org" />
+			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j" />
 		</links>
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
-			<item name="Sample Application" href="example.html"/>
-			<item name="Download" href="download.html"/>
+			<item name="Sample Application" href="example.html" />
+			<item name="Download" href="download.html" />
 			<item name="How to Use" href="usage.html" />
-		 	<item name="For Developers" href="developer.html" />
-		 	<item name="FAQ" href="faq.html" />
+			<item name="For Developers" href="developer.html" />
+			<item name="FAQ" href="faq.html" />
 		</menu>
 		<menu ref="reports" />
 	</body>
@@ -46,7 +48,7 @@
 				<user>pivot4j</user>
 				<showUser>true</showUser>
 				<showFollowers>true</showFollowers>
-				</twitter>
+			</twitter>
 			<googleSearch />
 		</fluidoSkin>
 	</custom>
