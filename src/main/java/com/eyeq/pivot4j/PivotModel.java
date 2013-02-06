@@ -10,6 +10,7 @@ package com.eyeq.pivot4j;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -42,6 +43,11 @@ public interface PivotModel extends StateHolder {
 	CellSet getCellSet() throws NotInitializedException;
 
 	/**
+	 * Flushes the last query result.
+	 */
+	void refresh() throws NotInitializedException;
+
+	/**
 	 * The initial MDX query. This is never changed except when the user enters
 	 * a new MDX query.
 	 */
@@ -55,6 +61,13 @@ public interface PivotModel extends StateHolder {
 	 */
 	String getCurrentMdx();
 
+	/**
+	 * Returns the current MDX query after all parameter expressions are
+	 * resolved. The result would be identical with {@link #getCurrentMdx()} if
+	 * no parameter expressions are present.
+	 */
+	String getEvaluatedMdx();
+
 	Locale getLocale();
 
 	/**
@@ -65,6 +78,8 @@ public interface PivotModel extends StateHolder {
 	String getRoleName();
 
 	void setRoleName(String roleName);
+
+	Map<String, Object> getExpressionContext();
 
 	/**
 	 * Adds a model change listener

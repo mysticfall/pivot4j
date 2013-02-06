@@ -11,11 +11,17 @@ package com.eyeq.pivot4j.impl;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -42,6 +48,8 @@ import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.QueryEvent;
 import com.eyeq.pivot4j.QueryListener;
 import com.eyeq.pivot4j.SortCriteria;
+import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
+import com.eyeq.pivot4j.el.ExpressionEvaluatorFactoryImpl;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.query.QueryChangeEvent;
@@ -49,6 +57,7 @@ import com.eyeq.pivot4j.query.QueryChangeListener;
 import com.eyeq.pivot4j.transform.Transform;
 import com.eyeq.pivot4j.transform.TransformFactory;
 import com.eyeq.pivot4j.transform.impl.TransformFactoryImpl;
+import com.eyeq.pivot4j.util.MemberUtils;
 
 /**
  * The pivot model represents all (meta-)data for an MDX query.
@@ -73,7 +82,9 @@ public class PivotModelImpl implements PivotModel {
 
 	private QueryAdapter queryAdapter;
 
-	private TransformFactory transformFactory;
+	private TransformFactory transformFactory = new TransformFactoryImpl();
+
+	private ExpressionEvaluatorFactory expressionEvaluatorFactory = new ExpressionEvaluatorFactoryImpl();
 
 	private int topBottomCount = 10;
 
@@ -86,6 +97,8 @@ public class PivotModelImpl implements PivotModel {
 	private String mdxQuery;
 
 	private CellSet cellSet;
+
+	private ExpressionContext expressionContext;
 
 	private QueryChangeListener queryChangeListener = new QueryChangeListener() {
 
@@ -104,7 +117,7 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		this.dataSource = dataSource;
-		this.transformFactory = createTransformFactory();
+		this.expressionContext = createExpressionContext();
 	}
 
 	/**
@@ -117,6 +130,7 @@ public class PivotModelImpl implements PivotModel {
 		if (locale == null) {
 			return Locale.getDefault();
 		}
+
 		return locale;
 	}
 
@@ -129,6 +143,10 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	public void setLocale(Locale locale) {
 		this.locale = locale;
+
+		if (connection != null) {
+			connection.setLocale(locale);
+		}
 	}
 
 	/**
@@ -146,6 +164,14 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+
+		if (connection != null) {
+			try {
+				connection.setRoleName(roleName);
+			} catch (OlapException e) {
+				throw new PivotException(e);
+			}
+		}
 	}
 
 	/**
@@ -200,6 +226,13 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		return connection;
+	}
+
+	/**
+	 * @return
+	 */
+	protected ExpressionContext createExpressionContext() {
+		return new ExpressionContext();
 	}
 
 	/**
@@ -314,7 +347,11 @@ public class PivotModelImpl implements PivotModel {
 			throw new IllegalStateException("Initial MDX is not specified.");
 		}
 
-		String mdx = normalizeMdx(getCurrentMdx());
+		if (expressionEvaluatorFactory != null) {
+			queryAdapter.evaluate(expressionEvaluatorFactory);
+		}
+
+		String mdx = normalizeMdx(getCurrentMdx(true));
 
 		try {
 			this.cellSet = executeMdx(connection, mdx);
@@ -322,9 +359,27 @@ public class PivotModelImpl implements PivotModel {
 			throw new PivotException(e);
 		}
 
+		expressionContext.put("cellSet", cellSet);
+
 		queryAdapter.afterExecute(cellSet);
 
 		return cellSet;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#refresh()
+	 */
+	@Override
+	public void refresh() throws NotInitializedException {
+		this.cellSet = null;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getExpressionContext()
+	 */
+	@Override
+	public Map<String, Object> getExpressionContext() {
+		return expressionContext;
 	}
 
 	/**
@@ -366,10 +421,25 @@ public class PivotModelImpl implements PivotModel {
 	 * @see com.eyeq.pivot4j.PivotModel#getCurrentMdx()
 	 */
 	public String getCurrentMdx() {
+		return getCurrentMdx(false);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getEvaluatedMdx()
+	 */
+	public String getEvaluatedMdx() {
+		return getCurrentMdx(true);
+	}
+
+	/**
+	 * @param evaluated
+	 * @return
+	 */
+	protected String getCurrentMdx(boolean evaluated) {
 		if (queryAdapter == null) {
 			return null;
 		} else {
-			return queryAdapter.getCurrentMdx();
+			return queryAdapter.getCurrentMdx(evaluated);
 		}
 	}
 
@@ -427,10 +497,6 @@ public class PivotModelImpl implements PivotModel {
 		return new QueryAdapter(this);
 	}
 
-	protected TransformFactory createTransformFactory() {
-		return new TransformFactoryImpl();
-	}
-
 	/**
 	 * Returns the queryAdapter.
 	 * 
@@ -443,8 +509,31 @@ public class PivotModelImpl implements PivotModel {
 	/**
 	 * @return the transformFactory
 	 */
-	protected TransformFactory getTransformFactory() {
+	public TransformFactory getTransformFactory() {
 		return transformFactory;
+	}
+
+	/**
+	 * @param factory
+	 *            the transformFactory to set
+	 */
+	public void setTransformFactory(TransformFactory factory) {
+		this.transformFactory = factory;
+	}
+
+	/**
+	 * @return the expressionEvaluatorFactory
+	 */
+	public ExpressionEvaluatorFactory getExpressionEvaluatorFactory() {
+		return expressionEvaluatorFactory;
+	}
+
+	/**
+	 * @param factory
+	 *            the expressionEvaluatorFactory to set
+	 */
+	public void setExpressionEvaluatorFactory(ExpressionEvaluatorFactory factory) {
+		this.expressionEvaluatorFactory = factory;
 	}
 
 	/**
@@ -533,6 +622,11 @@ public class PivotModelImpl implements PivotModel {
 	 * @see com.eyeq.pivot4j.PivotModel#getTransform(java.lang.Class)
 	 */
 	public <T extends Transform> T getTransform(Class<T> type) {
+		if (transformFactory == null) {
+			throw new IllegalStateException(
+					"No transform factory instance is available.");
+		}
+
 		return transformFactory.createTransform(type, queryAdapter);
 	}
 
@@ -833,5 +927,187 @@ public class PivotModelImpl implements PivotModel {
 		this.cellSet = null;
 
 		queryAdapter.restoreState(states[2]);
+	}
+
+	enum PredefinedNames {
+
+		cube {
+			@Override
+			Object getValue(PivotModelImpl model) {
+				return model.getCube();
+			}
+		},
+		catalog {
+			@Override
+			Object getValue(PivotModelImpl model) {
+				return model.getCatalog();
+			}
+		},
+		roleName {
+			@Override
+			Object getValue(PivotModelImpl model) {
+				return model.getRoleName();
+			}
+		},
+		locale {
+			@Override
+			Object getValue(PivotModelImpl model) {
+				return model.getLocale();
+			}
+		},
+		memberUtils {
+			@Override
+			Object getValue(PivotModelImpl model) {
+				return new MemberUtils(model.getCube());
+			}
+		},
+		connection {
+			@Override
+			Object getValue(PivotModelImpl model) {
+				return model.getConnection();
+			}
+		};
+
+		abstract Object getValue(PivotModelImpl model);
+	};
+
+	protected class ExpressionContext extends AbstractMap<String, Object> {
+
+		private Map<String, Object> attributes = new HashMap<String, Object>();
+
+		protected boolean isPredefined(String key) {
+			try {
+				PredefinedNames.valueOf(key);
+				return true;
+			} catch (IllegalArgumentException e) {
+				return false;
+			}
+		}
+
+		/**
+		 * @see java.util.HashMap#put(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public Object put(String key, Object value) {
+			if (isPredefined(key)) {
+				throw new IllegalArgumentException(
+						"The specified key is predefined and cannot be changed : "
+								+ key);
+			}
+
+			return attributes.put(key, value);
+		}
+
+		/**
+		 * @see java.util.HashMap#putAll(java.util.Map)
+		 */
+		@Override
+		public void putAll(Map<? extends String, ? extends Object> m) {
+			for (String key : m.keySet()) {
+				if (isPredefined(key)) {
+					throw new IllegalArgumentException(
+							"The specified key is predefined and cannot be changed : "
+									+ key);
+				}
+			}
+
+			attributes.putAll(m);
+		}
+
+		/**
+		 * @see java.util.HashMap#remove(java.lang.Object)
+		 */
+		@Override
+		public Object remove(Object key) {
+			if (isPredefined((String) key)) {
+				throw new IllegalArgumentException(
+						"The specified key is predefined and cannot be changed : "
+								+ key);
+			}
+
+			return attributes.remove(key);
+		}
+
+		/**
+		 * @see java.util.HashMap#clear()
+		 */
+		@Override
+		public void clear() {
+			throw new UnsupportedOperationException(
+					"The expression context cannot be cleared.");
+		}
+
+		/**
+		 * @see java.util.HashMap#get(java.lang.Object)
+		 */
+		@Override
+		public Object get(Object key) {
+			if (isPredefined((String) key)) {
+				return PredefinedNames.valueOf((String) key).getValue(
+						PivotModelImpl.this);
+			}
+
+			return attributes.get(key);
+		}
+
+		/**
+		 * @see java.util.HashMap#containsKey(java.lang.Object)
+		 */
+		@Override
+		public boolean containsKey(Object key) {
+			return attributes.containsKey(key) || isPredefined((String) key);
+		}
+
+		/**
+		 * @see java.util.HashMap#entrySet()
+		 */
+		@Override
+		public Set<Entry<String, Object>> entrySet() {
+			Set<Entry<String, Object>> set = new HashSet<Entry<String, Object>>(
+					attributes.entrySet());
+
+			for (PredefinedNames name : PredefinedNames.values()) {
+				Entry<String, Object> entry = new PredefinedEntry(name);
+				set.add(entry);
+			}
+
+			return set;
+		}
+	};
+
+	class PredefinedEntry implements Entry<String, Object> {
+
+		PredefinedNames name;
+
+		/**
+		 * @param name
+		 */
+		PredefinedEntry(PredefinedNames name) {
+			this.name = name;
+		}
+
+		/**
+		 * @see java.util.Map.Entry#getKey()
+		 */
+		@Override
+		public String getKey() {
+			return name.name();
+		}
+
+		/**
+		 * @see java.util.Map.Entry#getValue()
+		 */
+		@Override
+		public Object getValue() {
+			return name.getValue(PivotModelImpl.this);
+		}
+
+		/**
+		 * @see java.util.Map.Entry#setValue(java.lang.Object)
+		 */
+		@Override
+		public Object setValue(Object value) {
+			throw new UnsupportedOperationException();
+		}
 	}
 }

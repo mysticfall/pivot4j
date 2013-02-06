@@ -197,7 +197,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		// find the Quax for this hier
 		Quax quax = adapter.findQuax(hierarchy.getDimension());
 		if (quax == null) {
-			adapter.getCurrentMdx();
+			adapter.getCurrentMdx(true);
 			// the hierarchy was not found on any axis
 			return topLevelMembers(hierarchy, expandAllMember);
 			// return top level members of the hierarchy

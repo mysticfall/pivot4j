@@ -56,6 +56,18 @@ parser code {:
 
     throw new ParseException(err);
   }
+
+  ExpressionParameter createMemberParameter(String exp) {
+    String[] values = exp.substring(2, exp.length() - 1).replaceAll("]]", "]").split(":");
+
+    return new MemberParameter(values[0], values[1]);
+  }
+
+  ExpressionParameter createValueParameter(String exp) {
+    String[] values = exp.substring(2, exp.length() - 1).replaceAll("]]", "]").split(":");
+
+    return new ValueParameter(values[0], values[1]);
+  }
 :};
 
 /* Terminals (tokens returned by the scanner). */
@@ -118,6 +130,8 @@ terminal String ID;
 terminal String QUOTED_ID;
 terminal String AMP_QUOTED_ID;
 terminal String STRING;
+terminal String MEMBER_PARAM;
+terminal String VALUE_PARAM;
 terminal String UNKNOWN; // a token the lexer doesn't like!
 
 /* Non terminals */
@@ -147,6 +161,9 @@ non terminal List exp_list_opt, exp_list;
 non terminal CompoundId compound_id;
 non terminal String comp_op;
 non terminal List<CompoundId> dim_props, dim_prop_list;
+
+non terminal ExpressionParameter member_param;
+non terminal ExpressionParameter value_param;
 
 non terminal sap_var_def,sap_var_opt;
 non terminal Boolean sap_var_incl;
@@ -259,10 +276,13 @@ compound_id ::= identifier:i {: RESULT = new CompoundId(i); :}
 identifier ::= ID:x {: RESULT=x; :} 
 	| QUOTED_ID:y {: RESULT=y; :};
 
+member_param ::= MEMBER_PARAM:e {: RESULT = parser.createMemberParameter(e); :};
+value_param ::= VALUE_PARAM:e {: RESULT = parser.createValueParameter(e); :};
+
 expression ::= expression:x COLON value_expression:y 
-		{: // range yields set
-  	RESULT = new FunCall(":", Syntax.Infix, Arrays.asList(new Exp[] { x, y }));
- 	 :}
+	{: // range yields set
+		RESULT = new FunCall(":", Syntax.Infix, Arrays.asList(new Exp[] { x, y }));
+	:}
 	| value_expression:v {: RESULT = v; :};
 
 exp_list_opt ::= /* empty */ {:RESULT = new ArrayList(); :}
@@ -272,7 +292,7 @@ exp_list ::= expression:e {: RESULT = new ArrayList();  RESULT.add(e); :}
 	| expression:e COMMA exp_list:list {: list.add(0, e);  RESULT = list;  :};
 
 value_expression ::= term5:t {: RESULT = t; :}
-  | value_expression:x OR term5:y
+	| value_expression:x OR term5:y
 		{: RESULT = new FunCall("OR", Syntax.Infix, Arrays.asList(new Exp[] { x, y })); :}
 	| value_expression:x XOR term5:y
 		{: RESULT = new FunCall("XOR", Syntax.Infix, Arrays.asList(new Exp[] { x, y })); :};
@@ -312,9 +332,9 @@ factor ::= value_expression_primary:t {: RESULT = t; :}
 value_expression_primary ::= STRING:s
 		{: RESULT = Literal.createString(s); :}
 	| NUMBER:d {: RESULT = Literal.create(d); :}
-  | identifier:i {: RESULT = new CompoundId(i); :}
-  | value_expression_primary:i DOT ID:j
-  	{: RESULT = new FunCall(j, Syntax.Property, Arrays.asList(new Exp[] { i })); :}
+	| identifier:i {: RESULT = new CompoundId(i); :}
+	| value_expression_primary:i DOT ID:j
+		{: RESULT = new FunCall(j, Syntax.Property, Arrays.asList(new Exp[] { i })); :}
 	| value_expression_primary:i DOT QUOTED_ID:j
 		{:
 		  if (i instanceof CompoundId) {
@@ -346,7 +366,9 @@ value_expression_primary ::= STRING:s
 	| LBRACE exp_list_opt:lis RBRACE 
 		{: // set built from sets/tuples
   		RESULT = new FunCall("{}", Syntax.Braces, lis);
-  	:}
+		:}
+	| member_param:e {: RESULT = e; :}
+	| value_param:e {: RESULT = e; :}
 	| case_expression;
 
 case_expression ::= CASE value_expression_opt:x when_list:y else_clause_opt:z END 

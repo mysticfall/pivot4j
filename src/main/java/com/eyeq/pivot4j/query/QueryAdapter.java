@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -28,14 +30,21 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.StateHolder;
+import com.eyeq.pivot4j.el.EvaluationFailedException;
+import com.eyeq.pivot4j.el.ExpressionEvaluator;
+import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
+import com.eyeq.pivot4j.mdx.AbstractExpVisitor;
 import com.eyeq.pivot4j.mdx.CompoundId;
 import com.eyeq.pivot4j.mdx.Exp;
+import com.eyeq.pivot4j.mdx.ExpressionParameter;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Literal;
 import com.eyeq.pivot4j.mdx.MdxParser;
 import com.eyeq.pivot4j.mdx.MdxStatement;
+import com.eyeq.pivot4j.mdx.MemberParameter;
 import com.eyeq.pivot4j.mdx.QueryAxis;
 import com.eyeq.pivot4j.mdx.Syntax;
+import com.eyeq.pivot4j.mdx.ValueParameter;
 import com.eyeq.pivot4j.mdx.impl.MdxParserImpl;
 import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 
@@ -180,8 +189,68 @@ public class QueryAdapter implements StateHolder {
 		return parsedQuery;
 	}
 
-	public String getCurrentMdx() {
-		return parsedQuery.toMdx();
+	/**
+	 * @param evaluated
+	 * @return
+	 */
+	public String getCurrentMdx(final boolean evaluated) {
+		MdxStatement stmt = parsedQuery.clone();
+
+		stmt.accept(new AbstractExpVisitor() {
+
+			@Override
+			public void visitMemberParameter(MemberParameter exp) {
+				exp.setEvaluated(evaluated);
+			}
+
+			@Override
+			public void visitValueParameter(ValueParameter exp) {
+				exp.setEvaluated(evaluated);
+			}
+		});
+
+		return stmt.toMdx();
+	}
+
+	/**
+	 * @param factory
+	 */
+	public void evaluate(final ExpressionEvaluatorFactory factory) {
+		parsedQuery.accept(new AbstractExpVisitor() {
+
+			@Override
+			public void visitMemberParameter(MemberParameter exp) {
+				ExpressionEvaluator evaluator = factory.getEvaluator(exp
+						.getNamespace());
+				evaluate(evaluator, exp);
+			}
+
+			@Override
+			public void visitValueParameter(ValueParameter exp) {
+				ExpressionEvaluator evaluator = factory.getEvaluator(exp
+						.getNamespace());
+				evaluate(evaluator, exp);
+			}
+		});
+	}
+
+	/**
+	 * @param evaluator
+	 * @param exp
+	 */
+	protected void evaluate(ExpressionEvaluator evaluator,
+			ExpressionParameter exp) {
+		if (evaluator == null) {
+			throw new EvaluationFailedException(
+					"No expression evaluator found for namespace : "
+							+ exp.getNamespace(), exp.getNamespace(),
+					exp.getExpression());
+		}
+
+		Map<String, Object> context = model.getExpressionContext();
+
+		Object result = evaluator.evaluate(exp.getExpression(), context);
+		exp.setResult(ObjectUtils.toString(result));
 	}
 
 	/**

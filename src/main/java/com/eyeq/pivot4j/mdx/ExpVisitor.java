@@ -30,4 +30,8 @@ public interface ExpVisitor {
 	void visitSapVariable(SapVariable exp);
 
 	void visitSapVariableValue(SapVariable.Value exp);
+
+	void visitMemberParameter(MemberParameter exp);
+
+	void visitValueParameter(ValueParameter exp);
 }

@@ -52,17 +52,20 @@ INCLUDING=[Ii][Nn][Cc][Ll][Uu][Dd][Ii][Nn][Gg]
 EXCLUDING=[Ee][Xx][Cc][Ll][Uu][Dd][Ii][Nn][Gg]
 XOR=[Xx][Oo][Rr]
 WHITESPACE=[\ \t\r\n\f]
-ALPHA = [a-zA-Z]
-ALNUM = [a-zA-Z_0-9]
-IDENT = {ALPHA}{ALNUM}*
-INSTRING = [^\"\n\f\r\t]
-INSTRING2 = [^'\n\f\r\t]
-IDSTRING = [^\]\n\f\r\t]|\]\]
-BRACKETID = \[{IDSTRING}*\]
+ALPHA=[a-zA-Z]
+ALNUM=[a-zA-Z_0-9]
+IDENT={ALPHA}{ALNUM}*
+INSTRING=[^\"\n\f\r\t]
+INSTRING2=[^'\n\f\r\t]
+INSTRING3=[^\]]|\]\]
+IDSTRING=[^\]\n\f\r\t]|\]\]
+BRACKETID=\[{IDSTRING}*\]
+BRACKETSTR=\[{IDENT}+:{INSTRING3}*\]
+BRACESTR=\{{IDENT}+:{INSTRING3}*\}
 DIGIT=[0-9]
 INTEGER={DIGIT}+
-EXP = ([eE](\+|\-)?{DIGIT}+)
-FLOAT = ({DIGIT}+\.{DIGIT}*{EXP}?|{DIGIT}*\.{DIGIT}+{EXP}?|{DIGIT}+{EXP})
+EXP=([eE](\+|\-)?{DIGIT}+)
+FLOAT=({DIGIT}+\.{DIGIT}*{EXP}?|{DIGIT}*\.{DIGIT}+{EXP}?|{DIGIT}+{EXP})
 
 %cup
 %unicode
@@ -123,6 +126,8 @@ FLOAT = ({DIGIT}+\.{DIGIT}*{EXP}?|{DIGIT}*\.{DIGIT}+{EXP}?|{DIGIT}+{EXP})
 {FLOAT} { Double d = new Double(yytext()); return new Symbol(Symbols.NUMBER, d); }
 {IDENT} { return new Symbol(Symbols.ID, yytext()); }
 {BRACKETID} { return new Symbol(Symbols.QUOTED_ID, yytext()); }
+"$"{BRACKETSTR} { return new Symbol(Symbols.MEMBER_PARAM, yytext()); }
+"$"{BRACESTR} { return new Symbol(Symbols.VALUE_PARAM, yytext()); }
 "&"{BRACKETID} { return new Symbol(Symbols.AMP_QUOTED_ID, yytext()); }
 "\""{INSTRING}*"\"" { return new Symbol(Symbols.STRING, yytext()); }
 <YYINITIAL> "'"{INSTRING2}*"'" { return new Symbol(Symbols.STRING, yytext()); }
