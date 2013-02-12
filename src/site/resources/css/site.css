@@ -1,0 +1,20 @@
+body.topBarDisabled {
+	padding-top: 10px;
+}
+
+#banner {
+	background-image: url("../images/logo.png");
+	background-position: 5px;
+	background-repeat: no-repeat;
+	margin-bottom: 10px;
+	padding-left: 82px;
+}
+
+
+.nav-list > .active > a, .nav-list > .active > a:hover {
+	background-color: #D47541;
+}
+
+h1, h2, h3, h4, h5, h6, a, a:hover {
+	color: #D47541;
+}
