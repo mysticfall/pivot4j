@@ -62,7 +62,14 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	 * @param writer
 	 */
 	public HtmlRenderer(Writer writer) {
-		this.writer = new MarkupWriter(writer);
+		this.writer = createMarkupWriter(writer);
+	}
+
+	/**
+	 * @return writer
+	 */
+	protected MarkupWriter createMarkupWriter(Writer writer) {
+		return new MarkupWriter(writer);
 	}
 
 	/**
