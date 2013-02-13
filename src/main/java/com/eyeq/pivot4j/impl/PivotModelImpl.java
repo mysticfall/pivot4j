@@ -846,7 +846,7 @@ public class PivotModelImpl implements PivotModel {
 	public synchronized Serializable bookmarkState() {
 		Serializable[] state = new Serializable[3];
 
-		state[0] = getCurrentMdx();
+		state[0] = getCurrentMdx(false);
 
 		if (sortPosMembers == null) {
 			state[1] = null;
