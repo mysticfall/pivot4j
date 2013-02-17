@@ -19,22 +19,21 @@ import org.apache.commons.lang.ObjectUtils;
  */
 public class TreeNode<T> {
 
-	private TreeNode<T> parent = null;
+	private TreeNode<T> parent;
 
-	private List<TreeNode<T>> children = null;
+	private List<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
 
 	private T reference;
 
+	public TreeNode() {
+	}
+
 	/**
-	 * cTtor
-	 * 
 	 * @param obj
 	 *            referenced object
 	 */
 	public TreeNode(T obj) {
-		this.parent = null;
 		this.reference = obj;
-		this.children = new ArrayList<TreeNode<T>>();
 	}
 
 	/**

@@ -8,13 +8,23 @@
  */
 package com.eyeq.pivot4j.mdx;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 
 import com.eyeq.pivot4j.util.TreeNode;
 
 public class ExpNode extends TreeNode<Exp> implements Serializable {
 
 	private static final long serialVersionUID = 1956521185377274271L;
+
+	/**
+	 * Default constructor used for serialization
+	 */
+	protected ExpNode() {
+	}
 
 	/**
 	 * @param obj
@@ -90,6 +100,31 @@ public class ExpNode extends TreeNode<Exp> implements Serializable {
 	@Override
 	public ExpNode getRoot() {
 		return (ExpNode) super.getRoot();
+	}
+
+	/**
+	 * @param in
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	private void readObject(ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+		setReference((Exp) in.readObject());
+
+		@SuppressWarnings("unchecked")
+		List<TreeNode<Exp>> children = (List<TreeNode<Exp>>) in.readObject();
+		for (TreeNode<Exp> child : children) {
+			addChild(child);
+		}
+	}
+
+	/**
+	 * @param out
+	 * @throws IOException
+	 */
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeObject(getReference());
+		out.writeObject(getChildren());
 	}
 
 	/**
