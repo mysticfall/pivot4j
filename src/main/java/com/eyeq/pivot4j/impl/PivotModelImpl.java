@@ -323,14 +323,35 @@ public class PivotModelImpl implements PivotModel {
 	public Cube getCube() throws NotInitializedException {
 		checkInitialization();
 
+		Cube cube = null;
+
 		try {
 			String cubeName = queryAdapter.getCubeName();
 
 			Schema schema = connection.getOlapSchema();
-			return schema.getCubes().get(cubeName);
+			cube = schema.getCubes().get(cubeName);
+
+			if (cube == null && cubeName != null) {
+				Logger logger = LoggerFactory.getLogger(getClass());
+				if (logger.isWarnEnabled()) {
+					logger.warn("Cube with the specified name cannot be found : "
+							+ cubeName);
+				}
+
+				if (logger.isDebugEnabled()) {
+					logger.debug("List of cubes in schema : "
+							+ schema.getName());
+
+					for (Cube c : schema.getCubes()) {
+						logger.debug(c.getCaption() + " - " + c.getUniqueName());
+					}
+				}
+			}
 		} catch (OlapException e) {
 			throw new PivotException(e);
 		}
+
+		return cube;
 	}
 
 	/**
