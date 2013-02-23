@@ -253,7 +253,7 @@ public class MdxStatement extends AbstractExp {
 		clone.axes = new ArrayList<QueryAxis>(axes.size());
 
 		for (QueryAxis axis : axes) {
-			clone.axes.add(axis);
+			clone.axes.add(axis.clone());
 		}
 
 		if (cube != null) {
