@@ -20,7 +20,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.SortCriteria;
+import com.eyeq.pivot4j.sort.SortCriteria;
 import com.eyeq.pivot4j.transform.DrillExpandPosition;
 
 public class DrillExpandPositionImplIT extends

@@ -18,13 +18,16 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
+import com.eyeq.pivot4j.sort.SortCriteria;
+import com.eyeq.pivot4j.state.Bookmarkable;
+import com.eyeq.pivot4j.state.Configurable;
 import com.eyeq.pivot4j.transform.Transform;
 
 /**
  * Provides access to result and metadata. It does not specify what data are
  * displayed (the query).
  */
-public interface PivotModel extends StateHolder {
+public interface PivotModel extends Configurable, Bookmarkable {
 
 	void initialize();
 

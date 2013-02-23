@@ -9,9 +9,10 @@
 package com.eyeq.pivot4j.ui;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.StateHolder;
+import com.eyeq.pivot4j.state.Bookmarkable;
+import com.eyeq.pivot4j.state.Configurable;
 
-public interface PivotRenderer extends StateHolder {
+public interface PivotRenderer extends Configurable, Bookmarkable {
 
 	void initialize();
 
@@ -30,6 +31,6 @@ public interface PivotRenderer extends StateHolder {
 	void setShowDimensionTitle(boolean showDimensionTitle);
 
 	PropertyCollector getPropertyCollector();
-	
+
 	void setPropertyCollector(PropertyCollector collector);
 }

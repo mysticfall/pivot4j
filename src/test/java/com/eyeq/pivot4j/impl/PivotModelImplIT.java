@@ -13,11 +13,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.junit.Test;
-import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 
@@ -25,7 +23,6 @@ import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.NotInitializedException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.SortCriteria;
 
 public class PivotModelImplIT extends AbstractIntegrationTestCase {
 
@@ -117,51 +114,5 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		assertFalse("Model is already initialized.", model.isInitialized());
 
 		model.getCellSet();
-	}
-
-	@Test
-	public void testBookmarkState() {
-		PivotModel model = getPivotModel();
-		model.setMdx(getTestQuery());
-		model.initialize();
-
-		model.setSorting(true);
-		model.setTopBottomCount(3);
-		model.setSortCriteria(SortCriteria.BOTTOMCOUNT);
-
-		CellSet cellSet = model.getCellSet();
-		CellSetAxis axis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
-
-		model.sort(axis, axis.getPositions().get(0));
-
-		String mdx = model.getCurrentMdx();
-
-		Serializable bookmark = model.bookmarkState();
-
-		assertNotNull("Bookmarked state should not be null", bookmark);
-
-		PivotModel newModel = new PivotModelImpl(getDataSource());
-		newModel.restoreState(bookmark);
-
-		newModel.getCellSet();
-
-		String newMdx = newModel.getCurrentMdx();
-		if (newMdx != null) {
-			// Currently the parser treats every number as double value.
-			// It's inevitable now and does not impact the result.
-			newMdx = newMdx.replaceAll("3\\.0", "3");
-		}
-
-		assertEquals("MDX has been changed after the state restoration", mdx,
-				newMdx);
-		assertTrue(
-				"Property 'sorting' has been changed after the state restoration",
-				newModel.isSorting());
-		assertEquals(
-				"Property 'topBottomCount' has been changed after the state restoration",
-				3, newModel.getTopBottomCount());
-		assertEquals(
-				"Property 'sortMode' has been changed after the state restoration",
-				SortCriteria.BOTTOMCOUNT, newModel.getSortCriteria());
 	}
 }

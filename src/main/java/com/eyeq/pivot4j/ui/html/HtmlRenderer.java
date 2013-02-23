@@ -629,11 +629,11 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#bookmarkState()
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#saveState()
 	 */
 	@Override
-	public Serializable bookmarkState() {
-		return new Serializable[] { super.bookmarkState(), tableId, border,
+	public Serializable saveState() {
+		return new Serializable[] { super.saveState(), tableId, border,
 				cellSpacing, cellPadding, tableStyleClass,
 				columnHeaderStyleClass, columnTitleStyleClass,
 				rowHeaderStyleClass, rowTitleStyleClass, cornerStyleClass,

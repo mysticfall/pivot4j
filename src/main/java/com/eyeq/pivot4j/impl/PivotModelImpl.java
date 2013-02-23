@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.logging.LogFactory;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
@@ -47,13 +49,13 @@ import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.QueryEvent;
 import com.eyeq.pivot4j.QueryListener;
-import com.eyeq.pivot4j.SortCriteria;
 import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
 import com.eyeq.pivot4j.el.ExpressionEvaluatorFactoryImpl;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.query.QueryChangeEvent;
 import com.eyeq.pivot4j.query.QueryChangeListener;
+import com.eyeq.pivot4j.sort.SortCriteria;
 import com.eyeq.pivot4j.transform.Transform;
 import com.eyeq.pivot4j.transform.TransformFactory;
 import com.eyeq.pivot4j.transform.impl.TransformFactoryImpl;
@@ -696,7 +698,7 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		if (logger.isInfoEnabled()) {
-			logger.info("change sorting to " + sorting);
+			logger.info("Change sorting to " + sorting);
 		}
 
 		this.sorting = sorting;
@@ -862,9 +864,10 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
 	 */
-	public synchronized Serializable bookmarkState() {
+	@Override
+	public synchronized Serializable saveState() {
 		Serializable[] state = new Serializable[3];
 
 		state[0] = getCurrentMdx(false);
@@ -887,15 +890,20 @@ public class PivotModelImpl implements PivotModel {
 			state[1] = sortState;
 		}
 
-		state[2] = getQueryAdapter().bookmarkState();
+		state[2] = getQueryAdapter().saveState();
 
 		return state;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
 	 */
 	public synchronized void restoreState(Serializable state) {
+		if (state == null) {
+			throw new IllegalArgumentException(
+					"Required argument 'state' is null.");
+		}
+
 		Serializable[] states = (Serializable[]) state;
 
 		setMdx((String) states[0]);
@@ -926,7 +934,7 @@ public class PivotModelImpl implements PivotModel {
 								.getSegmentList());
 						if (member == null) {
 							if (logger.isWarnEnabled()) {
-								logger.warn("sort position member not found "
+								logger.warn("Sort position member not found "
 										+ sortPosUniqueNames[i]);
 							}
 
@@ -948,6 +956,105 @@ public class PivotModelImpl implements PivotModel {
 		this.cellSet = null;
 
 		queryAdapter.restoreState(states[2]);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public synchronized void saveSettings(
+			HierarchicalConfiguration configuration) {
+		if (configuration == null) {
+			throw new IllegalArgumentException(
+					"Configuration object cannot be null.");
+		}
+
+		if (configuration.getLogger() == null) {
+			configuration.setLogger(LogFactory.getLog(getClass()));
+		}
+
+		configuration.addProperty("model.mdx", getCurrentMdx());
+		configuration.addProperty("model.sort[@enabled]", sorting);
+
+		if (sortCriteria != null) {
+			configuration.addProperty("model.sort[@criteria]",
+					sortCriteria.name());
+			configuration.addProperty("model.sort[@topBottomCount]",
+					topBottomCount);
+			if (isSorting()) {
+				if (sortPosMembers != null) {
+					int index = 0;
+					for (Member member : sortPosMembers) {
+						configuration
+								.addProperty(String.format(
+										"model.sort.member(%s)", index++),
+										member.getUniqueName());
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public synchronized void restoreSettings(
+			HierarchicalConfiguration configuration) {
+		if (configuration == null) {
+			throw new IllegalArgumentException(
+					"Configuration object cannot be null.");
+		}
+
+		setMdx(configuration.getString("model.mdx"));
+
+		if (!isInitialized()) {
+			initialize();
+		}
+
+		List<Object> sortPosUniqueNames = configuration
+				.getList("model.sort.member");
+		if (sortPosUniqueNames == null || sortPosUniqueNames.isEmpty()) {
+			this.sortPosMembers = null;
+		} else {
+			try {
+				Cube cube = getCube();
+
+				this.sortPosMembers = new ArrayList<Member>(
+						sortPosUniqueNames.size());
+
+				for (Object uniqueName : sortPosUniqueNames) {
+					Member member = cube.lookupMember(IdentifierNode
+							.parseIdentifier(uniqueName.toString())
+							.getSegmentList());
+					if (member == null) {
+						if (logger.isWarnEnabled()) {
+							logger.warn("Sort position member not found "
+									+ uniqueName);
+						}
+
+						break;
+					}
+
+					sortPosMembers.add(member);
+				}
+			} catch (OlapException e) {
+				throw new PivotException(e);
+			}
+		}
+
+		this.topBottomCount = configuration.getInt(
+				"model.sort[@topBottomCount]", 10);
+		String sortName = configuration.getString("model.sort[@criteria]");
+		if (sortName == null) {
+			this.sortCriteria = SortCriteria.ASC;
+		} else {
+			this.sortCriteria = SortCriteria.valueOf(sortName);
+		}
+
+		this.sorting = configuration.getBoolean("model.sort[@enabled]", false);
+
+		this.cellSet = null;
 	}
 
 	enum PredefinedNames {

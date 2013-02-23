@@ -6,20 +6,13 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j;
+package com.eyeq.pivot4j.state;
 
-public enum SortCriteria {
+import java.io.Serializable;
 
-	/** sort hierarchically ascending */
-	ASC,
-	/** sort hierarchically descending */
-	DESC,
-	/** sort ascending breaking hierarchy */
-	BASC,
-	/** sort descending breaking hierarchy */
-	BDESC,
-	/** perform topcount */
-	TOPCOUNT,
-	/** perform bottomcount */
-	BOTTOMCOUNT;
+public interface Bookmarkable {
+
+	Serializable saveState();
+
+	void restoreState(Serializable state);
 }

@@ -30,15 +30,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotException;
-import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.ExpNode;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Syntax;
+import com.eyeq.pivot4j.state.Bookmarkable;
 import com.eyeq.pivot4j.util.TreeNode;
 import com.eyeq.pivot4j.util.TreeNodeCallback;
 
-public class Quax implements StateHolder {
+public class Quax implements Bookmarkable {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -2833,9 +2833,9 @@ public class Quax implements StateHolder {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
 	 */
-	public Serializable bookmarkState() {
+	public Serializable saveState() {
 		Serializable[] state = new Serializable[11];
 
 		state[0] = this.qubonMode;
@@ -2854,7 +2854,7 @@ public class Quax implements StateHolder {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
 	 */
 	@SuppressWarnings("unchecked")
 	public void restoreState(Serializable state) {

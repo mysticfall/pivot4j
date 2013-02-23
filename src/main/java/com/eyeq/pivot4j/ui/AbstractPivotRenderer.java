@@ -10,6 +10,8 @@ package com.eyeq.pivot4j.ui;
 
 import java.io.Serializable;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.logging.LogFactory;
 import org.olap4j.OlapException;
 
 import com.eyeq.pivot4j.PivotException;
@@ -188,23 +190,72 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
 	 */
 	@Override
-	public Serializable bookmarkState() {
+	public Serializable saveState() {
 		return new Serializable[] { showDimensionTitle, showParentMembers,
 				hideSpans };
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
 	 */
 	@Override
 	public void restoreState(Serializable state) {
+		if (state == null) {
+			throw new IllegalArgumentException(
+					"Required argument 'state' cannot be null.");
+		}
+
 		Serializable[] states = (Serializable[]) state;
 
 		this.showDimensionTitle = (Boolean) states[0];
 		this.showParentMembers = (Boolean) states[1];
 		this.hideSpans = (Boolean) states[2];
+
+		initialize();
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public void saveSettings(HierarchicalConfiguration configuration) {
+		if (configuration == null) {
+			throw new IllegalArgumentException(
+					"Configuration object cannot be null.");
+		}
+
+		configuration.setDelimiterParsingDisabled(true);
+
+		if (configuration.getLogger() == null) {
+			configuration.setLogger(LogFactory.getLog(getClass()));
+		}
+
+		configuration.addProperty("render.showDimensionTitle",
+				showDimensionTitle);
+		configuration
+				.addProperty("render.showParentMembers", showParentMembers);
+		configuration.addProperty("render.hideSpans", hideSpans);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public void restoreSettings(HierarchicalConfiguration configuration) {
+		if (configuration == null) {
+			throw new IllegalArgumentException(
+					"Configuration object cannot be null.");
+		}
+
+		this.showDimensionTitle = configuration.getBoolean(
+				"render.showDimensionTitle", true);
+		this.showParentMembers = configuration.getBoolean(
+				"render.showParentMembers", false);
+		this.hideSpans = configuration.getBoolean("render.hideSpans", false);
+
+		initialize();
 	}
 }

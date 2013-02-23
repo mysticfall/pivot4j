@@ -6,12 +6,13 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.ui;
+package com.eyeq.pivot4j.sort;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 
+import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.SortCriteria;
 
 public abstract class SortMode implements Serializable {
 
@@ -79,6 +80,34 @@ public abstract class SortMode implements Serializable {
 			}
 		}
 	};
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	public static SortMode fromName(String name) {
+		Field[] fields = SortMode.class.getFields();
+
+		for (Field field : fields) {
+			Object value;
+
+			try {
+				value = field.get(null);
+			} catch (Exception e) {
+				throw new PivotException(e);
+			}
+
+			if (value instanceof SortMode) {
+				SortMode mode = (SortMode) value;
+
+				if (name.equals(mode.getName())) {
+					return mode;
+				}
+			}
+		}
+
+		return null;
+	}
 
 	public abstract String getName();
 

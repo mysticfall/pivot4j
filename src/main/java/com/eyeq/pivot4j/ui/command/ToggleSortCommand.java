@@ -13,8 +13,8 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.sort.SortMode;
 import com.eyeq.pivot4j.ui.PivotUIRenderer;
-import com.eyeq.pivot4j.ui.SortMode;
 
 public class ToggleSortCommand extends AbstractSortCommand {
 

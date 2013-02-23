@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.StateHolder;
 import com.eyeq.pivot4j.el.EvaluationFailedException;
 import com.eyeq.pivot4j.el.ExpressionEvaluator;
 import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
@@ -47,11 +46,12 @@ import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.mdx.ValueParameter;
 import com.eyeq.pivot4j.mdx.impl.MdxParserImpl;
 import com.eyeq.pivot4j.mdx.metadata.MemberExp;
+import com.eyeq.pivot4j.state.Bookmarkable;
 
 /**
  * Adapt the MDX query to the model
  */
-public class QueryAdapter implements StateHolder {
+public class QueryAdapter implements Bookmarkable {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -1017,9 +1017,9 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
 	 */
-	public Serializable bookmarkState() {
+	public Serializable saveState() {
 		Serializable[] state = new Serializable[4];
 
 		state[0] = isAxesSwapped();
@@ -1038,7 +1038,7 @@ public class QueryAdapter implements StateHolder {
 
 			Serializable[] quaxStates = new Serializable[quaxes.size()];
 			for (int i = 0; i < quaxStates.length; i++) {
-				quaxStates[i] = quaxes.get(i).bookmarkState();
+				quaxStates[i] = quaxes.get(i).saveState();
 			}
 
 			state[3] = quaxStates;
@@ -1050,7 +1050,7 @@ public class QueryAdapter implements StateHolder {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
 	 */
 	public void restoreState(Serializable state) {
 		Serializable[] states = (Serializable[]) state;

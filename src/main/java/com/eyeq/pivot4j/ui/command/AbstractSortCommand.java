@@ -8,9 +8,9 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
+import com.eyeq.pivot4j.sort.SortMode;
 import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
-import com.eyeq.pivot4j.ui.SortMode;
 
 public abstract class AbstractSortCommand extends AbstractCellCommand<Void> implements
 		SortCommand {

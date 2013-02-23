@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.eyeq.pivot4j.sort.SortMode;
 import com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.DrillCollapseMemberCommand;
@@ -34,9 +40,9 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 
 	private boolean enableSort = true;
 
-	private boolean enableDrillThrough = false;
-
 	private SortMode sortMode = SortMode.BASIC;
+
+	private boolean enableDrillThrough = false;
 
 	private String drillDownMode = DrillDownCommand.MODE_POSITION;
 
@@ -62,7 +68,7 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 	/**
 	 * @param sortMode
 	 *            the sortMode to set
-	 * @see com.eyeq.pivot4j.ui.PivotUIRenderer#setSortMode(com.eyeq.pivot4j.ui.SortMode)
+	 * @see com.eyeq.pivot4j.ui.PivotUIRenderer#setSortMode(com.eyeq.pivot4j.sort.SortMode)
 	 */
 	public void setSortMode(SortMode sortMode) {
 		this.sortMode = sortMode;
@@ -223,17 +229,17 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 			List<CellCommand<?>> commands);
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#bookmarkState()
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
 	 */
 	@Override
-	public Serializable bookmarkState() {
-		return new Serializable[] { super.bookmarkState(), drillDownMode,
+	public Serializable saveState() {
+		return new Serializable[] { super.saveState(), drillDownMode,
 				enableColumnDrillDown, enableRowDrillDown, enableSort,
-				enableDrillThrough, sortMode };
+				sortMode, enableDrillThrough };
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.StateHolder#restoreState(java.io.Serializable)
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
 	 */
 	@Override
 	public void restoreState(Serializable state) {
@@ -245,7 +251,70 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 		this.enableColumnDrillDown = (Boolean) states[2];
 		this.enableRowDrillDown = (Boolean) states[3];
 		this.enableSort = (Boolean) states[4];
-		this.enableDrillThrough = (Boolean) states[5];
-		this.sortMode = (SortMode) states[6];
+		this.sortMode = (SortMode) states[5];
+		this.enableDrillThrough = (Boolean) states[6];
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public void saveSettings(HierarchicalConfiguration configuration) {
+		super.saveSettings(configuration);
+
+		if (configuration.getLogger() == null) {
+			configuration.setLogger(LogFactory.getLog(getClass()));
+		}
+
+		configuration.addProperty("render.drillDown[@mode]", drillDownMode);
+		configuration.addProperty("render.drillDown.columnAxis[@enabled]",
+				enableColumnDrillDown);
+		configuration.addProperty("render.drillDown.rowAxis[@enabled]",
+				enableRowDrillDown);
+		configuration.addProperty("render.sort[@enabled]", enableSort);
+
+		if (sortMode != null) {
+			configuration.addProperty("render.sort[@mode]", sortMode.getName());
+		}
+
+		configuration.addProperty("render.drillThrough[@enabled]",
+				enableDrillThrough);
+
+		// TODO Need to store registered commands here.
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public void restoreSettings(HierarchicalConfiguration configuration) {
+		super.restoreSettings(configuration);
+
+		this.drillDownMode = configuration.getString("render.drillDown[@mode]",
+				DrillDownCommand.MODE_POSITION);
+		this.enableColumnDrillDown = configuration.getBoolean(
+				"render.drillDown.columnAxis[@enabled]", false);
+		this.enableRowDrillDown = configuration.getBoolean(
+				"render.drillDown.rowAxis[@enabled]", false);
+		this.enableSort = configuration.getBoolean("render.sort[@enabled]",
+				true);
+
+		// TODO Need to support a custom implementation.
+		String sortModeName = configuration.getString("render.sort[@mode]",
+				SortMode.BASIC.getName());
+
+		this.sortMode = SortMode.fromName(sortModeName);
+
+		if (sortMode == null) {
+			Logger logger = LoggerFactory.getLogger(getClass());
+			if (logger.isWarnEnabled()) {
+				logger.warn("Ignoring unknown sort mode name : " + sortModeName);
+			}
+
+			this.sortMode = SortMode.BASIC;
+		}
+
+		this.enableDrillThrough = configuration.getBoolean(
+				"render.drillThrough[@enabled]", false);
 	}
 }

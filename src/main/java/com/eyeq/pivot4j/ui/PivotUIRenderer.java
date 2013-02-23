@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.ui;
 
+import com.eyeq.pivot4j.sort.SortMode;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 
 public interface PivotUIRenderer extends PivotRenderer {
