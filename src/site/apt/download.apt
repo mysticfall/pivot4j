@@ -7,7 +7,7 @@
 
 Download
 
-* Pivot4J Version 0.6
+* Pivot4J
 
 ** Stable Release
 
@@ -19,7 +19,11 @@ Download
 
 ** Development Snapshot
 
-	* The unstable snapshot builds of the project are available {{{http://dev.eyeq.co.kr/artifactory/libs-snapshot/com/eyeq/pivot4j/0.7-SNAPSHOT/}here}}.
+	* Library Jar : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/target/pivot4j-0.7-SNAPSHOT.jar}pivot4j-0.7-SNAPSHOT.jar}}
+
+	* JavaDoc API : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/target/pivot4j-0.7-SNAPSHOT-javadoc.jar}pivot4j-0.7-SNAPSHOT-javadoc.jar}}
+
+	* Source Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/target/pivot4j-0.7-SNAPSHOT-sources.jar}pivot4j-0.7-SNAPSHOT-sources.jar}}
 
 * Sample Application
 
@@ -33,4 +37,24 @@ Download
 
 ** Development Snapshot
 
-	* The unstable snapshot builds of the project are available {{{http://dev.eyeq.co.kr/artifactory/libs-snapshot/com/eyeq/pivot4j-jsf/0.7-SNAPSHOT/}here}}.
+	* Web Archive (.war) : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20JSF/lastSuccessfulBuild/artifact/target/pivot4j.war}pivot4j-0.7-SNAPSHOT.war}}
+
+	* JavaDoc API : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20JSF/lastSuccessfulBuild/artifact/target/pivot4j-jsf-0.7-SNAPSHOT-javadoc.jar}pivot4j-0.7-SNAPSHOT-javadoc.jar}}
+
+	* Source Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20JSF/lastSuccessfulBuild/artifact/target/pivot4j-jsf-0.7-SNAPSHOT-sources.jar}pivot4j-0.7-SNAPSHOT-sources.jar}}
+
+* Pentaho BI Plugin
+
+** Stable Release
+
+	* (No stable release is available yet).
+
+** Development Snapshot
+
+	* Tar.gz Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20Pentaho/lastSuccessfulBuild/artifact/target/pivot4j-pentaho-0.7-SNAPSHOT-plugin.tar.gz}pivot4j-pentaho-0.7-SNAPSHOT-plugin.tar.gz}}
+
+	* Zip Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20Pentaho/lastSuccessfulBuild/artifact/target/pivot4j-pentaho-0.7-SNAPSHOT-plugin.zip}pivot4j-pentaho-0.7-SNAPSHOT-plugin.zip}}
+
+License
+
+	* Please refer to the {{{./license.html}license section}} for information.

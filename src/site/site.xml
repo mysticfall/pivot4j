@@ -20,12 +20,14 @@
 			<item name="Issue Tracker" href="https://github.com/mysticfall/pivot4j/issues" />
 			<item name="Discussions" href="http://groups.google.com/d/forum/pivot4j-list" />
 			<item name="JPivot Project" href="http://jpivot.sourceforge.net" />
+			<item name="Pentaho Community" href="http://community.pentaho.com" />
 			<item name="Olap4J Project" href="http://www.olap4j.org" />
 			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j" />
 		</links>
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
 			<item name="Sample Application" href="example.html" />
+			<item name="Pentaho BI Plugin" href="pentaho.html" />
 			<item name="Download" href="download.html" />
 			<item name="How to Use" href="usage.html" />
 			<item name="For Developers" href="developer.html" />
