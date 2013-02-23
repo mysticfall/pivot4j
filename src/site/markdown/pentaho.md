@@ -1,4 +1,4 @@
-<head><title>Pivot4J - Sample Application</title></head> 
+<head><title>Pivot4J - Pentaho BI Plugin</title></head> 
 ## Pentaho BI Plugin
 
 ### About
