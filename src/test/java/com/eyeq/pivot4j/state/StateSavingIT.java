@@ -12,20 +12,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.junit.Test;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
 import com.eyeq.pivot4j.sort.SortCriteria;
 
-public class PivotModelImplIT extends AbstractIntegrationTestCase {
+public class StateSavingIT extends AbstractIntegrationTestCase {
 
 	private String testQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] WHERE [Time].[1997]";
@@ -92,7 +97,8 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 	}
 
 	@Test
-	public void testSaveModelSettings() {
+	public void testSaveModelSettings() throws ConfigurationException,
+			IOException {
 		PivotModel model = getPivotModel();
 		model.setMdx(getTestQuery());
 		model.initialize();
@@ -109,7 +115,21 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		String mdx = model.getCurrentMdx();
 
 		XMLConfiguration configuration = new XMLConfiguration();
+		configuration.setDelimiterParsingDisabled(true);
+
 		model.saveSettings(configuration);
+
+		Logger logger = LoggerFactory.getLogger(getClass());
+		if (logger.isDebugEnabled()) {
+			StringWriter writer = new StringWriter();
+			configuration.save(writer);
+			writer.flush();
+			writer.close();
+
+			logger.debug("Loading report content :"
+					+ System.getProperty("line.separator"));
+			logger.debug(writer.getBuffer().toString());
+		}
 
 		PivotModel newModel = new PivotModelImpl(getDataSource());
 		newModel.restoreSettings(configuration);
