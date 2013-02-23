@@ -263,7 +263,7 @@
 <a class="jxr_linenumber" name="253" href="#253">253</a> 		clone.axes = <strong class="jxr_keyword">new</strong> ArrayList&lt;QueryAxis&gt;(axes.size());
 <a class="jxr_linenumber" name="254" href="#254">254</a> 
 <a class="jxr_linenumber" name="255" href="#255">255</a> 		<strong class="jxr_keyword">for</strong> (QueryAxis axis : axes) {
-<a class="jxr_linenumber" name="256" href="#256">256</a> 			clone.axes.add(axis);
+<a class="jxr_linenumber" name="256" href="#256">256</a> 			clone.axes.add(axis.clone());
 <a class="jxr_linenumber" name="257" href="#257">257</a> 		}
 <a class="jxr_linenumber" name="258" href="#258">258</a> 
 <a class="jxr_linenumber" name="259" href="#259">259</a> 		<strong class="jxr_keyword">if</strong> (cube != <strong class="jxr_keyword">null</strong>) {

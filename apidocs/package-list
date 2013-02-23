@@ -1,5 +1,8 @@
 com.eyeq.pivot4j
 com.eyeq.pivot4j.datasource
+com.eyeq.pivot4j.el
+com.eyeq.pivot4j.el.freemarker
+com.eyeq.pivot4j.el.simple
 com.eyeq.pivot4j.export
 com.eyeq.pivot4j.export.fop
 com.eyeq.pivot4j.export.poi
@@ -8,6 +11,8 @@ com.eyeq.pivot4j.mdx
 com.eyeq.pivot4j.mdx.impl
 com.eyeq.pivot4j.mdx.metadata
 com.eyeq.pivot4j.query
+com.eyeq.pivot4j.sort
+com.eyeq.pivot4j.state
 com.eyeq.pivot4j.transform
 com.eyeq.pivot4j.transform.impl
 com.eyeq.pivot4j.ui

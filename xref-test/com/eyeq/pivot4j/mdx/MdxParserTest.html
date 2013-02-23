@@ -376,7 +376,149 @@
 <a class="jxr_linenumber" name="366" href="#366">366</a> 		assertEquals(<span class="jxr_string">"Wrong number of function arguments."</span>, 2, func.getArgs()
 <a class="jxr_linenumber" name="367" href="#367">367</a> 				.size());
 <a class="jxr_linenumber" name="368" href="#368">368</a> 	}
-<a class="jxr_linenumber" name="369" href="#369">369</a> }
+<a class="jxr_linenumber" name="369" href="#369">369</a> 
+<a class="jxr_linenumber" name="370" href="#370">370</a> 	@Test
+<a class="jxr_linenumber" name="371" href="#371">371</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpression() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="372" href="#372">372</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
+<a class="jxr_linenumber" name="373" href="#373">373</a> 				+ <span class="jxr_string">"WHERE $[s:parameter]"</span>;
+<a class="jxr_linenumber" name="374" href="#374">374</a> 
+<a class="jxr_linenumber" name="375" href="#375">375</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="376" href="#376">376</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
+<a class="jxr_linenumber" name="377" href="#377">377</a> 
+<a class="jxr_linenumber" name="378" href="#378">378</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
+<a class="jxr_linenumber" name="379" href="#379">379</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, parameter);
+<a class="jxr_linenumber" name="380" href="#380">380</a> 
+<a class="jxr_linenumber" name="381" href="#381">381</a> 		assertEquals(<span class="jxr_string">"Wrong member expression returned."</span>, <span class="jxr_string">"parameter"</span>,
+<a class="jxr_linenumber" name="382" href="#382">382</a> 				parameter.getExpression());
+<a class="jxr_linenumber" name="383" href="#383">383</a> 		assertEquals(<span class="jxr_string">"Wrong expression namespace."</span>, <span class="jxr_string">"s"</span>,
+<a class="jxr_linenumber" name="384" href="#384">384</a> 				parameter.getNamespace());
+<a class="jxr_linenumber" name="385" href="#385">385</a> 	}
+<a class="jxr_linenumber" name="386" href="#386">386</a> 
+<a class="jxr_linenumber" name="387" href="#387">387</a> 	@Test
+<a class="jxr_linenumber" name="388" href="#388">388</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testComplexParseMemberExpression() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="389" href="#389">389</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
+<a class="jxr_linenumber" name="390" href="#390">390</a> 				+ <span class="jxr_string">"WHERE $[s:#{set = \&quot;test\&quot;}]"</span>;
+<a class="jxr_linenumber" name="391" href="#391">391</a> 
+<a class="jxr_linenumber" name="392" href="#392">392</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="393" href="#393">393</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
+<a class="jxr_linenumber" name="394" href="#394">394</a> 
+<a class="jxr_linenumber" name="395" href="#395">395</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
+<a class="jxr_linenumber" name="396" href="#396">396</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, parameter);
+<a class="jxr_linenumber" name="397" href="#397">397</a> 
+<a class="jxr_linenumber" name="398" href="#398">398</a> 		assertEquals(<span class="jxr_string">"Wrong member expression returned."</span>, <span class="jxr_string">"#{set = \&quot;test\&quot;}"</span>,
+<a class="jxr_linenumber" name="399" href="#399">399</a> 				parameter.getExpression());
+<a class="jxr_linenumber" name="400" href="#400">400</a> 	}
+<a class="jxr_linenumber" name="401" href="#401">401</a> 
+<a class="jxr_linenumber" name="402" href="#402">402</a> 	@Test
+<a class="jxr_linenumber" name="403" href="#403">403</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInSet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="404" href="#404">404</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
+<a class="jxr_linenumber" name="405" href="#405">405</a> 				+ <span class="jxr_string">"WHERE {$[s:parameter], [Time].[1998]}"</span>;
+<a class="jxr_linenumber" name="406" href="#406">406</a> 
+<a class="jxr_linenumber" name="407" href="#407">407</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="408" href="#408">408</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
+<a class="jxr_linenumber" name="409" href="#409">409</a> 
+<a class="jxr_linenumber" name="410" href="#410">410</a> 		FunCall func = (FunCall) query.getSlicer();
+<a class="jxr_linenumber" name="411" href="#411">411</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, func);
+<a class="jxr_linenumber" name="412" href="#412">412</a> 
+<a class="jxr_linenumber" name="413" href="#413">413</a> 		assertEquals(<span class="jxr_string">"Wrong number of function arguments."</span>, 2, func.getArgs()
+<a class="jxr_linenumber" name="414" href="#414">414</a> 				.size());
+<a class="jxr_linenumber" name="415" href="#415">415</a> 
+<a class="jxr_linenumber" name="416" href="#416">416</a> 		ExpressionParameter parameter = (ExpressionParameter) func.getArgs()
+<a class="jxr_linenumber" name="417" href="#417">417</a> 				.get(0);
+<a class="jxr_linenumber" name="418" href="#418">418</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, parameter);
+<a class="jxr_linenumber" name="419" href="#419">419</a> 
+<a class="jxr_linenumber" name="420" href="#420">420</a> 		assertEquals(<span class="jxr_string">"Wrong member expression returned."</span>, <span class="jxr_string">"parameter"</span>,
+<a class="jxr_linenumber" name="421" href="#421">421</a> 				parameter.getExpression());
+<a class="jxr_linenumber" name="422" href="#422">422</a> 	}
+<a class="jxr_linenumber" name="423" href="#423">423</a> 
+<a class="jxr_linenumber" name="424" href="#424">424</a> 	@Test
+<a class="jxr_linenumber" name="425" href="#425">425</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInWithMember() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="426" href="#426">426</a> 		String mdx = <span class="jxr_string">"WITH MEMBER [EXPR_MEMBER] AS '$[s:parameter]' SELECT [Measures].[Store Sales] ON COLUMNS, "</span>
+<a class="jxr_linenumber" name="427" href="#427">427</a> 				+ <span class="jxr_string">"[Product].[All Products] ON ROWS FROM [Sales]"</span>;
+<a class="jxr_linenumber" name="428" href="#428">428</a> 
+<a class="jxr_linenumber" name="429" href="#429">429</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="430" href="#430">430</a> 
+<a class="jxr_linenumber" name="431" href="#431">431</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
+<a class="jxr_linenumber" name="432" href="#432">432</a> 
+<a class="jxr_linenumber" name="433" href="#433">433</a> 		List&lt;Formula&gt; formulas = query.getFormulas();
+<a class="jxr_linenumber" name="434" href="#434">434</a> 
+<a class="jxr_linenumber" name="435" href="#435">435</a> 		assertNotNull(<span class="jxr_string">"Formula list is null."</span>, formulas);
+<a class="jxr_linenumber" name="436" href="#436">436</a> 		assertEquals(<span class="jxr_string">"Wrong number of formula returned."</span>, 1, formulas.size());
+<a class="jxr_linenumber" name="437" href="#437">437</a> 
+<a class="jxr_linenumber" name="438" href="#438">438</a> 		Formula formula = formulas.get(0);
+<a class="jxr_linenumber" name="439" href="#439">439</a> 
+<a class="jxr_linenumber" name="440" href="#440">440</a> 		Exp exp = formula.getExp();
+<a class="jxr_linenumber" name="441" href="#441">441</a> 
+<a class="jxr_linenumber" name="442" href="#442">442</a> 		assertNotNull(<span class="jxr_string">"Formula expression is null."</span>, formulas);
+<a class="jxr_linenumber" name="443" href="#443">443</a> 		assertTrue(<span class="jxr_string">"Parameter expression type is wrong."</span>,
+<a class="jxr_linenumber" name="444" href="#444">444</a> 				exp instanceof ExpressionParameter);
+<a class="jxr_linenumber" name="445" href="#445">445</a> 
+<a class="jxr_linenumber" name="446" href="#446">446</a> 		ExpressionParameter parameter = (ExpressionParameter) exp;
+<a class="jxr_linenumber" name="447" href="#447">447</a> 
+<a class="jxr_linenumber" name="448" href="#448">448</a> 		assertEquals(<span class="jxr_string">"Wrong parameter expression."</span>, <span class="jxr_string">"parameter"</span>,
+<a class="jxr_linenumber" name="449" href="#449">449</a> 				parameter.getExpression());
+<a class="jxr_linenumber" name="450" href="#450">450</a> 	}
+<a class="jxr_linenumber" name="451" href="#451">451</a> 
+<a class="jxr_linenumber" name="452" href="#452">452</a> 	@Test
+<a class="jxr_linenumber" name="453" href="#453">453</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInWithSet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="454" href="#454">454</a> 		String mdx = <span class="jxr_string">"WITH SET [EXPR_SET] AS {$[s:parameter1], [AAA].[BBB], $[s:parameter2]} "</span>
+<a class="jxr_linenumber" name="455" href="#455">455</a> 				+ <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, "</span>
+<a class="jxr_linenumber" name="456" href="#456">456</a> 				+ <span class="jxr_string">"[Product].[All Products] ON ROWS FROM [Sales]"</span>;
+<a class="jxr_linenumber" name="457" href="#457">457</a> 
+<a class="jxr_linenumber" name="458" href="#458">458</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="459" href="#459">459</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
+<a class="jxr_linenumber" name="460" href="#460">460</a> 
+<a class="jxr_linenumber" name="461" href="#461">461</a> 		List&lt;Formula&gt; formulas = query.getFormulas();
+<a class="jxr_linenumber" name="462" href="#462">462</a> 
+<a class="jxr_linenumber" name="463" href="#463">463</a> 		assertNotNull(<span class="jxr_string">"Formula list is null."</span>, formulas);
+<a class="jxr_linenumber" name="464" href="#464">464</a> 		assertEquals(<span class="jxr_string">"Wrong number of formula returned."</span>, 1, formulas.size());
+<a class="jxr_linenumber" name="465" href="#465">465</a> 
+<a class="jxr_linenumber" name="466" href="#466">466</a> 		Formula formula = formulas.get(0);
+<a class="jxr_linenumber" name="467" href="#467">467</a> 
+<a class="jxr_linenumber" name="468" href="#468">468</a> 		Exp exp = formula.getExp();
+<a class="jxr_linenumber" name="469" href="#469">469</a> 
+<a class="jxr_linenumber" name="470" href="#470">470</a> 		assertNotNull(<span class="jxr_string">"Formula expression is null."</span>, formulas);
+<a class="jxr_linenumber" name="471" href="#471">471</a> 		assertTrue(<span class="jxr_string">"Parameter expression type is wrong."</span>,
+<a class="jxr_linenumber" name="472" href="#472">472</a> 				exp instanceof FunCall);
+<a class="jxr_linenumber" name="473" href="#473">473</a> 
+<a class="jxr_linenumber" name="474" href="#474">474</a> 		FunCall func = (FunCall) exp;
+<a class="jxr_linenumber" name="475" href="#475">475</a> 
+<a class="jxr_linenumber" name="476" href="#476">476</a> 		assertNotNull(<span class="jxr_string">"Set member list is null."</span>, func.getArgs());
+<a class="jxr_linenumber" name="477" href="#477">477</a> 		assertEquals(<span class="jxr_string">"Wrong number of set children returned."</span>, 3, func
+<a class="jxr_linenumber" name="478" href="#478">478</a> 				.getArgs().size());
+<a class="jxr_linenumber" name="479" href="#479">479</a> 
+<a class="jxr_linenumber" name="480" href="#480">480</a> 		assertTrue(<span class="jxr_string">"First parameter expression type is wrong."</span>, func.getArgs()
+<a class="jxr_linenumber" name="481" href="#481">481</a> 				.get(0) instanceof ExpressionParameter);
+<a class="jxr_linenumber" name="482" href="#482">482</a> 		assertTrue(<span class="jxr_string">"Third parameter expression type is wrong."</span>, func.getArgs()
+<a class="jxr_linenumber" name="483" href="#483">483</a> 				.get(2) instanceof ExpressionParameter);
+<a class="jxr_linenumber" name="484" href="#484">484</a> 
+<a class="jxr_linenumber" name="485" href="#485">485</a> 		ExpressionParameter parameter1 = (ExpressionParameter) func.getArgs()
+<a class="jxr_linenumber" name="486" href="#486">486</a> 				.get(0);
+<a class="jxr_linenumber" name="487" href="#487">487</a> 		ExpressionParameter parameter3 = (ExpressionParameter) func.getArgs()
+<a class="jxr_linenumber" name="488" href="#488">488</a> 				.get(2);
+<a class="jxr_linenumber" name="489" href="#489">489</a> 
+<a class="jxr_linenumber" name="490" href="#490">490</a> 		assertEquals(<span class="jxr_string">"Wrong parameter expression."</span>, <span class="jxr_string">"parameter1"</span>,
+<a class="jxr_linenumber" name="491" href="#491">491</a> 				parameter1.getExpression());
+<a class="jxr_linenumber" name="492" href="#492">492</a> 		assertEquals(<span class="jxr_string">"Wrong parameter expression."</span>, <span class="jxr_string">"parameter2"</span>,
+<a class="jxr_linenumber" name="493" href="#493">493</a> 				parameter3.getExpression());
+<a class="jxr_linenumber" name="494" href="#494">494</a> 	}
+<a class="jxr_linenumber" name="495" href="#495">495</a> 
+<a class="jxr_linenumber" name="496" href="#496">496</a> 	@Test
+<a class="jxr_linenumber" name="497" href="#497">497</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionEscape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="498" href="#498">498</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
+<a class="jxr_linenumber" name="499" href="#499">499</a> 				+ <span class="jxr_string">"WHERE $[s:[1, 2, 3]], SELECT, &amp;[AAA]], Crossjoin(), \&quot;aaa\&quot;]"</span>;
+<a class="jxr_linenumber" name="500" href="#500">500</a> 
+<a class="jxr_linenumber" name="501" href="#501">501</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="502" href="#502">502</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
+<a class="jxr_linenumber" name="503" href="#503">503</a> 
+<a class="jxr_linenumber" name="504" href="#504">504</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
+<a class="jxr_linenumber" name="505" href="#505">505</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, parameter);
+<a class="jxr_linenumber" name="506" href="#506">506</a> 
+<a class="jxr_linenumber" name="507" href="#507">507</a> 		assertEquals(<span class="jxr_string">"Wrong member expression returned."</span>,
+<a class="jxr_linenumber" name="508" href="#508">508</a> 				<span class="jxr_string">"[1, 2, 3], SELECT, &amp;[AAA], Crossjoin(), \&quot;aaa\&quot;"</span>,
+<a class="jxr_linenumber" name="509" href="#509">509</a> 				parameter.getExpression());
+<a class="jxr_linenumber" name="510" href="#510">510</a> 	}
+<a class="jxr_linenumber" name="511" href="#511">511</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
