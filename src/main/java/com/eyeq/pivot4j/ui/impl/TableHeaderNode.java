@@ -211,7 +211,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 						TableHeaderNode parentNode = new TableHeaderNode(
 								getReference());
-						parentNode.setPosition(position);
+						parentNode.setPosition(nodeChild.getPosition());
 						parentNode.setHierarchy(parent.getHierarchy());
 						parentNode.setMember(parent);
 						parentNode.addChild(childNode);
