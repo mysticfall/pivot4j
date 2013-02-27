@@ -11,7 +11,6 @@ package com.eyeq.pivot4j.ui.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
@@ -19,6 +18,7 @@ import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
 
+import com.eyeq.pivot4j.util.OlapUtils;
 import com.eyeq.pivot4j.util.TreeNode;
 import com.eyeq.pivot4j.util.TreeNodeCallback;
 
@@ -161,7 +161,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 			Hierarchy childHierarchy = nodeChild.getHierarchy();
 
 			if (childHierarchy != null) {
-				if (!ObjectUtils.equals(hierarchy, childHierarchy)) {
+				if (!OlapUtils.equals(hierarchy, childHierarchy)) {
 					int index = getChildren().indexOf(child);
 
 					removeChild(child);
@@ -190,7 +190,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 			if (member != null) {
 				Level rootLevel = nodeChild.getRootLevel();
 
-				if (!member.getLevel().equals(rootLevel)) {
+				if (!OlapUtils.equals(member.getLevel(), rootLevel)) {
 					int index = getChildren().indexOf(child);
 
 					removeChild(child);
@@ -202,7 +202,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 					Member parent = member;
 					while (parent != null
-							&& !rootLevel.equals(parent.getLevel())) {
+							&& !OlapUtils.equals(rootLevel, parent.getLevel())) {
 						parent = parent.getParentMember();
 
 						if (!levels.contains(parent.getLevel())) {
@@ -322,9 +322,9 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	 * @return
 	 */
 	protected boolean canMergeWith(TableHeaderNode sibling) {
-		if (ObjectUtils.equals(hierarchy, sibling.getHierarchy())) {
-			if (ObjectUtils.equals(member, sibling.getMember())) {
-				if (ObjectUtils.equals(property, sibling.getProperty())) {
+		if (OlapUtils.equals(hierarchy, sibling.getHierarchy())) {
+			if (OlapUtils.equals(member, sibling.getMember())) {
+				if (OlapUtils.equals(property, sibling.getProperty())) {
 					return getRowSpan() == sibling.getRowSpan();
 				}
 			}
@@ -393,7 +393,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 					if (nodeChild == TableHeaderNode.this) {
 						return TreeNodeCallback.CONTINUE;
-					} else if (!ObjectUtils.equals(hierarchy,
+					} else if (!OlapUtils.equals(hierarchy,
 							nodeChild.getHierarchy())) {
 						return TreeNodeCallback.BREAK;
 					}
@@ -411,7 +411,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 					TableHeaderNode nodeChild = (TableHeaderNode) node;
 
 					if (nodeChild.getMember() != null
-							&& ObjectUtils.equals(member.getLevel(), nodeChild
+							&& OlapUtils.equals(member.getLevel(), nodeChild
 									.getMember().getLevel())) {
 						maxSpan[0] = Math.max(maxSpan[0],
 								nodeChild.getHierarchyDescendents());
@@ -432,7 +432,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 			TableHeaderNode node = (TableHeaderNode) parent.getParent();
 
 			if (node != null
-					&& ObjectUtils.equals(hierarchy, node.getHierarchy())) {
+					&& OlapUtils.equals(hierarchy, node.getHierarchy())) {
 				parent = node;
 			} else {
 				break;
@@ -449,7 +449,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 		int height = 1;
 		for (TreeNode<TableAxisContext> child : getChildren()) {
 			TableHeaderNode nodeChild = (TableHeaderNode) child;
-			if (ObjectUtils.equals(hierarchy, nodeChild.getHierarchy())) {
+			if (OlapUtils.equals(hierarchy, nodeChild.getHierarchy())) {
 				height = Math.max(height,
 						1 + nodeChild.getHierarchyDescendents());
 			}

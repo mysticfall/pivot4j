@@ -32,6 +32,7 @@ import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
 import com.eyeq.pivot4j.util.MemberSelection;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		PlaceMembersOnAxes {
@@ -63,7 +64,7 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 
 		List<Hierarchy> hierarchies = quax.getHierarchies();
 		for (Hierarchy hier : hierarchies) {
-			if (hier.equals(hierarchy)) {
+			if (OlapUtils.equals(hier, hierarchy)) {
 				selection.addAll(members);
 			} else {
 				selection.addAll(findVisibleMembers(hier));
@@ -207,7 +208,7 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 
 			List<Member> members = new ArrayList<Member>();
 			for (Hierarchy hierarchy : hierarchies) {
-				if (member.getHierarchy().equals(hierarchy)) {
+				if (OlapUtils.equals(member.getHierarchy(), hierarchy)) {
 					members.add(member);
 				} else {
 					members.addAll(findVisibleMembers(hierarchy));

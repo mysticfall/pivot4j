@@ -28,6 +28,7 @@ import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.ChangeSlicer;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer {
 
@@ -99,7 +100,7 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 		for (Position position : positions) {
 			List<Member> posMembers = position.getMembers();
 			for (Member posMember : posMembers) {
-				if (posMember.getHierarchy().equals(hierarchy)
+				if (OlapUtils.equals(posMember.getHierarchy(), hierarchy)
 						&& !members.contains(posMember)) {
 					members.add(posMember);
 				}
@@ -187,7 +188,7 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 					hierarchies.add(memberHierarchy);
 				}
 
-				if (!memberHierarchy.equals(hierarchy)) {
+				if (!OlapUtils.equals(memberHierarchy, hierarchy)) {
 					List<Member> hierarchyMembers = memberMap
 							.get(memberHierarchy);
 					if (hierarchyMembers == null) {

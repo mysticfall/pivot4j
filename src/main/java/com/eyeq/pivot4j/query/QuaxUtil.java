@@ -26,6 +26,7 @@ import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.mdx.metadata.DimensionExp;
 import com.eyeq.pivot4j.mdx.metadata.LevelExp;
 import com.eyeq.pivot4j.mdx.metadata.MemberExp;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 public class QuaxUtil {
 
@@ -72,7 +73,7 @@ public class QuaxUtil {
 	 * @return true if oExp is equal to member
 	 */
 	public boolean equalMember(Exp oExp, Member member) {
-		return member.equals(memberForExp(oExp));
+		return OlapUtils.equals(member, memberForExp(oExp));
 	}
 
 	/**
@@ -95,7 +96,8 @@ public class QuaxUtil {
 	 */
 	public boolean checkParent(Member pMember, Exp cMembObj) {
 		Member child = memberForExp(cMembObj);
-		return child != null && pMember.equals(child.getParentMember());
+		return child != null
+				&& OlapUtils.equals(pMember, child.getParentMember());
 	}
 
 	/**
@@ -109,7 +111,8 @@ public class QuaxUtil {
 	 */
 	public boolean checkChild(Member cMember, Exp pMembObj) {
 		Member parent = memberForExp(pMembObj);
-		return parent != null && parent.equals(cMember.getParentMember());
+		return parent != null
+				&& OlapUtils.equals(parent, cMember.getParentMember());
 	}
 
 	/**
@@ -173,7 +176,7 @@ public class QuaxUtil {
 		FunCall f = (FunCall) oExp;
 
 		if (f.isCallTo("Children")) {
-			return member.equals(memberForExp(f.getArgs().get(0)));
+			return OlapUtils.equals(member, memberForExp(f.getArgs().get(0)));
 		} else if (f.isCallTo("Descendants")) {
 			// true, if f = descendants(m2, level) contains any child of m
 			// so level must be parent-level of m
@@ -182,13 +185,14 @@ public class QuaxUtil {
 			Level level = levelForExp(f.getArgs().get(1));
 			Level parentLevel = getParentLevel(level);
 
-			if (parentLevel != null && member.getLevel().equals(parentLevel)) {
+			if (parentLevel != null
+					&& OlapUtils.equals(member.getLevel(), parentLevel)) {
 				int ancestorLevelNumber = ancestor.getLevel().getDepth();
 				while (ancestorLevelNumber < member.getLevel().getDepth()) {
 					member = member.getParentMember();
 				}
 
-				if (member.equals(ancestor)) {
+				if (OlapUtils.equals(member, ancestor)) {
 					return true;
 				} else {
 					return false;
@@ -210,7 +214,8 @@ public class QuaxUtil {
 				}
 			}
 
-			if (parentLevel != null && member.getLevel().equals(parentLevel)) {
+			if (parentLevel != null
+					&& OlapUtils.equals(member.getLevel(), parentLevel)) {
 				return true;
 			} else {
 				return false;
@@ -226,7 +231,7 @@ public class QuaxUtil {
 				Member mm = memberForExp(exp);
 
 				Member mmp = mm.getParentMember();
-				if (mmp != null && mmp.equals(member)) {
+				if (mmp != null && OlapUtils.equals(mmp, member)) {
 					return true;
 				}
 			}
@@ -256,12 +261,12 @@ public class QuaxUtil {
 			// true, if m2.children contains descendants of m
 			// <==> m is equal or ancestor of m2
 			Member mExp = memberForExp(f.getArgs().get(0));
-			return (member.equals(mExp) || isDescendant(member, mExp));
+			return OlapUtils.equals(member, mExp) || isDescendant(member, mExp);
 		} else if (f.isCallTo("Descendants")) {
 			// true, if descendants(m2) contain descendants of m
 			// <==> m is equal or ancestor of m2
 			Member mExp = memberForExp(f.getArgs().get(0));
-			return (member.equals(mExp) || isDescendant(member, mExp));
+			return OlapUtils.equals(member, mExp) || isDescendant(member, mExp);
 		} else if (f.isCallTo("Members")) {
 			Level levExp = levelForExp(f.getArgs().get(0));
 			return levExp.getDepth() > member.getLevel().getDepth();
@@ -308,7 +313,7 @@ public class QuaxUtil {
 		if (descendant.isCalculated()) {
 			return false;
 		}
-		if (ancestor.equals(descendant)) {
+		if (OlapUtils.equals(ancestor, descendant)) {
 			return false;
 		}
 
@@ -318,7 +323,7 @@ public class QuaxUtil {
 			mm = mm.getParentMember();
 		}
 
-		if (mm.equals(ancestor)) {
+		if (OlapUtils.equals(mm, ancestor)) {
 			return true;
 		} else {
 			return false;
@@ -806,7 +811,8 @@ public class QuaxUtil {
 				if (exp instanceof FunCall) {
 					FunCall f = (FunCall) exp;
 					if (f.isCallTo("Children")
-							&& memberForExp(f.getArgs().get(0)).equals(grandPa)) {
+							&& OlapUtils.equals(
+									memberForExp(f.getArgs().get(0)), grandPa)) {
 						return;
 					}
 				}
@@ -843,7 +849,8 @@ public class QuaxUtil {
 				if (exp instanceof FunCall) {
 					FunCall f = (FunCall) exp;
 					if (f.isCallTo("Children")
-							&& memberForExp(f.getArgs().get(0)).equals(parent)) {
+							&& OlapUtils.equals(
+									memberForExp(f.getArgs().get(0)), parent)) {
 						return;
 					}
 				}
@@ -878,7 +885,8 @@ public class QuaxUtil {
 				if (exp instanceof FunCall) {
 					FunCall f = (FunCall) exp;
 					if (f.isCallTo("Children")
-							&& memberForExp(f.getArgs().get(0)).equals(member)) {
+							&& OlapUtils.equals(
+									memberForExp(f.getArgs().get(0)), member)) {
 						return;
 					}
 				}
@@ -915,7 +923,8 @@ public class QuaxUtil {
 				if (exp instanceof FunCall) {
 					FunCall f = (FunCall) exp;
 					if (f.isCallTo("Descendants")
-							&& memberForExp(f.getArgs().get(0)).equals(member)) {
+							&& OlapUtils.equals(
+									memberForExp(f.getArgs().get(0)), member)) {
 						return;
 					}
 				}
@@ -998,7 +1007,7 @@ public class QuaxUtil {
 		}
 
 		Member parent = memberForExp(f.getArgs().get(0));
-		return parent.equals(member.getParentMember());
+		return OlapUtils.equals(parent, member.getParentMember());
 	}
 
 	/**
@@ -1019,11 +1028,11 @@ public class QuaxUtil {
 		Level level = levelForExp(f.getArgs().get(1));
 		Level mLevel = member.getLevel();
 
-		if (!mLevel.equals(level)) {
+		if (!OlapUtils.equals(mLevel, level)) {
 			return false;
 		}
 
-		if (member.equals(ancestor)) {
+		if (OlapUtils.equals(member, ancestor)) {
 			return false;
 		}
 
@@ -1034,7 +1043,7 @@ public class QuaxUtil {
 			mm = mm.getParentMember();
 		}
 
-		return mm.equals(ancestor);
+		return OlapUtils.equals(mm, ancestor);
 	}
 
 	/**
@@ -1046,7 +1055,7 @@ public class QuaxUtil {
 	 */
 	public boolean isMemberInLevel(FunCall f, Member member) {
 		Level level = levelForExp(f.getArgs().get(0));
-		return level.equals(member.getLevel());
+		return OlapUtils.equals(level, member.getLevel());
 	}
 
 	/**
@@ -1060,7 +1069,7 @@ public class QuaxUtil {
 		// set of members expected
 		for (Exp arg : f.getArgs()) {
 			Member m = memberForExp(arg);
-			if (m.equals(member)) {
+			if (OlapUtils.equals(m, member)) {
 				return true;
 			}
 		}

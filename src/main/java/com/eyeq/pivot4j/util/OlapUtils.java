@@ -8,21 +8,23 @@
  */
 package com.eyeq.pivot4j.util;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.OlapException;
 import org.olap4j.mdx.IdentifierNode;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
+import org.olap4j.metadata.MetadataElement;
 
 import com.eyeq.pivot4j.PivotException;
 
-public class MemberUtils {
+public class OlapUtils {
 
 	private Cube cube;
 
 	/**
 	 * @param cube
 	 */
-	public MemberUtils(Cube cube) {
+	public OlapUtils(Cube cube) {
 		if (cube == null) {
 			throw new IllegalArgumentException(
 					"Required argument 'cube' cannot be null.");
@@ -58,5 +60,23 @@ public class MemberUtils {
 		} catch (OlapException e) {
 			throw new PivotException(e);
 		}
+	}
+
+	/**
+	 * @param elem
+	 * @param otherElem
+	 * @return
+	 */
+	public static boolean equals(MetadataElement elem, MetadataElement otherElem) {
+		if (elem == null) {
+			return otherElem == null;
+		} else if (otherElem == null) {
+			return false;
+		}
+
+		String uniqueName = elem.getUniqueName();
+		String otherUniqueName = otherElem.getUniqueName();
+
+		return ObjectUtils.equals(uniqueName, otherUniqueName);
 	}
 }

@@ -59,7 +59,7 @@ import com.eyeq.pivot4j.sort.SortCriteria;
 import com.eyeq.pivot4j.transform.Transform;
 import com.eyeq.pivot4j.transform.TransformFactory;
 import com.eyeq.pivot4j.transform.impl.TransformFactoryImpl;
-import com.eyeq.pivot4j.util.MemberUtils;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 /**
  * The pivot model represents all (meta-)data for an MDX query.
@@ -680,7 +680,7 @@ public class PivotModelImpl implements PivotModel {
 				// any null does not compare
 				if (member1 == null) {
 					return false;
-				} else if (!member1.equals(member2)) {
+				} else if (!OlapUtils.equals(member1, member2)) {
 					return false;
 				}
 			}
@@ -1086,7 +1086,7 @@ public class PivotModelImpl implements PivotModel {
 		memberUtils {
 			@Override
 			Object getValue(PivotModelImpl model) {
-				return new MemberUtils(model.getCube());
+				return new OlapUtils(model.getCube());
 			}
 		},
 		connection {

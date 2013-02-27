@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.olap4j.metadata.MetadataElement;
 
 /**
  * Tree Node for the for a general tree of Objects
@@ -261,7 +262,7 @@ public class TreeNode<T> {
 	public TreeNode<T> findNode(T reference) {
 		TreeNode<T> node = null;
 
-		if (ObjectUtils.equals(getReference(), reference)) {
+		if (isEquals(getReference(), reference)) {
 			node = this;
 		} else {
 			for (TreeNode<T> child : getChildren()) {
@@ -274,6 +275,21 @@ public class TreeNode<T> {
 		}
 
 		return node;
+	}
+
+	/**
+	 * @param reference
+	 * @param otherReference
+	 * @return
+	 */
+	private boolean isEquals(T reference, T otherReference) {
+		if (reference instanceof MetadataElement
+				&& otherReference instanceof MetadataElement) {
+			return OlapUtils.equals((MetadataElement) reference,
+					(MetadataElement) otherReference);
+		} else {
+			return ObjectUtils.equals(reference, otherReference);
+		}
 	}
 
 	/**

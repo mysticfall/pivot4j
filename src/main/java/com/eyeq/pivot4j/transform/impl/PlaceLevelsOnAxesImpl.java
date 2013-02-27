@@ -36,6 +36,7 @@ import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
 import com.eyeq.pivot4j.transform.PlaceLevelsOnAxes;
 import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 		PlaceLevelsOnAxes {
@@ -153,7 +154,7 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 			for (Hierarchy hier : hierarchies) {
 				selection.addAll(membersTransform.findVisibleMembers(hier));
 
-				if (hier.equals(hierarchy)) {
+				if (OlapUtils.equals(hier, hierarchy)) {
 					List<Member> members;
 					try {
 						members = level.getMembers();

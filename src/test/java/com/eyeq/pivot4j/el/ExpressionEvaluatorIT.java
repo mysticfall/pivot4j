@@ -25,7 +25,7 @@ import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.ChangeSlicer;
 import com.eyeq.pivot4j.transform.DrillExpandMember;
 import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
-import com.eyeq.pivot4j.util.MemberUtils;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
@@ -103,7 +103,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 		assertEquals("Wrong member was found on the slicer axis.",
 				"[Time].[1997]", members.get(0).getUniqueName());
 
-		Member member = MemberUtils.lookupMember(model.getCube(),
+		Member member = OlapUtils.lookupMember(model.getCube(),
 				"[Product].[All Products]");
 
 		DrillExpandMember drillTransform = model

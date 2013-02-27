@@ -35,6 +35,7 @@ import com.eyeq.pivot4j.mdx.ExpNode;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.state.Bookmarkable;
+import com.eyeq.pivot4j.util.OlapUtils;
 import com.eyeq.pivot4j.util.TreeNode;
 import com.eyeq.pivot4j.util.TreeNodeCallback;
 
@@ -343,7 +344,8 @@ public class Quax implements Bookmarkable {
 		// check range where member of this dimension is constant
 		int endRange = startIndex + 1;
 		for (; endRange < endIndex; endRange++) {
-			if (!posMembers.get(endRange).get(dimIndex).equals(currentOfDim)) {
+			if (!OlapUtils.equals(posMembers.get(endRange).get(dimIndex),
+					currentOfDim)) {
 				break;
 			}
 		}
@@ -2656,7 +2658,7 @@ public class Quax implements Bookmarkable {
 			List<String> members = ufMemberLists.get(hierIndex);
 			for (String name : members) {
 				Member m = getMember(name);
-				if (!member.equals(m)) {
+				if (!OlapUtils.equals(member, m)) {
 					newList.add(quaxUtil.expForMember(m));
 				}
 			}
