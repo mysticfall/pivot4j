@@ -8,6 +8,12 @@
  */
 package com.eyeq.pivot4j.ui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -19,6 +25,7 @@ import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
 
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 
 public class RenderContext {
 
@@ -44,6 +51,8 @@ public class RenderContext {
 
 	private CellType cellType;
 
+	private Aggregator aggregator;
+
 	private int columnCount;
 
 	private int rowCount;
@@ -60,6 +69,8 @@ public class RenderContext {
 
 	private int rowSpan = 1;
 
+	private Map<String, Member> cachedParents;
+
 	/**
 	 * @param model
 	 * @param renderer
@@ -67,18 +78,17 @@ public class RenderContext {
 	 * @param rowCount
 	 * @param columnHeaderCount
 	 * @param rowHeaderCount
+	 * @parma cachedParents
 	 */
 	public RenderContext(PivotModel model, PivotRenderer renderer,
 			int columnCount, int rowCount, int columnHeaderCount,
-			int rowHeaderCount) {
+			int rowHeaderCount, Map<String, Member> cachedParents) {
 		if (model == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'model'.");
+			throw new NullArgumentException("model");
 		}
 
 		if (renderer == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'renderer'.");
+			throw new NullArgumentException("renderer");
 		}
 
 		if (columnCount < 0) {
@@ -107,6 +117,12 @@ public class RenderContext {
 		this.rowCount = rowCount;
 		this.columnHeaderCount = columnHeaderCount;
 		this.rowHeaderCount = rowHeaderCount;
+
+		if (cachedParents == null) {
+			this.cachedParents = new HashMap<String, Member>();
+		} else {
+			this.cachedParents = cachedParents;
+		}
 	}
 
 	/**
@@ -368,6 +384,21 @@ public class RenderContext {
 	}
 
 	/**
+	 * @return the aggregator
+	 */
+	public Aggregator getAggregator() {
+		return aggregator;
+	}
+
+	/**
+	 * @param aggregator
+	 *            the aggregator to set
+	 */
+	public void setAggregator(Aggregator aggregator) {
+		this.aggregator = aggregator;
+	}
+
+	/**
 	 * @return
 	 */
 	public CellSetAxis getCellSetAxis() {
@@ -376,5 +407,42 @@ public class RenderContext {
 		}
 
 		return getCellSet().getAxes().get(axis.axisOrdinal());
+	}
+
+	/**
+	 * Temporary workaround for performance issue.
+	 * 
+	 * @see http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * @param member
+	 * @return
+	 */
+	public Member getParentMember(Member member) {
+		Member parent = cachedParents.get(member.getUniqueName());
+
+		if (parent == null) {
+			parent = member.getParentMember();
+			cachedParents.put(member.getUniqueName(), parent);
+		}
+
+		return parent;
+	}
+
+	/**
+	 * Temporary workaround for performance issue.
+	 * 
+	 * @see http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * @param member
+	 * @return
+	 */
+	public List<Member> getAncestorMembers(Member member) {
+		List<Member> ancestors = new ArrayList<Member>();
+
+		Member parent = member;
+
+		while ((parent = parent.getParentMember()) != null) {
+			ancestors.add(parent);
+		}
+
+		return ancestors;
 	}
 }

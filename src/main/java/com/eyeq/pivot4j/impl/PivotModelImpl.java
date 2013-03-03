@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.logging.LogFactory;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -114,8 +115,7 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	public PivotModelImpl(OlapDataSource dataSource) {
 		if (dataSource == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'dataSource'.");
+			throw new NullArgumentException("dataSource");
 		}
 
 		this.dataSource = dataSource;
@@ -483,7 +483,7 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	public void setMdx(String mdxQuery) {
 		if (mdxQuery == null) {
-			throw new IllegalArgumentException("MDX query cannot be null.");
+			throw new NullArgumentException("mdxQuery");
 		}
 
 		this.mdxQuery = mdxQuery;
@@ -900,8 +900,7 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	public synchronized void restoreState(Serializable state) {
 		if (state == null) {
-			throw new IllegalArgumentException(
-					"Required argument 'state' is null.");
+			throw new NullArgumentException("state");
 		}
 
 		Serializable[] states = (Serializable[]) state;
@@ -965,8 +964,7 @@ public class PivotModelImpl implements PivotModel {
 	public synchronized void saveSettings(
 			HierarchicalConfiguration configuration) {
 		if (configuration == null) {
-			throw new IllegalArgumentException(
-					"Configuration object cannot be null.");
+			throw new NullArgumentException("configuration");
 		}
 
 		if (configuration.getLogger() == null) {
@@ -1002,8 +1000,7 @@ public class PivotModelImpl implements PivotModel {
 	public synchronized void restoreSettings(
 			HierarchicalConfiguration configuration) {
 		if (configuration == null) {
-			throw new IllegalArgumentException(
-					"Configuration object cannot be null.");
+			throw new NullArgumentException("configuration");
 		}
 
 		setMdx(configuration.getString("model.mdx"));

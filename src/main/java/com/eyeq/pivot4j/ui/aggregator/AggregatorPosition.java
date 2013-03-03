@@ -6,9 +6,9 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.ui;
+package com.eyeq.pivot4j.ui.aggregator;
 
-public enum CellType {
+public enum AggregatorPosition {
 
-	Value, Header, Title, Aggregation, None;
+	Member, Hierarchy, Grand
 }

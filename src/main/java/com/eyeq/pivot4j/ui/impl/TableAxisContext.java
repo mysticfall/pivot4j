@@ -8,17 +8,21 @@
  */
 package com.eyeq.pivot4j.ui.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.Axis;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
 
 import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 
 public class TableAxisContext implements Cloneable {
 
@@ -28,42 +32,50 @@ public class TableAxisContext implements Cloneable {
 
 	private List<Hierarchy> hierarchies;
 
+	private List<Aggregator> aggregators;
+
 	private Map<Hierarchy, List<Level>> levelMap;
 
 	private Map<Level, List<Property>> propertyMap;
+
+	private Map<String, Member> cachedParents = new HashMap<String, Member>();
 
 	/**
 	 * @param axis
 	 * @param hierarchies
 	 * @param levels
+	 * @param aggregators
 	 * @param renderer
 	 */
 	public TableAxisContext(Axis axis, List<Hierarchy> hierarchies,
-			Map<Hierarchy, List<Level>> levels, PivotRenderer renderer) {
+			Map<Hierarchy, List<Level>> levels, List<Aggregator> aggregators,
+			PivotRenderer renderer) {
 		if (axis == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'axis'.");
+			throw new NullArgumentException("axis");
 		}
 
 		if (hierarchies == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'model'.");
+			throw new NullArgumentException("hierarchies");
 		}
 
 		if (levels == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'levelMap'.");
+			throw new NullArgumentException("levels");
 		}
 
 		if (renderer == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'renderer'.");
+			throw new NullArgumentException("renderer");
 		}
 
 		this.axis = axis;
 		this.hierarchies = hierarchies;
 		this.levelMap = levels;
 		this.renderer = renderer;
+
+		if (aggregators == null) {
+			aggregators = Collections.emptyList();
+		}
+
+		this.aggregators = aggregators;
 	}
 
 	/**
@@ -71,6 +83,13 @@ public class TableAxisContext implements Cloneable {
 	 */
 	public Axis getAxis() {
 		return axis;
+	}
+
+	/**
+	 * @return the renderer
+	 */
+	public PivotRenderer getPivotRenderer() {
+		return renderer;
 	}
 
 	/**
@@ -88,10 +107,10 @@ public class TableAxisContext implements Cloneable {
 	}
 
 	/**
-	 * @return the renderer
+	 * @return the aggregators
 	 */
-	public PivotRenderer getPivotRenderer() {
-		return renderer;
+	public List<Aggregator> getAggregators() {
+		return Collections.unmodifiableList(aggregators);
 	}
 
 	/**
@@ -115,5 +134,46 @@ public class TableAxisContext implements Cloneable {
 		}
 
 		return Collections.unmodifiableList(properties);
+	}
+
+	/**
+	 * Temporary workaround for performance issue.
+	 * 
+	 * @see http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * @param member
+	 * @return
+	 */
+	public Member getParentMember(Member member) {
+		Member parent = cachedParents.get(member.getUniqueName());
+
+		if (parent == null) {
+			parent = member.getParentMember();
+			cachedParents.put(member.getUniqueName(), parent);
+		}
+
+		return parent;
+	}
+
+	/**
+	 * Temporary workaround for performance issue.
+	 * 
+	 * @see http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * @param member
+	 * @return
+	 */
+	public List<Member> getAncestorMembers(Member member) {
+		List<Member> ancestors = new ArrayList<Member>();
+
+		Member parent = member;
+
+		while ((parent = parent.getParentMember()) != null) {
+			ancestors.add(parent);
+		}
+
+		return ancestors;
+	}
+
+	Map<String, Member> getParentMembersCache() {
+		return cachedParents;
 	}
 }

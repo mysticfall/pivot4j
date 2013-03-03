@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.mdx.IdentifierNode;
@@ -104,8 +105,7 @@ public class Quax implements Bookmarkable {
 	 */
 	public Quax(int ordinal, Cube cube) {
 		if (cube == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'cube'.");
+			throw new NullArgumentException("cube");
 		}
 
 		this.ordinal = ordinal;

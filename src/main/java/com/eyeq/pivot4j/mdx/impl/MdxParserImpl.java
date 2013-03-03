@@ -12,6 +12,8 @@ import java.io.StringReader;
 
 import java_cup.runtime.Symbol;
 
+import org.apache.commons.lang.NullArgumentException;
+
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.mdx.MdxParser;
 import com.eyeq.pivot4j.mdx.MdxStatement;
@@ -25,8 +27,7 @@ public class MdxParserImpl implements MdxParser {
 	@Override
 	public MdxStatement parse(String mdx) {
 		if (mdx == null) {
-			throw new IllegalArgumentException(
-					"MDX query argument cannot be null.");
+			throw new NullArgumentException("mdx");
 		}
 
 		MdxStatement query;

@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.pool.PoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.olap4j.OlapConnection;
@@ -46,8 +47,7 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 	public PooledOlapDataSource(OlapDataSource dataSource,
 			GenericObjectPool.Config poolConfig) {
 		if (dataSource == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'dataSource'.");
+			throw new NullArgumentException("dataSource");
 		}
 
 		this.dataSource = dataSource;

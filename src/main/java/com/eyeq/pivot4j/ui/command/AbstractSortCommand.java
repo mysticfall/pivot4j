@@ -12,8 +12,8 @@ import com.eyeq.pivot4j.sort.SortMode;
 import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public abstract class AbstractSortCommand extends AbstractCellCommand<Void> implements
-		SortCommand {
+public abstract class AbstractSortCommand extends AbstractCellCommand<Void>
+		implements SortCommand {
 
 	/**
 	 * @param renderer
@@ -90,6 +90,7 @@ public abstract class AbstractSortCommand extends AbstractCellCommand<Void> impl
 		return getRenderer().getEnableSort()
 				&& context.getPosition() != null
 				&& context.getMember() != null
+				&& context.getAggregator() == null
 				&& context.getPosition().getMembers()
 						.indexOf(context.getMember()) == context.getPosition()
 						.getMembers().size() - 1

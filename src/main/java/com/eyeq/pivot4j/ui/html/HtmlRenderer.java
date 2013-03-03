@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
+import org.olap4j.Axis;
 
 import com.eyeq.pivot4j.ui.AbstractPivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
@@ -488,10 +489,8 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 		boolean header;
 
 		switch (context.getCellType()) {
-		case ColumnHeader:
-		case RowHeader:
-		case ColumnTitle:
-		case RowTitle:
+		case Header:
+		case Title:
 		case None:
 			header = true;
 			break;
@@ -523,10 +522,8 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 		}
 
 		switch (context.getCellType()) {
-		case ColumnHeader:
-		case RowHeader:
-		case ColumnTitle:
-		case RowTitle:
+		case Header:
+		case Title:
 		case None:
 			writer.endElement("th");
 			break;
@@ -545,24 +542,26 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 		String style = null;
 
 		switch (context.getCellType()) {
-		case ColumnHeader:
-			styleClass = columnHeaderStyleClass;
-			break;
-		case RowHeader:
-			styleClass = rowHeaderStyleClass;
+		case Header:
+			if (context.getAxis() == Axis.COLUMNS) {
+				styleClass = columnHeaderStyleClass;
+			} else {
+				styleClass = rowHeaderStyleClass;
 
-			if (rowHeaderLevelPadding > 0) {
-				int padding = rowHeaderLevelPadding
-						* (1 + context.getMember().getDepth());
-				style = "padding-left: " + padding + "px;";
+				if (rowHeaderLevelPadding > 0) {
+					int padding = rowHeaderLevelPadding
+							* (1 + context.getMember().getDepth());
+					style = "padding-left: " + padding + "px;";
+				}
+
 			}
-
 			break;
-		case ColumnTitle:
-			styleClass = columnTitleStyleClass;
-			break;
-		case RowTitle:
-			styleClass = rowTitleStyleClass;
+		case Title:
+			if (context.getAxis() == Axis.COLUMNS) {
+				styleClass = columnTitleStyleClass;
+			} else {
+				styleClass = rowTitleStyleClass;
+			}
 			break;
 		case Value:
 			styleClass = cellStyleClass;

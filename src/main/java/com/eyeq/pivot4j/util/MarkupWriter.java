@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Map;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 
 public class MarkupWriter {
@@ -31,8 +32,7 @@ public class MarkupWriter {
 	 */
 	public MarkupWriter(Writer writer) {
 		if (writer == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'writer'.");
+			throw new NullArgumentException("writer");
 		}
 
 		this.writer = new PrintWriter(writer);

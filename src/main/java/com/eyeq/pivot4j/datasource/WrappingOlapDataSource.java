@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapConnection;
 
 /**
@@ -25,9 +26,9 @@ public class WrappingOlapDataSource extends AbstractOlapDataSource {
 
 	public WrappingOlapDataSource(DataSource dataSource) {
 		if (dataSource == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'dataSource'.");
+			throw new NullArgumentException("dataSource");
 		}
+
 		this.dataSource = dataSource;
 	}
 

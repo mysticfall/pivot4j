@@ -2,5 +2,6 @@
     <wb-module deploy-name="pivot4j">
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/target/generated-sources/parser"/>
+        <wb-resource deploy-path="/WEB-INF/foodmart" source-path="/target/derby"/>
     </wb-module>
 </project-modules>

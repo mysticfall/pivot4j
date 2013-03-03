@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapException;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
@@ -37,8 +38,7 @@ public class QuaxUtil {
 	 */
 	public QuaxUtil(Cube cube) {
 		if (cube == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'cube'.");
+			throw new NullArgumentException("cube");
 		}
 
 		this.cube = cube;

@@ -8,6 +8,8 @@
  */
 package com.eyeq.pivot4j.transform;
 
+import org.apache.commons.lang.NullArgumentException;
+
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.query.QueryAdapter;
 
@@ -20,8 +22,7 @@ public abstract class AbstractTransform implements Transform {
 	 */
 	public AbstractTransform(QueryAdapter queryAdapter) {
 		if (queryAdapter == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'queryAdapter'.");
+			throw new NullArgumentException("queryAdapter");
 		}
 
 		this.queryAdapter = queryAdapter;

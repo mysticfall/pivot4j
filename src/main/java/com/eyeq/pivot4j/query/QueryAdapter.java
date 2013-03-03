@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
@@ -84,8 +85,7 @@ public class QueryAdapter implements Bookmarkable {
 	 */
 	public QueryAdapter(PivotModel model) {
 		if (model == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'model'.");
+			throw new NullArgumentException("model");
 		}
 
 		this.model = model;

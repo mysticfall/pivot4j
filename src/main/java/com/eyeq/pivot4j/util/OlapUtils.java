@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.util;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.OlapException;
 import org.olap4j.mdx.IdentifierNode;
@@ -26,8 +27,7 @@ public class OlapUtils {
 	 */
 	public OlapUtils(Cube cube) {
 		if (cube == null) {
-			throw new IllegalArgumentException(
-					"Required argument 'cube' cannot be null.");
+			throw new NullArgumentException("cube");
 		}
 
 		this.cube = cube;

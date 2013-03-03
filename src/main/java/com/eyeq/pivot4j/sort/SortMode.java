@@ -11,6 +11,8 @@ package com.eyeq.pivot4j.sort;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.apache.commons.lang.NullArgumentException;
+
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 
@@ -118,8 +120,7 @@ public abstract class SortMode implements Serializable {
 	 */
 	public void toggleSort(PivotModel model) {
 		if (model == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'model'.");
+			throw new NullArgumentException("model");
 		}
 
 		SortCriteria currentCriteria = null;

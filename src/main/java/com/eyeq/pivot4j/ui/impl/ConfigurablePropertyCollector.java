@@ -11,6 +11,7 @@ package com.eyeq.pivot4j.ui.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Property;
@@ -26,8 +27,7 @@ public class ConfigurablePropertyCollector implements PropertyCollector {
 	 */
 	public ConfigurablePropertyCollector(List<String> propertyNames) {
 		if (propertyNames == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'propertyNames'.");
+			throw new NullArgumentException("propertyNames");
 		}
 
 		this.propertyNames = propertyNames;

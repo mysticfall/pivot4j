@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.datasource;
 
 import java.sql.SQLException;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.pool.BasePoolableObjectFactory;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
@@ -34,8 +35,7 @@ public class OlapConnectionFactory extends
 	 */
 	public OlapConnectionFactory(OlapDataSource dataSource) {
 		if (dataSource == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'dataSource'.");
+			throw new NullArgumentException("dataSource");
 		}
 
 		this.dataSource = dataSource;

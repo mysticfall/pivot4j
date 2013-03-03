@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.datasource;
 
 import java.sql.SQLException;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapConnection;
 
 /**
@@ -21,9 +22,9 @@ public class SingleConnectionOlapDataSource extends AbstractOlapDataSource {
 
 	public SingleConnectionOlapDataSource(OlapConnection connection) {
 		if (connection == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'connection'.");
+			throw new NullArgumentException("connection");
 		}
+
 		this.connection = connection;
 	}
 

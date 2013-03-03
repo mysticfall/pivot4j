@@ -11,11 +11,12 @@ package com.eyeq.pivot4j.ui.command;
 import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
 
+import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public abstract class AbstractDrillDownCommand extends AbstractCellCommand<Void>
-		implements DrillDownCommand {
+public abstract class AbstractDrillDownCommand extends
+		AbstractCellCommand<Void> implements DrillDownCommand {
 
 	/**
 	 * @param renderer
@@ -32,7 +33,8 @@ public abstract class AbstractDrillDownCommand extends AbstractCellCommand<Void>
 	public boolean canExecute(RenderContext context) {
 		boolean enabled = ObjectUtils.equals(getMode(context), getRenderer()
 				.getDrillDownMode())
-				&& context.getAxis() != null;
+				&& context.getAxis() != null
+				&& context.getCellType() != CellType.Aggregation;
 
 		if (enabled) {
 			enabled = (getRenderer().getEnableColumnDrillDown() && context

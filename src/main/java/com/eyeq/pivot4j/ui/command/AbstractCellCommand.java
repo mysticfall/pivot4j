@@ -8,6 +8,8 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
+import org.apache.commons.lang.NullArgumentException;
+
 import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
@@ -20,8 +22,7 @@ public abstract class AbstractCellCommand<T> implements CellCommand<T> {
 	 */
 	public AbstractCellCommand(PivotUIRenderer renderer) {
 		if (renderer == null) {
-			throw new IllegalArgumentException(
-					"Missing required argument 'renderer'.");
+			throw new NullArgumentException("renderer");
 		}
 
 		this.renderer = renderer;

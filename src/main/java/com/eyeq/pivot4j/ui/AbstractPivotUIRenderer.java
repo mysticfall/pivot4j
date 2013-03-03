@@ -229,6 +229,19 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 			List<CellCommand<?>> commands);
 
 	/**
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#swapAxes()
+	 */
+	@Override
+	public void swapAxes() {
+		super.swapAxes();
+
+		boolean enableDrillDown = enableColumnDrillDown;
+
+		this.enableColumnDrillDown = enableRowDrillDown;
+		this.enableRowDrillDown = enableDrillDown;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
 	 */
 	@Override
