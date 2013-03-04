@@ -278,7 +278,6 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 				logger.debug("Closing a returned connection object : " + con);
 			}
 
-			super.destroyObject(con);
 			con.unwrap(OlapConnection.class).close();
 		}
 	}
