@@ -8,9 +8,9 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
@@ -41,27 +41,28 @@ public class NonEmptyImplIT extends AbstractTransformTestCase<NonEmpty> {
 	public void testTransform() {
 		NonEmpty transform = getTransform();
 
-		assertFalse("Initial query does not include NON EMPTY statement",
-				transform.isNonEmpty());
+		assertThat("Initial query does not include NON EMPTY statement",
+				transform.isNonEmpty(), is(false));
 
 		transform.setNonEmpty(true);
 
-		assertTrue("Query does contain NON EMPTY statement",
-				transform.isNonEmpty());
-		assertEquals(
+		assertThat("Query does contain NON EMPTY statement",
+				transform.isNonEmpty(), is(true));
+		assertThat(
 				"Unexpected MDX query after set NON EMPTY statement",
-				"SELECT NON EMPTY {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT NON EMPTY {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "NON EMPTY {([Promotion Media].[All Media], [Product].[All Products])} ON ROWS "
-						+ "FROM [Sales]", getPivotModel().getCurrentMdx());
+						+ "FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 
 		transform.setNonEmpty(false);
 
-		assertFalse("Query does not contain NON EMPTY statement",
-				transform.isNonEmpty());
+		assertThat("Query does not contain NON EMPTY statement",
+				transform.isNonEmpty(), is(false));
 
-		assertEquals("Unexpected MDX query after removing NON EMPTY statement",
-				getInitialQuery(), getPivotModel().getCurrentMdx());
+		assertThat("Unexpected MDX query after removing NON EMPTY statement",
+				getPivotModel().getCurrentMdx(), is(equalTo(getInitialQuery())));
 	}
 }

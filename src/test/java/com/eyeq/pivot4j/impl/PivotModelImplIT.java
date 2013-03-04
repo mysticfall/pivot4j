@@ -8,10 +8,10 @@
  */
 package com.eyeq.pivot4j.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
@@ -49,10 +49,12 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		PivotModel model = getPivotModel();
 		model.setMdx(getTestQuery());
 
-		assertFalse("Model is already initialized.", model.isInitialized());
+		assertThat("Model is already initialized.", model.isInitialized(),
+				is(false));
+
 		model.initialize();
 
-		assertTrue("Model is not initialized.", model.isInitialized());
+		assertThat("Model is not initialized.", model.isInitialized(), is(true));
 	}
 
 	@Test(expected = PivotException.class)
@@ -67,10 +69,11 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		model.setMdx(getTestQuery());
 		model.initialize();
 
-		assertTrue("Model is not initialized.", model.isInitialized());
+		assertThat("Model is not initialized.", model.isInitialized(), is(true));
 
 		model.destroy();
-		assertFalse("Model is not destroyed.", model.isInitialized());
+
+		assertThat("Model is not destroyed.", model.isInitialized(), is(false));
 	}
 
 	@Test
@@ -80,11 +83,13 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		model.initialize();
 
 		CellSet cellSet = model.getCellSet();
-		assertNotNull("CellSet is null.", cellSet);
+
+		assertThat("CellSet is null.", cellSet, is(notNullValue()));
 
 		List<CellSetAxis> axes = cellSet.getAxes();
-		assertNotNull("Cell axes list is null.", axes);
-		assertEquals("Invalid cell axes size.", 2, axes.size());
+
+		assertThat("Cell axes list is null.", axes, is(notNullValue()));
+		assertThat("Invalid cell axes size.", axes.size(), is(equalTo(2)));
 	}
 
 	@Test
@@ -93,8 +98,8 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		model.setMdx(getTestQuery());
 		model.initialize();
 
-		assertEquals("MDX has been modified unexpectedly.", getTestQuery(),
-				model.getMdx());
+		assertThat("MDX has been modified unexpectedly.", model.getMdx(),
+				is(equalTo(getTestQuery())));
 	}
 
 	@Test
@@ -104,14 +109,17 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 		model.initialize();
 
 		String currentMdx = model.getCurrentMdx();
-		assertEquals("MDX has been modified unexpectedly.", getTestQuery(),
-				currentMdx);
+
+		assertThat("MDX has been modified unexpectedly.", currentMdx,
+				is(equalTo(getTestQuery())));
 	}
 
 	@Test(expected = NotInitializedException.class)
 	public void testGetCellSetBeforeInitialize() {
 		PivotModel model = getPivotModel();
-		assertFalse("Model is already initialized.", model.isInitialized());
+
+		assertThat("Model is already initialized.", model.isInitialized(),
+				is(false));
 
 		model.getCellSet();
 	}

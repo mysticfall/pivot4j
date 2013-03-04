@@ -8,9 +8,10 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,12 +59,12 @@ public class PlaceMembersOnAxesImplIT extends
 		List<Member> mediaMembers = transform
 				.findVisibleMembers(promotionMedia);
 
-		assertNotNull("[Promotion Media].[All Media] member should be visible",
-				mediaMembers);
-		assertFalse("[Promotion Media].[All Media] member should be visible",
-				mediaMembers.isEmpty());
-		assertEquals("Only [Promotion Media].[All Media] member is visible", 1,
-				mediaMembers.size());
+		assertThat("[Promotion Media].[All Media] member should be visible",
+				mediaMembers, is(notNullValue()));
+		assertThat("[Promotion Media].[All Media] member should be visible",
+				mediaMembers.isEmpty(), is(false));
+		assertThat("Only [Promotion Media].[All Media] member is visible",
+				mediaMembers.size(), is(equalTo(1)));
 	}
 
 	@Test
@@ -89,12 +90,12 @@ public class PlaceMembersOnAxesImplIT extends
 
 		transform.placeMembers(Axis.ROWS, members);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Promotion Media].[All Media], [Promotion Media].[Bulk Mail], [Promotion Media].[Daily Paper]}, "
-						+ "{[Product].[Food], [Product].[Drink]}) ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "{[Product].[Food], [Product].[Drink]}) ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -110,11 +111,11 @@ public class PlaceMembersOnAxesImplIT extends
 
 		transform.addMember(member, -1);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales], [Measures].[Profit]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales], [Measures].[Profit]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -130,11 +131,11 @@ public class PlaceMembersOnAxesImplIT extends
 
 		transform.addMember(member, 0);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Profit], [Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Profit], [Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -150,11 +151,11 @@ public class PlaceMembersOnAxesImplIT extends
 
 		transform.addMember(member, 1);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Profit], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Profit], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -173,12 +174,12 @@ public class PlaceMembersOnAxesImplIT extends
 
 		transform.addMembers(cube.getHierarchies().get("Measures"), members);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales], "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales], "
 						+ "[Measures].[Profit], [Measures].[Sales Count]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -194,11 +195,11 @@ public class PlaceMembersOnAxesImplIT extends
 
 		transform.moveMember(member, 2);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Store Cost], [Measures].[Unit Sales], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Store Cost], [Measures].[Unit Sales], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -214,11 +215,11 @@ public class PlaceMembersOnAxesImplIT extends
 
 		transform.removeMember(member);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -237,11 +238,11 @@ public class PlaceMembersOnAxesImplIT extends
 
 		transform.removeMembers(cube.getHierarchies().get("Measures"), members);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Store Cost]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Store Cost]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}

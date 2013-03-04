@@ -8,7 +8,9 @@
  */
 package com.eyeq.pivot4j.ui.html;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -115,7 +117,7 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 		String message = String
 				.format("Unexpected result : %s, hideSpans=%s, showDimensionTitle=%s, showParentMembers=%s",
 						name, hideSpans, showDimensionTitle, showParentMembers);
-		assertEquals(message, expected, result);
+		assertThat(message, result, is(equalTo(expected)));
 	}
 
 	@Test

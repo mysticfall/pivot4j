@@ -8,8 +8,10 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,12 +60,12 @@ public class PlaceHierarchiesOnAxesImplIT extends
 
 		transform.placeHierarchies(Axis.ROWS, hierarchies, false);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Promotion Media].[All Media]}, {[Product].[All Products], [Product].[Drink], "
-						+ "[Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "[Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -83,12 +85,12 @@ public class PlaceHierarchiesOnAxesImplIT extends
 
 		transform.placeHierarchies(Axis.ROWS, hierarchies, true);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query after set hierarchies on axis",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin(Union({[Promotion Media].[All Media]}, [Promotion Media].[All Media].Children), "
-						+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -103,12 +105,12 @@ public class PlaceHierarchiesOnAxesImplIT extends
 
 		transform.addHierarchy(Axis.ROWS, gender, false, -1);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query after adding a new hierarchy",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS"
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS"
 						+ ", CrossJoin({[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}, "
-						+ "{[Gender].[All Gender]}) ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "{[Gender].[All Gender]}) ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -123,12 +125,12 @@ public class PlaceHierarchiesOnAxesImplIT extends
 
 		transform.addHierarchy(Axis.ROWS, gender, false, 2);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query after adding a new hierarchy",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS"
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS"
 						+ ", CrossJoin({[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}, "
-						+ "{[Gender].[All Gender]}) ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "{[Gender].[All Gender]}) ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -143,12 +145,12 @@ public class PlaceHierarchiesOnAxesImplIT extends
 
 		transform.addHierarchy(Axis.ROWS, gender, false, 0);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query after adding a new hierarchy",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Gender].[All Gender]}, {[Product].[All Products], [Product].[Drink], [Product].[Food], "
-						+ "[Product].[Non-Consumable]}) ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "[Product].[Non-Consumable]}) ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -169,16 +171,16 @@ public class PlaceHierarchiesOnAxesImplIT extends
 
 		transform.moveHierarchy(Axis.ROWS, product, 0);
 
-		assertEquals(
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+		assertThat(
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}, "
 						+ "{[Promotion Media].[All Media], [Promotion Media].[Bulk Mail], [Promotion Media].[Cash Register Handout], "
 						+ "[Promotion Media].[Daily Paper], [Promotion Media].[Daily Paper, Radio], [Promotion Media].[Daily Paper, Radio, TV], "
 						+ "[Promotion Media].[In-Store Coupon], [Promotion Media].[No Media], [Promotion Media].[Product Attachment], "
 						+ "[Promotion Media].[Radio], [Promotion Media].[Street Handout], [Promotion Media].[Sunday Paper], "
 						+ "[Promotion Media].[Sunday Paper, Radio], [Promotion Media].[Sunday Paper, Radio, TV], "
-						+ "[Promotion Media].[TV]}) ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "[Promotion Media].[TV]}) ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -199,15 +201,15 @@ public class PlaceHierarchiesOnAxesImplIT extends
 
 		transform.removeHierarchy(Axis.ROWS, product);
 
-		assertEquals(
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+		assertThat(
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "{[Promotion Media].[All Media], [Promotion Media].[Bulk Mail], [Promotion Media].[Cash Register Handout], "
 						+ "[Promotion Media].[Daily Paper], [Promotion Media].[Daily Paper, Radio], [Promotion Media].[Daily Paper, Radio, TV], "
 						+ "[Promotion Media].[In-Store Coupon], [Promotion Media].[No Media], [Promotion Media].[Product Attachment], "
 						+ "[Promotion Media].[Radio], [Promotion Media].[Street Handout], [Promotion Media].[Sunday Paper], "
 						+ "[Promotion Media].[Sunday Paper, Radio], [Promotion Media].[Sunday Paper, Radio, TV], "
-						+ "[Promotion Media].[TV]} ON ROWS FROM [Sales]",
-				getPivotModel().getCurrentMdx());
+						+ "[Promotion Media].[TV]} ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 	}
@@ -227,22 +229,22 @@ public class PlaceHierarchiesOnAxesImplIT extends
 		List<Hierarchy> rowHierarhies = transform
 				.findVisibleHierarchies(Axis.ROWS);
 
-		assertNotNull("Hierarchy list on the column axis should not be null",
-				columnHierarhies);
-		assertEquals("Number of hierarchy on the column axis should be 1", 1,
-				columnHierarhies.size());
+		assertThat("Hierarchy list on the column axis should not be null",
+				columnHierarhies, is(notNullValue()));
+		assertThat("Number of hierarchy on the column axis should be 1",
+				columnHierarhies.size(), is(equalTo(1)));
 
-		assertEquals("Wrong name for the first hierarchy on the column axis",
-				"Measures", columnHierarhies.get(0).getName());
+		assertThat("Wrong name for the first hierarchy on the column axis",
+				columnHierarhies.get(0).getName(), is(equalTo("Measures")));
 
-		assertNotNull("Hierarchy list on the row axis should not be null",
-				rowHierarhies);
-		assertEquals("Number of hierarchies on the column axis should be 2", 2,
-				rowHierarhies.size());
+		assertThat("Hierarchy list on the row axis should not be null",
+				rowHierarhies, is(notNullValue()));
+		assertThat("Number of hierarchies on the column axis should be 2",
+				rowHierarhies.size(), is(equalTo(2)));
 
-		assertEquals("Wrong name for the first hierarchy on the row axis",
-				"Promotion Media", rowHierarhies.get(0).getName());
-		assertEquals("Wrong name for the seconde hierarchy on the row axis",
-				"Product", rowHierarhies.get(1).getName());
+		assertThat("Wrong name for the first hierarchy on the row axis",
+				rowHierarhies.get(0).getName(), is(equalTo("Promotion Media")));
+		assertThat("Wrong name for the seconde hierarchy on the row axis",
+				rowHierarhies.get(1).getName(), is(equalTo("Product")));
 	}
 }

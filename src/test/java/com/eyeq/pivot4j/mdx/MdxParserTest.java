@@ -8,10 +8,11 @@
  */
 package com.eyeq.pivot4j.mdx;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
@@ -39,9 +40,11 @@ public class MdxParserTest {
 
 		MdxStatement query = parseQuery(mdx);
 
-		assertNotNull("Failed to parse : " + mdx, query);
-		assertNotNull("Axes should not be null.", query.getAxes());
-		assertTrue("Number of axes should be 0.", query.getAxes().isEmpty());
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
+		assertThat("Axes should not be null.", query.getAxes(),
+				is(notNullValue()));
+		assertThat("Number of axes should be 0.", query.getAxes().isEmpty(),
+				is(true));
 	}
 
 	@Test
@@ -51,7 +54,7 @@ public class MdxParserTest {
 		MdxStatement query = new MdxStatement();
 		query.setCube(new CompoundId("DummyCube"));
 
-		assertEquals("Unexpected MDX query.", mdx, query.toMdx());
+		assertThat("Unexpected MDX query.", query.toMdx(), is(equalTo(mdx)));
 	}
 
 	@Test
@@ -60,26 +63,30 @@ public class MdxParserTest {
 
 		MdxStatement query = parseQuery(mdx);
 
-		assertNotNull("Failed to parse : " + mdx, query);
-		assertNotNull("Axes should not be null.", query.getAxes());
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
+		assertThat("Axes should not be null.", query.getAxes(),
+				is(notNullValue()));
 
-		assertEquals("Number of axes should be 1.", 1, query.getAxes().size());
+		assertThat("Number of axes should be 1.", query.getAxes().size(),
+				is(equalTo(1)));
 
 		Exp columnExp = query.getAxes().get(0).getExp();
 
-		assertNotNull("Exp object for columns axis is null.", columnExp);
+		assertThat("Exp object for columns axis is null.", columnExp,
+				is(notNullValue()));
 
-		assertTrue("Exp object should be instance of CompoundId.",
-				columnExp instanceof CompoundId);
+		assertThat("Exp object should be instance of CompoundId.", columnExp,
+				is(instanceOf(CompoundId.class)));
 
 		mdx = "SELECT [AAA] ON ROWS FROM DummyCube";
 
 		Exp rowExp = query.getAxes().get(0).getExp();
 
-		assertNotNull("Exp object for rows axis is null.", rowExp);
+		assertThat("Exp object for rows axis is null.", rowExp,
+				is(notNullValue()));
 
-		assertTrue("Exp object should be instance of CompoundId.",
-				rowExp instanceof CompoundId);
+		assertThat("Exp object should be instance of CompoundId.", rowExp,
+				is(instanceOf(CompoundId.class)));
 	}
 
 	@Test
@@ -92,7 +99,7 @@ public class MdxParserTest {
 		query.setAxis(axis);
 		query.setCube(new CompoundId("[DummyCube]"));
 
-		assertEquals("Unexpected MDX query.", mdx, query.toMdx());
+		assertThat("Unexpected MDX query.", query.toMdx(), is(equalTo(mdx)));
 	}
 
 	@Test
@@ -101,54 +108,58 @@ public class MdxParserTest {
 
 		MdxStatement query = parseQuery(mdx);
 
-		assertNotNull("Failed to parse : " + mdx, query);
-		assertNotNull("Axes should not be null.", query.getAxes());
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
+		assertThat("Axes should not be null.", query.getAxes(),
+				is(notNullValue()));
 
-		assertEquals("Number of axes should be 2.", 2, query.getAxes().size());
+		assertThat("Number of axes should be 2.", query.getAxes().size(),
+				is(equalTo(2)));
 
 		Exp columnExp = query.getAxes().get(0).getExp();
 
-		assertNotNull("Exp object for columns axis is null.", columnExp);
+		assertThat("Exp object for columns axis is null.", columnExp,
+				is(notNullValue()));
 
-		assertTrue("Exp object should be instance of CompoundId.",
-				columnExp instanceof CompoundId);
+		assertThat("Exp object should be instance of CompoundId.", columnExp,
+				is(instanceOf(CompoundId.class)));
 
 		CompoundId columnId = (CompoundId) columnExp;
-		assertEquals("Wrong number of name parts on column axis member.", 2,
-				columnId.getNames().size());
+		assertThat("Wrong number of name parts on column axis member.",
+				columnId.getNames().size(), is(equalTo(2)));
 
-		assertEquals("First name part has wrong identifier.", "[AAA]", columnId
-				.getNames().get(0).getName());
-		assertEquals("Second name part has wrong identifier.", "[BBB]",
-				columnId.getNames().get(1).getName());
-		assertFalse("First name part cannot be a key identifier.", columnId
-				.getNames().get(0).isKey());
-		assertTrue("Second name part is a key identifier.", columnId.getNames()
-				.get(1).isKey());
+		assertThat("First name part has wrong identifier.", columnId.getNames()
+				.get(0).getName(), is(equalTo("[AAA]")));
+		assertThat("Second name part has wrong identifier.", columnId
+				.getNames().get(1).getName(), is(equalTo("[BBB]")));
+		assertThat("First name part cannot be a key identifier.", columnId
+				.getNames().get(0).isKey(), is(false));
+		assertThat("Second name part is a key identifier.", columnId.getNames()
+				.get(1).isKey(), is(true));
 
 		Exp rowExp = query.getAxes().get(1).getExp();
 
-		assertNotNull("Exp object for rows axis is null.", rowExp);
+		assertThat("Exp object for rows axis is null.", rowExp,
+				is(notNullValue()));
 
-		assertTrue("Exp object should be instance of CompoundId.",
-				rowExp instanceof CompoundId);
+		assertThat("Exp object should be instance of CompoundId.", rowExp,
+				is(instanceOf(CompoundId.class)));
 
 		CompoundId rowId = (CompoundId) rowExp;
-		assertEquals("Wrong number of name parts on row axis member.", 3, rowId
-				.getNames().size());
+		assertThat("Wrong number of name parts on row axis member.", rowId
+				.getNames().size(), is(equalTo(3)));
 
-		assertEquals("First name part has wrong identifier.", "[CCC]", rowId
-				.getNames().get(0).getName());
-		assertEquals("Second name part has wrong identifier.", "[DDD]", rowId
-				.getNames().get(1).getName());
-		assertEquals("Third name part has wrong identifier.", "[EEE]", rowId
-				.getNames().get(2).getName());
-		assertFalse("First name part cannot be a key identifier.", rowId
-				.getNames().get(0).isKey());
-		assertTrue("Second name part is a key identifier.", rowId.getNames()
-				.get(1).isKey());
-		assertFalse("Third name part is not a key identifier.", rowId
-				.getNames().get(2).isKey());
+		assertThat("First name part has wrong identifier.", rowId.getNames()
+				.get(0).getName(), is(equalTo("[CCC]")));
+		assertThat("Second name part has wrong identifier.", rowId.getNames()
+				.get(1).getName(), is(equalTo("[DDD]")));
+		assertThat("Third name part has wrong identifier.", rowId.getNames()
+				.get(2).getName(), is(equalTo("[EEE]")));
+		assertThat("First name part cannot be a key identifier.", rowId
+				.getNames().get(0).isKey(), is(false));
+		assertThat("Second name part is a key identifier.", rowId.getNames()
+				.get(1).isKey(), is(true));
+		assertThat("Third name part is not a key identifier.", rowId.getNames()
+				.get(2).isKey(), is(false));
 	}
 
 	@Test
@@ -167,7 +178,7 @@ public class MdxParserTest {
 
 		query.setCube(new CompoundId("DummyCube"));
 
-		assertEquals("Unexpected MDX query.", mdx, query.toMdx());
+		assertThat("Unexpected MDX query.", query.toMdx(), is(equalTo(mdx)));
 	}
 
 	@Test
@@ -177,41 +188,43 @@ public class MdxParserTest {
 
 		MdxStatement query = parseQuery(mdx);
 
-		assertNotNull("Failed to parse : " + mdx, query);
-		assertNotNull("SAP varaible list should not be null.",
-				query.getSapVariables());
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
+		assertThat("SAP varaible list should not be null.",
+				query.getSapVariables(), is(notNullValue()));
 
-		assertEquals("Number of SAP variables should be 1.", 1, query
-				.getSapVariables().size());
+		assertThat("Number of SAP variables should be 1.", query
+				.getSapVariables().size(), is(equalTo(1)));
 
 		SapVariable variable = query.getSapVariables().get(0);
 
-		assertNotNull("SAP varaible should not be null.", variable);
+		assertThat("SAP varaible should not be null.", variable,
+				is(notNullValue()));
 
 		CompoundId name = variable.getName();
-		assertNotNull("Name of the SAP varaible should not be null.", name);
+		assertThat("Name of the SAP varaible should not be null.", name,
+				is(notNullValue()));
 
 		List<SapVariable.Value> values = variable.getValues();
-		assertNotNull("Value list of the SAP varaible should not be null.",
-				values);
-		assertEquals("Number of the SAP variable value should be 1.", 1,
-				values.size());
+		assertThat("Value list of the SAP varaible should not be null.",
+				values, is(notNullValue()));
+		assertThat("Number of the SAP variable value should be 1.",
+				values.size(), is(equalTo(1)));
 
 		SapVariable.Value value = values.get(0);
-		assertFalse("The SAP variable is not an interval value.",
-				value.isInterval());
-		assertTrue("The SAP variable has specified INCLUDING option.",
-				value.isIncluding());
+		assertThat("The SAP variable is not an interval value.",
+				value.isInterval(), is(false));
+		assertThat("The SAP variable has specified INCLUDING option.",
+				value.isIncluding(), is(true));
 
-		assertNotNull("Option value of the SAP varaible should not be null.",
-				value.getValue());
+		assertThat("Option value of the SAP varaible should not be null.",
+				value.getValue(), is(notNullValue()));
 
-		assertTrue(
+		assertThat(
 				"Option value of the SAP variable should be instance of CompoundId.",
-				value.getValue() instanceof CompoundId);
+				value.getValue(), is(instanceOf(CompoundId.class)));
 
-		assertEquals("Incorrect option value of the SAP variable.",
-				"[ODB_BRANC].[CHEM]", value.getValue().toMdx());
+		assertThat("Incorrect option value of the SAP variable.", value
+				.getValue().toMdx(), is(equalTo("[ODB_BRANC].[CHEM]")));
 	}
 
 	@Test
@@ -220,48 +233,52 @@ public class MdxParserTest {
 
 		MdxStatement query = parseQuery(mdx);
 
-		assertNotNull("Failed to parse : " + mdx, query);
-		assertNotNull("Axes should not be null.", query.getAxes());
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
+		assertThat("Axes should not be null.", query.getAxes(),
+				is(notNullValue()));
 
-		assertEquals("Number of axes should be 2.", 2, query.getAxes().size());
+		assertThat("Number of axes should be 2.", query.getAxes().size(),
+				is(equalTo(2)));
 
 		Exp columnExp = query.getAxes().get(0).getExp();
 
-		assertNotNull("Exp object for columns axis is null.", columnExp);
+		assertThat("Exp object for columns axis is null.", columnExp,
+				is(notNullValue()));
 
-		assertTrue("Exp object should be instance of CompoundId.",
-				columnExp instanceof CompoundId);
+		assertThat("Exp object should be instance of CompoundId.", columnExp,
+				is(instanceOf(CompoundId.class)));
 
 		CompoundId columnMember = (CompoundId) columnExp;
 		String[] columnNames = columnMember.toStringArray();
 
-		assertNotNull("Segments of column member id is null.", columnNames);
-		assertEquals("Column member id should contain 2 segment parts.", 2,
-				columnNames.length);
-		assertEquals(
-				"First segment of the column member element is incorrect.",
-				"[AA[BB]", columnNames[0]);
-		assertEquals(
-				"Second segment of the column member element is incorrect.",
-				"[CC]", columnNames[1]);
+		assertThat("Segments of column member id is null.", columnNames,
+				is(notNullValue()));
+		assertThat("Column member id should contain 2 segment parts.",
+				columnNames.length, is(equalTo(2)));
+		assertThat("First segment of the column member element is incorrect.",
+				columnNames[0], is(equalTo("[AA[BB]")));
+		assertThat("Second segment of the column member element is incorrect.",
+				columnNames[1], is(equalTo("[CC]")));
 
 		Exp rowExp = query.getAxes().get(1).getExp();
 
-		assertNotNull("Exp object for rows axis is null.", rowExp);
+		assertThat("Exp object for rows axis is null.", rowExp,
+				is(notNullValue()));
 
-		assertTrue("Exp object should be instance of CompoundId.",
-				rowExp instanceof CompoundId);
+		assertThat("Exp object should be instance of CompoundId.", rowExp,
+				is(instanceOf(CompoundId.class)));
 
 		CompoundId rowMember = (CompoundId) rowExp;
 		String[] rowNames = rowMember.toStringArray();
 
-		assertNotNull("Segments of row member id is null.", rowNames);
-		assertEquals("Row member id should contain 2 segment parts.", 2,
-				rowNames.length);
-		assertEquals("First segment of the row member element is incorrect.",
-				"[DD]", rowNames[0]);
-		assertEquals("Second segment of the row member element is incorrect.",
-				"[[AAB]", rowNames[1]);
+		assertThat("Segments of row member id is null.", rowNames,
+				is(notNullValue()));
+		assertThat("Row member id should contain 2 segment parts.",
+				rowNames.length, is(equalTo(2)));
+		assertThat("First segment of the row member element is incorrect.",
+				rowNames[0], is(equalTo("[DD]")));
+		assertThat("Second segment of the row member element is incorrect.",
+				rowNames[1], is(equalTo("[[AAB]")));
 	}
 
 	@Test
@@ -270,48 +287,52 @@ public class MdxParserTest {
 
 		MdxStatement query = parseQuery(mdx);
 
-		assertNotNull("Failed to parse : " + mdx, query);
-		assertNotNull("Axes should not be null.", query.getAxes());
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
+		assertThat("Axes should not be null.", query.getAxes(),
+				is(notNullValue()));
 
-		assertEquals("Number of axes should be 2.", 2, query.getAxes().size());
+		assertThat("Number of axes should be 2.", query.getAxes().size(),
+				is(equalTo(2)));
 
 		Exp columnExp = query.getAxes().get(0).getExp();
 
-		assertNotNull("Exp object for columns axis is null.", columnExp);
+		assertThat("Exp object for columns axis is null.", columnExp,
+				is(notNullValue()));
 
-		assertTrue("Exp object should be instance of CompoundId.",
-				columnExp instanceof CompoundId);
+		assertThat("Exp object should be instance of CompoundId.", columnExp,
+				is(instanceOf(CompoundId.class)));
 
 		CompoundId columnMember = (CompoundId) columnExp;
 		String[] columnNames = columnMember.toStringArray();
 
-		assertNotNull("Segments of column member id is null.", columnNames);
-		assertEquals("Column member id should contain 2 segment parts.", 2,
-				columnNames.length);
-		assertEquals(
-				"First segment of the column member element is incorrect.",
-				"[AA[BB]]]", columnNames[0]);
-		assertEquals(
-				"Second segment of the column member element is incorrect.",
-				"[CC]", columnNames[1]);
+		assertThat("Segments of column member id is null.", columnNames,
+				is(notNullValue()));
+		assertThat("Column member id should contain 2 segment parts.",
+				columnNames.length, is(equalTo(2)));
+		assertThat("First segment of the column member element is incorrect.",
+				columnNames[0], is(equalTo("[AA[BB]]]")));
+		assertThat("Second segment of the column member element is incorrect.",
+				columnNames[1], is(equalTo("[CC]")));
 
 		Exp rowExp = query.getAxes().get(1).getExp();
 
-		assertNotNull("Exp object for rows axis is null.", rowExp);
+		assertThat("Exp object for rows axis is null.", rowExp,
+				is(notNullValue()));
 
-		assertTrue("Exp object should be instance of CompoundId.",
-				rowExp instanceof CompoundId);
+		assertThat("Exp object should be instance of CompoundId.", rowExp,
+				is(instanceOf(CompoundId.class)));
 
 		CompoundId rowMember = (CompoundId) rowExp;
 		String[] rowNames = rowMember.toStringArray();
 
-		assertNotNull("Segments of row member id is null.", rowNames);
-		assertEquals("Row member id should contain 2 segment parts.", 2,
-				rowNames.length);
-		assertEquals("First segment of the row member element is incorrect.",
-				"[DD]", rowNames[0]);
-		assertEquals("Second segment of the row member element is incorrect.",
-				"[AA]]B]", rowNames[1]);
+		assertThat("Segments of row member id is null.", rowNames,
+				is(notNullValue()));
+		assertThat("Row member id should contain 2 segment parts.",
+				rowNames.length, is(equalTo(2)));
+		assertThat("First segment of the row member element is incorrect.",
+				rowNames[0], is(equalTo("[DD]")));
+		assertThat("Second segment of the row member element is incorrect.",
+				rowNames[1], is(equalTo("[AA]]B]")));
 	}
 
 	@Test
@@ -329,7 +350,7 @@ public class MdxParserTest {
 
 		query.setCube(new CompoundId("DummyCube"));
 
-		assertEquals("Unexpected MDX query.", mdx, query.toMdx());
+		assertThat("Unexpected MDX query.", query.toMdx(), is(equalTo(mdx)));
 	}
 
 	@Test
@@ -340,31 +361,33 @@ public class MdxParserTest {
 				+ "FROM [Adventure Works] WHERE [Product].[Category].[Bikes]";
 
 		MdxStatement query = parseQuery(mdx);
-		assertNotNull("Failed to parse : " + mdx, query);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
 
 		List<Formula> formulas = query.getFormulas();
 
-		assertNotNull("Formula list not be null.", formulas);
-		assertEquals("Number of formula should be 2.", 2, formulas.size());
+		assertThat("Formula list not be null.", formulas, is(notNullValue()));
+		assertThat("Number of formula should be 2.", formulas.size(),
+				is(equalTo(2)));
 
 		Formula formula = formulas.get(0);
 
-		assertEquals("Wrong formula type.", Formula.Type.MEMBER,
-				formula.getType());
-		assertEquals("Wrong calculated member name.",
-				"[Measures].[Special Discount]", formula.getName().toMdx());
+		assertThat("Wrong formula type.", formula.getType(),
+				is(equalTo(Formula.Type.MEMBER)));
+		assertThat("Wrong calculated member name.", formula.getName().toMdx(),
+				is(equalTo("[Measures].[Special Discount]")));
 
 		formula = formulas.get(1);
 
 		Exp arg = formula.getExp();
 
-		assertTrue("Wrong argument type.", arg instanceof FunCall);
+		assertThat("Wrong argument type.", arg, is(instanceOf(FunCall.class)));
 
 		FunCall func = (FunCall) arg;
 
-		assertEquals("Wrong function type.", Syntax.Infix, func.getType());
-		assertEquals("Wrong number of function arguments.", 2, func.getArgs()
-				.size());
+		assertThat("Wrong function type.", func.getType(),
+				is(equalTo(Syntax.Infix)));
+		assertThat("Wrong number of function arguments.",
+				func.getArgs().size(), is(equalTo(2)));
 	}
 
 	@Test
@@ -373,15 +396,15 @@ public class MdxParserTest {
 				+ "WHERE $[s:parameter]";
 
 		MdxStatement query = parseQuery(mdx);
-		assertNotNull("Failed to parse : " + mdx, query);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
 
 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
-		assertNotNull("Slicer exp is null.", parameter);
+		assertThat("Slicer exp is null.", parameter, is(notNullValue()));
 
-		assertEquals("Wrong member expression returned.", "parameter",
-				parameter.getExpression());
-		assertEquals("Wrong expression namespace.", "s",
-				parameter.getNamespace());
+		assertThat("Wrong member expression returned.",
+				parameter.getExpression(), is(equalTo("parameter")));
+		assertThat("Wrong expression namespace.", parameter.getNamespace(),
+				is(equalTo("s")));
 	}
 
 	@Test
@@ -390,13 +413,13 @@ public class MdxParserTest {
 				+ "WHERE $[s:#{set = \"test\"}]";
 
 		MdxStatement query = parseQuery(mdx);
-		assertNotNull("Failed to parse : " + mdx, query);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
 
 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
-		assertNotNull("Slicer exp is null.", parameter);
+		assertThat("Slicer exp is null.", parameter, is(notNullValue()));
 
-		assertEquals("Wrong member expression returned.", "#{set = \"test\"}",
-				parameter.getExpression());
+		assertThat("Wrong member expression returned.",
+				parameter.getExpression(), is(equalTo("#{set = \"test\"}")));
 	}
 
 	@Test
@@ -405,20 +428,20 @@ public class MdxParserTest {
 				+ "WHERE {$[s:parameter], [Time].[1998]}";
 
 		MdxStatement query = parseQuery(mdx);
-		assertNotNull("Failed to parse : " + mdx, query);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
 
 		FunCall func = (FunCall) query.getSlicer();
-		assertNotNull("Slicer exp is null.", func);
+		assertThat("Slicer exp is null.", func, is(notNullValue()));
 
-		assertEquals("Wrong number of function arguments.", 2, func.getArgs()
-				.size());
+		assertThat("Wrong number of function arguments.",
+				func.getArgs().size(), is(equalTo(2)));
 
 		ExpressionParameter parameter = (ExpressionParameter) func.getArgs()
 				.get(0);
-		assertNotNull("Slicer exp is null.", parameter);
+		assertThat("Slicer exp is null.", parameter, is(notNullValue()));
 
-		assertEquals("Wrong member expression returned.", "parameter",
-				parameter.getExpression());
+		assertThat("Wrong member expression returned.",
+				parameter.getExpression(), is(equalTo("parameter")));
 	}
 
 	@Test
@@ -428,25 +451,26 @@ public class MdxParserTest {
 
 		MdxStatement query = parseQuery(mdx);
 
-		assertNotNull("Failed to parse : " + mdx, query);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
 
 		List<Formula> formulas = query.getFormulas();
 
-		assertNotNull("Formula list is null.", formulas);
-		assertEquals("Wrong number of formula returned.", 1, formulas.size());
+		assertThat("Formula list is null.", formulas, is(notNullValue()));
+		assertThat("Wrong number of formula returned.", formulas.size(),
+				is(equalTo(1)));
 
 		Formula formula = formulas.get(0);
 
 		Exp exp = formula.getExp();
 
-		assertNotNull("Formula expression is null.", formulas);
-		assertTrue("Parameter expression type is wrong.",
-				exp instanceof ExpressionParameter);
+		assertThat("Formula expression is null.", formulas, is(notNullValue()));
+		assertThat("Parameter expression type is wrong.", exp,
+				is(instanceOf(ExpressionParameter.class)));
 
 		ExpressionParameter parameter = (ExpressionParameter) exp;
 
-		assertEquals("Wrong parameter expression.", "parameter",
-				parameter.getExpression());
+		assertThat("Wrong parameter expression.", parameter.getExpression(),
+				is(equalTo("parameter")));
 	}
 
 	@Test
@@ -456,41 +480,43 @@ public class MdxParserTest {
 				+ "[Product].[All Products] ON ROWS FROM [Sales]";
 
 		MdxStatement query = parseQuery(mdx);
-		assertNotNull("Failed to parse : " + mdx, query);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
 
 		List<Formula> formulas = query.getFormulas();
 
-		assertNotNull("Formula list is null.", formulas);
-		assertEquals("Wrong number of formula returned.", 1, formulas.size());
+		assertThat("Formula list is null.", formulas, is(notNullValue()));
+		assertThat("Wrong number of formula returned.", formulas.size(),
+				is(equalTo(1)));
 
 		Formula formula = formulas.get(0);
 
 		Exp exp = formula.getExp();
 
-		assertNotNull("Formula expression is null.", formulas);
-		assertTrue("Parameter expression type is wrong.",
-				exp instanceof FunCall);
+		assertThat("Formula expression is null.", formulas, is(notNullValue()));
+		assertThat("Parameter expression type is wrong.", exp,
+				is(instanceOf(FunCall.class)));
 
 		FunCall func = (FunCall) exp;
 
-		assertNotNull("Set member list is null.", func.getArgs());
-		assertEquals("Wrong number of set children returned.", 3, func
-				.getArgs().size());
+		assertThat("Set member list is null.", func.getArgs(),
+				is(notNullValue()));
+		assertThat("Wrong number of set children returned.", func.getArgs()
+				.size(), is(equalTo(3)));
 
-		assertTrue("First parameter expression type is wrong.", func.getArgs()
-				.get(0) instanceof ExpressionParameter);
-		assertTrue("Third parameter expression type is wrong.", func.getArgs()
-				.get(2) instanceof ExpressionParameter);
+		assertThat("First parameter expression type is wrong.", func.getArgs()
+				.get(0), is(instanceOf(ExpressionParameter.class)));
+		assertThat("Third parameter expression type is wrong.", func.getArgs()
+				.get(2), is(instanceOf(ExpressionParameter.class)));
 
 		ExpressionParameter parameter1 = (ExpressionParameter) func.getArgs()
 				.get(0);
 		ExpressionParameter parameter3 = (ExpressionParameter) func.getArgs()
 				.get(2);
 
-		assertEquals("Wrong parameter expression.", "parameter1",
-				parameter1.getExpression());
-		assertEquals("Wrong parameter expression.", "parameter2",
-				parameter3.getExpression());
+		assertThat("Wrong parameter expression.", parameter1.getExpression(),
+				is(equalTo("parameter1")));
+		assertThat("Wrong parameter expression.", parameter3.getExpression(),
+				is(equalTo("parameter2")));
 	}
 
 	@Test
@@ -499,13 +525,13 @@ public class MdxParserTest {
 				+ "WHERE $[s:[1, 2, 3]], SELECT, &[AAA]], Crossjoin(), \"aaa\"]";
 
 		MdxStatement query = parseQuery(mdx);
-		assertNotNull("Failed to parse : " + mdx, query);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
 
 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
-		assertNotNull("Slicer exp is null.", parameter);
+		assertThat("Slicer exp is null.", parameter, is(notNullValue()));
 
-		assertEquals("Wrong member expression returned.",
-				"[1, 2, 3], SELECT, &[AAA], Crossjoin(), \"aaa\"",
-				parameter.getExpression());
+		assertThat("Wrong member expression returned.",
+				parameter.getExpression(),
+				is(equalTo("[1, 2, 3], SELECT, &[AAA], Crossjoin(), \"aaa\"")));
 	}
 }

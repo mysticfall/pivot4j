@@ -8,9 +8,9 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
@@ -41,34 +41,36 @@ public class SwapAxesImplIT extends AbstractTransformTestCase<SwapAxes> {
 	public void testTransform() {
 		SwapAxes transform = getTransform();
 
-		assertFalse("Initial query axes are not swapped",
-				transform.isSwapAxes());
-		assertTrue("Should be able to swap axes on initial query",
-				transform.canSwapAxes());
+		assertThat("Initial query axes are not swapped",
+				transform.isSwapAxes(), is(false));
+		assertThat("Should be able to swap axes on initial query",
+				transform.canSwapAxes(), is(true));
 
 		transform.setSwapAxes(true);
 
-		assertTrue("Query axes have been swapped", transform.isSwapAxes());
+		assertThat("Query axes have been swapped", transform.isSwapAxes(),
+				is(true));
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query after axes have been swapped",
-				"SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS, "
 						+ "{[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON ROWS "
-						+ "FROM [Sales]", getPivotModel().getCurrentMdx());
+						+ "FROM [Sales]")));
 
 		getPivotModel().getCellSet();
 
 		transform.setSwapAxes(false);
 
-		assertEquals("Unexpected MDX query after axes have been restored",
-				getInitialQuery(), getPivotModel().getCurrentMdx());
+		assertThat("Unexpected MDX query after axes have been restored",
+				getPivotModel().getCurrentMdx(), is(equalTo(getInitialQuery())));
 
 		getPivotModel().getCellSet();
 
 		getPivotModel()
 				.setMdx("SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS FROM [Sales]");
 
-		assertFalse("Single query axis cannot be swapped with itself",
-				transform.canSwapAxes());
+		assertThat("Single query axis cannot be swapped with itself",
+				transform.canSwapAxes(), is(false));
 	}
 }

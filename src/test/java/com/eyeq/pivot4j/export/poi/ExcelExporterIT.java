@@ -8,8 +8,10 @@ package com.eyeq.pivot4j.export.poi;
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -111,15 +113,17 @@ public class ExcelExporterIT extends AbstractIntegrationTestCase {
 
 		Workbook workbook = WorkbookFactory.create(file);
 
-		assertNotNull("Workbook cannot be null.", workbook);
+		assertThat("Workbook cannot be null.", workbook, is(notNullValue()));
 
 		Sheet sheet = workbook.getSheetAt(0);
-		assertNotNull("Worksheet cannot be null.", sheet);
+		assertThat("Worksheet cannot be null.", sheet, is(notNullValue()));
 
-		assertEquals("Invalid worksheet name.", "Sales", sheet.getSheetName());
+		assertThat("Invalid worksheet name.", sheet.getSheetName(),
+				is(equalTo("Sales")));
 
-		assertEquals("Wrong number of rows.", rows, sheet.getLastRowNum());
-		assertEquals("Wrong number of merged regions.", mergedRegions,
-				sheet.getNumMergedRegions());
+		assertThat("Wrong number of rows.", sheet.getLastRowNum(),
+				is(equalTo(rows)));
+		assertThat("Wrong number of merged regions.",
+				sheet.getNumMergedRegions(), is(equalTo(mergedRegions)));
 	}
 }

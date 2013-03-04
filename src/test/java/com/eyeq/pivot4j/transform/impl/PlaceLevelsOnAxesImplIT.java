@@ -8,8 +8,9 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,39 +59,40 @@ public class PlaceLevelsOnAxesImplIT extends
 		Hierarchy product = cube.getHierarchies().get("Product");
 
 		List<Level> firstLevels = transform.findVisibleLevels(promotionMedia);
-		assertEquals(
+		assertThat(
 				"The number of visible levels in [Promotion Media] hierarchy should be 1",
-				1, firstLevels.size());
-		assertEquals(
+				firstLevels.size(), is(equalTo(1)));
+		assertThat(
 				"The first level of the hierarchy should be [Promotion Media].[(All)]",
-				firstLevels.get(0).getUniqueName(), promotionMedia.getLevels()
-						.get(0).getUniqueName());
+				promotionMedia.getLevels().get(0).getUniqueName(),
+				is(equalTo(firstLevels.get(0).getUniqueName())));
 
 		List<Level> allLevels = transform.findVisibleLevels(Axis.ROWS);
 
-		assertFalse("Visible levels should not be empty", allLevels.isEmpty());
-		assertEquals("The number of visible levels should be 5", 5,
-				allLevels.size());
-		assertEquals(
+		assertThat("Visible levels should not be empty", allLevels.isEmpty(),
+				is(false));
+		assertThat("The number of visible levels should be 5",
+				allLevels.size(), is(equalTo(5)));
+		assertThat(
 				"The first level of the axis should be [Promotion Media].[(All)]",
-				allLevels.get(0).getUniqueName(), promotionMedia.getLevels()
-						.get(0).getUniqueName());
-		assertEquals(
-				"The second level of the axis should be [Product].[(All)]",
-				allLevels.get(1).getUniqueName(), product.getLevels().get(0)
-						.getUniqueName());
-		assertEquals(
+				promotionMedia.getLevels().get(0).getUniqueName(),
+				is(equalTo(allLevels.get(0).getUniqueName())));
+
+		assertThat("The second level of the axis should be [Product].[(All)]",
+				product.getLevels().get(0).getUniqueName(),
+				is(equalTo(allLevels.get(1).getUniqueName())));
+		assertThat(
 				"The third level of the axis should be [Product].[Product Family]",
-				allLevels.get(2).getUniqueName(), product.getLevels().get(1)
-						.getUniqueName());
-		assertEquals(
+				product.getLevels().get(1).getUniqueName(),
+				is(equalTo(allLevels.get(2).getUniqueName())));
+		assertThat(
 				"The fourth level of the axis should be [Product].[Product Department]",
-				allLevels.get(3).getUniqueName(), product.getLevels().get(2)
-						.getUniqueName());
-		assertEquals(
+				product.getLevels().get(2).getUniqueName(),
+				is(equalTo(allLevels.get(3).getUniqueName())));
+		assertThat(
 				"The fourth level of the axis should be [Product].[Product Category]",
-				allLevels.get(4).getUniqueName(), product.getLevels().get(3)
-						.getUniqueName());
+				product.getLevels().get(3).getUniqueName(),
+				is(equalTo(allLevels.get(4).getUniqueName())));
 	}
 
 	@Test
@@ -104,9 +106,10 @@ public class PlaceLevelsOnAxesImplIT extends
 
 		transform.addLevel(Axis.ROWS, level, -1);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Promotion Media].[All Media], [Promotion Media].[Bulk Mail], [Promotion Media].[Cash Register Handout], "
 						+ "[Promotion Media].[Daily Paper], [Promotion Media].[Daily Paper, Radio], "
 						+ "[Promotion Media].[Daily Paper, Radio, TV], [Promotion Media].[In-Store Coupon], [Promotion Media].[No Media], "
@@ -117,8 +120,7 @@ public class PlaceLevelsOnAxesImplIT extends
 						+ "[Product].[Drink].[Beverages].[Carbonated Beverages], [Product].[Drink].[Beverages].[Drinks], "
 						+ "[Product].[Drink].[Beverages].[Hot Beverages], [Product].[Drink].[Beverages].[Pure Juice Beverages], "
 						+ "[Product].[Drink].[Dairy], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS "
-						+ "FROM [Sales] WHERE [Time].[1997]", getPivotModel()
-						.getCurrentMdx());
+						+ "FROM [Sales] WHERE [Time].[1997]")));
 	}
 
 	@Test
@@ -132,16 +134,16 @@ public class PlaceLevelsOnAxesImplIT extends
 
 		transform.addLevel(Axis.ROWS, level, 0);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Gender].[F], [Gender].[M]}, CrossJoin({[Promotion Media].[All Media]}, {[Product].[All Products], "
 						+ "[Product].[Drink], [Product].[Drink].[Alcoholic Beverages], [Product].[Drink].[Beverages], "
 						+ "[Product].[Drink].[Beverages].[Carbonated Beverages], [Product].[Drink].[Beverages].[Drinks], "
 						+ "[Product].[Drink].[Beverages].[Hot Beverages], [Product].[Drink].[Beverages].[Pure Juice Beverages], "
 						+ "[Product].[Drink].[Dairy], [Product].[Food], [Product].[Non-Consumable]})) ON ROWS "
-						+ "FROM [Sales] WHERE [Time].[1997]", getPivotModel()
-						.getCurrentMdx());
+						+ "FROM [Sales] WHERE [Time].[1997]")));
 	}
 
 	@Test
@@ -159,12 +161,12 @@ public class PlaceLevelsOnAxesImplIT extends
 
 		transform.placeLevels(Axis.ROWS, levels);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Gender].[All Gender]}, {[Store].[Canada], [Store].[Mexico], [Store].[USA]}) ON ROWS "
-						+ "FROM [Sales] WHERE [Time].[1997]", getPivotModel()
-						.getCurrentMdx());
+						+ "FROM [Sales] WHERE [Time].[1997]")));
 	}
 
 	@Test
@@ -178,16 +180,16 @@ public class PlaceLevelsOnAxesImplIT extends
 
 		transform.addLevel(Axis.ROWS, level, 1);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Promotion Media].[All Media]}, CrossJoin({[Gender].[F], [Gender].[M]}, "
 						+ "{[Product].[All Products], [Product].[Drink], [Product].[Drink].[Alcoholic Beverages], "
 						+ "[Product].[Drink].[Beverages], [Product].[Drink].[Beverages].[Carbonated Beverages], "
 						+ "[Product].[Drink].[Beverages].[Drinks], [Product].[Drink].[Beverages].[Hot Beverages], "
 						+ "[Product].[Drink].[Beverages].[Pure Juice Beverages], [Product].[Drink].[Dairy], "
-						+ "[Product].[Food], [Product].[Non-Consumable]})) ON ROWS FROM [Sales] WHERE [Time].[1997]",
-				getPivotModel().getCurrentMdx());
+						+ "[Product].[Food], [Product].[Non-Consumable]})) ON ROWS FROM [Sales] WHERE [Time].[1997]")));
 	}
 
 	@Test
@@ -201,15 +203,15 @@ public class PlaceLevelsOnAxesImplIT extends
 
 		transform.addLevel(Axis.ROWS, level, 2);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Promotion Media].[All Media]}, CrossJoin({[Product].[All Products], [Product].[Drink], "
 						+ "[Product].[Drink].[Alcoholic Beverages], [Product].[Drink].[Beverages], [Product].[Drink].[Beverages].[Carbonated Beverages], "
 						+ "[Product].[Drink].[Beverages].[Drinks], [Product].[Drink].[Beverages].[Hot Beverages], "
 						+ "[Product].[Drink].[Beverages].[Pure Juice Beverages], [Product].[Drink].[Dairy], [Product].[Food], "
-						+ "[Product].[Non-Consumable]}, {[Gender].[F], [Gender].[M]})) ON ROWS FROM [Sales] WHERE [Time].[1997]",
-				getPivotModel().getCurrentMdx());
+						+ "[Product].[Non-Consumable]}, {[Gender].[F], [Gender].[M]})) ON ROWS FROM [Sales] WHERE [Time].[1997]")));
 	}
 
 	@Test
@@ -224,13 +226,13 @@ public class PlaceLevelsOnAxesImplIT extends
 
 		transform.removeLevel(Axis.ROWS, level);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin({[Promotion Media].[All Media]}, {[Product].[All Products], [Product].[Drink], "
 						+ "[Product].[Drink].[Beverages].[Carbonated Beverages], [Product].[Drink].[Beverages].[Drinks], "
 						+ "[Product].[Drink].[Beverages].[Hot Beverages], [Product].[Drink].[Beverages].[Pure Juice Beverages], "
-						+ "[Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales] WHERE [Time].[1997]",
-				getPivotModel().getCurrentMdx());
+						+ "[Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales] WHERE [Time].[1997]")));
 	}
 }

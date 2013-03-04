@@ -8,10 +8,10 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 import org.olap4j.CellSet;
@@ -63,42 +63,42 @@ public class DrillExpandMemberImplIT extends
 		PivotModel model = getPivotModel();
 
 		CellSet cellSet = model.getCellSet();
-		assertNotNull("Unable to execute MDX query : " + getInitialQuery(),
-				cellSet);
+		assertThat("Unable to execute MDX query : " + getInitialQuery(),
+				cellSet, is(notNullValue()));
 
 		CellSetAxis axis = cellSet.getAxes().get(1);
 		Position position = axis.getPositions().get(0);
 
 		Member allMedia = position.getMembers().get(1);
 
-		assertEquals(
+		assertThat(
 				"Unexpected member at drill position : "
-						+ allMedia.getCaption(), "All Media",
-				allMedia.getCaption());
+						+ allMedia.getCaption(), allMedia.getCaption(),
+				is(equalTo("All Media")));
 
-		assertFalse("[All Media] should not be collapsible initially",
-				transform.canCollapse(allMedia));
-		assertTrue("[All Media] should be expandable initially",
-				transform.canExpand(allMedia));
+		assertThat("[All Media] should not be collapsible initially",
+				transform.canCollapse(allMedia), is(false));
+		assertThat("[All Media] should be expandable initially",
+				transform.canExpand(allMedia), is(true));
 
 		transform.expand(allMedia);
 
-		assertEquals("Unexpected MDX after drill down : ",
-				getTransformedQuery(), model.getCurrentMdx());
+		assertThat("Unexpected MDX after drill down : ", model.getCurrentMdx(),
+				is(equalTo(getTransformedQuery())));
 
-		assertTrue("[All Media] should be collapsible after drill down",
-				transform.canCollapse(allMedia));
-		assertFalse("[All Media] should not be expandable after drill down",
-				transform.canExpand(allMedia));
+		assertThat("[All Media] should be collapsible after drill down",
+				transform.canCollapse(allMedia), is(true));
+		assertThat("[All Media] should not be expandable after drill down",
+				transform.canExpand(allMedia), is(false));
 
 		transform.collapse(allMedia);
 
-		assertEquals("Unexpected MDX after collapse : ", getInitialQuery(),
-				model.getCurrentMdx());
+		assertThat("Unexpected MDX after collapse : ", model.getCurrentMdx(),
+				is(equalTo(getInitialQuery())));
 
-		assertFalse("[All Media] should not be collapsible after collapse",
-				transform.canCollapse(allMedia));
-		assertTrue("[All Media] should be expandable after collapse",
-				transform.canExpand(allMedia));
+		assertThat("[All Media] should not be collapsible after collapse",
+				transform.canCollapse(allMedia), is(false));
+		assertThat("[All Media] should be expandable after collapse",
+				transform.canExpand(allMedia), is(true));
 	}
 }

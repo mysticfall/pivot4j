@@ -8,7 +8,9 @@
  */
 package com.eyeq.pivot4j.el;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
@@ -46,10 +48,10 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 		List<Member> members = transform.getSlicer();
 
-		assertEquals("Slicer axis should contain one member.", 1,
-				members.size());
-		assertEquals("Wrong member was found on the slicer axis.",
-				"[Time].[1997]", members.get(0).getUniqueName());
+		assertThat("Slicer axis should contain one member.", members.size(),
+				is(1));
+		assertThat("Wrong member found on the slicer axis.", members.get(0)
+				.getUniqueName(), equalTo("[Time].[1997]"));
 	}
 
 	@Test
@@ -68,16 +70,15 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 		List<Position> positions = cellSet.getAxes()
 				.get(Axis.ROWS.axisOrdinal()).getPositions();
-		assertEquals("Row axis should contain one positions.", 1,
-				positions.size());
+		assertThat("Row axis should contain one positions.", positions.size(),
+				is(1));
 
 		Position position = positions.get(0);
 
-		assertEquals("Row axis should contain two dimensions.", 2, position
-				.getMembers().size());
-		assertEquals("Wrong member was found on the row axis.",
-				"[Product].[All Products]", position.getMembers().get(1)
-						.getUniqueName());
+		assertThat("Row axis should contain two dimensions.", position
+				.getMembers().size(), is(2));
+		assertThat("Wrong member found on the row axis.", position.getMembers()
+				.get(1).getUniqueName(), equalTo("[Product].[All Products]"));
 	}
 
 	@Test
@@ -97,11 +98,11 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 		List<Member> members = slicerTransform.getSlicer();
 
-		assertEquals("Slicer axis should contain one member.", 1,
-				members.size());
+		assertThat("Slicer axis should contain one member.", members.size(),
+				is(1));
 
-		assertEquals("Wrong member was found on the slicer axis.",
-				"[Time].[1997]", members.get(0).getUniqueName());
+		assertThat("Wrong member found on the slicer axis.", members.get(0)
+				.getUniqueName(), equalTo("[Time].[1997]"));
 
 		Member member = OlapUtils.lookupMember(model.getCube(),
 				"[Product].[All Products]");
@@ -114,8 +115,9 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 		model.getCellSet();
 
 		members = slicerTransform.getSlicer();
-		assertEquals("Wrong member was found on the slicer axis.",
-				"[Time].[1998]", members.get(0).getUniqueName());
+
+		assertThat("Wrong member found on the slicer axis.", members.get(0)
+				.getUniqueName(), equalTo("[Time].[1998]"));
 	}
 
 	@Test
@@ -134,11 +136,11 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 		List<Member> members = slicerTransform.getSlicer();
 
-		assertEquals("Slicer axis should contain one member.", 1,
-				members.size());
+		assertThat("Slicer axis should contain one member.", members.size(),
+				is(1));
 
-		assertEquals("Wrong member was found on the slicer axis.",
-				"[Time].[1997]", members.get(0).getUniqueName());
+		assertThat("Wrong member found on the slicer axis.", members.get(0)
+				.getUniqueName(), equalTo("[Time].[1997]"));
 
 		PlaceHierarchiesOnAxes hierarchyTransform = model
 				.getTransform(PlaceHierarchiesOnAxes.class);
@@ -151,8 +153,9 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 		model.getCellSet();
 
 		members = slicerTransform.getSlicer();
-		assertEquals("Wrong member was found on the slicer axis.",
-				"[Time].[1998]", members.get(0).getUniqueName());
+
+		assertThat("Wrong member found on the slicer axis.", members.get(0)
+				.getUniqueName(), equalTo("[Time].[1998]"));
 	}
 
 	@Test
@@ -169,15 +172,16 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 		model.getExpressionContext().put("ratio", "1.5");
 
 		CellSet cellSet = model.getCellSet();
-		assertEquals("Wrong cell value returned(ratio = 1.5).", "338,440.85",
-				cellSet.getCell(0).getFormattedValue());
+
+		assertThat("Wrong cell value returned(ratio = 1.5).", cellSet
+				.getCell(0).getFormattedValue(), equalTo("338,440.85"));
 
 		model.getExpressionContext().put("ratio", "2.5");
 		model.refresh();
 
 		cellSet = model.getCellSet();
 
-		assertEquals("Wrong cell value returned(ratio = 2.5).", "564,068.08",
-				cellSet.getCell(0).getFormattedValue());
+		assertThat("Wrong cell value returned(ratio = 2.5).", cellSet
+				.getCell(0).getFormattedValue(), equalTo("564,068.08"));
 	}
 }

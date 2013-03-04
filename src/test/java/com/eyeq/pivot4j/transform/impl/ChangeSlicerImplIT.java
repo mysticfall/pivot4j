@@ -8,9 +8,10 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +51,10 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 
 		List<Member> members = transform.getSlicer();
 
-		assertNotNull("Failed to retrieve slicer members", members);
-		assertFalse("Failed to retrieve slicer members", members.isEmpty());
+		assertThat("Failed to retrieve slicer members", members,
+				is(notNullValue()));
+		assertThat("Failed to retrieve slicer members", members.isEmpty(),
+				is(false));
 	}
 
 	@Test
@@ -65,7 +68,8 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 		Member year1998 = cube.lookupMember(IdentifierNode.parseIdentifier(
 				"[Time].[1998]").getSegmentList());
 
-		assertNotNull("Cannot look up member [Time].[1998]", year1998);
+		assertThat("Cannot look up member [Time].[1998]", year1998,
+				is(notNullValue()));
 
 		members.add(year1998);
 
@@ -73,12 +77,11 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 
 		getPivotModel().getCellSet();
 
-		assertEquals(
-				"",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+		assertThat(
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS "
-						+ "FROM [Sales] WHERE [Time].[1998]", getPivotModel()
-						.getCurrentMdx());
+						+ "FROM [Sales] WHERE [Time].[1998]")));
 	}
 
 	@Test
@@ -94,8 +97,10 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 		Member year1998 = cube.lookupMember(IdentifierNode.parseIdentifier(
 				"[Time].[1998]").getSegmentList());
 
-		assertNotNull("Cannot look up member [Time].[1997]", year1997);
-		assertNotNull("Cannot look up member [Time].[1998]", year1998);
+		assertThat("Cannot look up member [Time].[1997]", year1997,
+				is(notNullValue()));
+		assertThat("Cannot look up member [Time].[1998]", year1998,
+				is(notNullValue()));
 
 		members.add(year1997);
 		members.add(year1998);
@@ -104,12 +109,11 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 
 		getPivotModel().getCellSet();
 
-		assertEquals(
-				"",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+		assertThat(
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] "
-						+ "WHERE {[Time].[1997], [Time].[1998]}",
-				getPivotModel().getCurrentMdx());
+						+ "WHERE {[Time].[1997], [Time].[1998]}")));
 	}
 
 	@Test
@@ -122,16 +126,19 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 
 		Member year1997 = cube.lookupMember(IdentifierNode.parseIdentifier(
 				"[Time].[1997]").getSegmentList());
-		assertNotNull("Cannot look up member [Time].[1997]", year1997);
+		assertThat("Cannot look up member [Time].[1997]", year1997,
+				is(notNullValue()));
 
 		Member year1998 = cube.lookupMember(IdentifierNode.parseIdentifier(
 				"[Time].[1998]").getSegmentList());
-		assertNotNull("Cannot look up member [Time].[1998]", year1998);
+		assertThat("Cannot look up member [Time].[1998]", year1998,
+				is(notNullValue()));
 
 		Member genderM = cube.lookupMember(IdentifierNode.parseIdentifier(
 				"[Gender].[M]").getSegmentList());
 
-		assertNotNull("Cannot look up member [Gender].[M]", genderM);
+		assertThat("Cannot look up member [Gender].[M]", genderM,
+				is(notNullValue()));
 
 		members.add(year1997);
 		members.add(year1998);
@@ -141,12 +148,11 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 
 		getPivotModel().getCellSet();
 
-		assertEquals(
-				"",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+		assertThat(
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] "
-						+ "WHERE CrossJoin({[Time].[1997], [Time].[1998]}, [Gender].[M])",
-				getPivotModel().getCurrentMdx());
+						+ "WHERE CrossJoin({[Time].[1997], [Time].[1998]}, [Gender].[M])")));
 	}
 
 	@Test
@@ -157,12 +163,14 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 
 		Member year1997 = cube.lookupMember(IdentifierNode.parseIdentifier(
 				"[Time].[1997]").getSegmentList());
-		assertNotNull("Cannot look up member [Time].[1997]", year1997);
+		assertThat("Cannot look up member [Time].[1997]", year1997,
+				is(notNullValue()));
 
 		Member genderM = cube.lookupMember(IdentifierNode.parseIdentifier(
 				"[Gender].[M]").getSegmentList());
 
-		assertNotNull("Cannot look up member [Gender].[M]", genderM);
+		assertThat("Cannot look up member [Gender].[M]", genderM,
+				is(notNullValue()));
 
 		List<Member> timeMembers = new ArrayList<Member>(1);
 		timeMembers.add(year1997);
@@ -175,11 +183,10 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 
 		getPivotModel().getCellSet();
 
-		assertEquals(
-				"",
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+		assertThat(
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] "
-						+ "WHERE CrossJoin([Time].[1997], [Gender].[M])",
-				getPivotModel().getCurrentMdx());
+						+ "WHERE CrossJoin([Time].[1997], [Gender].[M])")));
 	}
 }

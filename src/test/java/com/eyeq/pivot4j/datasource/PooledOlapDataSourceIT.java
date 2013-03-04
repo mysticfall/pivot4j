@@ -8,8 +8,10 @@
  */
 package com.eyeq.pivot4j.datasource;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 
@@ -18,7 +20,6 @@ import org.junit.Test;
 import org.olap4j.OlapConnection;
 
 import com.eyeq.pivot4j.AbstractIntegrationTestCase;
-import com.eyeq.pivot4j.datasource.PooledOlapDataSource;
 
 public class PooledOlapDataSourceIT extends AbstractIntegrationTestCase {
 
@@ -37,46 +38,50 @@ public class PooledOlapDataSourceIT extends AbstractIntegrationTestCase {
 
 		PooledOlapDataSource dataSource = new PooledOlapDataSource(
 				getDataSource(), config);
-		OlapConnection connection1 = dataSource.getConnection();
-		OlapConnection connection2 = dataSource.getConnection();
-		OlapConnection connection3 = dataSource.getConnection();
+		OlapConnection con1 = dataSource.getConnection();
+		OlapConnection con2 = dataSource.getConnection();
+		OlapConnection con3 = dataSource.getConnection();
 
-		assertTrue("Invalid connection returned.", connection1.isValid(10));
-		assertTrue("Invalid connection returned.", connection2.isValid(10));
-		assertTrue("Invalid connection returned.", connection3.isValid(10));
+		assertThat("Invalid connection returned.", con1.isValid(10), is(true));
+		assertThat("Invalid connection returned.", con2.isValid(10), is(true));
+		assertThat("Invalid connection returned.", con3.isValid(10), is(true));
 
-		assertFalse("Closed connection returned.", connection1.isClosed());
-		assertFalse("Closed connection returned.", connection2.isClosed());
-		assertFalse("Closed connection returned.", connection3.isClosed());
+		assertThat("Closed connection returned.", con1.isClosed(), is(false));
+		assertThat("Closed connection returned.", con2.isClosed(), is(false));
+		assertThat("Closed connection returned.", con3.isClosed(), is(false));
 
-		assertFalse("Should return a new Connection instance.",
-				connection1.unwrap(OlapConnection.class) == connection2
-						.unwrap(OlapConnection.class));
-		assertFalse("Should return a new Connection instance.",
-				connection2.unwrap(OlapConnection.class) == connection3
-						.unwrap(OlapConnection.class));
+		assertThat("Should return a new Connection instance.",
+				con1.unwrap(OlapConnection.class),
+				not(sameInstance(con2.unwrap(OlapConnection.class))));
+		assertThat("Should return a new Connection instance.",
+				con2.unwrap(OlapConnection.class),
+				not(sameInstance(con3.unwrap(OlapConnection.class))));
 
-		connection3.close();
+		con3.close();
 
-		assertFalse("Connection remains open.", connection3.isClosed());
+		assertThat("Connection should remain open.", con3.isClosed(), is(false));
 
-		OlapConnection connection4 = dataSource.getConnection();
-		assertTrue("Should reuse an existing connection.",
-				connection3.unwrap(OlapConnection.class) == connection4
-						.unwrap(OlapConnection.class));
+		OlapConnection con4 = dataSource.getConnection();
+		assertThat("Should reuse an existing connection.",
+				con3.unwrap(OlapConnection.class),
+				sameInstance(con4.unwrap(OlapConnection.class)));
 
-		assertFalse("Closed connection returned.", connection4.isClosed());
+		assertThat("Closed connection returned.", con4.isClosed(), is(false));
 
 		dataSource.close();
 
-		assertFalse(
+		con1.close();
+		con2.close();
+		con4.close();
+
+		assertThat(
 				"Connection remains open after data source has been closed.",
-				connection1.isClosed());
-		assertFalse(
+				con1.isClosed(), is(true));
+		assertThat(
 				"Connection remains open after data source has been closed.",
-				connection2.isClosed());
-		assertFalse(
+				con2.isClosed(), is(true));
+		assertThat(
 				"Connection remains open after data source has been closed.",
-				connection3.isClosed());
+				con3.isClosed(), is(true));
 	}
 }

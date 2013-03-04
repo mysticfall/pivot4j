@@ -8,9 +8,9 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
@@ -57,21 +57,22 @@ public class DrillReplaceImplIT extends AbstractTransformTestCase<DrillReplace> 
 		Member allMedia = members.get(0);
 		Hierarchy hierarchy = allMedia.getHierarchy();
 
-		assertTrue(
+		assertThat(
 				"Should be able to drill down on [Promotion Media].[All Media]",
-				transform.canDrillDown(allMedia));
-		assertFalse(
+				transform.canDrillDown(allMedia), is(true));
+		assertThat(
 				"Drill up on [Promotion Media] hierarchy should not be possible",
-				transform.canDrillUp(hierarchy));
+				transform.canDrillUp(hierarchy), is(false));
 
 		transform.drillDown(allMedia);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query after drill down on "
 						+ allMedia.getUniqueName(),
-				"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin([Promotion Media].[All Media].Children, {[Product].[All Products]}) ON ROWS "
-						+ "FROM [Sales]", getPivotModel().getCurrentMdx());
+						+ "FROM [Sales]")));
 
 		cellSet = getPivotModel().getCellSet();
 
@@ -82,18 +83,18 @@ public class DrillReplaceImplIT extends AbstractTransformTestCase<DrillReplace> 
 
 		Member bulkMail = members.get(0);
 
-		assertFalse(
+		assertThat(
 				"Drill down on [Promotion Media].[Bulk Mail] member should not be possible",
-				transform.canDrillDown(bulkMail));
-		assertTrue("Should be able to drill up on [Promotion Media] hierarchy",
-				transform.canDrillUp(hierarchy));
+				transform.canDrillDown(bulkMail), is(false));
+		assertThat("Should be able to drill up on [Promotion Media] hierarchy",
+				transform.canDrillUp(hierarchy), is(true));
 
 		transform.drillUp(hierarchy);
 
-		assertEquals(
+		assertThat(
 				"Unexpected MDX query after drill down up "
-						+ hierarchy.getUniqueName(), getInitialQuery(),
-				getPivotModel().getCurrentMdx());
+						+ hierarchy.getUniqueName(), getPivotModel()
+						.getCurrentMdx(), is(equalTo(getInitialQuery())));
 
 		cellSet = getPivotModel().getCellSet();
 	}

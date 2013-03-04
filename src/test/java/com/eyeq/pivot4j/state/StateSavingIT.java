@@ -8,9 +8,10 @@
  */
 package com.eyeq.pivot4j.state;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -69,7 +70,8 @@ public class StateSavingIT extends AbstractIntegrationTestCase {
 
 		Serializable bookmark = model.saveState();
 
-		assertNotNull("Bookmarked state should not be null", bookmark);
+		assertThat("Bookmarked state should not be null", bookmark,
+				is(notNullValue()));
 
 		PivotModel newModel = new PivotModelImpl(getDataSource());
 		newModel.restoreState(bookmark);
@@ -83,17 +85,18 @@ public class StateSavingIT extends AbstractIntegrationTestCase {
 			newMdx = newMdx.replaceAll("3\\.0", "3");
 		}
 
-		assertEquals("MDX has been changed after the state restoration", mdx,
-				newMdx);
-		assertTrue(
+		assertThat("MDX has been changed after the state restoration", newMdx,
+				is(equalTo(mdx)));
+		assertThat(
 				"Property 'sorting' has been changed after the state restoration",
-				newModel.isSorting());
-		assertEquals(
+				newModel.isSorting(), is(true));
+		assertThat(
 				"Property 'topBottomCount' has been changed after the state restoration",
-				3, newModel.getTopBottomCount());
-		assertEquals(
+				newModel.getTopBottomCount(), is(equalTo(3)));
+		assertThat(
 				"Property 'sortMode' has been changed after the state restoration",
-				SortCriteria.BOTTOMCOUNT, newModel.getSortCriteria());
+				newModel.getSortCriteria(),
+				is(equalTo(SortCriteria.BOTTOMCOUNT)));
 	}
 
 	@Test
@@ -143,16 +146,17 @@ public class StateSavingIT extends AbstractIntegrationTestCase {
 			newMdx = newMdx.replaceAll("3\\.0", "3");
 		}
 
-		assertEquals("MDX has been changed after the state restoration", mdx,
-				newMdx);
-		assertTrue(
+		assertThat("MDX has been changed after the state restoration", newMdx,
+				is(equalTo(mdx)));
+		assertThat(
 				"Property 'sorting' has been changed after the state restoration",
-				newModel.isSorting());
-		assertEquals(
+				newModel.isSorting(), is(true));
+		assertThat(
 				"Property 'topBottomCount' has been changed after the state restoration",
-				3, newModel.getTopBottomCount());
-		assertEquals(
+				newModel.getTopBottomCount(), is(equalTo(3)));
+		assertThat(
 				"Property 'sortMode' has been changed after the state restoration",
-				SortCriteria.BOTTOMCOUNT, newModel.getSortCriteria());
+				newModel.getSortCriteria(),
+				is(equalTo(SortCriteria.BOTTOMCOUNT)));
 	}
 }
