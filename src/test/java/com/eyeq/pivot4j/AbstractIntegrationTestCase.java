@@ -8,7 +8,16 @@
  */
 package com.eyeq.pivot4j;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 
 import mondrian.rolap.RolapConnectionProperties;
 
@@ -105,5 +114,43 @@ public abstract class AbstractIntegrationTestCase {
 	 */
 	protected PivotModel getPivotModel() {
 		return model;
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 * @throws IOException
+	 */
+	protected String readTestResource(String name) throws IOException {
+		StringBuilder builder = new StringBuilder();
+		builder.append('/');
+		builder.append(getClass().getPackage().getName().replace('.', '/'));
+		builder.append('/');
+		builder.append(name);
+
+		String path = builder.toString();
+
+		InputStream in = getClass().getResourceAsStream(path);
+
+		if (in == null) {
+			assertThat("No resource was found with given name : " + path, in,
+					is(notNullValue()));
+		}
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+		StringWriter writer = new StringWriter();
+
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			writer.append(line);
+			writer.append('\n');
+		}
+
+		reader.close();
+		writer.flush();
+		writer.close();
+
+		return writer.toString().trim();
 	}
 }

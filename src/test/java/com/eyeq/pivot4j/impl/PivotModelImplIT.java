@@ -32,16 +32,8 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 	/**
 	 * @return the testQuery
 	 */
-	public String getTestQuery() {
+	protected String getTestQuery() {
 		return testQuery;
-	}
-
-	/**
-	 * @param testQuery
-	 *            the testQuery to set
-	 */
-	public void setTestQuery(String testQuery) {
-		this.testQuery = testQuery;
 	}
 
 	@Test

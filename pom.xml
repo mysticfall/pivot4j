@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.eyeq</groupId>
@@ -131,7 +132,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<configuration>
 							<target unless="maven.test.skip">
 								<mkdir dir="${project.build.directory}/derby" />
-								<unzip src="${basedir}/src/test/test-data/derby-foodmart.zip" dest="${project.build.directory}/derby" overwrite="false" />
+								<unzip src="${basedir}/src/test/test-data/derby-foodmart.zip"
+									dest="${project.build.directory}/derby" overwrite="false" />
 							</target>
 						</configuration>
 						<goals>
@@ -396,6 +398,18 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+			<version>2.11</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

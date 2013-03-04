@@ -12,9 +12,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringWriter;
 
 import org.junit.Test;
@@ -24,32 +22,6 @@ import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.ui.impl.NonInternalPropertyCollector;
 
 public class HtmlRendererIT extends AbstractIntegrationTestCase {
-
-	private static final String RESOURCE_PREFIX = "/com/eyeq/pivot4j/ui/html/";
-
-	/**
-	 * @param name
-	 * @return
-	 * @throws IOException
-	 */
-	protected String readTestResource(String name) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				getClass().getResourceAsStream(name)));
-
-		StringWriter writer = new StringWriter();
-
-		String line = null;
-		while ((line = reader.readLine()) != null) {
-			writer.append(line);
-			writer.append('\n');
-		}
-
-		reader.close();
-		writer.flush();
-		writer.close();
-
-		return writer.toString().trim();
-	}
 
 	/**
 	 * @param name
@@ -76,7 +48,7 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 	protected void runTestCase(String name, boolean hideSpans,
 			boolean showDimensionTitle, boolean showParentMembers)
 			throws IOException {
-		String mdx = readTestResource(RESOURCE_PREFIX + name + "-mdx.txt");
+		String mdx = readTestResource(name + "-mdx.txt");
 
 		PivotModel model = getPivotModel();
 		model.setMdx(mdx);
@@ -112,7 +84,7 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 
 		String result = writer.toString().trim();
 
-		String expected = readTestResource(RESOURCE_PREFIX + fileName);
+		String expected = readTestResource(fileName);
 
 		String message = String
 				.format("Unexpected result : %s, hideSpans=%s, showDimensionTitle=%s, showParentMembers=%s",
