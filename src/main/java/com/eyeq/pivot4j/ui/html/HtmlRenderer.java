@@ -557,9 +557,10 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 			}
 			break;
 		case Title:
+		case Aggregation:
 			if (context.getAxis() == Axis.COLUMNS) {
 				styleClass = columnTitleStyleClass;
-			} else {
+			} else if (context.getAxis() == Axis.ROWS) {
 				styleClass = rowTitleStyleClass;
 			}
 			break;
