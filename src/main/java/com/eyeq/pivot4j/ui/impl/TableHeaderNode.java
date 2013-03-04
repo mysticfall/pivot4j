@@ -219,7 +219,8 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 							&& !OlapUtils.equals(rootLevel, parent.getLevel())) {
 						parent = getReference().getParentMember(parent);
 
-						if (!levels.contains(parent.getLevel())) {
+						if (parent == null
+								|| !levels.contains(parent.getLevel())) {
 							continue;
 						}
 
