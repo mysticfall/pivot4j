@@ -11,115 +11,55 @@ package com.eyeq.pivot4j.ui.aggregator;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.olap4j.Axis;
 
-import com.eyeq.pivot4j.AbstractIntegrationTestCase;
-import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.ui.html.HtmlRenderer;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
-import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
 import com.gargoylesoftware.htmlunit.html.HtmlTableHeader;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
-public class AggregatorIT extends AbstractIntegrationTestCase {
-
-	private boolean deleteTestFile = true;
-
-	private HtmlTable table;
+public class AggregatorFullIT extends AbstractAggregatorTestCase {
 
 	/**
-	 * @return the table
+	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#getQueryName()
 	 */
-	protected HtmlTable getTable() {
-		return table;
+	@Override
+	protected String getQueryName() {
+		return "full";
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.AbstractIntegrationTestCase#setUp()
+	 * @param renderer
+	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#configureAggregators(com.eyeq.pivot4j.ui.PivotRenderer)
 	 */
 	@Override
-	public void setUp() throws Exception {
-		super.setUp();
+	protected void configureAggregators(PivotRenderer renderer) {
+		renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Grand,
+				MinimumAggregator.NAME);
+		renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Hierarchy,
+				TotalAggregator.NAME);
+		renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Member,
+				AverageAggregator.NAME);
 
-		PivotModel model = getPivotModel();
-		model.setMdx(readTestResource("mdx.txt"));
-		model.initialize();
-
-		Writer writer = null;
-
-		File file = File.createTempFile("pivot4j-", ".html");
-
-		if (deleteTestFile) {
-			file.deleteOnExit();
-		}
-
-		try {
-			writer = new FileWriter(file);
-
-			HtmlRenderer renderer = new HtmlRenderer(writer);
-			renderer.initialize();
-
-			renderer.setTableId("pivot");
-			renderer.setBorder(1);
-			renderer.setHideSpans(false);
-			renderer.setShowDimensionTitle(true);
-			renderer.setShowParentMembers(true);
-
-			renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Grand,
-					MinimumAggregator.NAME);
-			renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Hierarchy,
-					TotalAggregator.NAME);
-			renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Member,
-					AverageAggregator.NAME);
-
-			renderer.setAggregatorName(Axis.COLUMNS, AggregatorPosition.Grand,
-					MinimumAggregator.NAME);
-			renderer.setAggregatorName(Axis.COLUMNS,
-					AggregatorPosition.Hierarchy, TotalAggregator.NAME);
-			renderer.setAggregatorName(Axis.COLUMNS, AggregatorPosition.Member,
-					AverageAggregator.NAME);
-
-			renderer.render(model);
-		} finally {
-			writer.flush();
-			IOUtils.closeQuietly(writer);
-		}
-
-		WebClient webClient = new WebClient();
-		HtmlPage page = webClient.getPage(file.toURI().toURL());
-
-		this.table = page.getHtmlElementById("pivot");
-
-		assertThat("Table element is not found.", table, is(notNullValue()));
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.AbstractIntegrationTestCase#tearDown()
-	 */
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-
-		this.table = null;
+		renderer.setAggregatorName(Axis.COLUMNS, AggregatorPosition.Grand,
+				MinimumAggregator.NAME);
+		renderer.setAggregatorName(Axis.COLUMNS, AggregatorPosition.Hierarchy,
+				TotalAggregator.NAME);
+		renderer.setAggregatorName(Axis.COLUMNS, AggregatorPosition.Member,
+				AverageAggregator.NAME);
 	}
 
 	@Test
 	public void testAggregation() throws IOException {
+		HtmlTable table = getTable();
+
 		HtmlTableHeader header = table.getHeader();
 
 		List<HtmlTableRow> rows = header.getRows();
@@ -239,39 +179,5 @@ public class AggregatorIT extends AbstractIntegrationTestCase {
 		// Column axis aggregation
 		// (Bulk Mail, M, Food, Frozen Foods / Minimum, Unit Sales)
 		assertCell(rows, 7, 45, 1, 1, "8");
-	}
-
-	/**
-	 * @param cell
-	 * @param rowIndex
-	 * @param colIndex
-	 * @param rowSpan
-	 * @param colSpan
-	 * @param label
-	 */
-	protected void assertCell(List<HtmlTableRow> rows, int rowIndex,
-			int colIndex, int rowSpan, int colSpan, String label) {
-		String coords = String.format("(%s, %s).", rowIndex, colIndex);
-
-		assertThat("Insufficient row count" + coords, rows.size(),
-				is(greaterThan(rowIndex)));
-
-		HtmlTableRow row = rows.get(rowIndex);
-
-		assertThat("Insufficient column count" + coords, row.getCells().size(),
-				is(greaterThan(colIndex)));
-
-		HtmlTableCell cell = row.getCell(colIndex);
-
-		assertThat("Wrong row span of header cell" + coords, cell.getRowSpan(),
-				is(equalTo(rowSpan)));
-
-		assertThat("Wrong column span of header cell" + coords,
-				cell.getColumnSpan(), is(equalTo(colSpan)));
-
-		if (label != null) {
-			assertThat("Unexpected cell content" + coords,
-					cell.getTextContent(), is(equalToIgnoringWhiteSpace(label)));
-		}
 	}
 }
