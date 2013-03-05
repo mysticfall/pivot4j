@@ -130,12 +130,13 @@ public class AggregatorIT extends AbstractIntegrationTestCase {
 
 		// Column headers
 		assertCell(rows, 0, 0, 5, 4, null);
-		assertCell(rows, 0, 1, 1, 39, "Time");
+		assertCell(rows, 0, 1, 1, 45, "Time");
 
 		assertCell(rows, 1, 0, 2, 9, "Q1");
 		assertCell(rows, 1, 1, 2, 9, "Q2");
-		assertCell(rows, 1, 2, 1, 18, "Q2");
-		assertCell(rows, 1, 3, 4, 3, "Minimum");
+		assertCell(rows, 1, 2, 1, 21, "Q2");
+		assertCell(rows, 1, 3, 4, 3, "Total");
+		assertCell(rows, 1, 4, 4, 3, "Minimum");
 
 		assertCell(rows, 2, 0, 1, 9, "5");
 		assertCell(rows, 2, 1, 1, 9, "6");
@@ -179,7 +180,7 @@ public class AggregatorIT extends AbstractIntegrationTestCase {
 		rows = bodies.get(0).getRows();
 
 		assertThat("Table content is missing.", rows, is(notNullValue()));
-		assertThat("Not enough content rows.", rows.size(), is(equalTo(47)));
+		assertThat("Not enough content rows.", rows.size(), is(equalTo(48)));
 
 		assertCell(rows, 0, 0, 23, 1, "Bulk Mail");
 		assertCell(rows, 0, 1, 11, 1, "M");
@@ -205,7 +206,7 @@ public class AggregatorIT extends AbstractIntegrationTestCase {
 		assertCell(rows, 22, 0, 1, 3, "Total");
 
 		// Axis total title
-		assertCell(rows, 46, 0, 1, 4, "Minimum");
+		assertCell(rows, 47, 0, 1, 4, "Minimum");
 
 		// Row axis member aggregation
 		// (Bulk Mail, M, Food, Average / Q1, F, Store Sales)
@@ -221,7 +222,11 @@ public class AggregatorIT extends AbstractIntegrationTestCase {
 
 		// Row axis aggregation
 		// (Minimum / Q1, F, Store Sales)
-		assertCell(rows, 46, 1, 1, 1, "2.26");
+		assertCell(rows, 47, 1, 1, 1, "2.26");
+
+		// Column axis member aggregation
+		// (Bulk Mail, M, Food, Frozen Foods / Q2, 6, Average, Unit Sales)
+		assertCell(rows, 7, 39, 1, 1, "16.5");
 
 		// Column axis hierarchy aggregation
 		// (Daily Paper, S, Drink, Average / Q2, Total, Store Cost)
@@ -233,7 +238,7 @@ public class AggregatorIT extends AbstractIntegrationTestCase {
 
 		// Column axis aggregation
 		// (Bulk Mail, M, Food, Frozen Foods / Minimum, Unit Sales)
-		assertCell(rows, 7, 39, 1, 1, "8");
+		assertCell(rows, 7, 45, 1, 1, "8");
 	}
 
 	/**

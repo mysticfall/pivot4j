@@ -560,6 +560,16 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 		Map<Hierarchy, List<Level>> levelsMap = new HashMap<Hierarchy, List<Level>>();
 
+		Comparator<Level> levelComparator = new Comparator<Level>() {
+
+			@Override
+			public int compare(Level l1, Level l2) {
+				Integer d1 = l1.getDepth();
+				Integer d2 = l2.getDepth();
+				return d1.compareTo(d2);
+			}
+		};
+
 		boolean containsMeasure = false;
 
 		List<Member> firstMembers = positions.get(0).getMembers();
@@ -637,6 +647,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 				if (!levels.contains(member.getLevel())) {
 					levels.add(0, member.getLevel());
+					Collections.sort(levels, levelComparator);
 				}
 
 				TableHeaderNode childNode = new TableHeaderNode(nodeContext);
@@ -649,6 +660,27 @@ public class RenderStrategyImpl implements RenderStrategy {
 				}
 
 				lastChild = childNode;
+
+				if (hierarchyAggregatorName != null && lastMembers != null) {
+					int start = memberCount - 1;
+
+					if (containsMeasure) {
+						start--;
+					}
+
+					if (i < start) {
+						Member lastMember = lastMembers.get(i);
+
+						if (OlapUtils.equals(lastMember.getHierarchy(),
+								member.getHierarchy())
+								&& !OlapUtils.equals(lastMember, member)) {
+							createAggregators(hierarchyAggregatorName,
+									nodeContext, aggregators, axisRoot, null,
+									lastMembers.subList(0, i + 1),
+									totalMeasures);
+						}
+					}
+				}
 
 				if (memberAggregatorName != null) {
 					List<AggregationTarget> memberParents = memberParentMap
@@ -669,6 +701,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 					Member parentMember = axisRoot.getReference()
 							.getParentMember(member);
+
 					if (parentMember != null) {
 						if (lastSibling == null
 								|| axisRoot.getReference()
@@ -695,30 +728,18 @@ public class RenderStrategyImpl implements RenderStrategy {
 										lastMembers.subList(0, i));
 								path.add(lastParent.getParent());
 
+								Level parentLevel = lastParent.getParent()
+										.getLevel();
+								if (!levels.contains(parentLevel)) {
+									levels.add(0, parentLevel);
+									Collections.sort(levels, levelComparator);
+								}
+
 								createAggregators(memberAggregatorName,
 										nodeContext, aggregators, axisRoot,
 										lastParent.getLevel(), path,
 										totalMeasures);
 							}
-						}
-					}
-				}
-
-				if (hierarchyAggregatorName != null && lastMembers != null) {
-					int start = memberCount - 1;
-
-					if (containsMeasure) {
-						start--;
-					}
-
-					if (i < start) {
-						Member lastMember = lastMembers.get(i);
-
-						if (!OlapUtils.equals(lastMember, member)) {
-							createAggregators(hierarchyAggregatorName,
-									nodeContext, aggregators, axisRoot, null,
-									lastMembers.subList(0, i + 1),
-									totalMeasures);
 						}
 					}
 				}
@@ -731,8 +752,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 			lastMembers = members;
 		}
 
-		if ((aggregatorName != null || hierarchyAggregatorName != null)
-				&& lastMembers != null) {
+		if (lastMembers != null) {
 			int memberCount = lastMembers.size();
 
 			int start = memberCount - 1;
@@ -742,34 +762,44 @@ public class RenderStrategyImpl implements RenderStrategy {
 			}
 
 			for (int i = start; i >= 0; i--) {
-				if (i == 0) {
-					if (aggregatorName != null) {
-						createAggregators(aggregatorName, nodeContext,
-								aggregators, axisRoot, null,
-								lastMembers.subList(0, i), grandTotalMeasures);
-					}
-				} else {
-					if (hierarchyAggregatorName != null) {
-						createAggregators(hierarchyAggregatorName, nodeContext,
-								aggregators, axisRoot, null,
-								lastMembers.subList(0, i), totalMeasures);
+				if (memberAggregatorName != null) {
+					Hierarchy hierarchy = nodeContext.getHierarchies().get(i);
+
+					Level rootLevel = nodeContext.getLevels(hierarchy).get(0);
+
+					List<AggregationTarget> memberParents = memberParentMap
+							.get(hierarchy);
+
+					for (AggregationTarget target : memberParents) {
+						Member member = target.getParent();
+
+						if (member.getLevel().getDepth() < rootLevel.getDepth()) {
+							continue;
+						}
+
+						List<Member> path = new ArrayList<Member>(
+								lastMembers.subList(0, i));
+						path.add(member);
+
+						createAggregators(memberAggregatorName, nodeContext,
+								aggregators, axisRoot, target.getLevel(), path,
+								totalMeasures);
 					}
 				}
+
+				if (hierarchyAggregatorName != null) {
+					createAggregators(hierarchyAggregatorName, nodeContext,
+							aggregators, axisRoot, null,
+							lastMembers.subList(0, i), totalMeasures);
+				}
 			}
-		}
 
-		Comparator<Level> comparator = new Comparator<Level>() {
+			if (aggregatorName != null) {
+				List<Member> members = Collections.emptyList();
 
-			@Override
-			public int compare(Level l1, Level l2) {
-				Integer d1 = l1.getDepth();
-				Integer d2 = l2.getDepth();
-				return d1.compareTo(d2);
+				createAggregators(aggregatorName, nodeContext, aggregators,
+						axisRoot, null, members, grandTotalMeasures);
 			}
-		};
-
-		for (List<Level> levels : levelsMap.values()) {
-			Collections.sort(levels, comparator);
 		}
 
 		if (logger.isDebugEnabled()) {

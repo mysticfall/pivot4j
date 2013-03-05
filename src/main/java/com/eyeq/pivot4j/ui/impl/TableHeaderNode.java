@@ -13,13 +13,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.Axis;
+import org.olap4j.OlapException;
 import org.olap4j.Position;
+import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
 
+import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 import com.eyeq.pivot4j.util.OlapUtils;
 import com.eyeq.pivot4j.util.TreeNode;
@@ -337,15 +341,43 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	 * @return
 	 */
 	protected boolean canMergeWith(TableHeaderNode sibling) {
-		if (OlapUtils.equals(hierarchy, sibling.getHierarchy())) {
-			if (OlapUtils.equals(member, sibling.getMember())) {
-				if (OlapUtils.equals(property, sibling.getProperty())) {
-					return getRowSpan() == sibling.getRowSpan();
-				}
+		if (!OlapUtils.equals(hierarchy, sibling.getHierarchy())) {
+			return false;
+		}
+
+		if (!OlapUtils.equals(member, sibling.getMember())) {
+			return false;
+		}
+
+		if (!OlapUtils.equals(property, sibling.getProperty())) {
+			return false;
+		}
+
+		if (!OlapUtils.equals(property, sibling.getProperty())) {
+			return false;
+		}
+
+		if (aggregator == null) {
+			if (sibling.getAggregator() != null) {
+				return false;
+			}
+		} else {
+			Aggregator other = sibling.getAggregator();
+
+			if (other == null) {
+				return false;
+			}
+
+			if (!ObjectUtils.equals(aggregator.getName(), other.getName())) {
+				return false;
+			}
+
+			if (!ObjectUtils.equals(aggregator.getLevel(), other.getLevel())) {
+				return false;
 			}
 		}
 
-		return false;
+		return getRowSpan() == sibling.getRowSpan();
 	}
 
 	public int getColIndex() {
@@ -399,10 +431,10 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 				}
 			}
 
-			if (aggregator != null && member == null) {
-				final Map<Hierarchy, Integer> maxSpans = new HashMap<Hierarchy, Integer>(
-						getReference().getHierarchies().size());
+			final Map<Hierarchy, Integer> maxSpans = new HashMap<Hierarchy, Integer>(
+					getReference().getHierarchies().size());
 
+			if (aggregator != null) {
 				getRoot().walkTree(new TreeNodeCallback<TableAxisContext>() {
 
 					@Override
@@ -441,7 +473,9 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 						return TreeNodeCallback.CONTINUE;
 					}
 				});
+			}
 
+			if (member == null) {
 				int totalSpans = 0;
 
 				for (Integer span : maxSpans.values()) {
@@ -531,6 +565,29 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 				});
 
 				this.rowSpan = Math.max(1, maxSpan[0] - childSpan[0]);
+
+				if (aggregator != null) {
+					boolean child = false;
+
+					for (Hierarchy hier : getReference().getHierarchies()) {
+						if (OlapUtils.equals(hier, hierarchy)) {
+							child = true;
+							continue;
+						}
+
+						Type type;
+
+						try {
+							type = hier.getDimension().getDimensionType();
+						} catch (OlapException e) {
+							throw new PivotException(e);
+						}
+
+						if (child && type != Type.MEASURE) {
+							this.rowSpan += maxSpans.get(hier);
+						}
+					}
+				}
 			}
 		}
 
