@@ -694,10 +694,9 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 								if (!OlapUtils.equals(childMember, member)) {
 									return TreeNodeCallback.CONTINUE_SIBLING;
 								}
-							} else if (depth < childDepth) {
-								return TreeNodeCallback.CONTINUE_PARENT;
-							} else if (!getReference().getAncestorMembers(
-									member).contains(childMember)) {
+							} else if (depth < childDepth
+									|| !getReference().getAncestorMembers(
+											member).contains(childMember)) {
 								return TreeNodeCallback.CONTINUE_SIBLING;
 							}
 						}
