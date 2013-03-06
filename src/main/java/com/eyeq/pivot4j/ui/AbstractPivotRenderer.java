@@ -9,6 +9,8 @@
 package com.eyeq.pivot4j.ui;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	private AggregatorFactory aggregatorFactory = new DefaultAggregatorFactory();
 
-	private HashMap<AggregatorKey, String> aggregatorNames = new HashMap<AggregatorKey, String>();
+	private HashMap<AggregatorKey, List<String>> aggregatorNames = new HashMap<AggregatorKey, List<String>>();
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.PivotRenderer#initialize()
@@ -240,27 +242,111 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getAggregatorName(org.olap4j.Axis,
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getAggregators(org.olap4j.Axis,
 	 *      com.eyeq.pivot4j.ui.aggregator.AggregatorPosition)
 	 */
 	@Override
-	public String getAggregatorName(Axis axis, AggregatorPosition position) {
-		return aggregatorNames.get(new AggregatorKey(axis, position));
+	public List<String> getAggregators(Axis axis, AggregatorPosition position) {
+		if (axis == null) {
+			throw new NullArgumentException("axis");
+		}
+
+		if (position == null) {
+			throw new NullArgumentException("position");
+		}
+
+		List<String> names = aggregatorNames.get(new AggregatorKey(axis,
+				position));
+
+		if (names == null) {
+			names = Collections.emptyList();
+		}
+
+		return names;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setAggregatorName(org.olap4j.Axis,
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#addAggregator(org.olap4j.Axis,
 	 *      com.eyeq.pivot4j.ui.aggregator.AggregatorPosition, java.lang.String)
 	 */
 	@Override
-	public void setAggregatorName(Axis axis, AggregatorPosition position,
+	public void addAggregator(Axis axis, AggregatorPosition position,
 			String name) {
-		AggregatorKey key = new AggregatorKey(axis, position);
+		if (axis == null) {
+			throw new NullArgumentException("axis");
+		}
+
+		if (position == null) {
+			throw new NullArgumentException("position");
+		}
 
 		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+
+		AggregatorKey key = new AggregatorKey(axis, position);
+
+		List<String> names = aggregatorNames.get(key);
+
+		if (names == null) {
+			names = new ArrayList<String>();
+			aggregatorNames.put(key, names);
+		}
+
+		if (!names.contains(name)) {
+			names.add(name);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#removeAggregator(org.olap4j.Axis,
+	 *      com.eyeq.pivot4j.ui.aggregator.AggregatorPosition, java.lang.String)
+	 */
+	@Override
+	public void removeAggregator(Axis axis, AggregatorPosition position,
+			String name) {
+		if (axis == null) {
+			throw new NullArgumentException("axis");
+		}
+
+		if (position == null) {
+			throw new NullArgumentException("position");
+		}
+
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+
+		AggregatorKey key = new AggregatorKey(axis, position);
+
+		List<String> names = aggregatorNames.get(key);
+
+		if (names != null) {
+			names.remove(name);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setAggregators(org.olap4j.Axis,
+	 *      com.eyeq.pivot4j.ui.aggregator.AggregatorPosition, java.util.List)
+	 */
+	@Override
+	public void setAggregators(Axis axis, AggregatorPosition position,
+			List<String> names) {
+		if (axis == null) {
+			throw new NullArgumentException("axis");
+		}
+
+		if (position == null) {
+			throw new NullArgumentException("position");
+		}
+
+		AggregatorKey key = new AggregatorKey(axis, position);
+
+		if (names == null || names.isEmpty()) {
 			aggregatorNames.remove(key);
 		} else {
-			aggregatorNames.put(key, name);
+			aggregatorNames.put(key, names);
 		}
 	}
 
@@ -269,20 +355,20 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 */
 	@Override
 	public void swapAxes() {
-		HashMap<AggregatorKey, String> names = new HashMap<AggregatorKey, String>(
+		HashMap<AggregatorKey, List<String>> map = new HashMap<AggregatorKey, List<String>>(
 				aggregatorNames.size());
 
 		for (AggregatorKey key : aggregatorNames.keySet()) {
-			String value = aggregatorNames.get(key);
+			List<String> names = aggregatorNames.get(key);
 
 			if (key.axis == Axis.ROWS) {
-				names.put(new AggregatorKey(Axis.COLUMNS, key.position), value);
+				map.put(new AggregatorKey(Axis.COLUMNS, key.position), names);
 			} else {
-				names.put(new AggregatorKey(Axis.ROWS, key.position), value);
+				map.put(new AggregatorKey(Axis.ROWS, key.position), names);
 			}
 		}
 
-		this.aggregatorNames = names;
+		this.aggregatorNames = map;
 	}
 
 	/**
@@ -309,7 +395,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		this.showDimensionTitle = (Boolean) states[0];
 		this.showParentMembers = (Boolean) states[1];
 		this.hideSpans = (Boolean) states[2];
-		this.aggregatorNames = (HashMap<AggregatorKey, String>) states[3];
+		this.aggregatorNames = (HashMap<AggregatorKey, List<String>>) states[3];
 
 		initialize();
 	}
@@ -342,20 +428,24 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 				Axis axis = key.getAxis();
 				AggregatorPosition position = key.getPosition();
 
-				String name = aggregatorNames.get(key);
+				List<String> names = aggregatorNames.get(key);
 
-				configuration.addProperty(String.format(
-						"render.aggregations.aggregation(%s)", index), name);
-				configuration.addProperty(String.format(
-						"render.aggregations.aggregation(%s)[@axis]", index),
-						axis.name());
-				configuration
-						.addProperty(
-								String.format(
-										"render.aggregations.aggregation(%s)[@position]",
-										index), position.name());
+				for (String name : names) {
+					configuration
+							.addProperty(String.format(
+									"render.aggregations.aggregation(%s)",
+									index), name);
+					configuration
+							.addProperty(
+									String.format(
+											"render.aggregations.aggregation(%s)[@axis]",
+											index), axis.name());
+					configuration.addProperty(String.format(
+							"render.aggregations.aggregation(%s)[@position]",
+							index), position.name());
 
-				index++;
+					index++;
+				}
 			}
 		}
 	}
@@ -393,8 +483,18 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 								.format("render.aggregations.aggregation(%s)[@position]",
 										index)));
 
-				aggregatorNames.put(new AggregatorKey(axis, position),
-						value.toString());
+				AggregatorKey key = new AggregatorKey(axis, position);
+
+				List<String> names = aggregatorNames.get(key);
+
+				if (names == null) {
+					names = new ArrayList<String>();
+					aggregatorNames.put(key, names);
+				}
+
+				if (!names.contains(value)) {
+					names.add(value.toString());
+				}
 
 				index++;
 			}
@@ -472,5 +572,4 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			return axis == otherKey.axis && position == otherKey.position;
 		}
 	}
-
 }

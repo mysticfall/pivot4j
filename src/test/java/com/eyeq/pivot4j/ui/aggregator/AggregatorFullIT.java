@@ -41,18 +41,18 @@ public class AggregatorFullIT extends AbstractAggregatorTestCase {
 	 */
 	@Override
 	protected void configureAggregators(PivotRenderer renderer) {
-		renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Grand,
+		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Grand,
 				MinimumAggregator.NAME);
-		renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Hierarchy,
+		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Hierarchy,
 				TotalAggregator.NAME);
-		renderer.setAggregatorName(Axis.ROWS, AggregatorPosition.Member,
+		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Member,
 				AverageAggregator.NAME);
 
-		renderer.setAggregatorName(Axis.COLUMNS, AggregatorPosition.Grand,
+		renderer.addAggregator(Axis.COLUMNS, AggregatorPosition.Grand,
 				MinimumAggregator.NAME);
-		renderer.setAggregatorName(Axis.COLUMNS, AggregatorPosition.Hierarchy,
+		renderer.addAggregator(Axis.COLUMNS, AggregatorPosition.Hierarchy,
 				TotalAggregator.NAME);
-		renderer.setAggregatorName(Axis.COLUMNS, AggregatorPosition.Member,
+		renderer.addAggregator(Axis.COLUMNS, AggregatorPosition.Member,
 				AverageAggregator.NAME);
 	}
 

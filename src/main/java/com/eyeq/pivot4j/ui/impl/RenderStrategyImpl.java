@@ -586,18 +586,30 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 		AggregatorFactory aggregatorFactory = renderer.getAggregatorFactory();
 
-		String aggregatorName = null;
-		String hierarchyAggregatorName = null;
-		String memberAggregatorName = null;
+		List<String> aggregatorNames = null;
+		List<String> hierarchyAggregatorNames = null;
+		List<String> memberAggregatorNames = null;
 
 		if (aggregatorFactory != null
 				&& (!containsMeasure || index == firstMembers.size() - 1)) {
-			aggregatorName = renderer.getAggregatorName(axis,
+			aggregatorNames = renderer.getAggregators(axis,
 					AggregatorPosition.Grand);
-			hierarchyAggregatorName = renderer.getAggregatorName(axis,
+			hierarchyAggregatorNames = renderer.getAggregators(axis,
 					AggregatorPosition.Hierarchy);
-			memberAggregatorName = renderer.getAggregatorName(axis,
+			memberAggregatorNames = renderer.getAggregators(axis,
 					AggregatorPosition.Member);
+		}
+
+		if (aggregatorNames == null) {
+			aggregatorNames = Collections.emptyList();
+		}
+
+		if (hierarchyAggregatorNames == null) {
+			hierarchyAggregatorNames = Collections.emptyList();
+		}
+
+		if (memberAggregatorNames == null) {
+			memberAggregatorNames = Collections.emptyList();
 		}
 
 		TableAxisContext nodeContext = new TableAxisContext(axis, hierarchies,
@@ -661,7 +673,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 				lastChild = childNode;
 
-				if (hierarchyAggregatorName != null && lastMembers != null) {
+				if (!hierarchyAggregatorNames.isEmpty() && lastMembers != null) {
 					int start = memberCount - 1;
 
 					if (containsMeasure) {
@@ -674,15 +686,17 @@ public class RenderStrategyImpl implements RenderStrategy {
 						if (OlapUtils.equals(lastMember.getHierarchy(),
 								member.getHierarchy())
 								&& !OlapUtils.equals(lastMember, member)) {
-							createAggregators(hierarchyAggregatorName,
-									nodeContext, aggregators, axisRoot, null,
-									lastMembers.subList(0, i + 1),
-									totalMeasures);
+							for (String aggregatorName : hierarchyAggregatorNames) {
+								createAggregators(aggregatorName, nodeContext,
+										aggregators, axisRoot, null,
+										lastMembers.subList(0, i + 1),
+										totalMeasures);
+							}
 						}
 					}
 				}
 
-				if (memberAggregatorName != null) {
+				if (!memberAggregatorNames.isEmpty()) {
 					List<AggregationTarget> memberParents = memberParentMap
 							.get(member.getHierarchy());
 
@@ -735,10 +749,12 @@ public class RenderStrategyImpl implements RenderStrategy {
 									Collections.sort(levels, levelComparator);
 								}
 
-								createAggregators(memberAggregatorName,
-										nodeContext, aggregators, axisRoot,
-										lastParent.getLevel(), path,
-										totalMeasures);
+								for (String aggregatorName : memberAggregatorNames) {
+									createAggregators(aggregatorName,
+											nodeContext, aggregators, axisRoot,
+											lastParent.getLevel(), path,
+											totalMeasures);
+								}
 							}
 						}
 					}
@@ -762,7 +778,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 			}
 
 			for (int i = start; i >= 0; i--) {
-				if (memberAggregatorName != null) {
+				if (!memberAggregatorNames.isEmpty()) {
 					Hierarchy hierarchy = nodeContext.getHierarchies().get(i);
 
 					Level rootLevel = nodeContext.getLevels(hierarchy).get(0);
@@ -781,24 +797,30 @@ public class RenderStrategyImpl implements RenderStrategy {
 								lastMembers.subList(0, i));
 						path.add(member);
 
-						createAggregators(memberAggregatorName, nodeContext,
-								aggregators, axisRoot, target.getLevel(), path,
-								totalMeasures);
+						for (String aggregatorName : memberAggregatorNames) {
+							createAggregators(aggregatorName, nodeContext,
+									aggregators, axisRoot, target.getLevel(),
+									path, totalMeasures);
+						}
 					}
 				}
 
-				if (hierarchyAggregatorName != null) {
-					createAggregators(hierarchyAggregatorName, nodeContext,
-							aggregators, axisRoot, null,
-							lastMembers.subList(0, i), totalMeasures);
+				if (!hierarchyAggregatorNames.isEmpty()) {
+					for (String aggregatorName : hierarchyAggregatorNames) {
+						createAggregators(aggregatorName, nodeContext,
+								aggregators, axisRoot, null,
+								lastMembers.subList(0, i), totalMeasures);
+					}
 				}
 			}
 
-			if (aggregatorName != null) {
+			if (!aggregatorNames.isEmpty()) {
 				List<Member> members = Collections.emptyList();
 
-				createAggregators(aggregatorName, nodeContext, aggregators,
-						axisRoot, null, members, grandTotalMeasures);
+				for (String aggregatorName : aggregatorNames) {
+					createAggregators(aggregatorName, nodeContext, aggregators,
+							axisRoot, null, members, grandTotalMeasures);
+				}
 			}
 		}
 

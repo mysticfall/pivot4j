@@ -8,6 +8,8 @@
  */
 package com.eyeq.pivot4j.ui;
 
+import java.util.List;
+
 import org.olap4j.Axis;
 
 import com.eyeq.pivot4j.PivotModel;
@@ -40,9 +42,13 @@ public interface PivotRenderer extends Configurable, Bookmarkable {
 
 	AggregatorFactory getAggregatorFactory();
 
-	String getAggregatorName(Axis axis, AggregatorPosition position);
+	List<String> getAggregators(Axis axis, AggregatorPosition position);
 
-	void setAggregatorName(Axis axis, AggregatorPosition position, String name);
+	void addAggregator(Axis axis, AggregatorPosition position, String name);
+
+	void removeAggregator(Axis axis, AggregatorPosition position, String name);
+
+	void setAggregators(Axis axis, AggregatorPosition position, List<String> names);
 
 	void swapAxes();
 }
