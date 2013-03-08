@@ -1,0 +1,1 @@
+SELECT {[Measures].[Store Cost], [Measures].[Unit Sales]} ON COLUMNS, {[Product].[All Products]} ON ROWS FROM [Sales]
