@@ -20,6 +20,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
 
@@ -548,7 +549,9 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 						Level level = null;
 
-						if (nodeChild.getMember() != null) {
+						if (nodeChild == TableHeaderNode.this) {
+							return TreeNodeCallback.CONTINUE;
+						} else if (nodeChild.getMember() != null) {
 							level = nodeChild.getMember().getLevel();
 						} else if (nodeChild.getAggregator() != null) {
 							level = nodeChild.getAggregator().getLevel();
@@ -556,6 +559,14 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 						if (OlapUtils.equals(member.getLevel(), level)) {
 							int span = nodeChild.getHierarchyDescendents();
+
+							// Handling a corner case of #54
+							if (aggregator == null
+									&& nodeChild.getAggregator() != null
+									&& member instanceof Measure
+									&& getReference().getHierarchies().size() == 1) {
+								span++;
+							}
 
 							maxSpan[0] = Math.max(maxSpan[0], span);
 						}
