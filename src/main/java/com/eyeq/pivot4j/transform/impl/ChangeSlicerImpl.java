@@ -142,15 +142,26 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 				exp = createMemberSetExpression(hierarchy,
 						memberMap.get(hierarchy));
 			} else {
-				Exp[] sets = new Exp[hierarchies.size()];
-
 				int index = 0;
+
+				Exp[] sets = new Exp[2];
+
 				for (Hierarchy hierarchy : hierarchies) {
 					Exp set = createMemberSetExpression(hierarchy,
 							memberMap.get(hierarchy));
-					if (set != null) {
-						sets[index++] = set;
+					if (set == null) {
+						continue;
 					}
+
+					if (index < 2) {
+						sets[index] = set;
+					} else {
+						sets[0] = new FunCall("CrossJoin", Syntax.Function,
+								Arrays.asList(sets));
+						sets[1] = set;
+					}
+
+					index++;
 				}
 
 				exp = new FunCall("CrossJoin", Syntax.Function,
@@ -216,14 +227,25 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 			Hierarchy hier = hierarchies.get(0);
 			exp = createMemberSetExpression(hier, memberMap.get(hier));
 		} else if (size > 1) {
-			Exp[] sets = new Exp[hierarchies.size()];
-
 			int index = 0;
+
+			Exp[] sets = new Exp[2];
+
 			for (Hierarchy hier : hierarchies) {
 				Exp set = createMemberSetExpression(hier, memberMap.get(hier));
-				if (set != null) {
-					sets[index++] = set;
+				if (set == null) {
+					continue;
 				}
+
+				if (index < 2) {
+					sets[index] = set;
+				} else {
+					sets[0] = new FunCall("CrossJoin", Syntax.Function,
+							Arrays.asList(sets));
+					sets[1] = set;
+				}
+
+				index++;
 			}
 
 			exp = new FunCall("CrossJoin", Syntax.Function, Arrays.asList(sets));

@@ -189,4 +189,89 @@ public class ChangeSlicerImplIT extends AbstractTransformTestCase<ChangeSlicer> 
 						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] "
 						+ "WHERE CrossJoin([Time].[1997], [Gender].[M])")));
 	}
+
+	@Test
+	public void testSetSlicerWithManyHierarchies() throws OlapException {
+		ChangeSlicer transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Member year1997 = cube.lookupMember(IdentifierNode.parseIdentifier(
+				"[Time].[1997]").getSegmentList());
+		assertThat("Cannot look up member [Time].[1997]", year1997,
+				is(notNullValue()));
+
+		Member genderM = cube.lookupMember(IdentifierNode.parseIdentifier(
+				"[Gender].[M]").getSegmentList());
+
+		assertThat("Cannot look up member [Gender].[M]", genderM,
+				is(notNullValue()));
+
+		Member maritalStatusS = cube.lookupMember(IdentifierNode
+				.parseIdentifier("[Marital Status].[S]").getSegmentList());
+
+		assertThat("Cannot look up member [Marital Status].[S]",
+				maritalStatusS, is(notNullValue()));
+
+		List<Member> timeMembers = new ArrayList<Member>(1);
+		timeMembers.add(year1997);
+
+		List<Member> genderMembers = new ArrayList<Member>(1);
+		genderMembers.add(genderM);
+
+		List<Member> maritalStatusMembers = new ArrayList<Member>(1);
+		maritalStatusMembers.add(maritalStatusS);
+
+		transform.setSlicer(year1997.getHierarchy(), timeMembers);
+		transform.setSlicer(genderM.getHierarchy(), genderMembers);
+		transform
+				.setSlicer(maritalStatusS.getHierarchy(), maritalStatusMembers);
+
+		getPivotModel().getCellSet();
+
+		assertThat(
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] "
+						+ "WHERE CrossJoin(CrossJoin([Time].[1997], [Gender].[M]), [Marital Status].[S])")));
+	}
+
+	@Test
+	public void testSetSlicerWithManyHierarchies2() throws OlapException {
+		ChangeSlicer transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Member year1997 = cube.lookupMember(IdentifierNode.parseIdentifier(
+				"[Time].[1997]").getSegmentList());
+		assertThat("Cannot look up member [Time].[1997]", year1997,
+				is(notNullValue()));
+
+		Member genderM = cube.lookupMember(IdentifierNode.parseIdentifier(
+				"[Gender].[M]").getSegmentList());
+
+		assertThat("Cannot look up member [Gender].[M]", genderM,
+				is(notNullValue()));
+
+		Member maritalStatusS = cube.lookupMember(IdentifierNode
+				.parseIdentifier("[Marital Status].[S]").getSegmentList());
+
+		assertThat("Cannot look up member [Marital Status].[S]",
+				maritalStatusS, is(notNullValue()));
+
+		List<Member> members = new ArrayList<Member>(3);
+		members.add(year1997);
+		members.add(genderM);
+		members.add(maritalStatusS);
+
+		transform.setSlicer(members);
+
+		getPivotModel().getCellSet();
+
+		assertThat(
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] "
+						+ "WHERE CrossJoin(CrossJoin([Time].[1997], [Gender].[M]), [Marital Status].[S])")));
+	}
 }
