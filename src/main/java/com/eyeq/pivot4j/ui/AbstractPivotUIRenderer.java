@@ -171,16 +171,14 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 	}
 
 	/**
-	 * @param name
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getCommand(java.lang.String)
+	 * @see com.eyeq.pivot4j.ui.PivotUIRenderer#getCommand(java.lang.String)
 	 */
 	public CellCommand<?> getCommand(String name) {
 		return commands.get(name);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#addCommand(com.eyeq.pivot4j.ui.command
-	 *      .CellCommand)
+	 * @see com.eyeq.pivot4j.ui.PivotUIRenderer#addCommand(com.eyeq.pivot4j.ui.command.CellCommand)
 	 */
 	@Override
 	public void addCommand(CellCommand<?> command) {
@@ -188,7 +186,7 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#removeCommand(java.lang.String)
+	 * @see com.eyeq.pivot4j.ui.PivotUIRenderer#removeCommand(java.lang.String)
 	 */
 	@Override
 	public void removeCommand(String name) {
@@ -212,7 +210,7 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#startCell(com.eyeq.pivot4j.ui.RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#startCell(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void startCell(RenderContext context) {

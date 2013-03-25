@@ -25,7 +25,7 @@ public abstract class ExpressionParameter extends AbstractExp {
 
 	/**
 	 * @param namespace
-	 * @param function
+	 * @param expression
 	 */
 	public ExpressionParameter(String namespace, String expression) {
 		this.namespace = namespace;

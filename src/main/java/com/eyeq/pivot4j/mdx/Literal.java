@@ -117,7 +117,7 @@ public class Literal extends AbstractExp {
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitLiteral(this);

@@ -90,7 +90,7 @@ public class QuaxUtil {
 	 * 
 	 * @param pMember
 	 *            (parent)
-	 * @param cMember
+	 * @param cMembObj
 	 *            (child)
 	 * @return true if cMember (2.arg) is child of pMember (1.arg)
 	 */
@@ -103,9 +103,9 @@ public class QuaxUtil {
 	/**
 	 * Check, whether member is child of other member
 	 * 
-	 * @param pMember
-	 *            (child)
 	 * @param cMember
+	 *            (child)
+	 * @param pMembObj
 	 *            (parent)
 	 * @return true if cMember (1.arg) is child of pMember (2.arg)
 	 */
@@ -131,8 +131,8 @@ public class QuaxUtil {
 	/**
 	 * Check, whether funcall set contains member
 	 * 
-	 * @param f
-	 * @param m
+	 * @param oExp
+	 * @param member
 	 * @return true if FunCall contains member
 	 */
 	public boolean isMemberInFunCall(Exp oExp, Member member)
@@ -244,8 +244,8 @@ public class QuaxUtil {
 	/**
 	 * Check, whether funcall set contains descendant of a specific member
 	 * 
-	 * @param f
-	 * @param m
+	 * @param oExp
+	 * @param member
 	 * @return true if FunCall contains descendant of member
 	 */
 	public boolean isDescendantOfMemberInFunCall(Exp oExp, Member member)
@@ -373,7 +373,7 @@ public class QuaxUtil {
 	/**
 	 * Check, whether a member is on top level (has no parent);
 	 * 
-	 * @param m
+	 * @param oMem
 	 *            - member to be checked
 	 * @return true - if member is on top level
 	 */
@@ -475,7 +475,7 @@ public class QuaxUtil {
 	}
 
 	/**
-	 * @param oLevel
+	 * @param oExp
 	 * @return
 	 */
 	public Level levelForExp(Exp oExp) {
@@ -779,7 +779,7 @@ public class QuaxUtil {
 	 * 
 	 * @param oFun
 	 *            funcall expression
-	 * @param i
+	 * @param index
 	 *            index of argument
 	 * @return argument object
 	 */

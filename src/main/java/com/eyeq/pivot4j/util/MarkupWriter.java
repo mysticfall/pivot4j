@@ -105,9 +105,6 @@ public class MarkupWriter {
 		this.indentCharacter = indentCharacter;
 	}
 
-	/**
-	 * @param context
-	 */
 	protected void writeIndent() {
 		for (int i = 0; i < indent * indentSize; i++) {
 			writer.print(indentCharacter);

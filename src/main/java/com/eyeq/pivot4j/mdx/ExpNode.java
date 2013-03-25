@@ -27,7 +27,7 @@ public class ExpNode extends TreeNode<Exp> implements Serializable {
 	}
 
 	/**
-	 * @param obj
+	 * @param exp
 	 */
 	public ExpNode(Exp exp) {
 		super(exp);

@@ -81,7 +81,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.util.MarkupWriter#initialize()
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotUIRenderer#initialize()
 	 */
 	@Override
 	public void initialize() {
@@ -315,8 +315,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#startTable(com.eyeq.pivot4j.ui
-	 *      .RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#startTable(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void startTable(RenderContext context) {
@@ -354,8 +353,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#startHeader(com.eyeq.pivot4j.
-	 *      ui.RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#startHeader(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void startHeader(RenderContext context) {
@@ -363,8 +361,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endHeader(com.eyeq.pivot4j.ui
-	 *      .RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#endHeader(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void endHeader(RenderContext context) {
@@ -380,8 +377,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#startBody(com.eyeq.pivot4j.ui
-	 *      .RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#startBody(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void startBody(RenderContext context) {
@@ -389,8 +385,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endBody(com.eyeq.pivot4j.ui.
-	 *      RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#endBody(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void endBody(RenderContext context) {
@@ -406,8 +401,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endTable(com.eyeq.pivot4j.ui.
-	 *      RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#endTable(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void endTable(RenderContext context) {
@@ -415,8 +409,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#startRow(com.eyeq.pivot4j.ui.
-	 *      RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#startRow(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void startRow(RenderContext context) {
@@ -424,8 +417,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endRow(com.eyeq.pivot4j.ui.
-	 *      RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#endRow(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void endRow(RenderContext context) {
@@ -481,8 +473,8 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#startCell(com.eyeq.pivot4j.ui.RenderContext,
-	 *      java.util.Set)
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotUIRenderer#startCell(com.eyeq.pivot4j.ui.RenderContext,
+	 *      java.util.List)
 	 */
 	@Override
 	public void startCell(RenderContext context, List<CellCommand<?>> commands) {
@@ -511,8 +503,7 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#endCell(com.eyeq.pivot4j.ui.
-	 *      RenderContext)
+	 * @see com.eyeq.pivot4j.ui.PivotLayoutCallback#endCell(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public void endCell(RenderContext context) {

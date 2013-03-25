@@ -20,7 +20,8 @@ import org.olap4j.metadata.Level;
  * Use Case.
  * <ul>
  * <li>The GUI will examine the result of the olap query to find out which
- * levels are currently displayed on what axes.
+ * levels are currently displayed on what axes.</li>
+ * </ul>
  */
 public interface PlaceLevelsOnAxes extends Transform {
 

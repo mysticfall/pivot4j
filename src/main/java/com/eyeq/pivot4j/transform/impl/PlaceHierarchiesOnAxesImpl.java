@@ -214,7 +214,6 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	 * @param hierarchy
 	 * @param expandAllMember
 	 * @return
-	 * @throws OlapException
 	 */
 	protected Exp topLevelMembers(Hierarchy hierarchy, boolean expandAllMember) {
 		try {

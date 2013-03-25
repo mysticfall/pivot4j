@@ -43,7 +43,6 @@ public class ExpGenerator {
 	/**
 	 * Generate MDX Expression
 	 * 
-	 * @param genHierarchize
 	 * @return
 	 */
 	public Exp generate() {

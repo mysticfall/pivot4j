@@ -24,8 +24,6 @@ public class SapVariable extends AbstractExp {
 
 	/**
 	 * @param name
-	 * @param value
-	 * @param including
 	 */
 	public SapVariable(CompoundId name) {
 		this.name = name;
@@ -54,7 +52,7 @@ public class SapVariable extends AbstractExp {
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#toMdx()
+	 * @see com.eyeq.pivot4j.mdx.Exp#toMdx()
 	 */
 	public String toMdx() {
 		if (values.isEmpty()) {
@@ -102,7 +100,7 @@ public class SapVariable extends AbstractExp {
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitSapVariable(this);
@@ -146,9 +144,9 @@ public class SapVariable extends AbstractExp {
 		}
 
 		/**
-		 * @param values
+		 * @param lowValue
+		 * @param highValue
 		 * @param including
-		 * @param interval
 		 * @param option
 		 */
 		public Value(Exp lowValue, Exp highValue, boolean including,
@@ -226,6 +224,7 @@ public class SapVariable extends AbstractExp {
 
 		/**
 		 * @param visitor
+		 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 		 */
 		public void accept(ExpVisitor visitor) {
 			visitor.visitSapVariableValue(this);
@@ -240,7 +239,7 @@ public class SapVariable extends AbstractExp {
 		}
 
 		/**
-		 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#toMdx()
+		 * @see com.eyeq.pivot4j.mdx.Exp#toMdx()
 		 */
 		public String toMdx() {
 			if (lowValue == null || isInterval() && highValue == null) {

@@ -25,14 +25,14 @@ public class NonEmptyImpl extends AbstractTransform implements NonEmpty {
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.navi.NonEmpty#isNonEmpty()
+	 * @see com.eyeq.pivot4j.transform.NonEmpty#isNonEmpty()
 	 */
 	public boolean isNonEmpty() {
 		return getQueryAdapter().isNonEmpty();
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.navi.NonEmpty#setNonEmpty(boolean)
+	 * @see com.eyeq.pivot4j.transform.NonEmpty#setNonEmpty(boolean)
 	 */
 	public void setNonEmpty(boolean nonEmpty) {
 		getQueryAdapter().setNonEmpty(nonEmpty);

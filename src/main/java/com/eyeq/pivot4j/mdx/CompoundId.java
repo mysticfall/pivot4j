@@ -130,7 +130,7 @@ public class CompoundId extends AbstractExp {
 		}
 
 		/**
-		 * @param isKey
+		 * @param key
 		 *            the isKey to set
 		 */
 		public void setKey(boolean key) {
@@ -145,7 +145,7 @@ public class CompoundId extends AbstractExp {
 	/**
 	 * format to MDX
 	 * 
-	 * @see interface Exp
+	 * @see Exp
 	 */
 	public String toMdx() {
 		StringBuilder sb = new StringBuilder();
@@ -184,7 +184,7 @@ public class CompoundId extends AbstractExp {
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitCompoundId(this);

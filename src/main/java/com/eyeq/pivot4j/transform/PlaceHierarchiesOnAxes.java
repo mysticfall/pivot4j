@@ -20,19 +20,19 @@ import org.olap4j.metadata.Hierarchy;
  * <ul>
  * <li>The GUI will examine the result of the olap query to find out which
  * hierarchies are currently displayed on what axes. It will use
- * Axis.getHierarchies() for this
+ * Axis.getHierarchies() for this.</li>
  * 
  * <li>Then it will find out what Hierarchies exist by calling
- * OlapModel.getDimensions() and Dimension.getHierarchies().
+ * OlapModel.getDimensions() and Dimension.getHierarchies().</li>
  * 
  * <li>The Information will be presented to the user and he will be allowed to
- * change the mapping between axes and hierarchies.
+ * change the mapping between axes and hierarchies.</li>
  * 
  * <li>For every Hierarchy that the user selected for display on an axis, the
- * GUI will call createMemberExpression().
+ * GUI will call createMemberExpression().</li>
  * 
  * <li>For each axis the system will build the the array of memberExpressions
- * and call setAxis once.
+ * and call setAxis once.</li>
  * </ul>
  */
 public interface PlaceHierarchiesOnAxes extends Transform {
@@ -75,7 +75,7 @@ public interface PlaceHierarchiesOnAxes extends Transform {
 	 *            The target axis
 	 * @param hierarchy
 	 *            The hierarchy to move
-	 * @param index
+	 * @param position
 	 *            New hierarchy position
 	 */
 	void moveHierarchy(Axis axis, Hierarchy hierarchy, int position);

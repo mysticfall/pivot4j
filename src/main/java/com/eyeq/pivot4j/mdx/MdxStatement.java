@@ -88,7 +88,6 @@ public class MdxStatement extends AbstractExp {
 
 	/**
 	 * @param axis
-	 * @return
 	 */
 	public void setAxis(QueryAxis axis) {
 		removeAxis(axis.getAxis());

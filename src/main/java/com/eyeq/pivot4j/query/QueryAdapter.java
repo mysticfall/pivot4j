@@ -81,7 +81,6 @@ public class QueryAdapter implements Bookmarkable {
 
 	/**
 	 * @param model
-	 * @param parser
 	 */
 	public QueryAdapter(PivotModel model) {
 		if (model == null) {
@@ -475,8 +474,7 @@ public class QueryAdapter implements Bookmarkable {
 	/**
 	 * Add Order Funcall to QueryAxis
 	 * 
-	 * @param monAx
-	 * @param monSortMode
+	 * @param pq
 	 */
 	protected void orderAxis(MdxStatement pq) {
 		// Order(TopCount) is allowed, Order(Order) is not permitted
@@ -520,8 +518,8 @@ public class QueryAdapter implements Bookmarkable {
 	/**
 	 * Add Top/BottomCount Funcall to QueryAxis
 	 * 
-	 * @param monAx
-	 * @param nShow
+	 * @param pq
+	 * @param function
 	 */
 	protected void topBottomAxis(MdxStatement pq, String function) {
 		// TopCount(TopCount) and TopCount(Order) is not permitted
@@ -560,7 +558,7 @@ public class QueryAdapter implements Bookmarkable {
 	}
 
 	/**
-	 * @param parsedQuery
+	 * @param mdxQuery
 	 */
 	protected MdxStatement parseQuery(String mdxQuery) {
 		MdxParser parser = new MdxParserImpl();
@@ -573,7 +571,7 @@ public class QueryAdapter implements Bookmarkable {
 	 * array of member. Called from Model.getResult after the query was
 	 * executed.
 	 * 
-	 * @param result
+	 * @param cellSet
 	 *            the result which redefines the query axes
 	 */
 	public void afterExecute(CellSet cellSet) {
@@ -776,8 +774,8 @@ public class QueryAdapter implements Bookmarkable {
 	}
 
 	/**
-	 * @param position
-	 *            position to be expanded
+	 * @param pathMembers
+	 *            positions to be collapsed
 	 * @return true if the position can be collapsed
 	 */
 	public boolean canCollapse(List<Member> pathMembers) {
@@ -869,8 +867,8 @@ public class QueryAdapter implements Bookmarkable {
 	/**
 	 * Collapse a member in a specific position
 	 * 
-	 * @param position
-	 *            Position to be collapsed
+	 * @param pathMembers
+	 *            Positions to be collapsed
 	 */
 	public void collapse(List<Member> pathMembers) {
 		if (logger.isDebugEnabled()) {
@@ -962,7 +960,7 @@ public class QueryAdapter implements Bookmarkable {
 	}
 
 	/**
-	 * @param slicerExp
+	 * @param exp
 	 */
 	public void changeSlicer(Exp exp) {
 		parsedQuery.setSlicer(exp);

@@ -27,7 +27,7 @@ public class MemberParameter extends ExpressionParameter {
 
 	/**
 	 * @param namespace
-	 * @param function
+	 * @param expression
 	 */
 	public MemberParameter(String namespace, String expression) {
 		super(namespace, expression);
@@ -81,7 +81,7 @@ public class MemberParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitMemberParameter(this);

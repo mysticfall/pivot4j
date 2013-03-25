@@ -279,8 +279,7 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
-	 * @param dataSource
-	 * @return
+	 * @param connection
 	 * @throws SQLException
 	 */
 	protected void closeConnection(OlapConnection connection)
@@ -307,7 +306,8 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.PivotModel#getCatalog()
+	 * @return
+	 * @throws NotInitializedException
 	 */
 	public Catalog getCatalog() throws NotInitializedException {
 		checkInitialization();
@@ -560,14 +560,14 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.tonbeller.jpivot.core.Model#addModelChangeListener(ModelChangeListener)
+	 * @see com.eyeq.pivot4j.PivotModel#addModelChangeListener(com.eyeq.pivot4j.ModelChangeListener)
 	 */
 	public void addModelChangeListener(ModelChangeListener listener) {
 		modelListeners.add(listener);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.tonbeller.jpivot.core.Model#removeModelChangeListener(ModelChangeListener)
+	 * @see com.eyeq.pivot4j.PivotModel#removeModelChangeListener(com.eyeq.pivot4j.ModelChangeListener)
 	 */
 	public void removeModelChangeListener(ModelChangeListener listener) {
 		modelListeners.remove(listener);
@@ -714,8 +714,7 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
-	 * @param sort
-	 *            criteria (ASC,DESC,BASC,BDESC)
+	 * @see com.eyeq.pivot4j.PivotModel#setSortCriteria(com.eyeq.pivot4j.sort.SortCriteria)
 	 */
 	public void setSortCriteria(SortCriteria sortCriteria) {
 		if (this.sortCriteria == sortCriteria) {
@@ -773,14 +772,14 @@ public class PivotModelImpl implements PivotModel {
 
 	/**
 	 * @return top/bottom count
+	 * @see com.eyeq.pivot4j.PivotModel#getTopBottomCount()
 	 */
 	public int getTopBottomCount() {
 		return topBottomCount;
 	}
 
 	/**
-	 * @param top
-	 *            /bottom count
+	 * @see com.eyeq.pivot4j.PivotModel#setTopBottomCount(int)
 	 */
 	public void setTopBottomCount(int topBottomCount) {
 		if (this.topBottomCount == topBottomCount) {

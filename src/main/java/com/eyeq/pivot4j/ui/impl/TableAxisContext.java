@@ -139,7 +139,8 @@ public class TableAxisContext implements Cloneable {
 	/**
 	 * Temporary workaround for performance issue.
 	 * 
-	 * @see http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * 
 	 * @param member
 	 * @return
 	 */
@@ -157,7 +158,8 @@ public class TableAxisContext implements Cloneable {
 	/**
 	 * Temporary workaround for performance issue.
 	 * 
-	 * @see http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * 
 	 * @param member
 	 * @return
 	 */

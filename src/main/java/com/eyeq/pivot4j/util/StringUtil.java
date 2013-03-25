@@ -52,7 +52,7 @@ public class StringUtil {
 	 * @param strs
 	 *            - name parts
 	 * @param n
-	 *            - number of name parts, all if n <= 0
+	 *            - number of name parts, all if n &lt;= 0
 	 * @return unique name
 	 */
 	public static String createUName(String[] strs, int n) {

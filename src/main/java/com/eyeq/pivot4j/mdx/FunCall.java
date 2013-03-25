@@ -40,7 +40,7 @@ public class FunCall extends AbstractExp {
 	}
 
 	/**
-	 * @param fun
+	 * @param function
 	 * @param type
 	 * @param args
 	 */
@@ -126,7 +126,7 @@ public class FunCall extends AbstractExp {
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitFunCall(this);

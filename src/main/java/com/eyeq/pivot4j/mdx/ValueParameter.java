@@ -17,7 +17,7 @@ public class ValueParameter extends ExpressionParameter {
 
 	/**
 	 * @param namespace
-	 * @param function
+	 * @param expression
 	 */
 	public ValueParameter(String namespace, String expression) {
 		super(namespace, expression);
@@ -37,7 +37,7 @@ public class ValueParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept
+	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)
 	 */
 	public void accept(ExpVisitor visitor) {
 		visitor.visitValueParameter(this);
