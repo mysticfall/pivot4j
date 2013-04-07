@@ -1002,7 +1002,17 @@ public class PivotModelImpl implements PivotModel {
 			throw new NullArgumentException("configuration");
 		}
 
-		setMdx(configuration.getString("model.mdx"));
+		String mdx = configuration.getString("model.mdx");
+
+		setMdx(mdx);
+
+		if (mdx == null) {
+			if (logger.isWarnEnabled()) {
+				logger.warn("The configuration does not contain valid MDX query.");
+			}
+
+			return;
+		}
 
 		if (!isInitialized()) {
 			initialize();
