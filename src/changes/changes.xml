@@ -6,6 +6,38 @@
 		<author email="fender@eyeq.co.kr">Xavier Cho</author>
 	</properties>
 	<body>
+		<release version="0.7" date="2013-04-14" description="Pivot4J 0.7 release">
+			<action dev="mysticfall" type="fix" issue="34">
+				Unable to parse MDX with member names containing ']]' escape.
+			</action>
+			<action dev="mysticfall" type="add" issue="37">
+				Expression language support in MDX query.
+			</action>
+			<action dev="mysticfall" type="update" issue="42">
+				Custom / long term serialization support for StateHolder API.
+			</action>
+			<action dev="mysticfall" type="add" issue="44">
+				Implement visual total feature(based on render strategy API).
+			</action>
+			<action dev="mysticfall" type="fix" issue="46">
+				Use unique name instead of object itself when comparing between metadata elements.
+			</action>
+			<action dev="mysticfall" type="fix" issue="49">
+				Missing member aggregation at the last position of the hierarchy.
+			</action>
+			<action dev="mysticfall" type="update" issue="50">
+				Allow multiple aggregators per position.
+			</action>
+			<action dev="mysticfall" type="add">
+				[UI/Plugin] Add internalization/localisation support.
+			</action>
+			<action dev="it4biz" type="update">
+				[UI/Plugin] Brazilian Portuguese translation by IT4Biz and Professor Coruja Team.
+			</action>
+			<action dev="mysticfall" type="add">
+				[UI/Plugin] Add basic Selenium integration test cases.
+			</action>
+		</release>
 		<release version="0.6" date="2013-02-02" description="Pivot4J 0.6 release">
 			<action dev="mysticfall" type="add" issue="26">
 				Implemented PDF export feature.

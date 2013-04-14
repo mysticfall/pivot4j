@@ -3,7 +3,7 @@
             ------
             Xavier Cho
             ------
-             2012-11-18
+             2013-04-14
 
 How to Use Pivot4J
 
@@ -36,7 +36,7 @@ How to Use Pivot4J
         <dependency>
             <groupId>com.eyeq</groupId>
             <artifactId>pivot4j</artifactId>
-            <version>0.6</version>
+            <version>0.7</version>
         </dependency>
     </dependencies>
 </project>
@@ -171,7 +171,7 @@ writer.close();
 
 +-----+
 // From the original request, retrieve the model state and store it as a session attribute
-Serializable bookmark = model.bookmarkState();
+Serializable bookmark = model.saveState();
 
 session.setAttribute("pivotState", bookmark);
 

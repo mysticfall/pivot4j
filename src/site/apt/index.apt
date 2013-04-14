@@ -3,7 +3,7 @@
             ------
             Xavier Cho
             ------
-             2013-02-02
+             2013-04-14
 
 A New UI Independent JPivot Replacement
 
@@ -43,11 +43,19 @@ A New UI Independent JPivot Replacement
 
 	* Easy to use and very extensible renderer API including a concrete base implementation for web applications. 
 
-	* Built-in PDF and Excel exporters. 
+	* Built-in PDF and Excel exporters.
 
-	* A fully functional {{{./example.html}sample application}} based on Java Server Faces. 
+	* A fully functional {{{./example.html}sample application}} based on Java Server Faces.
+
+	* Visual total(non-MDX aggregation) support.
+
+	* Parameterized MDX support. 
 
 * News
+
+	* <<[2012-04-14]>> <<Pivot4J 0.7>> has been released. Visual total and expression language support was introduced 
+	with this version. Also, Brazilian Portuguese translation is done by {{{http://www.it4biz.com.br}IT4Biz}} and 
+	Professor Coruja Team.
 
 	* <<[2013-02-02]>> Decided to bump the version a little bit, so instead of 0.0.6, <<Pivot4J 0.6>> has been released. 
 	New features include PDF, Excel export support, and public MDX parser API. And we no longer maintain a separate 

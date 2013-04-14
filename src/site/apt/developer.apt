@@ -3,7 +3,7 @@
             ------
             Xavier Cho
             ------
-             2012-09-30
+             2013-04-14
 
 For Developers
 
@@ -17,14 +17,14 @@ For Developers
 
 	* {{{http://www.eclipse.org}Eclipse}} IDE (recommended).
 
-	* {{{http://www.eclipse.org/m2e}M2E}} 1.3 milestone or snapshot (recommended).
+	* {{{http://www.eclipse.org/m2e}M2E}} Maven Integration for Eclipse and WTP (recommended).
 
 ** Steps to Import Pivot4J Project to Eclipse
 
 	* From the project root directory, run below command to generate parser related source files :
 
 +-----+
-mvn compile
+mvn -Dmaven.test.skip=true verify
 +-----+
 
 	* Choose <<'File > Import > General / Existing Projects into Workspace'>> from Eclipse's main menu.
