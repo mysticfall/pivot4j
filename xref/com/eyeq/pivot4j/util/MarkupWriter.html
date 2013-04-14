@@ -22,27 +22,27 @@
 <a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> java.io.Writer;
 <a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> java.util.Map;
 <a class="jxr_linenumber" name="14" href="#14">14</a>  
-<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.StringUtils;
-<a class="jxr_linenumber" name="16" href="#16">16</a>  
-<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/eyeq/pivot4j/util/MarkupWriter.html">MarkupWriter</a> {
-<a class="jxr_linenumber" name="18" href="#18">18</a>  
-<a class="jxr_linenumber" name="19" href="#19">19</a>  	<strong class="jxr_keyword">private</strong> PrintWriter writer;
-<a class="jxr_linenumber" name="20" href="#20">20</a>  
-<a class="jxr_linenumber" name="21" href="#21">21</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> formatOutput = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="22" href="#22">22</a>  
-<a class="jxr_linenumber" name="23" href="#23">23</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> indent = 0;
-<a class="jxr_linenumber" name="24" href="#24">24</a>  
-<a class="jxr_linenumber" name="25" href="#25">25</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> indentSize = 1;
-<a class="jxr_linenumber" name="26" href="#26">26</a>  
-<a class="jxr_linenumber" name="27" href="#27">27</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">char</strong> indentCharacter = '\t';
-<a class="jxr_linenumber" name="28" href="#28">28</a>  
-<a class="jxr_linenumber" name="29" href="#29">29</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment">	 * @param writer</em>
-<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="32" href="#32">32</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../com/eyeq/pivot4j/util/MarkupWriter.html">MarkupWriter</a>(Writer writer) {
-<a class="jxr_linenumber" name="33" href="#33">33</a>  		<strong class="jxr_keyword">if</strong> (writer == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="34" href="#34">34</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="35" href="#35">35</a>  					<span class="jxr_string">"Missing required argument 'writer'."</span>);
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.NullArgumentException;
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.StringUtils;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/eyeq/pivot4j/util/MarkupWriter.html">MarkupWriter</a> {
+<a class="jxr_linenumber" name="19" href="#19">19</a>  
+<a class="jxr_linenumber" name="20" href="#20">20</a>  	<strong class="jxr_keyword">private</strong> PrintWriter writer;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  
+<a class="jxr_linenumber" name="22" href="#22">22</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> formatOutput = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  
+<a class="jxr_linenumber" name="24" href="#24">24</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> indent = 0;
+<a class="jxr_linenumber" name="25" href="#25">25</a>  
+<a class="jxr_linenumber" name="26" href="#26">26</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> indentSize = 1;
+<a class="jxr_linenumber" name="27" href="#27">27</a>  
+<a class="jxr_linenumber" name="28" href="#28">28</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">char</strong> indentCharacter = '\t';
+<a class="jxr_linenumber" name="29" href="#29">29</a>  
+<a class="jxr_linenumber" name="30" href="#30">30</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">	 * @param writer</em>
+<a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="33" href="#33">33</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../com/eyeq/pivot4j/util/MarkupWriter.html">MarkupWriter</a>(Writer writer) {
+<a class="jxr_linenumber" name="34" href="#34">34</a>  		<strong class="jxr_keyword">if</strong> (writer == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="35" href="#35">35</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"writer"</span>);
 <a class="jxr_linenumber" name="36" href="#36">36</a>  		}
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
 <a class="jxr_linenumber" name="38" href="#38">38</a>  		<strong class="jxr_keyword">this</strong>.writer = <strong class="jxr_keyword">new</strong> PrintWriter(writer);
@@ -115,92 +115,89 @@
 <a class="jxr_linenumber" name="105" href="#105">105</a> 		<strong class="jxr_keyword">this</strong>.indentCharacter = indentCharacter;
 <a class="jxr_linenumber" name="106" href="#106">106</a> 	}
 <a class="jxr_linenumber" name="107" href="#107">107</a> 
-<a class="jxr_linenumber" name="108" href="#108">108</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="109" href="#109">109</a> <em class="jxr_javadoccomment">	 * @param context</em>
-<a class="jxr_linenumber" name="110" href="#110">110</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="111" href="#111">111</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> writeIndent() {
-<a class="jxr_linenumber" name="112" href="#112">112</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; indent * indentSize; i++) {
-<a class="jxr_linenumber" name="113" href="#113">113</a> 			writer.print(indentCharacter);
-<a class="jxr_linenumber" name="114" href="#114">114</a> 		}
-<a class="jxr_linenumber" name="115" href="#115">115</a> 	}
-<a class="jxr_linenumber" name="116" href="#116">116</a> 
-<a class="jxr_linenumber" name="117" href="#117">117</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="118" href="#118">118</a> <em class="jxr_javadoccomment">	 * @param name</em>
-<a class="jxr_linenumber" name="119" href="#119">119</a> <em class="jxr_javadoccomment">	 * @param attributes</em>
-<a class="jxr_linenumber" name="120" href="#120">120</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="121" href="#121">121</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> startElement(String name, Map&lt;String, String&gt; attributes) {
-<a class="jxr_linenumber" name="122" href="#122">122</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
-<a class="jxr_linenumber" name="123" href="#123">123</a> 			writeIndent();
-<a class="jxr_linenumber" name="124" href="#124">124</a> 			indent++;
-<a class="jxr_linenumber" name="125" href="#125">125</a> 		}
+<a class="jxr_linenumber" name="108" href="#108">108</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> writeIndent() {
+<a class="jxr_linenumber" name="109" href="#109">109</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; indent * indentSize; i++) {
+<a class="jxr_linenumber" name="110" href="#110">110</a> 			writer.print(indentCharacter);
+<a class="jxr_linenumber" name="111" href="#111">111</a> 		}
+<a class="jxr_linenumber" name="112" href="#112">112</a> 	}
+<a class="jxr_linenumber" name="113" href="#113">113</a> 
+<a class="jxr_linenumber" name="114" href="#114">114</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="115" href="#115">115</a> <em class="jxr_javadoccomment">	 * @param name</em>
+<a class="jxr_linenumber" name="116" href="#116">116</a> <em class="jxr_javadoccomment">	 * @param attributes</em>
+<a class="jxr_linenumber" name="117" href="#117">117</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="118" href="#118">118</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> startElement(String name, Map&lt;String, String&gt; attributes) {
+<a class="jxr_linenumber" name="119" href="#119">119</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
+<a class="jxr_linenumber" name="120" href="#120">120</a> 			writeIndent();
+<a class="jxr_linenumber" name="121" href="#121">121</a> 			indent++;
+<a class="jxr_linenumber" name="122" href="#122">122</a> 		}
+<a class="jxr_linenumber" name="123" href="#123">123</a> 
+<a class="jxr_linenumber" name="124" href="#124">124</a> 		writer.print('&lt;');
+<a class="jxr_linenumber" name="125" href="#125">125</a> 		writer.print(name);
 <a class="jxr_linenumber" name="126" href="#126">126</a> 
-<a class="jxr_linenumber" name="127" href="#127">127</a> 		writer.print('&lt;');
-<a class="jxr_linenumber" name="128" href="#128">128</a> 		writer.print(name);
-<a class="jxr_linenumber" name="129" href="#129">129</a> 
-<a class="jxr_linenumber" name="130" href="#130">130</a> 		<strong class="jxr_keyword">if</strong> (attributes != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="131" href="#131">131</a> 			<strong class="jxr_keyword">if</strong> (attributes.containsKey(<span class="jxr_string">"id"</span>)) {
-<a class="jxr_linenumber" name="132" href="#132">132</a> 				writeAttribute(<span class="jxr_string">"id"</span>, attributes.get(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="133" href="#133">133</a> 			}
-<a class="jxr_linenumber" name="134" href="#134">134</a> 
-<a class="jxr_linenumber" name="135" href="#135">135</a> 			<strong class="jxr_keyword">for</strong> (String attributeName : attributes.keySet()) {
-<a class="jxr_linenumber" name="136" href="#136">136</a> 				<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"id"</span>.equals(attributeName)) {
-<a class="jxr_linenumber" name="137" href="#137">137</a> 					writeAttribute(attributeName, attributes.get(attributeName));
-<a class="jxr_linenumber" name="138" href="#138">138</a> 				}
-<a class="jxr_linenumber" name="139" href="#139">139</a> 			}
-<a class="jxr_linenumber" name="140" href="#140">140</a> 		}
-<a class="jxr_linenumber" name="141" href="#141">141</a> 
-<a class="jxr_linenumber" name="142" href="#142">142</a> 		writer.print('&gt;');
-<a class="jxr_linenumber" name="143" href="#143">143</a> 
-<a class="jxr_linenumber" name="144" href="#144">144</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
-<a class="jxr_linenumber" name="145" href="#145">145</a> 			writer.println();
-<a class="jxr_linenumber" name="146" href="#146">146</a> 		}
-<a class="jxr_linenumber" name="147" href="#147">147</a> 	}
-<a class="jxr_linenumber" name="148" href="#148">148</a> 
-<a class="jxr_linenumber" name="149" href="#149">149</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="150" href="#150">150</a> <em class="jxr_javadoccomment">	 * @param attributeName</em>
-<a class="jxr_linenumber" name="151" href="#151">151</a> <em class="jxr_javadoccomment">	 * @param attributeValue</em>
-<a class="jxr_linenumber" name="152" href="#152">152</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="153" href="#153">153</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeAttribute(String attributeName, String attributeValue) {
-<a class="jxr_linenumber" name="154" href="#154">154</a> 		writer.print(' ');
-<a class="jxr_linenumber" name="155" href="#155">155</a> 		writer.print(attributeName);
-<a class="jxr_linenumber" name="156" href="#156">156</a> 		writer.print(<span class="jxr_string">"=\&quot;"</span>);
-<a class="jxr_linenumber" name="157" href="#157">157</a> 		writer.print(StringUtils.trimToEmpty(attributeValue));
-<a class="jxr_linenumber" name="158" href="#158">158</a> 		writer.print(<span class="jxr_string">"\&quot;"</span>);
-<a class="jxr_linenumber" name="159" href="#159">159</a> 	}
-<a class="jxr_linenumber" name="160" href="#160">160</a> 
-<a class="jxr_linenumber" name="161" href="#161">161</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="162" href="#162">162</a> <em class="jxr_javadoccomment">	 * @param content</em>
-<a class="jxr_linenumber" name="163" href="#163">163</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="164" href="#164">164</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeContent(String content) {
-<a class="jxr_linenumber" name="165" href="#165">165</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
-<a class="jxr_linenumber" name="166" href="#166">166</a> 			writeIndent();
-<a class="jxr_linenumber" name="167" href="#167">167</a> 		}
-<a class="jxr_linenumber" name="168" href="#168">168</a> 
-<a class="jxr_linenumber" name="169" href="#169">169</a> 		writer.print(StringUtils.trimToEmpty(content));
-<a class="jxr_linenumber" name="170" href="#170">170</a> 
-<a class="jxr_linenumber" name="171" href="#171">171</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
-<a class="jxr_linenumber" name="172" href="#172">172</a> 			writer.println();
-<a class="jxr_linenumber" name="173" href="#173">173</a> 		}
-<a class="jxr_linenumber" name="174" href="#174">174</a> 	}
-<a class="jxr_linenumber" name="175" href="#175">175</a> 
-<a class="jxr_linenumber" name="176" href="#176">176</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="177" href="#177">177</a> <em class="jxr_javadoccomment">	 * @param name</em>
-<a class="jxr_linenumber" name="178" href="#178">178</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="179" href="#179">179</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> endElement(String name) {
-<a class="jxr_linenumber" name="180" href="#180">180</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
-<a class="jxr_linenumber" name="181" href="#181">181</a> 			indent--;
-<a class="jxr_linenumber" name="182" href="#182">182</a> 			writeIndent();
-<a class="jxr_linenumber" name="183" href="#183">183</a> 		}
-<a class="jxr_linenumber" name="184" href="#184">184</a> 
-<a class="jxr_linenumber" name="185" href="#185">185</a> 		writer.print(<span class="jxr_string">"&lt;/"</span>);
-<a class="jxr_linenumber" name="186" href="#186">186</a> 		writer.print(name);
-<a class="jxr_linenumber" name="187" href="#187">187</a> 		writer.print('&gt;');
-<a class="jxr_linenumber" name="188" href="#188">188</a> 
-<a class="jxr_linenumber" name="189" href="#189">189</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
-<a class="jxr_linenumber" name="190" href="#190">190</a> 			writer.println();
-<a class="jxr_linenumber" name="191" href="#191">191</a> 		}
-<a class="jxr_linenumber" name="192" href="#192">192</a> 	}
-<a class="jxr_linenumber" name="193" href="#193">193</a> }
+<a class="jxr_linenumber" name="127" href="#127">127</a> 		<strong class="jxr_keyword">if</strong> (attributes != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="128" href="#128">128</a> 			<strong class="jxr_keyword">if</strong> (attributes.containsKey(<span class="jxr_string">"id"</span>)) {
+<a class="jxr_linenumber" name="129" href="#129">129</a> 				writeAttribute(<span class="jxr_string">"id"</span>, attributes.get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="130" href="#130">130</a> 			}
+<a class="jxr_linenumber" name="131" href="#131">131</a> 
+<a class="jxr_linenumber" name="132" href="#132">132</a> 			<strong class="jxr_keyword">for</strong> (String attributeName : attributes.keySet()) {
+<a class="jxr_linenumber" name="133" href="#133">133</a> 				<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"id"</span>.equals(attributeName)) {
+<a class="jxr_linenumber" name="134" href="#134">134</a> 					writeAttribute(attributeName, attributes.get(attributeName));
+<a class="jxr_linenumber" name="135" href="#135">135</a> 				}
+<a class="jxr_linenumber" name="136" href="#136">136</a> 			}
+<a class="jxr_linenumber" name="137" href="#137">137</a> 		}
+<a class="jxr_linenumber" name="138" href="#138">138</a> 
+<a class="jxr_linenumber" name="139" href="#139">139</a> 		writer.print('&gt;');
+<a class="jxr_linenumber" name="140" href="#140">140</a> 
+<a class="jxr_linenumber" name="141" href="#141">141</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
+<a class="jxr_linenumber" name="142" href="#142">142</a> 			writer.println();
+<a class="jxr_linenumber" name="143" href="#143">143</a> 		}
+<a class="jxr_linenumber" name="144" href="#144">144</a> 	}
+<a class="jxr_linenumber" name="145" href="#145">145</a> 
+<a class="jxr_linenumber" name="146" href="#146">146</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="147" href="#147">147</a> <em class="jxr_javadoccomment">	 * @param attributeName</em>
+<a class="jxr_linenumber" name="148" href="#148">148</a> <em class="jxr_javadoccomment">	 * @param attributeValue</em>
+<a class="jxr_linenumber" name="149" href="#149">149</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="150" href="#150">150</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeAttribute(String attributeName, String attributeValue) {
+<a class="jxr_linenumber" name="151" href="#151">151</a> 		writer.print(' ');
+<a class="jxr_linenumber" name="152" href="#152">152</a> 		writer.print(attributeName);
+<a class="jxr_linenumber" name="153" href="#153">153</a> 		writer.print(<span class="jxr_string">"=\&quot;"</span>);
+<a class="jxr_linenumber" name="154" href="#154">154</a> 		writer.print(StringUtils.trimToEmpty(attributeValue));
+<a class="jxr_linenumber" name="155" href="#155">155</a> 		writer.print(<span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="156" href="#156">156</a> 	}
+<a class="jxr_linenumber" name="157" href="#157">157</a> 
+<a class="jxr_linenumber" name="158" href="#158">158</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="159" href="#159">159</a> <em class="jxr_javadoccomment">	 * @param content</em>
+<a class="jxr_linenumber" name="160" href="#160">160</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="161" href="#161">161</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeContent(String content) {
+<a class="jxr_linenumber" name="162" href="#162">162</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
+<a class="jxr_linenumber" name="163" href="#163">163</a> 			writeIndent();
+<a class="jxr_linenumber" name="164" href="#164">164</a> 		}
+<a class="jxr_linenumber" name="165" href="#165">165</a> 
+<a class="jxr_linenumber" name="166" href="#166">166</a> 		writer.print(StringUtils.trimToEmpty(content));
+<a class="jxr_linenumber" name="167" href="#167">167</a> 
+<a class="jxr_linenumber" name="168" href="#168">168</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
+<a class="jxr_linenumber" name="169" href="#169">169</a> 			writer.println();
+<a class="jxr_linenumber" name="170" href="#170">170</a> 		}
+<a class="jxr_linenumber" name="171" href="#171">171</a> 	}
+<a class="jxr_linenumber" name="172" href="#172">172</a> 
+<a class="jxr_linenumber" name="173" href="#173">173</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="174" href="#174">174</a> <em class="jxr_javadoccomment">	 * @param name</em>
+<a class="jxr_linenumber" name="175" href="#175">175</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="176" href="#176">176</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> endElement(String name) {
+<a class="jxr_linenumber" name="177" href="#177">177</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
+<a class="jxr_linenumber" name="178" href="#178">178</a> 			indent--;
+<a class="jxr_linenumber" name="179" href="#179">179</a> 			writeIndent();
+<a class="jxr_linenumber" name="180" href="#180">180</a> 		}
+<a class="jxr_linenumber" name="181" href="#181">181</a> 
+<a class="jxr_linenumber" name="182" href="#182">182</a> 		writer.print(<span class="jxr_string">"&lt;/"</span>);
+<a class="jxr_linenumber" name="183" href="#183">183</a> 		writer.print(name);
+<a class="jxr_linenumber" name="184" href="#184">184</a> 		writer.print('&gt;');
+<a class="jxr_linenumber" name="185" href="#185">185</a> 
+<a class="jxr_linenumber" name="186" href="#186">186</a> 		<strong class="jxr_keyword">if</strong> (formatOutput) {
+<a class="jxr_linenumber" name="187" href="#187">187</a> 			writer.println();
+<a class="jxr_linenumber" name="188" href="#188">188</a> 		}
+<a class="jxr_linenumber" name="189" href="#189">189</a> 	}
+<a class="jxr_linenumber" name="190" href="#190">190</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

@@ -224,72 +224,71 @@
 <a class="jxr_linenumber" name="214" href="#214">214</a> <em class="jxr_javadoccomment">	 * @param hierarchy</em>
 <a class="jxr_linenumber" name="215" href="#215">215</a> <em class="jxr_javadoccomment">	 * @param expandAllMember</em>
 <a class="jxr_linenumber" name="216" href="#216">216</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="217" href="#217">217</a> <em class="jxr_javadoccomment">	 * @throws OlapException</em>
-<a class="jxr_linenumber" name="218" href="#218">218</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="219" href="#219">219</a> 	<strong class="jxr_keyword">protected</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> topLevelMembers(Hierarchy hierarchy, <strong class="jxr_keyword">boolean</strong> expandAllMember) {
-<a class="jxr_linenumber" name="220" href="#220">220</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="221" href="#221">221</a> 			<strong class="jxr_keyword">if</strong> (hierarchy.hasAll()) {
-<a class="jxr_linenumber" name="222" href="#222">222</a> 				<em class="jxr_comment">// an "All" member is present -get it</em>
-<a class="jxr_linenumber" name="223" href="#223">223</a> 				<em class="jxr_comment">// does this call work with parent-child</em>
-<a class="jxr_linenumber" name="224" href="#224">224</a> 				Member allMember = hierarchy.getDefaultMember();
-<a class="jxr_linenumber" name="225" href="#225">225</a> 
-<a class="jxr_linenumber" name="226" href="#226">226</a> 				<strong class="jxr_keyword">if</strong> (allMember == <strong class="jxr_keyword">null</strong> || !allMember.isAll()) {
-<a class="jxr_linenumber" name="227" href="#227">227</a> 					allMember = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="228" href="#228">228</a> 
-<a class="jxr_linenumber" name="229" href="#229">229</a> 					List&lt;Member&gt; topMembers = hierarchy.getRootMembers();
-<a class="jxr_linenumber" name="230" href="#230">230</a> 					<strong class="jxr_keyword">for</strong> (Member member : topMembers) {
-<a class="jxr_linenumber" name="231" href="#231">231</a> 						<strong class="jxr_keyword">if</strong> (member.isAll()) {
-<a class="jxr_linenumber" name="232" href="#232">232</a> 							allMember = member;
-<a class="jxr_linenumber" name="233" href="#233">233</a> 							<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="234" href="#234">234</a> 						}
-<a class="jxr_linenumber" name="235" href="#235">235</a> 					}
-<a class="jxr_linenumber" name="236" href="#236">236</a> 				}
-<a class="jxr_linenumber" name="237" href="#237">237</a> 
-<a class="jxr_linenumber" name="238" href="#238">238</a> 				<strong class="jxr_keyword">if</strong> (allMember != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="239" href="#239">239</a> 					<strong class="jxr_keyword">if</strong> (!expandAllMember) {
-<a class="jxr_linenumber" name="240" href="#240">240</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(allMember);
-<a class="jxr_linenumber" name="241" href="#241">241</a> 					}
-<a class="jxr_linenumber" name="242" href="#242">242</a> 
-<a class="jxr_linenumber" name="243" href="#243">243</a> 					<em class="jxr_comment">// must expand</em>
-<a class="jxr_linenumber" name="244" href="#244">244</a> 					<em class="jxr_comment">// create Union({AllMember}, AllMember.children)</em>
-<a class="jxr_linenumber" name="245" href="#245">245</a> 					Exp allExp = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(allMember);
-<a class="jxr_linenumber" name="246" href="#246">246</a> 
-<a class="jxr_linenumber" name="247" href="#247">247</a> 					FunCall allSet = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"{}"</span>, Syntax.Braces);
-<a class="jxr_linenumber" name="248" href="#248">248</a> 					allSet.getArgs().add(allExp);
-<a class="jxr_linenumber" name="249" href="#249">249</a> 
-<a class="jxr_linenumber" name="250" href="#250">250</a> 					FunCall mAllChildren = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"Children"</span>,
-<a class="jxr_linenumber" name="251" href="#251">251</a> 							Syntax.Property);
-<a class="jxr_linenumber" name="252" href="#252">252</a> 					mAllChildren.getArgs().add(allExp);
-<a class="jxr_linenumber" name="253" href="#253">253</a> 
-<a class="jxr_linenumber" name="254" href="#254">254</a> 					FunCall union = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"Union"</span>, Syntax.Function);
-<a class="jxr_linenumber" name="255" href="#255">255</a> 					union.getArgs().add(allSet);
-<a class="jxr_linenumber" name="256" href="#256">256</a> 					union.getArgs().add(mAllChildren);
-<a class="jxr_linenumber" name="257" href="#257">257</a> 
-<a class="jxr_linenumber" name="258" href="#258">258</a> 					<strong class="jxr_keyword">return</strong> union;
-<a class="jxr_linenumber" name="259" href="#259">259</a> 				}
-<a class="jxr_linenumber" name="260" href="#260">260</a> 			}
-<a class="jxr_linenumber" name="261" href="#261">261</a> 
-<a class="jxr_linenumber" name="262" href="#262">262</a> 			List&lt;Member&gt; topMembers = hierarchy.getRootMembers();
-<a class="jxr_linenumber" name="263" href="#263">263</a> 			<strong class="jxr_keyword">if</strong> (topMembers.size() == 1) {
-<a class="jxr_linenumber" name="264" href="#264">264</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(topMembers.get(0)); <em class="jxr_comment">// single</em>
-<a class="jxr_linenumber" name="265" href="#265">265</a> 															<em class="jxr_comment">// member</em>
-<a class="jxr_linenumber" name="266" href="#266">266</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (topMembers.isEmpty()) {
-<a class="jxr_linenumber" name="267" href="#267">267</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// possible if access control active</em>
-<a class="jxr_linenumber" name="268" href="#268">268</a> 			}
-<a class="jxr_linenumber" name="269" href="#269">269</a> 
-<a class="jxr_linenumber" name="270" href="#270">270</a> 			List&lt;Exp&gt; args = <strong class="jxr_keyword">new</strong> ArrayList&lt;Exp&gt;(topMembers.size());
-<a class="jxr_linenumber" name="271" href="#271">271</a> 			<strong class="jxr_keyword">for</strong> (Member member : topMembers) {
-<a class="jxr_linenumber" name="272" href="#272">272</a> 				<strong class="jxr_keyword">if</strong> (!member.isHidden()) {
-<a class="jxr_linenumber" name="273" href="#273">273</a> 					args.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(member));
-<a class="jxr_linenumber" name="274" href="#274">274</a> 				}
-<a class="jxr_linenumber" name="275" href="#275">275</a> 			}
-<a class="jxr_linenumber" name="276" href="#276">276</a> 
-<a class="jxr_linenumber" name="277" href="#277">277</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"{}"</span>, Syntax.Braces, args);
-<a class="jxr_linenumber" name="278" href="#278">278</a> 		} <strong class="jxr_keyword">catch</strong> (OlapException e) {
-<a class="jxr_linenumber" name="279" href="#279">279</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(e);
-<a class="jxr_linenumber" name="280" href="#280">280</a> 		}
-<a class="jxr_linenumber" name="281" href="#281">281</a> 	}
-<a class="jxr_linenumber" name="282" href="#282">282</a> }
+<a class="jxr_linenumber" name="217" href="#217">217</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="218" href="#218">218</a> 	<strong class="jxr_keyword">protected</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/Exp.html">Exp</a> topLevelMembers(Hierarchy hierarchy, <strong class="jxr_keyword">boolean</strong> expandAllMember) {
+<a class="jxr_linenumber" name="219" href="#219">219</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="220" href="#220">220</a> 			<strong class="jxr_keyword">if</strong> (hierarchy.hasAll()) {
+<a class="jxr_linenumber" name="221" href="#221">221</a> 				<em class="jxr_comment">// an "All" member is present -get it</em>
+<a class="jxr_linenumber" name="222" href="#222">222</a> 				<em class="jxr_comment">// does this call work with parent-child</em>
+<a class="jxr_linenumber" name="223" href="#223">223</a> 				Member allMember = hierarchy.getDefaultMember();
+<a class="jxr_linenumber" name="224" href="#224">224</a> 
+<a class="jxr_linenumber" name="225" href="#225">225</a> 				<strong class="jxr_keyword">if</strong> (allMember == <strong class="jxr_keyword">null</strong> || !allMember.isAll()) {
+<a class="jxr_linenumber" name="226" href="#226">226</a> 					allMember = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="227" href="#227">227</a> 
+<a class="jxr_linenumber" name="228" href="#228">228</a> 					List&lt;Member&gt; topMembers = hierarchy.getRootMembers();
+<a class="jxr_linenumber" name="229" href="#229">229</a> 					<strong class="jxr_keyword">for</strong> (Member member : topMembers) {
+<a class="jxr_linenumber" name="230" href="#230">230</a> 						<strong class="jxr_keyword">if</strong> (member.isAll()) {
+<a class="jxr_linenumber" name="231" href="#231">231</a> 							allMember = member;
+<a class="jxr_linenumber" name="232" href="#232">232</a> 							<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="233" href="#233">233</a> 						}
+<a class="jxr_linenumber" name="234" href="#234">234</a> 					}
+<a class="jxr_linenumber" name="235" href="#235">235</a> 				}
+<a class="jxr_linenumber" name="236" href="#236">236</a> 
+<a class="jxr_linenumber" name="237" href="#237">237</a> 				<strong class="jxr_keyword">if</strong> (allMember != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="238" href="#238">238</a> 					<strong class="jxr_keyword">if</strong> (!expandAllMember) {
+<a class="jxr_linenumber" name="239" href="#239">239</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(allMember);
+<a class="jxr_linenumber" name="240" href="#240">240</a> 					}
+<a class="jxr_linenumber" name="241" href="#241">241</a> 
+<a class="jxr_linenumber" name="242" href="#242">242</a> 					<em class="jxr_comment">// must expand</em>
+<a class="jxr_linenumber" name="243" href="#243">243</a> 					<em class="jxr_comment">// create Union({AllMember}, AllMember.children)</em>
+<a class="jxr_linenumber" name="244" href="#244">244</a> 					Exp allExp = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(allMember);
+<a class="jxr_linenumber" name="245" href="#245">245</a> 
+<a class="jxr_linenumber" name="246" href="#246">246</a> 					FunCall allSet = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"{}"</span>, Syntax.Braces);
+<a class="jxr_linenumber" name="247" href="#247">247</a> 					allSet.getArgs().add(allExp);
+<a class="jxr_linenumber" name="248" href="#248">248</a> 
+<a class="jxr_linenumber" name="249" href="#249">249</a> 					FunCall mAllChildren = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"Children"</span>,
+<a class="jxr_linenumber" name="250" href="#250">250</a> 							Syntax.Property);
+<a class="jxr_linenumber" name="251" href="#251">251</a> 					mAllChildren.getArgs().add(allExp);
+<a class="jxr_linenumber" name="252" href="#252">252</a> 
+<a class="jxr_linenumber" name="253" href="#253">253</a> 					FunCall union = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"Union"</span>, Syntax.Function);
+<a class="jxr_linenumber" name="254" href="#254">254</a> 					union.getArgs().add(allSet);
+<a class="jxr_linenumber" name="255" href="#255">255</a> 					union.getArgs().add(mAllChildren);
+<a class="jxr_linenumber" name="256" href="#256">256</a> 
+<a class="jxr_linenumber" name="257" href="#257">257</a> 					<strong class="jxr_keyword">return</strong> union;
+<a class="jxr_linenumber" name="258" href="#258">258</a> 				}
+<a class="jxr_linenumber" name="259" href="#259">259</a> 			}
+<a class="jxr_linenumber" name="260" href="#260">260</a> 
+<a class="jxr_linenumber" name="261" href="#261">261</a> 			List&lt;Member&gt; topMembers = hierarchy.getRootMembers();
+<a class="jxr_linenumber" name="262" href="#262">262</a> 			<strong class="jxr_keyword">if</strong> (topMembers.size() == 1) {
+<a class="jxr_linenumber" name="263" href="#263">263</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(topMembers.get(0)); <em class="jxr_comment">// single</em>
+<a class="jxr_linenumber" name="264" href="#264">264</a> 															<em class="jxr_comment">// member</em>
+<a class="jxr_linenumber" name="265" href="#265">265</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (topMembers.isEmpty()) {
+<a class="jxr_linenumber" name="266" href="#266">266</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// possible if access control active</em>
+<a class="jxr_linenumber" name="267" href="#267">267</a> 			}
+<a class="jxr_linenumber" name="268" href="#268">268</a> 
+<a class="jxr_linenumber" name="269" href="#269">269</a> 			List&lt;Exp&gt; args = <strong class="jxr_keyword">new</strong> ArrayList&lt;Exp&gt;(topMembers.size());
+<a class="jxr_linenumber" name="270" href="#270">270</a> 			<strong class="jxr_keyword">for</strong> (Member member : topMembers) {
+<a class="jxr_linenumber" name="271" href="#271">271</a> 				<strong class="jxr_keyword">if</strong> (!member.isHidden()) {
+<a class="jxr_linenumber" name="272" href="#272">272</a> 					args.add(<strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/metadata/MemberExp.html">MemberExp</a>(member));
+<a class="jxr_linenumber" name="273" href="#273">273</a> 				}
+<a class="jxr_linenumber" name="274" href="#274">274</a> 			}
+<a class="jxr_linenumber" name="275" href="#275">275</a> 
+<a class="jxr_linenumber" name="276" href="#276">276</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/mdx/FunCall.html">FunCall</a>(<span class="jxr_string">"{}"</span>, Syntax.Braces, args);
+<a class="jxr_linenumber" name="277" href="#277">277</a> 		} <strong class="jxr_keyword">catch</strong> (OlapException e) {
+<a class="jxr_linenumber" name="278" href="#278">278</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(e);
+<a class="jxr_linenumber" name="279" href="#279">279</a> 		}
+<a class="jxr_linenumber" name="280" href="#280">280</a> 	}
+<a class="jxr_linenumber" name="281" href="#281">281</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

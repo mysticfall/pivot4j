@@ -140,7 +140,7 @@
 <a class="jxr_linenumber" name="130" href="#130">130</a> 		}
 <a class="jxr_linenumber" name="131" href="#131">131</a> 
 <a class="jxr_linenumber" name="132" href="#132">132</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="133" href="#133">133</a> <em class="jxr_javadoccomment">		 * @param isKey</em>
+<a class="jxr_linenumber" name="133" href="#133">133</a> <em class="jxr_javadoccomment">		 * @param key</em>
 <a class="jxr_linenumber" name="134" href="#134">134</a> <em class="jxr_javadoccomment">		 *            the isKey to set</em>
 <a class="jxr_linenumber" name="135" href="#135">135</a> <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="136" href="#136">136</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setKey(<strong class="jxr_keyword">boolean</strong> key) {
@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="145" href="#145">145</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="146" href="#146">146</a> <em class="jxr_javadoccomment">	 * format to MDX</em>
 <a class="jxr_linenumber" name="147" href="#147">147</a> <em class="jxr_javadoccomment">	 * </em>
-<a class="jxr_linenumber" name="148" href="#148">148</a> <em class="jxr_javadoccomment">	 * @see interface Exp</em>
+<a class="jxr_linenumber" name="148" href="#148">148</a> <em class="jxr_javadoccomment">	 * @see Exp</em>
 <a class="jxr_linenumber" name="149" href="#149">149</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="150" href="#150">150</a> 	<strong class="jxr_keyword">public</strong> String toMdx() {
 <a class="jxr_linenumber" name="151" href="#151">151</a> 		StringBuilder sb = <strong class="jxr_keyword">new</strong> StringBuilder();
@@ -194,7 +194,7 @@
 <a class="jxr_linenumber" name="184" href="#184">184</a> 	}
 <a class="jxr_linenumber" name="185" href="#185">185</a> 
 <a class="jxr_linenumber" name="186" href="#186">186</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="187" href="#187">187</a> <em class="jxr_javadoccomment">	 * @see com.tonbeller.jpivot.olap.mdxparse.Exp#accept</em>
+<a class="jxr_linenumber" name="187" href="#187">187</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.mdx.Exp#accept(com.eyeq.pivot4j.mdx.ExpVisitor)</em>
 <a class="jxr_linenumber" name="188" href="#188">188</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="189" href="#189">189</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> accept(<a href="../../../../com/eyeq/pivot4j/mdx/ExpVisitor.html">ExpVisitor</a> visitor) {
 <a class="jxr_linenumber" name="190" href="#190">190</a> 		visitor.visitCompoundId(<strong class="jxr_keyword">this</strong>);

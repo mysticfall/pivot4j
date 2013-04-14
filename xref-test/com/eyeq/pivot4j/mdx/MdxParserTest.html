@@ -18,507 +18,533 @@
 <a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">package</strong> com.eyeq.pivot4j.mdx;
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
-<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertFalse;
-<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertNotNull;
-<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
-<a class="jxr_linenumber" name="15" href="#15">15</a>  
-<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="17" href="#17">17</a>  
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> org.olap4j.Axis;
-<a class="jxr_linenumber" name="20" href="#20">20</a>  
-<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.impl.MdxParserImpl;
-<a class="jxr_linenumber" name="22" href="#22">22</a>  
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/eyeq/pivot4j/mdx/MdxParserTest.html">MdxParserTest</a> {
-<a class="jxr_linenumber" name="24" href="#24">24</a>  
-<a class="jxr_linenumber" name="25" href="#25">25</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment">	 * @param mdxQuery</em>
-<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment">	 * @throws Exception</em>
-<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="30" href="#30">30</a>  	<strong class="jxr_keyword">protected</strong> MdxStatement parseQuery(String mdxQuery) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="31" href="#31">31</a>  		MdxParser parser = <strong class="jxr_keyword">new</strong> MdxParserImpl();
-<a class="jxr_linenumber" name="32" href="#32">32</a>  
-<a class="jxr_linenumber" name="33" href="#33">33</a>  		<strong class="jxr_keyword">return</strong> parser.parse(mdxQuery);
-<a class="jxr_linenumber" name="34" href="#34">34</a>  	}
-<a class="jxr_linenumber" name="35" href="#35">35</a>  
-<a class="jxr_linenumber" name="36" href="#36">36</a>  	@Test
-<a class="jxr_linenumber" name="37" href="#37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseEmptyAxis() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="38" href="#38">38</a>  		String mdx = <span class="jxr_string">"SELECT FROM DummyCube"</span>;
-<a class="jxr_linenumber" name="39" href="#39">39</a>  
-<a class="jxr_linenumber" name="40" href="#40">40</a>  		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="41" href="#41">41</a>  
-<a class="jxr_linenumber" name="42" href="#42">42</a>  		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="43" href="#43">43</a>  		assertNotNull(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes());
-<a class="jxr_linenumber" name="44" href="#44">44</a>  		assertTrue(<span class="jxr_string">"Number of axes should be 0."</span>, query.getAxes().isEmpty());
-<a class="jxr_linenumber" name="45" href="#45">45</a>  	}
-<a class="jxr_linenumber" name="46" href="#46">46</a>  
-<a class="jxr_linenumber" name="47" href="#47">47</a>  	@Test
-<a class="jxr_linenumber" name="48" href="#48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGenerateEmptyAxis() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="49" href="#49">49</a>  		String mdx = <span class="jxr_string">"SELECT FROM DummyCube"</span>;
-<a class="jxr_linenumber" name="50" href="#50">50</a>  
-<a class="jxr_linenumber" name="51" href="#51">51</a>  		MdxStatement query = <strong class="jxr_keyword">new</strong> MdxStatement();
-<a class="jxr_linenumber" name="52" href="#52">52</a>  		query.setCube(<strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"DummyCube"</span>));
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.CoreMatchers.equalTo;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.CoreMatchers.instanceOf;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.CoreMatchers.is;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.CoreMatchers.notNullValue;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertThat;
+<a class="jxr_linenumber" name="16" href="#16">16</a>  
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> org.olap4j.Axis;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  
+<a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.mdx.impl.MdxParserImpl;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  
+<a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/eyeq/pivot4j/mdx/MdxParserTest.html">MdxParserTest</a> {
+<a class="jxr_linenumber" name="25" href="#25">25</a>  
+<a class="jxr_linenumber" name="26" href="#26">26</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">	 * @param mdxQuery</em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">	 * @throws Exception</em>
+<a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  	<strong class="jxr_keyword">protected</strong> MdxStatement parseQuery(String mdxQuery) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="32" href="#32">32</a>  		MdxParser parser = <strong class="jxr_keyword">new</strong> MdxParserImpl();
+<a class="jxr_linenumber" name="33" href="#33">33</a>  
+<a class="jxr_linenumber" name="34" href="#34">34</a>  		<strong class="jxr_keyword">return</strong> parser.parse(mdxQuery);
+<a class="jxr_linenumber" name="35" href="#35">35</a>  	}
+<a class="jxr_linenumber" name="36" href="#36">36</a>  
+<a class="jxr_linenumber" name="37" href="#37">37</a>  	@Test
+<a class="jxr_linenumber" name="38" href="#38">38</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseEmptyAxis() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="39" href="#39">39</a>  		String mdx = <span class="jxr_string">"SELECT FROM DummyCube"</span>;
+<a class="jxr_linenumber" name="40" href="#40">40</a>  
+<a class="jxr_linenumber" name="41" href="#41">41</a>  		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="42" href="#42">42</a>  
+<a class="jxr_linenumber" name="43" href="#43">43</a>  		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="44" href="#44">44</a>  		assertThat(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes(),
+<a class="jxr_linenumber" name="45" href="#45">45</a>  				is(notNullValue()));
+<a class="jxr_linenumber" name="46" href="#46">46</a>  		assertThat(<span class="jxr_string">"Number of axes should be 0."</span>, query.getAxes().isEmpty(),
+<a class="jxr_linenumber" name="47" href="#47">47</a>  				is(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="48" href="#48">48</a>  	}
+<a class="jxr_linenumber" name="49" href="#49">49</a>  
+<a class="jxr_linenumber" name="50" href="#50">50</a>  	@Test
+<a class="jxr_linenumber" name="51" href="#51">51</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGenerateEmptyAxis() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="52" href="#52">52</a>  		String mdx = <span class="jxr_string">"SELECT FROM DummyCube"</span>;
 <a class="jxr_linenumber" name="53" href="#53">53</a>  
-<a class="jxr_linenumber" name="54" href="#54">54</a>  		assertEquals(<span class="jxr_string">"Unexpected MDX query."</span>, mdx, query.toMdx());
-<a class="jxr_linenumber" name="55" href="#55">55</a>  	}
+<a class="jxr_linenumber" name="54" href="#54">54</a>  		MdxStatement query = <strong class="jxr_keyword">new</strong> MdxStatement();
+<a class="jxr_linenumber" name="55" href="#55">55</a>  		query.setCube(<strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"DummyCube"</span>));
 <a class="jxr_linenumber" name="56" href="#56">56</a>  
-<a class="jxr_linenumber" name="57" href="#57">57</a>  	@Test
-<a class="jxr_linenumber" name="58" href="#58">58</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseSingleAxis() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="59" href="#59">59</a>  		String mdx = <span class="jxr_string">"SELECT [AAA] ON COLUMNS FROM DummyCube"</span>;
-<a class="jxr_linenumber" name="60" href="#60">60</a>  
-<a class="jxr_linenumber" name="61" href="#61">61</a>  		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="62" href="#62">62</a>  
-<a class="jxr_linenumber" name="63" href="#63">63</a>  		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="64" href="#64">64</a>  		assertNotNull(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes());
+<a class="jxr_linenumber" name="57" href="#57">57</a>  		assertThat(<span class="jxr_string">"Unexpected MDX query."</span>, query.toMdx(), is(equalTo(mdx)));
+<a class="jxr_linenumber" name="58" href="#58">58</a>  	}
+<a class="jxr_linenumber" name="59" href="#59">59</a>  
+<a class="jxr_linenumber" name="60" href="#60">60</a>  	@Test
+<a class="jxr_linenumber" name="61" href="#61">61</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseSingleAxis() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="62" href="#62">62</a>  		String mdx = <span class="jxr_string">"SELECT [AAA] ON COLUMNS FROM DummyCube"</span>;
+<a class="jxr_linenumber" name="63" href="#63">63</a>  
+<a class="jxr_linenumber" name="64" href="#64">64</a>  		MdxStatement query = parseQuery(mdx);
 <a class="jxr_linenumber" name="65" href="#65">65</a>  
-<a class="jxr_linenumber" name="66" href="#66">66</a>  		assertEquals(<span class="jxr_string">"Number of axes should be 1."</span>, 1, query.getAxes().size());
-<a class="jxr_linenumber" name="67" href="#67">67</a>  
-<a class="jxr_linenumber" name="68" href="#68">68</a>  		Exp columnExp = query.getAxes().get(0).getExp();
+<a class="jxr_linenumber" name="66" href="#66">66</a>  		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="67" href="#67">67</a>  		assertThat(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes(),
+<a class="jxr_linenumber" name="68" href="#68">68</a>  				is(notNullValue()));
 <a class="jxr_linenumber" name="69" href="#69">69</a>  
-<a class="jxr_linenumber" name="70" href="#70">70</a>  		assertNotNull(<span class="jxr_string">"Exp object for columns axis is null."</span>, columnExp);
-<a class="jxr_linenumber" name="71" href="#71">71</a>  
-<a class="jxr_linenumber" name="72" href="#72">72</a>  		assertTrue(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="73" href="#73">73</a>  				columnExp instanceof CompoundId);
+<a class="jxr_linenumber" name="70" href="#70">70</a>  		assertThat(<span class="jxr_string">"Number of axes should be 1."</span>, query.getAxes().size(),
+<a class="jxr_linenumber" name="71" href="#71">71</a>  				is(equalTo(1)));
+<a class="jxr_linenumber" name="72" href="#72">72</a>  
+<a class="jxr_linenumber" name="73" href="#73">73</a>  		Exp columnExp = query.getAxes().get(0).getExp();
 <a class="jxr_linenumber" name="74" href="#74">74</a>  
-<a class="jxr_linenumber" name="75" href="#75">75</a>  		mdx = <span class="jxr_string">"SELECT [AAA] ON ROWS FROM DummyCube"</span>;
-<a class="jxr_linenumber" name="76" href="#76">76</a>  
-<a class="jxr_linenumber" name="77" href="#77">77</a>  		Exp rowExp = query.getAxes().get(0).getExp();
-<a class="jxr_linenumber" name="78" href="#78">78</a>  
-<a class="jxr_linenumber" name="79" href="#79">79</a>  		assertNotNull(<span class="jxr_string">"Exp object for rows axis is null."</span>, rowExp);
+<a class="jxr_linenumber" name="75" href="#75">75</a>  		assertThat(<span class="jxr_string">"Exp object for columns axis is null."</span>, columnExp,
+<a class="jxr_linenumber" name="76" href="#76">76</a>  				is(notNullValue()));
+<a class="jxr_linenumber" name="77" href="#77">77</a>  
+<a class="jxr_linenumber" name="78" href="#78">78</a>  		assertThat(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>, columnExp,
+<a class="jxr_linenumber" name="79" href="#79">79</a>  				is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
 <a class="jxr_linenumber" name="80" href="#80">80</a>  
-<a class="jxr_linenumber" name="81" href="#81">81</a>  		assertTrue(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="82" href="#82">82</a>  				rowExp instanceof CompoundId);
-<a class="jxr_linenumber" name="83" href="#83">83</a>  	}
+<a class="jxr_linenumber" name="81" href="#81">81</a>  		mdx = <span class="jxr_string">"SELECT [AAA] ON ROWS FROM DummyCube"</span>;
+<a class="jxr_linenumber" name="82" href="#82">82</a>  
+<a class="jxr_linenumber" name="83" href="#83">83</a>  		Exp rowExp = query.getAxes().get(0).getExp();
 <a class="jxr_linenumber" name="84" href="#84">84</a>  
-<a class="jxr_linenumber" name="85" href="#85">85</a>  	@Test
-<a class="jxr_linenumber" name="86" href="#86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGenerateSingleAxis() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="87" href="#87">87</a>  		String mdx = <span class="jxr_string">"SELECT [AAA] ON COLUMNS FROM [DummyCube]"</span>;
-<a class="jxr_linenumber" name="88" href="#88">88</a>  
-<a class="jxr_linenumber" name="89" href="#89">89</a>  		MdxStatement query = <strong class="jxr_keyword">new</strong> MdxStatement();
-<a class="jxr_linenumber" name="90" href="#90">90</a>  
-<a class="jxr_linenumber" name="91" href="#91">91</a>  		QueryAxis axis = <strong class="jxr_keyword">new</strong> QueryAxis(Axis.COLUMNS, <strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"[AAA]"</span>));
-<a class="jxr_linenumber" name="92" href="#92">92</a>  		query.setAxis(axis);
-<a class="jxr_linenumber" name="93" href="#93">93</a>  		query.setCube(<strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"[DummyCube]"</span>));
-<a class="jxr_linenumber" name="94" href="#94">94</a>  
-<a class="jxr_linenumber" name="95" href="#95">95</a>  		assertEquals(<span class="jxr_string">"Unexpected MDX query."</span>, mdx, query.toMdx());
-<a class="jxr_linenumber" name="96" href="#96">96</a>  	}
+<a class="jxr_linenumber" name="85" href="#85">85</a>  		assertThat(<span class="jxr_string">"Exp object for rows axis is null."</span>, rowExp,
+<a class="jxr_linenumber" name="86" href="#86">86</a>  				is(notNullValue()));
+<a class="jxr_linenumber" name="87" href="#87">87</a>  
+<a class="jxr_linenumber" name="88" href="#88">88</a>  		assertThat(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>, rowExp,
+<a class="jxr_linenumber" name="89" href="#89">89</a>  				is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="90" href="#90">90</a>  	}
+<a class="jxr_linenumber" name="91" href="#91">91</a>  
+<a class="jxr_linenumber" name="92" href="#92">92</a>  	@Test
+<a class="jxr_linenumber" name="93" href="#93">93</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGenerateSingleAxis() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="94" href="#94">94</a>  		String mdx = <span class="jxr_string">"SELECT [AAA] ON COLUMNS FROM [DummyCube]"</span>;
+<a class="jxr_linenumber" name="95" href="#95">95</a>  
+<a class="jxr_linenumber" name="96" href="#96">96</a>  		MdxStatement query = <strong class="jxr_keyword">new</strong> MdxStatement();
 <a class="jxr_linenumber" name="97" href="#97">97</a>  
-<a class="jxr_linenumber" name="98" href="#98">98</a>  	@Test
-<a class="jxr_linenumber" name="99" href="#99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseKeyIdentifier() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="100" href="#100">100</a> 		String mdx = <span class="jxr_string">"SELECT [AAA].&amp;[BBB] ON COLUMNS, [CCC].&amp;[DDD].[EEE] ON ROWS FROM DummyCube"</span>;
+<a class="jxr_linenumber" name="98" href="#98">98</a>  		QueryAxis axis = <strong class="jxr_keyword">new</strong> QueryAxis(Axis.COLUMNS, <strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"[AAA]"</span>));
+<a class="jxr_linenumber" name="99" href="#99">99</a>  		query.setAxis(axis);
+<a class="jxr_linenumber" name="100" href="#100">100</a> 		query.setCube(<strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"[DummyCube]"</span>));
 <a class="jxr_linenumber" name="101" href="#101">101</a> 
-<a class="jxr_linenumber" name="102" href="#102">102</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="103" href="#103">103</a> 
-<a class="jxr_linenumber" name="104" href="#104">104</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="105" href="#105">105</a> 		assertNotNull(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes());
-<a class="jxr_linenumber" name="106" href="#106">106</a> 
-<a class="jxr_linenumber" name="107" href="#107">107</a> 		assertEquals(<span class="jxr_string">"Number of axes should be 2."</span>, 2, query.getAxes().size());
+<a class="jxr_linenumber" name="102" href="#102">102</a> 		assertThat(<span class="jxr_string">"Unexpected MDX query."</span>, query.toMdx(), is(equalTo(mdx)));
+<a class="jxr_linenumber" name="103" href="#103">103</a> 	}
+<a class="jxr_linenumber" name="104" href="#104">104</a> 
+<a class="jxr_linenumber" name="105" href="#105">105</a> 	@Test
+<a class="jxr_linenumber" name="106" href="#106">106</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseKeyIdentifier() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="107" href="#107">107</a> 		String mdx = <span class="jxr_string">"SELECT [AAA].&amp;[BBB] ON COLUMNS, [CCC].&amp;[DDD].[EEE] ON ROWS FROM DummyCube"</span>;
 <a class="jxr_linenumber" name="108" href="#108">108</a> 
-<a class="jxr_linenumber" name="109" href="#109">109</a> 		Exp columnExp = query.getAxes().get(0).getExp();
+<a class="jxr_linenumber" name="109" href="#109">109</a> 		MdxStatement query = parseQuery(mdx);
 <a class="jxr_linenumber" name="110" href="#110">110</a> 
-<a class="jxr_linenumber" name="111" href="#111">111</a> 		assertNotNull(<span class="jxr_string">"Exp object for columns axis is null."</span>, columnExp);
-<a class="jxr_linenumber" name="112" href="#112">112</a> 
-<a class="jxr_linenumber" name="113" href="#113">113</a> 		assertTrue(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="114" href="#114">114</a> 				columnExp instanceof CompoundId);
-<a class="jxr_linenumber" name="115" href="#115">115</a> 
-<a class="jxr_linenumber" name="116" href="#116">116</a> 		CompoundId columnId = (CompoundId) columnExp;
-<a class="jxr_linenumber" name="117" href="#117">117</a> 		assertEquals(<span class="jxr_string">"Wrong number of name parts on column axis member."</span>, 2,
-<a class="jxr_linenumber" name="118" href="#118">118</a> 				columnId.getNames().size());
+<a class="jxr_linenumber" name="111" href="#111">111</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="112" href="#112">112</a> 		assertThat(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes(),
+<a class="jxr_linenumber" name="113" href="#113">113</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="114" href="#114">114</a> 
+<a class="jxr_linenumber" name="115" href="#115">115</a> 		assertThat(<span class="jxr_string">"Number of axes should be 2."</span>, query.getAxes().size(),
+<a class="jxr_linenumber" name="116" href="#116">116</a> 				is(equalTo(2)));
+<a class="jxr_linenumber" name="117" href="#117">117</a> 
+<a class="jxr_linenumber" name="118" href="#118">118</a> 		Exp columnExp = query.getAxes().get(0).getExp();
 <a class="jxr_linenumber" name="119" href="#119">119</a> 
-<a class="jxr_linenumber" name="120" href="#120">120</a> 		assertEquals(<span class="jxr_string">"First name part has wrong identifier."</span>, <span class="jxr_string">"[AAA]"</span>, columnId
-<a class="jxr_linenumber" name="121" href="#121">121</a> 				.getNames().get(0).getName());
-<a class="jxr_linenumber" name="122" href="#122">122</a> 		assertEquals(<span class="jxr_string">"Second name part has wrong identifier."</span>, <span class="jxr_string">"[BBB]"</span>,
-<a class="jxr_linenumber" name="123" href="#123">123</a> 				columnId.getNames().get(1).getName());
-<a class="jxr_linenumber" name="124" href="#124">124</a> 		assertFalse(<span class="jxr_string">"First name part cannot be a key identifier."</span>, columnId
-<a class="jxr_linenumber" name="125" href="#125">125</a> 				.getNames().get(0).isKey());
-<a class="jxr_linenumber" name="126" href="#126">126</a> 		assertTrue(<span class="jxr_string">"Second name part is a key identifier."</span>, columnId.getNames()
-<a class="jxr_linenumber" name="127" href="#127">127</a> 				.get(1).isKey());
-<a class="jxr_linenumber" name="128" href="#128">128</a> 
-<a class="jxr_linenumber" name="129" href="#129">129</a> 		Exp rowExp = query.getAxes().get(1).getExp();
-<a class="jxr_linenumber" name="130" href="#130">130</a> 
-<a class="jxr_linenumber" name="131" href="#131">131</a> 		assertNotNull(<span class="jxr_string">"Exp object for rows axis is null."</span>, rowExp);
-<a class="jxr_linenumber" name="132" href="#132">132</a> 
-<a class="jxr_linenumber" name="133" href="#133">133</a> 		assertTrue(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="134" href="#134">134</a> 				rowExp instanceof CompoundId);
-<a class="jxr_linenumber" name="135" href="#135">135</a> 
-<a class="jxr_linenumber" name="136" href="#136">136</a> 		CompoundId rowId = (CompoundId) rowExp;
-<a class="jxr_linenumber" name="137" href="#137">137</a> 		assertEquals(<span class="jxr_string">"Wrong number of name parts on row axis member."</span>, 3, rowId
-<a class="jxr_linenumber" name="138" href="#138">138</a> 				.getNames().size());
-<a class="jxr_linenumber" name="139" href="#139">139</a> 
-<a class="jxr_linenumber" name="140" href="#140">140</a> 		assertEquals(<span class="jxr_string">"First name part has wrong identifier."</span>, <span class="jxr_string">"[CCC]"</span>, rowId
-<a class="jxr_linenumber" name="141" href="#141">141</a> 				.getNames().get(0).getName());
-<a class="jxr_linenumber" name="142" href="#142">142</a> 		assertEquals(<span class="jxr_string">"Second name part has wrong identifier."</span>, <span class="jxr_string">"[DDD]"</span>, rowId
-<a class="jxr_linenumber" name="143" href="#143">143</a> 				.getNames().get(1).getName());
-<a class="jxr_linenumber" name="144" href="#144">144</a> 		assertEquals(<span class="jxr_string">"Third name part has wrong identifier."</span>, <span class="jxr_string">"[EEE]"</span>, rowId
-<a class="jxr_linenumber" name="145" href="#145">145</a> 				.getNames().get(2).getName());
-<a class="jxr_linenumber" name="146" href="#146">146</a> 		assertFalse(<span class="jxr_string">"First name part cannot be a key identifier."</span>, rowId
-<a class="jxr_linenumber" name="147" href="#147">147</a> 				.getNames().get(0).isKey());
-<a class="jxr_linenumber" name="148" href="#148">148</a> 		assertTrue(<span class="jxr_string">"Second name part is a key identifier."</span>, rowId.getNames()
-<a class="jxr_linenumber" name="149" href="#149">149</a> 				.get(1).isKey());
-<a class="jxr_linenumber" name="150" href="#150">150</a> 		assertFalse(<span class="jxr_string">"Third name part is not a key identifier."</span>, rowId
-<a class="jxr_linenumber" name="151" href="#151">151</a> 				.getNames().get(2).isKey());
-<a class="jxr_linenumber" name="152" href="#152">152</a> 	}
-<a class="jxr_linenumber" name="153" href="#153">153</a> 
-<a class="jxr_linenumber" name="154" href="#154">154</a> 	@Test
-<a class="jxr_linenumber" name="155" href="#155">155</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGenerateKeyIdentifier() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="156" href="#156">156</a> 		String mdx = <span class="jxr_string">"SELECT [AAA].&amp;[BBB] ON COLUMNS, [CCC].&amp;[DDD].[EEE] ON ROWS FROM DummyCube"</span>;
-<a class="jxr_linenumber" name="157" href="#157">157</a> 
-<a class="jxr_linenumber" name="158" href="#158">158</a> 		MdxStatement query = <strong class="jxr_keyword">new</strong> MdxStatement();
-<a class="jxr_linenumber" name="159" href="#159">159</a> 
-<a class="jxr_linenumber" name="160" href="#160">160</a> 		CompoundId columnId = <strong class="jxr_keyword">new</strong> CompoundId().append(<span class="jxr_string">"[AAA]"</span>).append(<span class="jxr_string">"[BBB]"</span>,
-<a class="jxr_linenumber" name="161" href="#161">161</a> 				<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="162" href="#162">162</a> 		CompoundId rowId = <strong class="jxr_keyword">new</strong> CompoundId().append(<span class="jxr_string">"[CCC]"</span>)
-<a class="jxr_linenumber" name="163" href="#163">163</a> 				.append(<span class="jxr_string">"[DDD]"</span>, <strong class="jxr_keyword">true</strong>).append(<span class="jxr_string">"[EEE]"</span>);
+<a class="jxr_linenumber" name="120" href="#120">120</a> 		assertThat(<span class="jxr_string">"Exp object for columns axis is null."</span>, columnExp,
+<a class="jxr_linenumber" name="121" href="#121">121</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="122" href="#122">122</a> 
+<a class="jxr_linenumber" name="123" href="#123">123</a> 		assertThat(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>, columnExp,
+<a class="jxr_linenumber" name="124" href="#124">124</a> 				is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="125" href="#125">125</a> 
+<a class="jxr_linenumber" name="126" href="#126">126</a> 		CompoundId columnId = (CompoundId) columnExp;
+<a class="jxr_linenumber" name="127" href="#127">127</a> 		assertThat(<span class="jxr_string">"Wrong number of name parts on column axis member."</span>,
+<a class="jxr_linenumber" name="128" href="#128">128</a> 				columnId.getNames().size(), is(equalTo(2)));
+<a class="jxr_linenumber" name="129" href="#129">129</a> 
+<a class="jxr_linenumber" name="130" href="#130">130</a> 		assertThat(<span class="jxr_string">"First name part has wrong identifier."</span>, columnId.getNames()
+<a class="jxr_linenumber" name="131" href="#131">131</a> 				.get(0).getName(), is(equalTo(<span class="jxr_string">"[AAA]"</span>)));
+<a class="jxr_linenumber" name="132" href="#132">132</a> 		assertThat(<span class="jxr_string">"Second name part has wrong identifier."</span>, columnId
+<a class="jxr_linenumber" name="133" href="#133">133</a> 				.getNames().get(1).getName(), is(equalTo(<span class="jxr_string">"[BBB]"</span>)));
+<a class="jxr_linenumber" name="134" href="#134">134</a> 		assertThat(<span class="jxr_string">"First name part cannot be a key identifier."</span>, columnId
+<a class="jxr_linenumber" name="135" href="#135">135</a> 				.getNames().get(0).isKey(), is(false));
+<a class="jxr_linenumber" name="136" href="#136">136</a> 		assertThat(<span class="jxr_string">"Second name part is a key identifier."</span>, columnId.getNames()
+<a class="jxr_linenumber" name="137" href="#137">137</a> 				.get(1).isKey(), is(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="138" href="#138">138</a> 
+<a class="jxr_linenumber" name="139" href="#139">139</a> 		Exp rowExp = query.getAxes().get(1).getExp();
+<a class="jxr_linenumber" name="140" href="#140">140</a> 
+<a class="jxr_linenumber" name="141" href="#141">141</a> 		assertThat(<span class="jxr_string">"Exp object for rows axis is null."</span>, rowExp,
+<a class="jxr_linenumber" name="142" href="#142">142</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="143" href="#143">143</a> 
+<a class="jxr_linenumber" name="144" href="#144">144</a> 		assertThat(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>, rowExp,
+<a class="jxr_linenumber" name="145" href="#145">145</a> 				is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="146" href="#146">146</a> 
+<a class="jxr_linenumber" name="147" href="#147">147</a> 		CompoundId rowId = (CompoundId) rowExp;
+<a class="jxr_linenumber" name="148" href="#148">148</a> 		assertThat(<span class="jxr_string">"Wrong number of name parts on row axis member."</span>, rowId
+<a class="jxr_linenumber" name="149" href="#149">149</a> 				.getNames().size(), is(equalTo(3)));
+<a class="jxr_linenumber" name="150" href="#150">150</a> 
+<a class="jxr_linenumber" name="151" href="#151">151</a> 		assertThat(<span class="jxr_string">"First name part has wrong identifier."</span>, rowId.getNames()
+<a class="jxr_linenumber" name="152" href="#152">152</a> 				.get(0).getName(), is(equalTo(<span class="jxr_string">"[CCC]"</span>)));
+<a class="jxr_linenumber" name="153" href="#153">153</a> 		assertThat(<span class="jxr_string">"Second name part has wrong identifier."</span>, rowId.getNames()
+<a class="jxr_linenumber" name="154" href="#154">154</a> 				.get(1).getName(), is(equalTo(<span class="jxr_string">"[DDD]"</span>)));
+<a class="jxr_linenumber" name="155" href="#155">155</a> 		assertThat(<span class="jxr_string">"Third name part has wrong identifier."</span>, rowId.getNames()
+<a class="jxr_linenumber" name="156" href="#156">156</a> 				.get(2).getName(), is(equalTo(<span class="jxr_string">"[EEE]"</span>)));
+<a class="jxr_linenumber" name="157" href="#157">157</a> 		assertThat(<span class="jxr_string">"First name part cannot be a key identifier."</span>, rowId
+<a class="jxr_linenumber" name="158" href="#158">158</a> 				.getNames().get(0).isKey(), is(false));
+<a class="jxr_linenumber" name="159" href="#159">159</a> 		assertThat(<span class="jxr_string">"Second name part is a key identifier."</span>, rowId.getNames()
+<a class="jxr_linenumber" name="160" href="#160">160</a> 				.get(1).isKey(), is(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="161" href="#161">161</a> 		assertThat(<span class="jxr_string">"Third name part is not a key identifier."</span>, rowId.getNames()
+<a class="jxr_linenumber" name="162" href="#162">162</a> 				.get(2).isKey(), is(false));
+<a class="jxr_linenumber" name="163" href="#163">163</a> 	}
 <a class="jxr_linenumber" name="164" href="#164">164</a> 
-<a class="jxr_linenumber" name="165" href="#165">165</a> 		query.setAxis(<strong class="jxr_keyword">new</strong> QueryAxis(Axis.COLUMNS, columnId));
-<a class="jxr_linenumber" name="166" href="#166">166</a> 		query.setAxis(<strong class="jxr_keyword">new</strong> QueryAxis(Axis.ROWS, rowId));
-<a class="jxr_linenumber" name="167" href="#167">167</a> 
-<a class="jxr_linenumber" name="168" href="#168">168</a> 		query.setCube(<strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"DummyCube"</span>));
-<a class="jxr_linenumber" name="169" href="#169">169</a> 
-<a class="jxr_linenumber" name="170" href="#170">170</a> 		assertEquals(<span class="jxr_string">"Unexpected MDX query."</span>, mdx, query.toMdx());
-<a class="jxr_linenumber" name="171" href="#171">171</a> 	}
-<a class="jxr_linenumber" name="172" href="#172">172</a> 
-<a class="jxr_linenumber" name="173" href="#173">173</a> 	@Test
-<a class="jxr_linenumber" name="174" href="#174">174</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseSapVariables() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="175" href="#175">175</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].members ON COLUMNS, NON EMPTY [ODB_CUST].members ON ROWS "</span>
-<a class="jxr_linenumber" name="176" href="#176">176</a> 				+ <span class="jxr_string">"FROM [ODBOSCEN1/MKTBRANCH] SAP VARIABLES [ODBBRANC] INCLUDING [ODB_BRANC].[CHEM]"</span>;
-<a class="jxr_linenumber" name="177" href="#177">177</a> 
-<a class="jxr_linenumber" name="178" href="#178">178</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="179" href="#179">179</a> 
-<a class="jxr_linenumber" name="180" href="#180">180</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="181" href="#181">181</a> 		assertNotNull(<span class="jxr_string">"SAP varaible list should not be null."</span>,
-<a class="jxr_linenumber" name="182" href="#182">182</a> 				query.getSapVariables());
+<a class="jxr_linenumber" name="165" href="#165">165</a> 	@Test
+<a class="jxr_linenumber" name="166" href="#166">166</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGenerateKeyIdentifier() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="167" href="#167">167</a> 		String mdx = <span class="jxr_string">"SELECT [AAA].&amp;[BBB] ON COLUMNS, [CCC].&amp;[DDD].[EEE] ON ROWS FROM DummyCube"</span>;
+<a class="jxr_linenumber" name="168" href="#168">168</a> 
+<a class="jxr_linenumber" name="169" href="#169">169</a> 		MdxStatement query = <strong class="jxr_keyword">new</strong> MdxStatement();
+<a class="jxr_linenumber" name="170" href="#170">170</a> 
+<a class="jxr_linenumber" name="171" href="#171">171</a> 		CompoundId columnId = <strong class="jxr_keyword">new</strong> CompoundId().append(<span class="jxr_string">"[AAA]"</span>).append(<span class="jxr_string">"[BBB]"</span>,
+<a class="jxr_linenumber" name="172" href="#172">172</a> 				<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="173" href="#173">173</a> 		CompoundId rowId = <strong class="jxr_keyword">new</strong> CompoundId().append(<span class="jxr_string">"[CCC]"</span>)
+<a class="jxr_linenumber" name="174" href="#174">174</a> 				.append(<span class="jxr_string">"[DDD]"</span>, <strong class="jxr_keyword">true</strong>).append(<span class="jxr_string">"[EEE]"</span>);
+<a class="jxr_linenumber" name="175" href="#175">175</a> 
+<a class="jxr_linenumber" name="176" href="#176">176</a> 		query.setAxis(<strong class="jxr_keyword">new</strong> QueryAxis(Axis.COLUMNS, columnId));
+<a class="jxr_linenumber" name="177" href="#177">177</a> 		query.setAxis(<strong class="jxr_keyword">new</strong> QueryAxis(Axis.ROWS, rowId));
+<a class="jxr_linenumber" name="178" href="#178">178</a> 
+<a class="jxr_linenumber" name="179" href="#179">179</a> 		query.setCube(<strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"DummyCube"</span>));
+<a class="jxr_linenumber" name="180" href="#180">180</a> 
+<a class="jxr_linenumber" name="181" href="#181">181</a> 		assertThat(<span class="jxr_string">"Unexpected MDX query."</span>, query.toMdx(), is(equalTo(mdx)));
+<a class="jxr_linenumber" name="182" href="#182">182</a> 	}
 <a class="jxr_linenumber" name="183" href="#183">183</a> 
-<a class="jxr_linenumber" name="184" href="#184">184</a> 		assertEquals(<span class="jxr_string">"Number of SAP variables should be 1."</span>, 1, query
-<a class="jxr_linenumber" name="185" href="#185">185</a> 				.getSapVariables().size());
-<a class="jxr_linenumber" name="186" href="#186">186</a> 
-<a class="jxr_linenumber" name="187" href="#187">187</a> 		SapVariable variable = query.getSapVariables().get(0);
+<a class="jxr_linenumber" name="184" href="#184">184</a> 	@Test
+<a class="jxr_linenumber" name="185" href="#185">185</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseSapVariables() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="186" href="#186">186</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].members ON COLUMNS, NON EMPTY [ODB_CUST].members ON ROWS "</span>
+<a class="jxr_linenumber" name="187" href="#187">187</a> 				+ <span class="jxr_string">"FROM [ODBOSCEN1/MKTBRANCH] SAP VARIABLES [ODBBRANC] INCLUDING [ODB_BRANC].[CHEM]"</span>;
 <a class="jxr_linenumber" name="188" href="#188">188</a> 
-<a class="jxr_linenumber" name="189" href="#189">189</a> 		assertNotNull(<span class="jxr_string">"SAP varaible should not be null."</span>, variable);
+<a class="jxr_linenumber" name="189" href="#189">189</a> 		MdxStatement query = parseQuery(mdx);
 <a class="jxr_linenumber" name="190" href="#190">190</a> 
-<a class="jxr_linenumber" name="191" href="#191">191</a> 		CompoundId name = variable.getName();
-<a class="jxr_linenumber" name="192" href="#192">192</a> 		assertNotNull(<span class="jxr_string">"Name of the SAP varaible should not be null."</span>, name);
-<a class="jxr_linenumber" name="193" href="#193">193</a> 
-<a class="jxr_linenumber" name="194" href="#194">194</a> 		List&lt;SapVariable.Value&gt; values = variable.getValues();
-<a class="jxr_linenumber" name="195" href="#195">195</a> 		assertNotNull(<span class="jxr_string">"Value list of the SAP varaible should not be null."</span>,
-<a class="jxr_linenumber" name="196" href="#196">196</a> 				values);
-<a class="jxr_linenumber" name="197" href="#197">197</a> 		assertEquals(<span class="jxr_string">"Number of the SAP variable value should be 1."</span>, 1,
-<a class="jxr_linenumber" name="198" href="#198">198</a> 				values.size());
+<a class="jxr_linenumber" name="191" href="#191">191</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="192" href="#192">192</a> 		assertThat(<span class="jxr_string">"SAP varaible list should not be null."</span>,
+<a class="jxr_linenumber" name="193" href="#193">193</a> 				query.getSapVariables(), is(notNullValue()));
+<a class="jxr_linenumber" name="194" href="#194">194</a> 
+<a class="jxr_linenumber" name="195" href="#195">195</a> 		assertThat(<span class="jxr_string">"Number of SAP variables should be 1."</span>, query
+<a class="jxr_linenumber" name="196" href="#196">196</a> 				.getSapVariables().size(), is(equalTo(1)));
+<a class="jxr_linenumber" name="197" href="#197">197</a> 
+<a class="jxr_linenumber" name="198" href="#198">198</a> 		SapVariable variable = query.getSapVariables().get(0);
 <a class="jxr_linenumber" name="199" href="#199">199</a> 
-<a class="jxr_linenumber" name="200" href="#200">200</a> 		SapVariable.Value value = values.get(0);
-<a class="jxr_linenumber" name="201" href="#201">201</a> 		assertFalse(<span class="jxr_string">"The SAP variable is not an interval value."</span>,
-<a class="jxr_linenumber" name="202" href="#202">202</a> 				value.isInterval());
-<a class="jxr_linenumber" name="203" href="#203">203</a> 		assertTrue(<span class="jxr_string">"The SAP variable has specified INCLUDING option."</span>,
-<a class="jxr_linenumber" name="204" href="#204">204</a> 				value.isIncluding());
-<a class="jxr_linenumber" name="205" href="#205">205</a> 
-<a class="jxr_linenumber" name="206" href="#206">206</a> 		assertNotNull(<span class="jxr_string">"Option value of the SAP varaible should not be null."</span>,
-<a class="jxr_linenumber" name="207" href="#207">207</a> 				value.getValue());
-<a class="jxr_linenumber" name="208" href="#208">208</a> 
-<a class="jxr_linenumber" name="209" href="#209">209</a> 		assertTrue(
-<a class="jxr_linenumber" name="210" href="#210">210</a> 				<span class="jxr_string">"Option value of the SAP variable should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="211" href="#211">211</a> 				value.getValue() instanceof CompoundId);
+<a class="jxr_linenumber" name="200" href="#200">200</a> 		assertThat(<span class="jxr_string">"SAP varaible should not be null."</span>, variable,
+<a class="jxr_linenumber" name="201" href="#201">201</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="202" href="#202">202</a> 
+<a class="jxr_linenumber" name="203" href="#203">203</a> 		CompoundId name = variable.getName();
+<a class="jxr_linenumber" name="204" href="#204">204</a> 		assertThat(<span class="jxr_string">"Name of the SAP varaible should not be null."</span>, name,
+<a class="jxr_linenumber" name="205" href="#205">205</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="206" href="#206">206</a> 
+<a class="jxr_linenumber" name="207" href="#207">207</a> 		List&lt;SapVariable.Value&gt; values = variable.getValues();
+<a class="jxr_linenumber" name="208" href="#208">208</a> 		assertThat(<span class="jxr_string">"Value list of the SAP varaible should not be null."</span>,
+<a class="jxr_linenumber" name="209" href="#209">209</a> 				values, is(notNullValue()));
+<a class="jxr_linenumber" name="210" href="#210">210</a> 		assertThat(<span class="jxr_string">"Number of the SAP variable value should be 1."</span>,
+<a class="jxr_linenumber" name="211" href="#211">211</a> 				values.size(), is(equalTo(1)));
 <a class="jxr_linenumber" name="212" href="#212">212</a> 
-<a class="jxr_linenumber" name="213" href="#213">213</a> 		assertEquals(<span class="jxr_string">"Incorrect option value of the SAP variable."</span>,
-<a class="jxr_linenumber" name="214" href="#214">214</a> 				<span class="jxr_string">"[ODB_BRANC].[CHEM]"</span>, value.getValue().toMdx());
-<a class="jxr_linenumber" name="215" href="#215">215</a> 	}
-<a class="jxr_linenumber" name="216" href="#216">216</a> 
-<a class="jxr_linenumber" name="217" href="#217">217</a> 	@Test
-<a class="jxr_linenumber" name="218" href="#218">218</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseOpeningBracket() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="219" href="#219">219</a> 		String mdx = <span class="jxr_string">"SELECT [AA[BB].[CC] ON COLUMNS, [DD].[[AAB] ON ROWS FROM DummyCube"</span>;
-<a class="jxr_linenumber" name="220" href="#220">220</a> 
-<a class="jxr_linenumber" name="221" href="#221">221</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="222" href="#222">222</a> 
-<a class="jxr_linenumber" name="223" href="#223">223</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="224" href="#224">224</a> 		assertNotNull(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes());
+<a class="jxr_linenumber" name="213" href="#213">213</a> 		SapVariable.Value value = values.get(0);
+<a class="jxr_linenumber" name="214" href="#214">214</a> 		assertThat(<span class="jxr_string">"The SAP variable is not an interval value."</span>,
+<a class="jxr_linenumber" name="215" href="#215">215</a> 				value.isInterval(), is(false));
+<a class="jxr_linenumber" name="216" href="#216">216</a> 		assertThat(<span class="jxr_string">"The SAP variable has specified INCLUDING option."</span>,
+<a class="jxr_linenumber" name="217" href="#217">217</a> 				value.isIncluding(), is(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="218" href="#218">218</a> 
+<a class="jxr_linenumber" name="219" href="#219">219</a> 		assertThat(<span class="jxr_string">"Option value of the SAP varaible should not be null."</span>,
+<a class="jxr_linenumber" name="220" href="#220">220</a> 				value.getValue(), is(notNullValue()));
+<a class="jxr_linenumber" name="221" href="#221">221</a> 
+<a class="jxr_linenumber" name="222" href="#222">222</a> 		assertThat(
+<a class="jxr_linenumber" name="223" href="#223">223</a> 				<span class="jxr_string">"Option value of the SAP variable should be instance of CompoundId."</span>,
+<a class="jxr_linenumber" name="224" href="#224">224</a> 				value.getValue(), is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
 <a class="jxr_linenumber" name="225" href="#225">225</a> 
-<a class="jxr_linenumber" name="226" href="#226">226</a> 		assertEquals(<span class="jxr_string">"Number of axes should be 2."</span>, 2, query.getAxes().size());
-<a class="jxr_linenumber" name="227" href="#227">227</a> 
-<a class="jxr_linenumber" name="228" href="#228">228</a> 		Exp columnExp = query.getAxes().get(0).getExp();
+<a class="jxr_linenumber" name="226" href="#226">226</a> 		assertThat(<span class="jxr_string">"Incorrect option value of the SAP variable."</span>, value
+<a class="jxr_linenumber" name="227" href="#227">227</a> 				.getValue().toMdx(), is(equalTo(<span class="jxr_string">"[ODB_BRANC].[CHEM]"</span>)));
+<a class="jxr_linenumber" name="228" href="#228">228</a> 	}
 <a class="jxr_linenumber" name="229" href="#229">229</a> 
-<a class="jxr_linenumber" name="230" href="#230">230</a> 		assertNotNull(<span class="jxr_string">"Exp object for columns axis is null."</span>, columnExp);
-<a class="jxr_linenumber" name="231" href="#231">231</a> 
-<a class="jxr_linenumber" name="232" href="#232">232</a> 		assertTrue(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="233" href="#233">233</a> 				columnExp instanceof CompoundId);
-<a class="jxr_linenumber" name="234" href="#234">234</a> 
-<a class="jxr_linenumber" name="235" href="#235">235</a> 		CompoundId columnMember = (CompoundId) columnExp;
-<a class="jxr_linenumber" name="236" href="#236">236</a> 		String[] columnNames = columnMember.toStringArray();
-<a class="jxr_linenumber" name="237" href="#237">237</a> 
-<a class="jxr_linenumber" name="238" href="#238">238</a> 		assertNotNull(<span class="jxr_string">"Segments of column member id is null."</span>, columnNames);
-<a class="jxr_linenumber" name="239" href="#239">239</a> 		assertEquals(<span class="jxr_string">"Column member id should contain 2 segment parts."</span>, 2,
-<a class="jxr_linenumber" name="240" href="#240">240</a> 				columnNames.length);
-<a class="jxr_linenumber" name="241" href="#241">241</a> 		assertEquals(
-<a class="jxr_linenumber" name="242" href="#242">242</a> 				<span class="jxr_string">"First segment of the column member element is incorrect."</span>,
-<a class="jxr_linenumber" name="243" href="#243">243</a> 				<span class="jxr_string">"[AA[BB]"</span>, columnNames[0]);
-<a class="jxr_linenumber" name="244" href="#244">244</a> 		assertEquals(
-<a class="jxr_linenumber" name="245" href="#245">245</a> 				<span class="jxr_string">"Second segment of the column member element is incorrect."</span>,
-<a class="jxr_linenumber" name="246" href="#246">246</a> 				<span class="jxr_string">"[CC]"</span>, columnNames[1]);
+<a class="jxr_linenumber" name="230" href="#230">230</a> 	@Test
+<a class="jxr_linenumber" name="231" href="#231">231</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseOpeningBracket() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="232" href="#232">232</a> 		String mdx = <span class="jxr_string">"SELECT [AA[BB].[CC] ON COLUMNS, [DD].[[AAB] ON ROWS FROM DummyCube"</span>;
+<a class="jxr_linenumber" name="233" href="#233">233</a> 
+<a class="jxr_linenumber" name="234" href="#234">234</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="235" href="#235">235</a> 
+<a class="jxr_linenumber" name="236" href="#236">236</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="237" href="#237">237</a> 		assertThat(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes(),
+<a class="jxr_linenumber" name="238" href="#238">238</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="239" href="#239">239</a> 
+<a class="jxr_linenumber" name="240" href="#240">240</a> 		assertThat(<span class="jxr_string">"Number of axes should be 2."</span>, query.getAxes().size(),
+<a class="jxr_linenumber" name="241" href="#241">241</a> 				is(equalTo(2)));
+<a class="jxr_linenumber" name="242" href="#242">242</a> 
+<a class="jxr_linenumber" name="243" href="#243">243</a> 		Exp columnExp = query.getAxes().get(0).getExp();
+<a class="jxr_linenumber" name="244" href="#244">244</a> 
+<a class="jxr_linenumber" name="245" href="#245">245</a> 		assertThat(<span class="jxr_string">"Exp object for columns axis is null."</span>, columnExp,
+<a class="jxr_linenumber" name="246" href="#246">246</a> 				is(notNullValue()));
 <a class="jxr_linenumber" name="247" href="#247">247</a> 
-<a class="jxr_linenumber" name="248" href="#248">248</a> 		Exp rowExp = query.getAxes().get(1).getExp();
-<a class="jxr_linenumber" name="249" href="#249">249</a> 
-<a class="jxr_linenumber" name="250" href="#250">250</a> 		assertNotNull(<span class="jxr_string">"Exp object for rows axis is null."</span>, rowExp);
-<a class="jxr_linenumber" name="251" href="#251">251</a> 
-<a class="jxr_linenumber" name="252" href="#252">252</a> 		assertTrue(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="253" href="#253">253</a> 				rowExp instanceof CompoundId);
-<a class="jxr_linenumber" name="254" href="#254">254</a> 
-<a class="jxr_linenumber" name="255" href="#255">255</a> 		CompoundId rowMember = (CompoundId) rowExp;
-<a class="jxr_linenumber" name="256" href="#256">256</a> 		String[] rowNames = rowMember.toStringArray();
-<a class="jxr_linenumber" name="257" href="#257">257</a> 
-<a class="jxr_linenumber" name="258" href="#258">258</a> 		assertNotNull(<span class="jxr_string">"Segments of row member id is null."</span>, rowNames);
-<a class="jxr_linenumber" name="259" href="#259">259</a> 		assertEquals(<span class="jxr_string">"Row member id should contain 2 segment parts."</span>, 2,
-<a class="jxr_linenumber" name="260" href="#260">260</a> 				rowNames.length);
-<a class="jxr_linenumber" name="261" href="#261">261</a> 		assertEquals(<span class="jxr_string">"First segment of the row member element is incorrect."</span>,
-<a class="jxr_linenumber" name="262" href="#262">262</a> 				<span class="jxr_string">"[DD]"</span>, rowNames[0]);
-<a class="jxr_linenumber" name="263" href="#263">263</a> 		assertEquals(<span class="jxr_string">"Second segment of the row member element is incorrect."</span>,
-<a class="jxr_linenumber" name="264" href="#264">264</a> 				<span class="jxr_string">"[[AAB]"</span>, rowNames[1]);
-<a class="jxr_linenumber" name="265" href="#265">265</a> 	}
-<a class="jxr_linenumber" name="266" href="#266">266</a> 
-<a class="jxr_linenumber" name="267" href="#267">267</a> 	@Test
-<a class="jxr_linenumber" name="268" href="#268">268</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseBracketEscape() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="269" href="#269">269</a> 		String mdx = <span class="jxr_string">"SELECT [AA[BB]]].[CC] ON COLUMNS, [DD].[AA]]B] ON ROWS FROM DummyCube"</span>;
+<a class="jxr_linenumber" name="248" href="#248">248</a> 		assertThat(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>, columnExp,
+<a class="jxr_linenumber" name="249" href="#249">249</a> 				is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="250" href="#250">250</a> 
+<a class="jxr_linenumber" name="251" href="#251">251</a> 		CompoundId columnMember = (CompoundId) columnExp;
+<a class="jxr_linenumber" name="252" href="#252">252</a> 		String[] columnNames = columnMember.toStringArray();
+<a class="jxr_linenumber" name="253" href="#253">253</a> 
+<a class="jxr_linenumber" name="254" href="#254">254</a> 		assertThat(<span class="jxr_string">"Segments of column member id is null."</span>, columnNames,
+<a class="jxr_linenumber" name="255" href="#255">255</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="256" href="#256">256</a> 		assertThat(<span class="jxr_string">"Column member id should contain 2 segment parts."</span>,
+<a class="jxr_linenumber" name="257" href="#257">257</a> 				columnNames.length, is(equalTo(2)));
+<a class="jxr_linenumber" name="258" href="#258">258</a> 		assertThat(<span class="jxr_string">"First segment of the column member element is incorrect."</span>,
+<a class="jxr_linenumber" name="259" href="#259">259</a> 				columnNames[0], is(equalTo(<span class="jxr_string">"[AA[BB]"</span>)));
+<a class="jxr_linenumber" name="260" href="#260">260</a> 		assertThat(<span class="jxr_string">"Second segment of the column member element is incorrect."</span>,
+<a class="jxr_linenumber" name="261" href="#261">261</a> 				columnNames[1], is(equalTo(<span class="jxr_string">"[CC]"</span>)));
+<a class="jxr_linenumber" name="262" href="#262">262</a> 
+<a class="jxr_linenumber" name="263" href="#263">263</a> 		Exp rowExp = query.getAxes().get(1).getExp();
+<a class="jxr_linenumber" name="264" href="#264">264</a> 
+<a class="jxr_linenumber" name="265" href="#265">265</a> 		assertThat(<span class="jxr_string">"Exp object for rows axis is null."</span>, rowExp,
+<a class="jxr_linenumber" name="266" href="#266">266</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="267" href="#267">267</a> 
+<a class="jxr_linenumber" name="268" href="#268">268</a> 		assertThat(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>, rowExp,
+<a class="jxr_linenumber" name="269" href="#269">269</a> 				is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
 <a class="jxr_linenumber" name="270" href="#270">270</a> 
-<a class="jxr_linenumber" name="271" href="#271">271</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="272" href="#272">272</a> 
-<a class="jxr_linenumber" name="273" href="#273">273</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="274" href="#274">274</a> 		assertNotNull(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes());
-<a class="jxr_linenumber" name="275" href="#275">275</a> 
-<a class="jxr_linenumber" name="276" href="#276">276</a> 		assertEquals(<span class="jxr_string">"Number of axes should be 2."</span>, 2, query.getAxes().size());
-<a class="jxr_linenumber" name="277" href="#277">277</a> 
-<a class="jxr_linenumber" name="278" href="#278">278</a> 		Exp columnExp = query.getAxes().get(0).getExp();
-<a class="jxr_linenumber" name="279" href="#279">279</a> 
-<a class="jxr_linenumber" name="280" href="#280">280</a> 		assertNotNull(<span class="jxr_string">"Exp object for columns axis is null."</span>, columnExp);
-<a class="jxr_linenumber" name="281" href="#281">281</a> 
-<a class="jxr_linenumber" name="282" href="#282">282</a> 		assertTrue(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="283" href="#283">283</a> 				columnExp instanceof CompoundId);
-<a class="jxr_linenumber" name="284" href="#284">284</a> 
-<a class="jxr_linenumber" name="285" href="#285">285</a> 		CompoundId columnMember = (CompoundId) columnExp;
-<a class="jxr_linenumber" name="286" href="#286">286</a> 		String[] columnNames = columnMember.toStringArray();
+<a class="jxr_linenumber" name="271" href="#271">271</a> 		CompoundId rowMember = (CompoundId) rowExp;
+<a class="jxr_linenumber" name="272" href="#272">272</a> 		String[] rowNames = rowMember.toStringArray();
+<a class="jxr_linenumber" name="273" href="#273">273</a> 
+<a class="jxr_linenumber" name="274" href="#274">274</a> 		assertThat(<span class="jxr_string">"Segments of row member id is null."</span>, rowNames,
+<a class="jxr_linenumber" name="275" href="#275">275</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="276" href="#276">276</a> 		assertThat(<span class="jxr_string">"Row member id should contain 2 segment parts."</span>,
+<a class="jxr_linenumber" name="277" href="#277">277</a> 				rowNames.length, is(equalTo(2)));
+<a class="jxr_linenumber" name="278" href="#278">278</a> 		assertThat(<span class="jxr_string">"First segment of the row member element is incorrect."</span>,
+<a class="jxr_linenumber" name="279" href="#279">279</a> 				rowNames[0], is(equalTo(<span class="jxr_string">"[DD]"</span>)));
+<a class="jxr_linenumber" name="280" href="#280">280</a> 		assertThat(<span class="jxr_string">"Second segment of the row member element is incorrect."</span>,
+<a class="jxr_linenumber" name="281" href="#281">281</a> 				rowNames[1], is(equalTo(<span class="jxr_string">"[[AAB]"</span>)));
+<a class="jxr_linenumber" name="282" href="#282">282</a> 	}
+<a class="jxr_linenumber" name="283" href="#283">283</a> 
+<a class="jxr_linenumber" name="284" href="#284">284</a> 	@Test
+<a class="jxr_linenumber" name="285" href="#285">285</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseBracketEscape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="286" href="#286">286</a> 		String mdx = <span class="jxr_string">"SELECT [AA[BB]]].[CC] ON COLUMNS, [DD].[AA]]B] ON ROWS FROM DummyCube"</span>;
 <a class="jxr_linenumber" name="287" href="#287">287</a> 
-<a class="jxr_linenumber" name="288" href="#288">288</a> 		assertNotNull(<span class="jxr_string">"Segments of column member id is null."</span>, columnNames);
-<a class="jxr_linenumber" name="289" href="#289">289</a> 		assertEquals(<span class="jxr_string">"Column member id should contain 2 segment parts."</span>, 2,
-<a class="jxr_linenumber" name="290" href="#290">290</a> 				columnNames.length);
-<a class="jxr_linenumber" name="291" href="#291">291</a> 		assertEquals(
-<a class="jxr_linenumber" name="292" href="#292">292</a> 				<span class="jxr_string">"First segment of the column member element is incorrect."</span>,
-<a class="jxr_linenumber" name="293" href="#293">293</a> 				<span class="jxr_string">"[AA[BB]]]"</span>, columnNames[0]);
-<a class="jxr_linenumber" name="294" href="#294">294</a> 		assertEquals(
-<a class="jxr_linenumber" name="295" href="#295">295</a> 				<span class="jxr_string">"Second segment of the column member element is incorrect."</span>,
-<a class="jxr_linenumber" name="296" href="#296">296</a> 				<span class="jxr_string">"[CC]"</span>, columnNames[1]);
-<a class="jxr_linenumber" name="297" href="#297">297</a> 
-<a class="jxr_linenumber" name="298" href="#298">298</a> 		Exp rowExp = query.getAxes().get(1).getExp();
-<a class="jxr_linenumber" name="299" href="#299">299</a> 
-<a class="jxr_linenumber" name="300" href="#300">300</a> 		assertNotNull(<span class="jxr_string">"Exp object for rows axis is null."</span>, rowExp);
+<a class="jxr_linenumber" name="288" href="#288">288</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="289" href="#289">289</a> 
+<a class="jxr_linenumber" name="290" href="#290">290</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="291" href="#291">291</a> 		assertThat(<span class="jxr_string">"Axes should not be null."</span>, query.getAxes(),
+<a class="jxr_linenumber" name="292" href="#292">292</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="293" href="#293">293</a> 
+<a class="jxr_linenumber" name="294" href="#294">294</a> 		assertThat(<span class="jxr_string">"Number of axes should be 2."</span>, query.getAxes().size(),
+<a class="jxr_linenumber" name="295" href="#295">295</a> 				is(equalTo(2)));
+<a class="jxr_linenumber" name="296" href="#296">296</a> 
+<a class="jxr_linenumber" name="297" href="#297">297</a> 		Exp columnExp = query.getAxes().get(0).getExp();
+<a class="jxr_linenumber" name="298" href="#298">298</a> 
+<a class="jxr_linenumber" name="299" href="#299">299</a> 		assertThat(<span class="jxr_string">"Exp object for columns axis is null."</span>, columnExp,
+<a class="jxr_linenumber" name="300" href="#300">300</a> 				is(notNullValue()));
 <a class="jxr_linenumber" name="301" href="#301">301</a> 
-<a class="jxr_linenumber" name="302" href="#302">302</a> 		assertTrue(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>,
-<a class="jxr_linenumber" name="303" href="#303">303</a> 				rowExp instanceof CompoundId);
+<a class="jxr_linenumber" name="302" href="#302">302</a> 		assertThat(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>, columnExp,
+<a class="jxr_linenumber" name="303" href="#303">303</a> 				is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
 <a class="jxr_linenumber" name="304" href="#304">304</a> 
-<a class="jxr_linenumber" name="305" href="#305">305</a> 		CompoundId rowMember = (CompoundId) rowExp;
-<a class="jxr_linenumber" name="306" href="#306">306</a> 		String[] rowNames = rowMember.toStringArray();
+<a class="jxr_linenumber" name="305" href="#305">305</a> 		CompoundId columnMember = (CompoundId) columnExp;
+<a class="jxr_linenumber" name="306" href="#306">306</a> 		String[] columnNames = columnMember.toStringArray();
 <a class="jxr_linenumber" name="307" href="#307">307</a> 
-<a class="jxr_linenumber" name="308" href="#308">308</a> 		assertNotNull(<span class="jxr_string">"Segments of row member id is null."</span>, rowNames);
-<a class="jxr_linenumber" name="309" href="#309">309</a> 		assertEquals(<span class="jxr_string">"Row member id should contain 2 segment parts."</span>, 2,
-<a class="jxr_linenumber" name="310" href="#310">310</a> 				rowNames.length);
-<a class="jxr_linenumber" name="311" href="#311">311</a> 		assertEquals(<span class="jxr_string">"First segment of the row member element is incorrect."</span>,
-<a class="jxr_linenumber" name="312" href="#312">312</a> 				<span class="jxr_string">"[DD]"</span>, rowNames[0]);
-<a class="jxr_linenumber" name="313" href="#313">313</a> 		assertEquals(<span class="jxr_string">"Second segment of the row member element is incorrect."</span>,
-<a class="jxr_linenumber" name="314" href="#314">314</a> 				<span class="jxr_string">"[AA]]B]"</span>, rowNames[1]);
-<a class="jxr_linenumber" name="315" href="#315">315</a> 	}
+<a class="jxr_linenumber" name="308" href="#308">308</a> 		assertThat(<span class="jxr_string">"Segments of column member id is null."</span>, columnNames,
+<a class="jxr_linenumber" name="309" href="#309">309</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="310" href="#310">310</a> 		assertThat(<span class="jxr_string">"Column member id should contain 2 segment parts."</span>,
+<a class="jxr_linenumber" name="311" href="#311">311</a> 				columnNames.length, is(equalTo(2)));
+<a class="jxr_linenumber" name="312" href="#312">312</a> 		assertThat(<span class="jxr_string">"First segment of the column member element is incorrect."</span>,
+<a class="jxr_linenumber" name="313" href="#313">313</a> 				columnNames[0], is(equalTo(<span class="jxr_string">"[AA[BB]]]"</span>)));
+<a class="jxr_linenumber" name="314" href="#314">314</a> 		assertThat(<span class="jxr_string">"Second segment of the column member element is incorrect."</span>,
+<a class="jxr_linenumber" name="315" href="#315">315</a> 				columnNames[1], is(equalTo(<span class="jxr_string">"[CC]"</span>)));
 <a class="jxr_linenumber" name="316" href="#316">316</a> 
-<a class="jxr_linenumber" name="317" href="#317">317</a> 	@Test
-<a class="jxr_linenumber" name="318" href="#318">318</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGenerateBracketEscape() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="319" href="#319">319</a> 		String mdx = <span class="jxr_string">"SELECT [AA[BB]]].[CC] ON COLUMNS, [DD].[AA]]B] ON ROWS FROM DummyCube"</span>;
-<a class="jxr_linenumber" name="320" href="#320">320</a> 
-<a class="jxr_linenumber" name="321" href="#321">321</a> 		MdxStatement query = <strong class="jxr_keyword">new</strong> MdxStatement();
-<a class="jxr_linenumber" name="322" href="#322">322</a> 
-<a class="jxr_linenumber" name="323" href="#323">323</a> 		CompoundId columnId = <strong class="jxr_keyword">new</strong> CompoundId().append(<span class="jxr_string">"[AA[BB]]]"</span>).append(
-<a class="jxr_linenumber" name="324" href="#324">324</a> 				<span class="jxr_string">"[CC]"</span>);
-<a class="jxr_linenumber" name="325" href="#325">325</a> 		CompoundId rowId = <strong class="jxr_keyword">new</strong> CompoundId().append(<span class="jxr_string">"[DD]"</span>).append(<span class="jxr_string">"[AA]]B]"</span>);
-<a class="jxr_linenumber" name="326" href="#326">326</a> 
-<a class="jxr_linenumber" name="327" href="#327">327</a> 		query.setAxis(<strong class="jxr_keyword">new</strong> QueryAxis(Axis.COLUMNS, columnId));
-<a class="jxr_linenumber" name="328" href="#328">328</a> 		query.setAxis(<strong class="jxr_keyword">new</strong> QueryAxis(Axis.ROWS, rowId));
-<a class="jxr_linenumber" name="329" href="#329">329</a> 
-<a class="jxr_linenumber" name="330" href="#330">330</a> 		query.setCube(<strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"DummyCube"</span>));
-<a class="jxr_linenumber" name="331" href="#331">331</a> 
-<a class="jxr_linenumber" name="332" href="#332">332</a> 		assertEquals(<span class="jxr_string">"Unexpected MDX query."</span>, mdx, query.toMdx());
-<a class="jxr_linenumber" name="333" href="#333">333</a> 	}
-<a class="jxr_linenumber" name="334" href="#334">334</a> 
-<a class="jxr_linenumber" name="335" href="#335">335</a> 	@Test
-<a class="jxr_linenumber" name="336" href="#336">336</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseWithMember() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="337" href="#337">337</a> 		String mdx = <span class="jxr_string">"WITH MEMBER [Measures].[Special Discount] AS [Measures].[Discount Amount] * 1.5 "</span>
-<a class="jxr_linenumber" name="338" href="#338">338</a> 				+ <span class="jxr_string">"MEMBER [Measures].[Premium Discount] AS [Measures].[Discount Amount] * 2.0 "</span>
-<a class="jxr_linenumber" name="339" href="#339">339</a> 				+ <span class="jxr_string">"SELECT [Measures].[Special Discount] on COLUMNS, NON EMPTY [Product].[Product].MEMBERS ON ROWS "</span>
-<a class="jxr_linenumber" name="340" href="#340">340</a> 				+ <span class="jxr_string">"FROM [Adventure Works] WHERE [Product].[Category].[Bikes]"</span>;
+<a class="jxr_linenumber" name="317" href="#317">317</a> 		Exp rowExp = query.getAxes().get(1).getExp();
+<a class="jxr_linenumber" name="318" href="#318">318</a> 
+<a class="jxr_linenumber" name="319" href="#319">319</a> 		assertThat(<span class="jxr_string">"Exp object for rows axis is null."</span>, rowExp,
+<a class="jxr_linenumber" name="320" href="#320">320</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="321" href="#321">321</a> 
+<a class="jxr_linenumber" name="322" href="#322">322</a> 		assertThat(<span class="jxr_string">"Exp object should be instance of CompoundId."</span>, rowExp,
+<a class="jxr_linenumber" name="323" href="#323">323</a> 				is(instanceOf(CompoundId.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="324" href="#324">324</a> 
+<a class="jxr_linenumber" name="325" href="#325">325</a> 		CompoundId rowMember = (CompoundId) rowExp;
+<a class="jxr_linenumber" name="326" href="#326">326</a> 		String[] rowNames = rowMember.toStringArray();
+<a class="jxr_linenumber" name="327" href="#327">327</a> 
+<a class="jxr_linenumber" name="328" href="#328">328</a> 		assertThat(<span class="jxr_string">"Segments of row member id is null."</span>, rowNames,
+<a class="jxr_linenumber" name="329" href="#329">329</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="330" href="#330">330</a> 		assertThat(<span class="jxr_string">"Row member id should contain 2 segment parts."</span>,
+<a class="jxr_linenumber" name="331" href="#331">331</a> 				rowNames.length, is(equalTo(2)));
+<a class="jxr_linenumber" name="332" href="#332">332</a> 		assertThat(<span class="jxr_string">"First segment of the row member element is incorrect."</span>,
+<a class="jxr_linenumber" name="333" href="#333">333</a> 				rowNames[0], is(equalTo(<span class="jxr_string">"[DD]"</span>)));
+<a class="jxr_linenumber" name="334" href="#334">334</a> 		assertThat(<span class="jxr_string">"Second segment of the row member element is incorrect."</span>,
+<a class="jxr_linenumber" name="335" href="#335">335</a> 				rowNames[1], is(equalTo(<span class="jxr_string">"[AA]]B]"</span>)));
+<a class="jxr_linenumber" name="336" href="#336">336</a> 	}
+<a class="jxr_linenumber" name="337" href="#337">337</a> 
+<a class="jxr_linenumber" name="338" href="#338">338</a> 	@Test
+<a class="jxr_linenumber" name="339" href="#339">339</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testGenerateBracketEscape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="340" href="#340">340</a> 		String mdx = <span class="jxr_string">"SELECT [AA[BB]]].[CC] ON COLUMNS, [DD].[AA]]B] ON ROWS FROM DummyCube"</span>;
 <a class="jxr_linenumber" name="341" href="#341">341</a> 
-<a class="jxr_linenumber" name="342" href="#342">342</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="343" href="#343">343</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="344" href="#344">344</a> 
-<a class="jxr_linenumber" name="345" href="#345">345</a> 		List&lt;Formula&gt; formulas = query.getFormulas();
-<a class="jxr_linenumber" name="346" href="#346">346</a> 
-<a class="jxr_linenumber" name="347" href="#347">347</a> 		assertNotNull(<span class="jxr_string">"Formula list not be null."</span>, formulas);
-<a class="jxr_linenumber" name="348" href="#348">348</a> 		assertEquals(<span class="jxr_string">"Number of formula should be 2."</span>, 2, formulas.size());
-<a class="jxr_linenumber" name="349" href="#349">349</a> 
-<a class="jxr_linenumber" name="350" href="#350">350</a> 		Formula formula = formulas.get(0);
-<a class="jxr_linenumber" name="351" href="#351">351</a> 
-<a class="jxr_linenumber" name="352" href="#352">352</a> 		assertEquals(<span class="jxr_string">"Wrong formula type."</span>, Formula.Type.MEMBER,
-<a class="jxr_linenumber" name="353" href="#353">353</a> 				formula.getType());
-<a class="jxr_linenumber" name="354" href="#354">354</a> 		assertEquals(<span class="jxr_string">"Wrong calculated member name."</span>,
-<a class="jxr_linenumber" name="355" href="#355">355</a> 				<span class="jxr_string">"[Measures].[Special Discount]"</span>, formula.getName().toMdx());
-<a class="jxr_linenumber" name="356" href="#356">356</a> 
-<a class="jxr_linenumber" name="357" href="#357">357</a> 		formula = formulas.get(1);
-<a class="jxr_linenumber" name="358" href="#358">358</a> 
-<a class="jxr_linenumber" name="359" href="#359">359</a> 		Exp arg = formula.getExp();
-<a class="jxr_linenumber" name="360" href="#360">360</a> 
-<a class="jxr_linenumber" name="361" href="#361">361</a> 		assertTrue(<span class="jxr_string">"Wrong argument type."</span>, arg instanceof FunCall);
+<a class="jxr_linenumber" name="342" href="#342">342</a> 		MdxStatement query = <strong class="jxr_keyword">new</strong> MdxStatement();
+<a class="jxr_linenumber" name="343" href="#343">343</a> 
+<a class="jxr_linenumber" name="344" href="#344">344</a> 		CompoundId columnId = <strong class="jxr_keyword">new</strong> CompoundId().append(<span class="jxr_string">"[AA[BB]]]"</span>).append(
+<a class="jxr_linenumber" name="345" href="#345">345</a> 				<span class="jxr_string">"[CC]"</span>);
+<a class="jxr_linenumber" name="346" href="#346">346</a> 		CompoundId rowId = <strong class="jxr_keyword">new</strong> CompoundId().append(<span class="jxr_string">"[DD]"</span>).append(<span class="jxr_string">"[AA]]B]"</span>);
+<a class="jxr_linenumber" name="347" href="#347">347</a> 
+<a class="jxr_linenumber" name="348" href="#348">348</a> 		query.setAxis(<strong class="jxr_keyword">new</strong> QueryAxis(Axis.COLUMNS, columnId));
+<a class="jxr_linenumber" name="349" href="#349">349</a> 		query.setAxis(<strong class="jxr_keyword">new</strong> QueryAxis(Axis.ROWS, rowId));
+<a class="jxr_linenumber" name="350" href="#350">350</a> 
+<a class="jxr_linenumber" name="351" href="#351">351</a> 		query.setCube(<strong class="jxr_keyword">new</strong> CompoundId(<span class="jxr_string">"DummyCube"</span>));
+<a class="jxr_linenumber" name="352" href="#352">352</a> 
+<a class="jxr_linenumber" name="353" href="#353">353</a> 		assertThat(<span class="jxr_string">"Unexpected MDX query."</span>, query.toMdx(), is(equalTo(mdx)));
+<a class="jxr_linenumber" name="354" href="#354">354</a> 	}
+<a class="jxr_linenumber" name="355" href="#355">355</a> 
+<a class="jxr_linenumber" name="356" href="#356">356</a> 	@Test
+<a class="jxr_linenumber" name="357" href="#357">357</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseWithMember() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="358" href="#358">358</a> 		String mdx = <span class="jxr_string">"WITH MEMBER [Measures].[Special Discount] AS [Measures].[Discount Amount] * 1.5 "</span>
+<a class="jxr_linenumber" name="359" href="#359">359</a> 				+ <span class="jxr_string">"MEMBER [Measures].[Premium Discount] AS [Measures].[Discount Amount] * 2.0 "</span>
+<a class="jxr_linenumber" name="360" href="#360">360</a> 				+ <span class="jxr_string">"SELECT [Measures].[Special Discount] on COLUMNS, NON EMPTY [Product].[Product].MEMBERS ON ROWS "</span>
+<a class="jxr_linenumber" name="361" href="#361">361</a> 				+ <span class="jxr_string">"FROM [Adventure Works] WHERE [Product].[Category].[Bikes]"</span>;
 <a class="jxr_linenumber" name="362" href="#362">362</a> 
-<a class="jxr_linenumber" name="363" href="#363">363</a> 		FunCall func = (FunCall) arg;
-<a class="jxr_linenumber" name="364" href="#364">364</a> 
-<a class="jxr_linenumber" name="365" href="#365">365</a> 		assertEquals(<span class="jxr_string">"Wrong function type."</span>, Syntax.Infix, func.getType());
-<a class="jxr_linenumber" name="366" href="#366">366</a> 		assertEquals(<span class="jxr_string">"Wrong number of function arguments."</span>, 2, func.getArgs()
-<a class="jxr_linenumber" name="367" href="#367">367</a> 				.size());
-<a class="jxr_linenumber" name="368" href="#368">368</a> 	}
-<a class="jxr_linenumber" name="369" href="#369">369</a> 
-<a class="jxr_linenumber" name="370" href="#370">370</a> 	@Test
-<a class="jxr_linenumber" name="371" href="#371">371</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpression() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="372" href="#372">372</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
-<a class="jxr_linenumber" name="373" href="#373">373</a> 				+ <span class="jxr_string">"WHERE $[s:parameter]"</span>;
-<a class="jxr_linenumber" name="374" href="#374">374</a> 
-<a class="jxr_linenumber" name="375" href="#375">375</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="376" href="#376">376</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="377" href="#377">377</a> 
-<a class="jxr_linenumber" name="378" href="#378">378</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
-<a class="jxr_linenumber" name="379" href="#379">379</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, parameter);
+<a class="jxr_linenumber" name="363" href="#363">363</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="364" href="#364">364</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="365" href="#365">365</a> 
+<a class="jxr_linenumber" name="366" href="#366">366</a> 		List&lt;Formula&gt; formulas = query.getFormulas();
+<a class="jxr_linenumber" name="367" href="#367">367</a> 
+<a class="jxr_linenumber" name="368" href="#368">368</a> 		assertThat(<span class="jxr_string">"Formula list not be null."</span>, formulas, is(notNullValue()));
+<a class="jxr_linenumber" name="369" href="#369">369</a> 		assertThat(<span class="jxr_string">"Number of formula should be 2."</span>, formulas.size(),
+<a class="jxr_linenumber" name="370" href="#370">370</a> 				is(equalTo(2)));
+<a class="jxr_linenumber" name="371" href="#371">371</a> 
+<a class="jxr_linenumber" name="372" href="#372">372</a> 		Formula formula = formulas.get(0);
+<a class="jxr_linenumber" name="373" href="#373">373</a> 
+<a class="jxr_linenumber" name="374" href="#374">374</a> 		assertThat(<span class="jxr_string">"Wrong formula type."</span>, formula.getType(),
+<a class="jxr_linenumber" name="375" href="#375">375</a> 				is(equalTo(Formula.Type.MEMBER)));
+<a class="jxr_linenumber" name="376" href="#376">376</a> 		assertThat(<span class="jxr_string">"Wrong calculated member name."</span>, formula.getName().toMdx(),
+<a class="jxr_linenumber" name="377" href="#377">377</a> 				is(equalTo(<span class="jxr_string">"[Measures].[Special Discount]"</span>)));
+<a class="jxr_linenumber" name="378" href="#378">378</a> 
+<a class="jxr_linenumber" name="379" href="#379">379</a> 		formula = formulas.get(1);
 <a class="jxr_linenumber" name="380" href="#380">380</a> 
-<a class="jxr_linenumber" name="381" href="#381">381</a> 		assertEquals(<span class="jxr_string">"Wrong member expression returned."</span>, <span class="jxr_string">"parameter"</span>,
-<a class="jxr_linenumber" name="382" href="#382">382</a> 				parameter.getExpression());
-<a class="jxr_linenumber" name="383" href="#383">383</a> 		assertEquals(<span class="jxr_string">"Wrong expression namespace."</span>, <span class="jxr_string">"s"</span>,
-<a class="jxr_linenumber" name="384" href="#384">384</a> 				parameter.getNamespace());
-<a class="jxr_linenumber" name="385" href="#385">385</a> 	}
+<a class="jxr_linenumber" name="381" href="#381">381</a> 		Exp arg = formula.getExp();
+<a class="jxr_linenumber" name="382" href="#382">382</a> 
+<a class="jxr_linenumber" name="383" href="#383">383</a> 		assertThat(<span class="jxr_string">"Wrong argument type."</span>, arg, is(instanceOf(FunCall.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="384" href="#384">384</a> 
+<a class="jxr_linenumber" name="385" href="#385">385</a> 		FunCall func = (FunCall) arg;
 <a class="jxr_linenumber" name="386" href="#386">386</a> 
-<a class="jxr_linenumber" name="387" href="#387">387</a> 	@Test
-<a class="jxr_linenumber" name="388" href="#388">388</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testComplexParseMemberExpression() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="389" href="#389">389</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
-<a class="jxr_linenumber" name="390" href="#390">390</a> 				+ <span class="jxr_string">"WHERE $[s:#{set = \&quot;test\&quot;}]"</span>;
-<a class="jxr_linenumber" name="391" href="#391">391</a> 
-<a class="jxr_linenumber" name="392" href="#392">392</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="393" href="#393">393</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="394" href="#394">394</a> 
-<a class="jxr_linenumber" name="395" href="#395">395</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
-<a class="jxr_linenumber" name="396" href="#396">396</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, parameter);
+<a class="jxr_linenumber" name="387" href="#387">387</a> 		assertThat(<span class="jxr_string">"Wrong function type."</span>, func.getType(),
+<a class="jxr_linenumber" name="388" href="#388">388</a> 				is(equalTo(Syntax.Infix)));
+<a class="jxr_linenumber" name="389" href="#389">389</a> 		assertThat(<span class="jxr_string">"Wrong number of function arguments."</span>,
+<a class="jxr_linenumber" name="390" href="#390">390</a> 				func.getArgs().size(), is(equalTo(2)));
+<a class="jxr_linenumber" name="391" href="#391">391</a> 	}
+<a class="jxr_linenumber" name="392" href="#392">392</a> 
+<a class="jxr_linenumber" name="393" href="#393">393</a> 	@Test
+<a class="jxr_linenumber" name="394" href="#394">394</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpression() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="395" href="#395">395</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
+<a class="jxr_linenumber" name="396" href="#396">396</a> 				+ <span class="jxr_string">"WHERE $[s:parameter]"</span>;
 <a class="jxr_linenumber" name="397" href="#397">397</a> 
-<a class="jxr_linenumber" name="398" href="#398">398</a> 		assertEquals(<span class="jxr_string">"Wrong member expression returned."</span>, <span class="jxr_string">"#{set = \&quot;test\&quot;}"</span>,
-<a class="jxr_linenumber" name="399" href="#399">399</a> 				parameter.getExpression());
-<a class="jxr_linenumber" name="400" href="#400">400</a> 	}
-<a class="jxr_linenumber" name="401" href="#401">401</a> 
-<a class="jxr_linenumber" name="402" href="#402">402</a> 	@Test
-<a class="jxr_linenumber" name="403" href="#403">403</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInSet() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="404" href="#404">404</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
-<a class="jxr_linenumber" name="405" href="#405">405</a> 				+ <span class="jxr_string">"WHERE {$[s:parameter], [Time].[1998]}"</span>;
-<a class="jxr_linenumber" name="406" href="#406">406</a> 
-<a class="jxr_linenumber" name="407" href="#407">407</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="408" href="#408">408</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
+<a class="jxr_linenumber" name="398" href="#398">398</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="399" href="#399">399</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="400" href="#400">400</a> 
+<a class="jxr_linenumber" name="401" href="#401">401</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
+<a class="jxr_linenumber" name="402" href="#402">402</a> 		assertThat(<span class="jxr_string">"Slicer exp is null."</span>, parameter, is(notNullValue()));
+<a class="jxr_linenumber" name="403" href="#403">403</a> 
+<a class="jxr_linenumber" name="404" href="#404">404</a> 		assertThat(<span class="jxr_string">"Wrong member expression returned."</span>,
+<a class="jxr_linenumber" name="405" href="#405">405</a> 				parameter.getExpression(), is(equalTo(<span class="jxr_string">"parameter"</span>)));
+<a class="jxr_linenumber" name="406" href="#406">406</a> 		assertThat(<span class="jxr_string">"Wrong expression namespace."</span>, parameter.getNamespace(),
+<a class="jxr_linenumber" name="407" href="#407">407</a> 				is(equalTo(<span class="jxr_string">"s"</span>)));
+<a class="jxr_linenumber" name="408" href="#408">408</a> 	}
 <a class="jxr_linenumber" name="409" href="#409">409</a> 
-<a class="jxr_linenumber" name="410" href="#410">410</a> 		FunCall func = (FunCall) query.getSlicer();
-<a class="jxr_linenumber" name="411" href="#411">411</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, func);
-<a class="jxr_linenumber" name="412" href="#412">412</a> 
-<a class="jxr_linenumber" name="413" href="#413">413</a> 		assertEquals(<span class="jxr_string">"Wrong number of function arguments."</span>, 2, func.getArgs()
-<a class="jxr_linenumber" name="414" href="#414">414</a> 				.size());
-<a class="jxr_linenumber" name="415" href="#415">415</a> 
-<a class="jxr_linenumber" name="416" href="#416">416</a> 		ExpressionParameter parameter = (ExpressionParameter) func.getArgs()
-<a class="jxr_linenumber" name="417" href="#417">417</a> 				.get(0);
-<a class="jxr_linenumber" name="418" href="#418">418</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, parameter);
-<a class="jxr_linenumber" name="419" href="#419">419</a> 
-<a class="jxr_linenumber" name="420" href="#420">420</a> 		assertEquals(<span class="jxr_string">"Wrong member expression returned."</span>, <span class="jxr_string">"parameter"</span>,
-<a class="jxr_linenumber" name="421" href="#421">421</a> 				parameter.getExpression());
-<a class="jxr_linenumber" name="422" href="#422">422</a> 	}
-<a class="jxr_linenumber" name="423" href="#423">423</a> 
-<a class="jxr_linenumber" name="424" href="#424">424</a> 	@Test
-<a class="jxr_linenumber" name="425" href="#425">425</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInWithMember() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="426" href="#426">426</a> 		String mdx = <span class="jxr_string">"WITH MEMBER [EXPR_MEMBER] AS '$[s:parameter]' SELECT [Measures].[Store Sales] ON COLUMNS, "</span>
-<a class="jxr_linenumber" name="427" href="#427">427</a> 				+ <span class="jxr_string">"[Product].[All Products] ON ROWS FROM [Sales]"</span>;
-<a class="jxr_linenumber" name="428" href="#428">428</a> 
-<a class="jxr_linenumber" name="429" href="#429">429</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="430" href="#430">430</a> 
-<a class="jxr_linenumber" name="431" href="#431">431</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
+<a class="jxr_linenumber" name="410" href="#410">410</a> 	@Test
+<a class="jxr_linenumber" name="411" href="#411">411</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testComplexParseMemberExpression() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="412" href="#412">412</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
+<a class="jxr_linenumber" name="413" href="#413">413</a> 				+ <span class="jxr_string">"WHERE $[s:#{set = \&quot;test\&quot;}]"</span>;
+<a class="jxr_linenumber" name="414" href="#414">414</a> 
+<a class="jxr_linenumber" name="415" href="#415">415</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="416" href="#416">416</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="417" href="#417">417</a> 
+<a class="jxr_linenumber" name="418" href="#418">418</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
+<a class="jxr_linenumber" name="419" href="#419">419</a> 		assertThat(<span class="jxr_string">"Slicer exp is null."</span>, parameter, is(notNullValue()));
+<a class="jxr_linenumber" name="420" href="#420">420</a> 
+<a class="jxr_linenumber" name="421" href="#421">421</a> 		assertThat(<span class="jxr_string">"Wrong member expression returned."</span>,
+<a class="jxr_linenumber" name="422" href="#422">422</a> 				parameter.getExpression(), is(equalTo(<span class="jxr_string">"#{set = \&quot;test\&quot;}"</span>)));
+<a class="jxr_linenumber" name="423" href="#423">423</a> 	}
+<a class="jxr_linenumber" name="424" href="#424">424</a> 
+<a class="jxr_linenumber" name="425" href="#425">425</a> 	@Test
+<a class="jxr_linenumber" name="426" href="#426">426</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInSet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="427" href="#427">427</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
+<a class="jxr_linenumber" name="428" href="#428">428</a> 				+ <span class="jxr_string">"WHERE {$[s:parameter], [Time].[1998]}"</span>;
+<a class="jxr_linenumber" name="429" href="#429">429</a> 
+<a class="jxr_linenumber" name="430" href="#430">430</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="431" href="#431">431</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
 <a class="jxr_linenumber" name="432" href="#432">432</a> 
-<a class="jxr_linenumber" name="433" href="#433">433</a> 		List&lt;Formula&gt; formulas = query.getFormulas();
-<a class="jxr_linenumber" name="434" href="#434">434</a> 
-<a class="jxr_linenumber" name="435" href="#435">435</a> 		assertNotNull(<span class="jxr_string">"Formula list is null."</span>, formulas);
-<a class="jxr_linenumber" name="436" href="#436">436</a> 		assertEquals(<span class="jxr_string">"Wrong number of formula returned."</span>, 1, formulas.size());
-<a class="jxr_linenumber" name="437" href="#437">437</a> 
-<a class="jxr_linenumber" name="438" href="#438">438</a> 		Formula formula = formulas.get(0);
-<a class="jxr_linenumber" name="439" href="#439">439</a> 
-<a class="jxr_linenumber" name="440" href="#440">440</a> 		Exp exp = formula.getExp();
-<a class="jxr_linenumber" name="441" href="#441">441</a> 
-<a class="jxr_linenumber" name="442" href="#442">442</a> 		assertNotNull(<span class="jxr_string">"Formula expression is null."</span>, formulas);
-<a class="jxr_linenumber" name="443" href="#443">443</a> 		assertTrue(<span class="jxr_string">"Parameter expression type is wrong."</span>,
-<a class="jxr_linenumber" name="444" href="#444">444</a> 				exp instanceof ExpressionParameter);
-<a class="jxr_linenumber" name="445" href="#445">445</a> 
-<a class="jxr_linenumber" name="446" href="#446">446</a> 		ExpressionParameter parameter = (ExpressionParameter) exp;
-<a class="jxr_linenumber" name="447" href="#447">447</a> 
-<a class="jxr_linenumber" name="448" href="#448">448</a> 		assertEquals(<span class="jxr_string">"Wrong parameter expression."</span>, <span class="jxr_string">"parameter"</span>,
-<a class="jxr_linenumber" name="449" href="#449">449</a> 				parameter.getExpression());
-<a class="jxr_linenumber" name="450" href="#450">450</a> 	}
+<a class="jxr_linenumber" name="433" href="#433">433</a> 		FunCall func = (FunCall) query.getSlicer();
+<a class="jxr_linenumber" name="434" href="#434">434</a> 		assertThat(<span class="jxr_string">"Slicer exp is null."</span>, func, is(notNullValue()));
+<a class="jxr_linenumber" name="435" href="#435">435</a> 
+<a class="jxr_linenumber" name="436" href="#436">436</a> 		assertThat(<span class="jxr_string">"Wrong number of function arguments."</span>,
+<a class="jxr_linenumber" name="437" href="#437">437</a> 				func.getArgs().size(), is(equalTo(2)));
+<a class="jxr_linenumber" name="438" href="#438">438</a> 
+<a class="jxr_linenumber" name="439" href="#439">439</a> 		ExpressionParameter parameter = (ExpressionParameter) func.getArgs()
+<a class="jxr_linenumber" name="440" href="#440">440</a> 				.get(0);
+<a class="jxr_linenumber" name="441" href="#441">441</a> 		assertThat(<span class="jxr_string">"Slicer exp is null."</span>, parameter, is(notNullValue()));
+<a class="jxr_linenumber" name="442" href="#442">442</a> 
+<a class="jxr_linenumber" name="443" href="#443">443</a> 		assertThat(<span class="jxr_string">"Wrong member expression returned."</span>,
+<a class="jxr_linenumber" name="444" href="#444">444</a> 				parameter.getExpression(), is(equalTo(<span class="jxr_string">"parameter"</span>)));
+<a class="jxr_linenumber" name="445" href="#445">445</a> 	}
+<a class="jxr_linenumber" name="446" href="#446">446</a> 
+<a class="jxr_linenumber" name="447" href="#447">447</a> 	@Test
+<a class="jxr_linenumber" name="448" href="#448">448</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInWithMember() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="449" href="#449">449</a> 		String mdx = <span class="jxr_string">"WITH MEMBER [EXPR_MEMBER] AS '$[s:parameter]' SELECT [Measures].[Store Sales] ON COLUMNS, "</span>
+<a class="jxr_linenumber" name="450" href="#450">450</a> 				+ <span class="jxr_string">"[Product].[All Products] ON ROWS FROM [Sales]"</span>;
 <a class="jxr_linenumber" name="451" href="#451">451</a> 
-<a class="jxr_linenumber" name="452" href="#452">452</a> 	@Test
-<a class="jxr_linenumber" name="453" href="#453">453</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInWithSet() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="454" href="#454">454</a> 		String mdx = <span class="jxr_string">"WITH SET [EXPR_SET] AS {$[s:parameter1], [AAA].[BBB], $[s:parameter2]} "</span>
-<a class="jxr_linenumber" name="455" href="#455">455</a> 				+ <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, "</span>
-<a class="jxr_linenumber" name="456" href="#456">456</a> 				+ <span class="jxr_string">"[Product].[All Products] ON ROWS FROM [Sales]"</span>;
+<a class="jxr_linenumber" name="452" href="#452">452</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="453" href="#453">453</a> 
+<a class="jxr_linenumber" name="454" href="#454">454</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="455" href="#455">455</a> 
+<a class="jxr_linenumber" name="456" href="#456">456</a> 		List&lt;Formula&gt; formulas = query.getFormulas();
 <a class="jxr_linenumber" name="457" href="#457">457</a> 
-<a class="jxr_linenumber" name="458" href="#458">458</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="459" href="#459">459</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="460" href="#460">460</a> 
-<a class="jxr_linenumber" name="461" href="#461">461</a> 		List&lt;Formula&gt; formulas = query.getFormulas();
-<a class="jxr_linenumber" name="462" href="#462">462</a> 
-<a class="jxr_linenumber" name="463" href="#463">463</a> 		assertNotNull(<span class="jxr_string">"Formula list is null."</span>, formulas);
-<a class="jxr_linenumber" name="464" href="#464">464</a> 		assertEquals(<span class="jxr_string">"Wrong number of formula returned."</span>, 1, formulas.size());
+<a class="jxr_linenumber" name="458" href="#458">458</a> 		assertThat(<span class="jxr_string">"Formula list is null."</span>, formulas, is(notNullValue()));
+<a class="jxr_linenumber" name="459" href="#459">459</a> 		assertThat(<span class="jxr_string">"Wrong number of formula returned."</span>, formulas.size(),
+<a class="jxr_linenumber" name="460" href="#460">460</a> 				is(equalTo(1)));
+<a class="jxr_linenumber" name="461" href="#461">461</a> 
+<a class="jxr_linenumber" name="462" href="#462">462</a> 		Formula formula = formulas.get(0);
+<a class="jxr_linenumber" name="463" href="#463">463</a> 
+<a class="jxr_linenumber" name="464" href="#464">464</a> 		Exp exp = formula.getExp();
 <a class="jxr_linenumber" name="465" href="#465">465</a> 
-<a class="jxr_linenumber" name="466" href="#466">466</a> 		Formula formula = formulas.get(0);
-<a class="jxr_linenumber" name="467" href="#467">467</a> 
-<a class="jxr_linenumber" name="468" href="#468">468</a> 		Exp exp = formula.getExp();
+<a class="jxr_linenumber" name="466" href="#466">466</a> 		assertThat(<span class="jxr_string">"Formula expression is null."</span>, formulas, is(notNullValue()));
+<a class="jxr_linenumber" name="467" href="#467">467</a> 		assertThat(<span class="jxr_string">"Parameter expression type is wrong."</span>, exp,
+<a class="jxr_linenumber" name="468" href="#468">468</a> 				is(instanceOf(ExpressionParameter.<strong class="jxr_keyword">class</strong>)));
 <a class="jxr_linenumber" name="469" href="#469">469</a> 
-<a class="jxr_linenumber" name="470" href="#470">470</a> 		assertNotNull(<span class="jxr_string">"Formula expression is null."</span>, formulas);
-<a class="jxr_linenumber" name="471" href="#471">471</a> 		assertTrue(<span class="jxr_string">"Parameter expression type is wrong."</span>,
-<a class="jxr_linenumber" name="472" href="#472">472</a> 				exp instanceof FunCall);
-<a class="jxr_linenumber" name="473" href="#473">473</a> 
-<a class="jxr_linenumber" name="474" href="#474">474</a> 		FunCall func = (FunCall) exp;
+<a class="jxr_linenumber" name="470" href="#470">470</a> 		ExpressionParameter parameter = (ExpressionParameter) exp;
+<a class="jxr_linenumber" name="471" href="#471">471</a> 
+<a class="jxr_linenumber" name="472" href="#472">472</a> 		assertThat(<span class="jxr_string">"Wrong parameter expression."</span>, parameter.getExpression(),
+<a class="jxr_linenumber" name="473" href="#473">473</a> 				is(equalTo(<span class="jxr_string">"parameter"</span>)));
+<a class="jxr_linenumber" name="474" href="#474">474</a> 	}
 <a class="jxr_linenumber" name="475" href="#475">475</a> 
-<a class="jxr_linenumber" name="476" href="#476">476</a> 		assertNotNull(<span class="jxr_string">"Set member list is null."</span>, func.getArgs());
-<a class="jxr_linenumber" name="477" href="#477">477</a> 		assertEquals(<span class="jxr_string">"Wrong number of set children returned."</span>, 3, func
-<a class="jxr_linenumber" name="478" href="#478">478</a> 				.getArgs().size());
-<a class="jxr_linenumber" name="479" href="#479">479</a> 
-<a class="jxr_linenumber" name="480" href="#480">480</a> 		assertTrue(<span class="jxr_string">"First parameter expression type is wrong."</span>, func.getArgs()
-<a class="jxr_linenumber" name="481" href="#481">481</a> 				.get(0) instanceof ExpressionParameter);
-<a class="jxr_linenumber" name="482" href="#482">482</a> 		assertTrue(<span class="jxr_string">"Third parameter expression type is wrong."</span>, func.getArgs()
-<a class="jxr_linenumber" name="483" href="#483">483</a> 				.get(2) instanceof ExpressionParameter);
+<a class="jxr_linenumber" name="476" href="#476">476</a> 	@Test
+<a class="jxr_linenumber" name="477" href="#477">477</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionInWithSet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="478" href="#478">478</a> 		String mdx = <span class="jxr_string">"WITH SET [EXPR_SET] AS {$[s:parameter1], [AAA].[BBB], $[s:parameter2]} "</span>
+<a class="jxr_linenumber" name="479" href="#479">479</a> 				+ <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, "</span>
+<a class="jxr_linenumber" name="480" href="#480">480</a> 				+ <span class="jxr_string">"[Product].[All Products] ON ROWS FROM [Sales]"</span>;
+<a class="jxr_linenumber" name="481" href="#481">481</a> 
+<a class="jxr_linenumber" name="482" href="#482">482</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="483" href="#483">483</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
 <a class="jxr_linenumber" name="484" href="#484">484</a> 
-<a class="jxr_linenumber" name="485" href="#485">485</a> 		ExpressionParameter parameter1 = (ExpressionParameter) func.getArgs()
-<a class="jxr_linenumber" name="486" href="#486">486</a> 				.get(0);
-<a class="jxr_linenumber" name="487" href="#487">487</a> 		ExpressionParameter parameter3 = (ExpressionParameter) func.getArgs()
-<a class="jxr_linenumber" name="488" href="#488">488</a> 				.get(2);
-<a class="jxr_linenumber" name="489" href="#489">489</a> 
-<a class="jxr_linenumber" name="490" href="#490">490</a> 		assertEquals(<span class="jxr_string">"Wrong parameter expression."</span>, <span class="jxr_string">"parameter1"</span>,
-<a class="jxr_linenumber" name="491" href="#491">491</a> 				parameter1.getExpression());
-<a class="jxr_linenumber" name="492" href="#492">492</a> 		assertEquals(<span class="jxr_string">"Wrong parameter expression."</span>, <span class="jxr_string">"parameter2"</span>,
-<a class="jxr_linenumber" name="493" href="#493">493</a> 				parameter3.getExpression());
-<a class="jxr_linenumber" name="494" href="#494">494</a> 	}
-<a class="jxr_linenumber" name="495" href="#495">495</a> 
-<a class="jxr_linenumber" name="496" href="#496">496</a> 	@Test
-<a class="jxr_linenumber" name="497" href="#497">497</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionEscape() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="498" href="#498">498</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
-<a class="jxr_linenumber" name="499" href="#499">499</a> 				+ <span class="jxr_string">"WHERE $[s:[1, 2, 3]], SELECT, &amp;[AAA]], Crossjoin(), \&quot;aaa\&quot;]"</span>;
+<a class="jxr_linenumber" name="485" href="#485">485</a> 		List&lt;Formula&gt; formulas = query.getFormulas();
+<a class="jxr_linenumber" name="486" href="#486">486</a> 
+<a class="jxr_linenumber" name="487" href="#487">487</a> 		assertThat(<span class="jxr_string">"Formula list is null."</span>, formulas, is(notNullValue()));
+<a class="jxr_linenumber" name="488" href="#488">488</a> 		assertThat(<span class="jxr_string">"Wrong number of formula returned."</span>, formulas.size(),
+<a class="jxr_linenumber" name="489" href="#489">489</a> 				is(equalTo(1)));
+<a class="jxr_linenumber" name="490" href="#490">490</a> 
+<a class="jxr_linenumber" name="491" href="#491">491</a> 		Formula formula = formulas.get(0);
+<a class="jxr_linenumber" name="492" href="#492">492</a> 
+<a class="jxr_linenumber" name="493" href="#493">493</a> 		Exp exp = formula.getExp();
+<a class="jxr_linenumber" name="494" href="#494">494</a> 
+<a class="jxr_linenumber" name="495" href="#495">495</a> 		assertThat(<span class="jxr_string">"Formula expression is null."</span>, formulas, is(notNullValue()));
+<a class="jxr_linenumber" name="496" href="#496">496</a> 		assertThat(<span class="jxr_string">"Parameter expression type is wrong."</span>, exp,
+<a class="jxr_linenumber" name="497" href="#497">497</a> 				is(instanceOf(FunCall.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="498" href="#498">498</a> 
+<a class="jxr_linenumber" name="499" href="#499">499</a> 		FunCall func = (FunCall) exp;
 <a class="jxr_linenumber" name="500" href="#500">500</a> 
-<a class="jxr_linenumber" name="501" href="#501">501</a> 		MdxStatement query = parseQuery(mdx);
-<a class="jxr_linenumber" name="502" href="#502">502</a> 		assertNotNull(<span class="jxr_string">"Failed to parse : "</span> + mdx, query);
-<a class="jxr_linenumber" name="503" href="#503">503</a> 
-<a class="jxr_linenumber" name="504" href="#504">504</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
-<a class="jxr_linenumber" name="505" href="#505">505</a> 		assertNotNull(<span class="jxr_string">"Slicer exp is null."</span>, parameter);
-<a class="jxr_linenumber" name="506" href="#506">506</a> 
-<a class="jxr_linenumber" name="507" href="#507">507</a> 		assertEquals(<span class="jxr_string">"Wrong member expression returned."</span>,
-<a class="jxr_linenumber" name="508" href="#508">508</a> 				<span class="jxr_string">"[1, 2, 3], SELECT, &amp;[AAA], Crossjoin(), \&quot;aaa\&quot;"</span>,
-<a class="jxr_linenumber" name="509" href="#509">509</a> 				parameter.getExpression());
-<a class="jxr_linenumber" name="510" href="#510">510</a> 	}
-<a class="jxr_linenumber" name="511" href="#511">511</a> }
+<a class="jxr_linenumber" name="501" href="#501">501</a> 		assertThat(<span class="jxr_string">"Set member list is null."</span>, func.getArgs(),
+<a class="jxr_linenumber" name="502" href="#502">502</a> 				is(notNullValue()));
+<a class="jxr_linenumber" name="503" href="#503">503</a> 		assertThat(<span class="jxr_string">"Wrong number of set children returned."</span>, func.getArgs()
+<a class="jxr_linenumber" name="504" href="#504">504</a> 				.size(), is(equalTo(3)));
+<a class="jxr_linenumber" name="505" href="#505">505</a> 
+<a class="jxr_linenumber" name="506" href="#506">506</a> 		assertThat(<span class="jxr_string">"First parameter expression type is wrong."</span>, func.getArgs()
+<a class="jxr_linenumber" name="507" href="#507">507</a> 				.get(0), is(instanceOf(ExpressionParameter.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="508" href="#508">508</a> 		assertThat(<span class="jxr_string">"Third parameter expression type is wrong."</span>, func.getArgs()
+<a class="jxr_linenumber" name="509" href="#509">509</a> 				.get(2), is(instanceOf(ExpressionParameter.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="510" href="#510">510</a> 
+<a class="jxr_linenumber" name="511" href="#511">511</a> 		ExpressionParameter parameter1 = (ExpressionParameter) func.getArgs()
+<a class="jxr_linenumber" name="512" href="#512">512</a> 				.get(0);
+<a class="jxr_linenumber" name="513" href="#513">513</a> 		ExpressionParameter parameter3 = (ExpressionParameter) func.getArgs()
+<a class="jxr_linenumber" name="514" href="#514">514</a> 				.get(2);
+<a class="jxr_linenumber" name="515" href="#515">515</a> 
+<a class="jxr_linenumber" name="516" href="#516">516</a> 		assertThat(<span class="jxr_string">"Wrong parameter expression."</span>, parameter1.getExpression(),
+<a class="jxr_linenumber" name="517" href="#517">517</a> 				is(equalTo(<span class="jxr_string">"parameter1"</span>)));
+<a class="jxr_linenumber" name="518" href="#518">518</a> 		assertThat(<span class="jxr_string">"Wrong parameter expression."</span>, parameter3.getExpression(),
+<a class="jxr_linenumber" name="519" href="#519">519</a> 				is(equalTo(<span class="jxr_string">"parameter2"</span>)));
+<a class="jxr_linenumber" name="520" href="#520">520</a> 	}
+<a class="jxr_linenumber" name="521" href="#521">521</a> 
+<a class="jxr_linenumber" name="522" href="#522">522</a> 	@Test
+<a class="jxr_linenumber" name="523" href="#523">523</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testParseMemberExpressionEscape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="524" href="#524">524</a> 		String mdx = <span class="jxr_string">"SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "</span>
+<a class="jxr_linenumber" name="525" href="#525">525</a> 				+ <span class="jxr_string">"WHERE $[s:[1, 2, 3]], SELECT, &amp;[AAA]], Crossjoin(), \&quot;aaa\&quot;]"</span>;
+<a class="jxr_linenumber" name="526" href="#526">526</a> 
+<a class="jxr_linenumber" name="527" href="#527">527</a> 		MdxStatement query = parseQuery(mdx);
+<a class="jxr_linenumber" name="528" href="#528">528</a> 		assertThat(<span class="jxr_string">"Failed to parse : "</span> + mdx, query, is(notNullValue()));
+<a class="jxr_linenumber" name="529" href="#529">529</a> 
+<a class="jxr_linenumber" name="530" href="#530">530</a> 		ExpressionParameter parameter = (ExpressionParameter) query.getSlicer();
+<a class="jxr_linenumber" name="531" href="#531">531</a> 		assertThat(<span class="jxr_string">"Slicer exp is null."</span>, parameter, is(notNullValue()));
+<a class="jxr_linenumber" name="532" href="#532">532</a> 
+<a class="jxr_linenumber" name="533" href="#533">533</a> 		assertThat(<span class="jxr_string">"Wrong member expression returned."</span>,
+<a class="jxr_linenumber" name="534" href="#534">534</a> 				parameter.getExpression(),
+<a class="jxr_linenumber" name="535" href="#535">535</a> 				is(equalTo(<span class="jxr_string">"[1, 2, 3], SELECT, &amp;[AAA], Crossjoin(), \&quot;aaa\&quot;"</span>)));
+<a class="jxr_linenumber" name="536" href="#536">536</a> 	}
+<a class="jxr_linenumber" name="537" href="#537">537</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

@@ -21,23 +21,23 @@
 <a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
 <a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> java.util.List;
 <a class="jxr_linenumber" name="13" href="#13">13</a>  
-<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.Level;
-<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.NamedList;
-<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.Property;
-<a class="jxr_linenumber" name="17" href="#17">17</a>  
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PropertyCollector;
-<a class="jxr_linenumber" name="19" href="#19">19</a>  
-<a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/ui/impl/ConfigurablePropertyCollector.html">ConfigurablePropertyCollector</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../com/eyeq/pivot4j/ui/PropertyCollector.html">PropertyCollector</a> {
-<a class="jxr_linenumber" name="21" href="#21">21</a>  
-<a class="jxr_linenumber" name="22" href="#22">22</a>  	<strong class="jxr_keyword">private</strong> List&lt;String&gt; propertyNames;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  
-<a class="jxr_linenumber" name="24" href="#24">24</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment">	 * @param propertyNames</em>
-<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="27" href="#27">27</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/impl/ConfigurablePropertyCollector.html">ConfigurablePropertyCollector</a>(List&lt;String&gt; propertyNames) {
-<a class="jxr_linenumber" name="28" href="#28">28</a>  		<strong class="jxr_keyword">if</strong> (propertyNames == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="29" href="#29">29</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(
-<a class="jxr_linenumber" name="30" href="#30">30</a>  					<span class="jxr_string">"Missing required argument 'propertyNames'."</span>);
+<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.NullArgumentException;
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.Level;
+<a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.NamedList;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> org.olap4j.metadata.Property;
+<a class="jxr_linenumber" name="18" href="#18">18</a>  
+<a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PropertyCollector;
+<a class="jxr_linenumber" name="20" href="#20">20</a>  
+<a class="jxr_linenumber" name="21" href="#21">21</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/ui/impl/ConfigurablePropertyCollector.html">ConfigurablePropertyCollector</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../../com/eyeq/pivot4j/ui/PropertyCollector.html">PropertyCollector</a> {
+<a class="jxr_linenumber" name="22" href="#22">22</a>  
+<a class="jxr_linenumber" name="23" href="#23">23</a>  	<strong class="jxr_keyword">private</strong> List&lt;String&gt; propertyNames;
+<a class="jxr_linenumber" name="24" href="#24">24</a>  
+<a class="jxr_linenumber" name="25" href="#25">25</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="26" href="#26">26</a>  <em class="jxr_javadoccomment">	 * @param propertyNames</em>
+<a class="jxr_linenumber" name="27" href="#27">27</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="28" href="#28">28</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/impl/ConfigurablePropertyCollector.html">ConfigurablePropertyCollector</a>(List&lt;String&gt; propertyNames) {
+<a class="jxr_linenumber" name="29" href="#29">29</a>  		<strong class="jxr_keyword">if</strong> (propertyNames == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="30" href="#30">30</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"propertyNames"</span>);
 <a class="jxr_linenumber" name="31" href="#31">31</a>  		}
 <a class="jxr_linenumber" name="32" href="#32">32</a>  
 <a class="jxr_linenumber" name="33" href="#33">33</a>  		<strong class="jxr_keyword">this</strong>.propertyNames = propertyNames;

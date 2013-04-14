@@ -18,9 +18,9 @@
 <a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">package</strong> com.eyeq.pivot4j.transform.impl;
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
-<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertFalse;
-<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertTrue;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.CoreMatchers.equalTo;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.CoreMatchers.is;
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertThat;
 <a class="jxr_linenumber" name="14" href="#14">14</a>  
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> org.junit.Test;
 <a class="jxr_linenumber" name="16" href="#16">16</a>  
@@ -51,37 +51,39 @@
 <a class="jxr_linenumber" name="41" href="#41">41</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testTransform() {
 <a class="jxr_linenumber" name="42" href="#42">42</a>  		SwapAxes transform = getTransform();
 <a class="jxr_linenumber" name="43" href="#43">43</a>  
-<a class="jxr_linenumber" name="44" href="#44">44</a>  		assertFalse(<span class="jxr_string">"Initial query axes are not swapped"</span>,
-<a class="jxr_linenumber" name="45" href="#45">45</a>  				transform.isSwapAxes());
-<a class="jxr_linenumber" name="46" href="#46">46</a>  		assertTrue(<span class="jxr_string">"Should be able to swap axes on initial query"</span>,
-<a class="jxr_linenumber" name="47" href="#47">47</a>  				transform.canSwapAxes());
+<a class="jxr_linenumber" name="44" href="#44">44</a>  		assertThat(<span class="jxr_string">"Initial query axes are not swapped"</span>,
+<a class="jxr_linenumber" name="45" href="#45">45</a>  				transform.isSwapAxes(), is(false));
+<a class="jxr_linenumber" name="46" href="#46">46</a>  		assertThat(<span class="jxr_string">"Should be able to swap axes on initial query"</span>,
+<a class="jxr_linenumber" name="47" href="#47">47</a>  				transform.canSwapAxes(), is(<strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="48" href="#48">48</a>  
 <a class="jxr_linenumber" name="49" href="#49">49</a>  		transform.setSwapAxes(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="50" href="#50">50</a>  
-<a class="jxr_linenumber" name="51" href="#51">51</a>  		assertTrue(<span class="jxr_string">"Query axes have been swapped"</span>, transform.isSwapAxes());
-<a class="jxr_linenumber" name="52" href="#52">52</a>  
-<a class="jxr_linenumber" name="53" href="#53">53</a>  		assertEquals(
-<a class="jxr_linenumber" name="54" href="#54">54</a>  				<span class="jxr_string">"Unexpected MDX query after axes have been swapped"</span>,
-<a class="jxr_linenumber" name="55" href="#55">55</a>  				<span class="jxr_string">"SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS, "</span>
-<a class="jxr_linenumber" name="56" href="#56">56</a>  						+ <span class="jxr_string">"{[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON ROWS "</span>
-<a class="jxr_linenumber" name="57" href="#57">57</a>  						+ <span class="jxr_string">"FROM [Sales]"</span>, getPivotModel().getCurrentMdx());
-<a class="jxr_linenumber" name="58" href="#58">58</a>  
-<a class="jxr_linenumber" name="59" href="#59">59</a>  		getPivotModel().getCellSet();
+<a class="jxr_linenumber" name="51" href="#51">51</a>  		assertThat(<span class="jxr_string">"Query axes have been swapped"</span>, transform.isSwapAxes(),
+<a class="jxr_linenumber" name="52" href="#52">52</a>  				is(<strong class="jxr_keyword">true</strong>));
+<a class="jxr_linenumber" name="53" href="#53">53</a>  
+<a class="jxr_linenumber" name="54" href="#54">54</a>  		assertThat(
+<a class="jxr_linenumber" name="55" href="#55">55</a>  				<span class="jxr_string">"Unexpected MDX query after axes have been swapped"</span>,
+<a class="jxr_linenumber" name="56" href="#56">56</a>  				getPivotModel().getCurrentMdx(),
+<a class="jxr_linenumber" name="57" href="#57">57</a>  				is(equalTo(<span class="jxr_string">"SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS, "</span>
+<a class="jxr_linenumber" name="58" href="#58">58</a>  						+ <span class="jxr_string">"{[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON ROWS "</span>
+<a class="jxr_linenumber" name="59" href="#59">59</a>  						+ <span class="jxr_string">"FROM [Sales]"</span>)));
 <a class="jxr_linenumber" name="60" href="#60">60</a>  
-<a class="jxr_linenumber" name="61" href="#61">61</a>  		transform.setSwapAxes(false);
+<a class="jxr_linenumber" name="61" href="#61">61</a>  		getPivotModel().getCellSet();
 <a class="jxr_linenumber" name="62" href="#62">62</a>  
-<a class="jxr_linenumber" name="63" href="#63">63</a>  		assertEquals(<span class="jxr_string">"Unexpected MDX query after axes have been restored"</span>,
-<a class="jxr_linenumber" name="64" href="#64">64</a>  				getInitialQuery(), getPivotModel().getCurrentMdx());
-<a class="jxr_linenumber" name="65" href="#65">65</a>  
-<a class="jxr_linenumber" name="66" href="#66">66</a>  		getPivotModel().getCellSet();
+<a class="jxr_linenumber" name="63" href="#63">63</a>  		transform.setSwapAxes(false);
+<a class="jxr_linenumber" name="64" href="#64">64</a>  
+<a class="jxr_linenumber" name="65" href="#65">65</a>  		assertThat(<span class="jxr_string">"Unexpected MDX query after axes have been restored"</span>,
+<a class="jxr_linenumber" name="66" href="#66">66</a>  				getPivotModel().getCurrentMdx(), is(equalTo(getInitialQuery())));
 <a class="jxr_linenumber" name="67" href="#67">67</a>  
-<a class="jxr_linenumber" name="68" href="#68">68</a>  		getPivotModel()
-<a class="jxr_linenumber" name="69" href="#69">69</a>  				.setMdx(<span class="jxr_string">"SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS FROM [Sales]"</span>);
-<a class="jxr_linenumber" name="70" href="#70">70</a>  
-<a class="jxr_linenumber" name="71" href="#71">71</a>  		assertFalse(<span class="jxr_string">"Single query axis cannot be swapped with itself"</span>,
-<a class="jxr_linenumber" name="72" href="#72">72</a>  				transform.canSwapAxes());
-<a class="jxr_linenumber" name="73" href="#73">73</a>  	}
-<a class="jxr_linenumber" name="74" href="#74">74</a>  }
+<a class="jxr_linenumber" name="68" href="#68">68</a>  		getPivotModel().getCellSet();
+<a class="jxr_linenumber" name="69" href="#69">69</a>  
+<a class="jxr_linenumber" name="70" href="#70">70</a>  		getPivotModel()
+<a class="jxr_linenumber" name="71" href="#71">71</a>  				.setMdx(<span class="jxr_string">"SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS FROM [Sales]"</span>);
+<a class="jxr_linenumber" name="72" href="#72">72</a>  
+<a class="jxr_linenumber" name="73" href="#73">73</a>  		assertThat(<span class="jxr_string">"Single query axis cannot be swapped with itself"</span>,
+<a class="jxr_linenumber" name="74" href="#74">74</a>  				transform.canSwapAxes(), is(false));
+<a class="jxr_linenumber" name="75" href="#75">75</a>  	}
+<a class="jxr_linenumber" name="76" href="#76">76</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

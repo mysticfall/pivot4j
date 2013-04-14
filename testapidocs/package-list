@@ -6,4 +6,5 @@ com.eyeq.pivot4j.impl
 com.eyeq.pivot4j.mdx
 com.eyeq.pivot4j.state
 com.eyeq.pivot4j.transform.impl
+com.eyeq.pivot4j.ui.aggregator
 com.eyeq.pivot4j.ui.html
