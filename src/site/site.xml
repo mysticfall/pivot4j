@@ -27,7 +27,7 @@
 		</links>
 		<menu name="Overview">
 			<item name="Introduction" href="index.html" />
-			<item name="Sample Application" href="example.html" />
+			<item name="Pivot4J Analytics" href="example.html" />
 			<item name="Pentaho BI Plugin" href="pentaho.html" />
 			<item name="Download" href="download.html" />
 			<item name="How to Use" href="usage.html" />

@@ -19,17 +19,17 @@ Download
 
 ** Development Snapshot
 
-	* Library Jar : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/target/pivot4j-0.8-SNAPSHOT.jar}pivot4j-0.8-SNAPSHOT.jar}}
+	* Library Jar : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-core/target/pivot4j-core-0.8-SNAPSHOT.jar}pivot4j-core-0.8-SNAPSHOT.jar}}
 
-	* JavaDoc API : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/target/pivot4j-0.8-SNAPSHOT-javadoc.jar}pivot4j-0.8-SNAPSHOT-javadoc.jar}}
+	* JavaDoc API : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-core/target/pivot4j-core-0.8-SNAPSHOT-javadoc.jar}pivot4j-core-0.8-SNAPSHOT-javadoc.jar}}
 
-	* Source Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/target/pivot4j-0.8-SNAPSHOT-sources.jar}pivot4j-0.8-SNAPSHOT-sources.jar}}
+	* Source Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-core/target/pivot4j-core-0.8-SNAPSHOT-sources.jar}pivot4j-core-0.8-SNAPSHOT-sources.jar}}
 
-* Sample Application
+* Pivot4J Analytics (Sample Application)
 
 ** Stable Release
 
-	* Web Archive (.war) : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-jsf/0.7/pivot4j-jsf-0.7.war}pivot4j-0.7.war}}
+	* Web Archive (.war) : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-jsf/0.7/pivot4j-jsf-0.7.war}pivot4j-jsf-0.7.war}}
 
 	* JavaDoc API : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-jsf/0.7/pivot4j-jsf-0.7-javadoc.jar}pivot4j-jsf-0.7-javadoc.jar}}
 
@@ -37,11 +37,11 @@ Download
 
 ** Development Snapshot
 
-	* Web Archive (.war) : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20JSF/lastSuccessfulBuild/artifact/target/pivot4j.war}pivot4j-0.8-SNAPSHOT.war}}
+	* Web Archive (.war) : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-analytics/target/pivot4j.war}pivot4j-analytics-0.8-SNAPSHOT.war}}
 
-	* JavaDoc API : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20JSF/lastSuccessfulBuild/artifact/target/pivot4j-jsf-0.8-SNAPSHOT-javadoc.jar}pivot4j-0.8-SNAPSHOT-javadoc.jar}}
+	* JavaDoc API : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-analytics/target/pivot4j-analytics-0.8-SNAPSHOT-javadoc.jar}pivot4j-analytics-0.8-SNAPSHOT-javadoc.jar}}
 
-	* Source Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20JSF/lastSuccessfulBuild/artifact/target/pivot4j-jsf-0.8-SNAPSHOT-sources.jar}pivot4j-0.8-SNAPSHOT-sources.jar}}
+	* Source Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-analytics/target/pivot4j-analytics-0.8-SNAPSHOT-sources.jar}pivot4j-analytics-0.8-SNAPSHOT-sources.jar}}
 
 * Pentaho BI Plugin
 
@@ -51,9 +51,9 @@ Download
 
 ** Development Snapshot
 
-	* Tar.gz Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20Pentaho/lastSuccessfulBuild/artifact/target/pivot4j-pentaho-0.8-SNAPSHOT-plugin.tar.gz}pivot4j-pentaho-0.8-SNAPSHOT-plugin.tar.gz}}
+	* Tar.gz Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-pentaho/target/pivot4j-pentaho-0.8-SNAPSHOT-plugin.tar.gz}pivot4j-pentaho-0.8-SNAPSHOT-plugin.tar.gz}}
 
-	* Zip Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J%20Pentaho/lastSuccessfulBuild/artifact/target/pivot4j-pentaho-0.8-SNAPSHOT-plugin.zip}pivot4j-pentaho-0.8-SNAPSHOT-plugin.zip}}
+	* Zip Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-pentaho/target/pivot4j-pentaho-0.8-SNAPSHOT-plugin.zip}pivot4j-pentaho-0.8-SNAPSHOT-plugin.zip}}
 
 License
 

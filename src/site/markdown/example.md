@@ -1,17 +1,11 @@
-<head><title>Pivot4J - Sample Application</title></head> 
-## Sample Application
+<head><title>Pivot4J - Pivot4J Analytics</title></head> 
+## Pivot4J Analytics (Sample Application)
 
 ### About
 
-The most important aim of the sample application is to provide Pivot4J users a working example to help them 
-understand the API and use it to build their own pivot style OLAP application.
-	
-On the other hand, it was also intended to help developers of the project to examine the common use cases 
-from end user's perspective and make them find out potential problems and improve upon the design.
-
-We expect many part of the source code which is written for this sample application would eventually 
-generalized and introduced to the Pivot4J project itself.  
-  
+Pivot4J Analytics is a fully featured OLAP analysis application which is built with the Pivot4J core library.
+It can also serve as a working example to help users understand the API and use it to build their own pivot 
+style OLAP application.
 
 <iframe width="560" height="315" src="http://www.youtube.com/embed/3cUyAKXfmEk?hd=1" frameborder="0" allowfullscreen="1"></iframe>
 
