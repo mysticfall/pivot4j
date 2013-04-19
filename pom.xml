@@ -17,6 +17,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<github.global.server>github</github.global.server>
+		<source.plugin.version>2.2.1</source.plugin.version>
+		<javadoc.plugin.version>2.9</javadoc.plugin.version>
 		<failsafe.plugin.version>2.14</failsafe.plugin.version>
 		<cobertura.plugin.version>2.5.2</cobertura.plugin.version>
 	</properties>
@@ -175,23 +177,13 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9</version>
+					<version>${javadoc.plugin.version}</version>
 					<executions>
 						<execution>
+							<id>aggregate</id>
+							<phase>site</phase>
 							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>2.2.1</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>jar</goal>
+								<goal>aggregate</goal>
 							</goals>
 						</execution>
 					</executions>
@@ -272,9 +264,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
+				<version>${javadoc.plugin.version}</version>
 				<configuration>
-					<aggregate>true</aggregate>
 					<links>
 						<link>http://docs.oracle.com/javase/7/docs/api/</link>
 						<link>http://docs.oracle.com/cd/E17802_01/products/products/servlet/2.5/docs/servlet-2_5-mr2/</link>
@@ -285,6 +276,20 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<link>http://www.primefaces.org/docs/api/3.4/</link>
 					</links>
 				</configuration>
+				<reportSets>
+					<reportSet>
+						<id>non-aggregate</id>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<id>aggregate</id>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
