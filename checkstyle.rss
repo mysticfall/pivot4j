@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2012 - 2013 Eyeq MC</copyright>
     <item>
-      <title>File: 136,
-             Errors: 5366,
+      <title>File: 196,
+             Errors: 8059,
              Warnings: 0,
              Infos: 0
       </title>
@@ -29,7 +29,35 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.impl.ConfigurablePropertyCollector.java">com/eyeq/pivot4j/ui/impl/ConfigurablePropertyCollector.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.repository.ReportContent.java">com/eyeq/pivot4j/analytics/repository/ReportContent.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.repository.ReportRepository.java">com/eyeq/pivot4j/analytics/repository/ReportRepository.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.MemberNode.java">com/eyeq/pivot4j/analytics/ui/navigator/MemberNode.java</a>
                 </td>
                 <td>
                   0
@@ -43,7 +71,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.util.OlapUtils.java">com/eyeq/pivot4j/util/OlapUtils.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.impl.ConfigurablePropertyCollector.java">com/eyeq/pivot4j/ui/impl/ConfigurablePropertyCollector.java</a>
                 </td>
                 <td>
                   0
@@ -52,7 +80,7 @@
                   0
                 </td>
                 <td>
-                  23
+                  12
                 </td>
               </tr>
                           <tr>
@@ -71,20 +99,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.AbstractAggregator.java">com/eyeq/pivot4j/ui/aggregator/AbstractAggregator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  97
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.ToggleSortCommand.java">com/eyeq/pivot4j/ui/command/ToggleSortCommand.java</a>
                 </td>
                 <td>
@@ -95,6 +109,20 @@
                 </td>
                 <td>
                   14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.servlet.PluginResourceResolver.java">com/eyeq/pivot4j/pentaho/servlet/PluginResourceResolver.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
                 </td>
               </tr>
                           <tr>
@@ -113,6 +141,1168 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.datasource.MdxOlap4JDataSource.java">com/eyeq/pivot4j/pentaho/datasource/MdxOlap4JDataSource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  27
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.AbstractPivotRenderer.java">com/eyeq/pivot4j/ui/AbstractPivotRenderer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  141
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.SelectionMode.java">com/eyeq/pivot4j/analytics/ui/SelectionMode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.MetadataExp.java">com/eyeq/pivot4j/mdx/metadata/MetadataExp.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.DrillExpandMember.java">com/eyeq/pivot4j/transform/DrillExpandMember.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.OlapConnectionFactory.java">com/eyeq/pivot4j/datasource/OlapConnectionFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  38
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.NotInitializedException.java">com/eyeq/pivot4j/NotInitializedException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.CalcSetMode.java">com/eyeq/pivot4j/query/CalcSetMode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.FilterHandler.java">com/eyeq/pivot4j/analytics/ui/FilterHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  154
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.RenderContext.java">com/eyeq/pivot4j/ui/RenderContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  129
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.SimpleOlapDataSource.java">com/eyeq/pivot4j/datasource/SimpleOlapDataSource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  20
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.NavigatorHandler.java">com/eyeq/pivot4j/analytics/ui/NavigatorHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  255
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.Syntax.java">com/eyeq/pivot4j/mdx/Syntax.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.RepositoryNode.java">com/eyeq/pivot4j/analytics/ui/navigator/RepositoryNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  76
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.ExpressionParameter.java">com/eyeq/pivot4j/mdx/ExpressionParameter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.repository.file.LocalFile.java">com/eyeq/pivot4j/analytics/repository/file/LocalFile.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  42
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.export.fop.FopExporter.java">com/eyeq/pivot4j/export/fop/FopExporter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  359
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillDownCommand.java">com/eyeq/pivot4j/ui/command/DrillDownCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.el.EvaluationFailedException.java">com/eyeq/pivot4j/el/EvaluationFailedException.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  32
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.QueryAdapter.java">com/eyeq/pivot4j/query/QueryAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  262
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory.java">com/eyeq/pivot4j/analytics/exception/Pivot4JExceptionHandlerFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.el.AbstractExpressionEvaluator.java">com/eyeq/pivot4j/el/AbstractExpressionEvaluator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillExpandMemberCommand.java">com/eyeq/pivot4j/ui/command/DrillExpandMemberCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.SwapAxes.java">com/eyeq/pivot4j/transform/SwapAxes.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.Aggregator.java">com/eyeq/pivot4j/ui/aggregator/Aggregator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.AbstractDrillDownCommand.java">com/eyeq/pivot4j/ui/command/AbstractDrillDownCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.impl.NonInternalPropertyCollector.java">com/eyeq/pivot4j/ui/impl/NonInternalPropertyCollector.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.CubeNode.java">com/eyeq/pivot4j/analytics/ui/navigator/CubeNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.SingleConnectionOlapDataSource.java">com/eyeq/pivot4j/datasource/SingleConnectionOlapDataSource.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.el.ExpressionEvaluator.java">com/eyeq/pivot4j/el/ExpressionEvaluator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.PivotLayoutCallback.java">com/eyeq/pivot4j/ui/PivotLayoutCallback.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.Transform.java">com/eyeq/pivot4j/transform/Transform.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.PivotGridHandler.java">com/eyeq/pivot4j/analytics/ui/PivotGridHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  105
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.AggregationHandler.java">com/eyeq/pivot4j/analytics/ui/AggregationHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  61
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.state.Configurable.java">com/eyeq/pivot4j/state/Configurable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.util.TreeNode.java">com/eyeq/pivot4j/util/TreeNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  76
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.repository.RepositoryFile.java">com/eyeq/pivot4j/analytics/repository/RepositoryFile.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.ui.PentahoFileHandler.java">com/eyeq/pivot4j/pentaho/ui/PentahoFileHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  66
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.AbstractSortCommand.java">com/eyeq/pivot4j/ui/command/AbstractSortCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand.java">com/eyeq/pivot4j/ui/command/BasicDrillThroughCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  26
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.AbstractExpVisitor.java">com/eyeq/pivot4j/mdx/AbstractExpVisitor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.export.poi.ExcelExporter.java">com/eyeq/pivot4j/export/poi/ExcelExporter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  175
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillCollapsePositionCommand.java">com/eyeq/pivot4j/ui/command/DrillCollapsePositionCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  31
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.QueryChangeListener.java">com/eyeq/pivot4j/query/QueryChangeListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.sort.SortMode.java">com/eyeq/pivot4j/sort/SortMode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  19
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.impl.RenderStrategyImpl.java">com/eyeq/pivot4j/ui/impl/RenderStrategyImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  336
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.HierarchyNode.java">com/eyeq/pivot4j/analytics/ui/navigator/HierarchyNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.SortCommand.java">com/eyeq/pivot4j/ui/command/SortCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.impl.TableAxisContext.java">com/eyeq/pivot4j/ui/impl/TableAxisContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  50
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.ExpNode.java">com/eyeq/pivot4j/mdx/ExpNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.QueryListener.java">com/eyeq/pivot4j/QueryListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.i18n.messages.properties">com/eyeq/pivot4j/analytics/i18n/messages.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes.java">com/eyeq/pivot4j/transform/PlaceHierarchiesOnAxes.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.servlet.PluginServletSession.java">com/eyeq/pivot4j/pentaho/servlet/PluginServletSession.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  83
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.NonEmpty.java">com/eyeq/pivot4j/transform/NonEmpty.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.NodeData.java">com/eyeq/pivot4j/analytics/ui/navigator/NodeData.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.DimensionExp.java">com/eyeq/pivot4j/mdx/metadata/DimensionExp.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.TotalAggregator.java">com/eyeq/pivot4j/ui/aggregator/TotalAggregator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  28
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.LevelExp.java">com/eyeq/pivot4j/mdx/metadata/LevelExp.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.impl.PlaceMembersOnAxesImpl.java">com/eyeq/pivot4j/transform/impl/PlaceMembersOnAxesImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  86
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.converter.AggregatorConverter.java">com/eyeq/pivot4j/analytics/converter/AggregatorConverter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  25
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.RepositoryHandler.java">com/eyeq/pivot4j/analytics/ui/RepositoryHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  146
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.MaximumAggregator.java">com/eyeq/pivot4j/ui/aggregator/MaximumAggregator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  29
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.servlet.PluginServletRequest.java">com/eyeq/pivot4j/pentaho/servlet/PluginServletRequest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  45
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.TransformFactory.java">com/eyeq/pivot4j/transform/TransformFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillCollapseMemberCommand.java">com/eyeq/pivot4j/ui/command/DrillCollapseMemberCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.AbstractMetadataExp.java">com/eyeq/pivot4j/mdx/metadata/AbstractMetadataExp.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.state.ViewStateEvent.java">com/eyeq/pivot4j/analytics/state/ViewStateEvent.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.CellCommand.java">com/eyeq/pivot4j/ui/command/CellCommand.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.el.ExpressionEvaluatorFactory.java">com/eyeq/pivot4j/el/ExpressionEvaluatorFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.datasource.sample.SampleDataSourceManager.java">com/eyeq/pivot4j/analytics/datasource/sample/SampleDataSourceManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata.java">com/eyeq/pivot4j/analytics/datasource/ConnectionMetadata.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.PivotExportHandler.java">com/eyeq/pivot4j/analytics/ui/PivotExportHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  96
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.util.StringUtil.java">com/eyeq/pivot4j/util/StringUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  27
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.AbstractTransform.java">com/eyeq/pivot4j/transform/AbstractTransform.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.state.ViewStateListener.java">com/eyeq/pivot4j/analytics/state/ViewStateListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.ValueParameter.java">com/eyeq/pivot4j/mdx/ValueParameter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager.java">com/eyeq/pivot4j/analytics/datasource/AbstractDataSourceManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  14
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.servlet.PluginServletConfig.java">com/eyeq/pivot4j/pentaho/servlet/PluginServletConfig.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.util.OlapUtils.java">com/eyeq/pivot4j/util/OlapUtils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.AbstractAggregator.java">com/eyeq/pivot4j/ui/aggregator/AbstractAggregator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  97
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.i18n.messages_ko.properties">com/eyeq/pivot4j/analytics/i18n/messages_ko.properties</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.content.ReportContentEditor.java">com/eyeq/pivot4j/pentaho/content/ReportContentEditor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.impl.PlaceLevelsOnAxesImpl.java">com/eyeq/pivot4j/transform/impl/PlaceLevelsOnAxesImpl.java</a>
                 </td>
                 <td>
@@ -123,20 +1313,6 @@
                 </td>
                 <td>
                   54
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.PivotUIRenderer.java">com/eyeq/pivot4j/ui/PivotUIRenderer.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  16
                 </td>
               </tr>
                           <tr>
@@ -155,7 +1331,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.AbstractPivotRenderer.java">com/eyeq/pivot4j/ui/AbstractPivotRenderer.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.PivotUIRenderer.java">com/eyeq/pivot4j/ui/PivotUIRenderer.java</a>
                 </td>
                 <td>
                   0
@@ -164,7 +1340,35 @@
                   0
                 </td>
                 <td>
-                  141
+                  16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.NodeFilter.java">com/eyeq/pivot4j/analytics/ui/navigator/NodeFilter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.servlet.PluginServletContext.java">com/eyeq/pivot4j/pentaho/servlet/PluginServletContext.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  111
                 </td>
               </tr>
                           <tr>
@@ -225,20 +1429,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.MetadataExp.java">com/eyeq/pivot4j/mdx/metadata/MetadataExp.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.impl.ChangeSlicerImpl.java">com/eyeq/pivot4j/transform/impl/ChangeSlicerImpl.java</a>
                 </td>
                 <td>
@@ -249,20 +1439,6 @@
                 </td>
                 <td>
                   49
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.DrillExpandMember.java">com/eyeq/pivot4j/transform/DrillExpandMember.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  14
                 </td>
               </tr>
                           <tr>
@@ -281,7 +1457,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.OlapConnectionFactory.java">com/eyeq/pivot4j/datasource/OlapConnectionFactory.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.Formula.java">com/eyeq/pivot4j/mdx/Formula.java</a>
                 </td>
                 <td>
                   0
@@ -290,7 +1466,7 @@
                   0
                 </td>
                 <td>
-                  38
+                  0
                 </td>
               </tr>
                           <tr>
@@ -309,7 +1485,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.Formula.java">com/eyeq/pivot4j/mdx/Formula.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.PivotStateManager.java">com/eyeq/pivot4j/analytics/ui/PivotStateManager.java</a>
                 </td>
                 <td>
                   0
@@ -318,35 +1494,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.CalcSetMode.java">com/eyeq/pivot4j/query/CalcSetMode.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.NotInitializedException.java">com/eyeq/pivot4j/NotInitializedException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
+                  32
                 </td>
               </tr>
                           <tr>
@@ -365,7 +1513,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.RenderContext.java">com/eyeq/pivot4j/ui/RenderContext.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.repository.file.LocalFileSystemRepository.java">com/eyeq/pivot4j/analytics/repository/file/LocalFileSystemRepository.java</a>
                 </td>
                 <td>
                   0
@@ -374,7 +1522,21 @@
                   0
                 </td>
                 <td>
-                  129
+                  92
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.content.ReportContentGenerator.java">com/eyeq/pivot4j/pentaho/content/ReportContentGenerator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
                 </td>
               </tr>
                           <tr>
@@ -393,7 +1555,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.SimpleOlapDataSource.java">com/eyeq/pivot4j/datasource/SimpleOlapDataSource.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.repository.RepositoryFileComparator.java">com/eyeq/pivot4j/analytics/repository/RepositoryFileComparator.java</a>
                 </td>
                 <td>
                   0
@@ -402,7 +1564,7 @@
                   0
                 </td>
                 <td>
-                  20
+                  8
                 </td>
               </tr>
                           <tr>
@@ -431,20 +1593,6 @@
                 </td>
                 <td>
                   8
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.Syntax.java">com/eyeq/pivot4j/mdx/Syntax.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
                 </td>
               </tr>
                           <tr>
@@ -491,20 +1639,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.ExpressionParameter.java">com/eyeq/pivot4j/mdx/ExpressionParameter.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.PropertyCollector.java">com/eyeq/pivot4j/ui/PropertyCollector.java</a>
                 </td>
                 <td>
@@ -519,7 +1653,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.export.fop.FopExporter.java">com/eyeq/pivot4j/export/fop/FopExporter.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.i18n.messages_pt_BR.properties">com/eyeq/pivot4j/analytics/i18n/messages_pt_BR.properties</a>
                 </td>
                 <td>
                   0
@@ -528,63 +1662,7 @@
                   0
                 </td>
                 <td>
-                  358
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillDownCommand.java">com/eyeq/pivot4j/ui/command/DrillDownCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.el.EvaluationFailedException.java">com/eyeq/pivot4j/el/EvaluationFailedException.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  32
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.QueryAdapter.java">com/eyeq/pivot4j/query/QueryAdapter.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  262
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.el.AbstractExpressionEvaluator.java">com/eyeq/pivot4j/el/AbstractExpressionEvaluator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  17
+                  38
                 </td>
               </tr>
                           <tr>
@@ -603,34 +1681,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.SwapAxes.java">com/eyeq/pivot4j/transform/SwapAxes.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillExpandMemberCommand.java">com/eyeq/pivot4j/ui/command/DrillExpandMemberCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  30
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.Literal.java">com/eyeq/pivot4j/mdx/Literal.java</a>
                 </td>
                 <td>
@@ -645,7 +1695,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.Aggregator.java">com/eyeq/pivot4j/ui/aggregator/Aggregator.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.WorkbenchHandler.java">com/eyeq/pivot4j/analytics/ui/WorkbenchHandler.java</a>
                 </td>
                 <td>
                   0
@@ -654,21 +1704,7 @@
                   0
                 </td>
                 <td>
-                  14
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.AbstractDrillDownCommand.java">com/eyeq/pivot4j/ui/command/AbstractDrillDownCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  13
+                  58
                 </td>
               </tr>
                           <tr>
@@ -687,7 +1723,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.impl.NonInternalPropertyCollector.java">com/eyeq/pivot4j/ui/impl/NonInternalPropertyCollector.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.MemberSelectionHandler.java">com/eyeq/pivot4j/analytics/ui/MemberSelectionHandler.java</a>
                 </td>
                 <td>
                   0
@@ -696,7 +1732,7 @@
                   0
                 </td>
                 <td>
-                  12
+                  168
                 </td>
               </tr>
                           <tr>
@@ -729,34 +1765,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.SingleConnectionOlapDataSource.java">com/eyeq/pivot4j/datasource/SingleConnectionOlapDataSource.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  13
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.el.ExpressionEvaluator.java">com/eyeq/pivot4j/el/ExpressionEvaluator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.state.Bookmarkable.java">com/eyeq/pivot4j/state/Bookmarkable.java</a>
                 </td>
                 <td>
@@ -767,20 +1775,6 @@
                 </td>
                 <td>
                   4
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.PivotLayoutCallback.java">com/eyeq/pivot4j/ui/PivotLayoutCallback.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  12
                 </td>
               </tr>
                           <tr>
@@ -813,7 +1807,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.Transform.java">com/eyeq/pivot4j/transform/Transform.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.DrillThroughDataModel.java">com/eyeq/pivot4j/analytics/ui/DrillThroughDataModel.java</a>
                 </td>
                 <td>
                   0
@@ -822,7 +1816,7 @@
                   0
                 </td>
                 <td>
-                  2
+                  56
                 </td>
               </tr>
                           <tr>
@@ -855,6 +1849,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.state.ViewStateHolder.java">com/eyeq/pivot4j/analytics/state/ViewStateHolder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  105
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.DefaultAggregatorFactory.java">com/eyeq/pivot4j/ui/aggregator/DefaultAggregatorFactory.java</a>
                 </td>
                 <td>
@@ -865,34 +1873,6 @@
                 </td>
                 <td>
                   23
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.state.Configurable.java">com/eyeq/pivot4j/state/Configurable.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillDownReplaceCommand.java">com/eyeq/pivot4j/ui/command/DrillDownReplaceCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  30
                 </td>
               </tr>
                           <tr>
@@ -911,7 +1891,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.util.TreeNode.java">com/eyeq/pivot4j/util/TreeNode.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillDownReplaceCommand.java">com/eyeq/pivot4j/ui/command/DrillDownReplaceCommand.java</a>
                 </td>
                 <td>
                   0
@@ -920,7 +1900,7 @@
                   0
                 </td>
                 <td>
-                  76
+                  30
                 </td>
               </tr>
                           <tr>
@@ -967,7 +1947,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand.java">com/eyeq/pivot4j/ui/command/BasicDrillThroughCommand.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.datasource.PentahoDataSourceManager.java">com/eyeq/pivot4j/pentaho/datasource/PentahoDataSourceManager.java</a>
                 </td>
                 <td>
                   0
@@ -977,20 +1957,6 @@
                 </td>
                 <td>
                   26
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.AbstractSortCommand.java">com/eyeq/pivot4j/ui/command/AbstractSortCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  22
                 </td>
               </tr>
                           <tr>
@@ -1009,7 +1975,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.AbstractExpVisitor.java">com/eyeq/pivot4j/mdx/AbstractExpVisitor.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.MetadataNode.java">com/eyeq/pivot4j/analytics/ui/navigator/MetadataNode.java</a>
                 </td>
                 <td>
                   0
@@ -1018,12 +1984,12 @@
                   0
                 </td>
                 <td>
-                  0
+                  9
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.export.poi.ExcelExporter.java">com/eyeq/pivot4j/export/poi/ExcelExporter.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.i18n.messages_en.properties">com/eyeq/pivot4j/analytics/i18n/messages_en.properties</a>
                 </td>
                 <td>
                   0
@@ -1032,12 +1998,12 @@
                   0
                 </td>
                 <td>
-                  175
+                  8
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillCollapsePositionCommand.java">com/eyeq/pivot4j/ui/command/DrillCollapsePositionCommand.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#mondrian.properties">mondrian.properties</a>
                 </td>
                 <td>
                   0
@@ -1046,7 +2012,7 @@
                   0
                 </td>
                 <td>
-                  31
+                  0
                 </td>
               </tr>
                           <tr>
@@ -1061,34 +2027,6 @@
                 </td>
                 <td>
                   95
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.QueryChangeListener.java">com/eyeq/pivot4j/query/QueryChangeListener.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.sort.SortMode.java">com/eyeq/pivot4j/sort/SortMode.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  19
                 </td>
               </tr>
                           <tr>
@@ -1121,20 +2059,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.impl.RenderStrategyImpl.java">com/eyeq/pivot4j/ui/impl/RenderStrategyImpl.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  336
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.Exp.java">com/eyeq/pivot4j/mdx/Exp.java</a>
                 </td>
                 <td>
@@ -1145,34 +2069,6 @@
                 </td>
                 <td>
                   0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.SortCommand.java">com/eyeq/pivot4j/ui/command/SortCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.impl.TableAxisContext.java">com/eyeq/pivot4j/ui/impl/TableAxisContext.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  50
                 </td>
               </tr>
                           <tr>
@@ -1205,20 +2101,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.ExpNode.java">com/eyeq/pivot4j/mdx/ExpNode.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.ChangeSlicer.java">com/eyeq/pivot4j/transform/ChangeSlicer.java</a>
                 </td>
                 <td>
@@ -1229,34 +2111,6 @@
                 </td>
                 <td>
                   7
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.QueryListener.java">com/eyeq/pivot4j/QueryListener.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  3
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes.java">com/eyeq/pivot4j/transform/PlaceHierarchiesOnAxes.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  10
                 </td>
               </tr>
                           <tr>
@@ -1275,20 +2129,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.NonEmpty.java">com/eyeq/pivot4j/transform/NonEmpty.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.CountAggregator.java">com/eyeq/pivot4j/ui/aggregator/CountAggregator.java</a>
                 </td>
                 <td>
@@ -1303,7 +2143,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.DimensionExp.java">com/eyeq/pivot4j/mdx/metadata/DimensionExp.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.LevelNode.java">com/eyeq/pivot4j/analytics/ui/navigator/LevelNode.java</a>
                 </td>
                 <td>
                   0
@@ -1312,21 +2152,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.TotalAggregator.java">com/eyeq/pivot4j/ui/aggregator/TotalAggregator.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  28
+                  15
                 </td>
               </tr>
                           <tr>
@@ -1345,6 +2171,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandler.java">com/eyeq/pivot4j/analytics/exception/Pivot4JExceptionHandler.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillExpandPositionCommand.java">com/eyeq/pivot4j/ui/command/DrillExpandPositionCommand.java</a>
                 </td>
                 <td>
@@ -1359,7 +2199,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.LevelExp.java">com/eyeq/pivot4j/mdx/metadata/LevelExp.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.servlet.FacesDispatcherServlet.java">com/eyeq/pivot4j/pentaho/servlet/FacesDispatcherServlet.java</a>
                 </td>
                 <td>
                   0
@@ -1368,21 +2208,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.impl.PlaceMembersOnAxesImpl.java">com/eyeq/pivot4j/transform/impl/PlaceMembersOnAxesImpl.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  86
+                  31
                 </td>
               </tr>
                           <tr>
@@ -1397,6 +2223,20 @@
                 </td>
                 <td>
                   0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.SelectionNode.java">com/eyeq/pivot4j/analytics/ui/navigator/SelectionNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  35
                 </td>
               </tr>
                           <tr>
@@ -1429,20 +2269,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.AbstractOlapDataSource.java">com/eyeq/pivot4j/datasource/AbstractOlapDataSource.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  40
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.export.AbstractPivotExporter.java">com/eyeq/pivot4j/export/AbstractPivotExporter.java</a>
                 </td>
                 <td>
@@ -1457,7 +2283,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.aggregator.MaximumAggregator.java">com/eyeq/pivot4j/ui/aggregator/MaximumAggregator.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.AbstractOlapDataSource.java">com/eyeq/pivot4j/datasource/AbstractOlapDataSource.java</a>
                 </td>
                 <td>
                   0
@@ -1466,7 +2292,7 @@
                   0
                 </td>
                 <td>
-                  29
+                  40
                 </td>
               </tr>
                           <tr>
@@ -1485,34 +2311,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.PooledOlapDataSource.java">com/eyeq/pivot4j/datasource/PooledOlapDataSource.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  81
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.DrillCollapseMemberCommand.java">com/eyeq/pivot4j/ui/command/DrillCollapseMemberCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  30
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.CompoundId.java">com/eyeq/pivot4j/mdx/CompoundId.java</a>
                 </td>
                 <td>
@@ -1527,7 +2325,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.TransformFactory.java">com/eyeq/pivot4j/transform/TransformFactory.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.datasource.PooledOlapDataSource.java">com/eyeq/pivot4j/datasource/PooledOlapDataSource.java</a>
                 </td>
                 <td>
                   0
@@ -1536,26 +2334,12 @@
                   0
                 </td>
                 <td>
-                  2
+                  81
                 </td>
               </tr>
                           <tr>
                 <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.MemberExp.java">com/eyeq/pivot4j/mdx/metadata/MemberExp.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.metadata.AbstractMetadataExp.java">com/eyeq/pivot4j/mdx/metadata/AbstractMetadataExp.java</a>
                 </td>
                 <td>
                   0
@@ -1583,6 +2367,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.DimensionNode.java">com/eyeq/pivot4j/analytics/ui/navigator/DimensionNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.UnknownExpressionException.java">com/eyeq/pivot4j/query/UnknownExpressionException.java</a>
                 </td>
                 <td>
@@ -1593,6 +2391,20 @@
                 </td>
                 <td>
                   16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.PrimeFacesPivotRenderer.java">com/eyeq/pivot4j/analytics/ui/PrimeFacesPivotRenderer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  118
                 </td>
               </tr>
                           <tr>
@@ -1625,7 +2437,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.CellCommand.java">com/eyeq/pivot4j/ui/command/CellCommand.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.NavigatorNode.java">com/eyeq/pivot4j/analytics/ui/navigator/NavigatorNode.java</a>
                 </td>
                 <td>
                   0
@@ -1634,21 +2446,7 @@
                   0
                 </td>
                 <td>
-                  10
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.el.ExpressionEvaluatorFactory.java">com/eyeq/pivot4j/el/ExpressionEvaluatorFactory.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
+                  74
                 </td>
               </tr>
                           <tr>
@@ -1681,6 +2479,20 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.LevelNodeData.java">com/eyeq/pivot4j/analytics/ui/navigator/LevelNodeData.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.impl.DrillExpandPositionImpl.java">com/eyeq/pivot4j/transform/impl/DrillExpandPositionImpl.java</a>
                 </td>
                 <td>
@@ -1691,6 +2503,20 @@
                 </td>
                 <td>
                   28
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.ui.navigator.MeasureNode.java">com/eyeq/pivot4j/analytics/ui/navigator/MeasureNode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
                 </td>
               </tr>
                           <tr>
@@ -1709,7 +2535,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.util.StringUtil.java">com/eyeq/pivot4j/util/StringUtil.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.AbstractCellCommand.java">com/eyeq/pivot4j/ui/command/AbstractCellCommand.java</a>
                 </td>
                 <td>
                   0
@@ -1718,21 +2544,7 @@
                   0
                 </td>
                 <td>
-                  27
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.transform.AbstractTransform.java">com/eyeq/pivot4j/transform/AbstractTransform.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  7
+                  13
                 </td>
               </tr>
                           <tr>
@@ -1751,20 +2563,6 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ui.command.AbstractCellCommand.java">com/eyeq/pivot4j/ui/command/AbstractCellCommand.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  13
-                </td>
-              </tr>
-                          <tr>
-                <td>
                   <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.util.MarkupWriter.java">com/eyeq/pivot4j/util/MarkupWriter.java</a>
                 </td>
                 <td>
@@ -1775,34 +2573,6 @@
                 </td>
                 <td>
                   46
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.impl.PivotModelImpl.java">com/eyeq/pivot4j/impl/PivotModelImpl.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  325
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.export.PivotExporter.java">com/eyeq/pivot4j/export/PivotExporter.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  4
                 </td>
               </tr>
                           <tr>
@@ -1821,7 +2591,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.QueryChangeEvent.java">com/eyeq/pivot4j/query/QueryChangeEvent.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.export.PivotExporter.java">com/eyeq/pivot4j/export/PivotExporter.java</a>
                 </td>
                 <td>
                   0
@@ -1830,7 +2600,63 @@
                   0
                 </td>
                 <td>
-                  6
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.impl.PivotModelImpl.java">com/eyeq/pivot4j/impl/PivotModelImpl.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  326
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.state.ViewState.java">com/eyeq/pivot4j/analytics/state/ViewState.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  68
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.pentaho.ui.PentahoCatalogChooser.java">com/eyeq/pivot4j/pentaho/ui/PentahoCatalogChooser.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  69
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.datasource.DataSourceManager.java">com/eyeq/pivot4j/analytics/datasource/DataSourceManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
                 </td>
               </tr>
                           <tr>
@@ -1845,6 +2671,34 @@
                 </td>
                 <td>
                   22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.query.QueryChangeEvent.java">com/eyeq/pivot4j/query/QueryChangeEvent.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.analytics.config.Settings.java">com/eyeq/pivot4j/analytics/config/Settings.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  42
                 </td>
               </tr>
                           <tr>
@@ -1877,7 +2731,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ModelChangeEvent.java">com/eyeq/pivot4j/ModelChangeEvent.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.sort.SortCriteria.java">com/eyeq/pivot4j/sort/SortCriteria.java</a>
                 </td>
                 <td>
                   0
@@ -1886,7 +2740,7 @@
                   0
                 </td>
                 <td>
-                  6
+                  8
                 </td>
               </tr>
                           <tr>
@@ -1905,7 +2759,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.mdx.ValueParameter.java">com/eyeq/pivot4j/mdx/ValueParameter.java</a>
+                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.ModelChangeEvent.java">com/eyeq/pivot4j/ModelChangeEvent.java</a>
                 </td>
                 <td>
                   0
@@ -1914,21 +2768,7 @@
                   0
                 </td>
                 <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://mysticfall.github.com/pivot4j/checkstyle.html#com.eyeq.pivot4j.sort.SortCriteria.java">com/eyeq/pivot4j/sort/SortCriteria.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  8
+                  6
                 </td>
               </tr>
                       </tbody>
