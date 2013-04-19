@@ -61,7 +61,7 @@
 						<configuration>
 							<target unless="maven.test.skip">
 								<mkdir dir="${project.build.directory}/derby" />
-								<unzip src="${basedir}/src/test/test-data/derby-foodmart.zip"
+								<unzip src="${project.basedir}/../src/test/data/derby-foodmart.zip"
 									dest="${project.build.directory}/derby" overwrite="false" />
 							</target>
 						</configuration>

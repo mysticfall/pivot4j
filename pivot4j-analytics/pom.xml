@@ -28,7 +28,7 @@
 						<phase>prepare-package</phase>
 						<configuration>
 							<target unless="maven.test.skip">
-								<unzip src="${basedir}/src/main/test-data/derby-foodmart.zip"
+								<unzip src="${project.basedir}/../src/test/data/derby-foodmart.zip"
 									dest="${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF"
 									overwrite="false" />
 							</target>
