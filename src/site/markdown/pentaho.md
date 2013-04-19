@@ -42,9 +42,3 @@ the Mondrian schema file bundled with the platform - *'./pentaho-solutions/steel
 * Note that after save the report first time, the file is not visible until the directory is manually refreshed. It's a known 
 issue and hopefully will get resolved soon.
 
-### Project
-
-The Pentaho BI plugin project is hosted separately at Github. 
-Please report any issues on the sample application to the [issue tracker](https://github.com/mysticfall/pivot4j-pentaho/issues) there.
-
-- Github project page : https://github.com/mysticfall/pivot4j-pentaho

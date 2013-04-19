@@ -24,10 +24,11 @@ For Developers
 	* From the project root directory, run below command to generate parser related source files :
 
 +-----+
-mvn -Dmaven.test.skip=true verify
+mvn verify
 +-----+
 
-	* Choose <<'File > Import > General / Existing Projects into Workspace'>> from Eclipse's main menu.
+	* Choose <<'File > Import > General / Existing Projects into Workspace'>> from Eclipse's main menu. Project that 
+	can be imported are pivot4j(POM only), pivot4j-core, pivot4j-analytics, pivot4j-pantaho respectively.
 
 	* If you're using M2E, you will encounter errors like 'Plugin execution not covered by lifecycle configuration' in pom.xml. 
 	Select each message in 'Problems' view, and right click to choose <<'Quick Fix'>> menu. It will show alternative methods to resolve the problem. 
@@ -38,7 +39,7 @@ mvn -Dmaven.test.skip=true verify
 	All of Pivot4J's unit test cases are integration tests, which means they require a live database to run properly.
 	Pivot4J provides a sample 'FoodMart' Derby database for that purpose, so you will need to start it before you can run the unit tests from Eclipse.
 
-	From the project root directory, run below command to start Derby database :
+	From the project root directory(i.e. pivot4j-core), run below command to start Derby database :
 
 +-----+
 mvn derby:run
