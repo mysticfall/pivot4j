@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin name="pivot4j" title="pivot4j" loader="OVERRIDING">
+	<static-paths>
+		<static-path url="/pivot4j" localFolder="webapp" />
+	</static-paths>
+
+	<overlays>
+		<overlay id="launch" resourcebundle="api/repos/pivot4j/webapp/resources/i18n/messages.properties">
+			<button id="launch_new_pivot4j_analytics" image="api/repos/pivot4j/webapp/resources/images/new-report.png"
+				command="openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/index.html')"
+				label="Pivot4J Analytics" />
+		</overlay>
+
+		<overlay id="startup.pivot4j" resourcebundle="api/repos/pivot4j/webapp/resources/i18n/messages.properties">
+			<toolbar id="mainToolbar">
+				<toolbarbutton id="tb-pivot4j-new" 
+					image="../api/repos/pivot4j/webapp/resources/images/new-report32.png"
+					onclick="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/index.xhtml')"
+					tooltiptext="${plugin.toolbar.new}" insertafter="dummyPluginContentButton" />
+			</toolbar>
+			<menubar id="newmenu">
+				<menuitem id="mi-pivot4j-new" label="${plugin.menu.new}"
+					command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/index.xhtml')" />
+			</menubar>		
+		</overlay>
+	</overlays>
+
+	<content-type type="pivot4j" mime-type="text/html">
+		<title>Pivot4J Analytics</title>
+		<description>Pivot4J analytics report</description>
+		<icon-url>api/repos/pivot4j/webapp/resources/images/logo16.png</icon-url>
+		<operations>
+			<operation>
+				<id>RUN</id>
+			</operation>
+			<operation>
+				<id>EDIT</id>
+			</operation>
+		</operations>
+	</content-type>
+
+	<content-generator id="pivot4j" type="pivot4j" title="Pivot4J Analytics Content Generator" 
+		class="com.eyeq.pivot4j.pentaho.content.ReportContentGenerator"/>
+
+	<bean id="pivot4j.generator" class="com.eyeq.pivot4j.pentaho.content.ReportContentGenerator" />
+	<bean id="pivot4j.editor" class="com.eyeq.pivot4j.pentaho.content.ReportContentEditor" />
+</plugin>

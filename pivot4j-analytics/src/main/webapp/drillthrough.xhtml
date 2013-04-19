@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<p:dialog id="drillthrough-dialog" header="#{title.drillthrough}"
+		widgetVar="drillThroughDialog" modal="true" width="860" height="430"
+		closable="true" resizable="true" styleClass="drillthrough"
+		dynamic="true" visible="#{drillThroughData.dataAvailable}">
+		<h:form id="drillthrough-form">
+			<p:dataTable id="drillthrough-grid" var="row"
+				widgetVar="drillThroughGrid" value="#{drillThroughData}" lazy="true"
+				paginator="true" first="0" rows="15"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				rendered="#{drillThroughData.dataAvailable}">
+				<p:columns value="#{drillThroughData.columns}" var="column">
+					<f:facet name="header">
+						<h:outputText value="#{column.label}" />
+					</f:facet>
+
+					<h:outputText value="#{row[column.name]}" />
+				</p:columns>
+			</p:dataTable>
+
+			<p:remoteCommand name="drillThrough" update=":drillthrough-dialog"
+				oncomplete="drillThroughGrid.getPaginator().setPage(0)" />
+
+			<p:growl id="growl" showDetail="true" sticky="true" />
+		</h:form>
+
+		<f:facet name="footer">
+			<h:panelGroup layout="block" styleClass="ui-dialog-buttonpane">
+				<h:form id="drillthrough-cform">
+					<p:commandButton value="#{msg['button.close']}"
+						action="#{drillThroughData.reset}" update=":drillthrough-dialog"
+						icon="ui-icon-close" />
+				</h:form>
+			</h:panelGroup>
+		</f:facet>
+	</p:dialog>
+</ui:composition>

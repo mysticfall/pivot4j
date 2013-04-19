@@ -1,0 +1,17 @@
+----------------------------------------------------------------
+Fri Apr 19 22:27:54 KST 2013:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.9.1.0 - (1344872): instance a816c00e-013e-227a-cf88-0000042141d0 
+on database directory /home/fender/workspace/pivot4j/pivot4j-analytics/target/pivot4j-analytics-0.8-SNAPSHOT/WEB-INF/foodmart  with class loader WebappClassLoader
+  context: /pivot4j
+  delegate: false
+  repositories:
+    /WEB-INF/classes/
+----------> Parent Classloader:
+ClassRealm[plugin>org.apache.tomcat.maven:tomcat6-maven-plugin:2.1, parent: sun.misc.Launcher$AppClassLoader@569bc36d]
+ 
+Loaded from file:/home/fender/workspace/pivot4j/pivot4j-analytics/target/pivot4j-analytics-0.8-SNAPSHOT/WEB-INF/lib/derby-10.9.1.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_17-b02
+user.dir=/home/fender/workspace/pivot4j/pivot4j-analytics
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

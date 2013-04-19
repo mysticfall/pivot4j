@@ -1,0 +1,178 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<h:form id="hierarchy-form">
+		<p:dialog id="hierarchy-config"
+			header="#{msg['title.hierarchy_config']}" widgetVar="hierarchyConfig"
+			modal="true" width="860" height="435" closable="true"
+			resizable="false" dynamic="true" styleClass="hierarchy-config">
+			<h:panelGrid id="hierarchy-config-grid" columns="4"
+				columnClasses="member-panel,control-panel,member-panel,control-panel"
+				headerClass="info-panel"
+				rendered="#{!empty memberSelectionHandler.hierarchyName}">
+				<f:facet name="header">
+					<h:panelGroup layout="block">
+						<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
+						<h:outputText value="#{msg['message.hierarchy_config.info']}" />
+					</h:panelGroup>
+				</f:facet>
+
+				<p:panel styleClass="source-panel">
+					<f:facet name="header">
+						<h:outputText
+							value="#{msg['header.hierarchy_config.members.all']}" />
+					</f:facet>
+
+					<p:tree id="member-tree" styleClass="navigator"
+						value="#{memberSelectionHandler.sourceNode}" dynamic="true"
+						cache="true" var="node" selectionMode="multiple"
+						selection="#{memberSelectionHandler.sourceSelection}"
+						animate="true">
+						<p:treeNode type="member" icon="ui-icon-member">
+							<h:outputText value="#{node.name}"
+								styleClass="node-member #{node.selected?'selected':''}" />
+						</p:treeNode>
+
+						<p:ajax event="select" update=":hierarchy-form:source-ctrl-panel"
+							listener="#{memberSelectionHandler.onSourceNodeSelected}" />
+					</p:tree>
+
+					<p:contextMenu id="hierarchy-source-menu"
+						styleClass="hierarchy-contextmenu" for="member-tree">
+						<p:menuitem value="#{msg['menu.hierarchy_config.select.single']}"
+							action="#{memberSelectionHandler.add}"
+							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
+							<f:param name="mode" value="Single" />
+						</p:menuitem>
+						<p:menuitem
+							value="#{msg['menu.hierarchy_config.select.siblings']}"
+							action="#{memberSelectionHandler.add}"
+							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
+							<f:param name="mode" value="Sibling" />
+						</p:menuitem>
+						<p:menuitem
+							value="#{msg['menu.hierarchy_config.select.children']}"
+							action="#{memberSelectionHandler.add}"
+							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
+							<f:param name="mode" value="Children" />
+						</p:menuitem>
+						<p:menuitem
+							value="#{msg['menu.hierarchy_config.select.descendants']}"
+							action="#{memberSelectionHandler.add}"
+							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
+							<f:param name="mode" value="Descendants" />
+						</p:menuitem>
+					</p:contextMenu>
+				</p:panel>
+
+				<h:panelGroup layout="block">
+					<p:outputPanel id="source-ctrl-panel">
+						<p:commandButton id="button-add" icon="ui-icon-carat-1-e"
+							value="#{msg['button.add']}"
+							action="#{memberSelectionHandler.add}"
+							binding="#{memberSelectionHandler.buttonAdd}"
+							update="hierarchy-config-grid,button-bar"
+							disabled="#{!memberSelectionHandler.addButtonEnabled}" />
+						<p:commandButton id="button-remove" icon="ui-icon-carat-1-w"
+							value="#{msg['button.remove']}"
+							action="#{memberSelectionHandler.remove}"
+							binding="#{memberSelectionHandler.buttonRemove}"
+							update="hierarchy-config-grid,button-bar"
+							disabled="#{!memberSelectionHandler.removeButtonEnabled}" />
+					</p:outputPanel>
+				</h:panelGroup>
+
+				<p:panel styleClass="target-panel">
+					<f:facet name="header">
+						<h:outputText
+							value="#{msg['header.hierarchy_config.members.selected']}" />
+					</f:facet>
+
+					<p:tree id="selection-tree" styleClass="navigator"
+						value="#{memberSelectionHandler.targetNode}" dynamic="true"
+						cache="true" var="node" selectionMode="multiple"
+						selection="#{memberSelectionHandler.targetSelection}">
+						<p:treeNode type="member" icon="ui-icon-member">
+							<h:outputText value="#{node.name}"
+								styleClass="node-member #{node.selected?'selected':''}" />
+						</p:treeNode>
+
+						<p:ajax event="select"
+							update=":hierarchy-form:source-ctrl-panel,:hierarchy-form:target-ctrl-panel"
+							listener="#{memberSelectionHandler.onTargetNodeSelected}" />
+					</p:tree>
+
+					<p:contextMenu id="hierarchy-target-menu"
+						styleClass="hierarchy-contextmenu" for="selection-tree">
+						<p:menuitem value="#{msg['menu.hierarchy_config.remove.single']}"
+							action="#{memberSelectionHandler.remove}"
+							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
+							<f:param name="mode" value="Single" />
+						</p:menuitem>
+						<p:menuitem
+							value="#{msg['menu.hierarchy_config.remove.siblings']}"
+							action="#{memberSelectionHandler.remove}"
+							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
+							<f:param name="mode" value="Sibling" />
+						</p:menuitem>
+						<p:menuitem
+							value="#{msg['menu.hierarchy_config.remove.children']}"
+							action="#{memberSelectionHandler.remove}"
+							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
+							<f:param name="mode" value="Children" />
+						</p:menuitem>
+						<p:menuitem
+							value="#{msg['menu.hierarchy_config.remove.descendants']}"
+							action="#{memberSelectionHandler.remove}"
+							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
+							<f:param name="mode" value="Descendants" />
+						</p:menuitem>
+					</p:contextMenu>
+				</p:panel>
+
+				<h:panelGroup layout="block">
+					<p:outputPanel id="target-ctrl-panel">
+						<p:commandButton id="button-up" icon="ui-icon-carat-1-n"
+							value="#{msg['button.up']}"
+							action="#{memberSelectionHandler.moveUp}"
+							binding="#{memberSelectionHandler.buttonUp}"
+							update="selection-tree,target-ctrl-panel,:hierarchy-form:button-bar"
+							disabled="#{!memberSelectionHandler.upButtonEnabled}" />
+						<p:commandButton id="button-down" icon="ui-icon-carat-1-s"
+							value="#{msg['button.down']}"
+							action="#{memberSelectionHandler.moveDown}"
+							binding="#{memberSelectionHandler.buttonDown}"
+							update="selection-tree,target-ctrl-panel,:hierarchy-form:button-bar"
+							disabled="#{!memberSelectionHandler.downButtonEnabled}" />
+					</p:outputPanel>
+				</h:panelGroup>
+			</h:panelGrid>
+
+			<p:messages showDetail="true" closable="true" />
+
+			<h:inputHidden value="#{memberSelectionHandler.hierarchyName}" />
+
+			<f:facet name="footer">
+				<p:outputPanel id="button-bar" layout="block"
+					styleClass="ui-dialog-buttonpane">
+					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
+						action="#{memberSelectionHandler.apply}"
+						update="hierarchy-config-grid,:source-tree-form,:target-tree-form,:grid-form,:editor-form:mdx-editor"
+						onsuccess="hierarchyConfig.hide();" oncomplete="onViewChanged()"
+						binding="#{memberSelectionHandler.buttonOk}" />
+					<p:commandButton value="#{msg['button.apply']}"
+						icon="ui-icon-check" action="#{memberSelectionHandler.apply}"
+						update="hierarchy-config-grid,:source-tree-form,:target-tree-form,:grid-form,:editor-form:mdx-editor"
+						binding="#{memberSelectionHandler.buttonApply}"
+						oncomplete="onViewChanged()" />
+					<p:commandButton value="#{msg['button.close']}"
+						icon="ui-icon-close" action="#{memberSelectionHandler.reset}"
+						onstart="hierarchyConfig.hide();" />
+				</p:outputPanel>
+			</f:facet>
+		</p:dialog>
+	</h:form>
+</ui:composition>

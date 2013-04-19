@@ -1,0 +1,11 @@
+body {
+	background-color: #333333;
+}
+
+#catalog-form .ui-selectonemenu {
+	width: 260px !important;
+}
+
+span.hide-on-embed, button.hide-on-embed {
+	display: inline !important;
+}
