@@ -1,14 +1,4 @@
 com.eyeq.pivot4j
-com.eyeq.pivot4j.analytics.config
-com.eyeq.pivot4j.analytics.converter
-com.eyeq.pivot4j.analytics.datasource
-com.eyeq.pivot4j.analytics.datasource.sample
-com.eyeq.pivot4j.analytics.exception
-com.eyeq.pivot4j.analytics.repository
-com.eyeq.pivot4j.analytics.repository.file
-com.eyeq.pivot4j.analytics.state
-com.eyeq.pivot4j.analytics.ui
-com.eyeq.pivot4j.analytics.ui.navigator
 com.eyeq.pivot4j.datasource
 com.eyeq.pivot4j.el
 com.eyeq.pivot4j.el.freemarker
@@ -20,10 +10,6 @@ com.eyeq.pivot4j.impl
 com.eyeq.pivot4j.mdx
 com.eyeq.pivot4j.mdx.impl
 com.eyeq.pivot4j.mdx.metadata
-com.eyeq.pivot4j.pentaho.content
-com.eyeq.pivot4j.pentaho.datasource
-com.eyeq.pivot4j.pentaho.servlet
-com.eyeq.pivot4j.pentaho.ui
 com.eyeq.pivot4j.query
 com.eyeq.pivot4j.sort
 com.eyeq.pivot4j.state
