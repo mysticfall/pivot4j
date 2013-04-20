@@ -20,6 +20,10 @@ public abstract class AbstractOlapDataSource implements OlapDataSource {
 
 	private PrintWriter logWriter;
 
+	private String userName;
+
+	private String password;
+
 	private int loginTimeout;
 
 	/**
@@ -38,6 +42,36 @@ public abstract class AbstractOlapDataSource implements OlapDataSource {
 
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		throw new SQLFeatureNotSupportedException();
+	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * @param userName
+	 *            the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password
+	 *            the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	/**
@@ -65,9 +99,13 @@ public abstract class AbstractOlapDataSource implements OlapDataSource {
 	 * @see org.olap4j.OlapDataSource#getConnection(java.lang.String,
 	 *      java.lang.String)
 	 */
-	public OlapConnection getConnection(String username, String password)
+	public OlapConnection getConnection(String userName, String password)
 			throws SQLException {
-		return createConnection(username, password);
+		if (userName == null) {
+			return createConnection(this.userName, this.password);
+		} else {
+			return createConnection(userName, password);
+		}
 	}
 
 	/**
