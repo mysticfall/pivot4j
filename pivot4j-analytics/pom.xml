@@ -104,7 +104,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${javadoc.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>javadoc-jar</id>
@@ -137,6 +136,11 @@
 			<groupId>com.eyeq</groupId>
 			<artifactId>pivot4j-core</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.olap4j</groupId>
+			<artifactId>olap4j-xmla</artifactId>
+			<version>1.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
