@@ -1,6 +1,7 @@
 package com.eyeq.pivot4j.pentaho.servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.faces.webapp.FacesServlet;
@@ -56,6 +57,10 @@ public class FacesDispatcherServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
+
+		if (initParameters == null) {
+			this.initParameters = new HashMap<String, String>();
+		}
 
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 

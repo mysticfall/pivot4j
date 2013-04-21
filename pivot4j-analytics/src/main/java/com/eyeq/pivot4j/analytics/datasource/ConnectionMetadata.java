@@ -11,6 +11,8 @@ public class ConnectionMetadata implements Configurable, Serializable {
 
 	private static final long serialVersionUID = 1613489385973603487L;
 
+	private String dataSourceName;
+
 	private String cubeName;
 
 	private String catalogName;
@@ -19,12 +21,30 @@ public class ConnectionMetadata implements Configurable, Serializable {
 	}
 
 	/**
+	 * @param dataSourceName
 	 * @param catalogName
 	 * @param cubeName
 	 */
-	public ConnectionMetadata(String catalogName, String cubeName) {
+	public ConnectionMetadata(String dataSourceName, String catalogName,
+			String cubeName) {
+		this.dataSourceName = dataSourceName;
 		this.catalogName = catalogName;
 		this.cubeName = cubeName;
+	}
+
+	/**
+	 * @return the dataSourceName
+	 */
+	public String getDataSourceName() {
+		return dataSourceName;
+	}
+
+	/**
+	 * @param dataSourceName
+	 *            the dataSourceName to set
+	 */
+	public void setDataSourceName(String dataSourceName) {
+		this.dataSourceName = dataSourceName;
 	}
 
 	/**
@@ -67,6 +87,7 @@ public class ConnectionMetadata implements Configurable, Serializable {
 					"Configuration object cannot be null.");
 		}
 
+		configuration.addProperty("connection.dataSource", dataSourceName);
 		configuration.addProperty("connection.catalog", catalogName);
 		configuration.addProperty("connection.cube", cubeName);
 	}
@@ -81,6 +102,7 @@ public class ConnectionMetadata implements Configurable, Serializable {
 					"Configuration object cannot be null.");
 		}
 
+		this.dataSourceName = configuration.getString("connection.dataSource");
 		this.catalogName = configuration.getString("connection.catalog");
 		this.cubeName = configuration.getString("connection.cube");
 	}
@@ -90,7 +112,9 @@ public class ConnectionMetadata implements Configurable, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this).append("cubeName", cubeName)
+		return new ToStringBuilder(this)
+				.append("dataSourceName", dataSourceName)
+				.append("cubeName", cubeName)
 				.append("catalogName", catalogName).toString();
 	}
 }

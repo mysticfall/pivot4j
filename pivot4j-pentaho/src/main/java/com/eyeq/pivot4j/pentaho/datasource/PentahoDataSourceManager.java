@@ -4,13 +4,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import mondrian.olap.Util;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.util.Pair;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapDataSource;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.repository.ISolutionRepository;
@@ -24,20 +23,29 @@ import org.pentaho.platform.util.messages.LocaleHelper;
 import com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager;
 import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
 
-public class PentahoDataSourceManager extends AbstractDataSourceManager {
+public class PentahoDataSourceManager extends
+		AbstractDataSourceManager<PentahoDataSourceDefinition> {
 
 	private IPentahoSession session;
 
 	private IMondrianCatalogService catalogService;
 
-	@PostConstruct
+	/**
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#initialize()
+	 */
+	@Override
 	protected void initialize() {
+		super.initialize();
+
 		this.session = PentahoSessionHolder.getSession();
 		this.catalogService = PentahoSystem.get(IMondrianCatalogService.class,
 				session);
 	}
 
-	@PreDestroy
+	/**
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#destroy()
+	 */
+	@Override
 	protected void destroy() {
 		this.session = null;
 		this.catalogService = null;
@@ -70,24 +78,71 @@ public class PentahoDataSourceManager extends AbstractDataSourceManager {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#doCreateDataSource(com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata)
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#registerDefinitions()
 	 */
 	@Override
-	protected OlapDataSource doCreateDataSource(
+	protected void registerDefinitions() {
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSourceDefinition(org.apache.commons.configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	protected PentahoDataSourceDefinition createDataSourceDefinition(
+			HierarchicalConfiguration configuration) {
+		return null;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#getDefinition(com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata)
+	 */
+	@Override
+	protected PentahoDataSourceDefinition getDefinition(
 			ConnectionMetadata connectionInfo) {
 		if (connectionInfo == null) {
+			throw new NullArgumentException("connectionInfo");
+		}
+
+		PentahoDataSourceDefinition definition = null;
+
+		synchronized (this) {
+			List<PentahoDataSourceDefinition> definitions = getDefinitions();
+
+			for (PentahoDataSourceDefinition def : definitions) {
+				if (def.supports(connectionInfo)) {
+					definition = def;
+					break;
+				}
+			}
+
+			if (definition == null) {
+				definition = new PentahoDataSourceDefinition(connectionInfo);
+				registerDefinition(definition);
+			}
+		}
+
+		return definition;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSource(com.eyeq.pivot4j.analytics.datasource.DataSourceDefinition)
+	 */
+	@Override
+	protected OlapDataSource createDataSource(
+			PentahoDataSourceDefinition definition) {
+		if (definition == null) {
 			return null;
 		}
 
 		ISolutionRepository repository = PentahoSystem.get(
 				ISolutionRepository.class, session);
 
-		MondrianCatalog catalog = getCatalog(connectionInfo.getCatalogName());
+		MondrianCatalog catalog = getCatalog(definition.getCatalogName());
 
 		if (catalog == null) {
-			if (log.isWarnEnabled()) {
-				log.warn("Unable to find catalog with name : "
-						+ connectionInfo.getCatalogName());
+			if (logger.isWarnEnabled()) {
+				logger.warn("Unable to find catalog with name : "
+						+ definition.getCatalogName());
 			}
 
 			return null;
@@ -125,8 +180,8 @@ public class PentahoDataSourceManager extends AbstractDataSourceManager {
 		properties.put("url", url);
 		properties.put("driver", MondrianOlap4jDriver.class.getName());
 
-		if (log.isInfoEnabled()) {
-			log.info("Using connection URL : " + url);
+		if (logger.isInfoEnabled()) {
+			logger.info("Using connection URL : " + url);
 		}
 
 		return new MdxOlap4JDataSource(session, properties);

@@ -46,8 +46,7 @@ public class PivotStateManager {
 		Map<String, String> parameters = externalContext
 				.getRequestParameterMap();
 
-		this.viewId = parameters
-				.get(settings.get(Settings.VIEW_PARAMETER_NAME));
+		this.viewId = parameters.get(settings.getViewParameterName());
 
 		if (viewId == null) {
 			this.viewId = (String) flash.get("viewId");

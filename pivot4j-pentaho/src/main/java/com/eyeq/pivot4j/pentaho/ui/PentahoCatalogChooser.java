@@ -159,8 +159,8 @@ public class PentahoCatalogChooser {
 		FacesContext context = FacesContext.getCurrentInstance();
 		Flash flash = context.getExternalContext().getFlash();
 
-		ConnectionMetadata connectionInfo = new ConnectionMetadata(catalogName,
-				cubeName);
+		ConnectionMetadata connectionInfo = new ConnectionMetadata(null,
+				catalogName, cubeName);
 
 		ViewState state = viewStateHolder
 				.createNewState(connectionInfo, viewId);

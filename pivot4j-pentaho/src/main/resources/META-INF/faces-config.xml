@@ -4,10 +4,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
 	<application>
 		<resource-bundle>
-			<base-name>com.eyeq.pivot4j.primefaces.i18n.messages</base-name>
+			<base-name>com.eyeq.pivot4j.analytics.i18n.messages</base-name>
 			<var>msg</var>
 		</resource-bundle>
-		<message-bundle>com.eyeq.pivot4j.primefaces.i18n.messages</message-bundle>
+		<message-bundle>com.eyeq.pivot4j.analytics.i18n.messages</message-bundle>
 		<locale-config>
 			<default-locale>en</default-locale>
 			<supported-locale>en</supported-locale>

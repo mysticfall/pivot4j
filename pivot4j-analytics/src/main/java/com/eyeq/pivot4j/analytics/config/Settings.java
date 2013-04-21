@@ -1,83 +1,87 @@
 package com.eyeq.pivot4j.analytics.config;
 
 import java.io.File;
-import java.util.AbstractMap;
-import java.util.HashSet;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.faces.FacesException;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.event.ConfigurationEvent;
+import org.apache.commons.configuration.event.ConfigurationListener;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eyeq.pivot4j.el.ExpressionEvaluator;
+import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
+import com.eyeq.pivot4j.el.ExpressionEvaluatorFactoryImpl;
+import com.eyeq.pivot4j.el.freemarker.FreeMarkerExpressionEvaluator;
+
 @ManagedBean(name = "settings", eager = true)
 @ApplicationScoped
-public class Settings extends AbstractMap<String, String> {
+public class Settings {
 
-	private Set<Entry<String, String>> entries = new HashSet<Entry<String, String>>();
+	public static final String CONFIG_FILE = "pivot4j.config";
 
-	public static final String APPLICATION_HOME = "applicationHome";
+	public static final String APPLICATION_HOME = "pivot4j.home";
 
-	public static final String PREFIX = "pivot4j.";
-
-	public static final String RESOURCE_PREFIX = "resourcePrefix";
-
-	public static final String LOCALE_ATTRIBUTE_NAME = "localeAttributeName";
-
-	public static final String CODE_MIRROR_THEME = "codeMirrorTheme";
-
-	public static final String VIEW_PARAMETER_NAME = "viewParameterName";
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private File applicationHome;
 
+	private HierarchicalConfiguration configuration;
+
+	private String theme;
+
+	private String editorTheme;
+
+	private String resourcePrefix;
+
+	private String viewParameterName;
+
+	private String localeAttributeName;
+
 	@PostConstruct
 	protected void initialize() {
-		Logger log = LoggerFactory.getLogger(getClass());
-
-		if (log.isInfoEnabled()) {
-			log.info("Reading configuration parameters.");
+		if (logger.isInfoEnabled()) {
+			logger.info("Reading configuration parameters.");
 		}
 
-		ExternalContext context = FacesContext.getCurrentInstance()
-				.getExternalContext();
+		FacesContext context = FacesContext.getCurrentInstance();
+		ExternalContext externalContext = context.getExternalContext();
 
-		@SuppressWarnings("unchecked")
-		Map<String, String> parameters = context.getInitParameterMap();
-
-		for (String key : parameters.keySet()) {
-			if (key.startsWith(PREFIX)) {
-				String configKey = key.substring(PREFIX.length());
-				String configValue = StringUtils.trim(parameters.get(key));
-
-				SettingEntry entry = new SettingEntry(configKey, configValue);
-
-				if (log.isInfoEnabled()) {
-					log.info(configKey + " : " + configValue);
-				}
-
-				entries.add(entry);
-			}
-		}
-
-		String path = StringUtils.trimToNull(get(Settings.APPLICATION_HOME));
-
+		String path = StringUtils.trimToNull(externalContext
+				.getInitParameter(APPLICATION_HOME));
 		if (path == null) {
-			if (log.isInfoEnabled()) {
-				log.info("Parameter 'applicationHome' is not set. Using the default path.");
+			if (logger.isInfoEnabled()) {
+				logger.info("Parameter 'applicationHome' is not set. Using the default path.");
 			}
 
 			path = System.getProperty("user.home") + File.separator
 					+ ".pivot4j";
+		} else if (path.endsWith(File.separator)) {
+			path = path.substring(0, path.length() - File.separator.length());
 		}
 
-		if (log.isInfoEnabled()) {
-			log.info("Using application home : " + path);
+		if (logger.isInfoEnabled()) {
+			logger.info("Using application home : " + path);
 		}
 
 		this.applicationHome = new File(path);
@@ -86,9 +90,137 @@ public class Settings extends AbstractMap<String, String> {
 			applicationHome.mkdirs();
 		}
 
-		if (log.isInfoEnabled()) {
-			log.info("Pivot4J web application has been initialized successfully.");
+		InputStream in = null;
+
+		try {
+			String configPath = StringUtils.trimToNull(externalContext
+					.getInitParameter(CONFIG_FILE));
+			if (configPath == null) {
+				configPath = path + File.separator + "pivot4j-config.xml";
+
+				File configFile = new File(configPath);
+
+				if (!configFile.exists()) {
+					String defaultConfig = "/WEB-INF/pivot4j-config.xml";
+
+					if (logger.isInfoEnabled()) {
+						logger.info("Config file does not exist. Using default : "
+								+ defaultConfig);
+					}
+
+					ServletContext servletContext = (ServletContext) externalContext
+							.getContext();
+
+					String location = servletContext.getRealPath(defaultConfig);
+
+					if (location != null) {
+						configFile = new File(location);
+					}
+				}
+
+				if (!configFile.exists()) {
+					String msg = "Unable to read the default config : "
+							+ configFile;
+					throw new FacesException(msg);
+				}
+
+				in = new FileInputStream(configFile);
+			} else {
+				URL url;
+
+				if (configPath.startsWith("classpath:")) {
+					url = new URL(null, configPath,
+							new ClasspathStreamHandler());
+				} else {
+					url = new URL(configPath);
+				}
+
+				in = url.openStream();
+
+				if (in == null) {
+					String msg = "Unable to read config from URL : " + url;
+					throw new FacesException(msg);
+				}
+			}
+
+			this.configuration = readConfiguration(context, in);
+		} catch (IOException e) {
+			String msg = "Failed to read application config : " + e;
+			throw new FacesException(msg, e);
+		} catch (ConfigurationException e) {
+			String msg = "Invalid application config : " + e;
+			throw new FacesException(msg, e);
+		} finally {
+			IOUtils.closeQuietly(in);
 		}
+
+		if (logger.isInfoEnabled()) {
+			logger.info("Pivot4J Analytics has been initialized successfully.");
+		}
+
+		configuration.addConfigurationListener(new ConfigurationListener() {
+
+			@Override
+			public void configurationChanged(ConfigurationEvent event) {
+				onConfigurationChanged(event);
+			}
+		});
+	}
+
+	/**
+	 * @param context
+	 * @param in
+	 * @return
+	 * @throws ConfigurationException
+	 * @throws IOException
+	 */
+	protected HierarchicalConfiguration readConfiguration(FacesContext context,
+			InputStream in) throws ConfigurationException, IOException {
+		ExpressionEvaluatorFactory factory = new ExpressionEvaluatorFactoryImpl();
+		ExpressionEvaluator evaluator = factory
+				.getEvaluator(FreeMarkerExpressionEvaluator.NAMESPACE);
+
+		String source = IOUtils.toString(in);
+		source = (String) evaluator.evaluate(source, createELContext(context));
+
+		XMLConfiguration configuration = new XMLConfiguration();
+		configuration.load(new StringReader(source));
+
+		return configuration;
+	}
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	protected Map<String, Object> createELContext(FacesContext context) {
+		Map<String, Object> elContext = new HashMap<String, Object>();
+
+		elContext.put("FS", File.separator);
+
+		elContext.put("userHome", System.getProperty("user.dir"));
+		elContext.put("appHome", applicationHome.getPath());
+
+		ServletContext servletContext = (ServletContext) context
+				.getExternalContext().getContext();
+		String webRoot = servletContext.getRealPath("/WEB-INF");
+
+		if (webRoot != null) {
+			elContext.put("webRoot", webRoot);
+		}
+
+		return elContext;
+	}
+
+	/**
+	 * @param event
+	 */
+	protected void onConfigurationChanged(ConfigurationEvent event) {
+		this.editorTheme = null;
+
+		this.resourcePrefix = null;
+		this.viewParameterName = null;
+		this.localeAttributeName = null;
 	}
 
 	/**
@@ -99,51 +231,75 @@ public class Settings extends AbstractMap<String, String> {
 	}
 
 	/**
-	 * @see java.util.AbstractMap#entrySet()
+	 * @return the configuration
 	 */
-	@Override
-	public Set<Entry<String, String>> entrySet() {
-		return entries;
+	public HierarchicalConfiguration getConfiguration() {
+		return configuration;
 	}
 
-	protected static class SettingEntry implements Entry<String, String> {
-
-		private String key;
-
-		private String value;
-
-		/**
-		 * @param key
-		 * @param value
-		 */
-		protected SettingEntry(String key, String value) {
-			this.key = key;
-			this.value = value;
+	public String getTheme() {
+		if (theme == null) {
+			this.theme = configuration.getString(
+					"appearances.ui-theme.default", "aristo").trim();
 		}
 
-		/**
-		 * @see java.util.Map.Entry#getKey()
-		 */
-		@Override
-		public String getKey() {
-			return key;
+		return theme;
+	}
+
+	public String getEditorTheme() {
+		if (editorTheme == null) {
+			this.editorTheme = StringUtils.trimToNull(configuration
+					.getString("appearances.editor-theme"));
 		}
 
-		/**
-		 * @see java.util.Map.Entry#getValue()
-		 */
-		@Override
-		public String getValue() {
-			return value;
+		return editorTheme;
+	}
+
+	public String getResourcePrefix() {
+		if (resourcePrefix == null) {
+			this.resourcePrefix = StringUtils.trimToEmpty(configuration
+					.getString("web.resource-prefix"));
 		}
 
+		return resourcePrefix;
+	}
+
+	public String getViewParameterName() {
+		if (viewParameterName == null) {
+			this.viewParameterName = configuration.getString(
+					"web.view-parameter", "viewId").trim();
+
+			if (viewParameterName == null) {
+				this.viewParameterName = "viewId";
+			}
+		}
+
+		return viewParameterName;
+	}
+
+	public String getLocaleAttributeName() {
+		if (localeAttributeName == null) {
+			this.localeAttributeName = configuration.getString(
+					"web.locale-attribute", "locale").trim();
+		}
+
+		return localeAttributeName;
+	}
+
+	static class ClasspathStreamHandler extends URLStreamHandler {
+
 		/**
-		 * @see java.util.Map.Entry#setValue(java.lang.Object)
+		 * @see java.net.URLStreamHandler#openConnection(java.net.URL)
 		 */
 		@Override
-		public String setValue(String value) {
-			this.value = value;
-			return value;
+		protected URLConnection openConnection(URL u) throws IOException {
+			URL resourceUrl = getClass().getClassLoader().getResource(
+					u.getPath());
+			if (resourceUrl == null) {
+				return null;
+			}
+
+			return resourceUrl.openConnection();
 		}
 	}
 }

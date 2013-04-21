@@ -251,7 +251,7 @@ public class ViewStateHolder {
 	public ViewState createNewState(ConnectionMetadata connectionInfo,
 			String viewId) {
 		OlapDataSource dataSource = dataSourceManager
-				.createDataSource(connectionInfo);
+				.getDataSource(connectionInfo);
 
 		if (dataSource == null) {
 			// TODO find more elegant way to determine standalone/plugin mode.

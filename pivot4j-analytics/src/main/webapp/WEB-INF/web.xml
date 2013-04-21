@@ -2,8 +2,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-
-	<description>Pivot4J Analytics Sample Application</description>
+	<description>Pivot4J Analytics</description>
 
 	<!-- JSF standard parameters -->
 	<context-param>
@@ -36,16 +35,8 @@
 		<param-value>false</param-value>
 	</context-param>
 	<context-param>
-		<param-name>pivot4j.resourcePrefix</param-name>
-		<param-value></param-value>
-	</context-param>
-	<context-param>
-		<param-name>pivot4j.viewParameterName</param-name>
-		<param-value>viewId</param-value>
-	</context-param>
-	<context-param>
-		<param-name>pivot4j.codeMirrorTheme</param-name>
-		<param-value>eclipse</param-value>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>#{settings.theme}</param-value>
 	</context-param>
 
 	<!-- Faces Servlet -->

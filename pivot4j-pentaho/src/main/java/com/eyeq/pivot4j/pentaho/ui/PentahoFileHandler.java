@@ -106,7 +106,7 @@ public class PentahoFileHandler {
 			connectionInfo.restoreSettings(configuration);
 
 			OlapDataSource dataSource = dataSourceManager
-					.createDataSource(connectionInfo);
+					.getDataSource(connectionInfo);
 
 			PivotModel model = new PivotModelImpl(dataSource);
 			model.restoreSettings(configuration);

@@ -24,6 +24,11 @@
 			src="#{contextPath}#{settings.resourcePrefix}/resources/js/jquery.ui.tabs.js"></script>
 		<script type="text/javascript"
 			src="#{contextPath}#{settings.resourcePrefix}/resources/js/pivot4j.js"></script>
+		<script>
+			var settings = {
+				"viewParameterName" : "#{settings.viewParameterName}"
+			};
+		</script>
 	</h:head>
 
 	<h:body id="body">

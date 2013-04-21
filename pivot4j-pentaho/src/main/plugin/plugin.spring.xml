@@ -29,23 +29,13 @@
 					<value>false</value>
 				</entry>
 				<entry key="javax.faces.FACELETS_RESOURCE_RESOLVER">
-					<value>com.eyeq.pivot4j.pentaho.servlet.PluginResourceResolver
-					</value>
+					<value>com.eyeq.pivot4j.pentaho.servlet.PluginResourceResolver</value>
 				</entry>
 				<entry key="primefaces.THEME">
-					<value>cruze</value>
+					<value>#{settings.theme}</value>
 				</entry>
-				<entry key="pivot4j.codeMirrorTheme">
-					<value>ambiance</value>
-				</entry>
-				<entry key="pivot4j.viewParameterName">
-					<value>ts</value>
-				</entry>
-				<entry key="pivot4j.resourcePrefix">
-					<value>/api/repos/pivot4j/webapp</value>
-				</entry>
-				<entry key="pivot4j.localeAttributeName">
-					<value>locale_override</value>
+				<entry key="pivot4j.config">
+					<value>classpath:./pivot4j-config.xml</value>
 				</entry>
 			</map>
 		</property>

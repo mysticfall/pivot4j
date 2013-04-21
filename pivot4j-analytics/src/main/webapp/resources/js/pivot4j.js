@@ -144,7 +144,8 @@ function createTab(tab) {
 	var panel = tabView.tabs("add", url, name).find(url);
 
 	var iframe = jQuery(document.createElement("iframe"));
-	iframe.attr("frameborder", "0").attr("src", "view.xhtml?viewId=" + tab.id);
+	iframe.attr("frameborder", "0").attr("src",
+			"view.xhtml?" + settings.viewParameterName + "=" + tab.id);
 
 	panel.append(iframe);
 

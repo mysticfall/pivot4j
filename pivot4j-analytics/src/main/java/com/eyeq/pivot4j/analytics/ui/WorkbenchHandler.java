@@ -163,7 +163,7 @@ public class WorkbenchHandler {
 					.getSession(false);
 
 			if (session != null) {
-				String key = settings.get(Settings.LOCALE_ATTRIBUTE_NAME);
+				String key = settings.getLocaleAttributeName();
 
 				if (key != null) {
 					Object value = session.getAttribute(key);

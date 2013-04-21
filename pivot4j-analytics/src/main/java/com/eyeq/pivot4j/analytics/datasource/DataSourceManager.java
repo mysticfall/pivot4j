@@ -13,5 +13,5 @@ public interface DataSourceManager {
 	 * @param connectionInfo
 	 * @return
 	 */
-	OlapDataSource createDataSource(ConnectionMetadata connectionInfo);
+	OlapDataSource getDataSource(ConnectionMetadata connectionInfo);
 }
