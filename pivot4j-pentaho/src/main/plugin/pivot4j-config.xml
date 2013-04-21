@@ -5,12 +5,15 @@
 	<!-- Appearance settings. -->
 	<appearances>
 		<ui-theme>
-			<default>cruze</default>
-
+			<default>black-tie</default>
 			<available-themes>
-				<theme name="aristo" description="Aristo theme" />
-				<theme name="bootstrap" description="Bootstrap theme" />
-				<theme name="cruze" description="Cruze theme" />
+				<theme name="aristo" description="Aristo" />
+				<theme name="bootstrap" description="Bootstrap" />
+				<theme name="black-tie" description="Black-Tie" />
+				<theme name="cruze" description="Cruze" />
+				<theme name="humanity" description="Humanity" />
+				<theme name="redmond" description="Redmond" />
+				<theme name="rocket" description="Rocket" />
 			</available-themes>
 		</ui-theme>
 
@@ -18,7 +21,7 @@
 			For a complete list of available editor themes, please visit : 
 			http://codemirror.net/demo/theme.html
 		-->
-		<editor-theme>ambiance</editor-theme>
+		<editor-theme>eclipse</editor-theme>
 	</appearances>
 
 	<!-- Miscellaneous settings used for integration with other systems. -->

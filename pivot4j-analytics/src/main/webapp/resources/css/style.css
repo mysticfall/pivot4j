@@ -71,6 +71,10 @@ body.report .pe-layout-pane-header {
 	overflow: hidden;
 }
 
+#toolbar-pane .ui-selectonemenu {
+	vertical-align: middle;
+}
+
 #navigator-pane {
 	z-index: 10;
 }

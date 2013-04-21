@@ -91,6 +91,14 @@
 								disabled="#{!workbenchHandler.viewValid}" />
 						</p:toolbarGroup>
 						<p:toolbarGroup align="right">
+							<p:themeSwitcher id="theme-switcher"
+								value="#{workbenchHandler.theme}">
+								<f:selectItem itemLabel="#{msg['label.theme.default']}"
+									itemValue="" />
+								<f:selectItems value="#{settings.availableThemes}" />
+								<p:ajax oncomplete="onThemeChanged()" />
+							</p:themeSwitcher>
+							<p:separator />
 							<p:menuButton value="#{msg['toolbar.links']}">
 								<p:menuitem value="#{msg['toolbar.links.home']}"
 									url="http://mysticfall.github.com/pivot4j" target="_blank" />

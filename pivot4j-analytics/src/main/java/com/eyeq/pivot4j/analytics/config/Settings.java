@@ -9,7 +9,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.faces.FacesException;
@@ -57,6 +60,8 @@ public class Settings {
 	private String viewParameterName;
 
 	private String localeAttributeName;
+
+	private SortedMap<String, String> availableThemes;
 
 	@PostConstruct
 	protected void initialize() {
@@ -253,6 +258,26 @@ public class Settings {
 		}
 
 		return editorTheme;
+	}
+
+	/**
+	 * @return the availableThemes
+	 */
+	public SortedMap<String, String> getAvailableThemes() {
+		synchronized (this) {
+			if (availableThemes == null) {
+				this.availableThemes = new TreeMap<String, String>();
+
+				List<HierarchicalConfiguration> configurations = configuration
+						.configurationsAt("appearances.ui-theme.available-themes.theme");
+				for (HierarchicalConfiguration config : configurations) {
+					String name = config.getString("[@name]");
+					availableThemes.put(StringUtils.capitalize(name), name);
+				}
+			}
+		}
+
+		return availableThemes;
 	}
 
 	public String getResourcePrefix() {

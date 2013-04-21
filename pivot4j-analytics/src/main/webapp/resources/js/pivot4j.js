@@ -276,3 +276,9 @@ function onViewChanged() {
 		parent.enableSave(true);
 	}
 }
+
+function onThemeChanged() {
+	jQuery(".ui-tabs-panel iframe").each(function(index, elem) {
+		elem.contentWindow.document.location.reload();
+	});
+}

@@ -32,7 +32,7 @@
 					<value>com.eyeq.pivot4j.pentaho.servlet.PluginResourceResolver</value>
 				</entry>
 				<entry key="primefaces.THEME">
-					<value>#{settings.theme}</value>
+					<value>#{workbenchHandler.theme}</value>
 				</entry>
 				<entry key="pivot4j.config">
 					<value>classpath:./pivot4j-config.xml</value>

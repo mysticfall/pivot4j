@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -189,6 +190,36 @@ public class WorkbenchHandler {
 		}
 
 		return locale;
+	}
+
+	/**
+	 * @return the theme
+	 */
+	public String getTheme() {
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		String theme = (String) context.getSessionMap().get("ui-theme");
+
+		if (theme == null) {
+			theme = settings.getTheme();
+		}
+
+		return theme;
+	}
+
+	/**
+	 * @param theme
+	 *            the theme to set
+	 */
+	public void setTheme(String theme) {
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+
+		if (theme == null) {
+			context.getSessionMap().remove("ui-theme");
+		} else {
+			context.getSessionMap().put("ui-theme", theme);
+		}
 	}
 
 	public boolean isOpenEnabled() {

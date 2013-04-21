@@ -67,9 +67,6 @@
 	<!-- Appearance settings. -->
 	<appearances>
 		<!--
-			By default, 'aristo', 'bootstrap', and 'cruze' themes are bundled 
-			with the application.
-
 			You can download more themes from the below site and install them 
 			under the application library directory (i.e. '/WEB-INF/lib') :
 
@@ -77,11 +74,14 @@
 		-->
 		<ui-theme>
 			<default>aristo</default>
-
 			<available-themes>
-				<theme name="aristo" description="Aristo theme" />
-				<theme name="bootstrap" description="Bootstrap theme" />
-				<theme name="cruze" description="Cruze theme" />
+				<theme name="aristo" description="Aristo" />
+				<theme name="bootstrap" description="Bootstrap" />
+				<theme name="black-tie" description="Black-Tie" />
+				<theme name="cruze" description="Cruze" />
+				<theme name="humanity" description="Humanity" />
+				<theme name="redmond" description="Redmond" />
+				<theme name="rocket" description="Rocket" />
 			</available-themes>
 		</ui-theme>
 
