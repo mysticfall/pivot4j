@@ -16,7 +16,8 @@ import org.olap4j.OlapConnection;
 /**
  * OlapDataSource implementation which returns existing OlapConnection instance.
  */
-public class SingleConnectionOlapDataSource extends AbstractOlapDataSource {
+public class SingleConnectionOlapDataSource extends AbstractOlapDataSource
+		implements CloseableDataSource {
 
 	private OlapConnection connection;
 
@@ -36,5 +37,13 @@ public class SingleConnectionOlapDataSource extends AbstractOlapDataSource {
 	protected OlapConnection createConnection(String userName, String password)
 			throws SQLException {
 		return connection;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.datasource.CloseableDataSource#close()
+	 */
+	@Override
+	public void close() throws SQLException {
+		connection.close();
 	}
 }

@@ -21,7 +21,8 @@ import org.olap4j.OlapDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PooledOlapDataSource extends AbstractOlapDataSource {
+public class PooledOlapDataSource extends AbstractOlapDataSource implements
+		CloseableDataSource {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -64,6 +65,10 @@ public class PooledOlapDataSource extends AbstractOlapDataSource {
 		return dataSource;
 	}
 
+	/**
+	 * @see com.eyeq.pivot4j.datasource.CloseableDataSource#close()
+	 */
+	@Override
 	public synchronized void close() throws SQLException {
 		try {
 			if (logger.isInfoEnabled()) {
