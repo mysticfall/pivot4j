@@ -212,7 +212,7 @@
 							</p:treeNode>
 						</p:tree>
 						<p:droppable for="cube-navigator"
-							hoverStyleClass="drop-target-node">
+							hoverStyleClass="ui-widget-header">
 							<p:ajax listener="#{navigatorHandler.onDrop}"
 								update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 								oncomplete="onViewChanged()" />
@@ -232,7 +232,7 @@
 								<h:outputText id="columns-node" value="#{msg['label.columns']}"
 									styleClass="node-axis" />
 								<p:droppable for="columns-node"
-									hoverStyleClass="drop-target-node">
+									hoverStyleClass="ui-widget-header">
 									<p:ajax listener="#{navigatorHandler.onDropOnAxis}"
 										update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 										oncomplete="onViewChanged()" />
@@ -242,7 +242,7 @@
 							<p:treeNode type="rows" icon="ui-icon-rows">
 								<h:outputText id="rows-node" value="#{msg['label.rows']}"
 									styleClass="node-axis" />
-								<p:droppable for="rows-node" hoverStyleClass="drop-target-node">
+								<p:droppable for="rows-node" hoverStyleClass="ui-widget-header">
 									<p:ajax listener="#{navigatorHandler.onDropOnAxis}"
 										update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 										oncomplete="onViewChanged()" />
@@ -262,7 +262,7 @@
 								<p:draggable for="hierarchy-node"
 									helper="clone', appendTo: 'body" revert="true" />
 								<p:droppable for="hierarchy-node"
-									hoverStyleClass="drop-target-node">
+									hoverStyleClass="ui-widget-header">
 									<p:ajax listener="#{navigatorHandler.onDropOnHierarchy}"
 										update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 										oncomplete="onViewChanged()" />
@@ -284,7 +284,7 @@
 								<p:draggable for="member-node" helper="clone', appendTo: 'body"
 									revert="true" />
 								<p:droppable for="member-node"
-									hoverStyleClass="drop-target-node">
+									hoverStyleClass="ui-widget-header">
 									<p:ajax listener="#{navigatorHandler.onDropOnMember}"
 										update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 										oncomplete="onViewChanged()" />

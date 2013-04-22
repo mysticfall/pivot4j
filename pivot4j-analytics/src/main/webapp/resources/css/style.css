@@ -183,16 +183,6 @@ body.report .pe-layout-pane-header {
 	background-position: 0 0;
 }
 
-.navigator .drop-target-node {
-	text-decoration: underline;
-	font-weight: bold;
-}
-
-.navigator.drop-target-node {
-	border: 1px solid red !important;
-	border-radius: 10px;
-}
-
 #source-tree-pane .ui-treenode .ui-state-highlight {
 	background: none !important;
 	text-shadow: none !important;
@@ -201,7 +191,8 @@ body.report .pe-layout-pane-header {
 }
 
 #cube-list-pane {
-	overflow: visible;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 #cube-list-pane label.cube-list-label {
