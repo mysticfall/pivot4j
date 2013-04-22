@@ -279,6 +279,9 @@ function onViewChanged() {
 
 function onThemeChanged() {
 	jQuery(".ui-tabs-panel iframe").each(function(index, elem) {
-		elem.contentWindow.document.location.reload();
+		var pf = elem.contentWindow.PrimeFaces;
+		if (pf) {
+			pf.changeTheme(themeSwitcher.value);
+		}
 	});
 }
