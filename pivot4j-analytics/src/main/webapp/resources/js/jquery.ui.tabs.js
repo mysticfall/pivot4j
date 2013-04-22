@@ -63,8 +63,15 @@ $.widget( "ui.tabs", {
 	},
 
 	_tabId: function( a ) {
-		return a.title && a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" ) ||
-			this.options.idPrefix + getNextTabId();
+		if (!a.title) {
+			return;
+		}
+
+		var id = a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" );
+		if (!id) {
+			id = this.options.idPrefix + getNextTabId();
+		}
+		return id;
 	},
 
 	_sanitizeSelector: function( hash ) {
@@ -281,7 +288,8 @@ $.widget( "ui.tabs", {
 		}
 
 		// set up animations
-		var hideFx, showFx;
+		var hideFx = undefined;
+		var showFx = undefined;
 		if ( o.fx ) {
 			if ( $.isArray( o.fx ) ) {
 				hideFx = o.fx[ 0 ];
@@ -577,7 +585,7 @@ $.widget( "ui.tabs", {
 
 	disable: function( index ) {
 		index = this._getIndex( index );
-		var self = this, o = this.options;
+		var self = this, o = self.options;
 		// cannot disable already selected tab
 		if ( index != o.selected ) {
 			this.lis.eq( index ).addClass( "ui-state-disabled" );

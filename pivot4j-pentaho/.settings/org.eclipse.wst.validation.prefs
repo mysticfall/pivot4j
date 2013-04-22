@@ -1,0 +1,15 @@
+DELEGATES_PREFERENCE=delegateValidatorList
+USER_BUILD_PREFERENCE=enabledBuildValidatorListorg.eclipse.wst.wsi.ui.internal.WSIMessageValidator;
+USER_MANUAL_PREFERENCE=enabledManualValidatorListorg.eclipse.wst.wsi.ui.internal.WSIMessageValidator;
+USER_PREFERENCE=overrideGlobalPreferencestruedisableAllValidationfalseversion1.2.402.v201212031633
+eclipse.preferences.version=1
+override=true
+suspend=false
+vals/com.liferay.ide.eclipse.layouttpl.core.liferaylayouttpldescriptorvalidator/global=FF01
+vals/com.liferay.ide.eclipse.portlet.core.liferaydisplaydescriptorvalidator/global=FF01
+vals/com.liferay.ide.eclipse.portlet.core.liferayhookdescriptorvalidator/global=FF01
+vals/com.liferay.ide.eclipse.portlet.core.liferayportletdescriptorvalidator/global=FF01
+vals/com.liferay.ide.eclipse.portlet.core.portletdescriptorvalidator/global=FF01
+vals/org.eclipse.wst.html.core.HTMLValidator/groups=0107include06111contentType136org.eclipse.wst.html.core.htmlsourceT07fileext04htmlF07fileext05xhtmlF07fileext03htmF07fileext04htplF07fileext03wmlF0107exclude0104file06targetF02
+vals/org.eclipse.wst.xml.core.xml/groups=0107include05111contentType128org.eclipse.core.runtime.xmlT111contentType134org.eclipse.wst.xml.core.xmlsourceT111contentType134org.eclipse.wst.xml.core.xslsourceT111contentType134org.eclipse.jst.jsp.core.tldsourceT07fileext03xmlF0107exclude09113projectNature134org.eclipse.jst.j2ee.ejb.EJBNature113projectNature130org.eclipse.jst.j2ee.EARNature04file08.projectT0104file110.classpathT0104file110.settings/T0204file06targetF0204file112settings.xmlF0104file110plugin.xmlF0104file118pivot4j-config.xmlF01
+vf.version=3
