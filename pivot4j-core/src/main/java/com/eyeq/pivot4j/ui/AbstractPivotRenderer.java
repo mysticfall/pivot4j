@@ -432,9 +432,10 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 				for (String name : names) {
 					configuration
-							.addProperty(String.format(
-									"render.aggregations.aggregation(%s)",
-									index), name);
+							.addProperty(
+									String.format(
+											"render.aggregations.aggregation(%s)[@name]",
+											index), name);
 					configuration
 							.addProperty(
 									String.format(
@@ -465,23 +466,20 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 				"render.showParentMembers", false);
 		this.hideSpans = configuration.getBoolean("render.hideSpans", false);
 
-		List<Object> aggregationSettings = configuration
-				.getList("render.aggregations.aggregation");
+		List<HierarchicalConfiguration> aggregationSettings = configuration
+				.configurationsAt("render.aggregations.aggregation");
 
 		this.aggregatorNames.clear();
 
-		if (aggregationSettings != null) {
-			int index = 0;
+		for (HierarchicalConfiguration aggConfig : aggregationSettings) {
+			String name = aggConfig.getString("[@name]");
 
-			for (Object value : aggregationSettings) {
-				Axis axis = Axis.Standard.valueOf(configuration
-						.getString(String.format(
-								"render.aggregations.aggregation(%s)[@axis]",
-								index)));
+			if (name != null) {
+				Axis axis = Axis.Standard.valueOf(aggConfig
+						.getString("[@axis]"));
+
 				AggregatorPosition position = AggregatorPosition
-						.valueOf(configuration.getString(String
-								.format("render.aggregations.aggregation(%s)[@position]",
-										index)));
+						.valueOf(aggConfig.getString("[@position]"));
 
 				AggregatorKey key = new AggregatorKey(axis, position);
 
@@ -492,11 +490,9 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 					aggregatorNames.put(key, names);
 				}
 
-				if (!names.contains(value)) {
-					names.add(value.toString());
+				if (!names.contains(name)) {
+					names.add(name);
 				}
-
-				index++;
 			}
 		}
 

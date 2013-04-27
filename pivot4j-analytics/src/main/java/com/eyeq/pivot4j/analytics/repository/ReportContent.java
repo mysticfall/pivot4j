@@ -10,11 +10,14 @@ import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.NullArgumentException;
+import org.olap4j.OlapDataSource;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.ui.PrimeFacesPivotRenderer;
+import com.eyeq.pivot4j.impl.PivotModelImpl;
 
 public class ReportContent {
 
@@ -70,7 +73,7 @@ public class ReportContent {
 	 * @throws ConfigurationException
 	 */
 	public void write(OutputStream out) throws ConfigurationException {
-		FileConfiguration configuration = (FileConfiguration) getConfiguration();
+		FileConfiguration configuration = (FileConfiguration) this.configuration;
 		configuration.save(out);
 	}
 
@@ -87,9 +90,29 @@ public class ReportContent {
 	}
 
 	/**
-	 * @return the configuration
+	 * @param state
+	 * @param manager
+	 * @return
 	 */
-	public HierarchicalConfiguration getConfiguration() {
-		return configuration;
+	public ViewState read(ViewState state, DataSourceManager manager) {
+		ConnectionMetadata connectionInfo = new ConnectionMetadata();
+		connectionInfo.restoreSettings(configuration);
+
+		state.setConnectionInfo(connectionInfo);
+
+		OlapDataSource dataSource = manager.getDataSource(connectionInfo);
+
+		PivotModel model = new PivotModelImpl(dataSource);
+		model.restoreSettings(configuration);
+
+		state.setModel(model);
+
+		PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
+				FacesContext.getCurrentInstance());
+		renderer.restoreSettings(configuration);
+
+		state.setRendererState(renderer.saveState());
+
+		return state;
 	}
 }
