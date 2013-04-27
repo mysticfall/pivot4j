@@ -36,12 +36,15 @@ public class ReportContent {
 		ConnectionMetadata connectionInfo = state.getConnectionInfo();
 
 		if (connectionInfo != null) {
-			connectionInfo.saveSettings(configuration);
+			configuration.addProperty("connection", "");
+			connectionInfo.saveSettings(configuration.configurationAt(
+					"connection", true));
 		}
 
 		PivotModel model = state.getModel();
 		if (model != null) {
-			model.saveSettings(configuration);
+			configuration.addProperty("model", "");
+			model.saveSettings(configuration.configurationAt("model", true));
 		}
 
 		if (state.getRendererState() != null) {
@@ -49,7 +52,9 @@ public class ReportContent {
 					FacesContext.getCurrentInstance());
 
 			renderer.restoreState(state.getRendererState());
-			renderer.saveSettings(configuration);
+
+			configuration.addProperty("render", "");
+			renderer.saveSettings(configuration.configurationAt("render"));
 		}
 	}
 
@@ -94,24 +99,37 @@ public class ReportContent {
 	 * @param manager
 	 * @return
 	 */
-	public ViewState read(ViewState state, DataSourceManager manager) {
+	public ViewState read(ViewState state, DataSourceManager manager)
+			throws ConfigurationException {
 		ConnectionMetadata connectionInfo = new ConnectionMetadata();
-		connectionInfo.restoreSettings(configuration);
+
+		try {
+			connectionInfo.restoreSettings(configuration
+					.configurationAt("connection"));
+		} catch (IllegalArgumentException e) {
+		}
 
 		state.setConnectionInfo(connectionInfo);
 
 		OlapDataSource dataSource = manager.getDataSource(connectionInfo);
 
 		PivotModel model = new PivotModelImpl(dataSource);
-		model.restoreSettings(configuration);
+
+		try {
+			model.restoreSettings(configuration.configurationAt("model"));
+		} catch (IllegalArgumentException e) {
+		}
 
 		state.setModel(model);
 
-		PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
-				FacesContext.getCurrentInstance());
-		renderer.restoreSettings(configuration);
+		try {
+			PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
+					FacesContext.getCurrentInstance());
+			renderer.restoreSettings(configuration.configurationAt("render"));
 
-		state.setRendererState(renderer.saveState());
+			state.setRendererState(renderer.saveState());
+		} catch (IllegalArgumentException e) {
+		}
 
 		return state;
 	}

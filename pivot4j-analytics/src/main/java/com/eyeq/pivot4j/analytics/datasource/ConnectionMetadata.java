@@ -87,9 +87,9 @@ public class ConnectionMetadata implements Configurable, Serializable {
 					"Configuration object cannot be null.");
 		}
 
-		configuration.addProperty("connection.dataSource", dataSourceName);
-		configuration.addProperty("connection.catalog", catalogName);
-		configuration.addProperty("connection.cube", cubeName);
+		configuration.addProperty("dataSource", dataSourceName);
+		configuration.addProperty("catalog", catalogName);
+		configuration.addProperty("cube", cubeName);
 	}
 
 	/**
@@ -102,9 +102,9 @@ public class ConnectionMetadata implements Configurable, Serializable {
 					"Configuration object cannot be null.");
 		}
 
-		this.dataSourceName = configuration.getString("connection.dataSource");
-		this.catalogName = configuration.getString("connection.catalog");
-		this.cubeName = configuration.getString("connection.cube");
+		this.dataSourceName = configuration.getString("dataSource");
+		this.catalogName = configuration.getString("catalog");
+		this.cubeName = configuration.getString("cube");
 	}
 
 	/**

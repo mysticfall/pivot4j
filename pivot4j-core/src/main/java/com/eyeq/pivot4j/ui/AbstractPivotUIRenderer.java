@@ -277,19 +277,18 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 			configuration.setLogger(LogFactory.getLog(getClass()));
 		}
 
-		configuration.addProperty("render.drillDown[@mode]", drillDownMode);
-		configuration.addProperty("render.drillDown.columnAxis[@enabled]",
+		configuration.addProperty("drillDown[@mode]", drillDownMode);
+		configuration.addProperty("drillDown.columnAxis[@enabled]",
 				enableColumnDrillDown);
-		configuration.addProperty("render.drillDown.rowAxis[@enabled]",
+		configuration.addProperty("drillDown.rowAxis[@enabled]",
 				enableRowDrillDown);
-		configuration.addProperty("render.sort[@enabled]", enableSort);
+		configuration.addProperty("sort[@enabled]", enableSort);
 
 		if (sortMode != null) {
-			configuration.addProperty("render.sort[@mode]", sortMode.getName());
+			configuration.addProperty("sort[@mode]", sortMode.getName());
 		}
 
-		configuration.addProperty("render.drillThrough[@enabled]",
-				enableDrillThrough);
+		configuration.addProperty("drillThrough[@enabled]", enableDrillThrough);
 
 		// TODO Need to store registered commands here.
 	}
@@ -301,17 +300,16 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 	public void restoreSettings(HierarchicalConfiguration configuration) {
 		super.restoreSettings(configuration);
 
-		this.drillDownMode = configuration.getString("render.drillDown[@mode]",
+		this.drillDownMode = configuration.getString("drillDown[@mode]",
 				DrillDownCommand.MODE_POSITION);
 		this.enableColumnDrillDown = configuration.getBoolean(
-				"render.drillDown.columnAxis[@enabled]", false);
+				"drillDown.columnAxis[@enabled]", false);
 		this.enableRowDrillDown = configuration.getBoolean(
-				"render.drillDown.rowAxis[@enabled]", false);
-		this.enableSort = configuration.getBoolean("render.sort[@enabled]",
-				true);
+				"drillDown.rowAxis[@enabled]", false);
+		this.enableSort = configuration.getBoolean("sort[@enabled]", true);
 
 		// TODO Need to support a custom implementation.
-		String sortModeName = configuration.getString("render.sort[@mode]",
+		String sortModeName = configuration.getString("sort[@mode]",
 				SortMode.BASIC.getName());
 
 		this.sortMode = SortMode.fromName(sortModeName);
@@ -326,6 +324,6 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 		}
 
 		this.enableDrillThrough = configuration.getBoolean(
-				"render.drillThrough[@enabled]", false);
+				"drillThrough[@enabled]", false);
 	}
 }

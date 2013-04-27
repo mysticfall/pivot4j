@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
@@ -415,11 +416,9 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			configuration.setLogger(LogFactory.getLog(getClass()));
 		}
 
-		configuration.addProperty("render.showDimensionTitle",
-				showDimensionTitle);
-		configuration
-				.addProperty("render.showParentMembers", showParentMembers);
-		configuration.addProperty("render.hideSpans", hideSpans);
+		configuration.addProperty("showDimensionTitle", showDimensionTitle);
+		configuration.addProperty("showParentMembers", showParentMembers);
+		configuration.addProperty("hideSpans", hideSpans);
 
 		if (!aggregatorNames.isEmpty()) {
 			int index = 0;
@@ -432,18 +431,15 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 				for (String name : names) {
 					configuration
-							.addProperty(
-									String.format(
-											"render.aggregations.aggregation(%s)[@name]",
-											index), name);
-					configuration
-							.addProperty(
-									String.format(
-											"render.aggregations.aggregation(%s)[@axis]",
-											index), axis.name());
+							.addProperty(String.format(
+									"aggregations.aggregation(%s)[@name]",
+									index), name);
 					configuration.addProperty(String.format(
-							"render.aggregations.aggregation(%s)[@position]",
-							index), position.name());
+							"aggregations.aggregation(%s)[@axis]", index), axis
+							.name());
+					configuration.addProperty(String.format(
+							"aggregations.aggregation(%s)[@position]", index),
+							position.name());
 
 					index++;
 				}
@@ -461,13 +457,13 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		}
 
 		this.showDimensionTitle = configuration.getBoolean(
-				"render.showDimensionTitle", true);
-		this.showParentMembers = configuration.getBoolean(
-				"render.showParentMembers", false);
-		this.hideSpans = configuration.getBoolean("render.hideSpans", false);
+				"showDimensionTitle", true);
+		this.showParentMembers = configuration.getBoolean("showParentMembers",
+				false);
+		this.hideSpans = configuration.getBoolean("hideSpans", false);
 
 		List<HierarchicalConfiguration> aggregationSettings = configuration
-				.configurationsAt("render.aggregations.aggregation");
+				.configurationsAt("aggregations.aggregation");
 
 		this.aggregatorNames.clear();
 
@@ -486,7 +482,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 				List<String> names = aggregatorNames.get(key);
 
 				if (names == null) {
-					names = new ArrayList<String>();
+					names = new LinkedList<String>();
 					aggregatorNames.put(key, names);
 				}
 

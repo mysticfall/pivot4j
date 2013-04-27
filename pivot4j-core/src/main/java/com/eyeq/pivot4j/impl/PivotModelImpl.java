@@ -970,22 +970,19 @@ public class PivotModelImpl implements PivotModel {
 			configuration.setLogger(LogFactory.getLog(getClass()));
 		}
 
-		configuration.addProperty("model.mdx", getCurrentMdx());
-		configuration.addProperty("model.sort[@enabled]", sorting);
+		configuration.addProperty("mdx", getCurrentMdx());
+		configuration.addProperty("sort[@enabled]", sorting);
 
 		if (sortCriteria != null) {
-			configuration.addProperty("model.sort[@criteria]",
-					sortCriteria.name());
-			configuration.addProperty("model.sort[@topBottomCount]",
-					topBottomCount);
+			configuration.addProperty("sort[@criteria]", sortCriteria.name());
+			configuration.addProperty("sort[@topBottomCount]", topBottomCount);
 			if (isSorting()) {
 				if (sortPosMembers != null) {
 					int index = 0;
 					for (Member member : sortPosMembers) {
-						configuration
-								.addProperty(String.format(
-										"model.sort.member(%s)", index++),
-										member.getUniqueName());
+						configuration.addProperty(
+								String.format("sort.member(%s)", index++),
+								member.getUniqueName());
 					}
 				}
 			}
@@ -1002,7 +999,7 @@ public class PivotModelImpl implements PivotModel {
 			throw new NullArgumentException("configuration");
 		}
 
-		String mdx = configuration.getString("model.mdx");
+		String mdx = configuration.getString("mdx");
 
 		setMdx(mdx);
 
@@ -1018,8 +1015,7 @@ public class PivotModelImpl implements PivotModel {
 			initialize();
 		}
 
-		List<Object> sortPosUniqueNames = configuration
-				.getList("model.sort.member");
+		List<Object> sortPosUniqueNames = configuration.getList("sort.member");
 		if (sortPosUniqueNames == null || sortPosUniqueNames.isEmpty()) {
 			this.sortPosMembers = null;
 		} else {
@@ -1049,16 +1045,15 @@ public class PivotModelImpl implements PivotModel {
 			}
 		}
 
-		this.topBottomCount = configuration.getInt(
-				"model.sort[@topBottomCount]", 10);
-		String sortName = configuration.getString("model.sort[@criteria]");
+		this.topBottomCount = configuration.getInt("sort[@topBottomCount]", 10);
+		String sortName = configuration.getString("sort[@criteria]");
 		if (sortName == null) {
 			this.sortCriteria = SortCriteria.ASC;
 		} else {
 			this.sortCriteria = SortCriteria.valueOf(sortName);
 		}
 
-		this.sorting = configuration.getBoolean("model.sort[@enabled]", false);
+		this.sorting = configuration.getBoolean("sort[@enabled]", false);
 
 		this.cellSet = null;
 	}
