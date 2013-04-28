@@ -12,8 +12,6 @@ public abstract class ExpressionParameter extends AbstractExp {
 
 	private static final long serialVersionUID = -8720548361608653946L;
 
-	private String namespace;
-
 	private String expression;
 
 	private String result;
@@ -24,27 +22,10 @@ public abstract class ExpressionParameter extends AbstractExp {
 	}
 
 	/**
-	 * @param namespace
 	 * @param expression
 	 */
-	public ExpressionParameter(String namespace, String expression) {
-		this.namespace = namespace;
+	public ExpressionParameter(String expression) {
 		this.expression = expression;
-	}
-
-	/**
-	 * @return the namespace
-	 */
-	public String getNamespace() {
-		return namespace;
-	}
-
-	/**
-	 * @param namespace
-	 *            the namespace to set
-	 */
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
 	}
 
 	/**
@@ -100,14 +81,13 @@ public abstract class ExpressionParameter extends AbstractExp {
 		if (evaluated) {
 			return result == null ? "" : result;
 		} else {
-			return toMdx(namespace, expression);
+			return toMdx(expression);
 		}
 	}
 
 	/**
-	 * @param namespace
 	 * @param expression
 	 * @return
 	 */
-	protected abstract String toMdx(String namespace, String expression);
+	protected abstract String toMdx(String expression);
 }

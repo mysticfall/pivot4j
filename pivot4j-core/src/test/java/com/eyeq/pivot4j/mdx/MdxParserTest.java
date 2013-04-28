@@ -393,7 +393,7 @@ public class MdxParserTest {
 	@Test
 	public void testParseMemberExpression() throws Exception {
 		String mdx = "SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "
-				+ "WHERE $[s:parameter]";
+				+ "WHERE $[parameter]";
 
 		MdxStatement query = parseQuery(mdx);
 		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
@@ -403,14 +403,12 @@ public class MdxParserTest {
 
 		assertThat("Wrong member expression returned.",
 				parameter.getExpression(), is(equalTo("parameter")));
-		assertThat("Wrong expression namespace.", parameter.getNamespace(),
-				is(equalTo("s")));
 	}
 
 	@Test
-	public void testComplexParseMemberExpression() throws Exception {
+	public void testParseMemberExpressionWithCalculation() throws Exception {
 		String mdx = "SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "
-				+ "WHERE $[s:#{set = \"test\"}]";
+				+ "WHERE $['aaa' + 'bbb']";
 
 		MdxStatement query = parseQuery(mdx);
 		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
@@ -419,34 +417,12 @@ public class MdxParserTest {
 		assertThat("Slicer exp is null.", parameter, is(notNullValue()));
 
 		assertThat("Wrong member expression returned.",
-				parameter.getExpression(), is(equalTo("#{set = \"test\"}")));
-	}
-
-	@Test
-	public void testParseMemberExpressionInSet() throws Exception {
-		String mdx = "SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "
-				+ "WHERE {$[s:parameter], [Time].[1998]}";
-
-		MdxStatement query = parseQuery(mdx);
-		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
-
-		FunCall func = (FunCall) query.getSlicer();
-		assertThat("Slicer exp is null.", func, is(notNullValue()));
-
-		assertThat("Wrong number of function arguments.",
-				func.getArgs().size(), is(equalTo(2)));
-
-		ExpressionParameter parameter = (ExpressionParameter) func.getArgs()
-				.get(0);
-		assertThat("Slicer exp is null.", parameter, is(notNullValue()));
-
-		assertThat("Wrong member expression returned.",
-				parameter.getExpression(), is(equalTo("parameter")));
+				parameter.getExpression(), is(equalTo("'aaa' + 'bbb'")));
 	}
 
 	@Test
 	public void testParseMemberExpressionInWithMember() throws Exception {
-		String mdx = "WITH MEMBER [EXPR_MEMBER] AS '$[s:parameter]' SELECT [Measures].[Store Sales] ON COLUMNS, "
+		String mdx = "WITH MEMBER [EXPR_MEMBER] AS '$[parameter]' SELECT [Measures].[Store Sales] ON COLUMNS, "
 				+ "[Product].[All Products] ON ROWS FROM [Sales]";
 
 		MdxStatement query = parseQuery(mdx);
@@ -475,7 +451,7 @@ public class MdxParserTest {
 
 	@Test
 	public void testParseMemberExpressionInWithSet() throws Exception {
-		String mdx = "WITH SET [EXPR_SET] AS {$[s:parameter1], [AAA].[BBB], $[s:parameter2]} "
+		String mdx = "WITH SET [EXPR_SET] AS {$[parameter1], [AAA].[BBB], $[parameter2]} "
 				+ "SELECT [Measures].[Store Sales] ON COLUMNS, "
 				+ "[Product].[All Products] ON ROWS FROM [Sales]";
 
@@ -522,7 +498,7 @@ public class MdxParserTest {
 	@Test
 	public void testParseMemberExpressionEscape() throws Exception {
 		String mdx = "SELECT [Measures].[Store Sales] ON COLUMNS, [Product].[All Products] ON ROWS FROM [Sales] "
-				+ "WHERE $[s:[1, 2, 3]], SELECT, &[AAA]], Crossjoin(), \"aaa\"]";
+				+ "WHERE $['#aaa' + '[1, 2, 3]]']";
 
 		MdxStatement query = parseQuery(mdx);
 		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
@@ -531,7 +507,36 @@ public class MdxParserTest {
 		assertThat("Slicer exp is null.", parameter, is(notNullValue()));
 
 		assertThat("Wrong member expression returned.",
-				parameter.getExpression(),
-				is(equalTo("[1, 2, 3], SELECT, &[AAA], Crossjoin(), \"aaa\"")));
+				parameter.getExpression(), is(equalTo("'#aaa' + '[1, 2, 3]'")));
+	}
+
+	@Test
+	public void testParseValueExpression() throws Exception {
+		String mdx = "WITH MEMBER [Measures].[Calc Cost] AS '[Measures].[Store Cost] * ${ratio}' "
+				+ "SELECT [Measures].[Calc Cost] ON COLUMNS FROM [Sales]";
+
+		MdxStatement query = parseQuery(mdx);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
+
+		List<Formula> formulas = query.getFormulas();
+
+		assertThat("Formula list not be null.", formulas, is(notNullValue()));
+		assertThat("Number of formula should be 1.", formulas.size(),
+				is(equalTo(1)));
+
+		Formula formula = formulas.get(0);
+
+		Exp arg = formula.getExp();
+
+		assertThat("Wrong argument type.", arg, is(instanceOf(FunCall.class)));
+
+		FunCall func = (FunCall) arg;
+
+		assertThat("Wrong number of function arguments.",
+				func.getArgs().size(), is(equalTo(2)));
+
+		ValueParameter parameter = (ValueParameter) func.getArgs().get(1);
+		assertThat("Wrong value parameter expression.",
+				parameter.getExpression(), is(equalTo("ratio")));
 	}
 }

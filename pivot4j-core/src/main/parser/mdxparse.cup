@@ -58,15 +58,11 @@ parser code {:
   }
 
   ExpressionParameter createMemberParameter(String exp) {
-    String[] values = exp.substring(2, exp.length() - 1).replaceAll("]]", "]").split(":");
-
-    return new MemberParameter(values[0], values[1]);
+    return new MemberParameter(exp.substring(2, exp.length() - 1).replaceAll("]]", "]"));
   }
 
   ExpressionParameter createValueParameter(String exp) {
-    String[] values = exp.substring(2, exp.length() - 1).replaceAll("]]", "]").split(":");
-
-    return new ValueParameter(values[0], values[1]);
+    return new ValueParameter(exp.substring(2, exp.length() - 1).replaceAll("]]", "]"));
   }
 :};
 

@@ -25,6 +25,7 @@ import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
 
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.el.ExpressionContext;
 import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 
 public class RenderContext {
@@ -68,6 +69,8 @@ public class RenderContext {
 	private int colSpan = 1;
 
 	private int rowSpan = 1;
+
+	private ExpressionContext expressionContext;
 
 	private Map<String, Member> cachedParents;
 
@@ -117,6 +120,8 @@ public class RenderContext {
 		this.rowCount = rowCount;
 		this.columnHeaderCount = columnHeaderCount;
 		this.rowHeaderCount = rowHeaderCount;
+
+		this.expressionContext = createExpressionContext(model);
 
 		if (cachedParents == null) {
 			this.cachedParents = new HashMap<String, Member>();
@@ -446,5 +451,217 @@ public class RenderContext {
 		}
 
 		return ancestors;
+	}
+
+	/**
+	 * @return the expressionContext
+	 */
+	public ExpressionContext getExpressionContext() {
+		return expressionContext;
+	}
+
+	/**
+	 * @param model
+	 * @return
+	 */
+	protected ExpressionContext createExpressionContext(PivotModel model) {
+		ExpressionContext context = new ExpressionContext(
+				model.getExpressionContext());
+
+		context.put("axis", new ExpressionContext.ValueBinding<Axis>() {
+
+			@Override
+			public Axis getValue() {
+				return getAxis();
+			}
+		});
+
+		context.put("axisName", new ExpressionContext.ValueBinding<String>() {
+
+			@Override
+			public String getValue() {
+				Axis axis = getAxis();
+
+				if (axis == null) {
+					return null;
+				}
+
+				return axis.name();
+			}
+		});
+
+		context.put("axisOridinal",
+				new ExpressionContext.ValueBinding<Integer>() {
+
+					@Override
+					public Integer getValue() {
+						Axis axis = getAxis();
+
+						if (axis == null) {
+							return null;
+						}
+
+						return axis.axisOrdinal();
+					}
+				});
+
+		context.put("hierarchy",
+				new ExpressionContext.ValueBinding<Hierarchy>() {
+
+					@Override
+					public Hierarchy getValue() {
+						return getHierarchy();
+					}
+				});
+
+		context.put("level", new ExpressionContext.ValueBinding<Level>() {
+
+			@Override
+			public Level getValue() {
+				return getLevel();
+			}
+		});
+
+		context.put("member", new ExpressionContext.ValueBinding<Member>() {
+
+			@Override
+			public Member getValue() {
+				return getMember();
+			}
+		});
+
+		context.put("cell", new ExpressionContext.ValueBinding<Cell>() {
+
+			@Override
+			public Cell getValue() {
+				return getCell();
+			}
+		});
+
+		context.put("cellType", new ExpressionContext.ValueBinding<CellType>() {
+
+			@Override
+			public CellType getValue() {
+				return getCellType();
+			}
+		});
+
+		context.put("cellTypeName",
+				new ExpressionContext.ValueBinding<String>() {
+
+					@Override
+					public String getValue() {
+						CellType type = getCellType();
+
+						if (type == null) {
+							return null;
+						}
+
+						return type.name();
+					}
+				});
+
+		context.put("position", new ExpressionContext.ValueBinding<Position>() {
+
+			@Override
+			public Position getValue() {
+				return getPosition();
+			}
+		});
+
+		context.put("columnPosition",
+				new ExpressionContext.ValueBinding<Position>() {
+
+					@Override
+					public Position getValue() {
+						return getColumnPosition();
+					}
+				});
+
+		context.put("rowPosition",
+				new ExpressionContext.ValueBinding<Position>() {
+
+					@Override
+					public Position getValue() {
+						return getRowPosition();
+					}
+				});
+
+		context.put("property", new ExpressionContext.ValueBinding<Property>() {
+
+			@Override
+			public Property getValue() {
+				return getProperty();
+			}
+		});
+
+		context.put("columnCount",
+				new ExpressionContext.ValueBinding<Integer>() {
+
+					@Override
+					public Integer getValue() {
+						return getColumnCount();
+					}
+				});
+
+		context.put("rowCount", new ExpressionContext.ValueBinding<Integer>() {
+
+			@Override
+			public Integer getValue() {
+				return getRowCount();
+			}
+		});
+
+		context.put("columnHeaderCount",
+				new ExpressionContext.ValueBinding<Integer>() {
+
+					@Override
+					public Integer getValue() {
+						return getColumnHeaderCount();
+					}
+				});
+
+		context.put("rowHeaderCount",
+				new ExpressionContext.ValueBinding<Integer>() {
+
+					@Override
+					public Integer getValue() {
+						return getRowHeaderCount();
+					}
+				});
+
+		context.put("colIndex", new ExpressionContext.ValueBinding<Integer>() {
+
+			@Override
+			public Integer getValue() {
+				return getColIndex();
+			}
+		});
+
+		context.put("rowIndex", new ExpressionContext.ValueBinding<Integer>() {
+
+			@Override
+			public Integer getValue() {
+				return getRowIndex();
+			}
+		});
+
+		context.put("colSpan", new ExpressionContext.ValueBinding<Integer>() {
+
+			@Override
+			public Integer getValue() {
+				return getColSpan();
+			}
+		});
+
+		context.put("rowSpan", new ExpressionContext.ValueBinding<Integer>() {
+
+			@Override
+			public Integer getValue() {
+				return getRowSpan();
+			}
+		});
+
+		return context;
 	}
 }

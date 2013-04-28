@@ -8,8 +8,6 @@
  */
 package com.eyeq.pivot4j.el;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,14 +18,13 @@ public abstract class AbstractExpressionEvaluator implements
 
 	/**
 	 * @see com.eyeq.pivot4j.el.ExpressionEvaluator#evaluate(java.lang.String,
-	 *      java.util.Map)
+	 *      com.eyeq.pivot4j.el.ExpressionContext)
 	 */
 	@Override
-	public Object evaluate(String expression, Map<String, Object> context)
+	public Object evaluate(String expression, ExpressionContext context)
 			throws EvaluationFailedException {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Evaluating expression : ");
-			logger.debug("	- namespace : " + getNamespace());
 			logger.debug("	- expression : " + expression);
 		}
 
@@ -39,8 +36,7 @@ public abstract class AbstractExpressionEvaluator implements
 			throw e;
 		} catch (Exception e) {
 			throw new EvaluationFailedException(
-					"Failed to evaluate the expression : " + e, getNamespace(),
-					expression, e);
+					"Failed to evaluate the expression : " + e, expression, e);
 		}
 
 		if (logger.isDebugEnabled()) {
@@ -57,5 +53,5 @@ public abstract class AbstractExpressionEvaluator implements
 	 * @throws EvaluationFailedException
 	 */
 	protected abstract Object doEvaluate(String expression,
-			Map<String, Object> context) throws Exception;
+			ExpressionContext context) throws Exception;
 }

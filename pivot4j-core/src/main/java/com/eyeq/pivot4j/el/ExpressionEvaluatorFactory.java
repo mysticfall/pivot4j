@@ -8,7 +8,12 @@
  */
 package com.eyeq.pivot4j.el;
 
+
 public interface ExpressionEvaluatorFactory {
 
-	ExpressionEvaluator getEvaluator(String namespace);
+	/**
+	 * @param context
+	 * @return
+	 */
+	ExpressionEvaluator createEvaluator();
 }

@@ -10,7 +10,6 @@ package com.eyeq.pivot4j;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -18,6 +17,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
+import com.eyeq.pivot4j.el.ExpressionContext;
 import com.eyeq.pivot4j.sort.SortCriteria;
 import com.eyeq.pivot4j.state.Bookmarkable;
 import com.eyeq.pivot4j.state.Configurable;
@@ -82,7 +82,7 @@ public interface PivotModel extends Configurable, Bookmarkable {
 
 	void setRoleName(String roleName);
 
-	Map<String, Object> getExpressionContext();
+	ExpressionContext getExpressionContext();
 
 	/**
 	 * Adds a model change listener

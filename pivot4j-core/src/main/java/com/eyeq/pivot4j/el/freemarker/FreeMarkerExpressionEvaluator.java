@@ -11,41 +11,33 @@ package com.eyeq.pivot4j.el.freemarker;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import com.eyeq.pivot4j.el.AbstractExpressionEvaluator;
+import org.apache.commons.lang.NullArgumentException;
 
-import freemarker.ext.beans.BeansWrapper;
+import com.eyeq.pivot4j.el.AbstractExpressionEvaluator;
+import com.eyeq.pivot4j.el.ExpressionContext;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 public class FreeMarkerExpressionEvaluator extends AbstractExpressionEvaluator {
 
-	public static final String NAMESPACE = "fm";
-
 	private Configuration configuration;
 
-	public FreeMarkerExpressionEvaluator() {
-		this.configuration = createConfiguration();
-	}
+	private Map<String, Template> cache = new HashMap<String, Template>();
 
 	/**
-	 * @see com.eyeq.pivot4j.el.ExpressionEvaluator#getNamespace()
+	 * @param configuration
 	 */
-	@Override
-	public String getNamespace() {
-		return NAMESPACE;
-	}
+	public FreeMarkerExpressionEvaluator(Configuration configuration) {
+		if (configuration == null) {
+			throw new NullArgumentException("configuration");
+		}
 
-	/**
-	 * @return configuration
-	 */
-	protected Configuration createConfiguration() {
-		Configuration configuration = new Configuration();
-		configuration.setObjectWrapper(new BeansWrapper());
-
-		return configuration;
+		this.configuration = configuration;
 	}
 
 	/**
@@ -55,26 +47,58 @@ public class FreeMarkerExpressionEvaluator extends AbstractExpressionEvaluator {
 		return configuration;
 	}
 
+	protected void clearTemplateCache() {
+		cache.clear();
+	}
+
+	/**
+	 * @param expression
+	 */
+	protected Template getTemplateFromCache(String expression) {
+		return cache.get(expression);
+	}
+
+	/**
+	 * @param expression
+	 */
+	protected void removeTemplateFromCache(String expression) {
+		cache.remove(expression);
+	}
+
+	/**
+	 * @param expression
+	 * @param template
+	 */
+	protected void putTemplateInCache(String expression, Template template) {
+		cache.put(expression, template);
+	}
+
 	/**
 	 * @param expression
 	 * @param configuration
 	 * @return
 	 * @throws IOException
 	 */
-	protected Template createTemplate(String expression,
-			Configuration configuration) throws IOException {
-		return new Template(expression, new StringReader(expression),
-				configuration);
+	protected Template createTemplate(String expression) throws IOException {
+		Template template = new Template(expression, new StringReader(
+				expression), configuration);
+		putTemplateInCache(expression, template);
+
+		return template;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.el.AbstractExpressionEvaluator#doEvaluate(java.lang.
-	 *      String, java.util.Map)
+	 * @see com.eyeq.pivot4j.el.AbstractExpressionEvaluator#doEvaluate(java.lang.String,
+	 *      com.eyeq.pivot4j.el.ExpressionContext)
 	 */
 	@Override
-	protected Object doEvaluate(String expression, Map<String, Object> context)
+	protected Object doEvaluate(String expression, ExpressionContext context)
 			throws Exception {
-		Template template = createTemplate(expression, getConfiguration());
+		Template template = getTemplateFromCache(expression);
+
+		if (template == null) {
+			template = createTemplate(expression);
+		}
 
 		Locale locale = (Locale) context.get("locale");
 		if (locale != null) {

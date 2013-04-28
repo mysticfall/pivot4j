@@ -12,11 +12,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -30,9 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.el.EvaluationFailedException;
 import com.eyeq.pivot4j.el.ExpressionEvaluator;
-import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
 import com.eyeq.pivot4j.mdx.AbstractExpVisitor;
 import com.eyeq.pivot4j.mdx.CompoundId;
 import com.eyeq.pivot4j.mdx.Exp;
@@ -70,7 +69,7 @@ public class QueryAdapter implements Bookmarkable {
 
 	private MdxStatement cloneQuery;
 
-	private Collection<QueryChangeListener> listeners = new ArrayList<QueryChangeListener>();
+	private Collection<QueryChangeListener> listeners = new LinkedList<QueryChangeListener>();
 
 	private QuaxChangeListener quaxListener = new QuaxChangeListener() {
 
@@ -212,44 +211,41 @@ public class QueryAdapter implements Bookmarkable {
 	}
 
 	/**
-	 * @param factory
+	 * @param evaluator
+	 * @param context
 	 */
-	public void evaluate(final ExpressionEvaluatorFactory factory) {
+	public void evaluate(final ExpressionEvaluator evaluator) {
 		parsedQuery.accept(new AbstractExpVisitor() {
 
 			@Override
 			public void visitMemberParameter(MemberParameter exp) {
-				ExpressionEvaluator evaluator = factory.getEvaluator(exp
-						.getNamespace());
-				evaluate(evaluator, exp);
+				evaluate(exp, evaluator);
 			}
 
 			@Override
 			public void visitValueParameter(ValueParameter exp) {
-				ExpressionEvaluator evaluator = factory.getEvaluator(exp
-						.getNamespace());
-				evaluate(evaluator, exp);
+				evaluate(exp, evaluator);
 			}
 		});
 	}
 
 	/**
-	 * @param evaluator
 	 * @param exp
+	 * @param evaluator
 	 */
-	protected void evaluate(ExpressionEvaluator evaluator,
-			ExpressionParameter exp) {
-		if (evaluator == null) {
-			throw new EvaluationFailedException(
-					"No expression evaluator found for namespace : "
-							+ exp.getNamespace(), exp.getNamespace(),
-					exp.getExpression());
+	protected void evaluate(ExpressionParameter exp,
+			ExpressionEvaluator evaluator) {
+		String expression = StringUtils.trimToNull(exp.getExpression());
+
+		if (expression == null) {
+			exp.setResult("");
+		} else {
+			Object result = evaluator.evaluate(
+					"${" + exp.getExpression() + "}",
+					model.getExpressionContext());
+
+			exp.setResult(ObjectUtils.toString(result));
 		}
-
-		Map<String, Object> context = model.getExpressionContext();
-
-		Object result = evaluator.evaluate(exp.getExpression(), context);
-		exp.setResult(ObjectUtils.toString(result));
 	}
 
 	/**

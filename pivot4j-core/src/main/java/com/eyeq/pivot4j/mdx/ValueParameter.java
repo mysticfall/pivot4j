@@ -16,20 +16,18 @@ public class ValueParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * @param namespace
 	 * @param expression
 	 */
-	public ValueParameter(String namespace, String expression) {
-		super(namespace, expression);
+	public ValueParameter(String expression) {
+		super(expression);
 	}
 
 	/**
-	 * 
 	 * @see java.lang.Object#clone()
 	 */
+	@Override
 	public ValueParameter clone() {
-		ValueParameter clone = new ValueParameter(getNamespace(),
-				getExpression());
+		ValueParameter clone = new ValueParameter(getExpression());
 		clone.setEvaluated(isEvaluated());
 		clone.setResult(getResult());
 
@@ -44,19 +42,13 @@ public class ValueParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.mdx.ExpressionParameter#toMdx(java.lang.String,
-	 *      java.lang.String)
+	 * @see com.eyeq.pivot4j.mdx.ExpressionParameter#toMdx(java.lang.String)
 	 */
 	@Override
-	protected String toMdx(String namespace, String expression) {
+	protected String toMdx(String expression) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("${");
-
-		if (namespace != null) {
-			sb.append(namespace);
-			sb.append(":");
-		}
 
 		if (expression != null) {
 			sb.append(expression.replaceAll("]", "]]"));

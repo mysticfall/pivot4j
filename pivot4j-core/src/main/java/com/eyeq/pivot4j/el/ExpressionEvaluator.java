@@ -8,18 +8,13 @@
  */
 package com.eyeq.pivot4j.el;
 
-import java.util.Map;
-
 public interface ExpressionEvaluator {
-
-	String getNamespace();
 
 	/**
 	 * @param expression
-	 * @param context
 	 * @return
 	 * @throws EvaluationFailedException
 	 */
-	Object evaluate(String expression, Map<String, Object> context)
+	Object evaluate(String expression, ExpressionContext context)
 			throws EvaluationFailedException;
 }
