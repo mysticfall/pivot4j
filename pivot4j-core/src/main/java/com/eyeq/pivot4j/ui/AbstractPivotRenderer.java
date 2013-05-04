@@ -16,7 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.logging.LogFactory;
@@ -55,11 +54,11 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	private HashMap<AggregatorKey, List<String>> aggregatorNames = new HashMap<AggregatorKey, List<String>>();
 
-	private PropertySource cellProperties;
+	private PropertySupport cellProperties;
 
-	private PropertySource rowHeaderProperties;
+	private PropertySupport rowHeaderProperties;
 
-	private PropertySource columnHeaderProperties;
+	private PropertySupport columnHeaderProperties;
 
 	public AbstractPivotRenderer() {
 		this.renderStrategy = createRenderStrategy();
@@ -246,7 +245,10 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			break;
 		}
 
-		// label = getString("label", label, context);
+		PropertySupport properties = getProperties(context);
+		if (label != null && properties != null) {
+			label = properties.getString("label", label, context);
+		}
 
 		return label;
 	}
@@ -413,6 +415,28 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 */
 	public PropertySource getColumnHeaderProperties() {
 		return columnHeaderProperties;
+	}
+
+	/**
+	 * @param axis
+	 * @param type
+	 * @return
+	 */
+	protected PropertySupport getProperties(RenderContext context) {
+		PropertySupport properties = null;
+
+		if (context.getCell() != null) {
+			properties = cellProperties;
+		} else if (context.getCellType() == CellType.Header
+				|| context.getCellType() == CellType.Title) {
+			if (context.getAxis() == Axis.ROWS) {
+				properties = rowHeaderProperties;
+			} else if (context.getAxis() == Axis.COLUMNS) {
+				properties = columnHeaderProperties;
+			}
+		}
+
+		return properties;
 	}
 
 	/**
@@ -603,6 +627,32 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 				if (!names.contains(name)) {
 					names.add(name);
 				}
+			}
+		}
+
+		initializeProperties();
+
+		if (cellProperties != null) {
+			try {
+				cellProperties.restoreSettings(configuration
+						.configurationAt("properties.cell"));
+			} catch (IllegalArgumentException e) {
+			}
+		}
+
+		if (columnHeaderProperties != null) {
+			try {
+				columnHeaderProperties.restoreSettings(configuration
+						.configurationAt("properties.column-header"));
+			} catch (IllegalArgumentException e) {
+			}
+		}
+
+		if (rowHeaderProperties != null) {
+			try {
+				rowHeaderProperties.restoreSettings(configuration
+						.configurationAt("properties.row-header"));
+			} catch (IllegalArgumentException e) {
 			}
 		}
 	}
