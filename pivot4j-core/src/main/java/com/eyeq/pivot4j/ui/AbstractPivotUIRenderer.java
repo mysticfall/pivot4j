@@ -48,13 +48,7 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 
 	private Map<String, CellCommand<?>> commands = new HashMap<String, CellCommand<?>>();
 
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#initialize()
-	 */
-	@Override
-	public void initialize() {
-		super.initialize();
-
+	public AbstractPivotUIRenderer() {
 		registerCommands();
 	}
 

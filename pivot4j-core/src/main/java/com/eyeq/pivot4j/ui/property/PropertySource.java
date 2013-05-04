@@ -8,7 +8,10 @@
  */
 package com.eyeq.pivot4j.ui.property;
 
-public interface PropertySource {
+import com.eyeq.pivot4j.state.Bookmarkable;
+import com.eyeq.pivot4j.state.Configurable;
+
+public interface PropertySource extends Configurable, Bookmarkable {
 
 	/**
 	 * @param property

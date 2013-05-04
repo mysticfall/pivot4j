@@ -61,35 +61,11 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 
 		if (facesContext != null) {
 			Application application = facesContext.getApplication();
+
 			this.expressionFactory = application.getExpressionFactory();
+			this.bundle = facesContext.getApplication().getResourceBundle(
+					facesContext, "msg");
 		}
-	}
-
-	/**
-	 * @return the parent JSF component
-	 */
-	public PanelGrid getComponent() {
-		return component;
-	}
-
-	/**
-	 * @param component
-	 */
-	public void setComponent(PanelGrid component) {
-		this.component = component;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#initialize()
-	 */
-	@Override
-	public void initialize() {
-		super.initialize();
-
-		FacesContext context = FacesContext.getCurrentInstance();
-
-		this.bundle = context.getApplication()
-				.getResourceBundle(context, "msg");
 
 		// Map command mode names to jQuery's predefined icon names. It can be
 		// also done by CSS.
@@ -109,6 +85,20 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 		iconMap.put("drillThrough", "ui-icon-search");
 
 		this.commandIndex = 0;
+	}
+
+	/**
+	 * @return the parent JSF component
+	 */
+	public PanelGrid getComponent() {
+		return component;
+	}
+
+	/**
+	 * @param component
+	 */
+	public void setComponent(PanelGrid component) {
+		this.component = component;
 	}
 
 	/**

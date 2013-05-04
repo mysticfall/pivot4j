@@ -19,10 +19,7 @@ import com.eyeq.pivot4j.ui.aggregator.AggregatorFactory;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
 import com.eyeq.pivot4j.ui.property.PropertySource;
 
-public interface PivotRenderer extends PropertySource, Configurable,
-		Bookmarkable {
-
-	void initialize();
+public interface PivotRenderer extends Configurable, Bookmarkable {
 
 	void render(PivotModel model);
 
@@ -54,4 +51,10 @@ public interface PivotRenderer extends PropertySource, Configurable,
 			List<String> names);
 
 	void swapAxes();
+
+	PropertySource getCellProperties();
+
+	PropertySource getRowHeaderProperties();
+
+	PropertySource getColumnHeaderProperties();
 }

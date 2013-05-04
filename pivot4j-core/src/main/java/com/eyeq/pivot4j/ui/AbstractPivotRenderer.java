@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.logging.LogFactory;
@@ -29,11 +30,14 @@ import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorFactory;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
 import com.eyeq.pivot4j.ui.aggregator.DefaultAggregatorFactory;
+import com.eyeq.pivot4j.ui.condition.ConditionFactory;
+import com.eyeq.pivot4j.ui.condition.DefaultConditionFactory;
 import com.eyeq.pivot4j.ui.impl.RenderStrategyImpl;
+import com.eyeq.pivot4j.ui.property.PropertySource;
 import com.eyeq.pivot4j.ui.property.PropertySupport;
 
-public abstract class AbstractPivotRenderer extends PropertySupport implements
-		PivotRenderer, PivotLayoutCallback {
+public abstract class AbstractPivotRenderer implements PivotRenderer,
+		PivotLayoutCallback {
 
 	private boolean hideSpans = false;
 
@@ -47,13 +51,31 @@ public abstract class AbstractPivotRenderer extends PropertySupport implements
 
 	private AggregatorFactory aggregatorFactory = new DefaultAggregatorFactory();
 
+	private ConditionFactory conditionFactory = new DefaultConditionFactory();
+
 	private HashMap<AggregatorKey, List<String>> aggregatorNames = new HashMap<AggregatorKey, List<String>>();
 
-	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#initialize()
-	 */
-	public void initialize() {
+	private PropertySource cellProperties;
+
+	private PropertySource rowHeaderProperties;
+
+	private PropertySource columnHeaderProperties;
+
+	public AbstractPivotRenderer() {
 		this.renderStrategy = createRenderStrategy();
+		initializeProperties();
+	}
+
+	protected void initializeProperties() {
+		if (conditionFactory == null) {
+			this.cellProperties = null;
+			this.columnHeaderProperties = null;
+			this.rowHeaderProperties = null;
+		} else {
+			this.cellProperties = new PropertySupport(conditionFactory);
+			this.columnHeaderProperties = new PropertySupport(conditionFactory);
+			this.rowHeaderProperties = new PropertySupport(conditionFactory);
+		}
 	}
 
 	/**
@@ -224,6 +246,8 @@ public abstract class AbstractPivotRenderer extends PropertySupport implements
 			break;
 		}
 
+		// label = getString("label", label, context);
+
 		return label;
 	}
 
@@ -353,6 +377,45 @@ public abstract class AbstractPivotRenderer extends PropertySupport implements
 	}
 
 	/**
+	 * @return the conditionFactory
+	 */
+	public ConditionFactory getConditionFactory() {
+		return conditionFactory;
+	}
+
+	/**
+	 * @param conditionFactory
+	 *            the conditionFactory to set
+	 */
+	public void setConditionFactory(ConditionFactory conditionFactory) {
+		this.conditionFactory = conditionFactory;
+	}
+
+	/**
+	 * @return the cellProperties
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getCellProperties()
+	 */
+	public PropertySource getCellProperties() {
+		return cellProperties;
+	}
+
+	/**
+	 * @return the rowHeaderProperties
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getRowHeaderProperties()
+	 */
+	public PropertySource getRowHeaderProperties() {
+		return rowHeaderProperties;
+	}
+
+	/**
+	 * @return the columnHeaderProperties
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getColumnHeaderProperties()
+	 */
+	public PropertySource getColumnHeaderProperties() {
+		return columnHeaderProperties;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.ui.PivotRenderer#swapAxes()
 	 */
 	@Override
@@ -374,12 +437,29 @@ public abstract class AbstractPivotRenderer extends PropertySupport implements
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.property.PropertySupport#saveState()
+	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
 	 */
 	@Override
 	public Serializable saveState() {
-		return new Serializable[] { super.saveState(), showDimensionTitle,
-				showParentMembers, hideSpans, aggregatorNames };
+		Serializable[] states = new Serializable[7];
+		states[0] = showDimensionTitle;
+		states[1] = showParentMembers;
+		states[2] = hideSpans;
+		states[3] = aggregatorNames;
+
+		if (cellProperties != null) {
+			states[4] = cellProperties.saveState();
+		}
+
+		if (columnHeaderProperties != null) {
+			states[5] = columnHeaderProperties.saveState();
+		}
+
+		if (rowHeaderProperties != null) {
+			states[6] = rowHeaderProperties.saveState();
+		}
+
+		return states;
 	}
 
 	/**
@@ -394,14 +474,24 @@ public abstract class AbstractPivotRenderer extends PropertySupport implements
 
 		Serializable[] states = (Serializable[]) state;
 
-		super.restoreState(states[0]);
+		this.showDimensionTitle = (Boolean) states[0];
+		this.showParentMembers = (Boolean) states[1];
+		this.hideSpans = (Boolean) states[2];
+		this.aggregatorNames = (HashMap<AggregatorKey, List<String>>) states[3];
 
-		this.showDimensionTitle = (Boolean) states[1];
-		this.showParentMembers = (Boolean) states[2];
-		this.hideSpans = (Boolean) states[3];
-		this.aggregatorNames = (HashMap<AggregatorKey, List<String>>) states[4];
+		initializeProperties();
 
-		initialize();
+		if (states[4] != null && cellProperties != null) {
+			this.cellProperties.restoreState(states[4]);
+		}
+
+		if (states[5] != null && columnHeaderProperties != null) {
+			this.columnHeaderProperties.restoreState(states[5]);
+		}
+
+		if (states[6] != null && rowHeaderProperties != null) {
+			this.rowHeaderProperties.restoreState(states[6]);
+		}
 	}
 
 	/**
@@ -449,7 +539,26 @@ public abstract class AbstractPivotRenderer extends PropertySupport implements
 			}
 		}
 
-		super.saveSettings(configuration);
+		if (cellProperties != null) {
+			configuration.addProperty("properties.cell", "");
+
+			cellProperties.saveSettings(configuration
+					.configurationAt("properties.cell"));
+		}
+
+		if (columnHeaderProperties != null) {
+			configuration.addProperty("properties.column-header", "");
+
+			columnHeaderProperties.saveSettings(configuration
+					.configurationAt("properties.column-header"));
+		}
+
+		if (rowHeaderProperties != null) {
+			configuration.addProperty("properties.row-header", "");
+
+			rowHeaderProperties.saveSettings(configuration
+					.configurationAt("properties.row-header"));
+		}
 	}
 
 	/**
@@ -496,10 +605,6 @@ public abstract class AbstractPivotRenderer extends PropertySupport implements
 				}
 			}
 		}
-
-		super.restoreSettings(configuration);
-
-		initialize();
 	}
 
 	static class AggregatorKey implements Serializable {

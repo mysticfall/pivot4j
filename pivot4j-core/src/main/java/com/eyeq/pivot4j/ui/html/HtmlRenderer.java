@@ -81,15 +81,6 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotUIRenderer#initialize()
-	 */
-	@Override
-	public void initialize() {
-		super.initialize();
-		this.commands = null;
-	}
-
-	/**
 	 * @return the tableId
 	 */
 	public String getTableId() {

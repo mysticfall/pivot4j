@@ -19,31 +19,27 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 
-import com.eyeq.pivot4j.state.Bookmarkable;
-import com.eyeq.pivot4j.state.Configurable;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.condition.ConditionFactory;
-import com.eyeq.pivot4j.ui.condition.DefaultConditionFactory;
 
-public class PropertySupport implements PropertySource, Configurable,
-		Bookmarkable {
+public class PropertySupport implements PropertySource {
 
 	private SortedMap<String, Property> properties = new TreeMap<String, Property>();
 
 	private ConditionFactory conditionFactory;
 
-	public PropertySupport() {
-	}
+	/**
+	 * @param conditionFactory
+	 */
+	public PropertySupport(ConditionFactory conditionFactory) {
+		if (conditionFactory == null) {
+			throw new NullArgumentException("conditionFactory");
+		}
 
-	protected ConditionFactory createConditionFactory() {
-		return new DefaultConditionFactory();
+		this.conditionFactory = conditionFactory;
 	}
 
 	protected ConditionFactory getConditionFactory() {
-		if (conditionFactory == null) {
-			this.conditionFactory = createConditionFactory();
-		}
-
 		return conditionFactory;
 	}
 
@@ -285,7 +281,7 @@ public class PropertySupport implements PropertySource, Configurable,
 		int index = 0;
 
 		for (Property property : properties.values()) {
-			String name = String.format("properties.property(%s)", index++);
+			String name = String.format("property(%s)", index++);
 
 			configuration.setProperty(name, "");
 
@@ -304,7 +300,7 @@ public class PropertySupport implements PropertySource, Configurable,
 
 		try {
 			List<HierarchicalConfiguration> configurations = configuration
-					.configurationsAt("properties.property");
+					.configurationsAt("property");
 
 			for (HierarchicalConfiguration propertyConfig : configurations) {
 				boolean conditional = propertyConfig.containsKey("conditions");

@@ -62,6 +62,7 @@ public class ExcelExporter extends AbstractPivotExporter {
 	private int sheetIndex = 0;
 
 	public ExcelExporter() {
+		reset();
 	}
 
 	/**
@@ -69,6 +70,7 @@ public class ExcelExporter extends AbstractPivotExporter {
 	 */
 	public ExcelExporter(OutputStream out) {
 		super(out);
+		reset();
 	}
 
 	/**
@@ -122,15 +124,6 @@ public class ExcelExporter extends AbstractPivotExporter {
 	 */
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#initialize()
-	 */
-	@Override
-	public void initialize() {
-		super.initialize();
-		reset();
 	}
 
 	protected void reset() {

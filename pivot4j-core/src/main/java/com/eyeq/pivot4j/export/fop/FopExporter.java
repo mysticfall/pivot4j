@@ -68,6 +68,7 @@ public class FopExporter extends AbstractPivotExporter {
 	private OrientationRequested orientation = OrientationRequested.PORTRAIT;
 
 	public FopExporter() {
+		initialize();
 	}
 
 	/**
@@ -75,6 +76,15 @@ public class FopExporter extends AbstractPivotExporter {
 	 */
 	public FopExporter(OutputStream out) {
 		super(out);
+
+		initialize();
+	}
+
+	protected void initialize() {
+		reset();
+
+		this.fopFactory = createFopFactory();
+		this.userAgent = createUserAgent(fopFactory);
 	}
 
 	/**
@@ -270,18 +280,6 @@ public class FopExporter extends AbstractPivotExporter {
 	 */
 	public void setFooterFontFamily(String footerFontFamily) {
 		this.footerFontFamily = footerFontFamily;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#initialize()
-	 */
-	@Override
-	public void initialize() {
-		super.initialize();
-		reset();
-
-		this.fopFactory = createFopFactory();
-		this.userAgent = createUserAgent(fopFactory);
 	}
 
 	protected void reset() {
