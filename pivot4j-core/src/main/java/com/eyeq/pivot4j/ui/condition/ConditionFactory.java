@@ -8,7 +8,11 @@
  */
 package com.eyeq.pivot4j.ui.condition;
 
+import java.util.List;
+
 public interface ConditionFactory {
+
+	List<String> getAvailableConditions();
 
 	/**
 	 * @param name

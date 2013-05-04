@@ -8,7 +8,7 @@
  */
 package com.eyeq.pivot4j.ui.aggregator;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.NullArgumentException;
@@ -26,7 +26,7 @@ public class DefaultAggregatorFactory implements AggregatorFactory {
 	 */
 	@Override
 	public List<String> getAvailableAggregations() {
-		List<String> names = new ArrayList<String>();
+		List<String> names = new LinkedList<String>();
 
 		names.add(TotalAggregator.NAME);
 		names.add(AverageAggregator.NAME);
@@ -55,6 +55,7 @@ public class DefaultAggregatorFactory implements AggregatorFactory {
 
 		Aggregator aggregator = null;
 
+		// TODO Replace this abomination with something more sensible.
 		if (TotalAggregator.NAME.equals(name)) {
 			aggregator = new TotalAggregator(axis, members, level, measure);
 		} else if (AverageAggregator.NAME.equals(name)) {
