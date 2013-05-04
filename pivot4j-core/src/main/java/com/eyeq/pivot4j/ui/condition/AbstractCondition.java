@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.ui.condition;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 
 public abstract class AbstractCondition implements Condition {
@@ -30,5 +31,13 @@ public abstract class AbstractCondition implements Condition {
 	 */
 	public ConditionFactory getConditionFactory() {
 		return conditionFactory;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public void saveSettings(HierarchicalConfiguration configuration) {
+		configuration.addProperty("[@name]", getName());
 	}
 }

@@ -32,6 +32,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.el.ExpressionEvaluator;
+import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
+import com.eyeq.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory;
 import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.PivotLayoutCallback;
 import com.eyeq.pivot4j.ui.PivotRenderer;
@@ -47,6 +50,12 @@ import com.eyeq.pivot4j.util.TreeNodeCallback;
 public class RenderStrategyImpl implements RenderStrategy {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	private ExpressionEvaluatorFactory expressionEvaluatorFactory;
+
+	public RenderStrategyImpl() {
+		this.expressionEvaluatorFactory = createExpressionEvaluatorFactory();
+	}
 
 	/**
 	 * @param model
@@ -115,13 +124,18 @@ public class RenderStrategyImpl implements RenderStrategy {
 		int columnCount = columnRoot.getWidth();
 		int rowCount = rowRoot.getWidth();
 
+		// TODO Share expression evaluator factory instance with the pivot
+		// model.
+		ExpressionEvaluator evaluator = expressionEvaluatorFactory
+				.createEvaluator();
+
 		Map<String, Member> cachedParents = new HashMap<String, Member>();
 
 		cachedParents.putAll(columnRoot.getReference().getParentMembersCache());
 		cachedParents.putAll(rowRoot.getReference().getParentMembersCache());
 
 		return new RenderContext(model, renderer, columnCount, rowCount,
-				columnHeaderCount, rowHeaderCount, cachedParents);
+				columnHeaderCount, rowHeaderCount, evaluator, cachedParents);
 	}
 
 	/**
@@ -1031,6 +1045,17 @@ public class RenderStrategyImpl implements RenderStrategy {
 				return TreeNodeCallback.CONTINUE;
 			}
 		});
+	}
+
+	protected ExpressionEvaluatorFactory createExpressionEvaluatorFactory() {
+		return new FreeMarkerExpressionEvaluatorFactory();
+	}
+
+	/**
+	 * @return the expressionEvaluatorFactory
+	 */
+	protected ExpressionEvaluatorFactory getExpressionEvaluatorFactory() {
+		return expressionEvaluatorFactory;
 	}
 
 	static class AggregationTarget {

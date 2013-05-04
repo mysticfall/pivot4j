@@ -12,30 +12,31 @@ import java.io.Serializable;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
+import com.eyeq.pivot4j.el.ExpressionEvaluator;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class NotCondition extends AbstractCondition {
+public class ExpressionCondition extends AbstractCondition {
 
-	public static final String NAME = "NOT";
+	public static final String NAME = "EXPR";
 
-	private Condition subCondition;
+	private String expression;
 
 	/**
 	 * @param conditionFactory
 	 */
-	public NotCondition(ConditionFactory conditionFactory) {
+	public ExpressionCondition(ConditionFactory conditionFactory) {
 		super(conditionFactory);
 	}
 
 	/**
 	 * @param conditionFactory
-	 * @param subCondition
+	 * @param expression
 	 */
-	public NotCondition(ConditionFactory conditionFactory,
-			Condition subCondition) {
+	public ExpressionCondition(ConditionFactory conditionFactory,
+			String expression) {
 		super(conditionFactory);
 
-		this.subCondition = subCondition;
+		this.expression = expression;
 	}
 
 	/**
@@ -46,18 +47,18 @@ public class NotCondition extends AbstractCondition {
 	}
 
 	/**
-	 * @return the subCondition
+	 * @return the expression
 	 */
-	public Condition getSubCondition() {
-		return subCondition;
+	public String getExpression() {
+		return expression;
 	}
 
 	/**
-	 * @param subCondition
-	 *            the subCondition to set
+	 * @param expression
+	 *            the expression to set
 	 */
-	public void setSubCondition(Condition subCondition) {
-		this.subCondition = subCondition;
+	public void setExpression(String expression) {
+		this.expression = expression;
 	}
 
 	/**
@@ -65,11 +66,20 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public boolean matches(RenderContext context) {
-		if (subCondition == null) {
-			throw new IllegalStateException("Sub condition was not specified.");
+		if (expression == null) {
+			throw new IllegalStateException("Missing expression statement.");
 		}
 
-		return !subCondition.matches(context);
+		ExpressionEvaluator evaluator = context.getExpressionEvaluator();
+
+		Object result = evaluator.evaluate(expression,
+				context.getExpressionContext());
+
+		if (result != null) {
+			return "true".equalsIgnoreCase(result.toString().trim());
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -77,11 +87,7 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public Serializable saveState() {
-		if (subCondition == null) {
-			return null;
-		}
-
-		return new Object[] { subCondition.getName(), subCondition.saveState() };
+		return expression;
 	}
 
 	/**
@@ -89,29 +95,23 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreState(Serializable state) {
-		Serializable[] states = (Serializable[]) state;
-
-		if (states == null) {
-			this.subCondition = null;
-		} else {
-			this.subCondition = getConditionFactory().createCondition(
-					(String) states[0]);
-			this.subCondition.restoreState(states[1]);
+		if (state != null) {
+			this.expression = (String) state;
 		}
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
-		super.saveSettings(configuration);
+		configuration.addProperty("[@name]", getName());
 
-		if (subCondition == null) {
+		if (expression == null) {
 			return;
 		}
 
-		subCondition.saveSettings(configuration.configurationAt("condition"));
+		configuration.addProperty("expression", expression);
 	}
 
 	/**
@@ -119,17 +119,7 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
-		HierarchicalConfiguration subConfig = configuration
-				.configurationAt("condition");
-
-		String name = subConfig.getString("[@name]");
-
-		if (name == null) {
-			this.subCondition = null;
-		} else {
-			this.subCondition = getConditionFactory().createCondition(name);
-			this.subCondition.restoreSettings(subConfig);
-		}
+		this.expression = configuration.getString("expression");
 	}
 
 	/**
@@ -138,13 +128,13 @@ public class NotCondition extends AbstractCondition {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("!");
+		builder.append("eval(");
 
-		if (subCondition == null) {
-			builder.append("[MISSING]");
-		} else {
-			builder.append(subCondition.toString());
+		if (expression != null) {
+			builder.append(expression);
 		}
+
+		builder.append(")");
 
 		return builder.toString();
 	}

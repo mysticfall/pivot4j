@@ -17,8 +17,10 @@ import com.eyeq.pivot4j.state.Bookmarkable;
 import com.eyeq.pivot4j.state.Configurable;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorFactory;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
+import com.eyeq.pivot4j.ui.property.PropertySource;
 
-public interface PivotRenderer extends Configurable, Bookmarkable {
+public interface PivotRenderer extends PropertySource, Configurable,
+		Bookmarkable {
 
 	void initialize();
 
@@ -48,7 +50,8 @@ public interface PivotRenderer extends Configurable, Bookmarkable {
 
 	void removeAggregator(Axis axis, AggregatorPosition position, String name);
 
-	void setAggregators(Axis axis, AggregatorPosition position, List<String> names);
+	void setAggregators(Axis axis, AggregatorPosition position,
+			List<String> names);
 
 	void swapAxes();
 }

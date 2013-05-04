@@ -136,11 +136,11 @@ public class AndCondition extends AbstractCondition {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see com.eyeq.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
-		configuration.addProperty("[@name]", getName());
+		super.saveSettings(configuration);
 
 		if (subConditions == null) {
 			return;

@@ -26,6 +26,7 @@ import org.olap4j.metadata.Property;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.el.ExpressionContext;
+import com.eyeq.pivot4j.el.ExpressionEvaluator;
 import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 
 public class RenderContext {
@@ -72,6 +73,8 @@ public class RenderContext {
 
 	private ExpressionContext expressionContext;
 
+	private ExpressionEvaluator expressionEvaluator;
+
 	private Map<String, Member> cachedParents;
 
 	/**
@@ -81,17 +84,23 @@ public class RenderContext {
 	 * @param rowCount
 	 * @param columnHeaderCount
 	 * @param rowHeaderCount
-	 * @parma cachedParents
+	 * @param expressionEvaluator
+	 * @param cachedParents
 	 */
 	public RenderContext(PivotModel model, PivotRenderer renderer,
 			int columnCount, int rowCount, int columnHeaderCount,
-			int rowHeaderCount, Map<String, Member> cachedParents) {
+			int rowHeaderCount, ExpressionEvaluator expressionEvaluator,
+			Map<String, Member> cachedParents) {
 		if (model == null) {
 			throw new NullArgumentException("model");
 		}
 
 		if (renderer == null) {
 			throw new NullArgumentException("renderer");
+		}
+
+		if (expressionEvaluator == null) {
+			throw new NullArgumentException("expressionEvaluator");
 		}
 
 		if (columnCount < 0) {
@@ -122,6 +131,7 @@ public class RenderContext {
 		this.rowHeaderCount = rowHeaderCount;
 
 		this.expressionContext = createExpressionContext(model);
+		this.expressionEvaluator = expressionEvaluator;
 
 		if (cachedParents == null) {
 			this.cachedParents = new HashMap<String, Member>();
@@ -458,6 +468,13 @@ public class RenderContext {
 	 */
 	public ExpressionContext getExpressionContext() {
 		return expressionContext;
+	}
+
+	/**
+	 * @return the expressionEvaluator
+	 */
+	public ExpressionEvaluator getExpressionEvaluator() {
+		return expressionEvaluator;
 	}
 
 	/**

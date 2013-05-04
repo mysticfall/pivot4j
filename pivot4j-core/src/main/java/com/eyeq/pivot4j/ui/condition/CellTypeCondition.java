@@ -12,30 +12,31 @@ import java.io.Serializable;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
+import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class NotCondition extends AbstractCondition {
+public class CellTypeCondition extends AbstractCondition {
 
-	public static final String NAME = "NOT";
+	public static final String NAME = "CELL_TYPE";
 
-	private Condition subCondition;
+	private CellType cellType;
 
 	/**
 	 * @param conditionFactory
 	 */
-	public NotCondition(ConditionFactory conditionFactory) {
+	public CellTypeCondition(ConditionFactory conditionFactory) {
 		super(conditionFactory);
 	}
 
 	/**
 	 * @param conditionFactory
-	 * @param subCondition
+	 * @param cellType
 	 */
-	public NotCondition(ConditionFactory conditionFactory,
-			Condition subCondition) {
+	public CellTypeCondition(ConditionFactory conditionFactory,
+			CellType cellType) {
 		super(conditionFactory);
 
-		this.subCondition = subCondition;
+		this.cellType = cellType;
 	}
 
 	/**
@@ -46,18 +47,18 @@ public class NotCondition extends AbstractCondition {
 	}
 
 	/**
-	 * @return the subCondition
+	 * @return the cellType
 	 */
-	public Condition getSubCondition() {
-		return subCondition;
+	public CellType getCellType() {
+		return cellType;
 	}
 
 	/**
-	 * @param subCondition
-	 *            the subCondition to set
+	 * @param cellType
+	 *            the cellType to set
 	 */
-	public void setSubCondition(Condition subCondition) {
-		this.subCondition = subCondition;
+	public void setCellType(CellType cellType) {
+		this.cellType = cellType;
 	}
 
 	/**
@@ -65,11 +66,11 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public boolean matches(RenderContext context) {
-		if (subCondition == null) {
-			throw new IllegalStateException("Sub condition was not specified.");
+		if (cellType == null) {
+			throw new IllegalStateException("Cell type was not specified.");
 		}
 
-		return !subCondition.matches(context);
+		return cellType == context.getCellType();
 	}
 
 	/**
@@ -77,11 +78,11 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public Serializable saveState() {
-		if (subCondition == null) {
+		if (cellType == null) {
 			return null;
 		}
 
-		return new Object[] { subCondition.getName(), subCondition.saveState() };
+		return cellType.name();
 	}
 
 	/**
@@ -89,14 +90,10 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreState(Serializable state) {
-		Serializable[] states = (Serializable[]) state;
-
-		if (states == null) {
-			this.subCondition = null;
+		if (state == null) {
+			this.cellType = null;
 		} else {
-			this.subCondition = getConditionFactory().createCondition(
-					(String) states[0]);
-			this.subCondition.restoreState(states[1]);
+			this.cellType = CellType.valueOf((String) state);
 		}
 	}
 
@@ -107,11 +104,11 @@ public class NotCondition extends AbstractCondition {
 	public void saveSettings(HierarchicalConfiguration configuration) {
 		super.saveSettings(configuration);
 
-		if (subCondition == null) {
+		if (cellType == null) {
 			return;
 		}
 
-		subCondition.saveSettings(configuration.configurationAt("condition"));
+		configuration.setProperty("value", cellType.name());
 	}
 
 	/**
@@ -119,16 +116,12 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
-		HierarchicalConfiguration subConfig = configuration
-				.configurationAt("condition");
+		String value = configuration.getString("value");
 
-		String name = subConfig.getString("[@name]");
-
-		if (name == null) {
-			this.subCondition = null;
+		if (value == null) {
+			this.cellType = null;
 		} else {
-			this.subCondition = getConditionFactory().createCondition(name);
-			this.subCondition.restoreSettings(subConfig);
+			this.cellType = CellType.valueOf(value);
 		}
 	}
 
@@ -138,12 +131,12 @@ public class NotCondition extends AbstractCondition {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("!");
+		builder.append("cell type == ");
 
-		if (subCondition == null) {
+		if (cellType == null) {
 			builder.append("[MISSING]");
 		} else {
-			builder.append(subCondition.toString());
+			builder.append(cellType.name());
 		}
 
 		return builder.toString();

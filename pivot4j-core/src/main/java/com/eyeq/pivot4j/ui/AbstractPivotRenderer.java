@@ -30,9 +30,10 @@ import com.eyeq.pivot4j.ui.aggregator.AggregatorFactory;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
 import com.eyeq.pivot4j.ui.aggregator.DefaultAggregatorFactory;
 import com.eyeq.pivot4j.ui.impl.RenderStrategyImpl;
+import com.eyeq.pivot4j.ui.property.PropertySupport;
 
-public abstract class AbstractPivotRenderer implements PivotRenderer,
-		PivotLayoutCallback {
+public abstract class AbstractPivotRenderer extends PropertySupport implements
+		PivotRenderer, PivotLayoutCallback {
 
 	private boolean hideSpans = false;
 
@@ -373,16 +374,16 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
+	 * @see com.eyeq.pivot4j.ui.property.PropertySupport#saveState()
 	 */
 	@Override
 	public Serializable saveState() {
-		return new Serializable[] { showDimensionTitle, showParentMembers,
-				hideSpans, aggregatorNames };
+		return new Serializable[] { super.saveState(), showDimensionTitle,
+				showParentMembers, hideSpans, aggregatorNames };
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
+	 * @see com.eyeq.pivot4j.ui.property.PropertySupport#restoreState(java.io.Serializable)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -393,16 +394,18 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 		Serializable[] states = (Serializable[]) state;
 
-		this.showDimensionTitle = (Boolean) states[0];
-		this.showParentMembers = (Boolean) states[1];
-		this.hideSpans = (Boolean) states[2];
-		this.aggregatorNames = (HashMap<AggregatorKey, List<String>>) states[3];
+		super.restoreState(states[0]);
+
+		this.showDimensionTitle = (Boolean) states[1];
+		this.showParentMembers = (Boolean) states[2];
+		this.hideSpans = (Boolean) states[3];
+		this.aggregatorNames = (HashMap<AggregatorKey, List<String>>) states[4];
 
 		initialize();
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see com.eyeq.pivot4j.ui.property.PropertySupport#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
@@ -445,6 +448,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 				}
 			}
 		}
+
+		super.saveSettings(configuration);
 	}
 
 	/**
@@ -491,6 +496,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 				}
 			}
 		}
+
+		super.restoreSettings(configuration);
 
 		initialize();
 	}
