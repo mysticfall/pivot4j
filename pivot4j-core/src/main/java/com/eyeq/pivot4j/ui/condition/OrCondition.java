@@ -81,7 +81,7 @@ public class OrCondition extends AbstractCondition {
 	 */
 	public boolean matches(RenderContext context) {
 		if (subConditions == null || subConditions.isEmpty()) {
-			throw new IllegalArgumentException("Missing sub conditions.");
+			throw new IllegalStateException("Missing sub conditions.");
 		}
 
 		for (Condition condition : subConditions) {
