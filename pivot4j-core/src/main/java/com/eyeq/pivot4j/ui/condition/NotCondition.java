@@ -81,7 +81,8 @@ public class NotCondition extends AbstractCondition {
 			return null;
 		}
 
-		return new Object[] { subCondition.getName(), subCondition.saveState() };
+		return new Serializable[] { subCondition.getName(),
+				subCondition.saveState() };
 	}
 
 	/**
@@ -111,6 +112,7 @@ public class NotCondition extends AbstractCondition {
 			return;
 		}
 
+		configuration.setProperty("condition", "");
 		subCondition.saveSettings(configuration.configurationAt("condition"));
 	}
 
@@ -119,16 +121,19 @@ public class NotCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
-		HierarchicalConfiguration subConfig = configuration
-				.configurationAt("condition");
+		this.subCondition = null;
 
-		String name = subConfig.getString("[@name]");
+		try {
+			HierarchicalConfiguration subConfig = configuration
+					.configurationAt("condition");
 
-		if (name == null) {
-			this.subCondition = null;
-		} else {
-			this.subCondition = getConditionFactory().createCondition(name);
-			this.subCondition.restoreSettings(subConfig);
+			String name = subConfig.getString("[@name]");
+
+			if (name != null) {
+				this.subCondition = getConditionFactory().createCondition(name);
+				this.subCondition.restoreSettings(subConfig);
+			}
+		} catch (IllegalArgumentException e) {
 		}
 	}
 

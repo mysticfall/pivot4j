@@ -163,21 +163,24 @@ public class AndCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
-		List<HierarchicalConfiguration> subConfigs = configuration
-				.configurationsAt("condition");
-
 		this.subConditions = new LinkedList<Condition>();
 
-		for (HierarchicalConfiguration subConfig : subConfigs) {
-			String name = subConfig.getString("[@name]");
+		try {
+			List<HierarchicalConfiguration> subConfigs = configuration
+					.configurationsAt("condition");
 
-			if (name != null) {
-				Condition condition = getConditionFactory().createCondition(
-						name);
-				condition.restoreSettings(subConfig);
+			for (HierarchicalConfiguration subConfig : subConfigs) {
+				String name = subConfig.getString("[@name]");
 
-				this.subConditions.add(condition);
+				if (name != null) {
+					Condition condition = getConditionFactory()
+							.createCondition(name);
+					condition.restoreSettings(subConfig);
+
+					this.subConditions.add(condition);
+				}
 			}
+		} catch (IllegalArgumentException e) {
 		}
 	}
 

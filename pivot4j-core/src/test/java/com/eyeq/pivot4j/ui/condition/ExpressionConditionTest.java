@@ -8,9 +8,14 @@
  */
 package com.eyeq.pivot4j.ui.condition;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.Serializable;
+
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.XMLConfiguration;
 import org.junit.Test;
 import org.olap4j.Axis;
 
@@ -79,5 +84,60 @@ public class ExpressionConditionTest extends AbstractConditionTest {
 		expression.setExpression("<#if axis = \"COLUMNS\">true</#if>");
 		assertThat("Expression '" + expression.getExpression()
 				+ "' should be false.", expression.matches(context), is(false));
+	}
+
+	@Test
+	public void testStateManagement() {
+		RenderContext context = createDummyRenderContext();
+		context.setColIndex(2);
+		context.setRowIndex(1);
+		context.setAxis(Axis.ROWS);
+
+		String expression = "<#if colIndex = 2 && rowIndex = 1>true</#if>";
+
+		ExpressionCondition condition = new ExpressionCondition(
+				conditionFactory);
+		condition.setExpression(expression);
+
+		Serializable state = condition.saveState();
+
+		condition = new ExpressionCondition(conditionFactory);
+		condition.restoreState(state);
+
+		assertThat("Expression has been changed.", condition.getExpression(),
+				is(equalTo(expression)));
+		assertThat("Expression '" + expression + "' should be true.",
+				condition.matches(context), is(true));
+	}
+
+	@Test
+	public void testSettingsManagement() throws ConfigurationException {
+		RenderContext context = createDummyRenderContext();
+		context.setColIndex(2);
+		context.setRowIndex(1);
+		context.setAxis(Axis.ROWS);
+
+		String expression = "<#if colIndex = 2 && rowIndex = 1>true</#if>";
+
+		ExpressionCondition condition = new ExpressionCondition(
+				conditionFactory);
+		condition.setExpression(expression);
+
+		XMLConfiguration configuration = new XMLConfiguration();
+		configuration.setRootElementName("condition");
+
+		condition.saveSettings(configuration);
+
+		condition = new ExpressionCondition(conditionFactory);
+		condition.restoreSettings(configuration);
+
+		assertThat("Expression has been changed.", condition.getExpression(),
+				is(equalTo(expression)));
+		assertThat("Expression '" + expression + "' should be true.",
+				condition.matches(context), is(true));
+
+		System.out.println("Saved configuration : ");
+
+		configuration.save(System.out);
 	}
 }
