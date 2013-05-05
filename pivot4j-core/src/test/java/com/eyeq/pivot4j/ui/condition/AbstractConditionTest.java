@@ -9,21 +9,14 @@
 package com.eyeq.pivot4j.ui.condition;
 
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
-import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.datasource.SimpleOlapDataSource;
-import com.eyeq.pivot4j.el.ExpressionEvaluator;
-import com.eyeq.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory;
-import com.eyeq.pivot4j.impl.PivotModelImpl;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.AbstractRenderTest;
 import com.eyeq.pivot4j.ui.RenderContext;
-import com.eyeq.pivot4j.ui.html.HtmlRenderer;
 
-public abstract class AbstractConditionTest {
+public abstract class AbstractConditionTest extends AbstractRenderTest {
 
 	protected static ConditionFactory conditionFactory = new DefaultConditionFactory() {
 
@@ -47,19 +40,6 @@ public abstract class AbstractConditionTest {
 			return super.createCondition(name);
 		}
 	};
-
-	protected RenderContext createDummyRenderContext() {
-		PivotModel model = new PivotModelImpl(new SimpleOlapDataSource());
-		PivotRenderer renderer = new HtmlRenderer(new StringWriter());
-
-		ExpressionEvaluator evaluator = new FreeMarkerExpressionEvaluatorFactory()
-				.createEvaluator();
-
-		RenderContext context = new RenderContext(model, renderer, 0, 0, 0, 0,
-				evaluator, null);
-
-		return context;
-	}
 
 	static class TestCondition extends AbstractCondition {
 

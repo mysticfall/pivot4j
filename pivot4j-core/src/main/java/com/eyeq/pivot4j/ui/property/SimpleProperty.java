@@ -11,6 +11,7 @@ package com.eyeq.pivot4j.ui.property;
 import java.io.Serializable;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
 
 import com.eyeq.pivot4j.el.ExpressionEvaluator;
@@ -25,12 +26,26 @@ public class SimpleProperty extends AbstractProperty {
 
 	/**
 	 * @param name
+	 */
+	public SimpleProperty(String name) {
+		super(name);
+	}
+
+	/**
+	 * @param name
 	 * @param value
 	 */
 	public SimpleProperty(String name, String value) {
 		super(name);
 
 		this.value = value;
+	}
+
+	/**
+	 * @return value
+	 */
+	public String getValue() {
+		return value;
 	}
 
 	/**
@@ -46,6 +61,10 @@ public class SimpleProperty extends AbstractProperty {
 	 */
 	@Override
 	public String getValue(RenderContext context) {
+		if (context == null) {
+			throw new NullArgumentException("context");
+		}
+
 		if (value == null) {
 			return null;
 		}

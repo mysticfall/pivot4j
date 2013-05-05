@@ -43,6 +43,20 @@ public class ConditionalProperty extends AbstractProperty {
 
 	/**
 	 * @param name
+	 * @param conditionFactory
+	 */
+	public ConditionalProperty(String name, ConditionFactory conditionFactory) {
+		super(name);
+
+		if (conditionFactory == null) {
+			throw new NullArgumentException("conditionFactory");
+		}
+
+		this.conditionFactory = conditionFactory;
+	}
+
+	/**
+	 * @param name
 	 * @param defaultValue
 	 * @param values
 	 * @param conditionFactory
@@ -197,15 +211,16 @@ public class ConditionalProperty extends AbstractProperty {
 					.configurationAt("conditions");
 
 			for (ConditionalValue value : values) {
-				String name = String.format("condition-property(%s)", index++);
+				String prefix = String
+						.format("condition-property(%s)", index++);
 
-				configurations.setProperty(name, "");
+				configurations.setProperty(prefix + ".condition", "");
+				configurations.setProperty(prefix + ".value", value.getValue());
 
 				SubnodeConfiguration conditionConfig = configurations
-						.configurationAt(name);
+						.configurationAt(prefix + ".condition");
 
 				value.getCondition().saveSettings(conditionConfig);
-				conditionConfig.setProperty("value", value.getValue());
 			}
 		}
 	}
@@ -222,16 +237,17 @@ public class ConditionalProperty extends AbstractProperty {
 		this.values = new LinkedList<ConditionalValue>();
 
 		try {
-			List<HierarchicalConfiguration> conditionConfigs = configuration
+			List<HierarchicalConfiguration> configurations = configuration
 					.configurationsAt("conditions.condition-property");
 
-			for (HierarchicalConfiguration conditionConfig : conditionConfigs) {
-				String name = conditionConfig.getString("condition[@name]");
+			for (HierarchicalConfiguration propertyConfig : configurations) {
+				String name = propertyConfig.getString("condition[@name]");
 
 				Condition condition = conditionFactory.createCondition(name);
-				condition.restoreSettings(conditionConfig);
+				condition.restoreSettings(propertyConfig
+						.configurationAt("condition"));
 
-				String value = conditionConfig.getString("value");
+				String value = propertyConfig.getString("value");
 
 				values.add(new ConditionalValue(condition, value));
 			}

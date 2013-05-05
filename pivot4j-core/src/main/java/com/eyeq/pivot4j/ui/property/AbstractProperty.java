@@ -68,7 +68,7 @@ public abstract class AbstractProperty implements Property {
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
-		configuration.setProperty("@name", name);
+		configuration.setProperty("[@name]", name);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public abstract class AbstractProperty implements Property {
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
-		this.name = configuration.getString("@name");
+		this.name = configuration.getString("[@name]");
 	}
 
 	/**
