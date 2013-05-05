@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.ui.condition;
 
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
@@ -24,7 +25,28 @@ import com.eyeq.pivot4j.ui.html.HtmlRenderer;
 
 public abstract class AbstractConditionTest {
 
-	protected static ConditionFactory conditionFactory = new DefaultConditionFactory();
+	protected static ConditionFactory conditionFactory = new DefaultConditionFactory() {
+
+		@Override
+		public List<String> getAvailableConditions() {
+			List<String> conditions = super.getAvailableConditions();
+			conditions.add("TRUE");
+			conditions.add("FALSE");
+
+			return conditions;
+		}
+
+		@Override
+		public Condition createCondition(String name) {
+			if (name.equals("TRUE")) {
+				return TestCondition.TRUE;
+			} else if (name.equals("FALSE")) {
+				return TestCondition.FALSE;
+			}
+
+			return super.createCondition(name);
+		}
+	};
 
 	protected RenderContext createDummyRenderContext() {
 		PivotModel model = new PivotModelImpl(new SimpleOlapDataSource());
@@ -47,9 +69,6 @@ public abstract class AbstractConditionTest {
 
 		static Condition FALSE = new TestCondition(false);
 
-		/**
-		 * @param result
-		 */
 		private TestCondition(boolean result) {
 			super(conditionFactory);
 
@@ -58,7 +77,7 @@ public abstract class AbstractConditionTest {
 
 		@Override
 		public String getName() {
-			return "TEST";
+			return result ? "TRUE" : "FALSE";
 		}
 
 		@Override
@@ -68,15 +87,24 @@ public abstract class AbstractConditionTest {
 
 		@Override
 		public Serializable saveState() {
-			return null;
+			return result;
 		}
 
 		@Override
 		public void restoreState(Serializable state) {
+			this.result = (Boolean) state;
+		}
+
+		@Override
+		public void saveSettings(HierarchicalConfiguration configuration) {
+			super.saveSettings(configuration);
+
+			configuration.setProperty("[@result]", result);
 		}
 
 		@Override
 		public void restoreSettings(HierarchicalConfiguration configuration) {
+			this.result = configuration.getBoolean("[@result]");
 		}
 	}
 }

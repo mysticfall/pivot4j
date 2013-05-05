@@ -148,8 +148,12 @@ public class OrCondition extends AbstractCondition {
 
 		int index = 0;
 		for (Condition condition : subConditions) {
+			String name = String.format("condition(%s)", index++);
+
+			configuration.setProperty(name, "");
+
 			HierarchicalConfiguration subConfig = configuration
-					.configurationAt(String.format("condition(%s)", index++));
+					.configurationAt(name);
 			condition.saveSettings(subConfig);
 		}
 	}
