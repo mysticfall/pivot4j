@@ -4,11 +4,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
-	<p:dialog id="drillthrough-dialog" header="#{title.drillthrough}"
-		widgetVar="drillThroughDialog" modal="true" width="860" height="430"
-		closable="true" resizable="true" styleClass="drillthrough"
-		dynamic="true" visible="#{drillThroughData.dataAvailable}">
-		<h:form id="drillthrough-form">
+	<h:form id="drillthrough-form">
+		<p:dialog id="drillthrough-dialog" header="#{title.drillthrough}"
+			widgetVar="drillThroughDialog" modal="true" width="860" height="430"
+			closable="true" resizable="true" styleClass="drillthrough"
+			dynamic="false" visible="#{drillThroughData.dataAvailable}">
 			<p:dataTable id="drillthrough-grid" var="row"
 				widgetVar="drillThroughGrid" value="#{drillThroughData}" lazy="true"
 				paginator="true" first="0" rows="15"
@@ -23,20 +23,18 @@
 				</p:columns>
 			</p:dataTable>
 
-			<p:remoteCommand name="drillThrough" update=":drillthrough-dialog"
-				oncomplete="drillThroughGrid.getPaginator().setPage(0)" />
-
 			<p:growl id="growl" showDetail="true" sticky="true" />
-		</h:form>
 
-		<f:facet name="footer">
-			<h:panelGroup layout="block" styleClass="ui-dialog-buttonpane">
-				<h:form id="drillthrough-cform">
+			<f:facet name="footer">
+				<h:panelGroup layout="block" styleClass="ui-dialog-buttonpane">
 					<p:commandButton value="#{msg['button.close']}"
-						action="#{drillThroughData.reset}" update=":drillthrough-dialog"
+						action="#{drillThroughData.reset}" update="drillthrough-dialog"
 						icon="ui-icon-close" />
-				</h:form>
-			</h:panelGroup>
-		</f:facet>
-	</p:dialog>
+				</h:panelGroup>
+			</f:facet>
+		</p:dialog>
+
+		<p:remoteCommand name="drillThrough" update="drillthrough-form"
+			oncomplete="drillThroughGrid.getPaginator().setPage(0)" />
+	</h:form>
 </ui:composition>
