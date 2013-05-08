@@ -26,11 +26,10 @@ public class MemberParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * @param namespace
 	 * @param expression
 	 */
-	public MemberParameter(String namespace, String expression) {
-		super(namespace, expression);
+	public MemberParameter(String expression) {
+		super(expression);
 	}
 
 	/**
@@ -67,12 +66,11 @@ public class MemberParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * 
 	 * @see java.lang.Object#clone()
 	 */
+	@Override
 	public MemberParameter clone() {
-		MemberParameter clone = new MemberParameter(getNamespace(),
-				getExpression());
+		MemberParameter clone = new MemberParameter(getExpression());
 		clone.setEvaluated(isEvaluated());
 		clone.setResult(getResult());
 		clone.member = member;
@@ -88,19 +86,13 @@ public class MemberParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.mdx.ExpressionParameter#toMdx(java.lang.String,
-	 *      java.lang.String)
+	 * @see com.eyeq.pivot4j.mdx.ExpressionParameter#toMdx(java.lang.String)
 	 */
 	@Override
-	protected String toMdx(String namespace, String expression) {
+	protected String toMdx(String expression) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("$[");
-
-		if (namespace != null) {
-			sb.append(namespace);
-			sb.append(":");
-		}
 
 		if (expression != null) {
 			sb.append(expression.replaceAll("]", "]]"));

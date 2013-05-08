@@ -69,7 +69,6 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 		StringWriter writer = new StringWriter();
 
 		HtmlRenderer renderer = new HtmlRenderer(writer);
-		renderer.initialize();
 
 		renderer.setBorder(1);
 		renderer.setHideSpans(hideSpans);

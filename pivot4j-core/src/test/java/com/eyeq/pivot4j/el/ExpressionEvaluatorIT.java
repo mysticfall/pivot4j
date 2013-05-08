@@ -35,7 +35,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 	public void testSimpleExpression() {
 		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 				+ "{([Promotion Media].[All Media], "
-				+ "[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[s:year]";
+				+ "[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[year]";
 
 		PivotModel model = getPivotModel();
 
@@ -58,7 +58,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 	public void testFreeMarkerExpression() {
 		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 				+ "{([Promotion Media].[All Media], "
-				+ "$[fm:${cube.dimensions.get(\"Product\").defaultHierarchy.defaultMember.uniqueName}]"
+				+ "$[cube.dimensions.get(\"Product\").defaultHierarchy.defaultMember.uniqueName]"
 				+ ")} ON ROWS FROM [Sales] WHERE [Time].[1997]";
 
 		PivotModel model = getPivotModel();
@@ -85,7 +85,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 	public void testPreserveParameterOnSlicerAfterDrillDown() {
 		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 				+ "{([Promotion Media].[All Media], "
-				+ "[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[s:year]";
+				+ "[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[year]";
 
 		PivotModel model = getPivotModel();
 
@@ -123,7 +123,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 	@Test
 	public void testPreserveParameterOnSlicerAfterAddingHierarchy() {
 		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-				+ "[Promotion Media].[All Media] ON ROWS FROM [Sales] WHERE $[s:year]";
+				+ "[Promotion Media].[All Media] ON ROWS FROM [Sales] WHERE $[year]";
 
 		PivotModel model = getPivotModel();
 
@@ -160,7 +160,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 	@Test
 	public void testSimpleValueExpression() throws OlapException {
-		String query = "WITH MEMBER [Measures].[Calc Cost] AS '[Measures].[Store Cost] * ${s:ratio}' "
+		String query = "WITH MEMBER [Measures].[Calc Cost] AS '[Measures].[Store Cost] * ${ratio}' "
 				+ "SELECT {[Measures].[Calc Cost], [Measures].[Store Sales]} ON COLUMNS, "
 				+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
 

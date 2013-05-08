@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -85,7 +86,7 @@ public class Quax implements Bookmarkable {
 
 	private Exp expGenerate = null;
 
-	private Collection<QuaxChangeListener> changeListeners = new ArrayList<QuaxChangeListener>();
+	private Collection<QuaxChangeListener> changeListeners = new LinkedList<QuaxChangeListener>();
 
 	private Map<Member, Boolean> canExpandMemberMap = new HashMap<Member, Boolean>();
 

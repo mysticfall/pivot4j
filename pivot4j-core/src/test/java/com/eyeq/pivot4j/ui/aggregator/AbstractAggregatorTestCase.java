@@ -86,7 +86,6 @@ public abstract class AbstractAggregatorTestCase extends
 			writer = new FileWriter(file);
 
 			HtmlRenderer renderer = new HtmlRenderer(writer);
-			renderer.initialize();
 			renderer.setTableId("pivot");
 			renderer.setBorder(1);
 

@@ -343,7 +343,6 @@ public class PivotExportHandler {
 		try {
 			exporter.setFormat(format);
 			exporter.setOutputStream(out);
-			exporter.initialize();
 
 			exporter.render(model);
 		} finally {
@@ -406,8 +405,6 @@ public class PivotExportHandler {
 
 		try {
 			exporter.setOutputStream(out);
-			exporter.initialize();
-
 			exporter.render(model);
 		} finally {
 			out.flush();

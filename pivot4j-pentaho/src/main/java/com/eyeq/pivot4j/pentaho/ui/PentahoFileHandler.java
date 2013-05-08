@@ -103,17 +103,31 @@ public class PentahoFileHandler {
 			}
 
 			ConnectionMetadata connectionInfo = new ConnectionMetadata();
-			connectionInfo.restoreSettings(configuration);
+
+			try {
+				connectionInfo.restoreSettings(configuration
+						.configurationAt("connection"));
+			} catch (IllegalArgumentException e) {
+			}
 
 			OlapDataSource dataSource = dataSourceManager
 					.getDataSource(connectionInfo);
 
 			PivotModel model = new PivotModelImpl(dataSource);
-			model.restoreSettings(configuration);
+
+			try {
+				model.restoreSettings(configuration.configurationAt("model"));
+			} catch (IllegalArgumentException e) {
+			}
 
 			PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
 					FacesContext.getCurrentInstance());
-			renderer.restoreSettings(configuration);
+
+			try {
+				renderer.restoreSettings(configuration
+						.configurationAt("render"));
+			} catch (IllegalArgumentException e) {
+			}
 
 			Serializable rendererState = renderer.saveState();
 
@@ -191,18 +205,26 @@ public class PentahoFileHandler {
 		configuration.setRootElementName("report");
 		configuration.setDelimiterParsingDisabled(true);
 
+		configuration.addProperty("connection", "");
+		configuration.addProperty("model", "");
+
 		ConnectionMetadata connectionInfo = state.getConnectionInfo();
-		connectionInfo.saveSettings(configuration);
+
+		connectionInfo
+				.saveSettings(configuration.configurationAt("connection"));
 
 		PivotModel model = state.getModel();
-		model.saveSettings(configuration);
+
+		model.saveSettings(configuration.configurationAt("model"));
 
 		if (state.getRendererState() != null) {
+			configuration.addProperty("render", "");
+
 			PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
 					FacesContext.getCurrentInstance());
 
 			renderer.restoreState(state.getRendererState());
-			renderer.saveSettings(configuration);
+			renderer.saveSettings(configuration.configurationAt("render"));
 		}
 
 		if (logger.isDebugEnabled()) {

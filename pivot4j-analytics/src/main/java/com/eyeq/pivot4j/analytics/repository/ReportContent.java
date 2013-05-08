@@ -10,11 +10,14 @@ import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.NullArgumentException;
+import org.olap4j.OlapDataSource;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.ui.PrimeFacesPivotRenderer;
+import com.eyeq.pivot4j.impl.PivotModelImpl;
 
 public class ReportContent {
 
@@ -33,12 +36,15 @@ public class ReportContent {
 		ConnectionMetadata connectionInfo = state.getConnectionInfo();
 
 		if (connectionInfo != null) {
-			connectionInfo.saveSettings(configuration);
+			configuration.addProperty("connection", "");
+			connectionInfo.saveSettings(configuration.configurationAt(
+					"connection", true));
 		}
 
 		PivotModel model = state.getModel();
 		if (model != null) {
-			model.saveSettings(configuration);
+			configuration.addProperty("model", "");
+			model.saveSettings(configuration.configurationAt("model", true));
 		}
 
 		if (state.getRendererState() != null) {
@@ -46,7 +52,9 @@ public class ReportContent {
 					FacesContext.getCurrentInstance());
 
 			renderer.restoreState(state.getRendererState());
-			renderer.saveSettings(configuration);
+
+			configuration.addProperty("render", "");
+			renderer.saveSettings(configuration.configurationAt("render"));
 		}
 	}
 
@@ -70,7 +78,7 @@ public class ReportContent {
 	 * @throws ConfigurationException
 	 */
 	public void write(OutputStream out) throws ConfigurationException {
-		FileConfiguration configuration = (FileConfiguration) getConfiguration();
+		FileConfiguration configuration = (FileConfiguration) this.configuration;
 		configuration.save(out);
 	}
 
@@ -87,9 +95,42 @@ public class ReportContent {
 	}
 
 	/**
-	 * @return the configuration
+	 * @param state
+	 * @param manager
+	 * @return
 	 */
-	public HierarchicalConfiguration getConfiguration() {
-		return configuration;
+	public ViewState read(ViewState state, DataSourceManager manager)
+			throws ConfigurationException {
+		ConnectionMetadata connectionInfo = new ConnectionMetadata();
+
+		try {
+			connectionInfo.restoreSettings(configuration
+					.configurationAt("connection"));
+		} catch (IllegalArgumentException e) {
+		}
+
+		state.setConnectionInfo(connectionInfo);
+
+		OlapDataSource dataSource = manager.getDataSource(connectionInfo);
+
+		PivotModel model = new PivotModelImpl(dataSource);
+
+		try {
+			model.restoreSettings(configuration.configurationAt("model"));
+		} catch (IllegalArgumentException e) {
+		}
+
+		state.setModel(model);
+
+		try {
+			PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
+					FacesContext.getCurrentInstance());
+			renderer.restoreSettings(configuration.configurationAt("render"));
+
+			state.setRendererState(renderer.saveState());
+		} catch (IllegalArgumentException e) {
+		}
+
+		return state;
 	}
 }

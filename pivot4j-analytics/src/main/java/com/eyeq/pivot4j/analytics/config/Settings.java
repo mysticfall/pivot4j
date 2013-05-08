@@ -8,9 +8,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -32,10 +30,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eyeq.pivot4j.el.ExpressionContext;
 import com.eyeq.pivot4j.el.ExpressionEvaluator;
 import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
-import com.eyeq.pivot4j.el.ExpressionEvaluatorFactoryImpl;
-import com.eyeq.pivot4j.el.freemarker.FreeMarkerExpressionEvaluator;
+import com.eyeq.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory;
 
 @ManagedBean(name = "settings", eager = true)
 @ApplicationScoped
@@ -181,9 +179,8 @@ public class Settings {
 	 */
 	protected HierarchicalConfiguration readConfiguration(FacesContext context,
 			InputStream in) throws ConfigurationException, IOException {
-		ExpressionEvaluatorFactory factory = new ExpressionEvaluatorFactoryImpl();
-		ExpressionEvaluator evaluator = factory
-				.getEvaluator(FreeMarkerExpressionEvaluator.NAMESPACE);
+		ExpressionEvaluatorFactory factory = new FreeMarkerExpressionEvaluatorFactory();
+		ExpressionEvaluator evaluator = factory.createEvaluator();
 
 		String source = IOUtils.toString(in);
 		source = (String) evaluator.evaluate(source, createELContext(context));
@@ -198,8 +195,8 @@ public class Settings {
 	 * @param context
 	 * @return
 	 */
-	protected Map<String, Object> createELContext(FacesContext context) {
-		Map<String, Object> elContext = new HashMap<String, Object>();
+	protected ExpressionContext createELContext(FacesContext context) {
+		ExpressionContext elContext = new ExpressionContext();
 
 		elContext.put("FS", File.separator);
 

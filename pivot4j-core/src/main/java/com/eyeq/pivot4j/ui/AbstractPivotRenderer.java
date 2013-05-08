@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
@@ -28,7 +29,11 @@ import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorFactory;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
 import com.eyeq.pivot4j.ui.aggregator.DefaultAggregatorFactory;
+import com.eyeq.pivot4j.ui.condition.ConditionFactory;
+import com.eyeq.pivot4j.ui.condition.DefaultConditionFactory;
 import com.eyeq.pivot4j.ui.impl.RenderStrategyImpl;
+import com.eyeq.pivot4j.ui.property.PropertySource;
+import com.eyeq.pivot4j.ui.property.PropertySupport;
 
 public abstract class AbstractPivotRenderer implements PivotRenderer,
 		PivotLayoutCallback {
@@ -45,13 +50,31 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	private AggregatorFactory aggregatorFactory = new DefaultAggregatorFactory();
 
+	private ConditionFactory conditionFactory = new DefaultConditionFactory();
+
 	private HashMap<AggregatorKey, List<String>> aggregatorNames = new HashMap<AggregatorKey, List<String>>();
 
-	/**
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#initialize()
-	 */
-	public void initialize() {
+	private PropertySupport cellProperties;
+
+	private PropertySupport rowHeaderProperties;
+
+	private PropertySupport columnHeaderProperties;
+
+	public AbstractPivotRenderer() {
 		this.renderStrategy = createRenderStrategy();
+		initializeProperties();
+	}
+
+	protected void initializeProperties() {
+		if (conditionFactory == null) {
+			this.cellProperties = null;
+			this.columnHeaderProperties = null;
+			this.rowHeaderProperties = null;
+		} else {
+			this.cellProperties = new PropertySupport(conditionFactory);
+			this.columnHeaderProperties = new PropertySupport(conditionFactory);
+			this.rowHeaderProperties = new PropertySupport(conditionFactory);
+		}
 	}
 
 	/**
@@ -222,6 +245,11 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			break;
 		}
 
+		PropertySupport properties = getProperties(context);
+		if (label != null && properties != null) {
+			label = properties.getString("label", label, context);
+		}
+
 		return label;
 	}
 
@@ -351,6 +379,67 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	}
 
 	/**
+	 * @return the conditionFactory
+	 */
+	public ConditionFactory getConditionFactory() {
+		return conditionFactory;
+	}
+
+	/**
+	 * @param conditionFactory
+	 *            the conditionFactory to set
+	 */
+	public void setConditionFactory(ConditionFactory conditionFactory) {
+		this.conditionFactory = conditionFactory;
+	}
+
+	/**
+	 * @return the cellProperties
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getCellProperties()
+	 */
+	public PropertySource getCellProperties() {
+		return cellProperties;
+	}
+
+	/**
+	 * @return the rowHeaderProperties
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getRowHeaderProperties()
+	 */
+	public PropertySource getRowHeaderProperties() {
+		return rowHeaderProperties;
+	}
+
+	/**
+	 * @return the columnHeaderProperties
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getColumnHeaderProperties()
+	 */
+	public PropertySource getColumnHeaderProperties() {
+		return columnHeaderProperties;
+	}
+
+	/**
+	 * @param axis
+	 * @param type
+	 * @return
+	 */
+	protected PropertySupport getProperties(RenderContext context) {
+		PropertySupport properties = null;
+
+		if (context.getCell() != null) {
+			properties = cellProperties;
+		} else if (context.getCellType() == CellType.Header
+				|| context.getCellType() == CellType.Title) {
+			if (context.getAxis() == Axis.ROWS) {
+				properties = rowHeaderProperties;
+			} else if (context.getAxis() == Axis.COLUMNS) {
+				properties = columnHeaderProperties;
+			}
+		}
+
+		return properties;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.ui.PivotRenderer#swapAxes()
 	 */
 	@Override
@@ -376,12 +465,29 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 */
 	@Override
 	public Serializable saveState() {
-		return new Serializable[] { showDimensionTitle, showParentMembers,
-				hideSpans, aggregatorNames };
+		Serializable[] states = new Serializable[7];
+		states[0] = showDimensionTitle;
+		states[1] = showParentMembers;
+		states[2] = hideSpans;
+		states[3] = aggregatorNames;
+
+		if (cellProperties != null) {
+			states[4] = cellProperties.saveState();
+		}
+
+		if (columnHeaderProperties != null) {
+			states[5] = columnHeaderProperties.saveState();
+		}
+
+		if (rowHeaderProperties != null) {
+			states[6] = rowHeaderProperties.saveState();
+		}
+
+		return states;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
+	 * @see com.eyeq.pivot4j.ui.property.PropertySupport#restoreState(java.io.Serializable)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -397,11 +503,23 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		this.hideSpans = (Boolean) states[2];
 		this.aggregatorNames = (HashMap<AggregatorKey, List<String>>) states[3];
 
-		initialize();
+		initializeProperties();
+
+		if (states[4] != null && cellProperties != null) {
+			this.cellProperties.restoreState(states[4]);
+		}
+
+		if (states[5] != null && columnHeaderProperties != null) {
+			this.columnHeaderProperties.restoreState(states[5]);
+		}
+
+		if (states[6] != null && rowHeaderProperties != null) {
+			this.rowHeaderProperties.restoreState(states[6]);
+		}
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see com.eyeq.pivot4j.ui.property.PropertySupport#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
@@ -415,11 +533,9 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			configuration.setLogger(LogFactory.getLog(getClass()));
 		}
 
-		configuration.addProperty("render.showDimensionTitle",
-				showDimensionTitle);
-		configuration
-				.addProperty("render.showParentMembers", showParentMembers);
-		configuration.addProperty("render.hideSpans", hideSpans);
+		configuration.addProperty("showDimensionTitle", showDimensionTitle);
+		configuration.addProperty("showParentMembers", showParentMembers);
+		configuration.addProperty("hideSpans", hideSpans);
 
 		if (!aggregatorNames.isEmpty()) {
 			int index = 0;
@@ -433,20 +549,39 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 				for (String name : names) {
 					configuration
 							.addProperty(String.format(
-									"render.aggregations.aggregation(%s)",
+									"aggregations.aggregation(%s)[@name]",
 									index), name);
-					configuration
-							.addProperty(
-									String.format(
-											"render.aggregations.aggregation(%s)[@axis]",
-											index), axis.name());
 					configuration.addProperty(String.format(
-							"render.aggregations.aggregation(%s)[@position]",
-							index), position.name());
+							"aggregations.aggregation(%s)[@axis]", index), axis
+							.name());
+					configuration.addProperty(String.format(
+							"aggregations.aggregation(%s)[@position]", index),
+							position.name());
 
 					index++;
 				}
 			}
+		}
+
+		if (cellProperties != null) {
+			configuration.addProperty("properties.cell", "");
+
+			cellProperties.saveSettings(configuration
+					.configurationAt("properties.cell"));
+		}
+
+		if (columnHeaderProperties != null) {
+			configuration.addProperty("properties.column-header", "");
+
+			columnHeaderProperties.saveSettings(configuration
+					.configurationAt("properties.column-header"));
+		}
+
+		if (rowHeaderProperties != null) {
+			configuration.addProperty("properties.row-header", "");
+
+			rowHeaderProperties.saveSettings(configuration
+					.configurationAt("properties.row-header"));
 		}
 	}
 
@@ -460,47 +595,66 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		}
 
 		this.showDimensionTitle = configuration.getBoolean(
-				"render.showDimensionTitle", true);
-		this.showParentMembers = configuration.getBoolean(
-				"render.showParentMembers", false);
-		this.hideSpans = configuration.getBoolean("render.hideSpans", false);
+				"showDimensionTitle", true);
+		this.showParentMembers = configuration.getBoolean("showParentMembers",
+				false);
+		this.hideSpans = configuration.getBoolean("hideSpans", false);
 
-		List<Object> aggregationSettings = configuration
-				.getList("render.aggregations.aggregation");
+		List<HierarchicalConfiguration> aggregationSettings = configuration
+				.configurationsAt("aggregations.aggregation");
 
 		this.aggregatorNames.clear();
 
-		if (aggregationSettings != null) {
-			int index = 0;
+		for (HierarchicalConfiguration aggConfig : aggregationSettings) {
+			String name = aggConfig.getString("[@name]");
 
-			for (Object value : aggregationSettings) {
-				Axis axis = Axis.Standard.valueOf(configuration
-						.getString(String.format(
-								"render.aggregations.aggregation(%s)[@axis]",
-								index)));
+			if (name != null) {
+				Axis axis = Axis.Standard.valueOf(aggConfig
+						.getString("[@axis]"));
+
 				AggregatorPosition position = AggregatorPosition
-						.valueOf(configuration.getString(String
-								.format("render.aggregations.aggregation(%s)[@position]",
-										index)));
+						.valueOf(aggConfig.getString("[@position]"));
 
 				AggregatorKey key = new AggregatorKey(axis, position);
 
 				List<String> names = aggregatorNames.get(key);
 
 				if (names == null) {
-					names = new ArrayList<String>();
+					names = new LinkedList<String>();
 					aggregatorNames.put(key, names);
 				}
 
-				if (!names.contains(value)) {
-					names.add(value.toString());
+				if (!names.contains(name)) {
+					names.add(name);
 				}
-
-				index++;
 			}
 		}
 
-		initialize();
+		initializeProperties();
+
+		if (cellProperties != null) {
+			try {
+				cellProperties.restoreSettings(configuration
+						.configurationAt("properties.cell"));
+			} catch (IllegalArgumentException e) {
+			}
+		}
+
+		if (columnHeaderProperties != null) {
+			try {
+				columnHeaderProperties.restoreSettings(configuration
+						.configurationAt("properties.column-header"));
+			} catch (IllegalArgumentException e) {
+			}
+		}
+
+		if (rowHeaderProperties != null) {
+			try {
+				rowHeaderProperties.restoreSettings(configuration
+						.configurationAt("properties.row-header"));
+			} catch (IllegalArgumentException e) {
+			}
+		}
 	}
 
 	static class AggregatorKey implements Serializable {

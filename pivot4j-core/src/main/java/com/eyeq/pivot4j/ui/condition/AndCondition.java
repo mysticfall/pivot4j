@@ -81,7 +81,7 @@ public class AndCondition extends AbstractCondition {
 	 */
 	public boolean matches(RenderContext context) {
 		if (subConditions == null || subConditions.isEmpty()) {
-			throw new IllegalArgumentException("Missing sub conditions.");
+			throw new IllegalStateException("Missing sub conditions.");
 		}
 
 		for (Condition condition : subConditions) {
@@ -136,11 +136,11 @@ public class AndCondition extends AbstractCondition {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see com.eyeq.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
-		configuration.addProperty("[@name]", getName());
+		super.saveSettings(configuration);
 
 		if (subConditions == null) {
 			return;
@@ -148,8 +148,12 @@ public class AndCondition extends AbstractCondition {
 
 		int index = 0;
 		for (Condition condition : subConditions) {
+			String name = String.format("condition(%s)", index++);
+
+			configuration.setProperty(name, "");
+
 			HierarchicalConfiguration subConfig = configuration
-					.configurationAt(String.format("condition(%s)", index++));
+					.configurationAt(name);
 			condition.saveSettings(subConfig);
 		}
 	}
@@ -159,21 +163,24 @@ public class AndCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
-		List<HierarchicalConfiguration> subConfigs = configuration
-				.configurationsAt("condition");
-
 		this.subConditions = new LinkedList<Condition>();
 
-		for (HierarchicalConfiguration subConfig : subConfigs) {
-			String name = subConfig.getString("[@name]");
+		try {
+			List<HierarchicalConfiguration> subConfigs = configuration
+					.configurationsAt("condition");
 
-			if (name != null) {
-				Condition condition = getConditionFactory().createCondition(
-						name);
-				condition.restoreSettings(subConfig);
+			for (HierarchicalConfiguration subConfig : subConfigs) {
+				String name = subConfig.getString("[@name]");
 
-				this.subConditions.add(condition);
+				if (name != null) {
+					Condition condition = getConditionFactory()
+							.createCondition(name);
+					condition.restoreSettings(subConfig);
+
+					this.subConditions.add(condition);
+				}
 			}
+		} catch (IllegalArgumentException e) {
 		}
 	}
 

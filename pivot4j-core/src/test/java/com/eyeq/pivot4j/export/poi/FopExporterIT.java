@@ -61,10 +61,8 @@ public class FopExporterIT extends AbstractIntegrationTestCase {
 			exporter.setShowParentMembers(true);
 			exporter.setShowDimensionTitle(true);
 			exporter.setHideSpans(false);
-
 			exporter.setOrientation(OrientationRequested.LANDSCAPE);
 
-			exporter.initialize();
 			exporter.render(getPivotModel());
 		} finally {
 			out.flush();

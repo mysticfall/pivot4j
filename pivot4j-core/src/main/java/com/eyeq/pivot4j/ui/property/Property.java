@@ -6,14 +6,20 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.el;
+package com.eyeq.pivot4j.ui.property;
 
+import com.eyeq.pivot4j.state.Bookmarkable;
+import com.eyeq.pivot4j.state.Configurable;
+import com.eyeq.pivot4j.ui.RenderContext;
 
-public interface ExpressionEvaluatorFactory {
+public interface Property extends Comparable<Property>, Configurable,
+		Bookmarkable {
+
+	String getName();
 
 	/**
 	 * @param context
 	 * @return
 	 */
-	ExpressionEvaluator createEvaluator();
+	String getValue(RenderContext context);
 }

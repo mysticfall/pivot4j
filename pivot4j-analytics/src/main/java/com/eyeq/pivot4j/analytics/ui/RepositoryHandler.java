@@ -23,15 +23,12 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.olap4j.OlapDataSource;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
 import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.analytics.repository.ReportContent;
@@ -43,7 +40,6 @@ import com.eyeq.pivot4j.analytics.state.ViewStateEvent;
 import com.eyeq.pivot4j.analytics.state.ViewStateHolder;
 import com.eyeq.pivot4j.analytics.state.ViewStateListener;
 import com.eyeq.pivot4j.analytics.ui.navigator.RepositoryNode;
-import com.eyeq.pivot4j.impl.PivotModelImpl;
 
 @ManagedBean(name = "repositoryHandler")
 @SessionScoped
@@ -289,11 +285,14 @@ public class RepositoryHandler implements ViewStateListener {
 		RepositoryNode node = (RepositoryNode) selection;
 		RepositoryFile file = node.getObject();
 
-		HierarchicalConfiguration configuration;
+		String viewId = UUID.randomUUID().toString();
+
+		ViewState state = new ViewState(viewId, file.getName());
+		state.setFile(file);
 
 		try {
 			ReportContent content = repository.getContent(file);
-			configuration = content.getConfiguration();
+			content.read(state, dataSourceManager);
 		} catch (ConfigurationException e) {
 			String title = bundle.getString("error.open.report.title");
 			String message = bundle.getString("error.open.report.format") + e;
@@ -319,28 +318,6 @@ public class RepositoryHandler implements ViewStateListener {
 
 			return;
 		}
-
-		ConnectionMetadata connectionInfo = new ConnectionMetadata();
-		connectionInfo.restoreSettings(configuration);
-
-		OlapDataSource dataSource = dataSourceManager
-				.getDataSource(connectionInfo);
-
-		PivotModel model = new PivotModelImpl(dataSource);
-		model.restoreSettings(configuration);
-
-		PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
-				FacesContext.getCurrentInstance());
-		renderer.restoreSettings(configuration);
-
-		String viewId = UUID.randomUUID().toString();
-
-		ViewState state = new ViewState(viewId, file.getName());
-
-		state.setFile(file);
-		state.setConnectionInfo(connectionInfo);
-		state.setModel(model);
-		state.setRendererState(renderer.saveState());
 
 		viewStateHolder.registerState(state);
 

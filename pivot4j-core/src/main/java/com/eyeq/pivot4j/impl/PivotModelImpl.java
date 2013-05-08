@@ -11,17 +11,12 @@ package com.eyeq.pivot4j.impl;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
@@ -50,8 +45,9 @@ import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.QueryEvent;
 import com.eyeq.pivot4j.QueryListener;
+import com.eyeq.pivot4j.el.ExpressionContext;
 import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
-import com.eyeq.pivot4j.el.ExpressionEvaluatorFactoryImpl;
+import com.eyeq.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory;
 import com.eyeq.pivot4j.query.Quax;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.query.QueryChangeEvent;
@@ -79,15 +75,15 @@ public class PivotModelImpl implements PivotModel {
 
 	private boolean initialized = false;
 
-	private Collection<ModelChangeListener> modelListeners = new ArrayList<ModelChangeListener>();
+	private Collection<ModelChangeListener> modelListeners = new LinkedList<ModelChangeListener>();
 
-	private Collection<QueryListener> queryListeners = new ArrayList<QueryListener>();
+	private Collection<QueryListener> queryListeners = new LinkedList<QueryListener>();
 
 	private QueryAdapter queryAdapter;
 
 	private TransformFactory transformFactory = new TransformFactoryImpl();
 
-	private ExpressionEvaluatorFactory expressionEvaluatorFactory = new ExpressionEvaluatorFactoryImpl();
+	private ExpressionEvaluatorFactory expressionEvaluatorFactory = new FreeMarkerExpressionEvaluatorFactory();
 
 	private int topBottomCount = 10;
 
@@ -211,6 +207,20 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.PivotModel#isInitialized()
+	 */
+	public boolean isInitialized() {
+		return initialized;
+	}
+
+	private void checkInitialization() throws NotInitializedException {
+		if (!isInitialized()) {
+			throw new NotInitializedException(
+					"Model has not been initialized yet.");
+		}
+	}
+
+	/**
 	 * @param dataSource
 	 * @return
 	 * @throws SQLException
@@ -228,20 +238,6 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		return connection;
-	}
-
-	/**
-	 * @return
-	 */
-	protected ExpressionContext createExpressionContext() {
-		return new ExpressionContext();
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.PivotModel#isInitialized()
-	 */
-	public boolean isInitialized() {
-		return initialized;
 	}
 
 	/**
@@ -287,11 +283,72 @@ public class PivotModelImpl implements PivotModel {
 		connection.close();
 	}
 
-	private void checkInitialization() throws NotInitializedException {
-		if (!isInitialized()) {
-			throw new NotInitializedException(
-					"Model has not been initialized yet.");
-		}
+	protected ExpressionContext createExpressionContext() {
+		ExpressionContext context = new ExpressionContext();
+
+		context.put("locale", new ExpressionContext.ValueBinding<Locale>() {
+
+			@Override
+			public Locale getValue() {
+				return getLocale();
+			}
+		});
+
+		context.put("roleName", new ExpressionContext.ValueBinding<String>() {
+
+			@Override
+			public String getValue() {
+				return getRoleName();
+			}
+		});
+
+		context.put("cube", new ExpressionContext.ValueBinding<Cube>() {
+
+			@Override
+			public Cube getValue() {
+				if (!isInitialized()) {
+					return null;
+				}
+
+				return getCube();
+			}
+		});
+
+		context.put("catalog", new ExpressionContext.ValueBinding<Catalog>() {
+
+			@Override
+			public Catalog getValue() {
+				if (!isInitialized()) {
+					return null;
+				}
+
+				return getCatalog();
+			}
+		});
+
+		context.put("cellSet", new ExpressionContext.ValueBinding<CellSet>() {
+
+			@Override
+			public CellSet getValue() {
+				return cellSet;
+			}
+		});
+
+		context.put("memberUtils",
+				new ExpressionContext.ValueBinding<OlapUtils>() {
+
+					@Override
+					public OlapUtils getValue() {
+						Cube cube = getCube();
+						if (cube == null) {
+							return null;
+						}
+
+						return new OlapUtils(cube);
+					}
+				});
+
+		return context;
 	}
 
 	/**
@@ -328,24 +385,29 @@ public class PivotModelImpl implements PivotModel {
 		Cube cube = null;
 
 		try {
-			String cubeName = queryAdapter.getCubeName();
+			if (cellSet != null) {
+				cube = cellSet.getMetaData().getCube();
+			} else {
+				String cubeName = queryAdapter.getCubeName();
 
-			Schema schema = connection.getOlapSchema();
-			cube = schema.getCubes().get(cubeName);
+				Schema schema = connection.getOlapSchema();
+				cube = schema.getCubes().get(cubeName);
 
-			if (cube == null && cubeName != null) {
-				Logger logger = LoggerFactory.getLogger(getClass());
-				if (logger.isWarnEnabled()) {
-					logger.warn("Cube with the specified name cannot be found : "
-							+ cubeName);
-				}
+				if (cube == null && cubeName != null) {
+					Logger logger = LoggerFactory.getLogger(getClass());
+					if (logger.isWarnEnabled()) {
+						logger.warn("Cube with the specified name cannot be found : "
+								+ cubeName);
+					}
 
-				if (logger.isDebugEnabled()) {
-					logger.debug("List of cubes in schema : "
-							+ schema.getName());
+					if (logger.isDebugEnabled()) {
+						logger.debug("List of cubes in schema : "
+								+ schema.getName());
 
-					for (Cube c : schema.getCubes()) {
-						logger.debug(c.getCaption() + " - " + c.getUniqueName());
+						for (Cube c : schema.getCubes()) {
+							logger.debug(c.getCaption() + " - "
+									+ c.getUniqueName());
+						}
 					}
 				}
 			}
@@ -371,7 +433,7 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		if (expressionEvaluatorFactory != null) {
-			queryAdapter.evaluate(expressionEvaluatorFactory);
+			queryAdapter.evaluate(expressionEvaluatorFactory.createEvaluator());
 		}
 
 		String mdx = normalizeMdx(getCurrentMdx(true));
@@ -401,7 +463,7 @@ public class PivotModelImpl implements PivotModel {
 	 * @see com.eyeq.pivot4j.PivotModel#getExpressionContext()
 	 */
 	@Override
-	public Map<String, Object> getExpressionContext() {
+	public ExpressionContext getExpressionContext() {
 		return expressionContext;
 	}
 
@@ -970,22 +1032,19 @@ public class PivotModelImpl implements PivotModel {
 			configuration.setLogger(LogFactory.getLog(getClass()));
 		}
 
-		configuration.addProperty("model.mdx", getCurrentMdx());
-		configuration.addProperty("model.sort[@enabled]", sorting);
+		configuration.addProperty("mdx", getCurrentMdx());
+		configuration.addProperty("sort[@enabled]", sorting);
 
 		if (sortCriteria != null) {
-			configuration.addProperty("model.sort[@criteria]",
-					sortCriteria.name());
-			configuration.addProperty("model.sort[@topBottomCount]",
-					topBottomCount);
+			configuration.addProperty("sort[@criteria]", sortCriteria.name());
+			configuration.addProperty("sort[@topBottomCount]", topBottomCount);
 			if (isSorting()) {
 				if (sortPosMembers != null) {
 					int index = 0;
 					for (Member member : sortPosMembers) {
-						configuration
-								.addProperty(String.format(
-										"model.sort.member(%s)", index++),
-										member.getUniqueName());
+						configuration.addProperty(
+								String.format("sort.member(%s)", index++),
+								member.getUniqueName());
 					}
 				}
 			}
@@ -1002,7 +1061,7 @@ public class PivotModelImpl implements PivotModel {
 			throw new NullArgumentException("configuration");
 		}
 
-		String mdx = configuration.getString("model.mdx");
+		String mdx = configuration.getString("mdx");
 
 		setMdx(mdx);
 
@@ -1018,8 +1077,7 @@ public class PivotModelImpl implements PivotModel {
 			initialize();
 		}
 
-		List<Object> sortPosUniqueNames = configuration
-				.getList("model.sort.member");
+		List<Object> sortPosUniqueNames = configuration.getList("sort.member");
 		if (sortPosUniqueNames == null || sortPosUniqueNames.isEmpty()) {
 			this.sortPosMembers = null;
 		} else {
@@ -1049,199 +1107,16 @@ public class PivotModelImpl implements PivotModel {
 			}
 		}
 
-		this.topBottomCount = configuration.getInt(
-				"model.sort[@topBottomCount]", 10);
-		String sortName = configuration.getString("model.sort[@criteria]");
+		this.topBottomCount = configuration.getInt("sort[@topBottomCount]", 10);
+		String sortName = configuration.getString("sort[@criteria]");
 		if (sortName == null) {
 			this.sortCriteria = SortCriteria.ASC;
 		} else {
 			this.sortCriteria = SortCriteria.valueOf(sortName);
 		}
 
-		this.sorting = configuration.getBoolean("model.sort[@enabled]", false);
+		this.sorting = configuration.getBoolean("sort[@enabled]", false);
 
 		this.cellSet = null;
-	}
-
-	enum PredefinedNames {
-
-		cube {
-			@Override
-			Object getValue(PivotModelImpl model) {
-				return model.getCube();
-			}
-		},
-		catalog {
-			@Override
-			Object getValue(PivotModelImpl model) {
-				return model.getCatalog();
-			}
-		},
-		roleName {
-			@Override
-			Object getValue(PivotModelImpl model) {
-				return model.getRoleName();
-			}
-		},
-		locale {
-			@Override
-			Object getValue(PivotModelImpl model) {
-				return model.getLocale();
-			}
-		},
-		memberUtils {
-			@Override
-			Object getValue(PivotModelImpl model) {
-				return new OlapUtils(model.getCube());
-			}
-		},
-		connection {
-			@Override
-			Object getValue(PivotModelImpl model) {
-				return model.getConnection();
-			}
-		};
-
-		abstract Object getValue(PivotModelImpl model);
-	};
-
-	protected class ExpressionContext extends AbstractMap<String, Object> {
-
-		private Map<String, Object> attributes = new HashMap<String, Object>();
-
-		protected boolean isPredefined(String key) {
-			try {
-				PredefinedNames.valueOf(key);
-				return true;
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
-		}
-
-		/**
-		 * @see java.util.HashMap#put(java.lang.Object, java.lang.Object)
-		 */
-		@Override
-		public Object put(String key, Object value) {
-			if (isPredefined(key)) {
-				throw new IllegalArgumentException(
-						"The specified key is predefined and cannot be changed : "
-								+ key);
-			}
-
-			return attributes.put(key, value);
-		}
-
-		/**
-		 * @see java.util.HashMap#putAll(java.util.Map)
-		 */
-		@Override
-		public void putAll(Map<? extends String, ? extends Object> m) {
-			for (String key : m.keySet()) {
-				if (isPredefined(key)) {
-					throw new IllegalArgumentException(
-							"The specified key is predefined and cannot be changed : "
-									+ key);
-				}
-			}
-
-			attributes.putAll(m);
-		}
-
-		/**
-		 * @see java.util.HashMap#remove(java.lang.Object)
-		 */
-		@Override
-		public Object remove(Object key) {
-			if (isPredefined((String) key)) {
-				throw new IllegalArgumentException(
-						"The specified key is predefined and cannot be changed : "
-								+ key);
-			}
-
-			return attributes.remove(key);
-		}
-
-		/**
-		 * @see java.util.HashMap#clear()
-		 */
-		@Override
-		public void clear() {
-			throw new UnsupportedOperationException(
-					"The expression context cannot be cleared.");
-		}
-
-		/**
-		 * @see java.util.HashMap#get(java.lang.Object)
-		 */
-		@Override
-		public Object get(Object key) {
-			if (isPredefined((String) key)) {
-				return PredefinedNames.valueOf((String) key).getValue(
-						PivotModelImpl.this);
-			}
-
-			return attributes.get(key);
-		}
-
-		/**
-		 * @see java.util.HashMap#containsKey(java.lang.Object)
-		 */
-		@Override
-		public boolean containsKey(Object key) {
-			return attributes.containsKey(key) || isPredefined((String) key);
-		}
-
-		/**
-		 * @see java.util.HashMap#entrySet()
-		 */
-		@Override
-		public Set<Entry<String, Object>> entrySet() {
-			Set<Entry<String, Object>> set = new HashSet<Entry<String, Object>>(
-					attributes.entrySet());
-
-			for (PredefinedNames name : PredefinedNames.values()) {
-				Entry<String, Object> entry = new PredefinedEntry(name);
-				set.add(entry);
-			}
-
-			return set;
-		}
-	};
-
-	class PredefinedEntry implements Entry<String, Object> {
-
-		PredefinedNames name;
-
-		/**
-		 * @param name
-		 */
-		PredefinedEntry(PredefinedNames name) {
-			this.name = name;
-		}
-
-		/**
-		 * @see java.util.Map.Entry#getKey()
-		 */
-		@Override
-		public String getKey() {
-			return name.name();
-		}
-
-		/**
-		 * @see java.util.Map.Entry#getValue()
-		 */
-		@Override
-		public Object getValue() {
-			return name.getValue(PivotModelImpl.this);
-		}
-
-		/**
-		 * @see java.util.Map.Entry#setValue(java.lang.Object)
-		 */
-		@Override
-		public Object setValue(Object value) {
-			throw new UnsupportedOperationException();
-		}
 	}
 }

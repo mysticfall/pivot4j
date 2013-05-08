@@ -104,7 +104,6 @@ public class ExcelExporterIT extends AbstractIntegrationTestCase {
 			exporter.setShowDimensionTitle(showDimensionTitle);
 			exporter.setHideSpans(hideSpans);
 
-			exporter.initialize();
 			exporter.render(getPivotModel());
 		} finally {
 			out.flush();

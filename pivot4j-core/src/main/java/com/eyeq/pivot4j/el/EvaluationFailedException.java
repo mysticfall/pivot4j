@@ -14,8 +14,6 @@ public class EvaluationFailedException extends PivotException {
 
 	private static final long serialVersionUID = 5164243103322308072L;
 
-	private String namespace;
-
 	private String expression;
 
 	public EvaluationFailedException() {
@@ -23,44 +21,22 @@ public class EvaluationFailedException extends PivotException {
 
 	/**
 	 * @param msg
-	 * @param namespace
 	 * @param expression
 	 */
-	public EvaluationFailedException(String msg, String namespace,
-			String expression) {
+	public EvaluationFailedException(String msg, String expression) {
 		super(msg);
-
-		this.namespace = namespace;
 		this.expression = expression;
 	}
 
 	/**
 	 * @param msg
-	 * @param namespace
 	 * @param expression
 	 * @param cause
 	 */
-	public EvaluationFailedException(String msg, String namespace,
-			String expression, Throwable cause) {
+	public EvaluationFailedException(String msg, String expression,
+			Throwable cause) {
 		super(msg, cause);
-
-		this.namespace = namespace;
 		this.expression = expression;
-	}
-
-	/**
-	 * @return the namespace
-	 */
-	public String getNamespace() {
-		return namespace;
-	}
-
-	/**
-	 * @param namespace
-	 *            the namespace to set
-	 */
-	public void setNamespace(String namespace) {
-		this.namespace = namespace;
 	}
 
 	/**
