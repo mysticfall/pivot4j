@@ -1,6 +1,7 @@
 package com.eyeq.pivot4j.pentaho.servlet;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Enumeration;
@@ -35,8 +36,7 @@ public class PluginServletSession implements HttpSession {
 		IPentahoSession pentahoSession = (IPentahoSession) session
 				.getAttribute(PentahoSystem.PENTAHO_SESSION_KEY);
 
-		if (pentahoSession == null
-				|| !(pentahoSession instanceof PentahoSessionProxy)) {
+		if (!(pentahoSession instanceof PentahoSessionProxy)) {
 			if (pentahoSession == null) {
 				pentahoSession = PentahoSessionHolder.getSession();
 			}
@@ -238,12 +238,15 @@ public class PluginServletSession implements HttpSession {
 		}
 
 		/**
+		 * @throws InvocationTargetException
+		 * @throws IllegalAccessException
+		 * @throws
 		 * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object,
 		 *      java.lang.reflect.Method, java.lang.Object[])
 		 */
 		@Override
 		public Object invoke(Object proxy, Method method, Object[] args)
-				throws Throwable {
+				throws IllegalAccessException, InvocationTargetException {
 			Object result = method.invoke(session, args);
 
 			if (method.getName().equals("destroy")) {

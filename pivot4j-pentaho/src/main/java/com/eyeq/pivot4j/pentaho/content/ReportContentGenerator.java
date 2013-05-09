@@ -1,5 +1,8 @@
 package com.eyeq.pivot4j.pentaho.content;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,10 +37,12 @@ public class ReportContentGenerator extends BaseContentGenerator {
 	}
 
 	/**
+	 * @throws IOException
+	 * @throws ServletException
 	 * @see org.pentaho.platform.engine.services.solution.BaseContentGenerator#createContent()
 	 */
 	@Override
-	public void createContent() throws Exception {
+	public void createContent() throws ServletException, IOException {
 		HttpServletRequest request = (HttpServletRequest) this.parameterProviders
 				.get("path").getParameter("httprequest");
 

@@ -5,9 +5,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.faces.view.facelets.ResourceResolver;
 import javax.servlet.RequestDispatcher;
@@ -20,6 +21,8 @@ import javax.servlet.ServletException;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.UnhandledException;
 import org.apache.myfaces.webapp.StartupServletContextListener;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 public class PluginServletContext implements ServletContext {
 
@@ -132,7 +135,7 @@ public class PluginServletContext implements ServletContext {
 			return e;
 		}
 
-		Vector<String> names = new Vector<String>();
+		List<String> names = new LinkedList<String>();
 
 		for (String name : initParameters.keySet()) {
 			names.add(name);
@@ -142,7 +145,7 @@ public class PluginServletContext implements ServletContext {
 			names.add(e.nextElement().toString());
 		}
 
-		return names.elements();
+		return Collections.enumeration(names);
 	}
 
 	/**
