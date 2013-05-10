@@ -545,11 +545,16 @@ public class MemberSelectionHandler implements NodeFilter {
 	}
 
 	/**
-	 * @param targetSelection
+	 * @param newSelection
 	 *            the targetSelection to set
 	 */
-	public void setTargetSelection(TreeNode[] targetSelection) {
-		this.targetSelection = targetSelection;
+	public void setTargetSelection(TreeNode[] newSelection) {
+		if (newSelection == null) {
+			this.targetSelection = null;
+		} else {
+			this.targetSelection = Arrays.copyOf(newSelection,
+					newSelection.length);
+		}
 	}
 
 	/**
