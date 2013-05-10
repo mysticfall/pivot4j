@@ -1,6 +1,7 @@
 package com.eyeq.pivot4j.analytics.ui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -175,11 +176,15 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 	}
 
 	/**
-	 * @param selection
+	 * @param newSelection
 	 *            the selection to set
 	 */
-	public void setSelection(TreeNode[] selection) {
-		this.selection = selection;
+	public void setSelection(TreeNode[] newSelection) {
+		if (newSelection == null) {
+			this.selection = null;
+		} else {
+			this.selection = Arrays.copyOf(newSelection, newSelection.length);
+		}
 	}
 
 	/**
