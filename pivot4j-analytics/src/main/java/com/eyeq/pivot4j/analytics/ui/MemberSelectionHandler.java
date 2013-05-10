@@ -1,5 +1,6 @@
 package com.eyeq.pivot4j.analytics.ui;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -524,11 +525,16 @@ public class MemberSelectionHandler implements NodeFilter {
 	}
 
 	/**
-	 * @param sourceSelection
+	 * @param newSelection
 	 *            the sourceSelection to set
 	 */
-	public void setSourceSelection(TreeNode[] sourceSelection) {
-		this.sourceSelection = sourceSelection;
+	public void setSourceSelection(TreeNode[] newSelection) {
+		if (newSelection == null) {
+			this.sourceSelection = null;
+		} else {
+			this.sourceSelection = Arrays.copyOf(newSelection,
+					newSelection.length);
+		}
 	}
 
 	/**
