@@ -225,12 +225,12 @@ public class PropertySupport implements PropertySource {
 	 */
 	@Override
 	public Serializable saveState() {
-		Collection<Property> properties = this.properties.values();
+		Collection<Property> propertyList = this.properties.values();
 
-		Serializable[] states = new Serializable[properties.size()];
+		Serializable[] states = new Serializable[propertyList.size()];
 
 		int index = 0;
-		for (Property property : properties) {
+		for (Property property : propertyList) {
 			boolean conditional = property instanceof ConditionalProperty;
 
 			states[index++] = new Serializable[] { conditional,
