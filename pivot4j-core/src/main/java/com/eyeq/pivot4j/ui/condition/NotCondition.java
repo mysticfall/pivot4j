@@ -16,7 +16,7 @@ import com.eyeq.pivot4j.ui.RenderContext;
 
 public class NotCondition extends AbstractCondition {
 
-	public static final String NAME = "NOT";
+	public static final String NAME = "not";
 
 	private Condition subCondition;
 

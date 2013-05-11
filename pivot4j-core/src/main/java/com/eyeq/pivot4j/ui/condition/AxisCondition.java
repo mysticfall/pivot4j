@@ -11,32 +11,32 @@ package com.eyeq.pivot4j.ui.condition;
 import java.io.Serializable;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.lang.ObjectUtils;
+import org.olap4j.Axis;
 
-import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class CellTypeCondition extends AbstractCondition {
+public class AxisCondition extends AbstractCondition {
 
-	public static final String NAME = "cellType";
+	public static final String NAME = "axis";
 
-	private CellType cellType;
+	private Axis axis;
 
 	/**
 	 * @param conditionFactory
 	 */
-	public CellTypeCondition(ConditionFactory conditionFactory) {
+	public AxisCondition(ConditionFactory conditionFactory) {
 		super(conditionFactory);
 	}
 
 	/**
 	 * @param conditionFactory
-	 * @param cellType
+	 * @param axis
 	 */
-	public CellTypeCondition(ConditionFactory conditionFactory,
-			CellType cellType) {
+	public AxisCondition(ConditionFactory conditionFactory, Axis axis) {
 		super(conditionFactory);
 
-		this.cellType = cellType;
+		this.axis = axis;
 	}
 
 	/**
@@ -47,18 +47,18 @@ public class CellTypeCondition extends AbstractCondition {
 	}
 
 	/**
-	 * @return the cellType
+	 * @return the axis
 	 */
-	public CellType getCellType() {
-		return cellType;
+	public Axis getAxis() {
+		return axis;
 	}
 
 	/**
-	 * @param cellType
-	 *            the cellType to set
+	 * @param axis
+	 *            the axis to set
 	 */
-	public void setCellType(CellType cellType) {
-		this.cellType = cellType;
+	public void setAxis(Axis axis) {
+		this.axis = axis;
 	}
 
 	/**
@@ -66,11 +66,11 @@ public class CellTypeCondition extends AbstractCondition {
 	 */
 	@Override
 	public boolean matches(RenderContext context) {
-		if (cellType == null) {
-			throw new IllegalStateException("Cell type was not specified.");
+		if (axis == null) {
+			throw new IllegalStateException("Axis is not specified.");
 		}
 
-		return cellType == context.getCellType();
+		return ObjectUtils.equals(axis, context.getAxis());
 	}
 
 	/**
@@ -78,11 +78,11 @@ public class CellTypeCondition extends AbstractCondition {
 	 */
 	@Override
 	public Serializable saveState() {
-		if (cellType == null) {
+		if (axis == null) {
 			return null;
 		}
 
-		return cellType.name();
+		return axis.name();
 	}
 
 	/**
@@ -91,9 +91,9 @@ public class CellTypeCondition extends AbstractCondition {
 	@Override
 	public void restoreState(Serializable state) {
 		if (state == null) {
-			this.cellType = null;
+			this.axis = null;
 		} else {
-			this.cellType = CellType.valueOf((String) state);
+			this.axis = Axis.Standard.valueOf((String) state);
 		}
 	}
 
@@ -104,11 +104,11 @@ public class CellTypeCondition extends AbstractCondition {
 	public void saveSettings(HierarchicalConfiguration configuration) {
 		super.saveSettings(configuration);
 
-		if (cellType == null) {
+		if (axis == null) {
 			return;
 		}
 
-		configuration.setProperty("value", cellType.name());
+		configuration.addProperty("axis", axis.name());
 	}
 
 	/**
@@ -116,12 +116,12 @@ public class CellTypeCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
-		String value = configuration.getString("value");
+		String name = configuration.getString("axis");
 
-		if (value == null) {
-			this.cellType = null;
+		if (name == null) {
+			this.axis = null;
 		} else {
-			this.cellType = CellType.valueOf(value);
+			this.axis = Axis.Standard.valueOf(name);
 		}
 	}
 
@@ -131,13 +131,13 @@ public class CellTypeCondition extends AbstractCondition {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(getName() + " = ");
+		builder.append("axis = '");
 
-		if (cellType == null) {
-			builder.append("[MISSING]");
-		} else {
-			builder.append(cellType.name());
+		if (axis != null) {
+			builder.append(axis.name());
 		}
+
+		builder.append("'");
 
 		return builder.toString();
 	}

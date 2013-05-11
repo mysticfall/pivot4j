@@ -27,10 +27,10 @@ public class FreeMarkerExpressionEvaluatorFactory implements
 	 * @return configuration
 	 */
 	protected Configuration createConfiguration() {
-		Configuration configuration = new Configuration();
-		configuration.setObjectWrapper(new BeansWrapper());
+		Configuration config = new Configuration();
+		config.setObjectWrapper(new BeansWrapper());
 
-		return configuration;
+		return config;
 	}
 
 	/**

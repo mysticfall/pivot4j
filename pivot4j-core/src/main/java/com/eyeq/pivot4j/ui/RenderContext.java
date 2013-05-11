@@ -77,6 +77,8 @@ public class RenderContext {
 
 	private Map<String, Member> cachedParents;
 
+	private Map<String, Object> attributes;
+
 	/**
 	 * @param model
 	 * @param renderer
@@ -138,6 +140,8 @@ public class RenderContext {
 		} else {
 			this.cachedParents = cachedParents;
 		}
+
+		this.attributes = new HashMap<String, Object>();
 	}
 
 	/**
@@ -478,6 +482,37 @@ public class RenderContext {
 	}
 
 	/**
+	 * @param name
+	 * @return
+	 */
+	public boolean hasAttribute(String name) {
+		return attributes.containsKey(name);
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	public Object getAttribute(String name) {
+		return attributes.get(name);
+	}
+
+	/**
+	 * @param name
+	 * @param value
+	 */
+	public void setAttribute(String name, Object value) {
+		attributes.put(name, value);
+	}
+
+	/**
+	 * @param name
+	 */
+	public void removeAttribute(String name) {
+		attributes.remove(name);
+	}
+
+	/**
 	 * @param model
 	 * @return
 	 */
@@ -497,13 +532,13 @@ public class RenderContext {
 
 			@Override
 			public String getValue() {
-				Axis axis = getAxis();
+				Axis theAxis = getAxis();
 
-				if (axis == null) {
+				if (theAxis == null) {
 					return null;
 				}
 
-				return axis.name();
+				return theAxis.name();
 			}
 		});
 
@@ -512,13 +547,13 @@ public class RenderContext {
 
 					@Override
 					public Integer getValue() {
-						Axis axis = getAxis();
+						Axis theAxis = getAxis();
 
-						if (axis == null) {
+						if (theAxis == null) {
 							return null;
 						}
 
-						return axis.axisOrdinal();
+						return theAxis.axisOrdinal();
 					}
 				});
 
@@ -678,6 +713,15 @@ public class RenderContext {
 				return getRowSpan();
 			}
 		});
+
+		context.put("attributes",
+				new ExpressionContext.ValueBinding<Map<String, Object>>() {
+
+					@Override
+					public Map<String, Object> getValue() {
+						return attributes;
+					}
+				});
 
 		return context;
 	}

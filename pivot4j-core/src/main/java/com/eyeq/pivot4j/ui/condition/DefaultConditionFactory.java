@@ -8,29 +8,52 @@
  */
 package com.eyeq.pivot4j.ui.condition;
 
+import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eyeq.pivot4j.PivotException;
+
 public class DefaultConditionFactory implements ConditionFactory {
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	private Map<String, Class<? extends Condition>> types = new TreeMap<String, Class<? extends Condition>>();
+
+	public DefaultConditionFactory() {
+		types.put(AndCondition.NAME, AndCondition.class);
+		types.put(OrCondition.NAME, OrCondition.class);
+		types.put(NotCondition.NAME, NotCondition.class);
+		types.put(ExpressionCondition.NAME, ExpressionCondition.class);
+
+		types.put(AxisCondition.NAME, AxisCondition.class);
+		types.put(HierarchyCondition.NAME, HierarchyCondition.class);
+		types.put(LevelCondition.NAME, LevelCondition.class);
+		types.put(MemberCondition.NAME, MemberCondition.class);
+
+		types.put(CellTypeCondition.NAME, CellTypeCondition.class);
+		types.put(CellValueCondition.NAME, CellValueCondition.class);
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Logger getLogger() {
+		return logger;
+	}
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.condition.ConditionFactory#getAvailableConditions()
 	 */
 	@Override
 	public List<String> getAvailableConditions() {
-		List<String> names = new LinkedList<String>();
-
-		names.add(AndCondition.NAME);
-		names.add(OrCondition.NAME);
-		names.add(NotCondition.NAME);
-		names.add(CellTypeCondition.NAME);
-		names.add(ExpressionCondition.NAME);
-
-		return names;
+		return new LinkedList<String>(types.keySet());
 	}
 
 	/**
@@ -44,21 +67,23 @@ public class DefaultConditionFactory implements ConditionFactory {
 
 		Condition condition = null;
 
-		// TODO Replace this abomination with something more sensible.
-		if (AndCondition.NAME.equals(name)) {
-			condition = new AndCondition(this);
-		} else if (OrCondition.NAME.equals(name)) {
-			condition = new OrCondition(this);
-		} else if (NotCondition.NAME.equals(name)) {
-			condition = new NotCondition(this);
-		} else if (CellTypeCondition.NAME.equals(name)) {
-			condition = new CellTypeCondition(this);
-		} else if (ExpressionCondition.NAME.equals(name)) {
-			condition = new ExpressionCondition(this);
+		Class<? extends Condition> type = types.get(name);
+
+		if (type != null) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Instantiating a new condition : " + type);
+			}
+
+			try {
+				Constructor<? extends Condition> constructor = type
+						.getConstructor(ConditionFactory.class);
+				condition = constructor.newInstance(this);
+			} catch (Exception e) {
+				throw new PivotException(e);
+			}
 		}
 
 		if (condition == null) {
-			Logger logger = LoggerFactory.getLogger(getClass());
 			if (logger.isWarnEnabled()) {
 				logger.warn("Unknown condition name : " + name);
 			}

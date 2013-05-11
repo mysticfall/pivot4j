@@ -11,54 +11,46 @@ package com.eyeq.pivot4j.ui.condition;
 import java.io.Serializable;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.olap4j.Position;
+import org.olap4j.metadata.Member;
 
-import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class CellTypeCondition extends AbstractCondition {
+public abstract class AbstractMetadataCondition extends AbstractCondition {
 
-	public static final String NAME = "cellType";
-
-	private CellType cellType;
+	private String uniqueName;
 
 	/**
 	 * @param conditionFactory
 	 */
-	public CellTypeCondition(ConditionFactory conditionFactory) {
+	public AbstractMetadataCondition(ConditionFactory conditionFactory) {
 		super(conditionFactory);
 	}
 
 	/**
 	 * @param conditionFactory
-	 * @param cellType
+	 * @param uniqueName
 	 */
-	public CellTypeCondition(ConditionFactory conditionFactory,
-			CellType cellType) {
+	public AbstractMetadataCondition(ConditionFactory conditionFactory,
+			String uniqueName) {
 		super(conditionFactory);
 
-		this.cellType = cellType;
+		this.uniqueName = uniqueName;
 	}
 
 	/**
-	 * @see com.eyeq.kona.equation.AbstractCondition#getName()
+	 * @return the uniqueName
 	 */
-	public String getName() {
-		return NAME;
+	public String getUniqueName() {
+		return uniqueName;
 	}
 
 	/**
-	 * @return the cellType
+	 * @param uniqueName
+	 *            the uniqueName to set
 	 */
-	public CellType getCellType() {
-		return cellType;
-	}
-
-	/**
-	 * @param cellType
-	 *            the cellType to set
-	 */
-	public void setCellType(CellType cellType) {
-		this.cellType = cellType;
+	public void setUniqueName(String uniqueName) {
+		this.uniqueName = uniqueName;
 	}
 
 	/**
@@ -66,23 +58,49 @@ public class CellTypeCondition extends AbstractCondition {
 	 */
 	@Override
 	public boolean matches(RenderContext context) {
-		if (cellType == null) {
-			throw new IllegalStateException("Cell type was not specified.");
+		if (uniqueName == null) {
+			throw new IllegalStateException(
+					"Unique name of the metadata is not specified.");
 		}
 
-		return cellType == context.getCellType();
+		return matches(context.getMember())
+				|| matches(context.getRowPosition())
+				|| matches(context.getColumnPosition());
 	}
+
+	/**
+	 * @param position
+	 * @return
+	 */
+	protected boolean matches(Position position) {
+		if (position == null) {
+			return false;
+		}
+
+		boolean matches = false;
+
+		for (Member member : position.getMembers()) {
+			if (matches(member)) {
+				matches = true;
+				break;
+			}
+		}
+
+		return matches;
+	}
+
+	/**
+	 * @param member
+	 * @return
+	 */
+	protected abstract boolean matches(Member member);
 
 	/**
 	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()
 	 */
 	@Override
 	public Serializable saveState() {
-		if (cellType == null) {
-			return null;
-		}
-
-		return cellType.name();
+		return uniqueName;
 	}
 
 	/**
@@ -90,10 +108,8 @@ public class CellTypeCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreState(Serializable state) {
-		if (state == null) {
-			this.cellType = null;
-		} else {
-			this.cellType = CellType.valueOf((String) state);
+		if (state != null) {
+			this.uniqueName = (String) state;
 		}
 	}
 
@@ -104,11 +120,11 @@ public class CellTypeCondition extends AbstractCondition {
 	public void saveSettings(HierarchicalConfiguration configuration) {
 		super.saveSettings(configuration);
 
-		if (cellType == null) {
+		if (uniqueName == null) {
 			return;
 		}
 
-		configuration.setProperty("value", cellType.name());
+		configuration.addProperty(getName(), uniqueName);
 	}
 
 	/**
@@ -116,13 +132,7 @@ public class CellTypeCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
-		String value = configuration.getString("value");
-
-		if (value == null) {
-			this.cellType = null;
-		} else {
-			this.cellType = CellType.valueOf(value);
-		}
+		this.uniqueName = configuration.getString(getName());
 	}
 
 	/**
@@ -131,13 +141,13 @@ public class CellTypeCondition extends AbstractCondition {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(getName() + " = ");
+		builder.append(getName() + " = '");
 
-		if (cellType == null) {
-			builder.append("[MISSING]");
-		} else {
-			builder.append(cellType.name());
+		if (uniqueName != null) {
+			builder.append(uniqueName);
 		}
+
+		builder.append("'");
 
 		return builder.toString();
 	}

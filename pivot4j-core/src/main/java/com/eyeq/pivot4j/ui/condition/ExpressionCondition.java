@@ -17,7 +17,7 @@ import com.eyeq.pivot4j.ui.RenderContext;
 
 public class ExpressionCondition extends AbstractCondition {
 
-	public static final String NAME = "EXPR";
+	public static final String NAME = "expression";
 
 	private String expression;
 
@@ -95,17 +95,19 @@ public class ExpressionCondition extends AbstractCondition {
 	 */
 	@Override
 	public void restoreState(Serializable state) {
-		if (state != null) {
+		if (state == null) {
+			this.expression = null;
+		} else {
 			this.expression = (String) state;
 		}
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see com.eyeq.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
-		configuration.addProperty("[@name]", getName());
+		super.saveSettings(configuration);
 
 		if (expression == null) {
 			return;

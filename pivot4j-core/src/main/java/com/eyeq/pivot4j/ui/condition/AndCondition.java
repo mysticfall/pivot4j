@@ -19,7 +19,7 @@ import com.eyeq.pivot4j.ui.RenderContext;
 
 public class AndCondition extends AbstractCondition {
 
-	public static final String NAME = "AND";
+	public static final String NAME = "and";
 
 	private List<Condition> subConditions;
 

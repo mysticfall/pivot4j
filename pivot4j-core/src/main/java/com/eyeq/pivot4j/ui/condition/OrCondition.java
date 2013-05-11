@@ -19,7 +19,7 @@ import com.eyeq.pivot4j.ui.RenderContext;
 
 public class OrCondition extends AbstractCondition {
 
-	public static final String NAME = "OR";
+	public static final String NAME = "or";
 
 	private List<Condition> subConditions;
 
