@@ -174,11 +174,11 @@ public abstract class AbstractAggregator implements Aggregator {
 		int count = getCount(targetPosition);
 		counts.put(targetPosition, ++count);
 
-		Measure measure = getMeasure(targetPosition);
+		Measure targetMeasure = getMeasure(targetPosition);
 
-		if (measure != null && context.getCell() != null
-				&& !formats.containsKey(measure)) {
-			formats.put(measure, getNumberFormat(context.getCell()));
+		if (targetMeasure != null && context.getCell() != null
+				&& !formats.containsKey(targetMeasure)) {
+			formats.put(targetMeasure, getNumberFormat(context.getCell()));
 		}
 
 		if (logger.isTraceEnabled()) {
@@ -199,19 +199,19 @@ public abstract class AbstractAggregator implements Aggregator {
 			return this.measure;
 		}
 
-		Measure measure = null;
+		Measure targetMeasure = null;
 
 		int size = position.getMembers().size();
 		for (int i = size - 1; i > -1; i--) {
 			Member member = position.getMembers().get(i);
 
 			if (member instanceof Measure) {
-				measure = (Measure) member;
+				targetMeasure = (Measure) member;
 				break;
 			}
 		}
 
-		return measure;
+		return targetMeasure;
 	}
 
 	/**
@@ -245,12 +245,12 @@ public abstract class AbstractAggregator implements Aggregator {
 	 * @return
 	 */
 	protected NumberFormat getNumberFormat(Position position) {
-		Measure measure = getMeasure(position);
-		if (measure == null) {
+		Measure measureAtPosition = getMeasure(position);
+		if (measureAtPosition == null) {
 			return null;
 		}
 
-		return formats.get(measure);
+		return formats.get(measureAtPosition);
 	}
 
 	/**

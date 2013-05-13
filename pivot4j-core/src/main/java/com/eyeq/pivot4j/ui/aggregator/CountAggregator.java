@@ -19,6 +19,7 @@ import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
 
+import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class CountAggregator extends AbstractAggregator {
@@ -72,6 +73,19 @@ public class CountAggregator extends AbstractAggregator {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregator#aggregate(com.eyeq.pivot4j.ui.RenderContext)
+	 */
+	@Override
+	public void aggregate(RenderContext context) {
+		if (context.getAggregator() != null
+				|| context.getCellType() == CellType.Aggregation) {
+			return;
+		}
+
+		super.aggregate(context);
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregator#calculate(java.lang.Double,
 	 *      java.lang.Double, org.olap4j.Position,
 	 *      com.eyeq.pivot4j.ui.RenderContext)
@@ -87,6 +101,10 @@ public class CountAggregator extends AbstractAggregator {
 	 */
 	@Override
 	protected Double getValue(Position position) {
+		if (position.getMembers().isEmpty()) {
+			return null;
+		}
+
 		return (double) getCount(position);
 	}
 }
