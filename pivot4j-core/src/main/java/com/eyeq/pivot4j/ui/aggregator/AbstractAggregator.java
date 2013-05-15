@@ -112,40 +112,6 @@ public abstract class AbstractAggregator implements Aggregator {
 	 */
 	@Override
 	public void aggregate(RenderContext context) {
-		if (context.getCell() == null
-				&& (measure == null || context.getAggregator() == null)) {
-			return;
-		}
-
-		Position position = getPosition(context);
-		List<Member> positionMembers = position.getMembers();
-
-		int index = 0;
-		for (Member member : members) {
-			if (positionMembers.size() <= index) {
-				return;
-			}
-
-			Member positionMember = positionMembers.get(index);
-
-			if (!OlapUtils.equals(member, positionMember)
-					&& (member.getDepth() >= positionMember.getDepth() || !context
-							.getAncestorMembers(positionMember)
-							.contains(member))) {
-				return;
-			}
-
-			index++;
-		}
-
-		if (measure != null && !positionMembers.isEmpty()) {
-			Member member = positionMembers.get(positionMembers.size() - 1);
-
-			if (!measure.equals(member)) {
-				return;
-			}
-		}
-
 		Position targetPosition = getTargetPosition(context);
 
 		Double cellValue = null;
@@ -181,7 +147,7 @@ public abstract class AbstractAggregator implements Aggregator {
 			formats.put(targetMeasure, getNumberFormat(context.getCell()));
 		}
 
-		if (logger.isTraceEnabled()) {
+		if (members.isEmpty() && logger.isTraceEnabled()) {
 			logger.trace("Calculation result : ");
 			logger.trace("	- count : " + count);
 			logger.trace("	- value : " + cellValue);
@@ -255,9 +221,9 @@ public abstract class AbstractAggregator implements Aggregator {
 
 	/**
 	 * @param context
-	 * @return
+	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getPosition(com.eyeq.pivot4j.ui.RenderContext)
 	 */
-	protected Position getPosition(RenderContext context) {
+	public Position getPosition(RenderContext context) {
 		Position position = null;
 
 		if (axis == Axis.COLUMNS) {
@@ -271,9 +237,9 @@ public abstract class AbstractAggregator implements Aggregator {
 
 	/**
 	 * @param context
-	 * @return
+	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getTargetPosition(com.eyeq.pivot4j.ui.RenderContext)
 	 */
-	protected Position getTargetPosition(RenderContext context) {
+	public Position getTargetPosition(RenderContext context) {
 		Position targetPosition = null;
 
 		if (axis == Axis.COLUMNS) {

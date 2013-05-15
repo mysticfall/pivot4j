@@ -355,28 +355,106 @@ public class RenderStrategyImpl implements RenderStrategy {
 			callback.cellContent(context);
 			callback.endCell(context);
 
-			if (rowNode.getMemberChildren() == 0) {
-				List<Aggregator> rowAggregators = rowRoot.getReference()
-						.getAggregators();
-				for (Aggregator aggregator : rowAggregators) {
-					if (context.getAggregator() != aggregator) {
-						aggregator.aggregate(context);
-					}
+			for (AggregatorPosition position : AggregatorPosition.values()) {
+				for (Aggregator aggregator : rowRoot.getReference()
+						.getAggregators(position)) {
+					aggregate(context, rowNode, aggregator, position);
 				}
 			}
 
-			if (columnNode == null || columnNode.getMemberChildren() == 0) {
-				List<Aggregator> columnAggregators = columnRoot.getReference()
-						.getAggregators();
-				for (Aggregator aggregator : columnAggregators) {
-					if (context.getAggregator() != aggregator) {
-						aggregator.aggregate(context);
+			if (columnNode != null) {
+				for (AggregatorPosition position : AggregatorPosition.values()) {
+					for (Aggregator aggregator : columnRoot.getReference()
+							.getAggregators(position)) {
+						aggregate(context, columnNode, aggregator, position);
 					}
 				}
 			}
 		}
 
 		context.setAggregator(null);
+	}
+
+	/**
+	 * @param context
+	 * @param node
+	 * @param aggregator
+	 * @param position
+	 */
+	protected void aggregate(RenderContext context, TableHeaderNode node,
+			Aggregator aggregator, AggregatorPosition position) {
+		Measure measure = aggregator.getMeasure();
+
+		List<Member> members = aggregator.getMembers();
+
+		if (context.getCell() == null
+				&& (measure == null || context.getAggregator() == null)) {
+			return;
+		}
+
+		if (context.getAggregator() != null
+				&& (context.getAggregator().getAxis() == aggregator.getAxis())) {
+			return;
+		}
+
+		List<Member> positionMembers = aggregator.getPosition(context)
+				.getMembers();
+
+		int index = 0;
+		for (Member member : members) {
+			if (positionMembers.size() <= index) {
+				return;
+			}
+
+			Member positionMember = positionMembers.get(index);
+
+			if (!OlapUtils.equals(member, positionMember)
+					&& (member.getDepth() >= positionMember.getDepth() || !context
+							.getAncestorMembers(positionMember)
+							.contains(member))) {
+				return;
+			}
+
+			index++;
+		}
+
+		if (measure != null && !positionMembers.isEmpty()) {
+			Member member = positionMembers.get(positionMembers.size() - 1);
+
+			if (!measure.equals(member)) {
+				return;
+			}
+		}
+
+		TableHeaderNode parent = node;
+
+		while (parent != null) {
+			if (parent.getHierarchyDescendents() == 1
+					&& parent.getMemberChildren() > 0) {
+				switch (position) {
+				case Grand:
+					return;
+				case Hierarchy:
+					if (!members.contains(parent.getMember())) {
+						return;
+					}
+					break;
+				case Member:
+					if (node == parent
+							|| members.lastIndexOf(parent.getMember()) == members
+									.size() - 1) {
+						return;
+					}
+					break;
+				default:
+					assert false;
+				}
+			}
+
+			parent = (TableHeaderNode) parent.getParent();
+		}
+
+		aggregator.aggregate(context);
 	}
 
 	/**
@@ -570,7 +648,15 @@ public class RenderStrategyImpl implements RenderStrategy {
 		}
 
 		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>();
+
 		List<Aggregator> aggregators = new ArrayList<Aggregator>();
+		List<Aggregator> hierarchyAggregators = new ArrayList<Aggregator>();
+		List<Aggregator> memberAggregators = new ArrayList<Aggregator>();
+
+		Map<AggregatorPosition, List<Aggregator>> aggregatorMap = new HashMap<AggregatorPosition, List<Aggregator>>();
+		aggregatorMap.put(AggregatorPosition.Grand, aggregators);
+		aggregatorMap.put(AggregatorPosition.Hierarchy, hierarchyAggregators);
+		aggregatorMap.put(AggregatorPosition.Member, memberAggregators);
 
 		Map<Hierarchy, List<Level>> levelsMap = new HashMap<Hierarchy, List<Level>>();
 
@@ -627,16 +713,16 @@ public class RenderStrategyImpl implements RenderStrategy {
 		}
 
 		TableAxisContext nodeContext = new TableAxisContext(axis, hierarchies,
-				levelsMap, aggregators, renderer);
+				levelsMap, aggregatorMap, renderer);
 
 		TableHeaderNode axisRoot = new TableHeaderNode(nodeContext);
 
 		Set<Measure> grandTotalMeasures = new LinkedHashSet<Measure>();
 		Set<Measure> totalMeasures = new LinkedHashSet<Measure>();
 
-		List<Member> lastMembers = null;
-
 		Map<Hierarchy, List<AggregationTarget>> memberParentMap = new HashMap<Hierarchy, List<AggregationTarget>>();
+
+		Position lastPosition = null;
 
 		for (Position position : positions) {
 			TableHeaderNode lastChild = null;
@@ -687,7 +773,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 				lastChild = childNode;
 
-				if (!hierarchyAggregatorNames.isEmpty() && lastMembers != null) {
+				if (!hierarchyAggregatorNames.isEmpty() && lastPosition != null) {
 					int start = memberCount - 1;
 
 					if (containsMeasure) {
@@ -695,16 +781,21 @@ public class RenderStrategyImpl implements RenderStrategy {
 					}
 
 					if (i < start) {
-						Member lastMember = lastMembers.get(i);
+						Member lastMember = lastPosition.getMembers().get(i);
 
 						if (OlapUtils.equals(lastMember.getHierarchy(),
 								member.getHierarchy())
-								&& !OlapUtils.equals(lastMember, member)) {
+								&& !OlapUtils.equals(lastMember, member)
+								|| !OlapUtils.equals(position, lastPosition, i)) {
 							for (String aggregatorName : hierarchyAggregatorNames) {
-								createAggregators(aggregatorName, nodeContext,
-										aggregators, axisRoot, null,
-										lastMembers.subList(0, i + 1),
-										totalMeasures);
+								createAggregators(
+										aggregatorName,
+										nodeContext,
+										hierarchyAggregators,
+										axisRoot,
+										null,
+										lastPosition.getMembers().subList(0,
+												i + 1), totalMeasures);
 							}
 						}
 					}
@@ -753,7 +844,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 								memberParents.remove(lastIndex);
 
 								List<Member> path = new ArrayList<Member>(
-										lastMembers.subList(0, i));
+										lastPosition.getMembers().subList(0, i));
 								path.add(lastParent.getParent());
 
 								Level parentLevel = lastParent.getParent()
@@ -765,12 +856,42 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 								for (String aggregatorName : memberAggregatorNames) {
 									createAggregators(aggregatorName,
-											nodeContext, aggregators, axisRoot,
-											lastParent.getLevel(), path,
-											totalMeasures);
+											nodeContext, memberAggregators,
+											axisRoot, lastParent.getLevel(),
+											path, totalMeasures);
 								}
 							}
 						}
+					}
+
+					if (lastPosition != null
+							&& !OlapUtils.equals(position, lastPosition, i)) {
+						Hierarchy hierarchy = nodeContext.getHierarchies().get(
+								i);
+
+						Level rootLevel = nodeContext.getLevels(hierarchy).get(
+								0);
+
+						for (AggregationTarget target : memberParents) {
+							Member memberParent = target.getParent();
+
+							if (memberParent.getLevel().getDepth() < rootLevel
+									.getDepth()) {
+								continue;
+							}
+
+							List<Member> path = new ArrayList<Member>(
+									lastPosition.getMembers().subList(0, i));
+							path.add(memberParent);
+
+							for (String aggregatorName : memberAggregatorNames) {
+								createAggregators(aggregatorName, nodeContext,
+										memberAggregators, axisRoot,
+										target.getLevel(), path, totalMeasures);
+							}
+						}
+
+						memberParents.clear();
 					}
 				}
 			}
@@ -779,11 +900,11 @@ public class RenderStrategyImpl implements RenderStrategy {
 				axisRoot.addChild(lastChild);
 			}
 
-			lastMembers = members;
+			lastPosition = position;
 		}
 
-		if (lastMembers != null) {
-			int memberCount = lastMembers.size();
+		if (lastPosition != null) {
+			int memberCount = lastPosition.getMembers().size();
 
 			int start = memberCount - 1;
 
@@ -807,14 +928,14 @@ public class RenderStrategyImpl implements RenderStrategy {
 							continue;
 						}
 
-						List<Member> path = new ArrayList<Member>(
-								lastMembers.subList(0, i));
+						List<Member> path = new ArrayList<Member>(lastPosition
+								.getMembers().subList(0, i));
 						path.add(member);
 
 						for (String aggregatorName : memberAggregatorNames) {
 							createAggregators(aggregatorName, nodeContext,
-									aggregators, axisRoot, target.getLevel(),
-									path, totalMeasures);
+									memberAggregators, axisRoot,
+									target.getLevel(), path, totalMeasures);
 						}
 					}
 				}
@@ -822,8 +943,9 @@ public class RenderStrategyImpl implements RenderStrategy {
 				if (!hierarchyAggregatorNames.isEmpty()) {
 					for (String aggregatorName : hierarchyAggregatorNames) {
 						createAggregators(aggregatorName, nodeContext,
-								aggregators, axisRoot, null,
-								lastMembers.subList(0, i), totalMeasures);
+								hierarchyAggregators, axisRoot, null,
+								lastPosition.getMembers().subList(0, i),
+								totalMeasures);
 					}
 				}
 			}
@@ -846,7 +968,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 				@Override
 				public int handleTreeNode(TreeNode<TableAxisContext> node) {
 					String label = node.toString();
-					logger.debug(StringUtils.leftPad(label, node.getLevel()
+					logger.trace(StringUtils.leftPad(label, node.getLevel()
 							+ label.length(), ' '));
 
 					return CONTINUE;
