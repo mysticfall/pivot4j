@@ -11,6 +11,7 @@ package com.eyeq.pivot4j.transform.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -183,18 +184,23 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 		PlaceMembersOnAxes transform = getQueryAdapter().getModel()
 				.getTransform(PlaceMembersOnAxes.class);
 
-		Hierarchy hierarchy = level.getHierarchy();
+		List<Member> members = transform.findVisibleMembers(level
+				.getHierarchy());
 
-		List<Member> members = transform.findVisibleMembers(axis);
-		List<Member> selection = new ArrayList<Member>(members.size());
+		List<Member> membersToRemove = new LinkedList<Member>();
 
 		for (Member member : members) {
-			if (!member.getLevel().equals(level)) {
-				selection.add(member);
+			if (OlapUtils.equals(level, member.getLevel())) {
+				membersToRemove.add(member);
 			}
 		}
 
-		transform.placeMembers(hierarchy, selection);
+		for (Member member : membersToRemove) {
+			System.out.println("### " + member);
+			members.remove(member);
+		}
+
+		transform.placeMembers(level.getHierarchy(), members);
 	}
 
 	/**
