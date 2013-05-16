@@ -120,10 +120,10 @@ public class AggregatorFullIT extends AbstractAggregatorTestCase {
 		rows = bodies.get(0).getRows();
 
 		assertThat("Table content is missing.", rows, is(notNullValue()));
-		assertThat("Not enough content rows.", rows.size(), is(equalTo(48)));
+		assertThat("Not enough content rows.", rows.size(), is(equalTo(51)));
 
-		assertCell(rows, 0, 0, 23, 1, "Bulk Mail");
-		assertCell(rows, 0, 1, 11, 1, "M");
+		assertCell(rows, 0, 0, 25, 1, "Bulk Mail");
+		assertCell(rows, 0, 1, 12, 1, "M");
 		assertCell(rows, 0, 2, 4, 1, "Drink");
 		assertCell(rows, 0, 3, 1, 1, "Alcoholic Beverages");
 
@@ -140,13 +140,15 @@ public class AggregatorFullIT extends AbstractAggregatorTestCase {
 		assertCell(rows, 9, 0, 1, 2, "Non-Consumable");
 
 		// Member total title
-		assertCell(rows, 10, 0, 1, 2, "Total");
+		assertCell(rows, 10, 0, 1, 1, "Drink");
+		assertCell(rows, 10, 1, 1, 1, "Average");
+		assertCell(rows, 11, 0, 1, 2, "Total");
 
 		// Hierarchy total title
-		assertCell(rows, 22, 0, 1, 3, "Total");
+		assertCell(rows, 23, 0, 1, 2, "Total");
 
 		// Axis total title
-		assertCell(rows, 47, 0, 1, 4, "Minimum");
+		assertCell(rows, 50, 0, 1, 4, "Minimum");
 
 		// Row axis member aggregation
 		// (Bulk Mail, M, Food, Average / Q1, F, Store Sales)
@@ -154,23 +156,23 @@ public class AggregatorFullIT extends AbstractAggregatorTestCase {
 
 		// Row axis hierarchy aggregation
 		// (Daily Paper, S, Total / Q1, F, Store Sales)
-		assertCell(rows, 44, 1, 1, 1, "887.15");
+		assertCell(rows, 47, 1, 1, 1, "887.15");
 
 		// Row axis hierarchy aggregation
 		// (Daily Paper, Total / Q1, F, Store Sales)
-		assertCell(rows, 45, 1, 1, 1, "2,052.52");
+		assertCell(rows, 48, 1, 1, 1, "2,052.52");
 
 		// Row axis aggregation
 		// (Minimum / Q1, F, Store Sales)
-		assertCell(rows, 47, 1, 1, 1, "2.26");
+		assertCell(rows, 50, 1, 1, 1, "2.26");
 
 		// Column axis member aggregation
 		// (Bulk Mail, M, Food, Frozen Foods / Q2, 6, Average, Unit Sales)
-		assertCell(rows, 7, 39, 1, 1, "16.5");
+		assertCell(rows, 7, 39, 1, 1, "11");
 
 		// Column axis hierarchy aggregation
 		// (Daily Paper, S, Drink, Average / Q2, Total, Store Cost)
-		assertCell(rows, 37, 17, 1, 1, "7.94");
+		assertCell(rows, 40, 17, 1, 1, "7.94");
 
 		// Column axis hierarchy aggregation
 		// (Bulk Mail, M, Drink, Alcoholic Beverages / Q2, 6, Total, Store Cost)
