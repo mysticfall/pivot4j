@@ -196,7 +196,6 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 		}
 
 		for (Member member : membersToRemove) {
-			System.out.println("### " + member);
 			members.remove(member);
 		}
 
