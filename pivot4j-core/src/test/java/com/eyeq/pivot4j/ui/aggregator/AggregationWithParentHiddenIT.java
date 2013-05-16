@@ -25,14 +25,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 import com.gargoylesoftware.htmlunit.html.HtmlTableHeader;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
-public class AggregatorHideParentIT extends AbstractAggregatorTestCase {
+public class AggregationWithParentHiddenIT extends AbstractAggregatorTestCase {
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#getQueryName()
 	 */
 	@Override
 	protected String getQueryName() {
-		return "full";
+		return "complex";
 	}
 
 	/**
