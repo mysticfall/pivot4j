@@ -1,0 +1,1 @@
+SELECT {[Measures].[Unit Sales]} ON COLUMNS, Hierarchize(Union(Union({[Product].[All Products], [Product].[Drink], [Product].[Drink].[Alcoholic Beverages], [Product].[Drink].[Beverages], [Product].[Drink].[Dairy], [Product].[Food], [Product].[Non-Consumable]}, [Product].[Drink].[Alcoholic Beverages].Children), [Product].[Drink].[Beverages].Children)) ON ROWS FROM [Sales]

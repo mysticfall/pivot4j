@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.transform.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -21,8 +22,11 @@ import org.olap4j.OlapException;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Member;
 
+import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.PlaceLevelsOnAxes;
+import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
 
 public class PlaceLevelsOnAxesImplIT extends
 		AbstractTransformTestCase<PlaceLevelsOnAxes> {
@@ -234,5 +238,31 @@ public class PlaceLevelsOnAxesImplIT extends
 						+ "[Product].[Drink].[Beverages].[Carbonated Beverages], [Product].[Drink].[Beverages].[Drinks], "
 						+ "[Product].[Drink].[Beverages].[Hot Beverages], [Product].[Drink].[Beverages].[Pure Juice Beverages], "
 						+ "[Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales] WHERE [Time].[1997]")));
+	}
+
+	@Test
+	public void testRemoveLevelFromCrossJoinedAxis() throws OlapException {
+		PlaceLevelsOnAxes transform = getTransform();
+
+		PivotModel model = getPivotModel();
+		model.setMdx("SELECT {[Measures].[Unit Sales]} ON COLUMNS, Union(Union({([Product].[All Products], [Gender].[All Gender])}, "
+				+ "Union(Union(CrossJoin({[Product].[Food]}, {[Gender].[All Gender]}), CrossJoin({[Product].[Food]}, {[Gender].[F]})), "
+				+ "CrossJoin({[Product].[Food]}, {[Gender].[M]}))), Union(Union(CrossJoin({[Product].[Non-Consumable]}, "
+				+ "{[Gender].[All Gender]}), CrossJoin({[Product].[Non-Consumable]}, {[Gender].[F]})), "
+				+ "CrossJoin({[Product].[Non-Consumable]}, {[Gender].[M]}))) ON ROWS FROM [Sales]");
+
+		Cube cube = getPivotModel().getCube();
+
+		Hierarchy product = cube.getHierarchies().get("Product");
+
+		Level level = product.getLevels().get("(All)");
+
+		transform.removeLevel(Axis.ROWS, level);
+
+		assertThat(
+				"Unexpected MDX query",
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales]} ON COLUMNS, CrossJoin({[Product].[Food], [Product].[Non-Consumable]}, "
+						+ "{[Gender].[All Gender], [Gender].[F], [Gender].[M]}) ON ROWS FROM [Sales]")));
 	}
 }

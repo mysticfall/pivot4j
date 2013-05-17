@@ -23,6 +23,7 @@ import org.olap4j.metadata.Property;
 
 import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.aggregator.Aggregator;
+import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
 
 public class TableAxisContext implements Cloneable {
 
@@ -32,7 +33,7 @@ public class TableAxisContext implements Cloneable {
 
 	private List<Hierarchy> hierarchies;
 
-	private List<Aggregator> aggregators;
+	private Map<AggregatorPosition, List<Aggregator>> aggregators;
 
 	private Map<Hierarchy, List<Level>> levelMap;
 
@@ -48,7 +49,8 @@ public class TableAxisContext implements Cloneable {
 	 * @param renderer
 	 */
 	public TableAxisContext(Axis axis, List<Hierarchy> hierarchies,
-			Map<Hierarchy, List<Level>> levels, List<Aggregator> aggregators,
+			Map<Hierarchy, List<Level>> levels,
+			Map<AggregatorPosition, List<Aggregator>> aggregators,
 			PivotRenderer renderer) {
 		if (axis == null) {
 			throw new NullArgumentException("axis");
@@ -72,10 +74,10 @@ public class TableAxisContext implements Cloneable {
 		this.renderer = renderer;
 
 		if (aggregators == null) {
-			aggregators = Collections.emptyList();
+			this.aggregators = new HashMap<AggregatorPosition, List<Aggregator>>();
+		} else {
+			this.aggregators = aggregators;
 		}
-
-		this.aggregators = aggregators;
 	}
 
 	/**
@@ -107,10 +109,17 @@ public class TableAxisContext implements Cloneable {
 	}
 
 	/**
-	 * @return the aggregators
+	 * @param position
+	 * @return
 	 */
-	public List<Aggregator> getAggregators() {
-		return Collections.unmodifiableList(aggregators);
+	public List<Aggregator> getAggregators(AggregatorPosition position) {
+		List<Aggregator> result = aggregators.get(position);
+
+		if (result == null) {
+			return Collections.emptyList();
+		} else {
+			return Collections.unmodifiableList(result);
+		}
 	}
 
 	/**

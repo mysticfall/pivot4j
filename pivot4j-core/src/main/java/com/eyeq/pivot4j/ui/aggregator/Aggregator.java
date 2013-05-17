@@ -11,6 +11,7 @@ package com.eyeq.pivot4j.ui.aggregator;
 import java.util.List;
 
 import org.olap4j.Axis;
+import org.olap4j.Position;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
@@ -28,6 +29,18 @@ public interface Aggregator {
 	Level getLevel();
 
 	Measure getMeasure();
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	Position getPosition(RenderContext context);
+
+	/**
+	 * @param context
+	 * @return
+	 */
+	Position getTargetPosition(RenderContext context);
 
 	/**
 	 * @param context

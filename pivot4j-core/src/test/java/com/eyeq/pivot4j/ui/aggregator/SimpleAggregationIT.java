@@ -25,14 +25,14 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 import com.gargoylesoftware.htmlunit.html.HtmlTableHeader;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
-public class AggregatorSingleDimensionIT extends AbstractAggregatorTestCase {
+public class SimpleAggregationIT extends AbstractAggregatorTestCase {
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#getQueryName()
 	 */
 	@Override
 	protected String getQueryName() {
-		return "single";
+		return "simple";
 	}
 
 	/**
@@ -49,6 +49,7 @@ public class AggregatorSingleDimensionIT extends AbstractAggregatorTestCase {
 
 	/**
 	 * @param renderer
+	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#configureRenderer(com.eyeq.pivot4j.ui.PivotRenderer)
 	 */
 	@Override
 	protected void configureRenderer(PivotRenderer renderer) {

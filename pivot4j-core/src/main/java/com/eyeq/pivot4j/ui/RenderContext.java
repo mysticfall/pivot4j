@@ -460,7 +460,7 @@ public class RenderContext {
 
 		Member parent = member;
 
-		while ((parent = parent.getParentMember()) != null) {
+		while ((parent = getParentMember(parent)) != null) {
 			ancestors.add(parent);
 		}
 

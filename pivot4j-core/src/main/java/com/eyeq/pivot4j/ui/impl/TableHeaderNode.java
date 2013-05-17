@@ -10,6 +10,8 @@ package com.eyeq.pivot4j.ui.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -670,12 +672,44 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 		return hierarchyDescendants;
 	}
 
+	protected List<Member> getMemberPath() {
+		List<Member> path = new LinkedList<Member>();
+
+		TableHeaderNode node = (TableHeaderNode) getParent();
+
+		while (node != null) {
+			path.add(0, node.getMember());
+			node = (TableHeaderNode) node.getParent();
+		}
+
+		return path;
+	}
+
+	/**
+	 * @param parentPath
+	 * @param childPath
+	 * @return
+	 */
+	private static boolean isSubPath(List<Member> parentPath,
+			List<Member> childPath) {
+		Iterator<Member> it = childPath.iterator();
+		for (Member member : parentPath) {
+			if (!OlapUtils.equals(member, it.next())) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	public int getMemberChildren() {
 		if (member == null) {
 			return 0;
 		}
 
 		if (memberChildren == null) {
+			final List<Member> path = getMemberPath();
+
 			final int[] childCount = new int[] { 0 };
 
 			final int depth = member.getDepth();
@@ -684,13 +718,20 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 				@Override
 				public int handleTreeNode(TreeNode<TableAxisContext> node) {
+					TableHeaderNode nodeChild = (TableHeaderNode) node;
+
 					if (node == TableHeaderNode.this) {
 						return TreeNodeCallback.CONTINUE;
 					}
 
-					TableHeaderNode nodeChild = (TableHeaderNode) node;
-
 					if (OlapUtils.equals(hierarchy, nodeChild.getHierarchy())) {
+						List<Member> childPath = nodeChild.getMemberPath();
+
+						if (path.size() > childPath.size()
+								|| !isSubPath(path, childPath)) {
+							return TreeNodeCallback.CONTINUE;
+						}
+
 						Member childMember = nodeChild.getMember();
 
 						if (childMember != null) {

@@ -11,6 +11,7 @@ package com.eyeq.pivot4j.util;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
 import org.olap4j.OlapException;
+import org.olap4j.Position;
 import org.olap4j.mdx.IdentifierNode;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
@@ -78,5 +79,56 @@ public class OlapUtils {
 		String otherUniqueName = otherElem.getUniqueName();
 
 		return ObjectUtils.equals(uniqueName, otherUniqueName);
+	}
+
+	/**
+	 * @param position
+	 * @param otherPosition
+	 * @return
+	 */
+	public static boolean equals(Position position, Position otherPosition) {
+		return equals(position, otherPosition, -1);
+	}
+
+	/**
+	 * @param position
+	 * @param otherPosition
+	 * @param memberIndex
+	 * @return
+	 */
+	public static boolean equals(Position position, Position otherPosition,
+			int memberIndex) {
+		if (position == null) {
+			throw new NullArgumentException("position");
+		}
+
+		if (otherPosition == null) {
+			throw new NullArgumentException("lastPosition");
+		}
+
+		if (position == otherPosition) {
+			return true;
+		}
+
+		int size = position.getMembers().size();
+
+		if (memberIndex < 0) {
+			memberIndex = size;
+
+			if (size != otherPosition.getMembers().size()) {
+				return false;
+			}
+		}
+
+		for (int i = 0; i < memberIndex; i++) {
+			Member member = position.getMembers().get(i);
+			Member lastMember = otherPosition.getMembers().get(i);
+
+			if (!equals(member, lastMember)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

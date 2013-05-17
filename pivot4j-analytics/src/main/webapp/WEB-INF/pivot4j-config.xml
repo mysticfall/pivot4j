@@ -73,7 +73,7 @@
 			http://www.primefaces.org/themes.html
 		-->
 		<ui-theme>
-			<default>aristo</default>
+			<default>redmond</default>
 			<available-themes>
 				<theme name="aristo" description="Aristo" />
 				<theme name="bootstrap" description="Bootstrap" />

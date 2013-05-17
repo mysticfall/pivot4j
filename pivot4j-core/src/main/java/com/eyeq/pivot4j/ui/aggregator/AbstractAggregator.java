@@ -112,40 +112,6 @@ public abstract class AbstractAggregator implements Aggregator {
 	 */
 	@Override
 	public void aggregate(RenderContext context) {
-		if (context.getCell() == null
-				&& (measure == null || context.getAggregator() == null)) {
-			return;
-		}
-
-		Position position = getPosition(context);
-		List<Member> positionMembers = position.getMembers();
-
-		int index = 0;
-		for (Member member : members) {
-			if (positionMembers.size() <= index) {
-				return;
-			}
-
-			Member positionMember = positionMembers.get(index);
-
-			if (!OlapUtils.equals(member, positionMember)
-					&& (member.getDepth() >= positionMember.getDepth() || !context
-							.getAncestorMembers(positionMember)
-							.contains(member))) {
-				return;
-			}
-
-			index++;
-		}
-
-		if (measure != null && !positionMembers.isEmpty()) {
-			Member member = positionMembers.get(positionMembers.size() - 1);
-
-			if (!measure.equals(member)) {
-				return;
-			}
-		}
-
 		Position targetPosition = getTargetPosition(context);
 
 		Double cellValue = null;
@@ -174,14 +140,14 @@ public abstract class AbstractAggregator implements Aggregator {
 		int count = getCount(targetPosition);
 		counts.put(targetPosition, ++count);
 
-		Measure measure = getMeasure(targetPosition);
+		Measure targetMeasure = getMeasure(targetPosition);
 
-		if (measure != null && context.getCell() != null
-				&& !formats.containsKey(measure)) {
-			formats.put(measure, getNumberFormat(context.getCell()));
+		if (targetMeasure != null && context.getCell() != null
+				&& !formats.containsKey(targetMeasure)) {
+			formats.put(targetMeasure, getNumberFormat(context.getCell()));
 		}
 
-		if (logger.isTraceEnabled()) {
+		if (members.isEmpty() && logger.isTraceEnabled()) {
 			logger.trace("Calculation result : ");
 			logger.trace("	- count : " + count);
 			logger.trace("	- value : " + cellValue);
@@ -199,19 +165,19 @@ public abstract class AbstractAggregator implements Aggregator {
 			return this.measure;
 		}
 
-		Measure measure = null;
+		Measure targetMeasure = null;
 
 		int size = position.getMembers().size();
 		for (int i = size - 1; i > -1; i--) {
 			Member member = position.getMembers().get(i);
 
 			if (member instanceof Measure) {
-				measure = (Measure) member;
+				targetMeasure = (Measure) member;
 				break;
 			}
 		}
 
-		return measure;
+		return targetMeasure;
 	}
 
 	/**
@@ -245,19 +211,19 @@ public abstract class AbstractAggregator implements Aggregator {
 	 * @return
 	 */
 	protected NumberFormat getNumberFormat(Position position) {
-		Measure measure = getMeasure(position);
-		if (measure == null) {
+		Measure measureAtPosition = getMeasure(position);
+		if (measureAtPosition == null) {
 			return null;
 		}
 
-		return formats.get(measure);
+		return formats.get(measureAtPosition);
 	}
 
 	/**
 	 * @param context
-	 * @return
+	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getPosition(com.eyeq.pivot4j.ui.RenderContext)
 	 */
-	protected Position getPosition(RenderContext context) {
+	public Position getPosition(RenderContext context) {
 		Position position = null;
 
 		if (axis == Axis.COLUMNS) {
@@ -271,9 +237,9 @@ public abstract class AbstractAggregator implements Aggregator {
 
 	/**
 	 * @param context
-	 * @return
+	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getTargetPosition(com.eyeq.pivot4j.ui.RenderContext)
 	 */
-	protected Position getTargetPosition(RenderContext context) {
+	public Position getTargetPosition(RenderContext context) {
 		Position targetPosition = null;
 
 		if (axis == Axis.COLUMNS) {
