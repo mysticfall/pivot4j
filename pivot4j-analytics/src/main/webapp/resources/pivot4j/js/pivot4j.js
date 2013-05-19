@@ -194,11 +194,13 @@ function enableSave(enable) {
 		if (typeof onReportChanged == "function") {
 			onReportChanged();
 		}
-	} else {
+	} else if (tab) {
 		tab.removeClass("dirty");
 	}
 
-	tab.data("dirty", enable);
+	if (tab) {
+		tab.data("dirty", enable);
+	}
 }
 
 function checkAndSaveReport() {
