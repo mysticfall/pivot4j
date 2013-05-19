@@ -245,8 +245,8 @@ public class RenderStrategyImpl implements RenderStrategy {
 							context.setColIndex(headerNode.getRowIndex() - 1);
 							context.setColSpan(headerNode.getRowSpan());
 							context.setRowSpan(headerNode.getColSpan());
-
 							context.setMember(headerNode.getMember());
+							context.setLevel(headerNode.getMemberLevel());
 							context.setProperty(headerNode.getProperty());
 							context.setHierarchy(headerNode.getHierarchy());
 							context.setRowPosition(headerNode.getPosition());
@@ -311,6 +311,7 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 			context.setCell(cell);
 			context.setHierarchy(null);
+			context.setLevel(null);
 			context.setMember(null);
 			context.setAxis(null);
 			context.setColIndex(context.getRowHeaderCount() + i);

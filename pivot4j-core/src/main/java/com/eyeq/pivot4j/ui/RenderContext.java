@@ -598,21 +598,6 @@ public class RenderContext {
 			}
 		});
 
-		context.put("cellTypeName",
-				new ExpressionContext.ValueBinding<String>() {
-
-					@Override
-					public String getValue() {
-						CellType type = getCellType();
-
-						if (type == null) {
-							return null;
-						}
-
-						return type.name();
-					}
-				});
-
 		context.put("position", new ExpressionContext.ValueBinding<Position>() {
 
 			@Override
@@ -711,6 +696,14 @@ public class RenderContext {
 			@Override
 			public Integer getValue() {
 				return getRowSpan();
+			}
+		});
+
+		context.put("aggregator", new ExpressionContext.ValueBinding<Aggregator>() {
+
+			@Override
+			public Aggregator getValue() {
+				return getAggregator();
 			}
 		});
 

@@ -98,6 +98,13 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	/**
+	 * @return the level
+	 */
+	public Level getMemberLevel() {
+		return member == null ? null : member.getLevel();
+	}
+
+	/**
 	 * @return the hierarchy
 	 */
 	public Hierarchy getHierarchy() {
