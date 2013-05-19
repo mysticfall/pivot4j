@@ -18,7 +18,6 @@
 
 	<factory>
 		<exception-handler-factory>
-			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
-		</exception-handler-factory>
+			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
 	</factory>
 </faces-config>

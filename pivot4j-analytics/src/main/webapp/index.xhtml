@@ -15,15 +15,14 @@
 			value="#{facesContext.externalContext.requestContextPath}" />
 
 		<link rel="shortcut icon"
-			href="#{contextPath}#{settings.resourcePrefix}/resources/images/logo16.png" />
-		<link type="text/css" rel="stylesheet"
-			href="#{contextPath}#{settings.resourcePrefix}/resources/css/style.css" />
-		<link type="text/css" rel="stylesheet"
-			href="#{contextPath}#{settings.resourcePrefix}/resources/css/jquery.ui.tabs.css" />
-		<script type="text/javascript"
-			src="#{contextPath}#{settings.resourcePrefix}/resources/js/jquery.ui.tabs.js"></script>
-		<script type="text/javascript"
-			src="#{contextPath}#{settings.resourcePrefix}/resources/js/pivot4j.js"></script>
+			href="#{contextPath}/javax.faces.resource/images/logo16.png.xhtml?ln=pivot4j" />
+
+		<h:outputStylesheet library="pivot4j" name="css/style.css" />
+		<h:outputStylesheet library="pivot4j" name="css/jquery.ui.tabs.css" />
+
+		<h:outputScript library="pivot4j" name="js/jquery.ui.tabs.js" />
+		<h:outputScript library="pivot4j" name="js/pivot4j.js" />
+
 		<script>
 			var settings = {
 				"viewParameterName" : "#{settings.viewParameterName}"
@@ -263,8 +262,7 @@
 
 		<p:ajaxStatus styleClass="ajax-status">
 			<f:facet name="start">
-				<p:graphicImage
-					value="#{settings.resourcePrefix}/resources/images/loading.gif" />
+				<p:graphicImage library="pivot4j" name="images/loading.gif" />
 			</f:facet>
 
 			<f:facet name="complete">

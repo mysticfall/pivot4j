@@ -1,6 +1,7 @@
 package com.eyeq.pivot4j.analytics.ui;
 
 import java.sql.ResultSet;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +10,14 @@ import java.util.ResourceBundle;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIParameter;
+import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.metadata.Measure;
@@ -22,8 +26,11 @@ import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.component.row.Row;
 import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.el.EvaluationFailedException;
 import com.eyeq.pivot4j.ui.AbstractPivotUIRenderer;
 import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.PivotUIRenderer;
@@ -32,8 +39,11 @@ import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 import com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.CellParameters;
+import com.eyeq.pivot4j.ui.property.PropertySupport;
 
 public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Map<String, String> iconMap;
 
@@ -99,6 +109,13 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	 */
 	public void setComponent(PanelGrid component) {
 		this.component = component;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Logger getLogger() {
+		return logger;
 	}
 
 	/**
@@ -256,8 +273,6 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 			styleClass = null;
 		}
 
-		column.setStyleClass(styleClass);
-
 		if (expressionFactory != null) {
 			for (CellCommand<?> command : commands) {
 				CellParameters parameters = command.createParameters(context);
@@ -321,6 +336,111 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 				column.getChildren().add(button);
 			}
 		}
+
+		PropertySupport properties = getProperties(context);
+
+		if (properties != null) {
+			StringBuilder builder = new StringBuilder();
+
+			addPropertyStyle("fgColor", "color", properties, builder, context);
+			addPropertyStyle("bgColor", "background-color", properties,
+					builder, context);
+
+			addPropertyStyle("fontFamily", "font-family", properties, builder,
+					context);
+			addPropertyStyle("fontSize", "font-size", properties, builder,
+					context);
+
+			String fontStyle = getPropertyValue("fontStyle", properties,
+					context);
+			if (fontStyle != null) {
+				if (fontStyle.contains("bold")) {
+					builder.append("font-weight: bold;");
+				}
+
+				if (fontStyle.contains("italic")) {
+					builder.append("font-style: oblique;");
+				}
+			}
+
+			String style = builder.toString();
+
+			if (StringUtils.isNotEmpty(style)) {
+				column.setStyle(style);
+			}
+
+			String styleClassProperty = getPropertyValue("styleClass",
+					properties, context);
+			if (styleClassProperty != null) {
+				if (styleClass == null) {
+					styleClass = styleClassProperty;
+				} else {
+					styleClass += " " + styleClassProperty;
+				}
+			}
+		}
+
+		column.setStyleClass(styleClass);
+	}
+
+	/**
+	 * @param key
+	 * @param style
+	 * @param properties
+	 * @param builder
+	 * @param context
+	 */
+	private void addPropertyStyle(String key, String style,
+			PropertySupport properties, StringBuilder builder,
+			RenderContext context) {
+		String value = getPropertyValue(key, properties, context);
+		if (value != null) {
+			builder.append(style);
+			builder.append(": ");
+			builder.append(value);
+			builder.append(";");
+		}
+	}
+
+	/**
+	 * @param key
+	 * @param properties
+	 * @param context
+	 * @return
+	 */
+	protected String getPropertyValue(String key, PropertySupport properties,
+			RenderContext context) {
+		String value = null;
+
+		try {
+			value = properties.getString(key, null, context);
+		} catch (EvaluationFailedException e) {
+			// In order not to bombard users with similar error messages.
+			String attributeName = "property.hasError." + key;
+
+			if (context.getAttribute(attributeName) == null) {
+				FacesContext facesContext = FacesContext.getCurrentInstance();
+
+				ResourceBundle bundle = getBundle();
+
+				MessageFormat mf = new MessageFormat(
+						bundle.getString("error.property.expression.title"));
+
+				String title = mf.format(new String[] { bundle
+						.getString("properties." + key) });
+
+				facesContext.addMessage(null, new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, title, e.getMessage()));
+
+				if (logger.isWarnEnabled()) {
+					logger.warn(title, e);
+				}
+
+				context.setAttribute(attributeName, true);
+			}
+		}
+
+		return value;
 	}
 
 	/**
@@ -329,13 +449,29 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	 */
 	@Override
 	public void cellContent(RenderContext context, String label) {
+		PropertySupport properties = getProperties(context);
+
 		HtmlOutputText text = new HtmlOutputText();
 		String id = "txt-" + text.hashCode();
 
 		text.setId(id);
 		text.setValue(label);
 
-		column.getChildren().add(text);
+		String link = null;
+
+		if (properties != null) {
+			link = getPropertyValue("link", properties, context);
+		}
+
+		if (link == null) {
+			column.getChildren().add(text);
+		} else {
+			HtmlOutputLink anchor = new HtmlOutputLink();
+			anchor.setValue(link);
+			anchor.getChildren().add(text);
+
+			column.getChildren().add(anchor);
+		}
 	}
 
 	/**

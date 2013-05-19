@@ -44,6 +44,7 @@ public class WorkbenchHandler {
 	public LayoutOptions getLayoutOptions() {
 		if (layoutOptions == null) {
 			this.layoutOptions = new LayoutOptions();
+			layoutOptions.addOption("enableCursorHotkey", false);
 
 			LayoutOptions toolbarOptions = new LayoutOptions();
 			toolbarOptions.addOption("resizable", false);
@@ -127,6 +128,7 @@ public class WorkbenchHandler {
 	public LayoutOptions getWorkspaceLayoutOptions() {
 		if (workspaceLayoutOptions == null) {
 			this.workspaceLayoutOptions = new LayoutOptions();
+			workspaceLayoutOptions.addOption("enableCursorHotkey", false);
 
 			LayoutOptions toolbarOptions = new LayoutOptions();
 			toolbarOptions.addOption("resizable", false);

@@ -214,7 +214,7 @@
 						oncomplete="onViewChanged()" />
 					<p:commandButton value="#{msg['button.close']}"
 						icon="ui-icon-close"
-						onclick="aggregatorTab.select(0); aggregationConfig.hide();" />
+						onclick="aggregatorTab.select(0); aggregationConfig.hide(); return false;" />
 				</h:panelGroup>
 			</f:facet>
 		</p:dialog>

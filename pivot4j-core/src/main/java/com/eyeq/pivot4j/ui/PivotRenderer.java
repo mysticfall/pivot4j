@@ -54,7 +54,5 @@ public interface PivotRenderer extends Configurable, Bookmarkable {
 
 	PropertySource getCellProperties();
 
-	PropertySource getRowHeaderProperties();
-
-	PropertySource getColumnHeaderProperties();
+	PropertySource getHeaderProperties();
 }

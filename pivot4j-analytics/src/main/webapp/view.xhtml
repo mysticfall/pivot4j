@@ -14,16 +14,18 @@
 		<c:set var="contextPath"
 			value="#{facesContext.externalContext.requestContextPath}" />
 
-		<link type="text/css" rel="stylesheet"
-			href="#{contextPath}#{settings.resourcePrefix}/resources/css/style.css" />
 		<link rel="shortcut icon"
-			href="#{contextPath}#{settings.resourcePrefix}/resources/images/logo16.png" />
+			href="#{contextPath}/javax.faces.resource/images/logo16.png.xhtml?ln=pivot4j" />
 
-		<script type="text/javascript"
-			src="#{contextPath}#{settings.resourcePrefix}/resources/js/pivot4j.js"></script>
-		<script type="text/javascript"
-			src="#{contextPath}#{settings.resourcePrefix}/resources/js/mdx.js"></script>
+		<h:outputStylesheet library="primefaces"
+			name="colorpicker/colorpicker.css" />
+		<h:outputStylesheet library="pivot4j" name="css/style.css" />
+
 		<h:outputScript library="primefaces" name="printer/printer.js" />
+		<h:outputScript library="primefaces" name="colorpicker/colorpicker.js" />
+		<h:outputScript library="pivot4j" name="js/colorpicker.js" />
+		<h:outputScript library="pivot4j" name="js/mdx.js" />
+		<h:outputScript library="pivot4j" name="js/pivot4j.js" />
 	</h:head>
 
 	<f:metadata>
@@ -109,6 +111,12 @@
 								<p:ajax update=":grid-form" />
 							</p:selectBooleanButton>
 							<p:separator rendered="#{!pivotStateManager.readOnly}" />
+							<p:commandButton value="#{msg['toolbar.properties']}"
+								title="#{msg['toolbar.properties.tooltip']}" type="button"
+								icon="ui-icon-gear" disabled="#{!pivotGridHandler.valid}"
+								onclick="propertiesConfig.show(); return false;">
+								<f:param name="skipRender" value="true" />
+							</p:commandButton>
 							<p:commandButton value="#{msg['toolbar.aggregation']}"
 								title="#{msg['toolbar.aggregation.tooltip']}"
 								icon="ui-icon-calculator" update=":aggregation-form"
@@ -439,6 +447,7 @@
 		</pe:layout>
 
 		<ui:include src="hierarchy.xhtml" />
+		<ui:include src="properties.xhtml" />
 		<ui:include src="aggregation.xhtml" />
 		<ui:include src="export.xhtml" />
 		<ui:include src="drillthrough.xhtml" />
@@ -446,8 +455,7 @@
 
 		<p:ajaxStatus styleClass="ajax-status">
 			<f:facet name="start">
-				<p:graphicImage
-					value="#{settings.resourcePrefix}/resources/images/loading.gif" />
+				<p:graphicImage library="pivot4j" name="images/loading.gif" />
 			</f:facet>
 
 			<f:facet name="success">

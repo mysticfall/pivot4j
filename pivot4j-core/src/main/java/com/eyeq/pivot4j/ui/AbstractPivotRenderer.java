@@ -56,9 +56,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	private PropertySupport cellProperties;
 
-	private PropertySupport rowHeaderProperties;
-
-	private PropertySupport columnHeaderProperties;
+	private PropertySupport headerProperties;
 
 	public AbstractPivotRenderer() {
 		this.renderStrategy = createRenderStrategy();
@@ -68,12 +66,10 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	protected void initializeProperties() {
 		if (conditionFactory == null) {
 			this.cellProperties = null;
-			this.columnHeaderProperties = null;
-			this.rowHeaderProperties = null;
+			this.headerProperties = null;
 		} else {
 			this.cellProperties = new PropertySupport(conditionFactory);
-			this.columnHeaderProperties = new PropertySupport(conditionFactory);
-			this.rowHeaderProperties = new PropertySupport(conditionFactory);
+			this.headerProperties = new PropertySupport(conditionFactory);
 		}
 	}
 
@@ -402,19 +398,11 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	}
 
 	/**
-	 * @return the rowHeaderProperties
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getRowHeaderProperties()
+	 * @return the headerProperties
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getHeaderProperties()
 	 */
-	public PropertySource getRowHeaderProperties() {
-		return rowHeaderProperties;
-	}
-
-	/**
-	 * @return the columnHeaderProperties
-	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getColumnHeaderProperties()
-	 */
-	public PropertySource getColumnHeaderProperties() {
-		return columnHeaderProperties;
+	public PropertySource getHeaderProperties() {
+		return headerProperties;
 	}
 
 	/**
@@ -425,15 +413,11 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	protected PropertySupport getProperties(RenderContext context) {
 		PropertySupport properties = null;
 
-		if (context.getCell() != null) {
-			properties = cellProperties;
-		} else if (context.getCellType() == CellType.Header
+		if (context.getCellType() == CellType.Header
 				|| context.getCellType() == CellType.Title) {
-			if (context.getAxis() == Axis.ROWS) {
-				properties = rowHeaderProperties;
-			} else if (context.getAxis() == Axis.COLUMNS) {
-				properties = columnHeaderProperties;
-			}
+			properties = headerProperties;
+		} else {
+			properties = cellProperties;
 		}
 
 		return properties;
@@ -465,7 +449,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	 */
 	@Override
 	public Serializable saveState() {
-		Serializable[] states = new Serializable[7];
+		Serializable[] states = new Serializable[6];
 		states[0] = showDimensionTitle;
 		states[1] = showParentMembers;
 		states[2] = hideSpans;
@@ -475,12 +459,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			states[4] = cellProperties.saveState();
 		}
 
-		if (columnHeaderProperties != null) {
-			states[5] = columnHeaderProperties.saveState();
-		}
-
-		if (rowHeaderProperties != null) {
-			states[6] = rowHeaderProperties.saveState();
+		if (headerProperties != null) {
+			states[5] = headerProperties.saveState();
 		}
 
 		return states;
@@ -509,12 +489,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			this.cellProperties.restoreState(states[4]);
 		}
 
-		if (states[5] != null && columnHeaderProperties != null) {
-			this.columnHeaderProperties.restoreState(states[5]);
-		}
-
-		if (states[6] != null && rowHeaderProperties != null) {
-			this.rowHeaderProperties.restoreState(states[6]);
+		if (states[5] != null && headerProperties != null) {
+			this.headerProperties.restoreState(states[5]);
 		}
 	}
 
@@ -570,18 +546,11 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 					.configurationAt("properties.cell"));
 		}
 
-		if (columnHeaderProperties != null) {
-			configuration.addProperty("properties.column-header", "");
+		if (headerProperties != null) {
+			configuration.addProperty("properties.header", "");
 
-			columnHeaderProperties.saveSettings(configuration
-					.configurationAt("properties.column-header"));
-		}
-
-		if (rowHeaderProperties != null) {
-			configuration.addProperty("properties.row-header", "");
-
-			rowHeaderProperties.saveSettings(configuration
-					.configurationAt("properties.row-header"));
+			headerProperties.saveSettings(configuration
+					.configurationAt("properties.header"));
 		}
 	}
 
@@ -640,18 +609,10 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			}
 		}
 
-		if (columnHeaderProperties != null) {
+		if (headerProperties != null) {
 			try {
-				columnHeaderProperties.restoreSettings(configuration
-						.configurationAt("properties.column-header"));
-			} catch (IllegalArgumentException e) {
-			}
-		}
-
-		if (rowHeaderProperties != null) {
-			try {
-				rowHeaderProperties.restoreSettings(configuration
-						.configurationAt("properties.row-header"));
+				headerProperties.restoreSettings(configuration
+						.configurationAt("properties.header"));
 			} catch (IllegalArgumentException e) {
 			}
 		}

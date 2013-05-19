@@ -191,7 +191,9 @@ function enableSave(enable) {
 	var tab = getActiveTab();
 
 	if (enable) {
-		onReportChanged();
+		if (typeof onReportChanged == "function") {
+			onReportChanged();
+		}
 	} else {
 		tab.removeClass("dirty");
 	}
@@ -284,4 +286,13 @@ function onThemeChanged() {
 			pf.changeTheme(themeSwitcher.value);
 		}
 	});
+}
+
+function applyThemeToCMEditor(selector) {
+	if (!selector) {
+		selector = ".properties-config .CodeMirror";
+	}
+
+	jQuery(selector).addClass(
+			"ui-state-default ui-inputfield ui-widget ui-corner-all");
 }
