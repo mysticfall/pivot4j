@@ -399,6 +399,10 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 			builder.append(": ");
 			builder.append(value);
 			builder.append(";");
+
+			if (style.equals("background-color")) {
+				builder.append("background-image: none;");
+			}
 		}
 	}
 
