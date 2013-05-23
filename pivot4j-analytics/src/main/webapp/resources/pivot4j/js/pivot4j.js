@@ -19,7 +19,7 @@ if (PrimeFaces.widget.BaseTree) {
 		} else {
 			var node = nodeContent.parent();
 
-			if (!this.isNodeSelected(node)) {
+			if (jQuery(".ui-chkbox", node).size() > 0 || !this.isNodeSelected(node)) {
 				this._nodeClick(event, nodeContent);
 			}
 		}
