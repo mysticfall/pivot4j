@@ -279,7 +279,10 @@ public class QuaxUtil {
 		} else if (f.isCallTo("{}")) {
 			for (Exp arg : f.getArgs()) {
 				Member mExp = memberForExp(arg);
-				return (!member.equals(mExp) && isDescendant(member, mExp));
+				if (!OlapUtils.equals(member, mExp)
+						&& isDescendant(member, mExp)) {
+					return true;
+				}
 			}
 
 			return false;

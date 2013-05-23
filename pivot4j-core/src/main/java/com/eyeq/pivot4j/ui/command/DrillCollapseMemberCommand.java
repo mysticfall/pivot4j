@@ -61,7 +61,8 @@ public class DrillCollapseMemberCommand extends AbstractDrillDownCommand {
 				.getTransform(DrillExpandMember.class);
 
 		Member member = context.getMember();
-		if (member == null) {
+		if (member == null
+				|| context.getPosition().getMembers().indexOf(member) == -1) {
 			return false;
 		}
 
