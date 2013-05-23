@@ -10,7 +10,6 @@ package com.eyeq.pivot4j.transform.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -22,11 +21,9 @@ import org.olap4j.OlapException;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
-import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.PlaceLevelsOnAxes;
-import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
 
 public class PlaceLevelsOnAxesImplIT extends
 		AbstractTransformTestCase<PlaceLevelsOnAxes> {
