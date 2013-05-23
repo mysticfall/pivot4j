@@ -557,16 +557,25 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 						TableHeaderNode nodeChild = (TableHeaderNode) node;
 
 						Level level = null;
+						Member nodeMember = nodeChild.getMember();
 
 						if (nodeChild == TableHeaderNode.this) {
 							return TreeNodeCallback.CONTINUE;
-						} else if (nodeChild.getMember() != null) {
-							level = nodeChild.getMember().getLevel();
+						} else if (nodeMember != null) {
+							level = nodeMember.getLevel();
 						} else if (nodeChild.getAggregator() != null) {
 							level = nodeChild.getAggregator().getLevel();
 						}
 
 						if (OlapUtils.equals(member.getLevel(), level)) {
+							if (nodeMember != null
+									&& (getReference().getAncestorMembers(
+											nodeMember).contains(member) || getReference()
+											.getAncestorMembers(member)
+											.contains(nodeMember))) {
+								return TreeNodeCallback.CONTINUE;
+							}
+
 							int span = nodeChild.getHierarchyDescendents();
 
 							// Handling a corner case of #54

@@ -1,0 +1,1 @@
+SELECT {[Measures].[Number of Employees]} ON COLUMNS, Hierarchize(Union(Union(Union({[Employees].[All Employees]}, [Employees].[All Employees].Children), [Employees].[Sheri Nowmer].Children), [Employees].[Sheri Nowmer].[Derrick Whelply].Children)) ON ROWS FROM [HR]

@@ -74,7 +74,10 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 		renderer.setHideSpans(hideSpans);
 		renderer.setShowDimensionTitle(showDimensionTitle);
 		renderer.setShowParentMembers(showParentMembers);
-		renderer.setPropertyCollector(new NonInternalPropertyCollector());
+
+		if (name.contains("properties")) {
+			renderer.setPropertyCollector(new NonInternalPropertyCollector());
+		}
 
 		renderer.render(model);
 
@@ -124,5 +127,10 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 	@Test
 	public void testComplexMemberProperties() throws IOException {
 		runTestCase("complex-member-properties");
+	}
+
+	@Test
+	public void testParentChildHierarchy() throws IOException {
+		runTestCase("parent-child");
 	}
 }
