@@ -133,4 +133,9 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 	public void testParentChildHierarchy() throws IOException {
 		runTestCase("parent-child");
 	}
+
+	@Test
+	public void testSingleDimensionCrossJoin() throws IOException {
+		runTestCase("single-dim-crossjoin");
+	}
 }

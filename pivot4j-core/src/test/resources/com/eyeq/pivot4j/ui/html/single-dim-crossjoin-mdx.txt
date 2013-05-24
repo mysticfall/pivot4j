@@ -1,0 +1,1 @@
+SELECT [Measures].[Store Sales] ON COLUMNS, {[Time].[1997]} * {[Time.Weekly].[Week].Members} ON ROWS FROM [Sales]
