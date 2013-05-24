@@ -329,8 +329,8 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 				button.getChildren().add(hierarchyParam);
 
 				UIParameter cellParam = new UIParameter();
-				hierarchyParam.setName("cell");
-				hierarchyParam.setValue(parameters.getCellOrdinal());
+				cellParam.setName("cell");
+				cellParam.setValue(parameters.getCellOrdinal());
 				button.getChildren().add(cellParam);
 
 				column.getChildren().add(button);
