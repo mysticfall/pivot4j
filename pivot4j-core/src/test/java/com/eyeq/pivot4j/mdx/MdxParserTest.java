@@ -539,4 +539,15 @@ public class MdxParserTest {
 		assertThat("Wrong value parameter expression.",
 				parameter.getExpression(), is(equalTo("ratio")));
 	}
+
+	@Test
+	public void testParseWithMemberProperties() throws Exception {
+		String mdx = "WITH MEMBER [Measures].[address] AS "
+				+ "'[Store].CurrentMember.Properties(\"Street address\")' "
+				+ "SELECT NON EMPTY {[Measures].[address]} ON COLUMNS, "
+				+ "NON EMPTY [Store].[USA].[CA].[Beverly Hills].Children ON ROWS from [Sales]";
+
+		MdxStatement query = parseQuery(mdx);
+		assertThat("Failed to parse : " + mdx, query, is(notNullValue()));
+	}
 }

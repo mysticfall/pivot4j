@@ -351,6 +351,8 @@ value_expression_primary ::= STRING:s
 	 :}
 	| value_expression_primary:i DOT identifier:j LPAREN exp_list_opt:lis RPAREN 
 		{: lis.add(0, i); RESULT = new FunCall(j, Syntax.Method, lis); :}
+	| value_expression_primary:i DOT PROPERTIES:j LPAREN exp_list_opt:lis RPAREN 
+		{: lis.add(0, i); RESULT = new FunCall("Properties", Syntax.Method, lis); :}
 	| identifier:i LPAREN exp_list_opt:lis RPAREN
 		{: RESULT = new FunCall(i, Syntax.Function, lis); :}
 	| LPAREN exp_list:lis RPAREN
