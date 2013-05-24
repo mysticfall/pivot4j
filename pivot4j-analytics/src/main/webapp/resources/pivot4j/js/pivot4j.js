@@ -17,11 +17,7 @@ if (PrimeFaces.widget.BaseTree) {
 		if (event.button != 0) {
 			event.stopPropagation();
 		} else {
-			var node = nodeContent.parent();
-
-			if (jQuery(".ui-chkbox", node).size() > 0 || !this.isNodeSelected(node)) {
-				this._nodeClick(event, nodeContent);
-			}
+			this._nodeClick(event, nodeContent);
 		}
 	};
 
