@@ -571,6 +571,10 @@ public class QueryAdapter implements Bookmarkable {
 	 * @param function
 	 */
 	protected void topBottomAxis(MdxStatement pq, String function) {
+		if (quaxToSort == null) {
+			return;
+		}
+
 		// TopCount(TopCount) and TopCount(Order) is not permitted
 		QueryAxis qa = pq.getAxis(Axis.Factory.forOrdinal(quaxToSort
 				.getOrdinal()));
