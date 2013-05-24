@@ -120,9 +120,7 @@ public class QueryAxis extends AbstractExp {
 	public String toMdx() {
 		StringBuilder sb = new StringBuilder();
 
-		if (exp == null) {
-			sb.append("{}");
-		} else {
+		if (exp != null) {
 			if (nonEmpty) {
 				sb.append("NON EMPTY ");
 			}
@@ -146,12 +144,12 @@ public class QueryAxis extends AbstractExp {
 					sb.append(property.toMdx());
 				}
 			}
-		}
 
-		sb.append(" ON ");
+			sb.append(" ON ");
 
-		if (axis != null) {
-			sb.append(axis.name());
+			if (axis != null) {
+				sb.append(axis.name());
+			}
 		}
 
 		return sb.toString();

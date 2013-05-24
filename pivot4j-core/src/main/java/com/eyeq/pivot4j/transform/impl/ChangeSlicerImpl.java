@@ -49,6 +49,10 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 		}
 
 		CellSet cellSet = getModel().getCellSet();
+		if (cellSet == null) {
+			return Collections.emptyList();
+		}
+
 		CellSetAxis slicer = cellSet.getFilterAxis();
 
 		return slicer.getAxisMetaData().getHierarchies();

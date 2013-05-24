@@ -21,6 +21,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
+import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
@@ -75,7 +76,13 @@ public class RenderStrategyImpl implements RenderStrategy {
 			throw new NullArgumentException("renderer");
 		}
 
-		List<CellSetAxis> axes = model.getCellSet().getAxes();
+		CellSet cellSet = model.getCellSet();
+
+		if (cellSet == null) {
+			return;
+		}
+
+		List<CellSetAxis> axes = cellSet.getAxes();
 		if (axes.isEmpty()) {
 			return;
 		}
@@ -640,8 +647,13 @@ public class RenderStrategyImpl implements RenderStrategy {
 	 */
 	protected TableHeaderNode createAxisTree(PivotModel model,
 			PivotRenderer renderer, Axis axis) {
-		CellSetAxis cellSetAxis = model.getCellSet().getAxes()
-				.get(axis.axisOrdinal());
+		List<CellSetAxis> axes = model.getCellSet().getAxes();
+
+		if (axes.size() < 2) {
+			return null;
+		}
+
+		CellSetAxis cellSetAxis = axes.get(axis.axisOrdinal());
 
 		List<Position> positions = cellSetAxis.getPositions();
 		if (positions == null || positions.isEmpty()) {

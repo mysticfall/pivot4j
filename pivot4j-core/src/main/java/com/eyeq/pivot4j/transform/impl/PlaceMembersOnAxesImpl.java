@@ -89,7 +89,11 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 	public void placeMembers(Axis axis, List<Member> members) {
 		QueryAdapter adapter = getQueryAdapter();
 
-		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+		Quax quax = adapter.getQuax(axis);
+
+		if (quax == null) {
+			quax = adapter.createQuax(axis);
+		}
 
 		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(members.size());
 		Map<Hierarchy, List<Member>> memberMap = new HashMap<Hierarchy, List<Member>>(
@@ -195,10 +199,15 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 
 		Quax quax = adapter.findQuax(member.getDimension());
 		if (quax == null) {
-			quax = adapter.getQuaxes().get(axis.axisOrdinal());
+			quax = adapter.getQuax(axis);
 
-			List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(
-					quax.getHierarchies());
+			List<Hierarchy> hierarchies;
+
+			if (quax == null) {
+				hierarchies = new ArrayList<Hierarchy>();
+			} else {
+				hierarchies = new ArrayList<Hierarchy>(quax.getHierarchies());
+			}
 
 			if (position < 0 || position >= hierarchies.size()) {
 				hierarchies.add(member.getHierarchy());
@@ -229,7 +238,7 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 	public void addMembers(Axis axis, List<Member> members, int position) {
 		QueryAdapter adapter = getQueryAdapter();
 
-		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+		Quax quax = adapter.getQuax(axis);
 
 		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(
 				quax.getHierarchies());
@@ -325,20 +334,17 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		QueryAdapter adapter = getQueryAdapter();
 
 		// find the Quax for this hierarchy
-		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+		Quax quax = adapter.getQuax(axis);
 		if (quax == null) {
-			return Collections.emptyList(); // should not occur
+			return Collections.emptyList();
 		}
 
 		CellSet cellSet = adapter.getModel().getCellSet();
+		CellSetAxis cellAxis = getCellSetAxis(cellSet, axis);
 
-		// locate the appropriate result axis
-		int iAx = quax.getOrdinal();
-		if (adapter.isAxesSwapped()) {
-			iAx = (iAx + 1) % 2;
+		if (cellAxis == null) {
+			return Collections.emptyList();
 		}
-
-		CellSetAxis cellAxis = cellSet.getAxes().get(iAx);
 
 		List<Position> positions = cellAxis.getPositions();
 		for (Position position : positions) {
@@ -377,17 +383,16 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		// It would be possible to add it (again) to the axis, which must be
 		// avoided
 
-		CellSet cellSet = adapter.getModel().getCellSet();
+		Axis axis = Axis.Factory.forOrdinal(quax.getOrdinal());
 
-		// locate the appropriate result axis
-		int iAx = quax.getOrdinal();
-		if (adapter.isAxesSwapped()) {
-			iAx = (iAx + 1) % 2;
+		CellSet cellSet = adapter.getModel().getCellSet();
+		CellSetAxis cellAxis = getCellSetAxis(cellSet, axis);
+
+		if (cellAxis == null) {
+			return Collections.emptyList();
 		}
 
-		CellSetAxis axis = cellSet.getAxes().get(iAx);
-
-		List<Position> positions = axis.getPositions();
+		List<Position> positions = cellAxis.getPositions();
 		for (Position position : positions) {
 			List<Member> members = position.getMembers();
 			Member member = members.get(iDim);

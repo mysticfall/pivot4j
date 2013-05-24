@@ -9,6 +9,9 @@
 package com.eyeq.pivot4j.transform;
 
 import org.apache.commons.lang.NullArgumentException;
+import org.olap4j.Axis;
+import org.olap4j.CellSet;
+import org.olap4j.CellSetAxis;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.query.QueryAdapter;
@@ -41,5 +44,35 @@ public abstract class AbstractTransform implements Transform {
 	 */
 	protected QueryAdapter getQueryAdapter() {
 		return queryAdapter;
+	}
+
+	/**
+	 * @param cellSet
+	 * @param axis
+	 * @return
+	 */
+	protected CellSetAxis getCellSetAxis(CellSet cellSet, Axis axis) {
+		Axis targetAxis = axis;
+
+		if (queryAdapter.isAxesSwapped()) {
+			if (axis == Axis.COLUMNS) {
+				targetAxis = Axis.ROWS;
+			} else if (axis == Axis.ROWS) {
+				targetAxis = Axis.COLUMNS;
+			}
+		}
+
+		CellSetAxis cellAxis = null;
+
+		if (cellSet != null) {
+			for (CellSetAxis item : cellSet.getAxes()) {
+				if (item.getAxisOrdinal() == targetAxis) {
+					cellAxis = item;
+					break;
+				}
+			}
+		}
+
+		return cellAxis;
 	}
 }

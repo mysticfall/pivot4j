@@ -17,6 +17,7 @@ import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
+import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapDataSource;
 import org.olap4j.OlapException;
@@ -232,8 +233,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 				model.destroy();
 			}
 		} else {
-			String mdx = String.format(
-					"select {} on COLUMNS, {} on ROWS from [%s]", cubeName);
+			String mdx = String.format("select from [%s]", cubeName);
 
 			model.setMdx(mdx);
 
@@ -245,6 +245,12 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 
 	public boolean isValid() {
 		if (model == null || !model.isInitialized()) {
+			return false;
+		}
+
+		CellSet cellSet = model.getCellSet();
+
+		if (cellSet == null) {
 			return false;
 		}
 
@@ -332,7 +338,9 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, title, e.getMessage()));
 
-			model.setMdx(oldMdx);
+			if (oldMdx != null) {
+				model.setMdx(oldMdx);
+			}
 		}
 	}
 

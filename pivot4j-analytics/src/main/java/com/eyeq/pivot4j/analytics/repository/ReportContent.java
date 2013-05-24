@@ -100,7 +100,7 @@ public class ReportContent {
 	 * @return
 	 */
 	public ViewState read(ViewState state, DataSourceManager manager)
-			throws ConfigurationException {
+			throws ConfigurationException, DataSourceNotFoundException {
 		ConnectionMetadata connectionInfo = new ConnectionMetadata();
 
 		try {
@@ -112,6 +112,10 @@ public class ReportContent {
 		state.setConnectionInfo(connectionInfo);
 
 		OlapDataSource dataSource = manager.getDataSource(connectionInfo);
+
+		if (dataSource == null) {
+			throw new DataSourceNotFoundException(connectionInfo);
+		}
 
 		PivotModel model = new PivotModelImpl(dataSource);
 

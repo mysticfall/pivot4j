@@ -378,79 +378,6 @@ public class Quax implements Bookmarkable {
 		return posTreeRoot;
 	}
 
-	/**
-	 * @param posTreeRoot
-	 * @param hiersChanged
-	 */
-	public void setPosTreeRoot(ExpNode posTreeRoot, boolean hiersChanged) {
-		this.posTreeRoot = posTreeRoot;
-
-		if (hiersChanged) {
-			// count dimensions, set hierarchies
-			TreeNode<Exp> firstNode = posTreeRoot;
-
-			List<TreeNode<Exp>> children = firstNode.getChildren();
-
-			this.hiers = new ArrayList<String>();
-			hierarchyMap.clear();
-
-			while (children.size() > 0) {
-				firstNode = children.get(0);
-				Exp oExp = firstNode.getReference();
-
-				Hierarchy hier;
-				try {
-					hier = quaxUtil.hierForExp(oExp);
-				} catch (UnknownExpressionException e) {
-					throw new PivotException(
-							"Could not determine Hierarchy for set : "
-									+ e.getExpression());
-				}
-
-				hiers.add(hier.getName());
-				hierarchyMap.put(hier.getName(), hier);
-
-				++nDimension;
-				children = firstNode.getChildren();
-			}
-
-			this.nDimension = hiers.size();
-
-			this.containsUF = new boolean[nDimension]; // init false
-			this.ufMemberLists = new ArrayList<ArrayList<String>>(nDimension);
-
-			memberMap.clear();
-
-			for (int i = 0; i < nDimension; i++) {
-				ufMemberLists.add(null);
-			}
-
-			// go through nodes and check for Unknown functions
-			// only one unknown function is possible in one hierarchy
-			posTreeRoot.walkChildren(new TreeNodeCallback<Exp>() {
-
-				/**
-				 * callback find unknown functions
-				 */
-				public int handleTreeNode(TreeNode<Exp> node) {
-					int nodeIndex = node.getLevel() - 1;
-
-					Exp oExp = node.getReference();
-					if (!quaxUtil.canHandle(oExp)) {
-						// indicate that dimension i contains an unknown
-						// function,
-						// which cannot be handled in some cases.
-						// this will cause the member list of this dimension to
-						// be stored
-						containsUF[nodeIndex] = true;
-					}
-
-					return TreeNodeCallback.CONTINUE;
-				}
-			});
-		}
-	}
-
 	public int getGenerateIndex() {
 		return generateIndex;
 	}
@@ -537,7 +464,7 @@ public class Quax implements Bookmarkable {
 	public int getOrdinal() {
 		return ordinal;
 	}
-
+	
 	/**
 	 * @return hierarchies
 	 */

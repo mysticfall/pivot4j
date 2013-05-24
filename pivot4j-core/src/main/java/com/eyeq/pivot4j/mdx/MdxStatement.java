@@ -162,8 +162,6 @@ public class MdxStatement extends AbstractExp {
 	public String toMdx() {
 		StringBuilder mdx = new StringBuilder();
 
-		boolean isFollow;
-
 		if (!formulas.isEmpty()) {
 			mdx.append("WITH");
 
@@ -177,16 +175,20 @@ public class MdxStatement extends AbstractExp {
 
 		mdx.append("SELECT");
 
-		isFollow = false;
+		boolean following = false;
 
 		for (QueryAxis qa : axes) {
-			if (isFollow) {
+			if (qa.getExp() == null) {
+				continue;
+			}
+
+			if (following) {
 				mdx.append(", ");
 			} else {
 				mdx.append(' ');
+				following = true;
 			}
 
-			isFollow = true;
 			mdx.append(qa.toMdx());
 		}
 
@@ -205,10 +207,9 @@ public class MdxStatement extends AbstractExp {
 			for (CompoundId cid : cellProperties) {
 				String str = cid.toMdx();
 
-				if (str.equalsIgnoreCase("VALUE")) {
-					continue; // default
-				} else if (str.equalsIgnoreCase("FORMATTED_VALUE")) {
-					continue; // default
+				if (str.equalsIgnoreCase("VALUE")
+						|| str.equalsIgnoreCase("FORMATTED_VALUE")) {
+					continue;
 				}
 
 				mdx.append(" ,");
@@ -219,13 +220,13 @@ public class MdxStatement extends AbstractExp {
 		if (!sapVariables.isEmpty()) {
 			mdx.append(" SAP VARIABLES ");
 
-			isFollow = false;
+			following = false;
 
 			for (SapVariable sapVariable : sapVariables) {
-				if (isFollow) {
+				if (following) {
 					mdx.append(", ");
 				} else {
-					isFollow = true;
+					following = true;
 				}
 
 				mdx.append(sapVariable.toMdx());

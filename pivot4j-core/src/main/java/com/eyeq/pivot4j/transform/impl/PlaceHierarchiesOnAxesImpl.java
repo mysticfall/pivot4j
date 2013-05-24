@@ -55,7 +55,11 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 					expandAllMember));
 		}
 
-		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+		Quax quax = adapter.getQuax(axis);
+		
+		if (quax == null) {
+			quax = adapter.createQuax(axis);
+		}
 
 		int nDimension = 0;
 		for (Exp memberExpression : memberExpressions) {
@@ -175,7 +179,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		QueryAdapter adapter = getQueryAdapter();
 
 		// find the Quax for this hierarchy
-		Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+		Quax quax = adapter.getQuax(axis);
 		if (quax == null) {
 			return Collections.emptyList(); // should not occur
 		}

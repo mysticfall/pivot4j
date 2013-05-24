@@ -12,8 +12,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
@@ -57,13 +61,13 @@ public class QueryAdapter implements Bookmarkable {
 
 	private PivotModel model;
 
-	private List<Quax> quaxes; // Array of query axis state object
+	private Map<Axis, Quax> quaxes; // Array of query axis state object
 
 	private boolean useQuax = false;
 
 	private boolean axesSwapped = false;
 
-	private Quax quaxToSort; // this is the Quax to be sorted
+	private Quax quaxToSort;
 
 	private MdxStatement parsedQuery;
 
@@ -99,15 +103,14 @@ public class QueryAdapter implements Bookmarkable {
 
 		List<QueryAxis> queryAxes = parsedQuery.getAxes();
 
-		this.quaxes = new ArrayList<Quax>(queryAxes.size());
+		this.quaxes = new LinkedHashMap<Axis, Quax>(queryAxes.size());
 
 		int ordinal = 0;
-		for (@SuppressWarnings("unused")
-		QueryAxis queryAxis : queryAxes) {
+		for (QueryAxis queryAxis : queryAxes) {
 			Quax quax = new Quax(ordinal++, model.getCube());
 			quax.addChangeListener(quaxListener);
 
-			quaxes.add(quax);
+			quaxes.put(queryAxis.getAxis(), quax);
 		}
 	}
 
@@ -116,13 +119,31 @@ public class QueryAdapter implements Bookmarkable {
 			return false;
 		}
 
-		for (Quax quax : quaxes) {
+		for (Quax quax : quaxes.values()) {
 			if (!quax.isInitialized()) {
 				return false;
 			}
 		}
 
 		return true;
+	}
+
+	public boolean isValid() {
+		if (parsedQuery == null || parsedQuery.getAxes() == null) {
+			return false;
+		}
+
+		List<QueryAxis> axes = parsedQuery.getAxes();
+
+		int axisCount = 0;
+
+		for (QueryAxis qa : axes) {
+			if (qa.getExp() != null) {
+				axisCount++;
+			}
+		}
+
+		return axisCount >= 2;
 	}
 
 	/**
@@ -251,16 +272,38 @@ public class QueryAdapter implements Bookmarkable {
 	/**
 	 * @return
 	 */
-	public List<Quax> getQuaxes() {
+	public Quax getQuax(Axis axis) {
 		if (!isInitialized()) {
 			getModel().getCellSet();
 		}
 
-		return Collections.unmodifiableList(quaxes);
+		return quaxes.get(axis);
 	}
 
 	/**
-	 * @return true if quas is to be used
+	 * @param axis
+	 * @return
+	 */
+	public Quax createQuax(Axis axis) {
+		if (!isInitialized()) {
+			getModel().getCellSet();
+		}
+
+		Quax quax = new Quax(axis.axisOrdinal(), getModel().getCube());
+		quax.initialize(new ArrayList<Position>());
+		quax.addChangeListener(quaxListener);
+
+		quaxes.put(axis, quax);
+
+		return quax;
+	}
+
+	public Set<Axis> getAxes() {
+		return Collections.unmodifiableSet(quaxes.keySet());
+	}
+
+	/**
+	 * @return true if quax is to be used
 	 */
 	public boolean getUseQuax() {
 		return useQuax;
@@ -288,13 +331,11 @@ public class QueryAdapter implements Bookmarkable {
 				columnAxis.setExp(rowAxis.getExp());
 				rowAxis.setExp(exp);
 
-				int columnAxisOrdinal = parsedQuery.getAxes().indexOf(
-						columnAxis);
-				int rowAxisOrdinal = parsedQuery.getAxes().indexOf(rowAxis);
+				Quax columnQuax = quaxes.get(Axis.COLUMNS);
+				Quax rowQuax = quaxes.get(Axis.ROWS);
 
-				Quax quax = quaxes.get(columnAxisOrdinal);
-				quaxes.set(columnAxisOrdinal, quaxes.get(rowAxisOrdinal));
-				quaxes.set(rowAxisOrdinal, quax);
+				quaxes.put(Axis.COLUMNS, rowQuax);
+				quaxes.put(Axis.ROWS, columnQuax);
 
 				fireQueryChanged();
 			}
@@ -372,7 +413,7 @@ public class QueryAdapter implements Bookmarkable {
 			getModel().getCellSet();
 		}
 
-		for (Quax quax : quaxes) {
+		for (Quax quax : quaxes.values()) {
 			if (quax.dimIdx(dim) >= 0) {
 				return quax;
 			}
@@ -390,16 +431,14 @@ public class QueryAdapter implements Bookmarkable {
 		if (useQuax) {
 			int iQuaxToSort = activeQuaxToSort();
 
-			List<QueryAxis> qAxes = parsedQuery.getAxes();
-
-			int i = 0;
-			for (Quax quax : quaxes) {
+			for (Quax quax : quaxes.values()) {
 				if (quax.getPosTreeRoot() == null) {
 					continue;
 				}
 
 				boolean doHierarchize = false;
-				if (quax.isHierarchizeNeeded() && i != iQuaxToSort) {
+				if (quax.isHierarchizeNeeded()
+						&& quax.getOrdinal() != iQuaxToSort) {
 					doHierarchize = true;
 
 					if (logger.isDebugEnabled()) {
@@ -408,9 +447,23 @@ public class QueryAdapter implements Bookmarkable {
 				}
 
 				Exp eSet = quax.genExp(doHierarchize);
-				qAxes.get(i).setExp(eSet);
 
-				i++;
+				Axis axis = Axis.Factory.forOrdinal(quax.getOrdinal());
+
+				if (isAxesSwapped()) {
+					if (axis == Axis.COLUMNS) {
+						axis = Axis.ROWS;
+					} else if (axis == Axis.ROWS) {
+						axis = Axis.COLUMNS;
+					}
+				}
+
+				QueryAxis queryAxis = parsedQuery.getAxis(axis);
+				if (queryAxis == null) {
+					parsedQuery.setAxis(new QueryAxis(axis, eSet));
+				} else {
+					queryAxis.setExp(eSet);
+				}
 			}
 		}
 
@@ -474,8 +527,8 @@ public class QueryAdapter implements Bookmarkable {
 	 */
 	protected void orderAxis(MdxStatement pq) {
 		// Order(TopCount) is allowed, Order(Order) is not permitted
-		List<QueryAxis> queryAxes = pq.getAxes();
-		QueryAxis qa = queryAxes.get(quaxToSort.getOrdinal());
+		QueryAxis qa = pq.getAxis(Axis.Factory.forOrdinal(quaxToSort
+				.getOrdinal()));
 
 		Exp setForAx = qa.getExp();
 
@@ -519,9 +572,9 @@ public class QueryAdapter implements Bookmarkable {
 	 */
 	protected void topBottomAxis(MdxStatement pq, String function) {
 		// TopCount(TopCount) and TopCount(Order) is not permitted
-		List<QueryAxis> queryAxes = pq.getAxes();
+		QueryAxis qa = pq.getAxis(Axis.Factory.forOrdinal(quaxToSort
+				.getOrdinal()));
 
-		QueryAxis qa = queryAxes.get(quaxToSort.getOrdinal());
 		Exp setForAx = qa.getExp();
 		Exp sortExp;
 
@@ -573,45 +626,71 @@ public class QueryAdapter implements Bookmarkable {
 	public void afterExecute(CellSet cellSet) {
 		List<CellSetAxis> axes = cellSet.getAxes();
 
+		Map<Axis, CellSetAxis> axisMap = new HashMap<Axis, CellSetAxis>();
+		for (CellSetAxis axis : axes) {
+			axisMap.put(axis.getAxisOrdinal(), axis);
+		}
+
 		// initialization: get the result positions and set it to quax
 		// if the quaxes are not yet used to generate the query
 		if (!useQuax) {
-			int i = 0;
 			for (CellSetAxis axis : axes) {
 				List<Position> positions = axis.getPositions();
 
-				int index = axesSwapped ? (i + 1) % 2 : i;
-				quaxes.get(index).initialize(positions);
+				Axis targetAxis = axis.getAxisOrdinal();
 
-				i++;
+				if (axesSwapped) {
+					if (axis.getAxisOrdinal() == Axis.COLUMNS) {
+						targetAxis = Axis.ROWS;
+					} else if (axis.getAxisOrdinal() == Axis.ROWS) {
+						targetAxis = Axis.COLUMNS;
+					}
+				}
+
+				Quax quax = quaxes.get(targetAxis);
+				if (quax != null) {
+					quax.initialize(positions);
+				}
 			}
 		} else {
 			// hierarchize result if neccessary
-			int i = 0;
-			for (Quax quax : quaxes) {
-				int index = axesSwapped ? (i + 1) % 2 : i;
-				List<Position> positions = axes.get(index).getPositions();
+			for (Quax quax : quaxes.values()) {
+				Axis targetAxis = Axis.Factory.forOrdinal(quax.getOrdinal());
 
-				// after a result for CalcSet.GENERATE was gotten
-				// we have to re-initialize the quax,
-				// so that we can navigate.
-				if (quax.getGenerateMode() == CalcSetMode.Generate) {
-					quax.resetGenerate();
-					quax.initialize(positions);
-				} else {
-					// unknown function members are collected
-					// - always for a "Sticky generate" unknown function
-					// - on first result for any other unknown function
-					int nDimension = quax.getNDimension();
-					for (int j = 0; j < nDimension; j++) {
-						// collect members for unknown functions on quax
-						if (quax.isUnknownFunction(j)) {
-							List<Member> members = memListForHier(j, positions);
-							quax.setHierMemberList(j, members);
+				if (axesSwapped) {
+					if (quax.getOrdinal() == Axis.COLUMNS.axisOrdinal()) {
+						targetAxis = Axis.ROWS;
+					} else if (quax.getOrdinal() == Axis.ROWS.axisOrdinal()) {
+						targetAxis = Axis.COLUMNS;
+					}
+				}
+
+				CellSetAxis cellSetAxis = axisMap.get(targetAxis);
+
+				if (cellSetAxis != null) {
+					List<Position> positions = cellSetAxis.getPositions();
+
+					// after a result for CalcSet.GENERATE was gotten
+					// we have to re-initialize the quax,
+					// so that we can navigate.
+					if (quax.getGenerateMode() == CalcSetMode.Generate) {
+						quax.resetGenerate();
+						quax.initialize(positions);
+					} else {
+						// unknown function members are collected
+						// - always for a "Sticky generate" unknown function
+						// - on first result for any other unknown function
+						int nDimension = quax.getNDimension();
+						for (int j = 0; j < nDimension; j++) {
+							// collect members for unknown functions on quax
+							if (quax.isUnknownFunction(j)) {
+								List<Member> members = memListForHier(j,
+										positions);
+								quax.setHierMemberList(j, members);
+							}
 						}
 					}
 				}
-				i++;
 			}
 		}
 
@@ -1028,11 +1107,19 @@ public class QueryAdapter implements Bookmarkable {
 		}
 
 		if (getUseQuax()) {
-			List<Quax> quaxes = getQuaxes();
-
 			Serializable[] quaxStates = new Serializable[quaxes.size()];
-			for (int i = 0; i < quaxStates.length; i++) {
-				quaxStates[i] = quaxes.get(i).saveState();
+
+			int i = 0;
+			for (Axis axis : quaxes.keySet()) {
+				Quax quax = quaxes.get(axis);
+
+				if (quax == null) {
+					quaxStates[i++] = new Serializable[] { axis.axisOrdinal(),
+							null };
+				} else {
+					quaxStates[i++] = new Serializable[] { axis.axisOrdinal(),
+							quax.saveState() };
+				}
 			}
 
 			state[3] = quaxStates;
@@ -1057,8 +1144,7 @@ public class QueryAdapter implements Bookmarkable {
 		Quax quaxToSort = null;
 
 		if (quaxOrdinal > -1) {
-			List<Quax> quaxes = getQuaxes();
-			for (Quax quax : quaxes) {
+			for (Quax quax : quaxes.values()) {
 				if (quaxOrdinal == quax.getOrdinal()) {
 					quaxToSort = quax;
 					break;
@@ -1072,14 +1158,23 @@ public class QueryAdapter implements Bookmarkable {
 			Serializable[] quaxStates = (Serializable[]) states[3];
 
 			// reset the quaxes to current state
-			List<Quax> quaxes = getQuaxes();
 			if (quaxes.size() != quaxStates.length) {
 				throw new IllegalArgumentException(
 						"Stored quax state is not compatible with the current MDX.");
 			}
 
 			for (int i = 0; i < quaxStates.length; i++) {
-				quaxes.get(i).restoreState(quaxStates[i]);
+				Serializable[] quaxState = (Serializable[]) quaxStates[i];
+
+				int ordinal = (Integer) quaxState[0];
+
+				Axis axis = Axis.Factory.forOrdinal(ordinal);
+
+				if (quaxState[1] == null) {
+					quaxes.remove(axis);
+				} else {
+					quaxes.get(axis).restoreState(quaxState[1]);
+				}
 			}
 		}
 	}

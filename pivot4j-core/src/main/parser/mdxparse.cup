@@ -187,7 +187,7 @@ axis_spec_list ::= axis_spec:i {: RESULT = new ArrayList<QueryAxis>(); RESULT.ad
 	| axis_spec:e COMMA axis_spec_list : list {: list.add(0, e); RESULT = list; :};
 
 axis_spec ::= non_empty_opt:b expression:s dim_props:dprops ON axis_name:a
-		{: RESULT = new QueryAxis(Axis.Standard.valueOf(a), s, b.booleanValue()); 
+		{: RESULT = new QueryAxis(Axis.Standard.valueOf(a.toUpperCase()), s, b.booleanValue()); 
 		   if (dprops !=null) RESULT.getDimensionProperties().addAll(dprops); :};
 
 dim_props ::= /* empty */ {: RESULT = new ArrayList<CompoundId>(); :}

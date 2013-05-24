@@ -28,7 +28,7 @@ public class SwapAxesImpl extends AbstractTransform implements SwapAxes {
 	 * @see com.eyeq.pivot4j.transform.SwapAxes#canSwapAxes()
 	 */
 	public boolean canSwapAxes() {
-		return getQueryAdapter().getQuaxes().size() > 1;
+		return getQueryAdapter().getAxes().size() > 1;
 	}
 
 	/**

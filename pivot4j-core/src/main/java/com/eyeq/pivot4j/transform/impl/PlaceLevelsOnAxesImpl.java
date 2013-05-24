@@ -60,7 +60,11 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 		try {
 			QueryAdapter adapter = getQueryAdapter();
 
-			Quax quax = adapter.getQuaxes().get(axis.axisOrdinal());
+			Quax quax = adapter.getQuax(axis);
+
+			if (quax == null) {
+				quax = adapter.createQuax(axis);
+			}
 
 			List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(
 					levels.size());
@@ -213,14 +217,11 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 		QueryAdapter adapter = getQueryAdapter();
 
 		CellSet cellSet = adapter.getModel().getCellSet();
+		CellSetAxis cellAxis = getCellSetAxis(cellSet, axis);
 
-		// locate the appropriate result axis
-		int iQuax = axis.axisOrdinal();
-		if (adapter.isAxesSwapped()) {
-			iQuax = (iQuax + 1) % 2;
+		if (cellAxis == null) {
+			return Collections.emptyList();
 		}
-
-		CellSetAxis cellAxis = cellSet.getAxes().get(iQuax);
 
 		List<Position> positions = cellAxis.getPositions();
 

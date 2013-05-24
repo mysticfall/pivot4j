@@ -21,6 +21,7 @@ import java.util.Locale;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.logging.LogFactory;
+import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
@@ -437,6 +438,10 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		String mdx = normalizeMdx(getCurrentMdx(true));
+
+		if (!queryAdapter.isValid()) {
+			return null;
+		}
 
 		try {
 			this.cellSet = executeMdx(connection, mdx);
@@ -1033,18 +1038,28 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		configuration.addProperty("mdx", getCurrentMdx());
-		configuration.addProperty("sort[@enabled]", sorting);
 
-		if (sortCriteria != null) {
-			configuration.addProperty("sort[@criteria]", sortCriteria.name());
-			configuration.addProperty("sort[@topBottomCount]", topBottomCount);
-			if (isSorting()) {
-				if (sortPosMembers != null) {
-					int index = 0;
-					for (Member member : sortPosMembers) {
-						configuration.addProperty(
-								String.format("sort.member(%s)", index++),
-								member.getUniqueName());
+		if (sorting) {
+			configuration.addProperty("sort[@enabled]", sorting);
+
+			if (queryAdapter.getQuaxToSort() != null) {
+				configuration.addProperty("sort[@ordinal]", queryAdapter
+						.getQuaxToSort().getOrdinal());
+			}
+
+			if (sortCriteria != null) {
+				configuration.addProperty("sort[@criteria]",
+						sortCriteria.name());
+				configuration.addProperty("sort[@topBottomCount]",
+						topBottomCount);
+				if (isSorting()) {
+					if (sortPosMembers != null) {
+						int index = 0;
+						for (Member member : sortPosMembers) {
+							configuration.addProperty(
+									String.format("sort.member(%s)", index++),
+									member.getUniqueName());
+						}
 					}
 				}
 			}
@@ -1077,45 +1092,66 @@ public class PivotModelImpl implements PivotModel {
 			initialize();
 		}
 
-		List<Object> sortPosUniqueNames = configuration.getList("sort.member");
-		if (sortPosUniqueNames == null || sortPosUniqueNames.isEmpty()) {
-			this.sortPosMembers = null;
-		} else {
-			try {
-				Cube cube = getCube();
+		this.sorting = configuration.getBoolean("sort[@enabled]", false);
 
-				this.sortPosMembers = new ArrayList<Member>(
-						sortPosUniqueNames.size());
+		this.sortPosMembers = null;
+		this.sortCriteria = SortCriteria.ASC;
+		this.topBottomCount = 10;
 
-				for (Object uniqueName : sortPosUniqueNames) {
-					Member member = cube.lookupMember(IdentifierNode
-							.parseIdentifier(uniqueName.toString())
-							.getSegmentList());
-					if (member == null) {
-						if (logger.isWarnEnabled()) {
-							logger.warn("Sort position member not found "
-									+ uniqueName);
+		Quax quaxToSort = null;
+
+		if (sorting) {
+			List<Object> sortPosUniqueNames = configuration
+					.getList("sort.member");
+			if (sortPosUniqueNames != null && !sortPosUniqueNames.isEmpty()) {
+				try {
+					Cube cube = getCube();
+
+					this.sortPosMembers = new ArrayList<Member>(
+							sortPosUniqueNames.size());
+
+					for (Object uniqueName : sortPosUniqueNames) {
+						Member member = cube.lookupMember(IdentifierNode
+								.parseIdentifier(uniqueName.toString())
+								.getSegmentList());
+						if (member == null) {
+							if (logger.isWarnEnabled()) {
+								logger.warn("Sort position member not found "
+										+ uniqueName);
+							}
+
+							break;
 						}
 
+						sortPosMembers.add(member);
+					}
+				} catch (OlapException e) {
+					throw new PivotException(e);
+				}
+			}
+
+			this.topBottomCount = configuration.getInt("sort[@topBottomCount]",
+					10);
+
+			String sortName = configuration.getString("sort[@criteria]");
+			if (sortName != null) {
+				this.sortCriteria = SortCriteria.valueOf(sortName);
+			}
+
+			int ordinal = configuration.getInt("sort[@ordinal]", -1);
+
+			if (ordinal > 0) {
+				for (Axis axis : queryAdapter.getAxes()) {
+					Quax quax = queryAdapter.getQuax(axis);
+					if (quax.getOrdinal() == ordinal) {
+						quaxToSort = quax;
 						break;
 					}
-
-					sortPosMembers.add(member);
 				}
-			} catch (OlapException e) {
-				throw new PivotException(e);
 			}
 		}
 
-		this.topBottomCount = configuration.getInt("sort[@topBottomCount]", 10);
-		String sortName = configuration.getString("sort[@criteria]");
-		if (sortName == null) {
-			this.sortCriteria = SortCriteria.ASC;
-		} else {
-			this.sortCriteria = SortCriteria.valueOf(sortName);
-		}
-
-		this.sorting = configuration.getBoolean("sort[@enabled]", false);
+		queryAdapter.setQuaxToSort(quaxToSort);
 
 		this.cellSet = null;
 	}
