@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
 import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
+import com.eyeq.pivot4j.analytics.repository.DataSourceNotFoundException;
 import com.eyeq.pivot4j.analytics.repository.ReportContent;
 import com.eyeq.pivot4j.analytics.repository.ReportRepository;
 import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
@@ -290,30 +291,32 @@ public class RepositoryHandler implements ViewStateListener {
 		ViewState state = new ViewState(viewId, file.getName());
 		state.setFile(file);
 
+		String errorMessage = null;
+		Exception exception = null;
+
 		try {
 			ReportContent content = repository.getContent(file);
 			content.read(state, dataSourceManager);
 		} catch (ConfigurationException e) {
-			String title = bundle.getString("error.open.report.title");
-			String message = bundle.getString("error.open.report.format") + e;
-
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, message));
-
-			if (log.isErrorEnabled()) {
-				log.error(title, e);
-			}
-
-			return;
+			exception = e;
+			errorMessage = bundle.getString("error.open.report.format") + e;
+		} catch (DataSourceNotFoundException e) {
+			exception = e;
+			errorMessage = bundle.getString("error.open.report.dataSource")
+					+ e.getConnectionInfo().getDataSourceName();
 		} catch (IOException e) {
+			exception = e;
+			errorMessage = bundle.getString("error.open.report.io") + e;
+		}
+
+		if (exception != null) {
 			String title = bundle.getString("error.open.report.title");
-			String message = bundle.getString("error.open.report.io") + e;
 
 			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, message));
+					FacesMessage.SEVERITY_INFO, title, errorMessage));
 
 			if (log.isErrorEnabled()) {
-				log.error(title, e);
+				log.error(title, exception);
 			}
 
 			return;
