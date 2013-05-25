@@ -29,6 +29,17 @@ if (PrimeFaces.widget.BaseTree) {
 			});
 }
 
+function initNavigatorDroppables() {
+	jQuery("#target-tree-pane").droppable({
+		over : function(e) {
+			jQuery("#source-tree-pane .ui-droppable").droppable("disable");
+		},
+		out : function(e) {
+			jQuery("#source-tree-pane .ui-droppable").droppable("enable");
+		}
+	});
+}
+
 function initializeTabs(tabs) {
 	var tabView = jQuery("#tab-panel")
 			.tabs(
