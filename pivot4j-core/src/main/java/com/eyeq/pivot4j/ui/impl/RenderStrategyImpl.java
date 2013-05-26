@@ -417,6 +417,12 @@ public class RenderStrategyImpl implements RenderStrategy {
 
 			Member positionMember = positionMembers.get(index);
 
+			if (positionMember.getDepth() > 1
+					&& context.getParentMember(positionMember) == null) {
+				positionMember = new RaggedMemberWrapper(positionMember,
+						context.getModel().getCube());
+			}
+
 			if (!OlapUtils.equals(member, positionMember)
 					&& (member.getDepth() >= positionMember.getDepth() || !context
 							.getAncestorMembers(positionMember)
@@ -758,6 +764,9 @@ public class RenderStrategyImpl implements RenderStrategy {
 					if (!grandTotalMeasures.contains(measure)) {
 						grandTotalMeasures.add(measure);
 					}
+				} else if (member != null && member.getDepth() > 0
+						&& nodeContext.getParentMember(member) == null) {
+					member = new RaggedMemberWrapper(member, model.getCube());
 				}
 
 				if (hierarchies.size() < memberCount) {
@@ -777,11 +786,6 @@ public class RenderStrategyImpl implements RenderStrategy {
 				}
 
 				TableHeaderNode childNode = new TableHeaderNode(nodeContext);
-
-				if (member != null && member.getDepth() > 0
-						&& nodeContext.getParentMember(member) == null) {
-					member = new RaggedMemberWrapper(member, model.getCube());
-				}
 
 				childNode.setMember(member);
 				childNode.setHierarchy(member.getHierarchy());
@@ -838,8 +842,15 @@ public class RenderStrategyImpl implements RenderStrategy {
 								.get(memberParents.size() - 1);
 					}
 
-					Member parentMember = axisRoot.getReference()
-							.getParentMember(member);
+					Member parentMember;
+
+					if (member instanceof RaggedMemberWrapper) {
+						parentMember = ((RaggedMemberWrapper) member)
+								.getTopMember();
+					} else {
+						parentMember = axisRoot.getReference().getParentMember(
+								member);
+					}
 
 					if (parentMember != null) {
 						if (lastSibling == null
