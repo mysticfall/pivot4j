@@ -29,6 +29,7 @@ import com.eyeq.pivot4j.analytics.ui.navigator.NodeFilter;
 import com.eyeq.pivot4j.analytics.ui.navigator.SelectionNode;
 import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
 import com.eyeq.pivot4j.util.MemberSelection;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 @ManagedBean(name = "memberSelectionHandler")
 @ViewScoped
@@ -310,8 +311,11 @@ public class MemberSelectionHandler implements NodeFilter {
 				List<Member> targetMembers = mode.getTargetMembers(member);
 
 				for (Member target : targetMembers) {
-					if (members.contains(target)) {
-						members.remove(target);
+					Member wrappedMember = OlapUtils.wrapRaggedIfNecessary(
+							target, model.getCube());
+
+					if (members.contains(wrappedMember)) {
+						members.remove(wrappedMember);
 						empty = false;
 					}
 				}
