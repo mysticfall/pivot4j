@@ -70,13 +70,6 @@ public class RaggedMemberWrapper implements Member, Named {
 					"The specified member does not need a ragged parent placeholder.");
 		}
 
-		Property property = member.getProperties().get("PARENT_UNIQUE_NAME");
-
-		if (property == null) {
-			throw new IllegalArgumentException(
-					"The specified member does not have 'PARENT_UNIQUE_NAME' property.");
-		}
-
 		this.baseMember = member;
 		this.nameSegments = Collections.unmodifiableList(IdentifierParser
 				.parseIdentifier(member.getUniqueName()));
