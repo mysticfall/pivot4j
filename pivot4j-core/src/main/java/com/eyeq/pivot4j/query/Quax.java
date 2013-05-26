@@ -43,7 +43,7 @@ import com.eyeq.pivot4j.util.TreeNodeCallback;
 
 public class Quax implements Bookmarkable {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Cube cube;
 
@@ -51,21 +51,21 @@ public class Quax implements Bookmarkable {
 
 	private int nDimension;
 
-	private ArrayList<String> hiers;
+	private List<String> hiers;
 
 	// currently, we can handle the following Funcalls
 	// member.children, member.descendants, level.members
 	// other funcalls are "unknown functions"
 	private boolean[] containsUF;
 
-	private ArrayList<ArrayList<String>> ufMemberLists; // if there are unknonwn
-														// functions
+	// if there are unknonwn functions
+	private List<List<String>> ufMemberLists;
 
-	// private UnknownFunction[] unknownFunctions;
-	private ExpNode posTreeRoot = null; // Position tree used in normal
-										// mode
+	// Position tree used in normal mode
+	private ExpNode posTreeRoot = null;
 
-	private int ordinal; // ordinal of query axis, never changed by swap
+	// ordinal of query axis, never changed by swap
+	private int ordinal;
 
 	private boolean qubonMode = false;
 
@@ -82,7 +82,8 @@ public class Quax implements Bookmarkable {
 
 	private CalcSetMode generateMode = CalcSetMode.Simple;
 
-	private int generateIndex = -1; // we handle generate for only 1 dimension
+	// we handle generate for only 1 dimension
+	private int generateIndex = -1;
 
 	private Exp expGenerate = null;
 
@@ -179,7 +180,7 @@ public class Quax implements Bookmarkable {
 	public void initialize(List<Position> positions) {
 		List<List<Member>> posMembers;
 
-		int nDimension = 0;
+		int dimCount = 0;
 
 		this.hierarchizeNeeded = false;
 		this.nHierExclude = 0;
@@ -191,7 +192,7 @@ public class Quax implements Bookmarkable {
 			setHierarchies(new ArrayList<Hierarchy>(0));
 			return;
 		} else {
-			nDimension = positions.get(0).getMembers().size();
+			dimCount = positions.get(0).getMembers().size();
 			posMembers = new ArrayList<List<Member>>(positions.size());
 
 			for (Position position : positions) {
@@ -199,14 +200,14 @@ public class Quax implements Bookmarkable {
 			}
 		}
 
-		List<Hierarchy> hiers = new ArrayList<Hierarchy>(nDimension);
+		List<Hierarchy> hierachyList = new ArrayList<Hierarchy>(dimCount);
 
 		List<Member> firstMembers = posMembers.get(0);
 		for (Member member : firstMembers) {
-			hiers.add(member.getLevel().getHierarchy());
+			hierachyList.add(member.getLevel().getHierarchy());
 		}
 
-		setHierarchies(hiers);
+		setHierarchies(hierachyList);
 		initPositions(posMembers);
 
 		// initialize the dimension flags
@@ -221,11 +222,13 @@ public class Quax implements Bookmarkable {
 				int iDim = node.getLevel();
 
 				if (iDim == Quax.this.nDimension) {
-					return TreeNodeCallback.BREAK; // bottom reached
+					// bottom reached
+					return TreeNodeCallback.BREAK;
 				}
 
 				if (node.getChildren().size() == 1) {
-					return TreeNodeCallback.CONTINUE; // continue next level
+					// continue next level
+					return TreeNodeCallback.CONTINUE;
 				} else {
 					// more than one child - break out
 					Quax.this.qubonMode = false;
@@ -235,7 +238,8 @@ public class Quax implements Bookmarkable {
 		});
 
 		if (qubonMode) {
-			nHierExclude = nDimension - 1; // nothing hierarchized
+			// nothing hierarchized
+			nHierExclude = dimCount - 1;
 		}
 	}
 
@@ -257,8 +261,8 @@ public class Quax implements Bookmarkable {
 		 * if (nDimension > 1) hierarchizePositions(aPosMemStart);
 		 */
 
-		// init position tree
-		this.posTreeRoot = new ExpNode(null); // root
+		// init position tree root
+		this.posTreeRoot = new ExpNode(null);
 		int end = addToPosTree(posMemStart, 0, posMemStart.size(), 0,
 				posTreeRoot);
 		while (end < posMemStart.size()) {
@@ -298,15 +302,15 @@ public class Quax implements Bookmarkable {
 					ExpNode newChild = new ExpNode(oFun);
 					node.addChild(newChild);
 
-					return TreeNodeCallback.CONTINUE_SIBLING; // continue next
-					// sibling
+					return TreeNodeCallback.CONTINUE_SIBLING;
 				}
 				return TreeNodeCallback.CONTINUE;
 			}
 		});
 
-		this.containsUF = new boolean[nDimension]; // init false
-		this.ufMemberLists = new ArrayList<ArrayList<String>>(nDimension);
+		// init false
+		this.containsUF = new boolean[nDimension];
+		this.ufMemberLists = new ArrayList<List<String>>(nDimension);
 
 		memberMap.clear();
 
@@ -433,13 +437,10 @@ public class Quax implements Bookmarkable {
 		if (qubon && generateIndex >= 0 && generateMode == CalcSetMode.Sticky
 				&& dimIndex == generateIndex) {
 			return false;
-		} else if (!qubon && generateIndex >= 0
-				&& generateMode == CalcSetMode.Sticky
-				&& dimIndex >= generateIndex) {
-			return false;
-		} else {
-			return true;
 		}
+
+		return (qubon || generateIndex < 0
+				|| generateMode != CalcSetMode.Sticky || dimIndex < generateIndex);
 	}
 
 	/**
@@ -464,7 +465,7 @@ public class Quax implements Bookmarkable {
 	public int getOrdinal() {
 		return ordinal;
 	}
-	
+
 	/**
 	 * @return hierarchies
 	 */
@@ -517,7 +518,8 @@ public class Quax implements Bookmarkable {
 	 */
 	public int dimIdx(Dimension dim) {
 		if (hiers == null || hiers.isEmpty()) {
-			return -1; // quax was not initialized yet
+			// quax was not initialized yet
+			return -1;
 		}
 
 		int i = 0;
@@ -557,8 +559,9 @@ public class Quax implements Bookmarkable {
 				}
 			}
 
-			this.containsUF = new boolean[nDimension]; // init false
-			this.ufMemberLists = new ArrayList<ArrayList<String>>(nDimension);
+			// init false
+			this.containsUF = new boolean[nDimension];
+			this.ufMemberLists = new ArrayList<List<String>>(nDimension);
 
 			memberMap.clear();
 
@@ -610,12 +613,11 @@ public class Quax implements Bookmarkable {
 				}
 
 				newNode = new ExpNode(set);
-				if (generateIndex == i && generateMode == CalcSetMode.Sticky) {
+				if (generateIndex == i && generateMode == CalcSetMode.Sticky
+						&& !set.equals(expGenerate)) {
 					// there was a sticky generate on this hier
 					// reset, if set expression is different now
-					if (!set.equals(expGenerate)) {
-						resetGenerate();
-					}
+					resetGenerate();
 				}
 			}
 			current.addChild(newNode);
@@ -644,8 +646,11 @@ public class Quax implements Bookmarkable {
 	 * Recursively find "children" Funcall
 	 */
 	private boolean findChildrenCall(Exp oExp, int level) {
-		if (!quaxUtil.isFunCall(oExp))
-			return false; // member or level or ...
+		if (!quaxUtil.isFunCall(oExp)) {
+			// member or level or ...
+			return false;
+		}
+
 		if (level > 0 && quaxUtil.isFunCallTo(oExp, "children")) {
 			return true;
 		}
@@ -686,8 +691,7 @@ public class Quax implements Bookmarkable {
 		boolean childFound = checkChildPosition(memberPath);
 
 		// cache the result
-		Boolean bool = new Boolean(!childFound);
-		canExpandPosMap.put(memberPath, bool);
+		canExpandPosMap.put(memberPath, !childFound);
 
 		return !childFound;
 	}
@@ -807,8 +811,7 @@ public class Quax implements Bookmarkable {
 
 		// first check the cache
 		if (canExpandMemberMap.containsKey(member)) {
-			boolean canExpand = canExpandMemberMap.get(member);
-			return canExpand;
+			return canExpandMemberMap.get(member);
 		}
 
 		// loop over Position Tree
@@ -852,8 +855,8 @@ public class Quax implements Bookmarkable {
 			public int handleTreeNode(TreeNode<Exp> node) {
 				int nodeIndex = node.getLevel() - 1;
 				if (nodeIndex < dimIndex) {
-					return TreeNodeCallback.CONTINUE; // we are below iDim,
-					// don't care
+					// we are below iDim, don't care
+					return TreeNodeCallback.CONTINUE;
 				}
 
 				// iDimNode == iDim
@@ -870,8 +873,7 @@ public class Quax implements Bookmarkable {
 					}
 				}
 
-				return TreeNodeCallback.CONTINUE_SIBLING; // continue next
-				// sibling
+				return TreeNodeCallback.CONTINUE_SIBLING;
 			}
 		});
 
@@ -918,8 +920,7 @@ public class Quax implements Bookmarkable {
 
 		// first check the cache
 		if (canCollapsePosMap.containsKey(memberPath)) {
-			boolean canCollapse = canCollapsePosMap.get(memberPath);
-			return canCollapse;
+			return canCollapsePosMap.get(memberPath);
 		}
 
 		// loop over Position Tree
@@ -1072,7 +1073,8 @@ public class Quax implements Bookmarkable {
 									.equals(oMember)
 									|| quaxUtil.isDescendant(
 											memberPath.get(dimIndex), oMember)) {
-								removeList.add(node); // add to delete list
+								// add to delete list
+								removeList.add(node);
 							}
 						} else if (quaxUtil.isFunCallTo(oExp, "{}")) {
 							// set of members may be there as result of split,
@@ -1093,8 +1095,8 @@ public class Quax implements Bookmarkable {
 							int nRemove = removeMembers.size();
 							if (nRemove == argCount) {
 								// all memers in set are descendants, remove the
-								// node
-								removeList.add(node); // add to delete list
+								// node.
+								removeList.add(node);
 							} else if (nRemove > 0) {
 								// remove descendant nodes from set
 								Exp[] remaining = new Exp[argCount - nRemove];
@@ -1108,8 +1110,8 @@ public class Quax implements Bookmarkable {
 								}
 
 								if (remaining.length == 1) {
-									node.setReference(remaining[0]); // single
-									// member
+									// single member
+									node.setReference(remaining[0]);
 								} else {
 									FunCall newSet = new FunCall("{}",
 											Syntax.Braces);
@@ -1132,11 +1134,10 @@ public class Quax implements Bookmarkable {
 							}
 						}
 						return TreeNodeCallback.CONTINUE_SIBLING;
-					} else if (quaxUtil.isMember(oExp)) {
-						if (quaxUtil.isDescendant(memberPath.get(dimIndex),
-								oExp)) {
-							removeList.add(node);
-						}
+					} else if (quaxUtil.isMember(oExp)
+							&& quaxUtil.isDescendant(memberPath.get(dimIndex),
+									oExp)) {
+						removeList.add(node);
 					}
 					return TreeNodeCallback.CONTINUE_SIBLING;
 					// always break on level iDim, next sibling
@@ -1184,8 +1185,7 @@ public class Quax implements Bookmarkable {
 
 		// first check the cache
 		if (canCollapseMemberMap.containsKey(member)) {
-			boolean canCollapse = canCollapseMemberMap.get(member);
-			return canCollapse;
+			return canCollapseMemberMap.get(member);
 		}
 
 		// loop over Position Tree
@@ -1229,8 +1229,8 @@ public class Quax implements Bookmarkable {
 			public int handleTreeNode(TreeNode<Exp> node) {
 				int nodeIndex = node.getLevel() - 1;
 				if (nodeIndex < dimIndex) {
-					return TreeNodeCallback.CONTINUE; // we are below iDim,
-					// don't care
+					// we are below iDim, don't care
+					return TreeNodeCallback.CONTINUE;
 				}
 
 				// iDimNode == iDim
@@ -1246,8 +1246,7 @@ public class Quax implements Bookmarkable {
 						nodesForMember.add(node);
 					}
 				}
-				return TreeNodeCallback.CONTINUE_SIBLING; // continue next
-				// sibling
+				return TreeNodeCallback.CONTINUE_SIBLING;
 			}
 		});
 
@@ -1262,8 +1261,8 @@ public class Quax implements Bookmarkable {
 				if (oComplement == null) {
 					removePathToNode(node);
 				} else {
-					node.setReference(oComplement); // replace node object by
-													// complement
+					// replace node object by complement
+					node.setReference(oComplement);
 				}
 			}
 		}
@@ -1339,14 +1338,16 @@ public class Quax implements Bookmarkable {
 				if (!quaxUtil.isMember(oExp)) {
 					// FunCall
 					if (isFunCallNotTopLevel(oExp, nodeIndex)) {
-						return TreeNodeCallback.BREAK; // got it
+						// got it
+						return TreeNodeCallback.BREAK;
 					} else {
 						return TreeNodeCallback.CONTINUE_SIBLING;
 					}
 				} else {
 					// member
 					if (quaxUtil.levelDepthForMember(oExp) > 0) {
-						return TreeNodeCallback.BREAK; // got it
+						// got it
+						return TreeNodeCallback.BREAK;
 					} else {
 						return TreeNodeCallback.CONTINUE_SIBLING;
 					}
@@ -1644,7 +1645,8 @@ public class Quax implements Bookmarkable {
 		if (generateIndex > 1) {
 			oTuple = new FunCall("()", Syntax.Parentheses, currentsOfDim);
 		} else {
-			oTuple = currentsOfDim.get(0); // just dimension.currentmember
+			// just dimension.currentmember
+			oTuple = currentsOfDim.get(0);
 		}
 
 		// generate set braces around tuple
@@ -1676,9 +1678,7 @@ public class Quax implements Bookmarkable {
 								memberPath.get(nodeIndex))) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
-							return TreeNodeCallback.CONTINUE_SIBLING; // continue
-							// next
-							// sibling
+							return TreeNodeCallback.CONTINUE_SIBLING;
 						}
 					} else {
 						// must be FunCall
@@ -1686,9 +1686,7 @@ public class Quax implements Bookmarkable {
 								nodeIndex)) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
-							return TreeNodeCallback.CONTINUE_SIBLING; // continue
-							// next
-							// sibling
+							return TreeNodeCallback.CONTINUE_SIBLING;
 						}
 					}
 				}
@@ -1697,21 +1695,19 @@ public class Quax implements Bookmarkable {
 				// node Exp must contain children of member[iDim]
 				if (quaxUtil.isMember(oExp)) {
 					if (quaxUtil.checkParent(memberPath.get(nodeIndex), oExp)) {
-						return TreeNodeCallback.BREAK; // found
+						// found
+						return TreeNodeCallback.BREAK;
 					} else {
-						return TreeNodeCallback.CONTINUE_SIBLING; // continue
-						// next
-						// sibling
+						return TreeNodeCallback.CONTINUE_SIBLING;
 					}
 				} else {
 					// must be FunCall
 					if (isChildOfMemberInFunCall(oExp,
 							memberPath.get(nodeIndex), nodeIndex)) {
-						return TreeNodeCallback.BREAK; // found
+						// found
+						return TreeNodeCallback.BREAK;
 					} else {
-						return TreeNodeCallback.CONTINUE_SIBLING; // continue
-						// next
-						// sibling
+						return TreeNodeCallback.CONTINUE_SIBLING;
 					}
 				}
 			}
@@ -1776,8 +1772,7 @@ public class Quax implements Bookmarkable {
 				Exp oExp = node.getReference();
 
 				if (!quaxUtil.isMember(oExp)) {
-					return TreeNodeCallback.CONTINUE_SIBLING; // continue next
-					// sibling
+					return TreeNodeCallback.CONTINUE_SIBLING;
 				}
 
 				if (quaxUtil.equalMember(oExp, memberPath.get(nodeIndex))) {
@@ -1793,8 +1788,7 @@ public class Quax implements Bookmarkable {
 					}
 				} else {
 					// no match
-					return TreeNodeCallback.CONTINUE_SIBLING; // continue next
-					// sibling
+					return TreeNodeCallback.CONTINUE_SIBLING;
 				}
 			}
 		});
@@ -1842,10 +1836,9 @@ public class Quax implements Bookmarkable {
 						// iDimNode < iDim
 						return TreeNodeCallback.CONTINUE;
 					}
-				} else
-					return TreeNodeCallback.CONTINUE_SIBLING; // no match,
-				// continue next
-				// sibling
+				} else {
+					return TreeNodeCallback.CONTINUE_SIBLING;
+				}
 			}
 		});
 
@@ -1863,8 +1856,8 @@ public class Quax implements Bookmarkable {
 			public int handleTreeNode(TreeNode<Exp> node) {
 				int nodeIndex = node.getLevel() - 1;
 				if (nodeIndex < iDim) {
-					return TreeNodeCallback.CONTINUE; // we are below iDim,
-					// don't care
+					// we are below iDim don't care
+					return TreeNodeCallback.CONTINUE;
 				}
 
 				// iDimNode == iDim
@@ -1872,16 +1865,17 @@ public class Quax implements Bookmarkable {
 				Exp oExp = node.getReference();
 				if (quaxUtil.isMember(oExp)) {
 					if (quaxUtil.checkParent(member, oExp)) {
-						return TreeNodeCallback.BREAK; // found
+						// found
+						return TreeNodeCallback.BREAK;
 					}
 				} else {
 					// must be FunCall
 					if (isChildOfMemberInFunCall(oExp, member, nodeIndex)) {
-						return TreeNodeCallback.BREAK; // found
+						// found
+						return TreeNodeCallback.BREAK;
 					}
 				}
-				return TreeNodeCallback.CONTINUE_SIBLING; // continue next
-				// sibling
+				return TreeNodeCallback.CONTINUE_SIBLING;
 			}
 		});
 
@@ -1916,11 +1910,12 @@ public class Quax implements Bookmarkable {
 		// that this funcall does not contain member.
 		// Then - there is nothing to split.
 		if (!isMemberInFunCall(oExp, member, funCall.getLevel() - 1)) {
-			return; // nothing to split
+			// nothing to split
+			return;
 		}
 
-		Exp oComplement = createComplement(oExp, member, hierIndex); // can be
-																		// null
+		// can be null
+		Exp oComplement = createComplement(oExp, member, hierIndex);
 		if (oComplement == null) {
 			// this means, that the set resolves to a single member,
 			// mPath[iDimNode]
@@ -1962,7 +1957,8 @@ public class Quax implements Bookmarkable {
 				parent = parent.getParent();
 			}
 
-			if (parent.getLevel() > 0) { // should always be true
+			// should always be true
+			if (parent.getLevel() > 0) {
 				parent.remove();
 			}
 		}
@@ -2000,7 +1996,8 @@ public class Quax implements Bookmarkable {
 		cleanupMemberList(funCallList, memberList, dimIndex);
 
 		if (funCallList.isEmpty() && memberList.size() == 1) {
-			return memberList.get(0); // single member only
+			// single member only
+			return memberList.get(0);
 		}
 
 		Exp mSet = null;
@@ -2259,11 +2256,11 @@ public class Quax implements Bookmarkable {
 			int level = m.getLevel().getDepth();
 			int levlev = lev.getDepth();
 			if (levlev == level + 1) {
-				quaxUtil.addMemberSiblings(list, m, maxLevel); // same as
-																// children
+				// same as children
+				quaxUtil.addMemberSiblings(list, m, maxLevel);
 			} else if (levlev == level + 2) {
-				quaxUtil.addMemberChildren(list, m, maxLevel); // m *is*
-																// grandfather
+				// m *is* grandfather
+				quaxUtil.addMemberChildren(list, m, maxLevel);
 			} else {
 				// add descendants of parent level
 				Level parentLevel = quaxUtil.getParentLevel(lev);
@@ -2276,7 +2273,8 @@ public class Quax implements Bookmarkable {
 
 			int levlev = lev.getDepth();
 			if (levlev == 0) {
-				return; // cannot drill up
+				// cannot drill up
+				return;
 			}
 
 			Level parentLevel = quaxUtil.getParentLevel(lev);
@@ -2284,8 +2282,8 @@ public class Quax implements Bookmarkable {
 		} else {
 			// must be Top/Bottom Function with arg[0] being base set
 			Exp oFun2 = quaxUtil.funCallArg(oFun, 0);
-			addFunCallToDrillup(list, oFun2, maxLevel); // do not have a better
-														// solution
+			// do not have a better solution
+			addFunCallToDrillup(list, oFun2, maxLevel);
 		}
 	}
 
@@ -2329,10 +2327,11 @@ public class Quax implements Bookmarkable {
 		} catch (UnknownExpressionException e) {
 			// it is an Unkown FunCall
 			// assume "true" if the member is in the List for this dimension
-			if (ufMemberLists.get(hierIndex) == null)
+			if (ufMemberLists.get(hierIndex) == null) {
 				throw new PivotException(
 						"Unknow Function - no member list, dimension="
 								+ hierIndex + " function=" + e.getExpression());
+			}
 
 			result = ufMemberLists.get(hierIndex).contains(member);
 		}
@@ -2499,8 +2498,9 @@ public class Quax implements Bookmarkable {
 
 			List<Member> remainder = new ArrayList<Member>(members.size());
 			for (Member m : members) {
-				if (!quaxUtil.isDescendant(member, m))
+				if (!quaxUtil.isDescendant(member, m)) {
 					remainder.add(m);
+				}
 			}
 
 			return quaxUtil.createMemberSet(remainder);
@@ -2626,7 +2626,8 @@ public class Quax implements Bookmarkable {
 			}
 
 			if (mComplement.size() == 1) {
-				return mComplement.get(0); // single member
+				// single member
+				return mComplement.get(0);
 			}
 
 			Exp oComplement = new FunCall("{}", Syntax.Braces, mComplement);
@@ -2657,12 +2658,14 @@ public class Quax implements Bookmarkable {
 
 			for (int i = 0; i < nArg; i++) {
 				Exp o = quaxUtil.funCallArg(oFun, i);
-				if (!(o.equals(oMember)))
+				if (!(o.equals(oMember))) {
 					mComplement.add(o);
+				}
 			}
 
 			if (mComplement.size() == 1) {
-				return mComplement.get(0); // single member
+				// single member
+				return mComplement.get(0);
 			}
 
 			Exp oComplement = new FunCall("{}", Syntax.Braces, mComplement);
@@ -2680,9 +2683,11 @@ public class Quax implements Bookmarkable {
 			if (complements[0] == null && complements[1] == null) {
 				return null;
 			} else if (complements[0] != null && complements[1] == null) {
-				return complements[0]; // No Union needed
+				// No Union needed
+				return complements[0];
 			} else if (complements[0] == null && complements[1] != null) {
-				return complements[1]; // No Union needed
+				// No Union needed
+				return complements[1];
 			} else {
 				// complement can be single member
 				if (!quaxUtil.isFunCall(complements[0])) {
@@ -2775,8 +2780,8 @@ public class Quax implements Bookmarkable {
 		state[4] = this.generateIndex;
 		state[5] = this.generateMode;
 		state[6] = this.nHierExclude;
-		state[7] = this.ufMemberLists;
-		state[8] = this.hiers;
+		state[7] = (Serializable) this.ufMemberLists;
+		state[8] = (Serializable) this.hiers;
 		state[9] = this.containsUF;
 		state[10] = posTreeRoot;
 
@@ -2797,8 +2802,8 @@ public class Quax implements Bookmarkable {
 		this.generateIndex = (Integer) states[4];
 		this.generateMode = (CalcSetMode) states[5];
 		this.nHierExclude = (Integer) states[6];
-		this.ufMemberLists = (ArrayList<ArrayList<String>>) states[7];
-		this.hiers = (ArrayList<String>) states[8];
+		this.ufMemberLists = (List<List<String>>) states[7];
+		this.hiers = (List<String>) states[8];
 		this.containsUF = (boolean[]) states[9];
 		this.posTreeRoot = (ExpNode) states[10];
 	}

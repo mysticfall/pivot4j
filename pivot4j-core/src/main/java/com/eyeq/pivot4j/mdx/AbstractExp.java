@@ -8,7 +8,7 @@
  */
 package com.eyeq.pivot4j.mdx;
 
-public abstract class AbstractExp implements Exp {
+public abstract class AbstractExp implements Exp, Cloneable {
 
 	private static final long serialVersionUID = -3736674439789473278L;
 

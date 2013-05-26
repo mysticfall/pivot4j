@@ -145,8 +145,7 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 		if (context.getCellType() == CellType.Aggregation) {
 			Aggregator aggregator = context.getAggregator();
 
-			if (aggregator != null
-					&& (context.getMember() == null || !(context.getMember() instanceof Measure))) {
+			if (aggregator != null && !(context.getMember() instanceof Measure)) {
 				String key = "label.aggregation.type." + aggregator.getName();
 				String value = bundle.getString(key);
 
@@ -154,16 +153,6 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 					label = value;
 				}
 			}
-		}
-		if (context.getMember()!=null) {
-
-//			Property property = context.getMember().getProperties().get("MEMBER_UNIQUE_NAME");
-//			try {
-//				label += " / " + context.getMember().getPropertyValue(property);
-//			} catch (OlapException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 		}
 
 		return label;
@@ -433,10 +422,6 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 			String attributeName = "property.hasError." + key;
 
 			if (context.getAttribute(attributeName) == null) {
-				FacesContext facesContext = FacesContext.getCurrentInstance();
-
-				ResourceBundle bundle = getBundle();
-
 				MessageFormat mf = new MessageFormat(
 						bundle.getString("error.property.expression.title"));
 

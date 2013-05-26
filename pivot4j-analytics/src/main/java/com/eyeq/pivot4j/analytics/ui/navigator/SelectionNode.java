@@ -110,8 +110,8 @@ public class SelectionNode extends MetadataNode<Member> {
 		List<org.primefaces.model.TreeNode> children = new ArrayList<org.primefaces.model.TreeNode>(
 				nodes.size());
 
-		for (TreeNode<Member> node : nodes) {
-			SelectionNode child = new SelectionNode(node, selection);
+		for (TreeNode<Member> memberNode : nodes) {
+			SelectionNode child = new SelectionNode(memberNode, selection);
 			child.setParent(this);
 
 			children.add(child);

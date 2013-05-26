@@ -208,9 +208,7 @@ public abstract class AbstractPivotUIRenderer extends AbstractPivotRenderer
 	 */
 	@Override
 	public void startCell(RenderContext context) {
-		List<CellCommand<?>> commands = getCommands(context);
-
-		startCell(context, commands);
+		startCell(context, getCommands(context));
 	}
 
 	/**

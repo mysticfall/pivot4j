@@ -70,14 +70,14 @@ public class DrillThroughDataModel extends LazyDataModel<Map<String, Object>> {
 				rowIndex++;
 			}
 
-			List<DataColumn> columns = getColumns();
+			List<DataColumn> columnList = getColumns();
 
 			for (int i = 0; i < pageSize; i++) {
 				if (rs.next()) {
 					Map<String, Object> row = new HashMap<String, Object>(
-							columns.size() + 1);
+							columnList.size() + 1);
 
-					for (DataColumn column : columns) {
+					for (DataColumn column : columnList) {
 						if (ROW_KEY.equals(column.getName())) {
 							row.put(ROW_KEY, rowIndex + i + 1);
 						} else {
@@ -162,9 +162,9 @@ public class DrillThroughDataModel extends LazyDataModel<Map<String, Object>> {
 
 	public static class DataColumn {
 
-		String label;
+		private String label;
 
-		String name;
+		private String name;
 
 		/**
 		 * @param label

@@ -63,14 +63,16 @@ public class ExpGenerator {
 				if (quaxUtil.isMember(expForNode)) {
 					openSet.add(expForNode);
 					continue;
-				} else
+				} else {
 					closeOpenSet = true;
+				}
 			} else {
 				if (quaxUtil.isFunCallTo(expForNode, "()")) {
 					openSet.add(expForNode);
 					continue;
-				} else
+				} else {
 					closeOpenSet = true;
+				}
 			}
 
 			if (closeOpenSet && !openSet.isEmpty()) {
@@ -133,7 +135,8 @@ public class ExpGenerator {
 	private Exp genExpForNode(TreeNode<Exp> node, int untilIndex) {
 		Exp eNode = node.getReference();
 		if (node.getLevel() == untilIndex) {
-			return eNode; // last dimension
+			// last dimension
+			return eNode;
 		}
 
 		// use tuple representation if possible
@@ -223,7 +226,8 @@ public class ExpGenerator {
 
 		int size = nDimension - node.getLevel() + 1;
 		if (size == 1) {
-			return new Exp[] { node.getReference() }; // single member
+			// single member
+			return new Exp[] { node.getReference() };
 		}
 
 		List<TreeNode<Exp>> childNodes = node.getChildren();

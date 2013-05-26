@@ -23,7 +23,7 @@ import com.eyeq.pivot4j.datasource.CloseableDataSource;
 public abstract class AbstractDataSourceManager<T extends DataSourceDefinition>
 		implements DataSourceManager {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@ManagedProperty(value = "#{settings}")
 	private Settings settings;
@@ -47,14 +47,21 @@ public abstract class AbstractDataSourceManager<T extends DataSourceDefinition>
 			logger.info("Destroying data source manager.");
 		}
 
-		List<T> definitions = new LinkedList<T>(this.definitions);
+		List<T> defs = new LinkedList<T>(this.definitions);
 
-		for (T definition : definitions) {
+		for (T definition : defs) {
 			unregisterDefinition(definition);
 		}
 
 		this.dataSources.clear();
 		this.definitions.clear();
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Logger getLogger() {
+		return logger;
 	}
 
 	protected void registerDefinitions() {

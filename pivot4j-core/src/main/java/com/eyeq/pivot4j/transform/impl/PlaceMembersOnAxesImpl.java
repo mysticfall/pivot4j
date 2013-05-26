@@ -374,7 +374,8 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		// find the Quax for this hierarchy
 		Quax quax = adapter.findQuax(hierarchy.getDimension());
 		if (quax == null) {
-			return Collections.emptyList(); // should not occur
+			// should not occur
+			return Collections.emptyList();
 		}
 
 		int iDim = quax.dimIdx(hierarchy.getDimension());

@@ -93,10 +93,10 @@ public class MemberSelectionHandler implements NodeFilter {
 		if (sourceNode == null) {
 			this.sourceNode = new DefaultTreeNode();
 
-			Hierarchy hierarchy = getHierarchy();
-			if (hierarchy != null) {
+			Hierarchy hier = getHierarchy();
+			if (hier != null) {
 				try {
-					List<? extends Member> members = hierarchy.getRootMembers();
+					List<? extends Member> members = hier.getRootMembers();
 
 					for (Member member : members) {
 						MemberNode node = new MemberNode(member);
@@ -133,10 +133,10 @@ public class MemberSelectionHandler implements NodeFilter {
 	 */
 	public TreeNode getTargetNode() {
 		if (targetNode == null) {
-			MemberSelection selection = getSelection();
+			MemberSelection sel = getSelection();
 
-			if (selection != null) {
-				this.targetNode = new SelectionNode(selection);
+			if (sel != null) {
+				this.targetNode = new SelectionNode(sel);
 
 				targetNode.setExpanded(true);
 			}
@@ -213,14 +213,14 @@ public class MemberSelectionHandler implements NodeFilter {
 			mode = SelectionMode.valueOf(modeName);
 		}
 
-		MemberSelection selection = getSelection();
+		MemberSelection sel = getSelection();
 
 		if (mode == null) {
-			selection.clear();
+			sel.clear();
 		} else {
 			boolean empty = true;
 
-			List<Member> members = selection.getMembers();
+			List<Member> members = sel.getMembers();
 
 			for (TreeNode node : sourceSelection) {
 				MemberNode memberNode = (MemberNode) node;
@@ -381,11 +381,9 @@ public class MemberSelectionHandler implements NodeFilter {
 	}
 
 	public Hierarchy getHierarchy() {
-		if (hierarchy == null) {
-			if (hierarchyName != null && model.isInitialized()) {
-				this.hierarchy = model.getCube().getHierarchies()
-						.get(hierarchyName);
-			}
+		if (hierarchy == null && hierarchyName != null && model.isInitialized()) {
+			this.hierarchy = model.getCube().getHierarchies()
+					.get(hierarchyName);
 		}
 
 		return hierarchy;
@@ -393,13 +391,13 @@ public class MemberSelectionHandler implements NodeFilter {
 
 	protected MemberSelection getSelection() {
 		if (selection == null) {
-			Hierarchy hierarchy = getHierarchy();
+			Hierarchy hier = getHierarchy();
 
-			if (hierarchy != null) {
+			if (hier != null) {
 				PlaceMembersOnAxes transform = model
 						.getTransform(PlaceMembersOnAxes.class);
 
-				List<Member> members = transform.findVisibleMembers(hierarchy);
+				List<Member> members = transform.findVisibleMembers(hier);
 				this.selection = new MemberSelection(members, model.getCube());
 			}
 		}

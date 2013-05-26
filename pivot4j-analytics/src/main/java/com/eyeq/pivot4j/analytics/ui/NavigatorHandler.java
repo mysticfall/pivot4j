@@ -261,8 +261,8 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 	 * @param axis
 	 */
 	protected void configureAxis(TreeNode axisRoot, Axis axis) {
-		List<Hierarchy> hierarchies = getHierarchies(axis);
-		for (Hierarchy hierarchy : hierarchies) {
+		List<Hierarchy> hierarchyList = getHierarchies(axis);
+		for (Hierarchy hierarchy : hierarchyList) {
 			DefaultTreeNode hierarchyNode = new DefaultTreeNode();
 			hierarchyNode.setData(hierarchy);
 			hierarchyNode.setType("hierarchy");
@@ -277,16 +277,16 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 			}
 
 			if (type == Type.MEASURE) {
-				List<Member> members = getMembers(hierarchy);
-				for (Member member : members) {
+				List<Member> memberList = getMembers(hierarchy);
+				for (Member member : memberList) {
 					DefaultTreeNode memberNode = new DefaultTreeNode();
 					memberNode.setData(member);
 					memberNode.setType("measure");
 					memberNode.setParent(hierarchyNode);
 				}
 			} else {
-				List<Level> levels = getLevels(hierarchy);
-				for (Level level : levels) {
+				List<Level> levelList = getLevels(hierarchy);
+				for (Level level : levelList) {
 					DefaultTreeNode levelNode = new DefaultTreeNode();
 					levelNode.setData(level);
 					levelNode.setType("level");
@@ -368,21 +368,21 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 
 		boolean fromNavigator = isSourceNode(e.getDragId());
 
-		TreeNode rootNode = fromNavigator ? getCubeNode() : getTargetNode();
+		TreeNode root = fromNavigator ? getCubeNode() : getTargetNode();
 
-		TreeNode sourceNode = findNodeFromPath(rootNode, sourcePath);
-		TreeNode targetNode = findNodeFromPath(getTargetNode(), targetPath);
+		TreeNode source = findNodeFromPath(root, sourcePath);
+		TreeNode target = findNodeFromPath(getTargetNode(), targetPath);
 
 		if (fromNavigator) {
-			onDropOnAxis(sourceNode, targetNode);
-		} else if (sourceNode.getData() instanceof Hierarchy) {
-			Axis targetAxis = (Axis) targetNode.getData();
-			Hierarchy hierarchy = (Hierarchy) sourceNode.getData();
+			onDropOnAxis(source, target);
+		} else if (source.getData() instanceof Hierarchy) {
+			Axis targetAxis = (Axis) target.getData();
+			Hierarchy hierarchy = (Hierarchy) source.getData();
 
-			if (sourceNode.getParent().equals(targetNode)) {
+			if (source.getParent().equals(target)) {
 				moveHierarhy(targetAxis, hierarchy, 0);
 			} else {
-				Axis sourceAxis = (Axis) sourceNode.getParent().getData();
+				Axis sourceAxis = (Axis) source.getParent().getData();
 
 				removeHierarhy(sourceAxis, hierarchy);
 				addHierarhy(targetAxis, hierarchy);
@@ -426,28 +426,28 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 
 		boolean fromNavigator = isSourceNode(e.getDragId());
 
-		TreeNode rootNode = fromNavigator ? getCubeNode() : getTargetNode();
+		TreeNode root = fromNavigator ? getCubeNode() : getTargetNode();
 
-		TreeNode sourceNode = findNodeFromPath(rootNode, sourcePath);
-		TreeNode targetNode = findNodeFromPath(getTargetNode(), targetPath);
+		TreeNode source = findNodeFromPath(root, sourcePath);
+		TreeNode target = findNodeFromPath(getTargetNode(), targetPath);
 
 		if (fromNavigator) {
-			onDropOnHierarchy(sourceNode, targetNode, position);
-		} else if (sourceNode.getData() instanceof Hierarchy) {
-			Axis targetAxis = (Axis) targetNode.getParent().getData();
-			Hierarchy hierarchy = (Hierarchy) sourceNode.getData();
+			onDropOnHierarchy(source, target, position);
+		} else if (source.getData() instanceof Hierarchy) {
+			Axis targetAxis = (Axis) target.getParent().getData();
+			Hierarchy hierarchy = (Hierarchy) source.getData();
 
-			if (sourceNode.getParent().equals(targetNode)) {
+			if (source.getParent().equals(target)) {
 				moveHierarhy(targetAxis, hierarchy, position);
 			} else {
-				Axis sourceAxis = (Axis) sourceNode.getParent().getData();
+				Axis sourceAxis = (Axis) source.getParent().getData();
 
 				removeHierarhy(sourceAxis, hierarchy);
 				addHierarhy(targetAxis, hierarchy, position);
 			}
-		} else if (sourceNode.getData() instanceof Member) {
-			if (sourceNode.getParent().equals(targetNode)) {
-				moveMember((Member) sourceNode.getData(), 0);
+		} else if (source.getData() instanceof Member) {
+			if (source.getParent().equals(target)) {
+				moveMember((Member) source.getData(), 0);
 			}
 		}
 	}
@@ -494,28 +494,28 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 
 		boolean fromNavigator = isSourceNode(e.getDragId());
 
-		TreeNode rootNode = fromNavigator ? getCubeNode() : getTargetNode();
+		TreeNode root = fromNavigator ? getCubeNode() : getTargetNode();
 
-		TreeNode sourceNode = findNodeFromPath(rootNode, sourcePath);
-		TreeNode targetNode = findNodeFromPath(getTargetNode(), targetPath);
+		TreeNode source = findNodeFromPath(root, sourcePath);
+		TreeNode target = findNodeFromPath(getTargetNode(), targetPath);
 
 		Member member;
 
 		if (fromNavigator) {
-			if (!(sourceNode instanceof MeasureNode)) {
+			if (!(source instanceof MeasureNode)) {
 				return;
 			}
 
-			member = ((MeasureNode) sourceNode).getObject();
+			member = ((MeasureNode) source).getObject();
 
-			Axis axis = (Axis) targetNode.getParent().getParent().getData();
+			Axis axis = (Axis) target.getParent().getParent().getData();
 			addMember(axis, member, position);
 		} else {
-			if (!(sourceNode.getData() instanceof Member)) {
+			if (!(source.getData() instanceof Member)) {
 				return;
 			}
 
-			member = (Member) sourceNode.getData();
+			member = (Member) source.getData();
 			moveMember(member, position);
 		}
 	}
@@ -838,7 +838,7 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 			try {
 				isMeasure = hierarchy.getDimension().getDimensionType() == Type.MEASURE;
 			} catch (OlapException e) {
-				throw new FacesException();
+				throw new FacesException(e);
 			}
 
 			return isMeasure || isSelected(element);

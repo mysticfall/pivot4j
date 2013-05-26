@@ -187,19 +187,18 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 			Hierarchy childHierarchy = nodeChild.getHierarchy();
 
-			if (childHierarchy != null) {
-				if (!OlapUtils.equals(hierarchy, childHierarchy)) {
-					int index = getChildren().indexOf(child);
+			if (childHierarchy != null
+					&& !OlapUtils.equals(hierarchy, childHierarchy)) {
+				int index = getChildren().indexOf(child);
 
-					removeChild(child);
+				removeChild(child);
 
-					TableHeaderNode hierarchyNode = new TableHeaderNode(
-							getReference());
-					hierarchyNode.setHierarchy(childHierarchy);
+				TableHeaderNode hierarchyNode = new TableHeaderNode(
+						getReference());
+				hierarchyNode.setHierarchy(childHierarchy);
 
-					addChild(index, hierarchyNode);
-					hierarchyNode.addChild(child);
-				}
+				addChild(index, hierarchyNode);
+				hierarchyNode.addChild(child);
 			}
 
 			nodeChild.addHierarhcyHeaders();
@@ -213,11 +212,11 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 		for (TreeNode<TableAxisContext> child : children) {
 			TableHeaderNode nodeChild = (TableHeaderNode) child;
 
-			Member member = nodeChild.getMember();
-			if (member != null) {
+			Member mem = nodeChild.getMember();
+			if (mem != null) {
 				Level rootLevel = nodeChild.getRootLevel();
 
-				if (!OlapUtils.equals(member.getLevel(), rootLevel)) {
+				if (!OlapUtils.equals(mem.getLevel(), rootLevel)) {
 					int index = getChildren().indexOf(child);
 
 					removeChild(child);
@@ -227,7 +226,7 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 					TreeNode<TableAxisContext> childNode = child;
 
-					Member parent = member;
+					Member parent = mem;
 
 					while (parent != null
 							&& !OlapUtils.equals(rootLevel, parent.getLevel())) {
@@ -285,13 +284,13 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 					TableHeaderNode parentNode = this;
 
-					for (Property property : properties) {
+					for (Property prop : properties) {
 						TableHeaderNode propertyNode = new TableHeaderNode(
 								getReference());
 						propertyNode.setPosition(position);
 						propertyNode.setHierarchy(getHierarchy());
 						propertyNode.setMember(getMember());
-						propertyNode.setProperty(property);
+						propertyNode.setProperty(prop);
 
 						parentNode.addChild(propertyNode);
 
@@ -434,11 +433,9 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 	public int getRowSpan() {
 		if (rowSpan == null) {
-			if (member == null || property != null) {
-				if (aggregator == null) {
-					this.rowSpan = 1;
-					return rowSpan;
-				}
+			if ((member == null || property != null) && aggregator == null) {
+				this.rowSpan = 1;
+				return rowSpan;
 			}
 
 			final Map<Hierarchy, Integer> maxSpans = new HashMap<Hierarchy, Integer>(

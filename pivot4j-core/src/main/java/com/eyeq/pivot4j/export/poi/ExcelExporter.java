@@ -157,23 +157,23 @@ public class ExcelExporter extends AbstractPivotExporter {
 	}
 
 	protected Workbook createWorkbook() {
-		Workbook workbook = null;
+		Workbook newWorkbook = null;
 
 		switch (format) {
 		case XSSF:
-			workbook = new XSSFWorkbook();
+			newWorkbook = new XSSFWorkbook();
 			break;
 		case HSSF:
-			workbook = new HSSFWorkbook();
+			newWorkbook = new HSSFWorkbook();
 			break;
 		case SXSSF:
-			workbook = new SXSSFWorkbook(500);
+			newWorkbook = new SXSSFWorkbook(500);
 			break;
 		default:
 			assert false;
 		}
 
-		return workbook;
+		return newWorkbook;
 	}
 
 	/**
@@ -188,11 +188,11 @@ public class ExcelExporter extends AbstractPivotExporter {
 	 * @return
 	 */
 	protected Sheet createSheet(RenderContext context, Workbook workbook) {
-		Sheet sheet = workbook.createSheet(WorkbookUtil
+		Sheet newSheet = workbook.createSheet(WorkbookUtil
 				.createSafeSheetName(getSheetName(context, sheetIndex)));
 
 		sheetIndex++;
-		return sheet;
+		return newSheet;
 	}
 
 	/**

@@ -67,10 +67,10 @@ public class ReportContent {
 			throw new NullArgumentException("in");
 		}
 
-		FileConfiguration configuration = (FileConfiguration) createConfiguration();
-		configuration.load(in);
+		FileConfiguration config = (FileConfiguration) createConfiguration();
+		config.load(in);
 
-		this.configuration = (HierarchicalConfiguration) configuration;
+		this.configuration = (HierarchicalConfiguration) config;
 	}
 
 	/**
@@ -78,20 +78,20 @@ public class ReportContent {
 	 * @throws ConfigurationException
 	 */
 	public void write(OutputStream out) throws ConfigurationException {
-		FileConfiguration configuration = (FileConfiguration) this.configuration;
-		configuration.save(out);
+		FileConfiguration config = (FileConfiguration) this.configuration;
+		config.save(out);
 	}
 
 	/**
 	 * @return the configuration
 	 */
 	protected HierarchicalConfiguration createConfiguration() {
-		XMLConfiguration configuration = new XMLConfiguration();
+		XMLConfiguration config = new XMLConfiguration();
 
-		configuration.setRootElementName("report");
-		configuration.setDelimiterParsingDisabled(true);
+		config.setRootElementName("report");
+		config.setDelimiterParsingDisabled(true);
 
-		return configuration;
+		return config;
 	}
 
 	/**

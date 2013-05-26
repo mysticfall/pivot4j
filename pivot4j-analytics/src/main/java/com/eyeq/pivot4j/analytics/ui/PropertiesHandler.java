@@ -147,7 +147,7 @@ public class PropertiesHandler {
 
 			ExpressionFactory factory = application.getExpressionFactory();
 
-			ValueExpression expression = factory.createValueExpression(
+			ValueExpression exp = factory.createValueExpression(
 					context.getELContext(), "#{propertiesHandler.value}",
 					Object.class);
 
@@ -156,8 +156,8 @@ public class PropertiesHandler {
 					"#{propertiesHandler.onPropertyChange}", Void.TYPE,
 					new Class[0]);
 
-			editor.createComponent(descriptor, editorPanel, expression,
-					listener, "button-bar");
+			editor.createComponent(descriptor, editorPanel, exp, listener,
+					"button-bar");
 
 			this.value = editor.getValue(descriptor, properties);
 		}
@@ -312,10 +312,10 @@ public class PropertiesHandler {
 		item.setTitle(property.getDescription(context));
 		item.setIcon(property.getIcon());
 
-		MethodExpression expression = factory.createMethodExpression(
+		MethodExpression exp = factory.createMethodExpression(
 				context.getELContext(), "#{propertiesHandler.selectProperty}",
 				Void.TYPE, new Class[0]);
-		item.setActionExpression(expression);
+		item.setActionExpression(exp);
 		item.setUpdate("content,button-bar,:growl");
 		item.setOncomplete("applyThemeToCMEditor('.properties-config .CodeMirror')");
 

@@ -58,11 +58,12 @@ import com.eyeq.pivot4j.util.OlapUtils;
  */
 public class QueryAdapter implements Bookmarkable {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PivotModel model;
 
-	private Map<Axis, Quax> quaxes; // Array of query axis state object
+	// Array of query axis state object
+	private Map<Axis, Quax> quaxes;
 
 	private boolean useQuax = false;
 
@@ -516,7 +517,8 @@ public class QueryAdapter implements Bookmarkable {
 				topBottomAxis(parsedQuery, "BottomCount");
 				break;
 			default:
-				return; // do nothing
+				// do nothing
+				return;
 			}
 		}
 	}
@@ -536,8 +538,10 @@ public class QueryAdapter implements Bookmarkable {
 		// setForAx is the top level Exp of the axis
 		// put an Order FunCall around
 		List<Exp> args = new ArrayList<Exp>(3);
-		args.add(setForAx); // the set to be sorted is the set representing the
-							// query axis
+
+		// the set to be sorted is the set representing the query axis
+		args.add(setForAx);
+
 		// if we got more than 1 position member, generate a tuple for the 2.arg
 		Exp sortExp;
 
@@ -611,7 +615,9 @@ public class QueryAdapter implements Bookmarkable {
 
 		List<Exp> args = new ArrayList<Exp>(3);
 
-		args.add(setForAx); // the set representing the query axis
+		// the set representing the query axis
+		args.add(setForAx);
+
 		args.add(Literal.create(model.getTopBottomCount()));
 		args.add(sortExp);
 
@@ -1045,8 +1051,9 @@ public class QueryAdapter implements Bookmarkable {
 
 		quax.drillUp(hierarchy);
 
-		if (logger.isInfoEnabled())
+		if (logger.isInfoEnabled()) {
 			logger.info("Drill up hierarchy " + hierarchy.getCaption());
+		}
 	}
 
 	/**
@@ -1113,8 +1120,6 @@ public class QueryAdapter implements Bookmarkable {
 		state[0] = isAxesSwapped();
 		state[1] = getUseQuax();
 
-		Quax quaxToSort = getQuaxToSort();
-
 		if (quaxToSort == null) {
 			state[2] = -1;
 		} else {
@@ -1156,18 +1161,16 @@ public class QueryAdapter implements Bookmarkable {
 
 		int quaxOrdinal = (Integer) states[2];
 
-		Quax quaxToSort = null;
+		this.quaxToSort = null;
 
 		if (quaxOrdinal > -1) {
 			for (Quax quax : quaxes.values()) {
 				if (quaxOrdinal == quax.getOrdinal()) {
-					quaxToSort = quax;
+					this.quaxToSort = quax;
 					break;
 				}
 			}
 		}
-
-		this.quaxToSort = quaxToSort;
 
 		if (useQuax) {
 			Serializable[] quaxStates = (Serializable[]) states[3];

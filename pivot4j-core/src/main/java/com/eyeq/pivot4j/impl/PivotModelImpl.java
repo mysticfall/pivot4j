@@ -64,7 +64,7 @@ import com.eyeq.pivot4j.util.OlapUtils;
  */
 public class PivotModelImpl implements PivotModel {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private OlapDataSource dataSource;
 
@@ -117,6 +117,13 @@ public class PivotModelImpl implements PivotModel {
 
 		this.dataSource = dataSource;
 		this.expressionContext = createExpressionContext();
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Logger getLogger() {
+		return logger;
 	}
 
 	/**
@@ -214,7 +221,7 @@ public class PivotModelImpl implements PivotModel {
 		return initialized;
 	}
 
-	private void checkInitialization() throws NotInitializedException {
+	private void checkInitialization() {
 		if (!isInitialized()) {
 			throw new NotInitializedException(
 					"Model has not been initialized yet.");
@@ -228,23 +235,23 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	protected OlapConnection createConnection(OlapDataSource dataSource)
 			throws SQLException {
-		OlapConnection connection = dataSource.getConnection();
+		OlapConnection con = dataSource.getConnection();
 
 		if (roleName != null) {
-			connection.setRoleName(roleName);
+			con.setRoleName(roleName);
 		}
 
 		if (locale != null) {
-			connection.setLocale(locale);
+			con.setLocale(locale);
 		}
 
-		return connection;
+		return con;
 	}
 
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#destroy()
 	 */
-	public synchronized void destroy() throws NotInitializedException {
+	public synchronized void destroy() {
 		checkInitialization();
 
 		if (queryAdapter != null) {
@@ -367,7 +374,7 @@ public class PivotModelImpl implements PivotModel {
 	 * @return
 	 * @throws NotInitializedException
 	 */
-	public Catalog getCatalog() throws NotInitializedException {
+	public Catalog getCatalog() {
 		checkInitialization();
 
 		try {
@@ -380,7 +387,7 @@ public class PivotModelImpl implements PivotModel {
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#getCube()
 	 */
-	public Cube getCube() throws NotInitializedException {
+	public Cube getCube() {
 		checkInitialization();
 
 		Cube cube = null;
@@ -395,7 +402,6 @@ public class PivotModelImpl implements PivotModel {
 				cube = schema.getCubes().get(cubeName);
 
 				if (cube == null && cubeName != null) {
-					Logger logger = LoggerFactory.getLogger(getClass());
 					if (logger.isWarnEnabled()) {
 						logger.warn("Cube with the specified name cannot be found : "
 								+ cubeName);
@@ -422,7 +428,7 @@ public class PivotModelImpl implements PivotModel {
 	/**
 	 * @see com.eyeq.pivot4j.PivotModel#getCellSet()
 	 */
-	public synchronized CellSet getCellSet() throws NotInitializedException {
+	public synchronized CellSet getCellSet() {
 		checkInitialization();
 
 		if (cellSet != null) {
@@ -460,7 +466,7 @@ public class PivotModelImpl implements PivotModel {
 	 * @see com.eyeq.pivot4j.PivotModel#refresh()
 	 */
 	@Override
-	public void refresh() throws NotInitializedException {
+	public void refresh() {
 		this.cellSet = null;
 	}
 
@@ -487,7 +493,7 @@ public class PivotModelImpl implements PivotModel {
 		Date start = new Date(System.currentTimeMillis());
 
 		OlapStatement stmt = connection.createStatement();
-		CellSet cellSet = stmt.executeOlapQuery(mdx);
+		CellSet result = stmt.executeOlapQuery(mdx);
 
 		long duration = System.currentTimeMillis() - start.getTime();
 		if (logger.isInfoEnabled()) {
@@ -496,7 +502,7 @@ public class PivotModelImpl implements PivotModel {
 
 		fireQueryExecuted(start, duration, mdx);
 
-		return cellSet;
+		return result;
 	}
 
 	protected String normalizeMdx(String mdx) {
@@ -1052,14 +1058,12 @@ public class PivotModelImpl implements PivotModel {
 						sortCriteria.name());
 				configuration.addProperty("sort[@topBottomCount]",
 						topBottomCount);
-				if (isSorting()) {
-					if (sortPosMembers != null) {
-						int index = 0;
-						for (Member member : sortPosMembers) {
-							configuration.addProperty(
-									String.format("sort.member(%s)", index++),
-									member.getUniqueName());
-						}
+				if (isSorting() && sortPosMembers != null) {
+					int index = 0;
+					for (Member member : sortPosMembers) {
+						configuration.addProperty(
+								String.format("sort.member(%s)", index++),
+								member.getUniqueName());
 					}
 				}
 			}

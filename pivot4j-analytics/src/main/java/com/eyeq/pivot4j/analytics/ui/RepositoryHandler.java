@@ -46,7 +46,7 @@ import com.eyeq.pivot4j.analytics.ui.navigator.RepositoryNode;
 @SessionScoped
 public class RepositoryHandler implements ViewStateListener {
 
-	protected Logger log = LoggerFactory.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@ManagedProperty(value = "#{dataSourceManager}")
 	private DataSourceManager dataSourceManager;
@@ -184,12 +184,12 @@ public class RepositoryHandler implements ViewStateListener {
 
 		RepositoryFile parent = getDirectoryToSave();
 
-		RepositoryNode rootNode = getRepositoryRootNode();
+		RepositoryNode root = getRepositoryRootNode();
 
 		ViewState state = viewStateHolder.getState(activeViewId);
 
 		if (state.getFile() != null) {
-			RepositoryNode node = rootNode.findNode(state.getFile());
+			RepositoryNode node = root.findNode(state.getFile());
 			if (node != null) {
 				node.setViewId(null);
 			}
@@ -230,14 +230,14 @@ public class RepositoryHandler implements ViewStateListener {
 		state.setName(reportName);
 		state.setFile(file);
 
-		RepositoryNode parentNode = rootNode.findNode(parent);
+		RepositoryNode parentNode = root.findNode(parent);
 
-		RepositoryNode selection = parentNode.selectNode(file);
-		if (selection == null) {
-			selection = new RepositoryNode(file, repository);
-			selection.setParent(parentNode);
+		RepositoryNode node = parentNode.selectNode(file);
+		if (node == null) {
+			node = new RepositoryNode(file, repository);
+			node.setParent(parentNode);
 
-			parentNode.getChildren().add(selection);
+			parentNode.getChildren().add(node);
 
 			final RepositoryFileComparator comparator = new RepositoryFileComparator();
 
@@ -255,8 +255,8 @@ public class RepositoryHandler implements ViewStateListener {
 					});
 		}
 
-		selection.setViewId(activeViewId);
-		this.selection = selection;
+		node.setViewId(activeViewId);
+		this.selection = node;
 
 		RequestContext requestContext = RequestContext.getCurrentInstance();
 		requestContext.addCallbackParam("name", state.getName());
@@ -367,7 +367,7 @@ public class RepositoryHandler implements ViewStateListener {
 
 		this.activeViewId = null;
 
-		if (selection != null && selection instanceof RepositoryNode) {
+		if (selection instanceof RepositoryNode) {
 			RepositoryNode node = (RepositoryNode) selection;
 			if (node.getObject().equals(file)) {
 				selection.getParent().getChildren().remove(selection);
@@ -420,8 +420,8 @@ public class RepositoryHandler implements ViewStateListener {
 	}
 
 	public void onSelectionChange() {
-		RepositoryNode rootNode = getRepositoryRootNode();
-		rootNode.clearSelection();
+		RepositoryNode root = getRepositoryRootNode();
+		root.clearSelection();
 
 		if (selection != null) {
 			selection.setSelected(true);

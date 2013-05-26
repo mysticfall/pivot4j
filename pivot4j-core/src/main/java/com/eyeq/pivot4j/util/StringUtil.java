@@ -8,7 +8,7 @@
  */
 package com.eyeq.pivot4j.util;
 
-public class StringUtil {
+public final class StringUtil {
 
 	private StringUtil() {
 	}
@@ -37,13 +37,17 @@ public class StringUtil {
 		// uniqueName = [Product].[All Products].[Drink]
 		String str = uniqueName.trim();
 		int l2 = str.length() - 1;
-		if (str.charAt(0) != '[' || str.charAt(l2) != ']')
-			return new String[] { uniqueName }; // should not occur
+
+		// should not occur
+		if (str.charAt(0) != '[' || str.charAt(l2) != ']') {
+			return new String[] { uniqueName };
+		}
+
 		// remove first opening bracket and last closing bracket
 		str = str.substring(1, l2);
+
 		// str = Product].[All Products].[Drink
-		String[] nameParts = str.split("\\]\\.\\[");
-		return nameParts;
+		return str.split("\\]\\.\\[");
 	}
 
 	/**
@@ -56,12 +60,17 @@ public class StringUtil {
 	 * @return unique name
 	 */
 	public static String createUName(String[] strs, int n) {
-		if (n <= 0)
+		if (n <= 0) {
 			n = strs.length;
-		StringBuffer sb = new StringBuffer();
+		}
+
+		StringBuilder sb = new StringBuilder();
+
 		for (int i = 0; i < n; i++) {
-			if (i > 0)
+			if (i > 0) {
 				sb.append('.');
+			}
+
 			sb.append('[');
 			sb.append(strs[i]);
 			sb.append(']');
@@ -92,7 +101,8 @@ public class StringUtil {
 		String[] strs = splitUniqueName(uName);
 		int n = strs.length;
 		if (n < 3) {
-			return null; // at least 3 parts required, if a parent exists
+			// at least 3 parts required, if a parent exists
+			return null;
 		}
 		return createUName(strs, n - 1);
 	}

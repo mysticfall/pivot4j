@@ -19,6 +19,7 @@ import org.pentaho.platform.engine.services.solution.SolutionReposHelper;
 import org.pentaho.platform.plugin.action.mondrian.catalog.IMondrianCatalogService;
 import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCatalog;
 import org.pentaho.platform.util.messages.LocaleHelper;
+import org.slf4j.Logger;
 
 import com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager;
 import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
@@ -140,6 +141,7 @@ public class PentahoDataSourceManager extends
 		MondrianCatalog catalog = getCatalog(definition.getCatalogName());
 
 		if (catalog == null) {
+			Logger logger = getLogger();
 			if (logger.isWarnEnabled()) {
 				logger.warn("Unable to find catalog with name : "
 						+ definition.getCatalogName());
@@ -180,6 +182,7 @@ public class PentahoDataSourceManager extends
 		properties.put("url", url);
 		properties.put("driver", MondrianOlap4jDriver.class.getName());
 
+		Logger logger = getLogger();
 		if (logger.isInfoEnabled()) {
 			logger.info("Using connection URL : " + url);
 		}

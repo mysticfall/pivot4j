@@ -43,7 +43,7 @@ public class Settings {
 
 	public static final String APPLICATION_HOME = "pivot4j.home";
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private File applicationHome;
 
@@ -185,10 +185,10 @@ public class Settings {
 		String source = IOUtils.toString(in);
 		source = (String) evaluator.evaluate(source, createELContext(context));
 
-		XMLConfiguration configuration = new XMLConfiguration();
-		configuration.load(new StringReader(source));
+		XMLConfiguration config = new XMLConfiguration();
+		config.load(new StringReader(source));
 
-		return configuration;
+		return config;
 	}
 
 	/**

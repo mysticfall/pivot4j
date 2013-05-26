@@ -188,8 +188,7 @@ public class PivotExportHandler {
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 */
-	public List<SelectItem> getPaperSizes() throws IllegalArgumentException,
-			IllegalAccessException {
+	public List<SelectItem> getPaperSizes() throws IllegalAccessException {
 		if (paperSizes == null) {
 			this.paperSizes = new ArrayList<SelectItem>();
 
@@ -232,18 +231,18 @@ public class PivotExportHandler {
 
 			this.orientations = new ArrayList<SelectItem>();
 
-			for (Orientation orientation : Orientation.values()) {
+			for (Orientation orient : Orientation.values()) {
 				String label;
 
 				try {
 					label = bundle
 							.getString("label.pdf_export.page.orientation."
-									+ orientation.name().toLowerCase());
+									+ orient.name().toLowerCase());
 				} catch (MissingResourceException e) {
-					label = orientation.name();
+					label = orient.name();
 				}
 
-				orientations.add(new SelectItem(orientation, label));
+				orientations.add(new SelectItem(orient, label));
 			}
 		}
 
@@ -351,8 +350,7 @@ public class PivotExportHandler {
 		}
 	}
 
-	public void exportPdf() throws IOException, IllegalArgumentException,
-			IllegalAccessException {
+	public void exportPdf() throws IOException, IllegalAccessException {
 		HierarchicalConfiguration configuration = new HierarchicalConfiguration();
 
 		PivotRenderer renderer = gridHandler.getRenderer();

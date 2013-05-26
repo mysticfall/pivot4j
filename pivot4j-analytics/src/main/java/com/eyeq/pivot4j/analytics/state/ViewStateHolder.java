@@ -39,7 +39,7 @@ public class ViewStateHolder {
 
 	private static final long MINUTE = 60;
 
-	protected Logger log = LoggerFactory.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@ManagedProperty(value = "#{settings}")
 	private Settings settings;
@@ -269,11 +269,11 @@ public class ViewStateHolder {
 		MessageFormat mf = new MessageFormat(
 				messages.getString("label.untitled"));
 
-		List<ViewState> states = getStates();
+		List<ViewState> stateList = getStates();
 
-		Set<String> names = new HashSet<String>(states.size());
+		Set<String> names = new HashSet<String>(stateList.size());
 
-		for (ViewState state : states) {
+		for (ViewState state : stateList) {
 			names.add(state.getName());
 		}
 

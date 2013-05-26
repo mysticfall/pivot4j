@@ -56,7 +56,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		}
 
 		Quax quax = adapter.getQuax(axis);
-		
+
 		if (quax == null) {
 			quax = adapter.createQuax(axis);
 		}
@@ -181,7 +181,8 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		// find the Quax for this hierarchy
 		Quax quax = adapter.getQuax(axis);
 		if (quax == null) {
-			return Collections.emptyList(); // should not occur
+			// should not occur
+			return Collections.emptyList();
 		}
 
 		return quax.getHierarchies();
@@ -264,10 +265,11 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 			List<Member> topMembers = hierarchy.getRootMembers();
 			if (topMembers.size() == 1) {
-				return new MemberExp(topMembers.get(0)); // single
-															// member
+				// single member
+				return new MemberExp(topMembers.get(0));
 			} else if (topMembers.isEmpty()) {
-				return null; // possible if access control active
+				// possible if access control active
+				return null;
 			}
 
 			List<Exp> args = new ArrayList<Exp>(topMembers.size());

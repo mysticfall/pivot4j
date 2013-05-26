@@ -184,8 +184,8 @@ public abstract class NavigatorNode<T> implements TreeNode {
 	 * @param child
 	 * @return
 	 */
-	protected <TC extends MetadataElement> boolean configureChildNode(
-			TC element, NavigatorNode<?> child) {
+	protected <C extends MetadataElement> boolean configureChildNode(
+			C element, NavigatorNode<?> child) {
 		child.setParent(this);
 
 		if (nodeFilter != null) {
@@ -195,8 +195,8 @@ public abstract class NavigatorNode<T> implements TreeNode {
 				child.setSelectable(nodeFilter.isSelectable(element));
 				child.setSelected(nodeFilter.isSelected(element));
 
-				NodeData data = child.getData();
-				data.setSelected(nodeFilter.isActive(element));
+				NodeData nodeData = child.getData();
+				nodeData.setSelected(nodeFilter.isActive(element));
 			} else {
 				return false;
 			}

@@ -222,18 +222,11 @@ public class QuaxUtil {
 				}
 			}
 
-			if (parentLevel != null
-					&& OlapUtils.equals(member.getLevel(), parentLevel)) {
-				return true;
-			} else {
-				return false;
-			}
+			return (parentLevel != null && OlapUtils.equals(member.getLevel(),
+					parentLevel));
 		} else if (f.isCallTo("Union")) {
-			if (isChildOfMemberInFunCall(f.getArgs().get(0), member)) {
-				return true;
-			} else {
-				return isChildOfMemberInFunCall(f.getArgs().get(1), member);
-			}
+			return isChildOfMemberInFunCall(f.getArgs().get(0), member)
+					|| isChildOfMemberInFunCall(f.getArgs().get(1), member);
 		} else if (f.isCallTo("{}")) {
 			for (Exp exp : f.getArgs()) {
 				Member mm = memberForExp(exp);
@@ -341,11 +334,7 @@ public class QuaxUtil {
 			mm = mm.getParentMember();
 		}
 
-		if (OlapUtils.equals(mm, ancestor)) {
-			return true;
-		} else {
-			return false;
-		}
+		return OlapUtils.equals(mm, ancestor);
 	}
 
 	/**
@@ -365,9 +354,11 @@ public class QuaxUtil {
 		FunCall f = (FunCall) oExp;
 
 		if (f.isCallTo("Children")) {
-			return true; // children *not* top level
+			// children *not* top level
+			return true;
 		} else if (f.isCallTo("Descendants")) {
-			return true; // descendants*not* top level
+			// descendants*not* top level
+			return true;
 		} else if (f.isCallTo("Members")) {
 			Level level = levelForExp(f.getArgs().get(0));
 			return (level.getDepth() > 0);
@@ -397,11 +388,7 @@ public class QuaxUtil {
 	 */
 	public boolean isMemberOnToplevel(Exp oMem) {
 		Member member = memberForExp(oMem);
-		if (member.getLevel().getDepth() > 0) {
-			return false;
-		} else {
-			return true;
-		}
+		return (member.getLevel().getDepth() <= 0);
 	}
 
 	/**
@@ -763,7 +750,8 @@ public class QuaxUtil {
 		}
 
 		if (topExp.size() == 1) {
-			return topExp.get(0); // single member
+			// single member
+			return topExp.get(0);
 		}
 
 		return new FunCall("{}", Syntax.Braces, topExp);
@@ -813,8 +801,10 @@ public class QuaxUtil {
 	public void addMemberUncles(List<Exp> list, Member member, int[] maxLevel) {
 		int parentLevel = member.getLevel().getDepth() - 1;
 
-		if (parentLevel < maxLevel[0])
+		if (parentLevel < maxLevel[0]) {
 			return;
+		}
+
 		if (parentLevel > maxLevel[0]) {
 			maxLevel[0] = parentLevel;
 			list.clear();
