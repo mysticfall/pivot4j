@@ -440,8 +440,13 @@ public class RenderContext {
 		Member parent = cachedParents.get(member.getUniqueName());
 
 		if (parent == null) {
-			parent = member.getParentMember();
-			cachedParents.put(member.getUniqueName(), parent);
+			boolean isRagged = member.getDepth() > 1;
+
+			if (isRagged) {
+			} else {
+				parent = member.getParentMember();
+				cachedParents.put(member.getUniqueName(), parent);
+			}
 		}
 
 		return parent;
@@ -699,13 +704,14 @@ public class RenderContext {
 			}
 		});
 
-		context.put("aggregator", new ExpressionContext.ValueBinding<Aggregator>() {
+		context.put("aggregator",
+				new ExpressionContext.ValueBinding<Aggregator>() {
 
-			@Override
-			public Aggregator getValue() {
-				return getAggregator();
-			}
-		});
+					@Override
+					public Aggregator getValue() {
+						return getAggregator();
+					}
+				});
 
 		context.put("attributes",
 				new ExpressionContext.ValueBinding<Map<String, Object>>() {

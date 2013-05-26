@@ -253,7 +253,7 @@ public class MemberSelectionHandler implements NodeFilter {
 				return;
 			}
 
-			this.selection = new MemberSelection(members);
+			this.selection = new MemberSelection(members, model.getCube());
 		}
 
 		this.sourceNode = null;
@@ -333,7 +333,7 @@ public class MemberSelectionHandler implements NodeFilter {
 				return;
 			}
 
-			this.selection = new MemberSelection(members);
+			this.selection = new MemberSelection(members, model.getCube());
 		}
 
 		this.sourceNode = null;
@@ -400,7 +400,7 @@ public class MemberSelectionHandler implements NodeFilter {
 						.getTransform(PlaceMembersOnAxes.class);
 
 				List<Member> members = transform.findVisibleMembers(hierarchy);
-				this.selection = new MemberSelection(members);
+				this.selection = new MemberSelection(members, model.getCube());
 			}
 		}
 

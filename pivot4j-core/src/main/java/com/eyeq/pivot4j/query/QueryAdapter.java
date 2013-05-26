@@ -51,6 +51,7 @@ import com.eyeq.pivot4j.mdx.ValueParameter;
 import com.eyeq.pivot4j.mdx.impl.MdxParserImpl;
 import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 import com.eyeq.pivot4j.state.Bookmarkable;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 /**
  * Adapt the MDX query to the model
@@ -545,16 +546,20 @@ public class QueryAdapter implements Bookmarkable {
 			return;
 		}
 
+		OlapUtils utils = new OlapUtils(getModel().getCube());
+
 		if (sortPosMembers.size() > 1) {
 			List<Exp> memberExp = new ArrayList<Exp>(sortPosMembers.size());
 
 			for (Member member : sortPosMembers) {
-				memberExp.add(new MemberExp(member));
+				memberExp
+						.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
 			}
 
 			sortExp = new FunCall("()", Syntax.Parentheses, memberExp);
 		} else {
-			sortExp = new MemberExp(sortPosMembers.get(0));
+			sortExp = new MemberExp(utils.wrapRaggedIfNecessary(sortPosMembers
+					.get(0)));
 		}
 
 		args.add(sortExp);
@@ -587,17 +592,21 @@ public class QueryAdapter implements Bookmarkable {
 			return;
 		}
 
+		OlapUtils utils = new OlapUtils(getModel().getCube());
+
 		// if we got more than 1 position member, generate a tuple
 		if (sortPosMembers.size() > 1) {
 			List<Exp> memberExp = new ArrayList<Exp>(sortPosMembers.size());
 
 			for (Member member : sortPosMembers) {
-				memberExp.add(new MemberExp(member));
+				memberExp
+						.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
 			}
 
 			sortExp = new FunCall("()", Syntax.Parentheses, memberExp);
 		} else {
-			sortExp = new MemberExp(sortPosMembers.get(0));
+			sortExp = new MemberExp(utils.wrapRaggedIfNecessary(sortPosMembers
+					.get(0)));
 		}
 
 		List<Exp> args = new ArrayList<Exp>(3);
@@ -769,8 +778,10 @@ public class QueryAdapter implements Bookmarkable {
 	protected Object createMemberSet(List<Member> members) {
 		List<Exp> exps = new ArrayList<Exp>(members.size());
 
+		OlapUtils utils = new OlapUtils(getModel().getCube());
+
 		for (Member member : members) {
-			exps.add(new MemberExp(member));
+			exps.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
 		}
 
 		return new FunCall("{}", Syntax.Braces, exps);

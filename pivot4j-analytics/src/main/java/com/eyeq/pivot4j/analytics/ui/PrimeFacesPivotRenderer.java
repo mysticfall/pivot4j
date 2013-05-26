@@ -155,6 +155,16 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 				}
 			}
 		}
+		if (context.getMember()!=null) {
+
+//			Property property = context.getMember().getProperties().get("MEMBER_UNIQUE_NAME");
+//			try {
+//				label += " / " + context.getMember().getPropertyValue(property);
+//			} catch (OlapException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		}
 
 		return label;
 	}

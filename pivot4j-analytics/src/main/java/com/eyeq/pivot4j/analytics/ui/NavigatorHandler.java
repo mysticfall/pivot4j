@@ -1,6 +1,8 @@
 package com.eyeq.pivot4j.analytics.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +147,20 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 			PlaceLevelsOnAxes transform = model
 					.getTransform(PlaceLevelsOnAxes.class);
 
-			result = transform.findVisibleLevels(hierarchy);
+			result = new ArrayList<Level>(
+					transform.findVisibleLevels(hierarchy));
+
+			Collections.sort(result, new Comparator<Level>() {
+
+				@Override
+				public int compare(Level l1, Level l2) {
+					Integer d1 = l1.getDepth();
+					Integer d2 = l2.getDepth();
+
+					return d1.compareTo(d2);
+				}
+			});
+
 			levels.put(hierarchy, result);
 		}
 

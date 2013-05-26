@@ -46,15 +46,15 @@ public class OlapUtils {
 	 * @return
 	 */
 	public Member lookupMember(String identifier) {
-		return lookupMember(cube, identifier);
+		return lookupMember(identifier, cube);
 	}
 
 	/**
-	 * @param cube
 	 * @param identifier
+	 * @param cube
 	 * @return
 	 */
-	public static Member lookupMember(Cube cube, String identifier) {
+	public static Member lookupMember(String identifier, Cube cube) {
 		try {
 			return cube.lookupMember(IdentifierNode.parseIdentifier(identifier)
 					.getSegmentList());
@@ -130,5 +130,46 @@ public class OlapUtils {
 		}
 
 		return true;
+	}
+
+	/**
+	 * @param member
+	 * @return
+	 */
+	public static boolean isRaggedMember(Member member) {
+		if (member == null) {
+			throw new NullArgumentException("member");
+		}
+
+		return member.getDepth() > 1 && member.getParentMember() == null;
+	}
+
+	/**
+	 * @param member
+	 * @return
+	 */
+	public Member wrapRaggedIfNecessary(Member member) {
+		return wrapRaggedIfNecessary(member, cube);
+	}
+
+	/**
+	 * @param member
+	 * @param cube
+	 * @return
+	 */
+	public static Member wrapRaggedIfNecessary(Member member, Cube cube) {
+		if (member == null) {
+			throw new NullArgumentException("member");
+		}
+
+		if (cube == null) {
+			throw new NullArgumentException("cube");
+		}
+
+		if (isRaggedMember(member)) {
+			return new RaggedMemberWrapper(member, cube);
+		}
+
+		return member;
 	}
 }

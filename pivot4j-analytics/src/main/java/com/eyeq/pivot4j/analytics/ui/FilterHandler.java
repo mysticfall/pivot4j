@@ -116,7 +116,7 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 				ChangeSlicer transform = model.getTransform(ChangeSlicer.class);
 
 				this.filterMembers = new MemberSelection(
-						transform.getSlicer(hierarchy));
+						transform.getSlicer(hierarchy), model.getCube());
 			}
 
 		}

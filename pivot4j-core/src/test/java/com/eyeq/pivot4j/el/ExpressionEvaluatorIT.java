@@ -104,8 +104,8 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 		assertThat("Wrong member found on the slicer axis.", members.get(0)
 				.getUniqueName(), equalTo("[Time].[1997]"));
 
-		Member member = OlapUtils.lookupMember(model.getCube(),
-				"[Product].[All Products]");
+		Member member = OlapUtils.lookupMember("[Product].[All Products]",
+				model.getCube());
 
 		DrillExpandMember drillTransform = model
 				.getTransform(DrillExpandMember.class);

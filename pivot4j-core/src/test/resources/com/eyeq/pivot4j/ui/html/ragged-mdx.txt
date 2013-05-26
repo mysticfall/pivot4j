@@ -1,0 +1,1 @@
+SELECT NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, NON EMPTY Hierarchize(Union(Union(Union({[Geography].[Canada], [Geography].[Israel], [Geography].[Mexico], [Geography].[USA], [Geography].[Vatican]}, [Geography].[Israel].Children), [Geography].[Mexico].Children), [Geography].[USA].Children)) ON ROWS FROM [Sales Ragged]

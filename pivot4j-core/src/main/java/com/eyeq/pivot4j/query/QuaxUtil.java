@@ -28,6 +28,7 @@ import com.eyeq.pivot4j.mdx.metadata.DimensionExp;
 import com.eyeq.pivot4j.mdx.metadata.LevelExp;
 import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 import com.eyeq.pivot4j.util.OlapUtils;
+import com.eyeq.pivot4j.util.RaggedMemberWrapper;
 
 public class QuaxUtil {
 
@@ -176,7 +177,14 @@ public class QuaxUtil {
 		FunCall f = (FunCall) oExp;
 
 		if (f.isCallTo("Children")) {
-			return OlapUtils.equals(member, memberForExp(f.getArgs().get(0)));
+			if (member instanceof RaggedMemberWrapper) {
+				return OlapUtils.equals(
+						((RaggedMemberWrapper) member).getTopMember(),
+						memberForExp(f.getArgs().get(0)));
+			} else {
+				return OlapUtils.equals(member,
+						memberForExp(f.getArgs().get(0)));
+			}
 		} else if (f.isCallTo("Descendants")) {
 			// true, if f = descendants(m2, level) contains any child of m
 			// so level must be parent-level of m
@@ -230,7 +238,14 @@ public class QuaxUtil {
 			for (Exp exp : f.getArgs()) {
 				Member mm = memberForExp(exp);
 
-				Member mmp = mm.getParentMember();
+				Member mmp;
+
+				if (mm instanceof RaggedMemberWrapper) {
+					mmp = ((RaggedMemberWrapper) mm).getTopMember();
+				} else {
+					mmp = mm.getParentMember();
+				}
+
 				if (mmp != null && OlapUtils.equals(mmp, member)) {
 					return true;
 				}
@@ -565,7 +580,7 @@ public class QuaxUtil {
 	 * @return Expression Object
 	 */
 	public Exp expForMember(Member member) {
-		return new MemberExp(member);
+		return new MemberExp(OlapUtils.wrapRaggedIfNecessary(member, cube));
 	}
 
 	/**

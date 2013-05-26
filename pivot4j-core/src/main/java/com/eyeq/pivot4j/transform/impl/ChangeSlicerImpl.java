@@ -267,13 +267,17 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 			List<Member> members) {
 		if (members == null || members.isEmpty()) {
 			return null;
-		} else if (members.size() == 1) {
-			return new MemberExp(members.get(0));
+		}
+
+		OlapUtils utils = new OlapUtils(getModel().getCube());
+
+		if (members.size() == 1) {
+			return new MemberExp(utils.wrapRaggedIfNecessary(members.get(0)));
 		}
 
 		List<Exp> expressions = new ArrayList<Exp>(members.size());
 		for (Member member : members) {
-			expressions.add(new MemberExp(member));
+			expressions.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
 		}
 
 		return new FunCall("{}", Syntax.Braces, expressions);

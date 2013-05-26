@@ -45,6 +45,7 @@ import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorFactory;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
 import com.eyeq.pivot4j.util.OlapUtils;
+import com.eyeq.pivot4j.util.RaggedMemberWrapper;
 import com.eyeq.pivot4j.util.TreeNode;
 import com.eyeq.pivot4j.util.TreeNodeCallback;
 
@@ -776,6 +777,12 @@ public class RenderStrategyImpl implements RenderStrategy {
 				}
 
 				TableHeaderNode childNode = new TableHeaderNode(nodeContext);
+
+				if (member != null && member.getDepth() > 0
+						&& nodeContext.getParentMember(member) == null) {
+					member = new RaggedMemberWrapper(member, model.getCube());
+				}
+
 				childNode.setMember(member);
 				childNode.setHierarchy(member.getHierarchy());
 				childNode.setPosition(position);

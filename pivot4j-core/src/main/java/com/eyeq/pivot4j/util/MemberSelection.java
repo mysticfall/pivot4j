@@ -14,21 +14,42 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.NullArgumentException;
+import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
 public class MemberSelection extends TreeNode<Member> {
 
 	private Set<Member> selection = new HashSet<Member>();
 
-	public MemberSelection() {
+	private Cube cube;
+
+	/**
+	 * @param cube
+	 */
+	public MemberSelection(Cube cube) {
 		super(null);
+
+		if (cube == null) {
+			throw new NullArgumentException("cube");
+		}
+
+		this.cube = cube;
 	}
 
 	/**
 	 * @param members
+	 * @param cube
 	 */
-	public MemberSelection(List<Member> members) {
+	public MemberSelection(List<Member> members, Cube cube) {
 		super(null);
+
+		if (cube == null) {
+			throw new NullArgumentException("cube");
+		}
+
+		this.cube = cube;
+
 		addMembers(members);
 	}
 
@@ -45,12 +66,25 @@ public class MemberSelection extends TreeNode<Member> {
 	 * @param member
 	 */
 	public void addMember(Member member) {
-		List<Member> ancestors = new ArrayList<Member>(
-				member.getAncestorMembers());
-
-		Collections.reverse(ancestors);
+		List<Member> ancestors;
 
 		TreeNode<Member> parent = this;
+
+		Member wrappedMember = OlapUtils.wrapRaggedIfNecessary(member, cube);
+
+		if (wrappedMember instanceof RaggedMemberWrapper) {
+			RaggedMemberWrapper raggedMember = (RaggedMemberWrapper) wrappedMember;
+
+			Member topMember = raggedMember.getTopMember();
+
+			ancestors = new ArrayList<Member>(topMember.getAncestorMembers());
+			ancestors.add(0, topMember);
+		} else {
+			ancestors = new ArrayList<Member>(
+					wrappedMember.getAncestorMembers());
+		}
+
+		Collections.reverse(ancestors);
 
 		for (Member ancestor : ancestors) {
 			TreeNode<Member> node = findChild(ancestor);
@@ -63,17 +97,17 @@ public class MemberSelection extends TreeNode<Member> {
 			parent = node;
 		}
 
-		TreeNode<Member> node = findChild(member);
+		TreeNode<Member> node = findChild(wrappedMember);
 
 		if (node == null) {
-			node = new SelectionNode(member, true);
+			node = new SelectionNode(wrappedMember, true);
 			parent.addChild(node);
 		} else {
 			((SelectionNode) node).setSelected(true);
 		}
 
-		if (!isSelected(member)) {
-			selection.add(member);
+		if (!isSelected(wrappedMember)) {
+			selection.add(wrappedMember);
 		}
 	}
 
@@ -100,7 +134,12 @@ public class MemberSelection extends TreeNode<Member> {
 	 * @return
 	 */
 	public boolean isSelected(Member member) {
-		return selection.contains(member);
+		if (member == null) {
+			return false;
+		}
+
+		Member wrappedMember = OlapUtils.wrapRaggedIfNecessary(member, cube);
+		return selection.contains(wrappedMember);
 	}
 
 	public List<Member> getMembers() {

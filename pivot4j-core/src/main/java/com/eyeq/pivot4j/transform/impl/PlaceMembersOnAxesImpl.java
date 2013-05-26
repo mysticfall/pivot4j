@@ -117,6 +117,8 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 			}
 		}
 
+		OlapUtils utils = new OlapUtils(getModel().getCube());
+
 		List<Exp> expressions = new ArrayList<Exp>(hierarchies.size());
 
 		for (Hierarchy hierarchy : hierarchies) {
@@ -125,10 +127,11 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 			List<Exp> sets = new ArrayList<Exp>(selection.size());
 
 			if (selection.size() == 1) {
-				expressions.add(new MemberExp(selection.get(0)));
+				expressions.add(new MemberExp(utils
+						.wrapRaggedIfNecessary(selection.get(0))));
 			} else {
 				for (Member member : selection) {
-					sets.add(new MemberExp(member));
+					sets.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
 				}
 
 				expressions.add(new FunCall("{}", Syntax.Braces, sets));
@@ -183,7 +186,7 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 				.getTransform(PlaceMembersOnAxes.class);
 
 		MemberSelection selection = new MemberSelection(
-				transform.findVisibleMembers(hierarchy));
+				transform.findVisibleMembers(hierarchy), getModel().getCube());
 		selection.addMembers(members);
 
 		placeMembers(hierarchy, selection.getMembers());
