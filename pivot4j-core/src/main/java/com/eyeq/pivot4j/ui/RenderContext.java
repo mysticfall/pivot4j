@@ -440,13 +440,8 @@ public class RenderContext {
 		Member parent = cachedParents.get(member.getUniqueName());
 
 		if (parent == null) {
-			boolean isRagged = member.getDepth() > 1;
-
-			if (isRagged) {
-			} else {
-				parent = member.getParentMember();
-				cachedParents.put(member.getUniqueName(), parent);
-			}
+			parent = member.getParentMember();
+			cachedParents.put(member.getUniqueName(), parent);
 		}
 
 		return parent;
