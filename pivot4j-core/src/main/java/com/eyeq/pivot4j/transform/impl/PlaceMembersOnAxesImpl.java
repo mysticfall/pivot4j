@@ -37,7 +37,7 @@ import com.eyeq.pivot4j.util.OlapUtils;
 public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		PlaceMembersOnAxes {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * @param queryAdapter

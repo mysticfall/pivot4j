@@ -20,21 +20,21 @@ import com.eyeq.pivot4j.ui.PropertyCollector;
 
 public class NonInternalPropertyCollector implements PropertyCollector {
 
-	static Set<String> INTERNAL_PROPERTIES;
+	private static Set<String> internalProperties;
 
 	static {
-		INTERNAL_PROPERTIES = new HashSet<String>();
+		internalProperties = new HashSet<String>();
 
 		for (Property property : Property.StandardMemberProperty.values()) {
-			INTERNAL_PROPERTIES.add(property.getName());
+			internalProperties.add(property.getName());
 		}
 
 		// Workaround for Olap4J issue #77
-		INTERNAL_PROPERTIES.add("CELL_FORMATTER");
-		INTERNAL_PROPERTIES.add("CELL_FORMATTER_SCRIPT");
-		INTERNAL_PROPERTIES.add("CELL_FORMATTER_SCRIPT_LANGUAGE");
-		INTERNAL_PROPERTIES.add("DISPLAY_FOLDER");
-		INTERNAL_PROPERTIES.add("KEY");
+		internalProperties.add("CELL_FORMATTER");
+		internalProperties.add("CELL_FORMATTER_SCRIPT");
+		internalProperties.add("CELL_FORMATTER_SCRIPT_LANGUAGE");
+		internalProperties.add("DISPLAY_FOLDER");
+		internalProperties.add("KEY");
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class NonInternalPropertyCollector implements PropertyCollector {
 
 		for (Property property : properties) {
 			if (property.isVisible()
-					&& !INTERNAL_PROPERTIES.contains(property.getName())) {
+					&& !internalProperties.contains(property.getName())) {
 				selection.add(property);
 			}
 		}

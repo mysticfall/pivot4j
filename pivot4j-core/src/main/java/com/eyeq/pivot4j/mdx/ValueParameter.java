@@ -23,10 +23,9 @@ public class ValueParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	@Override
-	public ValueParameter clone() {
+	public ValueParameter copy() {
 		ValueParameter clone = new ValueParameter(getExpression());
 		clone.setEvaluated(isEvaluated());
 		clone.setResult(getResult());

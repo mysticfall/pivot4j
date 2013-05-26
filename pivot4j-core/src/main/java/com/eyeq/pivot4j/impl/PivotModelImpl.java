@@ -807,7 +807,7 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
-	 * returns true, if one of the members is a measure
+	 * returns true, if ONE of the members is a measure
 	 * 
 	 * @param position
 	 *            the position to check for sortability

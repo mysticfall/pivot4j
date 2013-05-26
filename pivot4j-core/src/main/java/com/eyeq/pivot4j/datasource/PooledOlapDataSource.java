@@ -21,6 +21,8 @@ import org.olap4j.OlapDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eyeq.pivot4j.PivotException;
+
 public class PooledOlapDataSource extends AbstractOlapDataSource implements
 		CloseableDataSource {
 
@@ -238,7 +240,7 @@ public class PooledOlapDataSource extends AbstractOlapDataSource implements
 		 * @see com.eyeq.pivot4j.datasource.OlapConnectionFactory#makeObject()
 		 */
 		@Override
-		public OlapConnection makeObject() throws Exception {
+		public OlapConnection makeObject() {
 			final OlapConnection connection = super.makeObject();
 
 			InvocationHandler handler = new InvocationHandler() {
@@ -278,12 +280,16 @@ public class PooledOlapDataSource extends AbstractOlapDataSource implements
 		 *      .olap4j.OlapConnection)
 		 */
 		@Override
-		public void destroyObject(OlapConnection con) throws Exception {
+		public void destroyObject(OlapConnection con) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Closing a returned connection object : " + con);
 			}
 
-			con.unwrap(OlapConnection.class).close();
+			try {
+				con.unwrap(OlapConnection.class).close();
+			} catch (SQLException e) {
+				throw new PivotException(e);
+			}
 		}
 	}
 }

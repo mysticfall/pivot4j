@@ -80,10 +80,9 @@ public class SetExp extends AbstractExp {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	@Override
-	public SetExp clone() {
-		return new SetExp(mode, expression.clone(), hierarchy);
+	public SetExp copy() {
+		return new SetExp(mode, expression.copy(), hierarchy);
 	}
 }

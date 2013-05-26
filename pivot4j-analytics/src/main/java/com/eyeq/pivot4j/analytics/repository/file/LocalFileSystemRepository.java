@@ -50,12 +50,10 @@ public class LocalFileSystemRepository implements ReportRepository {
 
 			File file = new File(path);
 
-			if (!file.exists()) {
-				if (!file.mkdirs()) {
-					throw new IOException(
-							"Creating repository direcoty failed with unknown reason : "
-									+ path);
-				}
+			if (!file.exists() && !file.mkdirs()) {
+				throw new IOException(
+						"Creating repository direcoty failed with unknown reason : "
+								+ path);
 			}
 
 			this.root = new LocalFile(file, file);

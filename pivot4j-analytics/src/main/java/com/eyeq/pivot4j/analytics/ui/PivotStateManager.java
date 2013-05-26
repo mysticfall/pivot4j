@@ -26,7 +26,7 @@ import com.eyeq.pivot4j.analytics.state.ViewStateHolder;
 @ViewScoped
 public class PivotStateManager {
 
-	protected Logger log = LoggerFactory.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@ManagedProperty(value = "#{settings}")
 	private Settings settings;

@@ -105,12 +105,6 @@ public abstract class AbstractMetadataExp<T extends MetadataElement> extends
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
-	 */
-	@Override
-	public abstract AbstractMetadataExp<T> clone();
-
-	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override

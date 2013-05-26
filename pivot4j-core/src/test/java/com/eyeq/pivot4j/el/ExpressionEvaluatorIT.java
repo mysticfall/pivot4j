@@ -48,7 +48,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 		List<Member> members = transform.getSlicer();
 
-		assertThat("Slicer axis should contain one member.", members.size(),
+		assertThat("Slicer axis should contain ONE member.", members.size(),
 				is(1));
 		assertThat("Wrong member found on the slicer axis.", members.get(0)
 				.getUniqueName(), equalTo("[Time].[1997]"));
@@ -70,7 +70,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 		List<Position> positions = cellSet.getAxes()
 				.get(Axis.ROWS.axisOrdinal()).getPositions();
-		assertThat("Row axis should contain one positions.", positions.size(),
+		assertThat("Row axis should contain ONE positions.", positions.size(),
 				is(1));
 
 		Position position = positions.get(0);
@@ -98,7 +98,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 		List<Member> members = slicerTransform.getSlicer();
 
-		assertThat("Slicer axis should contain one member.", members.size(),
+		assertThat("Slicer axis should contain ONE member.", members.size(),
 				is(1));
 
 		assertThat("Wrong member found on the slicer axis.", members.get(0)
@@ -136,7 +136,7 @@ public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
 		List<Member> members = slicerTransform.getSlicer();
 
-		assertThat("Slicer axis should contain one member.", members.size(),
+		assertThat("Slicer axis should contain ONE member.", members.size(),
 				is(1));
 
 		assertThat("Wrong member found on the slicer axis.", members.get(0)

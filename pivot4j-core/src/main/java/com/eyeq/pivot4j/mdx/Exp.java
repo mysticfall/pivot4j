@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * Expression node for an MDX parse tree
  */
-public interface Exp extends Cloneable, Serializable {
+public interface Exp extends Serializable {
 
 	String toMdx();
 
@@ -22,5 +22,5 @@ public interface Exp extends Cloneable, Serializable {
 	 */
 	void accept(ExpVisitor visitor);
 
-	Exp clone();
+	Exp copy();
 }

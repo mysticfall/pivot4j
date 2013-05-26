@@ -436,11 +436,11 @@ public class RepositoryHandler implements ViewStateListener {
 
 		ViewState state = viewStateHolder.getState(activeViewId);
 
-		RepositoryNode rootNode = getRepositoryRootNode();
-		rootNode.clearSelection();
+		RepositoryNode root = getRepositoryRootNode();
+		root.clearSelection();
 
 		if (state != null && state.getFile() != null) {
-			this.selection = rootNode.selectNode(state.getFile());
+			this.selection = root.selectNode(state.getFile());
 		}
 	}
 
@@ -564,8 +564,8 @@ public class RepositoryHandler implements ViewStateListener {
 			return;
 		}
 
-		RepositoryNode rootNode = getRepositoryRootNode();
-		RepositoryNode node = rootNode.findNode(file);
+		RepositoryNode root = getRepositoryRootNode();
+		RepositoryNode node = root.findNode(file);
 
 		if (node != null) {
 			node.setViewId(viewId);
@@ -579,8 +579,8 @@ public class RepositoryHandler implements ViewStateListener {
 	public void viewUnregistered(ViewStateEvent e) {
 		String viewId = e.getState().getId();
 
-		RepositoryNode rootNode = getRepositoryRootNode();
-		RepositoryNode node = rootNode.findNode(viewId);
+		RepositoryNode root = getRepositoryRootNode();
+		RepositoryNode node = root.findNode(viewId);
 
 		if (node != null) {
 			node.setViewId(null);

@@ -83,10 +83,9 @@ public class LevelExp extends AbstractMetadataExp<Level> {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	@Override
-	public LevelExp clone() {
+	public LevelExp copy() {
 		return new LevelExp(getName(), getUniqueName(), getHierarchyName());
 	}
 }

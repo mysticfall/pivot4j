@@ -156,7 +156,7 @@ public class LocalFile implements RepositoryFile {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof LocalFile)) {
+		if (!(obj instanceof LocalFile)) {
 			return false;
 		}
 

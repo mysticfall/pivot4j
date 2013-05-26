@@ -200,11 +200,7 @@ public class QuaxUtil {
 					member = member.getParentMember();
 				}
 
-				if (OlapUtils.equals(member, ancestor)) {
-					return true;
-				} else {
-					return false;
-				}
+				return OlapUtils.equals(member, ancestor);
 			} else {
 				return false;
 			}

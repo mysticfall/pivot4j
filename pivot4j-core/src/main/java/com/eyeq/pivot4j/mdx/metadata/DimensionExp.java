@@ -54,10 +54,10 @@ public class DimensionExp extends AbstractMetadataExp<Dimension> {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
 	@Override
-	public DimensionExp clone() {
+	public DimensionExp copy() {
 		return new DimensionExp(getName(), getUniqueName());
 	}
 }

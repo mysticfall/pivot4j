@@ -211,7 +211,7 @@ public class Quax implements Bookmarkable {
 		initPositions(posMembers);
 
 		// initialize the dimension flags
-		// if there is only one set node per dimension,
+		// if there is only ONE set node per dimension,
 		// we are in qubon mode
 		posTreeRoot.walkTree(new TreeNodeCallback<Exp>() {
 
@@ -230,7 +230,7 @@ public class Quax implements Bookmarkable {
 					// continue next level
 					return TreeNodeCallback.CONTINUE;
 				} else {
-					// more than one child - break out
+					// more than ONE child - break out
 					Quax.this.qubonMode = false;
 					return TreeNodeCallback.BREAK;
 				}
@@ -286,7 +286,7 @@ public class Quax implements Bookmarkable {
 					// continue
 					// next
 					// sibling
-					// more than one child in last dimension
+					// more than ONE child in last dimension
 					// create a single set function node
 					List<Exp> memArray = new ArrayList<Exp>(node.getChildren()
 							.size());
@@ -1312,7 +1312,7 @@ public class Quax implements Bookmarkable {
 	}
 
 	/**
-	 * Drill up is possible if at least one member in the tree is not at the top
+	 * Drill up is possible if at least ONE member in the tree is not at the top
 	 * level of this hierarchy.
 	 */
 	public boolean canDrillUp(Hierarchy hierarchy) {

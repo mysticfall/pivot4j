@@ -170,10 +170,9 @@ public class CompoundId extends AbstractExp {
 	}
 
 	/**
-	 * 
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	public CompoundId clone() {
+	public CompoundId copy() {
 		CompoundId cloned = new CompoundId();
 
 		for (NamePart part : names) {

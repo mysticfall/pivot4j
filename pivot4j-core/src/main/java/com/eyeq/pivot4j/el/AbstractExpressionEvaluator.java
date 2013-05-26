@@ -14,15 +14,14 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractExpressionEvaluator implements
 		ExpressionEvaluator {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * @see com.eyeq.pivot4j.el.ExpressionEvaluator#evaluate(java.lang.String,
 	 *      com.eyeq.pivot4j.el.ExpressionContext)
 	 */
 	@Override
-	public Object evaluate(String expression, ExpressionContext context)
-			throws EvaluationFailedException {
+	public Object evaluate(String expression, ExpressionContext context) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Evaluating expression : ");
 			logger.debug("	- expression : " + expression);
@@ -44,6 +43,13 @@ public abstract class AbstractExpressionEvaluator implements
 		}
 
 		return result;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Logger getLogger() {
+		return logger;
 	}
 
 	/**

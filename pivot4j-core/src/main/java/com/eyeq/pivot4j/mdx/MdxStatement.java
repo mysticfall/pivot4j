@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.olap4j.Axis;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This is the result of parsing an MDX query.
@@ -22,8 +20,6 @@ import org.slf4j.LoggerFactory;
 public class MdxStatement extends AbstractExp {
 
 	private static final long serialVersionUID = 8608792548174831908L;
-
-	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	private List<Formula> formulas = new ArrayList<Formula>();
 
@@ -237,39 +233,39 @@ public class MdxStatement extends AbstractExp {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	public MdxStatement clone() {
+	public MdxStatement copy() {
 		MdxStatement clone = new MdxStatement();
 
 		if (!formulas.isEmpty()) {
 			clone.formulas = new ArrayList<Formula>(formulas.size());
 
 			for (Formula element : formulas) {
-				clone.formulas.add(element.clone());
+				clone.formulas.add(element.copy());
 			}
 		}
 
 		clone.axes = new ArrayList<QueryAxis>(axes.size());
 
 		for (QueryAxis axis : axes) {
-			clone.axes.add(axis.clone());
+			clone.axes.add(axis.copy());
 		}
 
 		if (cube != null) {
-			clone.cube = this.cube.clone();
+			clone.cube = this.cube.copy();
 		}
 
 		if (slicer != null) {
-			clone.slicer = this.slicer.clone();
+			clone.slicer = this.slicer.copy();
 		}
 
 		for (CompoundId property : cellProperties) {
-			clone.cellProperties.add(property.clone());
+			clone.cellProperties.add(property.copy());
 		}
 
 		for (SapVariable variable : sapVariables) {
-			clone.sapVariables.add(variable.clone());
+			clone.sapVariables.add(variable.copy());
 		}
 
 		clone.axesSwapped = this.axesSwapped;

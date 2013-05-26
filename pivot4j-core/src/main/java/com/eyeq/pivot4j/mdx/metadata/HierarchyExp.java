@@ -54,10 +54,10 @@ public class HierarchyExp extends AbstractMetadataExp<Hierarchy> {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
 	@Override
-	public HierarchyExp clone() {
+	public HierarchyExp copy() {
 		return new HierarchyExp(getName(), getUniqueName());
 	}
 }

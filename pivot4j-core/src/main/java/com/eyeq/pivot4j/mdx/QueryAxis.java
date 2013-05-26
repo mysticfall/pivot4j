@@ -156,20 +156,19 @@ public class QueryAxis extends AbstractExp {
 	}
 
 	/**
-	 * 
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	public QueryAxis clone() {
+	public QueryAxis copy() {
 		QueryAxis clone = new QueryAxis();
 		clone.axis = axis;
 		clone.nonEmpty = nonEmpty;
 
 		if (exp != null) {
-			clone.exp = exp.clone();
+			clone.exp = exp.copy();
 		}
 
 		for (CompoundId property : dimensionProperties) {
-			clone.dimensionProperties.add(property.clone());
+			clone.dimensionProperties.add(property.copy());
 		}
 
 		return clone;

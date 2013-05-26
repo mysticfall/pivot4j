@@ -40,7 +40,7 @@ public interface PlaceLevelsOnAxes extends Transform {
 	 *            The level to add
 	 * @param position
 	 *            The position index where to add the level. Any value less than
-	 *            zero will put the hierarchy at the end of the axis. Note that
+	 *            ZERO will put the hierarchy at the end of the axis. Note that
 	 *            it's the index of the parent hierarchy, not the level itself
 	 *            since the order of a level in a hierarchy cannot be changed by
 	 *            definition. If the parent hierarchy exists on any axis, the

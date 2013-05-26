@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
@@ -52,7 +53,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 	private ConditionFactory conditionFactory = new DefaultConditionFactory();
 
-	private HashMap<AggregatorKey, List<String>> aggregatorNames = new HashMap<AggregatorKey, List<String>>();
+	private Map<AggregatorKey, List<String>> aggregatorNames = new HashMap<AggregatorKey, List<String>>();
 
 	private PropertySupport cellProperties;
 
@@ -453,7 +454,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		states[0] = showDimensionTitle;
 		states[1] = showParentMembers;
 		states[2] = hideSpans;
-		states[3] = aggregatorNames;
+		states[3] = (Serializable) aggregatorNames;
 
 		if (cellProperties != null) {
 			states[4] = cellProperties.saveState();
@@ -481,7 +482,7 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		this.showDimensionTitle = (Boolean) states[0];
 		this.showParentMembers = (Boolean) states[1];
 		this.hideSpans = (Boolean) states[2];
-		this.aggregatorNames = (HashMap<AggregatorKey, List<String>>) states[3];
+		this.aggregatorNames = (Map<AggregatorKey, List<String>>) states[3];
 
 		initializeProperties();
 
@@ -622,9 +623,9 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 
 		private static final long serialVersionUID = 4244611391569825053L;
 
-		Axis axis;
+		private Axis axis;
 
-		AggregatorPosition position;
+		private AggregatorPosition position;
 
 		AggregatorKey() {
 		}

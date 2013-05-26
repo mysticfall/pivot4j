@@ -18,7 +18,7 @@ import org.olap4j.metadata.Member;
  * Example: if you expand "Europe" you may see "Germany", "France" etc. If you
  * collapse "Europe" the countries will not be shown.
  * <p>
- * If multiple Hierarchies are shown on a single axis, only one position is
+ * If multiple Hierarchies are shown on a single axis, only ONE position is
  * expanded. For example
  * 
  * <pre>

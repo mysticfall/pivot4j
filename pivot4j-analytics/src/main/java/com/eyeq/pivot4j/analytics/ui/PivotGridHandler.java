@@ -20,7 +20,6 @@ import org.apache.commons.lang.StringUtils;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapDataSource;
-import org.olap4j.OlapException;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Schema;
 import org.primefaces.component.panelgrid.PanelGrid;
@@ -189,7 +188,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		return duration;
 	}
 
-	public List<UISelectItem> getCubes() throws OlapException, SQLException {
+	public List<UISelectItem> getCubes() throws SQLException {
 		if (cubeItems == null) {
 			FacesContext context = FacesContext.getCurrentInstance();
 
@@ -234,7 +233,6 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 			}
 		} else {
 			String mdx = String.format("select from [%s]", cubeName);
-
 			model.setMdx(mdx);
 
 			if (!model.isInitialized()) {

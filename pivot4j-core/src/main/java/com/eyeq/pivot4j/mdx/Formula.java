@@ -129,24 +129,23 @@ public class Formula extends AbstractExp {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.mdx.AbstractExp#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	@Override
-	public Formula clone() {
+	public Formula copy() {
 		Formula clone = new Formula();
 
 		clone.type = type;
 
 		if (name != null) {
-			clone.name = name.clone();
+			clone.name = name.copy();
 		}
 
 		if (exp != null) {
-			clone.exp = exp.clone();
+			clone.exp = exp.copy();
 		}
 
 		for (Property property : properties) {
-			clone.properties.add(property.clone());
+			clone.properties.add(property.copy());
 		}
 
 		return clone;
@@ -242,14 +241,14 @@ public class Formula extends AbstractExp {
 		}
 
 		/**
-		 * @see java.lang.Object#clone()
+		 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 		 */
-		public Property clone() {
+		public Property copy() {
 			Property clone = new Property();
 			clone.name = name;
 
 			if (exp != null) {
-				clone.exp = exp.clone();
+				clone.exp = exp.copy();
 			}
 
 			return clone;

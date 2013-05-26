@@ -66,10 +66,9 @@ public class MemberParameter extends ExpressionParameter {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	@Override
-	public MemberParameter clone() {
+	public MemberParameter copy() {
 		MemberParameter clone = new MemberParameter(getExpression());
 		clone.setEvaluated(isEvaluated());
 		clone.setResult(getResult());

@@ -293,14 +293,14 @@ public class MemberSelectionHandler implements NodeFilter {
 			mode = SelectionMode.valueOf(modeName);
 		}
 
-		MemberSelection selection = getSelection();
+		MemberSelection sel = getSelection();
 
 		if (mode == null) {
-			selection.clear();
+			sel.clear();
 		} else {
 			boolean empty = true;
 
-			List<Member> members = selection.getMembers();
+			List<Member> members = sel.getMembers();
 
 			for (TreeNode node : targetSelection) {
 				SelectionNode memberNode = (SelectionNode) node;
@@ -352,8 +352,8 @@ public class MemberSelectionHandler implements NodeFilter {
 		SelectionNode node = (SelectionNode) targetSelection[0];
 		Member member = node.getObject();
 
-		MemberSelection selection = getSelection();
-		selection.moveUp(member);
+		MemberSelection sel = getSelection();
+		sel.moveUp(member);
 
 		SelectionNode parent = (SelectionNode) node.getParent();
 		parent.moveUp(node);
@@ -368,8 +368,8 @@ public class MemberSelectionHandler implements NodeFilter {
 		SelectionNode node = (SelectionNode) targetSelection[0];
 		Member member = node.getObject();
 
-		MemberSelection selection = getSelection();
-		selection.moveDown(member);
+		MemberSelection sel = getSelection();
+		sel.moveDown(member);
 
 		SelectionNode parent = (SelectionNode) node.getParent();
 		parent.moveDown(node);
@@ -453,9 +453,9 @@ public class MemberSelectionHandler implements NodeFilter {
 
 			Member member = node.getObject();
 
-			MemberSelection selection = getSelection();
+			MemberSelection sel = getSelection();
 
-			canMoveUp = selection.canMoveUp(member);
+			canMoveUp = sel.canMoveUp(member);
 		}
 
 		return canMoveUp;
@@ -471,9 +471,8 @@ public class MemberSelectionHandler implements NodeFilter {
 
 			Member member = node.getObject();
 
-			MemberSelection selection = getSelection();
-
-			canMoveDown = selection.canMoveDown(member);
+			MemberSelection sel = getSelection();
+			canMoveDown = sel.canMoveDown(member);
 		}
 
 		return canMoveDown;

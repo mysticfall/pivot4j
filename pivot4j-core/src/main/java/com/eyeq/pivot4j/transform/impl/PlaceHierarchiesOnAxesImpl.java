@@ -32,7 +32,7 @@ import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
 public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		PlaceHierarchiesOnAxes {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * @param queryAdapter

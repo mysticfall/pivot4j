@@ -107,22 +107,22 @@ public class RenderContext {
 
 		if (columnCount < 0) {
 			throw new IllegalArgumentException(
-					"Column count should be zero or positive integer.");
+					"Column count should be ZERO or positive integer.");
 		}
 
 		if (rowCount < 0) {
 			throw new IllegalArgumentException(
-					"Row count should be zero or positive integer.");
+					"Row count should be ZERO or positive integer.");
 		}
 
 		if (columnHeaderCount < 0) {
 			throw new IllegalArgumentException(
-					"Column header count should be zero or positive integer.");
+					"Column header count should be ZERO or positive integer.");
 		}
 
 		if (rowHeaderCount < 0) {
 			throw new IllegalArgumentException(
-					"Row header count should be zero or positive integer.");
+					"Row header count should be ZERO or positive integer.");
 		}
 
 		this.model = model;

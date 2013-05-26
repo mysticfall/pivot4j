@@ -102,14 +102,13 @@ public class FunCall extends AbstractExp {
 	}
 
 	/**
-	 * 
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	public FunCall clone() {
+	public FunCall copy() {
 		List<Exp> cloneArgs = new ArrayList<Exp>(args.size());
 
 		for (Exp arg : args) {
-			cloneArgs.add(arg.clone());
+			cloneArgs.add(arg.copy());
 		}
 
 		return new FunCall(function, type, cloneArgs);

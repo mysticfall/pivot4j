@@ -17,10 +17,12 @@ import org.olap4j.OlapDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eyeq.pivot4j.PivotException;
+
 public class OlapConnectionFactory extends
 		BasePoolableObjectFactory<OlapConnection> {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private OlapDataSource dataSource;
 
@@ -39,6 +41,13 @@ public class OlapConnectionFactory extends
 		}
 
 		this.dataSource = dataSource;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Logger getLogger() {
+		return logger;
 	}
 
 	/**
@@ -90,11 +99,15 @@ public class OlapConnectionFactory extends
 	 * @see org.apache.commons.pool.BasePoolableObjectFactory#makeObject()
 	 */
 	@Override
-	public OlapConnection makeObject() throws Exception {
+	public OlapConnection makeObject() {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Creating a new OLAP connection.");
 		}
-		return dataSource.getConnection(userName, password);
+		try {
+			return dataSource.getConnection(userName, password);
+		} catch (SQLException e) {
+			throw new PivotException(e);
+		}
 	}
 
 	/**
@@ -102,14 +115,18 @@ public class OlapConnectionFactory extends
 	 *      lang.Object)
 	 */
 	@Override
-	public void destroyObject(OlapConnection con) throws Exception {
-		super.destroyObject(con);
+	public void destroyObject(OlapConnection con) {
+		try {
+			super.destroyObject(con);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Closing a returned OLAP connection.");
+			if (logger.isDebugEnabled()) {
+				logger.debug("Closing a returned OLAP connection.");
+			}
+
+			con.close();
+		} catch (Exception e) {
+			throw new PivotException(e);
 		}
-
-		con.close();
 	}
 
 	/**

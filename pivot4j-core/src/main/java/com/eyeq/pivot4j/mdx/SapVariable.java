@@ -82,18 +82,17 @@ public class SapVariable extends AbstractExp {
 	}
 
 	/**
-	 * 
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	public SapVariable clone() {
+	public SapVariable copy() {
 		SapVariable clone = new SapVariable();
 
 		if (name != null) {
-			clone.name = name.clone();
+			clone.name = name.copy();
 		}
 
 		for (Value value : values) {
-			clone.values.add(value.clone());
+			clone.values.add(value.copy());
 		}
 
 		return clone;
@@ -201,18 +200,17 @@ public class SapVariable extends AbstractExp {
 		}
 
 		/**
-		 * 
-		 * @see java.lang.Object#clone()
+		 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 		 */
-		public Value clone() {
+		public Value copy() {
 			Value clone = new Value();
 
 			if (highValue != null) {
-				clone.highValue = highValue.clone();
+				clone.highValue = highValue.copy();
 			}
 
 			if (lowValue != null) {
-				clone.lowValue = lowValue.clone();
+				clone.lowValue = lowValue.copy();
 			}
 
 			clone.including = including;

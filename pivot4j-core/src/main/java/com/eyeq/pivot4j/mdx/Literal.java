@@ -15,19 +15,19 @@ public class Literal extends AbstractExp {
 
 	private static final long serialVersionUID = 3137892085820716628L;
 
-	public int type;
+	private int type;
 
 	private Object o;
 
-	public static final Literal emptyString = new Literal("", false);
+	public static final Literal EMPTY_STRING = new Literal("", false);
 
-	public static final Literal zero = new Literal(new Integer(0));
+	public static final Literal ZERO = new Literal(0);
 
-	public static final Literal one = new Literal(new Integer(1));
+	public static final Literal ONE = new Literal(1);
 
-	public static final Literal doubleZero = new Literal(new Double(0.0));
+	public static final Literal DOUBLE_ZERO = new Literal(0.0d);
 
-	public static final Literal doubleOne = new Literal(new Double(1.0));
+	public static final Literal DOUBLE_ONE = new Literal(1.0d);
 
 	public static final int TYPE_SYMBOL = 1;
 
@@ -42,7 +42,7 @@ public class Literal extends AbstractExp {
 
 	public static Literal createString(String s) {
 		if (s.equals("")) {
-			return emptyString;
+			return EMPTY_STRING;
 		} else {
 			return new Literal(s, false);
 		}
@@ -59,9 +59,9 @@ public class Literal extends AbstractExp {
 
 	public static Literal create(Double d) {
 		if (d.doubleValue() == 0.0) {
-			return doubleZero;
+			return DOUBLE_ZERO;
 		} else if (d.doubleValue() == 1.0) {
-			return doubleOne;
+			return DOUBLE_ONE;
 		} else {
 			return new Literal(d);
 		}
@@ -74,9 +74,9 @@ public class Literal extends AbstractExp {
 
 	public static Literal create(Integer i) {
 		if (i.intValue() == 0) {
-			return zero;
+			return ZERO;
 		} else if (i.intValue() == 1) {
-			return one;
+			return ONE;
 		} else {
 			return new Literal(i);
 		}
@@ -92,9 +92,9 @@ public class Literal extends AbstractExp {
 	/**
 	 * Literal is immutable
 	 * 
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	public Literal clone() {
+	public final Literal copy() {
 		return this;
 	}
 
@@ -105,8 +105,9 @@ public class Literal extends AbstractExp {
 			// must remove enclosing double quotes
 			String str = (String) o;
 			return str.substring(1, str.length() - 1);
-		} else
+		} else {
 			return o.toString();
+		}
 	}
 
 	/**

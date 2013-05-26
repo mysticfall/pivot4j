@@ -83,10 +83,8 @@ public class DefaultConditionFactory implements ConditionFactory {
 			}
 		}
 
-		if (condition == null) {
-			if (logger.isWarnEnabled()) {
-				logger.warn("Unknown condition name : " + name);
-			}
+		if (condition == null && logger.isWarnEnabled()) {
+			logger.warn("Unknown condition name : " + name);
 		}
 
 		return condition;

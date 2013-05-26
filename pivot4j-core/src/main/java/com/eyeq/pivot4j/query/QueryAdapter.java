@@ -215,7 +215,7 @@ public class QueryAdapter implements Bookmarkable {
 	 * @return
 	 */
 	public String getCurrentMdx(final boolean evaluated) {
-		MdxStatement stmt = parsedQuery.clone();
+		MdxStatement stmt = parsedQuery.copy();
 
 		stmt.accept(new AbstractExpVisitor() {
 
@@ -480,12 +480,12 @@ public class QueryAdapter implements Bookmarkable {
 			// functions.
 			if (cloneQuery == null) {
 				if (isSortOnQuery()) {
-					this.cloneQuery = parsedQuery.clone();
+					this.cloneQuery = parsedQuery.copy();
 				}
 			} else {
 				// reset to original state
 				if (isSortOnQuery()) {
-					this.parsedQuery = cloneQuery.clone();
+					this.parsedQuery = cloneQuery.copy();
 				} else {
 					this.parsedQuery = cloneQuery;
 				}
@@ -1004,7 +1004,7 @@ public class QueryAdapter implements Bookmarkable {
 	}
 
 	/**
-	 * Drill up is possible if at least one member in the tree is not at the top
+	 * Drill up is possible if at least ONE member in the tree is not at the top
 	 * level of this hierarchy.
 	 */
 	public boolean canDrillUp(Hierarchy hierarchy) {

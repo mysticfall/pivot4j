@@ -62,10 +62,9 @@ public class MemberExp extends AbstractMetadataExp<Member> {
 	}
 
 	/**
-	 * @see java.lang.Object#clone()
+	 * @see com.eyeq.pivot4j.mdx.Exp#copy()
 	 */
-	@Override
-	public MemberExp clone() {
+	public MemberExp copy() {
 		return new MemberExp(getName(), getUniqueName());
 	}
 }

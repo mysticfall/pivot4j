@@ -34,7 +34,7 @@ import com.eyeq.pivot4j.util.OlapUtils;
 
 public abstract class AbstractAggregator implements Aggregator {
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Axis axis;
 
@@ -72,6 +72,13 @@ public abstract class AbstractAggregator implements Aggregator {
 
 		this.level = level;
 		this.measure = measure;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	protected Logger getLogger() {
+		return logger;
 	}
 
 	/**

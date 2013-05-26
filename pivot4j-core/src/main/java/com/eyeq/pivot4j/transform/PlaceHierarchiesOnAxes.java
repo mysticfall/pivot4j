@@ -57,7 +57,7 @@ public interface PlaceHierarchiesOnAxes extends Transform {
 	 * @param expandAllMember
 	 * @param position
 	 *            The position index where to add the hierarchy. Any value less
-	 *            than zero will put the hierarchy at the end of the axis.
+	 *            than ZERO will put the hierarchy at the end of the axis.
 	 */
 	void addHierarchy(Axis axis, Hierarchy hierarchy, boolean expandAllMember,
 			int position);

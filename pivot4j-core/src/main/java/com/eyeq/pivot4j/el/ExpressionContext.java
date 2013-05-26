@@ -144,9 +144,9 @@ public class ExpressionContext extends HashMap<String, Object> {
 
 	static class Entry implements Map.Entry<String, Object> {
 
-		String key;
+		private String key;
 
-		Object value;
+		private Object value;
 
 		Entry(String key, Object value) {
 			this.key = key;

@@ -115,7 +115,7 @@ public interface PivotModel extends Configurable, Bookmarkable {
 	 * will be used.
 	 * 
 	 * @param axisToSort
-	 *            the axis to sort. Its one of the "other" axes, that do not
+	 *            the axis to sort. Its ONE of the "other" axes, that do not
 	 *            contain position
 	 * @param position
 	 *            the sort criteria
@@ -134,8 +134,8 @@ public interface PivotModel extends Configurable, Bookmarkable {
 
 	/**
 	 * Returns true if user may sort by the members. This will be the case when
-	 * one of the members is a measure. The GUI will paint a "sort button" for
-	 * one of the members
+	 * ONE of the members is a measure. The GUI will paint a "sort button" for
+	 * ONE of the members
 	 */
 	boolean isSortable(Position position);
 
