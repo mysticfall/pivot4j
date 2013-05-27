@@ -107,9 +107,9 @@ public class QueryAdapter implements Bookmarkable {
 
 		this.quaxes = new LinkedHashMap<Axis, Quax>(queryAxes.size());
 
-		int ordinal = 0;
 		for (QueryAxis queryAxis : queryAxes) {
-			Quax quax = new Quax(ordinal++, model.getCube());
+			Quax quax = new Quax(queryAxis.getAxis().axisOrdinal(),
+					model.getCube());
 			quax.addChangeListener(quaxListener);
 
 			quaxes.put(queryAxis.getAxis(), quax);
