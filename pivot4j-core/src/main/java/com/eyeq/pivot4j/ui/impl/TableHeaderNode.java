@@ -214,41 +214,31 @@ public class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 			Member mem = nodeChild.getMember();
 			if (mem != null) {
-				Level rootLevel = nodeChild.getRootLevel();
+				int index = getChildren().indexOf(child);
 
-				if (!OlapUtils.equals(mem.getLevel(), rootLevel)) {
-					int index = getChildren().indexOf(child);
+				removeChild(child);
 
-					removeChild(child);
+				TreeNode<TableAxisContext> childNode = child;
 
-					List<Level> levels = getReference().getLevels(
-							nodeChild.getHierarchy());
+				Member parent = mem;
 
-					TreeNode<TableAxisContext> childNode = child;
+				while (parent != null) {
+					parent = getReference().getParentMember(parent);
 
-					Member parent = mem;
-
-					while (parent != null
-							&& !OlapUtils.equals(rootLevel, parent.getLevel())) {
-						parent = getReference().getParentMember(parent);
-
-						if (parent == null
-								|| !levels.contains(parent.getLevel())) {
-							continue;
-						}
-
-						TableHeaderNode parentNode = new TableHeaderNode(
-								getReference());
-						parentNode.setPosition(nodeChild.getPosition());
-						parentNode.setHierarchy(parent.getHierarchy());
-						parentNode.setMember(parent);
-						parentNode.addChild(childNode);
-
-						childNode = parentNode;
+					if (parent == null) {
+						break;
 					}
+					TableHeaderNode parentNode = new TableHeaderNode(
+							getReference());
+					parentNode.setPosition(nodeChild.getPosition());
+					parentNode.setHierarchy(parent.getHierarchy());
+					parentNode.setMember(parent);
+					parentNode.addChild(childNode);
 
-					addChild(index, childNode);
+					childNode = parentNode;
 				}
+
+				addChild(index, childNode);
 			}
 
 			nodeChild.addParentMemberHeaders();

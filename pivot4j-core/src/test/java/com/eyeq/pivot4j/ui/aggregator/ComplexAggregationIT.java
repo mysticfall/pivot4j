@@ -66,49 +66,58 @@ public class ComplexAggregationIT extends AbstractAggregatorTestCase {
 
 		assertThat("Table header is missing.", rows, is(notNullValue()));
 		assertThat("Not enough column header rows.", rows.size(),
-				is(equalTo(7)));
+				is(equalTo(9)));
 
 		// Column headers
-		assertCell(rows, 0, 0, 5, 4, null);
+		assertCell(rows, 0, 0, 7, 7, null);
 		assertCell(rows, 0, 1, 1, 45, "Time");
+		assertCell(rows, 1, 0, 1, 39, "1997");
+		assertCell(rows, 1, 1, 6, 3, "Total");
+		assertCell(rows, 1, 2, 6, 3, "Minimum");
+		assertCell(rows, 2, 0, 2, 9, "Q1");
+		assertCell(rows, 2, 1, 2, 9, "Q2");
+		assertCell(rows, 2, 2, 1, 21, "Q2");
 
-		assertCell(rows, 1, 0, 2, 9, "Q1");
-		assertCell(rows, 1, 1, 2, 9, "Q2");
-		assertCell(rows, 1, 2, 1, 21, "Q2");
-		assertCell(rows, 1, 3, 4, 3, "Total");
-		assertCell(rows, 1, 4, 4, 3, "Minimum");
-
-		assertCell(rows, 2, 0, 1, 9, "5");
-		assertCell(rows, 2, 1, 1, 9, "6");
+		assertCell(rows, 3, 0, 1, 9, "5");
+		assertCell(rows, 3, 1, 1, 9, "6");
 
 		for (int i = 0; i < 3; i++) {
-			assertCell(rows, 3, i, 1, 9, "Gender");
+			assertCell(rows, 4, i, 1, 9, "Gender");
+		}
+
+		assertCell(rows, 5, 0, 1, 6, "All Gender");
+		assertCell(rows, 5, 1, 2, 3, "Total");
+
+		for (int i = 0; i < 3; i++) {
+			assertCell(rows, 5, (i * 2) + 2, 1, 6, "All Gender");
+			assertCell(rows, 5, (i * 2) + 3, 2, 3, "Total");
 		}
 
 		for (int i = 0; i < 4; i++) {
-			assertCell(rows, 4, i * 3, 1, 3, "F");
-			assertCell(rows, 4, (i * 3) + 1, 1, 3, "M");
-			assertCell(rows, 4, (i * 3) + 2, 1, 3, "Total");
-
+			assertCell(rows, 6, (i * 2), 1, 3, "F");
+			assertCell(rows, 6, (i * 2) + 1, 1, 3, "M");
 		}
 
-		assertCell(rows, 5, 0, 1, 1, "Promotion Media");
-		assertCell(rows, 5, 1, 1, 1, "Marital Status");
-		assertCell(rows, 5, 2, 1, 2, "Product");
+		assertCell(rows, 7, 0, 1, 2, "Promotion Media");
+		assertCell(rows, 7, 1, 1, 2, "Marital Status");
+		assertCell(rows, 7, 2, 1, 3, "Product");
 
 		for (int i = 3; i < 16; i++) {
-			assertCell(rows, 5, i, 1, 3, "Measures");
+			assertCell(rows, 7, i, 1, 3, "Measures");
 		}
 
-		assertCell(rows, 6, 0, 1, 1, "Media Type");
-		assertCell(rows, 6, 1, 1, 1, "Marital Status");
-		assertCell(rows, 6, 2, 1, 1, "Product Family");
-		assertCell(rows, 6, 3, 1, 1, "Product Department");
+		assertCell(rows, 8, 0, 1, 1, "(All)");
+		assertCell(rows, 8, 1, 1, 1, "Media Type");
+		assertCell(rows, 8, 2, 1, 1, "(All)");
+		assertCell(rows, 8, 3, 1, 1, "Marital Status");
+		assertCell(rows, 8, 4, 1, 1, "(All)");
+		assertCell(rows, 8, 5, 1, 1, "Product Family");
+		assertCell(rows, 8, 6, 1, 1, "Product Department");
 
 		for (int i = 0; i < 13; i++) {
-			assertCell(rows, 6, (i * 3) + 4, 1, 1, "Store Sales");
-			assertCell(rows, 6, (i * 3) + 5, 1, 1, "Store Cost");
-			assertCell(rows, 6, (i * 3) + 6, 1, 1, "Unit Sales");
+			assertCell(rows, 8, (i * 3) + 7, 1, 1, "Store Sales");
+			assertCell(rows, 8, (i * 3) + 8, 1, 1, "Store Cost");
+			assertCell(rows, 8, (i * 3) + 9, 1, 1, "Unit Sales");
 		}
 
 		// Table content
@@ -122,10 +131,13 @@ public class ComplexAggregationIT extends AbstractAggregatorTestCase {
 		assertThat("Table content is missing.", rows, is(notNullValue()));
 		assertThat("Not enough content rows.", rows.size(), is(equalTo(51)));
 
-		assertCell(rows, 0, 0, 25, 1, "Bulk Mail");
-		assertCell(rows, 0, 1, 12, 1, "M");
-		assertCell(rows, 0, 2, 4, 1, "Drink");
-		assertCell(rows, 0, 3, 1, 1, "Alcoholic Beverages");
+		assertCell(rows, 0, 0, 49, 1, "All Media");
+		assertCell(rows, 0, 1, 25, 1, "Bulk Mail");
+		assertCell(rows, 0, 2, 24, 1, "All Marital Status");
+		assertCell(rows, 0, 3, 12, 1, "M");
+		assertCell(rows, 0, 4, 11, 1, "All Products");
+		assertCell(rows, 0, 5, 4, 1, "Drink");
+		assertCell(rows, 0, 6, 1, 1, "Alcoholic Beverages");
 
 		assertCell(rows, 1, 0, 1, 1, "Beverages");
 		assertCell(rows, 2, 0, 1, 1, "Dairy");
@@ -142,13 +154,13 @@ public class ComplexAggregationIT extends AbstractAggregatorTestCase {
 		// Member total title
 		assertCell(rows, 10, 0, 1, 1, "Drink");
 		assertCell(rows, 10, 1, 1, 1, "Average");
-		assertCell(rows, 11, 0, 1, 2, "Total");
+		assertCell(rows, 11, 0, 1, 3, "Total");
 
 		// Hierarchy total title
-		assertCell(rows, 23, 0, 1, 2, "Total");
+		assertCell(rows, 23, 0, 1, 3, "Total");
 
 		// Axis total title
-		assertCell(rows, 50, 0, 1, 4, "Minimum");
+		assertCell(rows, 50, 0, 1, 7, "Minimum");
 
 		// Row axis member aggregation
 		// (Bulk Mail, M, Food, Average / Q1, F, Store Sales)
@@ -176,7 +188,7 @@ public class ComplexAggregationIT extends AbstractAggregatorTestCase {
 
 		// Column axis hierarchy aggregation
 		// (Bulk Mail, M, Drink, Alcoholic Beverages / Q2, 6, Total, Store Cost)
-		assertCell(rows, 0, 38, 1, 1, "13.88");
+		assertCell(rows, 0, 41, 1, 1, "13.88");
 
 		// Column axis aggregation
 		// (Bulk Mail, M, Food, Frozen Foods / Minimum, Unit Sales)
