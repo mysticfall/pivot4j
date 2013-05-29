@@ -30,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.export.AbstractPivotExporter;
+import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class FopExporter extends AbstractPivotExporter {
@@ -1016,7 +1017,7 @@ public class FopExporter extends AbstractPivotExporter {
 	protected AttributesImpl createCellContentAttributes(RenderContext context) {
 		AttributesImpl attributes = new AttributesImpl();
 
-		if (context.getCell() != null) {
+		if (context.getCellType() == CellType.Value) {
 			attributes.addAttribute("", "text-align", "text-align", "CDATA",
 					"right");
 		}

@@ -35,6 +35,7 @@ import org.olap4j.OlapException;
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.export.AbstractPivotExporter;
+import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class ExcelExporter extends AbstractPivotExporter {
@@ -52,6 +53,8 @@ public class ExcelExporter extends AbstractPivotExporter {
 	private CellStyle headerCellStyle;
 
 	private CellStyle valueCellStyle;
+
+	private CellStyle aggregationCellStyle;
 
 	private List<CellRangeAddress> mergedRegions;
 
@@ -326,15 +329,65 @@ public class ExcelExporter extends AbstractPivotExporter {
 		return valueCellStyle;
 	}
 
+	protected CellStyle createAggregationCellStyle() {
+		CellStyle style = workbook.createCellStyle();
+		Font font = workbook.createFont();
+
+		font.setFontName(fontFamily);
+		font.setFontHeightInPoints((short) fontSize);
+		font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+
+		style.setFont(font);
+		style.setAlignment(CellStyle.ALIGN_RIGHT);
+		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+		switch (format) {
+		case XSSF:
+		case SXSSF:
+			((XSSFCellStyle) style).setFillForegroundColor(new XSSFColor(
+					Color.lightGray));
+			break;
+		case HSSF:
+			style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+			break;
+		default:
+			assert false;
+		}
+
+		style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style.setBorderTop(CellStyle.BORDER_THIN);
+		style.setBorderLeft(CellStyle.BORDER_THIN);
+		style.setBorderRight(CellStyle.BORDER_THIN);
+		style.setBorderBottom(CellStyle.BORDER_THIN);
+		style.setDataFormat((short) 4);
+
+		return style;
+	}
+
+	/**
+	 * @return aggregationCellStyle
+	 */
+	protected CellStyle getAggregationCellStyle() {
+		if (aggregationCellStyle == null) {
+			this.aggregationCellStyle = createAggregationCellStyle();
+		}
+
+		return aggregationCellStyle;
+	}
+
 	/**
 	 * @param context
 	 * @return
 	 */
 	protected CellStyle getCellStyle(RenderContext context) {
-		if (context.getCell() == null) {
-			return getHeaderCellStyle();
+		if (context.getCellType() == CellType.Value) {
+			if (context.getAggregator() == null) {
+				return getValueCellStyle();
+			} else {
+				return getAggregationCellStyle();
+			}
 		} else {
-			return getValueCellStyle();
+			return getHeaderCellStyle();
 		}
 	}
 
@@ -390,17 +443,22 @@ public class ExcelExporter extends AbstractPivotExporter {
 	public void cellContent(RenderContext context) {
 		cell.setCellStyle(getCellStyle(context));
 
-		if (context.getCell() == null) {
-			super.cellContent(context);
-		} else {
-			try {
-				Double value = context.getCell().isEmpty() ? null : context
-						.getCell().getDoubleValue();
+		if (context.getCellType() == CellType.Value) {
+			Double value = null;
 
-				cellContent(context, value);
-			} catch (OlapException e) {
-				throw new PivotException(e);
+			if (context.getAggregator() != null) {
+				value = context.getAggregator().getValue(context);
+			} else if (!context.getCell().isEmpty()) {
+				try {
+					value = context.getCell().getDoubleValue();
+				} catch (OlapException e) {
+					throw new PivotException(e);
+				}
 			}
+
+			cellContent(context, value);
+		} else {
+			super.cellContent(context);
 		}
 	}
 
