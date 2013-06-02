@@ -8,8 +8,11 @@
  */
 package com.eyeq.pivot4j.util;
 
+import java.sql.SQLException;
+
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
+import org.olap4j.OlapDatabaseMetaData;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.mdx.IdentifierNode;
@@ -171,5 +174,28 @@ public class OlapUtils {
 		}
 
 		return member;
+	}
+
+	/**
+	 * Check to see if an empty set expression is supported by the backend
+	 * provider.
+	 * 
+	 * See : http://jira.pentaho.com/browse/MONDRIAN-1597
+	 * 
+	 * @param metadata
+	 * @return
+	 */
+	public static boolean isEmptySetSupported(OlapDatabaseMetaData metadata) {
+		try {
+			String driverName = metadata.getDriverName().toLowerCase();
+			if (driverName.contains("xmla") || driverName.contains("xml/a")) {
+				return !metadata.getDatabaseProductName().toLowerCase()
+						.contains("mondrian");
+			}
+		} catch (SQLException e) {
+			throw new PivotException(e);
+		}
+
+		return true;
 	}
 }

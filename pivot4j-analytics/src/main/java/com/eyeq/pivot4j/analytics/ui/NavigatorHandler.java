@@ -437,7 +437,7 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 			Axis targetAxis = (Axis) target.getParent().getData();
 			Hierarchy hierarchy = (Hierarchy) source.getData();
 
-			if (source.getParent().equals(target)) {
+			if (source.getParent().equals(target.getParent())) {
 				moveHierarhy(targetAxis, hierarchy, position);
 			} else {
 				Axis sourceAxis = (Axis) source.getParent().getData();

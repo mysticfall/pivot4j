@@ -26,6 +26,7 @@ import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
+import org.olap4j.OlapDatabaseMetaData;
 import org.olap4j.OlapException;
 import org.olap4j.OlapStatement;
 import org.olap4j.Position;
@@ -381,6 +382,32 @@ public class PivotModelImpl implements PivotModel {
 			return connection.getOlapCatalog();
 		} catch (OlapException e) {
 			throw new PivotException(e);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getMetadata()
+	 */
+	@Override
+	public OlapDatabaseMetaData getMetadata() {
+		boolean initialized = (connection != null);
+
+		try {
+			if (!initialized) {
+				connection = createConnection(dataSource);
+			}
+
+			return connection.getMetaData();
+		} catch (SQLException e) {
+			throw new PivotException(e);
+		} finally {
+			if (!initialized) {
+				try {
+					closeConnection(connection);
+				} catch (SQLException e) {
+					throw new PivotException(e);
+				}
+			}
 		}
 	}
 

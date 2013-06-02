@@ -11,28 +11,34 @@ package com.eyeq.pivot4j.transform.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
+import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Syntax;
 import com.eyeq.pivot4j.mdx.metadata.MemberExp;
 import com.eyeq.pivot4j.query.Quax;
+import com.eyeq.pivot4j.query.QuaxUtil;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.PlaceMembersOnAxes;
 import com.eyeq.pivot4j.util.MemberSelection;
 import com.eyeq.pivot4j.util.OlapUtils;
+import com.eyeq.pivot4j.util.TreeNode;
+import com.eyeq.pivot4j.util.TreeNodeCallback;
 
 public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		PlaceMembersOnAxes {
@@ -346,7 +352,10 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		CellSetAxis cellAxis = getCellSetAxis(cellSet, axis);
 
 		if (cellAxis == null) {
-			return Collections.emptyList();
+			MemberCollector collector = new MemberCollector(null);
+			quax.getPosTreeRoot().walkTree(collector);
+
+			return collector.getMembers();
 		}
 
 		List<Position> positions = cellAxis.getPositions();
@@ -393,7 +402,10 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		CellSetAxis cellAxis = getCellSetAxis(cellSet, axis);
 
 		if (cellAxis == null) {
-			return Collections.emptyList();
+			MemberCollector collector = new MemberCollector(hierarchy);
+			quax.getPosTreeRoot().walkTree(collector);
+
+			return collector.getMembers();
 		}
 
 		List<Position> positions = cellAxis.getPositions();
@@ -406,5 +418,76 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		}
 
 		return visibleMembers;
+	}
+
+	class MemberCollector implements TreeNodeCallback<Exp> {
+
+		private QuaxUtil util = new QuaxUtil(getModel().getCube());
+
+		private List<Member> members = new LinkedList<Member>();
+
+		private Hierarchy hierarchy;
+
+		/**
+		 * @param hierarchy
+		 */
+		MemberCollector(Hierarchy hierarchy) {
+			this.hierarchy = hierarchy;
+		}
+
+		/**
+		 * @see com.eyeq.pivot4j.util.TreeNodeCallback#handleTreeNode(com.eyeq.pivot4j.util.TreeNode)
+		 */
+		@Override
+		public int handleTreeNode(TreeNode<Exp> node) {
+			Exp exp = node.getReference();
+
+			if (exp != null) {
+				addExp(exp);
+			}
+
+			return CONTINUE;
+		}
+
+		void addExp(Exp exp) {
+			if (util.isMember(exp)) {
+				addMember(util.memberForExp(exp));
+			} else if (util.isFunCallTo(exp, "{}")
+					|| util.isFunCallTo(exp, "CrossJoin")
+					|| util.isFunCallTo(exp, "Hierarchize")
+					|| util.isFunCallTo(exp, "Union")) {
+				FunCall func = (FunCall) exp;
+
+				for (Exp arg : func.getArgs()) {
+					addExp(arg);
+				}
+			} else if (util.isFunCallTo(exp, "Children")) {
+				Exp arg = util.funCallArg(exp, 0);
+
+				if (util.isMember(arg)) {
+					Member member = util.memberForExp(arg);
+
+					try {
+						for (Member child : member.getChildMembers()) {
+							addMember(child);
+						}
+					} catch (OlapException e) {
+						throw new PivotException(e);
+					}
+				}
+			}
+		}
+
+		void addMember(Member member) {
+			if (!members.contains(member)
+					&& (hierarchy == null || OlapUtils.equals(hierarchy,
+							member.getHierarchy()))) {
+				members.add(member);
+			}
+		}
+
+		public List<Member> getMembers() {
+			return Collections.unmodifiableList(members);
+		}
 	}
 }

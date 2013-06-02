@@ -108,8 +108,7 @@ public class QueryAdapter implements Bookmarkable {
 		this.quaxes = new LinkedHashMap<Axis, Quax>(queryAxes.size());
 
 		for (QueryAxis queryAxis : queryAxes) {
-			Quax quax = new Quax(queryAxis.getAxis().axisOrdinal(),
-					model.getCube());
+			Quax quax = new Quax(queryAxis.getAxis().axisOrdinal(), model);
 			quax.addChangeListener(quaxListener);
 
 			quaxes.put(queryAxis.getAxis(), quax);
@@ -291,7 +290,7 @@ public class QueryAdapter implements Bookmarkable {
 			getModel().getCellSet();
 		}
 
-		Quax quax = new Quax(axis.axisOrdinal(), getModel().getCube());
+		Quax quax = new Quax(axis.axisOrdinal(), getModel());
 		quax.initialize(new ArrayList<Position>());
 		quax.addChangeListener(quaxListener);
 

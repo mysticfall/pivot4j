@@ -36,6 +36,7 @@ import com.eyeq.pivot4j.transform.SwapAxes;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.CellParameters;
 import com.eyeq.pivot4j.ui.command.DrillDownCommand;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 @ManagedBean(name = "pivotGridHandler")
 @RequestScoped
@@ -232,7 +233,15 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 				model.destroy();
 			}
 		} else {
-			String mdx = String.format("select from [%s]", cubeName);
+			String mdx;
+
+			if (OlapUtils.isEmptySetSupported(model.getMetadata())) {
+				mdx = String.format(
+						"select {} on columns, {} on rows from [%s]", cubeName);
+			} else {
+				mdx = String.format("select from [%s]", cubeName);
+			}
+
 			model.setMdx(mdx);
 
 			if (!model.isInitialized()) {

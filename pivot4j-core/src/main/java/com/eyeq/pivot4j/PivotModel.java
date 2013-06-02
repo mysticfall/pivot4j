@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
+import org.olap4j.OlapDatabaseMetaData;
 import org.olap4j.Position;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
@@ -35,20 +36,36 @@ public interface PivotModel extends Configurable, Bookmarkable {
 
 	/**
 	 * Called once when the not used any longer. E.g. close DB connection
+	 * 
+	 * @throws NotInitializedException
 	 */
-	void destroy() throws NotInitializedException;
+	void destroy();
 
-	Cube getCube() throws NotInitializedException;
+	/**
+	 * Returns the database metadata for the active connection.
+	 */
+	OlapDatabaseMetaData getMetadata();
+
+	/**
+	 * Returns the cube for the query.
+	 * 
+	 * @throws NotInitializedException
+	 */
+	Cube getCube();
 
 	/**
 	 * Runs the query and returns the result.
+	 * 
+	 * @throws NotInitializedException
 	 */
-	CellSet getCellSet() throws NotInitializedException;
+	CellSet getCellSet();
 
 	/**
 	 * Flushes the last query result.
+	 * 
+	 * @throws NotInitializedException
 	 */
-	void refresh() throws NotInitializedException;
+	void refresh();
 
 	/**
 	 * The initial MDX query. This is never changed except when the user enters
@@ -119,9 +136,9 @@ public interface PivotModel extends Configurable, Bookmarkable {
 	 *            contain position
 	 * @param position
 	 *            the sort criteria
+	 * @throws NotInitializedException
 	 */
-	void sort(CellSetAxis axisToSort, Position position)
-			throws NotInitializedException;
+	void sort(CellSetAxis axisToSort, Position position);
 
 	boolean isSorting();
 

@@ -23,7 +23,6 @@ import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
@@ -32,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotException;
+import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.ExpNode;
 import com.eyeq.pivot4j.mdx.FunCall;
@@ -45,7 +45,7 @@ public class Quax implements Bookmarkable {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Cube cube;
+	private PivotModel model;
 
 	private QuaxUtil quaxUtil;
 
@@ -103,23 +103,23 @@ public class Quax implements Bookmarkable {
 
 	/**
 	 * @param ordinal
-	 * @param cube
+	 * @param model
 	 */
-	public Quax(int ordinal, Cube cube) {
-		if (cube == null) {
-			throw new NullArgumentException("cube");
+	public Quax(int ordinal, PivotModel model) {
+		if (model == null) {
+			throw new NullArgumentException("model");
 		}
 
 		this.ordinal = ordinal;
-		this.cube = cube;
-		this.quaxUtil = new QuaxUtil(cube);
+		this.model = model;
+		this.quaxUtil = new QuaxUtil(getModel().getCube());
 	}
 
 	/**
-	 * @return the cube
+	 * @return the model
 	 */
-	protected Cube getCube() {
-		return cube;
+	protected PivotModel getModel() {
+		return model;
 	}
 
 	/**
@@ -1389,11 +1389,20 @@ public class Quax implements Bookmarkable {
 	 * @return Exp for axis set
 	 */
 	public Exp genExp(boolean genHierarchize) {
+		Exp exp;
+
 		if (generateMode != CalcSetMode.Simple && generateIndex > 0) {
-			return genGenerateExp(genHierarchize);
+			exp = genGenerateExp(genHierarchize);
 		} else {
-			return genNormalExp(genHierarchize);
+			exp = genNormalExp(genHierarchize);
 		}
+
+		if (posTreeRoot.getChildCount() == 0
+				&& OlapUtils.isEmptySetSupported(model.getMetadata())) {
+			exp = new FunCall("{}", Syntax.Braces);
+		}
+
+		return exp;
 	}
 
 	/**
@@ -2866,8 +2875,9 @@ public class Quax implements Bookmarkable {
 
 		if (member == null) {
 			try {
-				member = cube.lookupMember(IdentifierNode.parseIdentifier(
-						uniqueName).getSegmentList());
+				member = getModel().getCube().lookupMember(
+						IdentifierNode.parseIdentifier(uniqueName)
+								.getSegmentList());
 			} catch (OlapException e) {
 				throw new PivotException(e);
 			}
@@ -2885,7 +2895,7 @@ public class Quax implements Bookmarkable {
 		Hierarchy hierarchy = hierarchyMap.get(name);
 
 		if (hierarchy == null) {
-			hierarchy = cube.getHierarchies().get(name);
+			hierarchy = getModel().getCube().getHierarchies().get(name);
 			hierarchyMap.put(name, hierarchy);
 		}
 
