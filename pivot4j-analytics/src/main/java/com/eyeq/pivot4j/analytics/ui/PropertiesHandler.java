@@ -265,11 +265,15 @@ public class PropertiesHandler {
 	 * @return
 	 */
 	protected Submenu createSubMenu(PropertyCategory category) {
+		String postfix = category.name().toLowerCase();
+
 		Submenu categoryMenu = new Submenu();
+		categoryMenu.setId("menu-" + postfix);
 		categoryMenu.setLabel(bundle.getString("properties.category."
 				+ category.name()));
 
 		Submenu colorMenu = new Submenu();
+		colorMenu.setId("menu-color-" + postfix);
 		colorMenu.setLabel(bundle.getString("properties.category.color"));
 		colorMenu.setIcon("ui-icon-image");
 		colorMenu.getChildren().add(createMenuItem(category, "fgColor"));
@@ -278,6 +282,7 @@ public class PropertiesHandler {
 		categoryMenu.getChildren().add(colorMenu);
 
 		Submenu fontMenu = new Submenu();
+		fontMenu.setId("menu-font-" + postfix);
 		fontMenu.setLabel(bundle.getString("properties.category.font"));
 		fontMenu.setIcon("ui-icon-pencil");
 		fontMenu.getChildren().add(createMenuItem(category, "fontFamily"));
@@ -308,15 +313,21 @@ public class PropertiesHandler {
 		ExpressionFactory factory = application.getExpressionFactory();
 
 		MenuItem item = new MenuItem();
+		item.setId("mi-" + key.toLowerCase() + "-"
+				+ category.name().toLowerCase());
 		item.setValue(property.getName(context));
 		item.setTitle(property.getDescription(context));
 		item.setIcon(property.getIcon());
+
+		if (category.equals(getCategory()) && key.equals(getKey())) {
+			item.setStyleClass("ui-state-highlight");
+		}
 
 		MethodExpression exp = factory.createMethodExpression(
 				context.getELContext(), "#{propertiesHandler.selectProperty}",
 				Void.TYPE, new Class[0]);
 		item.setActionExpression(exp);
-		item.setUpdate("content,button-bar,:growl");
+		item.setUpdate("properties-menu,content,button-bar,:growl");
 		item.setOncomplete("applyThemeToCMEditor('.properties-config .CodeMirror')");
 
 		UIParameter keyParam = new UIParameter();
