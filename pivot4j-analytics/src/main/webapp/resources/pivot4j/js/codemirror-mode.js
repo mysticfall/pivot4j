@@ -298,25 +298,26 @@ CodeMirror
 	}
 
 	function scriptHint(editor, keywords, getToken, options) {
-		var result;
+		var result = [];
 
 		// Find the token at the cursor
 		var cur = editor.getCursor();
 		var token = getToken(editor, cur);
 
-		var tprop = token;
-
 		token.state = CodeMirror.innerMode(editor.getMode(), token.state).state;
 
-		var isTag = token.string.charAt(0) == "<";
+		var ch = token.string.charAt(0);
 
-		if (isTag) {
-			if (token.string.length > 1 && token.string.charAt(1) == "/") {
-				result = [ "</#if>", "</#list>", "</#assign>" ];
-			} else {
+		if (ch == "<" || ch == "/") {
+			if (ch == "<") {
 				result = [ "<#if ", "<#list ", "<#assign ", "<#else>" ];
+			} else if (getToken(editor, Pos(cur.line, token.start)).string
+					.charAt(0) == "<") {
+				result = [ "/#if>", "/#list>", "/#assign>" ];
 			}
 		} else {
+			var tprop = token;
+
 			// If it's not a 'word-style' token, ignore the token.
 			if (!/^[\w$_]*$/.test(token.string)) {
 				token = tprop = {
