@@ -210,7 +210,7 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 		String id = "col-" + column.hashCode();
 
 		column.setId(id);
-		column.setColspan(context.getColSpan());
+		column.setColspan(context.getColumnSpan());
 		column.setRowspan(context.getRowSpan());
 
 		String styleClass;

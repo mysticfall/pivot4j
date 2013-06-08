@@ -566,8 +566,8 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 			attributes.put("style", style);
 		}
 
-		if (context.getColSpan() > 1) {
-			attributes.put("colspan", Integer.toString(context.getColSpan()));
+		if (context.getColumnSpan() > 1) {
+			attributes.put("colspan", Integer.toString(context.getColumnSpan()));
 		}
 
 		if (context.getRowSpan() > 1) {

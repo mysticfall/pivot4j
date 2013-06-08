@@ -503,6 +503,18 @@ span.ui-button-icon-only {
 	height: 200px;
 }
 
+.CodeMirror-completions {
+	z-index: 2000 !important;
+}
+
+.CodeMirror-completions select {
+	color: #000000;
+}
+
+.usage-info li {
+    padding: 0.1em;
+}
+
 .ui-dialog .ui-dialog-footer {
 	padding: 0;
 }
@@ -528,6 +540,10 @@ span.ui-button-icon-only {
 
 .ui-dialog .ui-dialog-buttonpane .ui-messages div {
 	margin: 5px 0 5px 0 !important;
+}
+
+.ui-dialog .ui-dialog-content {
+	cursor: default;
 }
 
 .filter-dialog .ui-tree-container {

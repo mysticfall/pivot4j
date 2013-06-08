@@ -345,7 +345,7 @@ public class RenderContext {
 	/**
 	 * @return the colIndex
 	 */
-	public int getColIndex() {
+	public int getColumnIndex() {
 		return colIndex;
 	}
 
@@ -375,7 +375,7 @@ public class RenderContext {
 	/**
 	 * @return the colSpan
 	 */
-	public int getColSpan() {
+	public int getColumnSpan() {
 		return colSpan;
 	}
 
@@ -528,35 +528,6 @@ public class RenderContext {
 			}
 		});
 
-		context.put("axisName", new ExpressionContext.ValueBinding<String>() {
-
-			@Override
-			public String getValue() {
-				Axis theAxis = getAxis();
-
-				if (theAxis == null) {
-					return null;
-				}
-
-				return theAxis.name();
-			}
-		});
-
-		context.put("axisOridinal",
-				new ExpressionContext.ValueBinding<Integer>() {
-
-					@Override
-					public Integer getValue() {
-						Axis theAxis = getAxis();
-
-						if (theAxis == null) {
-							return null;
-						}
-
-						return theAxis.axisOrdinal();
-					}
-				});
-
 		context.put("hierarchy",
 				new ExpressionContext.ValueBinding<Hierarchy>() {
 
@@ -667,13 +638,14 @@ public class RenderContext {
 					}
 				});
 
-		context.put("colIndex", new ExpressionContext.ValueBinding<Integer>() {
+		context.put("columnIndex",
+				new ExpressionContext.ValueBinding<Integer>() {
 
-			@Override
-			public Integer getValue() {
-				return getColIndex();
-			}
-		});
+					@Override
+					public Integer getValue() {
+						return getColumnIndex();
+					}
+				});
 
 		context.put("rowIndex", new ExpressionContext.ValueBinding<Integer>() {
 
@@ -683,13 +655,14 @@ public class RenderContext {
 			}
 		});
 
-		context.put("colSpan", new ExpressionContext.ValueBinding<Integer>() {
+		context.put("columnSpan",
+				new ExpressionContext.ValueBinding<Integer>() {
 
-			@Override
-			public Integer getValue() {
-				return getColSpan();
-			}
-		});
+					@Override
+					public Integer getValue() {
+						return getColumnSpan();
+					}
+				});
 
 		context.put("rowSpan", new ExpressionContext.ValueBinding<Integer>() {
 

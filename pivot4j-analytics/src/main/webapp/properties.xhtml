@@ -49,16 +49,34 @@
 
 							<p:outputLabel value="#{msg['label.properties.expression']}"
 								rendered="#{propertiesHandler.useExpression}" />
-							<pe:codeMirror mode="text/x-mdx"
+							<pe:codeMirror mode="text/x-freemarker"
 								value="#{propertiesHandler.expression}" lineNumbers="true"
 								lineWrapping="true" matchBrackets="true"
 								theme="#{settings.editorTheme}"
+								extraKeys="{'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.pivot4jHint);}}"
 								rendered="#{propertiesHandler.useExpression}">
 								<p:ajax event="blur"
 									listener="#{propertiesHandler.onPropertyChange}"
 									update="button-bar" />
 								<f:param name="skipRender" value="true" />
 							</pe:codeMirror>
+
+							<f:facet name="footer">
+								<h:panelGroup laayout="block" styleClass="usage-info"
+									rendered="#{propertiesHandler.useExpression}">
+									<ul>
+										<li><h:outputText
+												value="#{msg['message.properties.expr.help.0']}" /></li>
+										<li><h:outputFormat
+												value="#{msg['message.properties.expr.help.1']}"
+												escape="false">
+												<f:param
+													value="&lt;a href='http://freemarker.sourceforge.net/docs/dgui_template_exp.html' target='_blank'&gt;" />
+												<f:param value="&lt;/a&gt;" />
+											</h:outputFormat></li>
+									</ul>
+								</h:panelGroup>
+							</f:facet>
 						</h:panelGrid>
 					</h:panelGroup>
 				</p:layoutUnit>

@@ -962,10 +962,10 @@ public class FopExporter extends AbstractPivotExporter {
 	protected AttributesImpl createCellAttributes(RenderContext context) {
 		AttributesImpl attributes = new AttributesImpl();
 
-		if (context.getColSpan() > 1) {
+		if (context.getColumnSpan() > 1) {
 			attributes.addAttribute("", "number-columns-spanned",
 					"number-columns-spanned", "CDATA",
-					Integer.toString(context.getColSpan()));
+					Integer.toString(context.getColumnSpan()));
 		}
 
 		if (context.getRowSpan() > 1) {

@@ -433,7 +433,7 @@ public class ExcelExporter extends AbstractPivotExporter {
 	 */
 	@Override
 	public void startCell(RenderContext context) {
-		this.cell = createCell(row, context.getColIndex() + getColOffset());
+		this.cell = createCell(row, context.getColumnIndex() + getColOffset());
 	}
 
 	/**
@@ -528,11 +528,11 @@ public class ExcelExporter extends AbstractPivotExporter {
 	 * @return
 	 */
 	protected CellRangeAddress createMergedRegion(RenderContext context) {
-		if (context.getColSpan() > 1 || context.getRowSpan() > 1) {
+		if (context.getColumnSpan() > 1 || context.getRowSpan() > 1) {
 			int firstRow = context.getRowIndex() + getRowOffset();
 			int lastRow = firstRow + context.getRowSpan() - 1;
-			int firstCol = context.getColIndex() + getColOffset();
-			int lastCol = firstCol + context.getColSpan() - 1;
+			int firstCol = context.getColumnIndex() + getColOffset();
+			int lastCol = firstCol + context.getColumnSpan() - 1;
 
 			return new CellRangeAddress(firstRow, lastRow, firstCol, lastCol);
 		} else {

@@ -577,13 +577,13 @@ public class RenderStrategyImpl implements RenderStrategy {
 				callback.cellContent(context);
 				callback.endCell(context);
 
-				context.setColIndex(context.getColIndex() + span);
+				context.setColIndex(context.getColumnIndex() + span);
 
 				List<Property> properties = propertyMap.get(hierarchy);
 				if (properties != null) {
 					for (Property property : properties) {
 						context.setColSpan(1);
-						context.setColIndex(context.getColIndex() + 1);
+						context.setColIndex(context.getColumnIndex() + 1);
 						context.setProperty(property);
 
 						callback.startCell(context);
