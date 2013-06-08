@@ -64,16 +64,16 @@ public class ExpressionConditionTest extends AbstractConditionTest {
 		ExpressionCondition expression = new ExpressionCondition(
 				conditionFactory);
 
-		expression.setExpression("<#if colIndex = 2>true</#if>");
+		expression.setExpression("<#if columnIndex = 2>true</#if>");
 		assertThat("Expression '" + expression.getExpression()
 				+ "' should be true.", expression.matches(context), is(true));
 
-		expression.setExpression("<#if colIndex != 2>true</#if>");
+		expression.setExpression("<#if columnIndex != 2>true</#if>");
 		assertThat("Expression '" + expression.getExpression()
 				+ "' should be false.", expression.matches(context), is(false));
 
 		expression
-				.setExpression("<#if colIndex = 2 && rowIndex = 1>true</#if>");
+				.setExpression("<#if columnIndex = 2 && rowIndex = 1>true</#if>");
 		assertThat("Expression '" + expression.getExpression()
 				+ "' should be true.", expression.matches(context), is(true));
 
@@ -93,7 +93,7 @@ public class ExpressionConditionTest extends AbstractConditionTest {
 		context.setRowIndex(1);
 		context.setAxis(Axis.ROWS);
 
-		String expression = "<#if colIndex = 2 && rowIndex = 1>true</#if>";
+		String expression = "<#if columnIndex = 2 && rowIndex = 1>true</#if>";
 
 		ExpressionCondition condition = new ExpressionCondition(
 				conditionFactory);
@@ -117,7 +117,7 @@ public class ExpressionConditionTest extends AbstractConditionTest {
 		context.setRowIndex(1);
 		context.setAxis(Axis.ROWS);
 
-		String expression = "<#if colIndex = 2 && rowIndex = 1>true</#if>";
+		String expression = "<#if columnIndex = 2 && rowIndex = 1>true</#if>";
 
 		ExpressionCondition condition = new ExpressionCondition(
 				conditionFactory);

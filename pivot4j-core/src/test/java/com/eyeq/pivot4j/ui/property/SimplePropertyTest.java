@@ -30,7 +30,7 @@ public class SimplePropertyTest extends AbstractRenderTest {
 		context.setRowIndex(1);
 
 		Property property = new SimpleProperty("label",
-				"(${rowIndex}, ${colIndex})");
+				"(${rowIndex}, ${columnIndex})");
 
 		String result = property.getValue(context);
 

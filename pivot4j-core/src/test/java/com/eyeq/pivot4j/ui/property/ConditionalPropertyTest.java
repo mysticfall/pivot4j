@@ -50,7 +50,7 @@ public class ConditionalPropertyTest extends AbstractRenderTest {
 		List<ConditionalValue> values = new LinkedList<ConditionalValue>();
 
 		values.add(new ConditionalValue(new ExpressionCondition(factory,
-				"<#if colIndex = 1>true</#if>"), "red"));
+				"<#if columnIndex = 1>true</#if>"), "red"));
 		values.add(new ConditionalValue(or, "blue"));
 
 		property.setDefaultValue("black");
