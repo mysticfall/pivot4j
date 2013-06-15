@@ -13,7 +13,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapDataSource;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.ui.PrimeFacesPivotRenderer;
@@ -33,7 +33,7 @@ public class ReportContent {
 
 		this.configuration = createConfiguration();
 
-		ConnectionMetadata connectionInfo = state.getConnectionInfo();
+		ConnectionInfo connectionInfo = state.getConnectionInfo();
 
 		if (connectionInfo != null) {
 			configuration.addProperty("connection", "");
@@ -101,7 +101,7 @@ public class ReportContent {
 	 */
 	public ViewState read(ViewState state, DataSourceManager manager)
 			throws ConfigurationException, DataSourceNotFoundException {
-		ConnectionMetadata connectionInfo = new ConnectionMetadata();
+		ConnectionInfo connectionInfo = new ConnectionInfo();
 
 		try {
 			connectionInfo.restoreSettings(configuration

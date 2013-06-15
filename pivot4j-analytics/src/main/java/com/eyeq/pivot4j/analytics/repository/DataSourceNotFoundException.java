@@ -1,24 +1,24 @@
 package com.eyeq.pivot4j.analytics.repository;
 
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 
 public class DataSourceNotFoundException extends Exception {
 
 	private static final long serialVersionUID = -6634494832895522425L;
 	
-	private ConnectionMetadata connectionInfo;
+	private ConnectionInfo connectionInfo;
 
 	/**
 	 * @param connectionInfo
 	 */
-	public DataSourceNotFoundException(ConnectionMetadata connectionInfo) {
+	public DataSourceNotFoundException(ConnectionInfo connectionInfo) {
 		this.connectionInfo = connectionInfo;
 	}
 
 	/**
 	 * @return the connectionInfo
 	 */
-	public ConnectionMetadata getConnectionInfo() {
+	public ConnectionInfo getConnectionInfo() {
 		return connectionInfo;
 	}
 }

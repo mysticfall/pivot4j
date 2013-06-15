@@ -29,7 +29,7 @@ import com.eyeq.pivot4j.ModelChangeListener;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.QueryEvent;
 import com.eyeq.pivot4j.QueryListener;
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
 import com.eyeq.pivot4j.transform.NonEmpty;
 import com.eyeq.pivot4j.transform.SwapAxes;
@@ -71,7 +71,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 			if (model.isInitialized()) {
 				this.cubeName = model.getCube().getName();
 			} else {
-				ConnectionMetadata connectionInfo = stateManager
+				ConnectionInfo connectionInfo = stateManager
 						.getConnectionInfo();
 
 				if (connectionInfo != null) {

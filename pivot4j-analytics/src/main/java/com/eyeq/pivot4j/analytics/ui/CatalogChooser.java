@@ -1,41 +1,40 @@
-package com.eyeq.pivot4j.pentaho.ui;
+package com.eyeq.pivot4j.analytics.ui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-import javax.faces.application.NavigationHandler;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
-import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.pentaho.platform.api.repository2.unified.RepositoryFile;
-import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCatalog;
-import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCube;
-import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianSchema;
+import org.olap4j.OlapDataSource;
 
-import com.eyeq.pivot4j.pentaho.datasource.PentahoDataSourceManager;
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.config.Settings;
+import com.eyeq.pivot4j.analytics.datasource.CatalogInfo;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
+import com.eyeq.pivot4j.analytics.datasource.CubeInfo;
+import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.state.ViewStateHolder;
+import com.eyeq.pivot4j.impl.PivotModelImpl;
 
-@ManagedBean(name = "pentahoCatalogChooser")
+@ManagedBean(name = "catalogChooser")
 @ViewScoped
-public class PentahoCatalogChooser {
+public class CatalogChooser {
+
+	@ManagedProperty(value = "#{settings}")
+	private Settings settings;
 
 	@ManagedProperty(value = "#{dataSourceManager}")
-	private PentahoDataSourceManager dataSourceManager;
+	private DataSourceManager dataSourceManager;
 
 	@ManagedProperty(value = "#{viewStateHolder}")
 	private ViewStateHolder viewStateHolder;
-
-	@ManagedProperty(value = "#{pentahoFileHandler}")
-	private PentahoFileHandler fileHandler;
 
 	private List<UISelectItem> catalogItems;
 
@@ -49,23 +48,35 @@ public class PentahoCatalogChooser {
 
 	private boolean editable;
 
+	@PostConstruct
+	protected void initialized() {
+
+	}
+
 	public List<UISelectItem> getCatalogs() {
 		if (catalogItems == null) {
-			List<MondrianCatalog> catalogs = dataSourceManager.getCatalogs();
+			FacesContext context = FacesContext.getCurrentInstance();
+			ResourceBundle messages = context.getApplication()
+					.getResourceBundle(context, "msg");
+
+			List<CatalogInfo> catalogs = dataSourceManager.getCatalogs();
 
 			this.catalogItems = new ArrayList<UISelectItem>(catalogs.size());
 
 			UISelectItem defaultItem = new UISelectItem();
-			defaultItem.setItemLabel("---- Please select a catalog ----");
+			defaultItem.setItemLabel(messages
+					.getString("message.catalog.chooser.default"));
 			defaultItem.setItemValue("");
 
 			catalogItems.add(defaultItem);
 
-			for (MondrianCatalog catalog : catalogs) {
+			for (CatalogInfo catalog : catalogs) {
 				UISelectItem item = new UISelectItem();
 
-				item.setItemLabel(catalog.getName());
-				item.setItemValue(catalog.getDefinition());
+				item.setItemValue(catalog.getName());
+				item.setItemLabel(catalog.getLabel());
+				item.setItemDescription(catalog.getDescription());
+
 				catalogItems.add(item);
 			}
 		}
@@ -75,26 +86,28 @@ public class PentahoCatalogChooser {
 
 	public List<UISelectItem> getCubes() {
 		if (cubeItems == null) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			ResourceBundle messages = context.getApplication()
+					.getResourceBundle(context, "msg");
+
 			this.cubeItems = new ArrayList<UISelectItem>();
 
 			UISelectItem defaultItem = new UISelectItem();
-			defaultItem.setItemLabel("---- Please select a cube ----");
+			defaultItem.setItemLabel(messages
+					.getString("message.cube_list.default"));
 			defaultItem.setItemValue("");
 
 			cubeItems.add(defaultItem);
 
-			MondrianCatalog catalog = getDataSourceManager().getCatalog(
-					catalogName);
+			if (catalogName != null) {
+				List<CubeInfo> cubes = dataSourceManager.getCubes(catalogName);
 
-			if (catalog != null) {
-				MondrianSchema schema = catalog.getSchema();
-
-				List<MondrianCube> cubes = schema.getCubes();
-
-				for (MondrianCube cube : cubes) {
+				for (CubeInfo cube : cubes) {
 					UISelectItem item = new UISelectItem();
-					item.setItemValue(cube.getId());
-					item.setItemLabel(cube.getName());
+
+					item.setItemValue(cube.getName());
+					item.setItemLabel(cube.getLabel());
+					item.setItemDescription(cube.getDescription());
 
 					cubeItems.add(item);
 				}
@@ -114,68 +127,54 @@ public class PentahoCatalogChooser {
 		}
 	}
 
-	public boolean isNew() {
-		return viewId == null || viewStateHolder.getState(viewId) == null;
-	}
-
-	public void checkState() throws IOException, ClassNotFoundException,
-			ConfigurationException {
-		if (viewId != null) {
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-
-			HttpServletRequest request = (HttpServletRequest) facesContext
-					.getExternalContext().getRequest();
-
-			RepositoryFile file = (RepositoryFile) request.getAttribute("file");
-
-			ViewState state;
-
-			if (file == null) {
-				state = viewStateHolder.getState(viewId);
-			} else {
-				state = fileHandler.load(viewId, file);
-
-				if (state != null) {
-					state.setReadOnly(!editable);
-					viewStateHolder.registerState(state);
-				}
-			}
-
-			if (state != null) {
-				ConnectionMetadata connectionInfo = state.getConnectionInfo();
-
-				this.catalogName = connectionInfo.getCatalogName();
-				this.cubeName = connectionInfo.getCubeName();
-
-				NavigationHandler navigationHandler = facesContext
-						.getApplication().getNavigationHandler();
-				navigationHandler.handleNavigation(facesContext, null,
-						"view?faces-redirect=true&ts=" + viewId);
-			}
+	public boolean isNewReport() {
+		if (viewId == null) {
+			return true;
 		}
+
+		ViewState state = viewStateHolder.getState(viewId);
+
+		return state == null || state.getConnectionInfo() == null;
 	}
 
 	public String proceed() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		Flash flash = context.getExternalContext().getFlash();
 
-		ConnectionMetadata connectionInfo = new ConnectionMetadata(null,
-				catalogName, cubeName);
+		ConnectionInfo connectionInfo = new ConnectionInfo(catalogName,
+				cubeName);
 
-		ViewState state = viewStateHolder
-				.createNewState(connectionInfo, viewId);
-		viewStateHolder.registerState(state);
+		ViewState state = viewStateHolder.getState(viewId);
+
+		if (state == null) {
+			state = viewStateHolder.createNewState(connectionInfo, viewId);
+			viewStateHolder.registerState(state);
+		} else {
+			OlapDataSource dataSource = dataSourceManager
+					.getDataSource(connectionInfo);
+
+			state.setModel(new PivotModelImpl(dataSource));
+			state.setConnectionInfo(connectionInfo);
+		}
 
 		flash.put("connectionInfo", connectionInfo);
 		flash.put("viewId", viewId);
 
-		return "view?faces-redirect=true&ts=" + viewId;
+		StringBuilder builder = new StringBuilder();
+		builder.append("view");
+		builder.append("?faces-redirect=true");
+		builder.append("&");
+		builder.append(settings.getViewParameterName());
+		builder.append("=");
+		builder.append(viewId);
+
+		return builder.toString();
 	}
 
 	/**
 	 * @return the dataSourceManager
 	 */
-	public PentahoDataSourceManager getDataSourceManager() {
+	public DataSourceManager getDataSourceManager() {
 		return dataSourceManager;
 	}
 
@@ -183,23 +182,23 @@ public class PentahoCatalogChooser {
 	 * @param dataSourceManager
 	 *            the dataSourceManager to set
 	 */
-	public void setDataSourceManager(PentahoDataSourceManager dataSourceManager) {
+	public void setDataSourceManager(DataSourceManager dataSourceManager) {
 		this.dataSourceManager = dataSourceManager;
 	}
 
 	/**
-	 * @return the fileHandler
+	 * @return the settings
 	 */
-	public PentahoFileHandler getFileHandler() {
-		return fileHandler;
+	public Settings getSettings() {
+		return settings;
 	}
 
 	/**
-	 * @param fileHandler
-	 *            the fileHandler to set
+	 * @param settings
+	 *            the settings to set
 	 */
-	public void setFileHandler(PentahoFileHandler fileHandler) {
-		this.fileHandler = fileHandler;
+	public void setSettings(Settings settings) {
+		this.settings = settings;
 	}
 
 	/**

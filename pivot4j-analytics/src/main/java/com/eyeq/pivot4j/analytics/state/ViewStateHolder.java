@@ -29,7 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.config.Settings;
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.CatalogInfo;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
 
@@ -236,10 +237,17 @@ public class ViewStateHolder {
 	/**
 	 * Create an empty view state.
 	 * 
-	 * @param connectionInfo
 	 * @return
 	 */
-	public ViewState createNewState(ConnectionMetadata connectionInfo) {
+	public ViewState createNewState() {
+		List<CatalogInfo> catalogs = dataSourceManager.getCatalogs();
+
+		ConnectionInfo connectionInfo = null;
+
+		if (catalogs.size() == 1) {
+			connectionInfo = new ConnectionInfo(catalogs.get(0).getName(), null);
+		}
+
 		return createNewState(connectionInfo, null);
 	}
 
@@ -248,18 +256,13 @@ public class ViewStateHolder {
 	 * @param viewId
 	 * @return
 	 */
-	public ViewState createNewState(ConnectionMetadata connectionInfo,
-			String viewId) {
-		OlapDataSource dataSource = dataSourceManager
-				.getDataSource(connectionInfo);
-
-		if (dataSource == null) {
-			// TODO find more elegant way to determine standalone/plugin mode.
-			return null;
-		}
+	public ViewState createNewState(ConnectionInfo connectionInfo, String viewId) {
+		String id;
 
 		if (viewId == null) {
-			viewId = UUID.randomUUID().toString();
+			id = UUID.randomUUID().toString();
+		} else {
+			id = viewId;
 		}
 
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -289,9 +292,16 @@ public class ViewStateHolder {
 			}
 		}
 
-		PivotModel model = new PivotModelImpl(dataSource);
+		PivotModel model = null;
 
-		return new ViewState(viewId, name, connectionInfo, model, null);
+		if (connectionInfo != null) {
+			OlapDataSource dataSource = dataSourceManager
+					.getDataSource(connectionInfo);
+
+			model = new PivotModelImpl(dataSource);
+		}
+
+		return new ViewState(id, name, connectionInfo, model, null);
 	}
 
 	/**

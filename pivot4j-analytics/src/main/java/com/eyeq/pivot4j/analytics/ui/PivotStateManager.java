@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.config.Settings;
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.state.ViewStateHolder;
 
@@ -163,7 +163,7 @@ public class PivotStateManager {
 		state.setRendererState(rendererState);
 	}
 
-	public ConnectionMetadata getConnectionInfo() {
+	public ConnectionInfo getConnectionInfo() {
 		ViewState state = getState();
 		if (state == null) {
 			return null;

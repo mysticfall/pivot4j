@@ -10,10 +10,13 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -31,12 +34,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.impl.PivotModelImpl;
-import com.eyeq.pivot4j.pentaho.datasource.PentahoDataSourceManager;
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.state.ViewStateHolder;
 import com.eyeq.pivot4j.analytics.ui.PrimeFacesPivotRenderer;
+import com.eyeq.pivot4j.impl.PivotModelImpl;
+import com.eyeq.pivot4j.pentaho.datasource.PentahoDataSourceManager;
 
 @ManagedBean(name = "pentahoFileHandler")
 @SessionScoped
@@ -56,6 +59,43 @@ public class PentahoFileHandler {
 	protected void initialize() {
 		this.session = PentahoSessionHolder.getSession();
 		this.repository = PentahoSystem.get(IUnifiedRepository.class, session);
+	}
+
+	public void load() throws IOException, ClassNotFoundException,
+			ConfigurationException {
+		FacesContext context = FacesContext.getCurrentInstance();
+		ExternalContext externalContext = context.getExternalContext();
+
+		Map<String, String> parameters = externalContext
+				.getRequestParameterMap();
+
+		String viewId = parameters.get("ts");
+		String editable = parameters.get("editable");
+
+		HttpServletRequest request = (HttpServletRequest) context
+				.getExternalContext().getRequest();
+
+		RepositoryFile file = (RepositoryFile) request.getAttribute("file");
+
+		ViewState state;
+
+		if (file == null) {
+			state = viewStateHolder.getState(viewId);
+		} else {
+			state = load(viewId, file);
+
+			if (state != null) {
+				state.setReadOnly("false".equalsIgnoreCase(editable));
+				viewStateHolder.registerState(state);
+			}
+		}
+
+		if (state != null) {
+			NavigationHandler navigationHandler = context.getApplication()
+					.getNavigationHandler();
+			navigationHandler.handleNavigation(context, null,
+					"view?faces-redirect=true&ts=" + viewId);
+		}
 	}
 
 	/**
@@ -102,7 +142,7 @@ public class PentahoFileHandler {
 				logger.debug(writer.getBuffer().toString());
 			}
 
-			ConnectionMetadata connectionInfo = new ConnectionMetadata();
+			ConnectionInfo connectionInfo = new ConnectionInfo();
 
 			try {
 				connectionInfo.restoreSettings(configuration
@@ -208,7 +248,7 @@ public class PentahoFileHandler {
 		configuration.addProperty("connection", "");
 		configuration.addProperty("model", "");
 
-		ConnectionMetadata connectionInfo = state.getConnectionInfo();
+		ConnectionInfo connectionInfo = state.getConnectionInfo();
 
 		connectionInfo
 				.saveSettings(configuration.configurationAt("connection"));

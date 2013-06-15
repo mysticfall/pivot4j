@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.eyeq.pivot4j.state.Configurable;
 
-public interface DataSourceDefinition extends Serializable, Configurable {
+public interface DataSourceInfo extends Serializable, Configurable {
 
 	String getName();
 

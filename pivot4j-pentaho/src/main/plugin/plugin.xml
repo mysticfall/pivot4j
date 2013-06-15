@@ -7,7 +7,7 @@
 	<overlays>
 		<overlay id="launch" resourcebundle="api/repos/pivot4j/webapp/resources/pivot4j/i18n/messages.properties">
 			<button id="launch_new_pivot4j_analytics" image="api/repos/pivot4j/webapp/resources/pivot4j/images/new-report.png"
-				command="openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/index.html')"
+				command="openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/catalog.html')"
 				label="Pivot4J Analytics" />
 		</overlay>
 
@@ -15,12 +15,12 @@
 			<toolbar id="mainToolbar">
 				<toolbarbutton id="tb-pivot4j-new" 
 					image="../api/repos/pivot4j/webapp/resources/pivot4j/images/new-report32.png"
-					onclick="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/index.xhtml')"
+					onclick="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/catalog.xhtml')"
 					tooltiptext="${plugin.toolbar.new}" insertafter="dummyPluginContentButton" />
 			</toolbar>
 			<menubar id="newmenu">
 				<menuitem id="mi-pivot4j-new" label="${plugin.menu.new}"
-					command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/index.xhtml')" />
+					command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/catalog.xhtml')" />
 			</menubar>		
 		</overlay>
 	</overlays>

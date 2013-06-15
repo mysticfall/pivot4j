@@ -6,8 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public abstract class AbstractDataSourceDefinition implements
-		DataSourceDefinition {
+public abstract class AbstractDataSourceInfo implements DataSourceInfo {
 
 	private static final long serialVersionUID = -1308857219571095791L;
 
@@ -97,11 +96,11 @@ public abstract class AbstractDataSourceDefinition implements
 			return false;
 		}
 
-		if (!(obj instanceof AbstractDataSourceDefinition)) {
+		if (!(obj instanceof AbstractDataSourceInfo)) {
 			return false;
 		}
 
-		AbstractDataSourceDefinition other = (AbstractDataSourceDefinition) obj;
+		AbstractDataSourceInfo other = (AbstractDataSourceInfo) obj;
 
 		return new EqualsBuilder().append(name, other.name).isEquals();
 	}

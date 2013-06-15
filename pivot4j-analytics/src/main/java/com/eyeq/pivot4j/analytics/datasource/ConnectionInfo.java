@@ -7,44 +7,24 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.eyeq.pivot4j.state.Configurable;
 
-public class ConnectionMetadata implements Configurable, Serializable {
+public class ConnectionInfo implements Configurable, Serializable {
 
 	private static final long serialVersionUID = 1613489385973603487L;
 
-	private String dataSourceName;
+	private String catalogName;
 
 	private String cubeName;
 
-	private String catalogName;
-
-	public ConnectionMetadata() {
+	public ConnectionInfo() {
 	}
 
 	/**
-	 * @param dataSourceName
 	 * @param catalogName
 	 * @param cubeName
 	 */
-	public ConnectionMetadata(String dataSourceName, String catalogName,
-			String cubeName) {
-		this.dataSourceName = dataSourceName;
+	public ConnectionInfo(String catalogName, String cubeName) {
 		this.catalogName = catalogName;
 		this.cubeName = cubeName;
-	}
-
-	/**
-	 * @return the dataSourceName
-	 */
-	public String getDataSourceName() {
-		return dataSourceName;
-	}
-
-	/**
-	 * @param dataSourceName
-	 *            the dataSourceName to set
-	 */
-	public void setDataSourceName(String dataSourceName) {
-		this.dataSourceName = dataSourceName;
 	}
 
 	/**
@@ -87,7 +67,6 @@ public class ConnectionMetadata implements Configurable, Serializable {
 					"Configuration object cannot be null.");
 		}
 
-		configuration.addProperty("dataSource", dataSourceName);
 		configuration.addProperty("catalog", catalogName);
 		configuration.addProperty("cube", cubeName);
 	}
@@ -102,7 +81,6 @@ public class ConnectionMetadata implements Configurable, Serializable {
 					"Configuration object cannot be null.");
 		}
 
-		this.dataSourceName = configuration.getString("dataSource");
 		this.catalogName = configuration.getString("catalog");
 		this.cubeName = configuration.getString("cube");
 	}
@@ -112,9 +90,7 @@ public class ConnectionMetadata implements Configurable, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this)
-				.append("dataSourceName", dataSourceName)
-				.append("cubeName", cubeName)
+		return new ToStringBuilder(this).append("cubeName", cubeName)
 				.append("catalogName", catalogName).toString();
 	}
 }

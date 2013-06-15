@@ -7,7 +7,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
 
 public class ViewState {
@@ -24,7 +24,7 @@ public class ViewState {
 
 	private Date lastActive = new Date();
 
-	private ConnectionMetadata connectionInfo;
+	private ConnectionInfo connectionInfo;
 
 	private PivotModel model;
 
@@ -54,7 +54,7 @@ public class ViewState {
 	 * @param model
 	 * @param file
 	 */
-	public ViewState(String id, String name, ConnectionMetadata connectionInfo,
+	public ViewState(String id, String name, ConnectionInfo connectionInfo,
 			PivotModel model, RepositoryFile file) {
 		if (id == null) {
 			throw new NullArgumentException("id");
@@ -118,7 +118,7 @@ public class ViewState {
 	/**
 	 * @return the connectionInfo
 	 */
-	public ConnectionMetadata getConnectionInfo() {
+	public ConnectionInfo getConnectionInfo() {
 		return connectionInfo;
 	}
 
@@ -126,7 +126,7 @@ public class ViewState {
 	 * @param connectionInfo
 	 *            the connectionInfo to set
 	 */
-	public void setConnectionInfo(ConnectionMetadata connectionInfo) {
+	public void setConnectionInfo(ConnectionInfo connectionInfo) {
 		this.connectionInfo = connectionInfo;
 	}
 

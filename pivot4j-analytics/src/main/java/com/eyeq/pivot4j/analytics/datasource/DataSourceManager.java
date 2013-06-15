@@ -1,8 +1,18 @@
 package com.eyeq.pivot4j.analytics.datasource;
 
+import java.util.List;
+
 import org.olap4j.OlapDataSource;
 
 public interface DataSourceManager {
+
+	List<CatalogInfo> getCatalogs();
+
+	/**
+	 * @param definition
+	 * @return
+	 */
+	List<CubeInfo> getCubes(String catalogName);
 
 	/**
 	 * Create an OLAP datasource from the specified connection information. Note
@@ -13,5 +23,5 @@ public interface DataSourceManager {
 	 * @param connectionInfo
 	 * @return
 	 */
-	OlapDataSource getDataSource(ConnectionMetadata connectionInfo);
+	OlapDataSource getDataSource(ConnectionInfo connectionInfo);
 }

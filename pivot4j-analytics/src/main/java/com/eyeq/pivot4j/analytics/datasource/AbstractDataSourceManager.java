@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.eyeq.pivot4j.analytics.config.Settings;
 import com.eyeq.pivot4j.datasource.CloseableDataSource;
 
-public abstract class AbstractDataSourceManager<T extends DataSourceDefinition>
+public abstract class AbstractDataSourceManager<T extends DataSourceInfo>
 		implements DataSourceManager {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -137,10 +137,6 @@ public abstract class AbstractDataSourceManager<T extends DataSourceDefinition>
 		}
 	}
 
-	protected List<T> getDefinitions() {
-		return Collections.unmodifiableList(definitions);
-	}
-
 	/**
 	 * @param configuration
 	 * @return
@@ -177,23 +173,22 @@ public abstract class AbstractDataSourceManager<T extends DataSourceDefinition>
 	 * @param connectionInfo
 	 * @return
 	 */
-	protected T getDefinition(ConnectionMetadata connectionInfo) {
+	protected T getDefinition(ConnectionInfo connectionInfo) {
 		if (connectionInfo == null) {
 			throw new NullArgumentException("connectionInfo");
 		}
 
 		T definition = null;
 
-		if (connectionInfo.getDataSourceName() == null) {
+		if (connectionInfo.getCatalogName() == null) {
 			if (!definitions.isEmpty()) {
 				definition = definitions.get(0);
-				connectionInfo.setDataSourceName(definition.getName());
+				connectionInfo.setCatalogName(definition.getName());
 			}
 		} else {
 			synchronized (this) {
 				for (T def : definitions) {
-					if (connectionInfo.getDataSourceName()
-							.equals(def.getName())) {
+					if (connectionInfo.getCatalogName().equals(def.getName())) {
 						definition = def;
 						break;
 					}
@@ -204,11 +199,30 @@ public abstract class AbstractDataSourceManager<T extends DataSourceDefinition>
 		return definition;
 	}
 
+	protected T getDefinition(String name) {
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+
+		T definition = null;
+
+		synchronized (this) {
+			for (T def : definitions) {
+				if (name.equals(def.getName())) {
+					definition = def;
+					break;
+				}
+			}
+		}
+
+		return definition;
+	}
+
 	/**
-	 * @see com.eyeq.pivot4j.analytics.datasource.DataSourceManager#getDataSource(com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata)
+	 * @see com.eyeq.pivot4j.analytics.datasource.DataSourceManager#getDataSource(com.eyeq.pivot4j.analytics.datasource.ConnectionInfo)
 	 */
 	@Override
-	public OlapDataSource getDataSource(ConnectionMetadata connectionInfo) {
+	public OlapDataSource getDataSource(ConnectionInfo connectionInfo) {
 		OlapDataSource dataSource = null;
 
 		T definition = getDefinition(connectionInfo);
@@ -218,6 +232,10 @@ public abstract class AbstractDataSourceManager<T extends DataSourceDefinition>
 		}
 
 		return dataSource;
+	}
+
+	protected List<T> getDefinitions() {
+		return Collections.unmodifiableList(definitions);
 	}
 
 	/**

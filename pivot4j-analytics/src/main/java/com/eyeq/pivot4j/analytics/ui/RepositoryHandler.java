@@ -29,7 +29,6 @@ import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
 import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.analytics.repository.DataSourceNotFoundException;
 import com.eyeq.pivot4j.analytics.repository.ReportContent;
@@ -69,8 +68,7 @@ public class RepositoryHandler implements ViewStateListener {
 	protected void initialize() {
 		viewStateHolder.addViewStateListener(this);
 
-		ViewState state = viewStateHolder
-				.createNewState(new ConnectionMetadata());
+		ViewState state = viewStateHolder.createNewState();
 
 		if (state != null) {
 			viewStateHolder.registerState(state);
@@ -105,13 +103,12 @@ public class RepositoryHandler implements ViewStateListener {
 		List<ViewState> states = viewStateHolder.getStates();
 
 		for (ViewState state : states) {
-			context.addCallbackParam(state.getId(), new PageInfo(state));
+			context.addCallbackParam(state.getId(), new ViewInfo(state));
 		}
 	}
 
 	public void create() {
-		ViewState state = viewStateHolder
-				.createNewState(new ConnectionMetadata());
+		ViewState state = viewStateHolder.createNewState();
 		viewStateHolder.registerState(state);
 
 		this.activeViewId = state.getId();
@@ -121,7 +118,7 @@ public class RepositoryHandler implements ViewStateListener {
 		}
 
 		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.addCallbackParam("report", new PageInfo(state));
+		requestContext.addCallbackParam("report", new ViewInfo(state));
 	}
 
 	public void save() {
@@ -303,7 +300,7 @@ public class RepositoryHandler implements ViewStateListener {
 		} catch (DataSourceNotFoundException e) {
 			exception = e;
 			errorMessage = bundle.getString("error.open.report.dataSource")
-					+ e.getConnectionInfo().getDataSourceName();
+					+ e.getConnectionInfo().getCatalogName();
 		} catch (IOException e) {
 			exception = e;
 			errorMessage = bundle.getString("error.open.report.io") + e;
@@ -331,7 +328,7 @@ public class RepositoryHandler implements ViewStateListener {
 		this.activeViewId = viewId;
 
 		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.addCallbackParam("report", new PageInfo(state));
+		requestContext.addCallbackParam("report", new ViewInfo(state));
 	}
 
 	public void delete() {
@@ -673,7 +670,7 @@ public class RepositoryHandler implements ViewStateListener {
 		this.selection = selection;
 	}
 
-	public static class PageInfo implements Serializable {
+	public static class ViewInfo implements Serializable {
 
 		private static final long serialVersionUID = 862747643432896517L;
 
@@ -685,13 +682,16 @@ public class RepositoryHandler implements ViewStateListener {
 
 		private boolean dirty;
 
+		private boolean initialized;
+
 		/**
 		 * @param state
 		 */
-		PageInfo(ViewState state) {
+		ViewInfo(ViewState state) {
 			this.id = state.getId();
 			this.name = state.getName();
 			this.dirty = state.isDirty();
+			this.initialized = state.getConnectionInfo() != null;
 
 			if (state.getFile() != null) {
 				this.path = state.getFile().getPath();
@@ -724,6 +724,13 @@ public class RepositoryHandler implements ViewStateListener {
 		 */
 		public boolean isDirty() {
 			return dirty;
+		}
+
+		/**
+		 * @return the initialized
+		 */
+		public boolean isInitialized() {
+			return initialized;
 		}
 	}
 }

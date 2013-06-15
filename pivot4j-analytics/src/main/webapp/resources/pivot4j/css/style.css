@@ -507,6 +507,10 @@ span.ui-button-icon-only {
 	z-index: 2000 !important;
 }
 
+.CodeMirror-completions select {
+	color: #000000;
+}
+
 .usage-info li {
     padding: 0.1em;
 }

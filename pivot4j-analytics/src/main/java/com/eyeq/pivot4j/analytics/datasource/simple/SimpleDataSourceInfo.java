@@ -9,9 +9,9 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceDefinition;
+import com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceInfo;
 
-public class SimpleDataSourceDefinition extends AbstractDataSourceDefinition {
+public class SimpleDataSourceInfo extends AbstractDataSourceInfo {
 
 	private static final long serialVersionUID = -513787516897344513L;
 
@@ -26,7 +26,7 @@ public class SimpleDataSourceDefinition extends AbstractDataSourceDefinition {
 	private Properties properties;
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceDefinition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceInfo#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
@@ -67,7 +67,7 @@ public class SimpleDataSourceDefinition extends AbstractDataSourceDefinition {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceDefinition#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceInfo#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
@@ -168,7 +168,7 @@ public class SimpleDataSourceDefinition extends AbstractDataSourceDefinition {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceDefinition#hashCode()
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceInfo#hashCode()
 	 */
 	@Override
 	public int hashCode() {
@@ -177,7 +177,7 @@ public class SimpleDataSourceDefinition extends AbstractDataSourceDefinition {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceDefinition#equals(java.lang.Object)
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceInfo#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -189,11 +189,11 @@ public class SimpleDataSourceDefinition extends AbstractDataSourceDefinition {
 			return false;
 		}
 
-		if (!(obj instanceof SimpleDataSourceDefinition)) {
+		if (!(obj instanceof SimpleDataSourceInfo)) {
 			return false;
 		}
 
-		SimpleDataSourceDefinition other = (SimpleDataSourceDefinition) obj;
+		SimpleDataSourceInfo other = (SimpleDataSourceInfo) obj;
 
 		return new EqualsBuilder().append(getName(), other.getName())
 				.append(driverClass, other.driverClass).append(url, other.url)

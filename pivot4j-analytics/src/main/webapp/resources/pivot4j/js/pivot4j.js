@@ -139,7 +139,7 @@ function addTab(tab) {
 }
 
 function createTab(tab) {
-	var url = "#view-" + tab.id;
+	var viewId = "#view-" + tab.id;
 
 	var name = tab.name;
 
@@ -147,13 +147,22 @@ function createTab(tab) {
 		name = "*" + tab.name;
 	}
 
+	var url;
+
+	if (tab.initialized) {
+		url = "view.xhtml?";
+	} else {
+		url = "catalog.xhtml?";
+	}
+
+	url += settings.viewParameterName + "=" + tab.id;
+
 	var tabView = jQuery("#tab-panel");
-	var panel = tabView.tabs("add", url, name).find(url);
 
 	var iframe = jQuery(document.createElement("iframe"));
-	iframe.attr("frameborder", "0").attr("src",
-			"view.xhtml?" + settings.viewParameterName + "=" + tab.id);
+	iframe.attr("frameborder", "0").attr("src", url);
 
+	var panel = tabView.tabs("add", viewId, name).find(viewId);
 	panel.append(iframe);
 
 	var newTab = tabView.find("li:last");
@@ -168,6 +177,7 @@ function createTab(tab) {
 		newTab.data("dirty", tab.dirty);
 		newTab.addClass("dirty");
 	}
+console.log(newTab);
 }
 
 function closeTab() {
@@ -201,6 +211,8 @@ function enableSave(enable) {
 		if (typeof onReportChanged == "function") {
 			onReportChanged();
 		}
+
+		tab.addClass("dirty");
 	} else if (tab) {
 		tab.removeClass("dirty");
 	}
