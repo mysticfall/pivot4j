@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<Context>
+	<Environment name="jsf/ProjectStage" type="java.lang.String"
+		value="UnitTest" override="true" />
+</Context>

@@ -69,7 +69,7 @@ public abstract class AbstractIntegrationTestCase {
 
 	protected static WebDriver createDriver() {
 		String type = StringUtils.trimToNull(System
-				.getProperty("integrationTestsDriverType"));
+				.getProperty("web.test.driver"));
 
 		return createDriver(type);
 	}
@@ -125,7 +125,7 @@ public abstract class AbstractIntegrationTestCase {
 	public void before() {
 		if (driver != null) {
 			String url = StringUtils.trimToNull(System
-					.getProperty("integrationTestsUrl"));
+					.getProperty("web.test.url"));
 			if (url == null) {
 				url = "http://localhost:8080/pivot4j";
 			}

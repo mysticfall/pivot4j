@@ -14,7 +14,10 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<web.server.port>9090</web.server.port>
+		<web.test.port>9090</web.test.port>
+		<web.test.url>http://localhost:${web.server.port}/pivot4j</web.test.url>
+		<jsf.project.stage>Production</jsf.project.stage>
+		<log4j.level>warn</log4j.level>
 	</properties>
 
 	<build>
@@ -46,43 +49,22 @@
 					<warName>pivot4j</warName>
 					<archiveClasses>true</archiveClasses>
 					<attachClasses>true</attachClasses>
+					<webXml>${project.build.directory}/generated-resources/xml/xslt/web.xml</webXml>
+					<webResources>
+						<resource>
+							<directory>${project.build.directory}/generated-resources/xml/xslt</directory>
+							<includes>
+								<include>log4j.xml</include>
+							</includes>
+							<targetPath>WEB-INF/classes</targetPath>
+						</resource>
+					</webResources>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.carlspring.maven</groupId>
 				<artifactId>derby-maven-plugin</artifactId>
 				<version>1.5</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat6-maven-plugin</artifactId>
-				<version>2.1</version>
-				<configuration>
-					<port>${web.server.port}</port>
-					<path>/pivot4j</path>
-				</configuration>
-				<executions>
-					<execution>
-						<id>tomcat-run</id>
-						<goals>
-							<goal>run-war-only</goal>
-						</goals>
-						<phase>pre-integration-test</phase>
-						<configuration>
-							<fork>true</fork>
-							<systemProperties>
-								<JAVA_OPTS>-Xmx512m -XX:MaxPermSize=256m</JAVA_OPTS>
-							</systemProperties>
-						</configuration>
-					</execution>
-					<execution>
-						<id>tomcat-shutdown</id>
-						<goals>
-							<goal>shutdown</goal>
-						</goals>
-						<phase>post-integration-test</phase>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -98,6 +80,81 @@
 						<configuration>
 							<attach>true</attach>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<version>${xml.plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformationSets>
+						<transformationSet>
+							<dir>${basedir}/src/main/webapp/WEB-INF</dir>
+							<includes>
+								<include>web.xml</include>
+							</includes>
+							<stylesheet>${basedir}/src/main/xsl/web.xsl</stylesheet>
+							<parameters>
+								<parameter>
+									<name>jsf.project.stage</name>
+									<value>${jsf.project.stage}</value>
+								</parameter>
+							</parameters>
+						</transformationSet>
+						<transformationSet>
+							<dir>${basedir}/src/main/resources/</dir>
+							<includes>
+								<include>log4j.xml</include>
+							</includes>
+							<stylesheet>${basedir}/src/main/xsl/log4j.xsl</stylesheet>
+							<parameters>
+								<parameter>
+									<name>log4j.level</name>
+									<value>${log4j.level}</value>
+								</parameter>
+							</parameters>
+						</transformationSet>
+					</transformationSets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat6-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<port>${web.test.port}</port>
+					<path>/pivot4j</path>
+				</configuration>
+				<executions>
+					<execution>
+						<id>tomcat-run</id>
+						<goals>
+							<goal>run-war-only</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+						<configuration>
+							<fork>true</fork>
+							<systemProperties>
+								<JAVA_OPTS>-Xmx512m -XX:MaxPermSize=256m</JAVA_OPTS>
+							</systemProperties>
+							<contextFile>${basedir}/src/test/context/pivot4j.xml</contextFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>tomcat-shutdown</id>
+						<goals>
+							<goal>shutdown</goal>
+						</goals>
+						<phase>post-integration-test</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -129,6 +186,16 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<excludes>
+					<exclude>log4j.xml</exclude>
+				</excludes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
 	</build>
 
 	<dependencies>
@@ -342,12 +409,8 @@
 								<configuration>
 									<systemProperties>
 										<property>
-											<name>integrationTestsDriverType</name>
+											<name>web.test.driver</name>
 											<value>firefox</value>
-										</property>
-										<property>
-											<name>integrationTestsUrl</name>
-											<value>http://localhost:${web.server.port}/pivot4j</value>
 										</property>
 									</systemProperties>
 								</configuration>
@@ -375,12 +438,8 @@
 								<configuration>
 									<systemProperties>
 										<property>
-											<name>integrationTestsDriverType</name>
+											<name>web.test.driver</name>
 											<value>win32ie</value>
-										</property>
-										<property>
-											<name>integrationTestsUrl</name>
-											<value>http://localhost:${web.server.port}/pivot4j</value>
 										</property>
 									</systemProperties>
 								</configuration>
