@@ -143,7 +143,7 @@
 						<configuration>
 							<fork>true</fork>
 							<systemProperties>
-								<JAVA_OPTS>-Xmx512m -XX:MaxPermSize=256m</JAVA_OPTS>
+								<JAVA_OPTS>-Xmx1024m -XX:MaxPermSize=256m</JAVA_OPTS>
 							</systemProperties>
 							<contextFile>${basedir}/src/test/context/pivot4j.xml</contextFile>
 						</configuration>
