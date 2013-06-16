@@ -124,13 +124,14 @@ public abstract class AbstractIntegrationTestCase {
 	@Before
 	public void before() {
 		if (driver != null) {
-			String url = StringUtils.trimToNull(System
-					.getProperty("web.test.url"));
-			if (url == null) {
-				url = "http://localhost:8080/pivot4j";
+			String port = StringUtils.trimToNull(System
+					.getProperty("web.test.port"));
+			if (port == null) {
+				port = "8080";
 			}
 
-			url += getPageUrl();
+			String url = String.format("http://localhost:%s/pivot4j%s", port,
+					getPageUrl());
 
 			if (log.isInfoEnabled()) {
 				log.info("Opening URL : " + url);

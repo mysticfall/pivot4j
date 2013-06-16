@@ -16,6 +16,7 @@
 	<properties>
 		<jsf.project.stage>Production</jsf.project.stage>
 		<log4j.level>warn</log4j.level>
+		<web.test.port>9090</web.test.port>
 	</properties>
 
 	<build>
@@ -412,7 +413,7 @@
 										</property>
 										<property>
 											<name>web.test.port</name>
-											<value>9090</value>
+											<value>${web.test.port}</value>
 										</property>
 									</systemProperties>
 								</configuration>
@@ -445,7 +446,7 @@
 										</property>
 										<property>
 											<name>web.test.port</name>
-											<value>9090</value>
+											<value>${web.test.port}</value>
 										</property>
 									</systemProperties>
 								</configuration>
