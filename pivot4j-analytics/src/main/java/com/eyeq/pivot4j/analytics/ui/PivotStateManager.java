@@ -60,8 +60,7 @@ public class PivotStateManager {
 		}
 
 		if (state == null) {
-			// ProjectStage stage = context.getApplication().getProjectStage();
-			ProjectStage stage = ProjectStage.UnitTest;
+			ProjectStage stage = context.getApplication().getProjectStage();
 
 			if (stage == ProjectStage.UnitTest) {
 				state = viewStateHolder.createNewState();
