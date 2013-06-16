@@ -243,7 +243,7 @@ public class NavigatorIT extends AbstractIntegrationTestCase {
 			}
 		}
 
-		assertThat("Unable to find Sales item.", salesItem, is(notNullValue()));
+		assertThat("Unable to find the 'Sales' item.", salesItem, is(notNullValue()));
 
 		salesItem.click();
 

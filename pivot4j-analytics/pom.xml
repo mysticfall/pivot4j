@@ -14,8 +14,6 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<web.test.port>9090</web.test.port>
-		<web.test.url>http://localhost:${web.server.port}/pivot4j</web.test.url>
 		<jsf.project.stage>Production</jsf.project.stage>
 		<log4j.level>warn</log4j.level>
 	</properties>
@@ -412,6 +410,10 @@
 											<name>web.test.driver</name>
 											<value>firefox</value>
 										</property>
+										<property>
+											<name>web.test.port</name>
+											<value>9090</value>
+										</property>
 									</systemProperties>
 								</configuration>
 							</execution>
@@ -440,6 +442,10 @@
 										<property>
 											<name>web.test.driver</name>
 											<value>win32ie</value>
+										</property>
+										<property>
+											<name>web.test.port</name>
+											<value>9090</value>
 										</property>
 									</systemProperties>
 								</configuration>

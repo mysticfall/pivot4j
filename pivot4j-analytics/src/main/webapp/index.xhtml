@@ -253,7 +253,8 @@
 		</h:form>
 
 		<h:form id="form">
-			<p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true" />
+			<p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true"
+				rendered="#{facesContext.application.projectStage != 'UnitTest'}" />
 
 			<p:remoteCommand name="onPageLoad" autoRun="true"
 				action="#{repositoryHandler.loadReports}"

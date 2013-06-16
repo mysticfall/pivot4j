@@ -207,18 +207,18 @@ function getTabIndex(id) {
 function enableSave(enable) {
 	var tab = getActiveTab();
 
-	if (enable) {
-		if (typeof onReportChanged == "function") {
-			onReportChanged();
-		}
-
-		tab.addClass("dirty");
-	} else if (tab) {
-		tab.removeClass("dirty");
+	if (enable && typeof onReportChanged == "function") {
+		onReportChanged();
 	}
 
 	if (tab) {
-		tab.data("dirty", enable);
+		if (enable) {
+			tab.data("dirty", enable);
+			tab.addClass("dirty");
+		} else {
+			tab.addClass("dirty");
+			tab.removeClass("dirty");
+		}
 	}
 }
 

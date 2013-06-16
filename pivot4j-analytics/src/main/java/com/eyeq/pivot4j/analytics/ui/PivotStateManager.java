@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -59,8 +60,18 @@ public class PivotStateManager {
 		}
 
 		if (state == null) {
-			throw new FacesException("No view state data is available : "
-					+ viewId);
+			// ProjectStage stage = context.getApplication().getProjectStage();
+			ProjectStage stage = ProjectStage.UnitTest;
+
+			if (stage == ProjectStage.UnitTest) {
+				state = viewStateHolder.createNewState();
+				viewStateHolder.registerState(state);
+
+				this.viewId = state.getId();
+			} else {
+				throw new FacesException("No view state data is available : "
+						+ viewId);
+			}
 		}
 
 		if (log.isInfoEnabled()) {

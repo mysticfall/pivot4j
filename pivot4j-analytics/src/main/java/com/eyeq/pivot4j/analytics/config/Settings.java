@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.faces.FacesException;
+import javax.faces.application.ProjectStage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
@@ -70,6 +71,8 @@ public class Settings {
 		FacesContext context = FacesContext.getCurrentInstance();
 		ExternalContext externalContext = context.getExternalContext();
 
+		ProjectStage stage = context.getApplication().getProjectStage();
+
 		String path = StringUtils.trimToNull(externalContext
 				.getInitParameter(APPLICATION_HOME));
 		if (path == null) {
@@ -98,12 +101,12 @@ public class Settings {
 		try {
 			String configPath = StringUtils.trimToNull(externalContext
 					.getInitParameter(CONFIG_FILE));
-			if (configPath == null) {
+			if (configPath == null || stage == ProjectStage.UnitTest) {
 				configPath = path + File.separator + "pivot4j-config.xml";
 
 				File configFile = new File(configPath);
 
-				if (!configFile.exists()) {
+				if (!configFile.exists() || stage == ProjectStage.UnitTest) {
 					String defaultConfig = "/WEB-INF/pivot4j-config.xml";
 
 					if (logger.isInfoEnabled()) {
