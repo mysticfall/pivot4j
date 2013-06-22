@@ -62,9 +62,9 @@
 								<p:ajax update=":grid-form" oncomplete="onViewChanged()" />
 							</p:selectBooleanButton>
 							<p:selectBooleanButton value="#{pivotGridHandler.nonEmpty}"
-								title="#{msg['toolbar.non_empty.tooltip']}"
-								onLabel="#{msg['toolbar.non_empty']}"
-								offLabel="#{msg['toolbar.non_empty']}"
+								title="#{msg['toolbar.nonEmpty.tooltip']}"
+								onLabel="#{msg['toolbar.nonEmpty']}"
+								offLabel="#{msg['toolbar.nonEmpty']}"
 								onIcon="ui-icon-circlesmall-close"
 								offIcon="ui-icon-circlesmall-close"
 								disabled="#{!pivotGridHandler.valid}"
@@ -263,7 +263,7 @@
 								<p:commandButton icon="ui-button-icon-only ui-icon-search"
 									action="#{memberSelectionHandler.show}"
 									update=":hierarchy-form" oncomplete="hierarchyConfig.show();"
-									title="#{msg['button.hierarchy_config.tooltip']}">
+									title="#{msg['button.hierarchyConfig.tooltip']}">
 									<f:param name="hierarchy" value="#{node.name}" />
 								</p:commandButton>
 								<!-- workaround for issue #1 -->

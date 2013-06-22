@@ -9,9 +9,9 @@
 			widgetVar="exportConfig" modal="true" width="655" height="380"
 			closable="true" resizable="false" dynamic="true"
 			styleClass="export-config">
-			<p:fieldset legend="#{msg['header.pdf_export.content_settings']}">
+			<p:fieldset legend="#{msg['header.pdfExport.contentSettings']}">
 				<h:panelGrid columns="2" columnClasses="field-name,field-input">
-					<p:outputLabel value="#{msg['label.pdf_export.header.show']}"
+					<p:outputLabel value="#{msg['label.pdfExport.header.show']}"
 						for="input-show-header" />
 					<p:selectBooleanCheckbox id="input-show-header"
 						value="#{pivotExportHandler.showHeader}">
@@ -19,13 +19,13 @@
 							update="input-header-text,input-header-fsize" />
 					</p:selectBooleanCheckbox>
 
-					<p:outputLabel value="#{msg['label.pdf_export.header.text']}"
+					<p:outputLabel value="#{msg['label.pdfExport.header.text']}"
 						for="input-header-text" />
 					<p:inputText id="input-header-text"
 						value="#{pivotExportHandler.headerText}" size="60" maxlength="100"
 						disabled="#{!pivotExportHandler.showHeader}" />
 
-					<p:outputLabel value="#{msg['label.pdf_export.header.font.size']}"
+					<p:outputLabel value="#{msg['label.pdfExport.header.font.size']}"
 						for="input-header-fsize" />
 					<h:panelGroup>
 						<p:spinner id="input-header-fsize"
@@ -34,7 +34,7 @@
 						<h:outputText value="pt" styleClass="unit" />
 					</h:panelGroup>
 
-					<p:outputLabel value="#{msg['label.pdf_export.footer.show']}"
+					<p:outputLabel value="#{msg['label.pdfExport.footer.show']}"
 						for="input-show-footer" />
 					<p:selectBooleanCheckbox id="input-show-footer"
 						value="#{pivotExportHandler.showFooter}">
@@ -42,13 +42,13 @@
 							update="input-footer-text,input-footer-fsize" />
 					</p:selectBooleanCheckbox>
 
-					<p:outputLabel value="#{msg['label.pdf_export.footer.text']}"
+					<p:outputLabel value="#{msg['label.pdfExport.footer.text']}"
 						for="input-footer-text" />
 					<p:inputText id="input-footer-text"
 						value="#{pivotExportHandler.footerText}" size="60" maxlength="100"
 						disabled="#{!pivotExportHandler.showFooter}" />
 
-					<p:outputLabel value="#{msg['label.pdf_export.footer.font.size']}"
+					<p:outputLabel value="#{msg['label.pdfExport.footer.font.size']}"
 						for="input-footer-fsize" />
 					<h:panelGroup>
 						<p:spinner id="input-footer-fsize"
@@ -57,7 +57,7 @@
 						<h:outputText value="pt" styleClass="unit" />
 					</h:panelGroup>
 
-					<p:outputLabel value="#{msg['label.pdf_export.content.font.size']}"
+					<p:outputLabel value="#{msg['label.pdfExport.content.font.size']}"
 						for="input-fsize" />
 					<h:panelGroup>
 						<p:spinner id="input-fsize" value="#{pivotExportHandler.fontSize}"
@@ -70,16 +70,16 @@
 
 			<p:spacer height="2" />
 
-			<p:fieldset legend="#{msg['header.pdf_export.page_settings']}">
+			<p:fieldset legend="#{msg['header.pdfExport.pageSettings']}">
 				<h:panelGrid columns="2" columnClasses="field-name,field-input">
-					<p:outputLabel value="#{msg['label.pdf_export.page.orientation']}"
+					<p:outputLabel value="#{msg['label.pdfExport.page.orientation']}"
 						for="input-orientation" />
 					<p:selectOneRadio id="input-orientation"
 						value="#{pivotExportHandler.orientation}">
 						<f:selectItems value="#{pivotExportHandler.orientations}" />
 					</p:selectOneRadio>
 
-					<p:outputLabel value="#{msg['label.pdf_export.page.size']}"
+					<p:outputLabel value="#{msg['label.pdfExport.page.size']}"
 						for="input-paper-size" />
 					<p:selectOneMenu id="input-paper-size"
 						value="#{pivotExportHandler.paperSize}">

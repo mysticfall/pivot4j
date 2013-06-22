@@ -244,9 +244,9 @@ public class MemberSelectionHandler implements NodeFilter {
 				ResourceBundle bundle = context.getApplication()
 						.getResourceBundle(context, "msg");
 
-				String title = bundle.getString("warn.no_members.title");
+				String title = bundle.getString("warn.noMembers.title");
 				String message = bundle
-						.getString("warn.no_members.select.message");
+						.getString("warn.noMembers.select.message");
 				FacesContext.getCurrentInstance().addMessage(
 						null,
 						new FacesMessage(FacesMessage.SEVERITY_WARN, title,
@@ -327,9 +327,9 @@ public class MemberSelectionHandler implements NodeFilter {
 				ResourceBundle bundle = context.getApplication()
 						.getResourceBundle(context, "msg");
 
-				String title = bundle.getString("warn.no_members.title");
+				String title = bundle.getString("warn.noMembers.title");
 				String message = bundle
-						.getString("warn.no_members.remove.message");
+						.getString("warn.noMembers.remove.message");
 				FacesContext.getCurrentInstance().addMessage(
 						null,
 						new FacesMessage(FacesMessage.SEVERITY_WARN, title,

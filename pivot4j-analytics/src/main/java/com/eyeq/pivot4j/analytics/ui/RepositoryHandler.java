@@ -260,7 +260,7 @@ public class RepositoryHandler implements ViewStateListener {
 		requestContext.addCallbackParam("path", file.getPath());
 
 		String title = bundle.getString("message.save.report.title");
-		String message = bundle.getString("message.save_as.report.message")
+		String message = bundle.getString("message.saveAs.report.message")
 				+ file.getPath();
 
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,

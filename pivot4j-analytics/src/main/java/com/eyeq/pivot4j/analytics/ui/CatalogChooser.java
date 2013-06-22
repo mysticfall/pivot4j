@@ -94,7 +94,7 @@ public class CatalogChooser {
 
 			UISelectItem defaultItem = new UISelectItem();
 			defaultItem.setItemLabel(messages
-					.getString("message.cube_list.default"));
+					.getString("message.cubeList.default"));
 			defaultItem.setItemValue("");
 
 			cubeItems.add(defaultItem);

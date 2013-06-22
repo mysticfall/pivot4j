@@ -6,7 +6,7 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 	<h:form id="hierarchy-form">
 		<p:dialog id="hierarchy-config"
-			header="#{msg['title.hierarchy_config']}" widgetVar="hierarchyConfig"
+			header="#{msg['title.hierarchyConfig']}" widgetVar="hierarchyConfig"
 			modal="true" width="860" height="435" closable="true"
 			resizable="false" dynamic="true" styleClass="hierarchy-config">
 			<h:panelGrid id="hierarchy-config-grid" columns="4"
@@ -16,14 +16,14 @@
 				<f:facet name="header">
 					<h:panelGroup layout="block">
 						<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
-						<h:outputText value="#{msg['message.hierarchy_config.info']}" />
+						<h:outputText value="#{msg['message.hierarchyConfig.info']}" />
 					</h:panelGroup>
 				</f:facet>
 
 				<p:panel styleClass="source-panel">
 					<f:facet name="header">
 						<h:outputText
-							value="#{msg['header.hierarchy_config.members.all']}" />
+							value="#{msg['header.hierarchyConfig.members.all']}" />
 					</f:facet>
 
 					<p:tree id="member-tree" styleClass="navigator"
@@ -42,25 +42,25 @@
 
 					<p:contextMenu id="hierarchy-source-menu"
 						styleClass="hierarchy-contextmenu" for="member-tree">
-						<p:menuitem value="#{msg['menu.hierarchy_config.select.single']}"
+						<p:menuitem value="#{msg['menu.hierarchyConfig.select.single']}"
 							action="#{memberSelectionHandler.add}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
 							<f:param name="mode" value="Single" />
 						</p:menuitem>
 						<p:menuitem
-							value="#{msg['menu.hierarchy_config.select.siblings']}"
+							value="#{msg['menu.hierarchyConfig.select.siblings']}"
 							action="#{memberSelectionHandler.add}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
 							<f:param name="mode" value="Sibling" />
 						</p:menuitem>
 						<p:menuitem
-							value="#{msg['menu.hierarchy_config.select.children']}"
+							value="#{msg['menu.hierarchyConfig.select.children']}"
 							action="#{memberSelectionHandler.add}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
 							<f:param name="mode" value="Children" />
 						</p:menuitem>
 						<p:menuitem
-							value="#{msg['menu.hierarchy_config.select.descendants']}"
+							value="#{msg['menu.hierarchyConfig.select.descendants']}"
 							action="#{memberSelectionHandler.add}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
 							<f:param name="mode" value="Descendants" />
@@ -88,7 +88,7 @@
 				<p:panel styleClass="target-panel">
 					<f:facet name="header">
 						<h:outputText
-							value="#{msg['header.hierarchy_config.members.selected']}" />
+							value="#{msg['header.hierarchyConfig.members.selected']}" />
 					</f:facet>
 
 					<p:tree id="selection-tree" styleClass="navigator"
@@ -107,25 +107,25 @@
 
 					<p:contextMenu id="hierarchy-target-menu"
 						styleClass="hierarchy-contextmenu" for="selection-tree">
-						<p:menuitem value="#{msg['menu.hierarchy_config.remove.single']}"
+						<p:menuitem value="#{msg['menu.hierarchyConfig.remove.single']}"
 							action="#{memberSelectionHandler.remove}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
 							<f:param name="mode" value="Single" />
 						</p:menuitem>
 						<p:menuitem
-							value="#{msg['menu.hierarchy_config.remove.siblings']}"
+							value="#{msg['menu.hierarchyConfig.remove.siblings']}"
 							action="#{memberSelectionHandler.remove}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
 							<f:param name="mode" value="Sibling" />
 						</p:menuitem>
 						<p:menuitem
-							value="#{msg['menu.hierarchy_config.remove.children']}"
+							value="#{msg['menu.hierarchyConfig.remove.children']}"
 							action="#{memberSelectionHandler.remove}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
 							<f:param name="mode" value="Children" />
 						</p:menuitem>
 						<p:menuitem
-							value="#{msg['menu.hierarchy_config.remove.descendants']}"
+							value="#{msg['menu.hierarchyConfig.remove.descendants']}"
 							action="#{memberSelectionHandler.remove}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
 							<f:param name="mode" value="Descendants" />

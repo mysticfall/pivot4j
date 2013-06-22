@@ -54,8 +54,8 @@
 								title="#{msg['toolbar.save.tooltip']}" icon="ui-icon-disk"
 								type="button" onclick="checkAndSaveReport(); return false;"
 								disabled="#{!workbenchHandler.saveEnabled}" />
-							<p:commandButton value="#{msg['toolbar.save_as']}"
-								title="#{msg['toolbar.save_as.tooltip']}" icon="ui-icon-disk"
+							<p:commandButton value="#{msg['toolbar.saveAs']}"
+								title="#{msg['toolbar.saveAs.tooltip']}" icon="ui-icon-disk"
 								type="button" onclick="showSaveDialog(); return false;"
 								disabled="#{!workbenchHandler.saveAsEnabled}" />
 							<p:commandButton value="#{msg['toolbar.delete']}"
@@ -163,8 +163,9 @@
 						<p:menuitem value="#{msg['toolbar.open']}"
 							title="#{msg['toolbar.open.tooltip']}"
 							action="#{repositoryHandler.open}"
-							update="repository-panel,:growl"
+							update=":toolbar-form,repository-panel,:growl"
 							oncomplete="addTab(args.report);" icon="ui-icon-folder-open"
+							rendered="#{repositoryHandler.selection != null and !repositoryHandler.selection.object.directory}"
 							disabled="#{!workbenchHandler.openEnabled}" />
 					</p:contextMenu>
 

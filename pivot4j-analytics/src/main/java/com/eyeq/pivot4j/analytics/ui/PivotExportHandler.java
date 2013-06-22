@@ -236,7 +236,7 @@ public class PivotExportHandler {
 
 				try {
 					label = bundle
-							.getString("label.pdf_export.page.orientation."
+							.getString("label.pdfExport.page.orientation."
 									+ orient.name().toLowerCase());
 				} catch (MissingResourceException e) {
 					label = orient.name();

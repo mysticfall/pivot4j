@@ -196,7 +196,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 			ResourceBundle bundle = context.getApplication().getResourceBundle(
 					context, "msg");
 
-			String defaultLabel = bundle.getString("message.cube_list.default");
+			String defaultLabel = bundle.getString("message.cubeList.default");
 
 			this.cubeItems = new ArrayList<UISelectItem>();
 
