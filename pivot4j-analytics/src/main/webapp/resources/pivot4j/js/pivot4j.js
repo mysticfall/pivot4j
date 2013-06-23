@@ -55,15 +55,12 @@ function initializeTabs(tabs) {
 		var href = tab.find("a").attr("href");
 		var id = href.substring(6);
 
-		jQuery("#tab-panel").data("viewToClose", id);
+		setViewToClose(id);
 
 		if (tab.data("dirty")) {
 			confirmCloseDialog.show();
 		} else {
-			closeReport([ {
-				name : 'viewId',
-				value : id
-			} ]);
+			closeReport(id);
 		}
 	});
 
@@ -85,6 +82,24 @@ function initializeTabs(tabs) {
 	if (activeIndex > -1) {
 		tabView.tabs("select", activeIndex);
 	}
+}
+
+function attachClosingViewParam() {
+	var id = getViewToClose();
+
+	if (id) {
+		PrimeFaces.addSubmitParam("close-form", {
+			viewId : id
+		});
+	}
+}
+
+function getViewToClose() {
+	return jQuery("#tab-panel").data("viewToClose");
+}
+
+function setViewToClose(id) {
+	jQuery("#tab-panel").data("viewToClose", id);
 }
 
 function getActiveViewId() {
@@ -177,24 +192,16 @@ function createTab(tab) {
 		newTab.data("dirty", tab.dirty);
 		newTab.addClass("dirty");
 	}
-console.log(newTab);
-}
-
-function closeTab() {
-	var tabView = jQuery("#tab-panel");
-	var index = getTabIndex(getViewToClose());
-
-	tabView.tabs("remove", index);
 }
 
 function closeActiveTab() {
-	var index = getActiveViewIndex();
-
-	jQuery("#tab-panel").tabs("remove", index);
+	closeTab(getActiveViewIndex());
 }
 
-function getViewToClose() {
-	return jQuery("#tab-panel").data("viewToClose");
+function closeTab(index) {
+	jQuery("#tab-panel").tabs("remove", index);
+
+	setViewToClose(null);
 }
 
 function getTabIndex(id) {
@@ -212,26 +219,13 @@ function enableSave(enable) {
 	}
 
 	if (tab) {
+		tab.data("dirty", enable);
+
 		if (enable) {
-			tab.data("dirty", enable);
 			tab.addClass("dirty");
 		} else {
-			tab.addClass("dirty");
 			tab.removeClass("dirty");
 		}
-	}
-}
-
-function checkAndSaveReport() {
-	var tab = getActiveTab();
-	if (!tab) {
-		return;
-	}
-
-	if (tab.data("path")) {
-		saveReport();
-	} else {
-		showSaveDialog();
 	}
 }
 

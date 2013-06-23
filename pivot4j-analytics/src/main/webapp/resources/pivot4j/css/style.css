@@ -546,6 +546,10 @@ span.ui-button-icon-only {
 	cursor: default;
 }
 
+.ui-confirm-dialog .ui-outputlabel {
+	margin-right: 5px;
+}
+
 .filter-dialog .ui-tree-container {
 	margin: 5px 0;
 	height: 280px;

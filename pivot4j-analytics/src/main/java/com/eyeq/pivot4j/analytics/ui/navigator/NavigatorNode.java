@@ -163,6 +163,10 @@ public abstract class NavigatorNode<T> implements TreeNode {
 		return children;
 	}
 
+	public void refresh() {
+		this.children = null;
+	}
+
 	protected boolean isLoaded() {
 		return children != null;
 	}
@@ -184,8 +188,8 @@ public abstract class NavigatorNode<T> implements TreeNode {
 	 * @param child
 	 * @return
 	 */
-	protected <C extends MetadataElement> boolean configureChildNode(
-			C element, NavigatorNode<?> child) {
+	protected <C extends MetadataElement> boolean configureChildNode(C element,
+			NavigatorNode<?> child) {
 		child.setParent(this);
 
 		if (nodeFilter != null) {

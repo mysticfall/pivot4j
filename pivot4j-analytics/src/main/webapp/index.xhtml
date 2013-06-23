@@ -45,18 +45,21 @@
 								update="toolbar,:repository-form:view-id,:growl"
 								title="#{msg['toolbar.new.tooltip']}" icon="ui-icon-document" />
 							<p:commandButton value="#{msg['toolbar.open']}"
+								action="#{repositoryHandler.open}"
+								oncomplete="addTab(args.report)"
+								update=":repository-form:repository-panel,toolbar,:growl"
 								title="#{msg['toolbar.open.tooltip']}"
-								icon="ui-icon-folder-open" type="button"
-								onclick="openReport(); return false;"
+								icon="ui-icon-folder-open"
 								disabled="#{!workbenchHandler.openEnabled}"
 								widgetVar="openButton" />
 							<p:commandButton value="#{msg['toolbar.save']}"
+								action="#{repositoryHandler.save}"
 								title="#{msg['toolbar.save.tooltip']}" icon="ui-icon-disk"
-								type="button" onclick="checkAndSaveReport(); return false;"
 								disabled="#{!workbenchHandler.saveEnabled}" />
 							<p:commandButton value="#{msg['toolbar.saveAs']}"
 								title="#{msg['toolbar.saveAs.tooltip']}" icon="ui-icon-disk"
-								type="button" onclick="showSaveDialog(); return false;"
+								action="#{repositoryHandler.suggestNewName}"
+								update=":new-form,:growl" oncomplete="newReportDialog.show()"
 								disabled="#{!workbenchHandler.saveAsEnabled}" />
 							<p:commandButton value="#{msg['toolbar.delete']}"
 								title="#{msg['toolbar.delete.tooltip']}" icon="ui-icon-trash"
@@ -155,41 +158,33 @@
 
 						<h:inputHidden id="view-id"
 							value="#{repositoryHandler.activeViewId}" />
-						<h:inputHidden id="report-name"
-							value="#{repositoryHandler.reportName}" />
 					</h:panelGroup>
 
 					<p:contextMenu id="navigator-menu" for="repository-navigator">
 						<p:menuitem value="#{msg['toolbar.open']}"
 							title="#{msg['toolbar.open.tooltip']}"
 							action="#{repositoryHandler.open}"
-							update=":toolbar-form,repository-panel,:growl"
+							update=":toolbar-form,repository-panel,navigator-menu,:growl"
 							oncomplete="addTab(args.report);" icon="ui-icon-folder-open"
 							rendered="#{repositoryHandler.selection != null and !repositoryHandler.selection.object.directory}"
 							disabled="#{!workbenchHandler.openEnabled}" />
+						<p:menuitem value="#{msg['menu.new.folder']}"
+							title="#{msg['menu.new.folder.tooltip']}"
+							icon="ui-icon-folder-collapsed" update=":new-folder-form:dialog"
+							oncomplete="newFolderDialog.show();"
+							rendered="#{repositoryHandler.selection != null and repositoryHandler.selection.object.directory}" />
 					</p:contextMenu>
 
 					<p:remoteCommand name="openReport"
 						action="#{repositoryHandler.open}"
 						oncomplete="addTab(args.report)"
 						update="repository-panel,:toolbar-form:toolbar,:growl" />
-					<p:remoteCommand name="saveReport"
-						action="#{repositoryHandler.save}" onsuccess="enableSave(false)"
-						update=":toolbar-form:toolbar,:growl" />
-					<p:remoteCommand name="saveReportAs"
-						action="#{repositoryHandler.saveAs}" onsuccess="enableSave(false)"
-						oncomplete="onReportSaved(args)" update="repository-panel,:growl" />
-					<p:remoteCommand name="showSaveDialog"
-						action="#{repositoryHandler.suggestNewName}"
-						oncomplete="newReportDialog.show(); PrimeFaces.focus('new-form:report-name');"
-						update=":new-form,:growl" />
-					<p:remoteCommand name="deleteReport"
-						action="#{repositoryHandler.delete}" oncomplete="closeActiveTab()"
-						update="repository-panel,:toolbar-form:toolbar,:growl" />
-					<p:remoteCommand name="closeReport"
-						action="#{repositoryHandler.close}"
-						update="repository-panel,:toolbar-form:toolbar,:growl"
-						onsuccess="closeTab(); confirmCloseDialog.hide();" />
+					<pe:remoteCommand name="closeReport"
+						actionListener="#{repositoryHandler.close}"
+						update="repository-panel,:toolbar-form:toolbar,:growl">
+						<pe:methodSignature parameters="java.lang.String" />
+						<pe:methodParam name="viewId" />
+					</pe:remoteCommand>
 					<p:remoteCommand name="onReportSelected"
 						action="#{repositoryHandler.onTabChange}"
 						update="repository-panel,navigator-menu,:toolbar-form:toolbar,:growl" />
@@ -213,16 +208,38 @@
 				header="#{msg['title.save.report']}" severity="info"
 				widgetVar="newReportDialog">
 				<f:facet name="message">
-					<p:outputLabel value="#{msg['label.name']}" for="report-name" />
-					<p:inputText id="report-name"
-						value="#{repositoryHandler.reportName}" required="true" />
+					<p:outputLabel id="label" value="#{msg['label.name']}" for="name" />
+					<p:inputText id="name" value="#{repositoryHandler.reportName}"
+						required="true" widgetVar="newReportName" />
 				</f:facet>
 
 				<p:commandButton value="#{msg['button.ok']}"
-					update=":repository-form:report-name,:growl"
-					oncomplete="if(!args.validationFailed) saveReportAs();" />
+					action="#{repositoryHandler.saveAs}"
+					oncomplete="onReportSaved(args)"
+					update="name,label,focus,:repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
 				<p:commandButton value="#{msg['button.close']}"
 					onclick="newReportDialog.hide(); return false;" type="button" />
+
+				<p:focus id="focus" />
+			</p:confirmDialog>
+		</h:form>
+
+		<h:form id="new-folder-form">
+			<p:confirmDialog id="dialog" header="#{msg['title.new.folder']}"
+				severity="info" widgetVar="newFolderDialog">
+				<f:facet name="message">
+					<p:outputLabel id="label" value="#{msg['label.name']}" for="name" />
+					<p:inputText id="name" value="#{repositoryHandler.folderName}"
+						required="true" widgetVar="newFolderName" />
+				</f:facet>
+
+				<p:commandButton value="#{msg['button.ok']}"
+					action="#{repositoryHandler.createDirectory}"
+					update="name,label,focus,:repository-form:repository-panel,:growl" />
+				<p:commandButton value="#{msg['button.close']}"
+					onclick="newFolderDialog.hide(); return false;" type="button" />
+
+				<p:focus id="focus" for="name" />
 			</p:confirmDialog>
 		</h:form>
 
@@ -232,11 +249,16 @@
 				header="#{msg['title.confirm']}" severity="alert"
 				widgetVar="confirmCloseDialog">
 				<p:commandButton value="#{msg['button.yes']}"
-					onclick="confirmCloseDialog.hide(); checkAndSaveReport(); return false;"
-					type="button" />
+					action="#{repositoryHandler.save}"
+					onstart="attachClosingViewParam()"
+					onsuccess="confirmCloseDialog.hide()">
+					<f:param name="close" value="true" />
+				</p:commandButton>
 				<p:commandButton value="#{msg['button.no']}"
-					onclick="closeReport([{name: 'viewId', value: getViewToClose()}]); return false;"
-					type="button" />
+					action="#{repositoryHandler.close}"
+					update=":repository-form:repository-panel,:toolbar-form:toolbar,close-form,:growl"
+					onstart="attachClosingViewParam()"
+					onsuccess="confirmCloseDialog.hide()" />
 				<p:commandButton value="#{msg['button.cancel']}"
 					onclick="confirmCloseDialog.hide(); return false;" type="button" />
 			</p:confirmDialog>
@@ -246,8 +268,9 @@
 				header="#{msg['title.confirm']}" severity="alert"
 				widgetVar="confirmDeleteDialog">
 				<p:commandButton value="#{msg['button.ok']}"
-					onclick="confirmDeleteDialog.hide(); deleteReport(); return false;"
-					type="button" />
+					action="#{repositoryHandler.delete}" oncomplete="closeActiveTab()"
+					onsuccess="confirmDeleteDialog.hide()" process="@this"
+					update=":repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
 				<p:commandButton value="#{msg['button.cancel']}"
 					onclick="confirmDeleteDialog.hide(); return false;" type="button" />
 			</p:confirmDialog>
@@ -255,6 +278,7 @@
 
 		<h:form id="form">
 			<p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true"
+				process="@this"
 				rendered="#{facesContext.application.projectStage != 'UnitTest'}" />
 
 			<p:remoteCommand name="onPageLoad" autoRun="true"

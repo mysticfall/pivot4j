@@ -2,6 +2,7 @@ package com.eyeq.pivot4j.analytics.ui;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -64,6 +65,8 @@ public class RepositoryHandler implements ViewStateListener {
 
 	private String reportName;
 
+	private String folderName;
+
 	@PostConstruct
 	protected void initialize() {
 		viewStateHolder.addViewStateListener(this);
@@ -121,19 +124,102 @@ public class RepositoryHandler implements ViewStateListener {
 		requestContext.addCallbackParam("report", new ViewInfo(state));
 	}
 
-	public void save() {
+	public void createDirectory() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		ResourceBundle bundle = context.getApplication().getResourceBundle(
 				context, "msg");
 
-		ViewState state = viewStateHolder.getState(activeViewId);
+		RepositoryFile parent = getTargetDirectory();
 
-		ReportContent content = new ReportContent(state);
+		RepositoryFile newFile;
+
+		String path = parent.getPath() + "/" + folderName;
+
+		if (log.isInfoEnabled()) {
+			log.info("Creating a new folder : " + path);
+		}
+
+		try {
+			if (repository.exists(path)) {
+				this.folderName = null;
+
+				String title = bundle.getString("error.create.folder.title");
+				String message = bundle.getString("warn.folder.exists");
+
+				context.addMessage("new-folder-form:name", new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, title, message));
+
+				return;
+			}
+
+			newFile = repository.createDirectory(parent, folderName);
+		} catch (IOException e) {
+			String title = bundle.getString("error.create.folder.title");
+			String message = bundle.getString("error.create.folder.io") + e;
+
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, title, message));
+
+			if (log.isErrorEnabled()) {
+				log.error(title, e);
+			}
+
+			return;
+		}
+
+		RepositoryNode parentNode = getRepositoryRootNode().findNode(parent);
+		parentNode.setExpanded(true);
+		parentNode.setSelected(false);
+		parentNode.refresh();
+
+		RepositoryNode newFileNode = getRepositoryRootNode().findNode(newFile);
+		newFileNode.setSelected(true);
+
+		this.selection = newFileNode;
+		this.folderName = null;
+
+		RequestContext requestContext = RequestContext.getCurrentInstance();
+		requestContext.execute("newFolderDialog.hide()");
+	}
+
+	public void save() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		RequestContext requestContext = RequestContext.getCurrentInstance();
+
+		ResourceBundle bundle = context.getApplication().getResourceBundle(
+				context, "msg");
+
+		Map<String, String> parameters = context.getExternalContext()
+				.getRequestParameterMap();
+		String param = parameters.get("close");
+
+		String viewId = parameters.get("viewId");
+
+		if (viewId == null) {
+			viewId = activeViewId;
+		}
+
+		boolean saveAndClose = "true".equals(param);
+
+		ViewState state = viewStateHolder.getState(viewId);
 
 		RepositoryFile file = state.getFile();
 
+		if (file == null) {
+			suggestNewName();
+
+			requestContext.update("new-form");
+			requestContext.execute("newReportDialog.show()");
+
+			return;
+		}
+
+		requestContext.update(Arrays.asList(new String[] {
+				"toolbar-form:toolbar", "repository-form:repository-panel",
+				"growl" }));
+
 		try {
-			repository.setContent(file, content);
+			repository.setContent(file, new ReportContent(state));
 		} catch (ConfigurationException e) {
 			String title = bundle.getString("error.save.report.title");
 			String message = bundle.getString("error.save.report.format") + e;
@@ -151,7 +237,7 @@ public class RepositoryHandler implements ViewStateListener {
 			String message = bundle.getString("error.save.report.io") + e;
 
 			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, message));
+					FacesMessage.SEVERITY_ERROR, title, message));
 
 			if (log.isErrorEnabled()) {
 				log.error(title, e);
@@ -160,9 +246,20 @@ public class RepositoryHandler implements ViewStateListener {
 			return;
 		}
 
-		RepositoryNode node = getRepositoryRootNode().selectNode(file);
-		if (node != null) {
+		if (saveAndClose) {
+			requestContext.update("close-form");
+
+			close(viewId);
+		} else {
+			if (this.selection != null) {
+				this.selection.setSelected(false);
+			}
+
+			RepositoryNode node = getRepositoryRootNode().selectNode(file);
 			node.setViewId(state.getId());
+			node.setSelected(true);
+
+			this.selection = node;
 		}
 
 		state.setDirty(false);
@@ -172,6 +269,8 @@ public class RepositoryHandler implements ViewStateListener {
 
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
 				title, message));
+
+		requestContext.execute("enableSave(false);");
 	}
 
 	public void saveAs() {
@@ -179,7 +278,7 @@ public class RepositoryHandler implements ViewStateListener {
 		ResourceBundle bundle = context.getApplication().getResourceBundle(
 				context, "msg");
 
-		RepositoryFile parent = getDirectoryToSave();
+		RepositoryFile parent = getTargetDirectory();
 
 		RepositoryNode root = getRepositoryRootNode();
 
@@ -203,7 +302,7 @@ public class RepositoryHandler implements ViewStateListener {
 			String message = bundle.getString("error.save.report.format") + e;
 
 			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, message));
+					FacesMessage.SEVERITY_ERROR, title, message));
 
 			if (log.isErrorEnabled()) {
 				log.error(title, e);
@@ -215,7 +314,7 @@ public class RepositoryHandler implements ViewStateListener {
 			String message = bundle.getString("error.save.report.io") + e;
 
 			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, message));
+					FacesMessage.SEVERITY_ERROR, title, message));
 
 			if (log.isErrorEnabled()) {
 				log.error(title, e);
@@ -226,8 +325,15 @@ public class RepositoryHandler implements ViewStateListener {
 
 		state.setName(reportName);
 		state.setFile(file);
+		state.setDirty(false);
 
 		RepositoryNode parentNode = root.findNode(parent);
+		parentNode.setSelected(false);
+		parentNode.setExpanded(true);
+
+		if (this.selection != null) {
+			this.selection.setSelected(false);
+		}
 
 		RepositoryNode node = parentNode.selectNode(file);
 		if (node == null) {
@@ -253,7 +359,10 @@ public class RepositoryHandler implements ViewStateListener {
 		}
 
 		node.setViewId(activeViewId);
+		node.setSelected(true);
+
 		this.selection = node;
+		this.reportName = null;
 
 		RequestContext requestContext = RequestContext.getCurrentInstance();
 		requestContext.addCallbackParam("name", state.getName());
@@ -310,7 +419,7 @@ public class RepositoryHandler implements ViewStateListener {
 			String title = bundle.getString("error.open.report.title");
 
 			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, errorMessage));
+					FacesMessage.SEVERITY_ERROR, title, errorMessage));
 
 			if (log.isErrorEnabled()) {
 				log.error(title, exception);
@@ -351,7 +460,7 @@ public class RepositoryHandler implements ViewStateListener {
 					+ e;
 
 			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, message));
+					FacesMessage.SEVERITY_ERROR, title, message));
 
 			if (log.isErrorEnabled()) {
 				log.error(title, e);
@@ -404,7 +513,29 @@ public class RepositoryHandler implements ViewStateListener {
 				.getRequestParameterMap();
 		String viewId = parameters.get("viewId");
 
-		viewStateHolder.unregisterState(viewId);
+		close(viewId);
+	}
+
+	/**
+	 * @param viewId
+	 */
+	public void close(String viewId) {
+		String viewToClose;
+
+		if (viewId == null) {
+			viewToClose = this.activeViewId;
+			this.activeViewId = null;
+		} else {
+			viewToClose = viewId;
+		}
+
+		ViewState view = viewStateHolder.getState(viewToClose);
+		int index = viewStateHolder.getStates().indexOf(view);
+
+		viewStateHolder.unregisterState(viewToClose);
+
+		RequestContext.getCurrentInstance().execute(
+				String.format("closeTab(%s)", index));
 	}
 
 	public void onTabChange() {
@@ -461,7 +592,7 @@ public class RepositoryHandler implements ViewStateListener {
 			return;
 		}
 
-		RepositoryFile parent = getDirectoryToSave();
+		RepositoryFile parent = getTargetDirectory();
 
 		Set<String> names;
 
@@ -501,7 +632,7 @@ public class RepositoryHandler implements ViewStateListener {
 		this.reportName = name;
 	}
 
-	protected RepositoryFile getDirectoryToSave() {
+	protected RepositoryFile getTargetDirectory() {
 		RepositoryFile parent = null;
 
 		if (selection != null) {
@@ -623,6 +754,21 @@ public class RepositoryHandler implements ViewStateListener {
 	 */
 	public void setReportName(String reportName) {
 		this.reportName = reportName;
+	}
+
+	/**
+	 * @return the folderName
+	 */
+	public String getFolderName() {
+		return folderName;
+	}
+
+	/**
+	 * @param folderName
+	 *            the folderName to set
+	 */
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
 	}
 
 	/**

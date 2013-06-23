@@ -75,22 +75,25 @@ public class LocalFileSystemRepository implements ReportRepository {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#exists(java.lang.String)
+	 */
+	@Override
+	public boolean exists(String path) throws IOException {
+		return getSystemFile(path).exists();
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFile(java.lang.String)
 	 */
 	@Override
 	public RepositoryFile getFile(String path) throws IOException {
-		if (path == null) {
-			throw new NullArgumentException("file");
+		File file = getSystemFile(path);
+
+		if (!file.exists()) {
+			return null;
 		}
 
-		if (path.equals(RepositoryFile.SEPARATOR)) {
-			return root;
-		}
-
-		String filePath = root.getFile().getCanonicalPath()
-				+ path.replaceAll(RepositoryFile.SEPARATOR, File.separator);
-
-		return new LocalFile(new File(filePath), root.getRoot());
+		return new LocalFile(file, root.getRoot());
 	}
 
 	/**
@@ -296,6 +299,26 @@ public class LocalFileSystemRepository implements ReportRepository {
 								+ localFile.getPath());
 			}
 		}
+	}
+
+	/**
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 */
+	protected File getSystemFile(String path) throws IOException {
+		if (path == null) {
+			throw new NullArgumentException("file");
+		}
+
+		if (path.equals(RepositoryFile.SEPARATOR)) {
+			return root.getFile();
+		}
+
+		String filePath = root.getFile().getCanonicalPath()
+				+ path.replaceAll(RepositoryFile.SEPARATOR, File.separator);
+
+		return new File(filePath);
 	}
 
 	/**

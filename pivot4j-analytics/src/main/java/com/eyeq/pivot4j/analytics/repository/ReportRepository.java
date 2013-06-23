@@ -11,6 +11,8 @@ public interface ReportRepository {
 
 	RepositoryFile getFile(String path) throws IOException;
 
+	boolean exists(String path) throws IOException;
+
 	List<RepositoryFile> getFiles(RepositoryFile parent) throws IOException;
 
 	RepositoryFile createDirectory(RepositoryFile parent, String name)
