@@ -10,7 +10,7 @@
             the following values: Development, Production, SystemTest, UnitTest
         </description>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
-		<param-value>Development</param-value>
+		<param-value>UnitTest</param-value>
 	</context-param>
 	<context-param>
 		<description>
@@ -35,9 +35,17 @@
 		<param-value>false</param-value>
 	</context-param>
 	<context-param>
+		<param-name>org.apache.myfaces.LOG_WEB_CONTEXT_PARAMS</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
 		<param-name>primefaces.THEME</param-name>
 		<param-value>#{workbenchHandler.theme}</param-value>
 	</context-param>
+
+	<listener>
+		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
+	</listener>
 
 	<!-- Faces Servlet -->
 	<servlet>
@@ -51,6 +59,15 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
+
+	<mime-mapping>
+		<extension>css</extension>
+		<mime-type>text/css</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>js</extension>
+		<mime-type>text/javascript</mime-type>
+	</mime-mapping>
 
 	<!-- Welcome files -->
 	<welcome-file-list>

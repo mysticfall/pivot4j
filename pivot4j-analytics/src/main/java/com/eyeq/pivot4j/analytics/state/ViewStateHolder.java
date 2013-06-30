@@ -34,7 +34,7 @@ import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
 
-@ManagedBean(name = "viewStateHolder", eager = true)
+@ManagedBean(name = "viewStateHolder")
 @SessionScoped
 public class ViewStateHolder {
 

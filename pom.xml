@@ -22,6 +22,9 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<failsafe.plugin.version>2.14</failsafe.plugin.version>
 		<cobertura.plugin.version>2.5.2</cobertura.plugin.version>
 		<xml.plugin.version>1.0</xml.plugin.version>
+		<mondrian.version>3.5.7</mondrian.version>
+		<derby.version>10.9.1.0</derby.version>
+		<derby.plugin.version>1.5</derby.plugin.version>
 		<sonar.host.url>http://dev.eyeq.co.kr/sonar</sonar.host.url>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.cobertura.reportPath>${project.build.directory}/site/cobertura/coverage.xml</sonar.cobertura.reportPath>

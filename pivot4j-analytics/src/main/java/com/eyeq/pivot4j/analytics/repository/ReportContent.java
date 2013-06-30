@@ -1,7 +1,11 @@
 package com.eyeq.pivot4j.analytics.repository;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 import javax.faces.context.FacesContext;
 
@@ -19,9 +23,11 @@ import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.ui.PrimeFacesPivotRenderer;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
 
-public class ReportContent {
+public class ReportContent implements Serializable {
 
-	private HierarchicalConfiguration configuration;
+	private static final long serialVersionUID = 8261947657917338352L;
+
+	private transient HierarchicalConfiguration configuration;
 
 	/**
 	 * @param state
@@ -71,6 +77,12 @@ public class ReportContent {
 		config.load(in);
 
 		this.configuration = (HierarchicalConfiguration) config;
+	}
+
+	/**
+	 * Constructor used in serialization.
+	 */
+	ReportContent() {
 	}
 
 	/**
@@ -136,5 +148,35 @@ public class ReportContent {
 		}
 
 		return state;
+	}
+
+	/**
+	 * @param in
+	 * @throws IOException
+	 */
+	private void readObject(ObjectInputStream in) throws IOException {
+		this.configuration = createConfiguration();
+
+		FileConfiguration fileConfig = (FileConfiguration) configuration;
+
+		try {
+			fileConfig.load(in);
+		} catch (ConfigurationException e) {
+			throw new IOException(e);
+		}
+	}
+
+	/**
+	 * @param out
+	 * @throws IOException
+	 */
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		FileConfiguration fileConfig = (FileConfiguration) configuration;
+
+		try {
+			fileConfig.save(out);
+		} catch (ConfigurationException e) {
+			throw new IOException(e);
+		}
 	}
 }

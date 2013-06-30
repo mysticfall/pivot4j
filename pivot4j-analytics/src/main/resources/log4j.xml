@@ -2,19 +2,22 @@
 <!DOCTYPE log4j:configuration PUBLIC
   "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<!-- This configuration is intended to be used for debugging Mondrian server, 
+		as currently it does not support SLF4J (Refer: http://jira.pentaho.com/browse/MONDRIAN-1171). 
+		To change log level for Pivot4J itself, please use logback-test.xml instead. -->
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{MM-dd HH:mm:ss} %-5p [%c{1}] - %m%n" />
 		</layout>
 	</appender>
 
-	<category name="com.eyeq.pivot4j" additivity="false">
-		<priority value="debug" />
+	<category name="mondrian" additivity="false">
+		<priority value="warn" />
 		<appender-ref ref="CONSOLE" />
 	</category>
 
 	<root>
-		<priority value="info" />
+		<priority value="warn" />
 		<appender-ref ref="CONSOLE" />
 	</root>
 </log4j:configuration>

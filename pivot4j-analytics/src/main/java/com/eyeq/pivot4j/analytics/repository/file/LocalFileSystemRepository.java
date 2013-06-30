@@ -43,11 +43,13 @@ public class LocalFileSystemRepository implements ReportRepository {
 
 	@PostConstruct
 	protected void initialize() {
+		String path = getRootPath();
+
+		if (log.isInfoEnabled()) {
+			log.info("Root repository path : " + path);
+		}
+
 		try {
-			File home = settings.getApplicationHome();
-
-			String path = home.getPath() + File.separator + "repository";
-
 			File file = new File(path);
 
 			if (!file.exists() && !file.mkdirs()) {
@@ -57,14 +59,15 @@ public class LocalFileSystemRepository implements ReportRepository {
 			}
 
 			this.root = new LocalFile(file, file);
-
-			if (log.isInfoEnabled()) {
-				log.info("Root repository path : " + file.getCanonicalPath());
-			}
 		} catch (IOException e) {
 			throw new FacesException(e);
 		}
 	}
+
+	protected String getRootPath() {
+		File home = settings.getApplicationHome();
+		return home.getPath() + File.separator + "repository";
+	};
 
 	/**
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getRoot()

@@ -2,16 +2,13 @@ package com.eyeq.pivot4j.analytics.repository.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.lang.NullArgumentException;
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.eyeq.pivot4j.analytics.repository.AbstractRepositoryFile;
 import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
 
-public class LocalFile implements RepositoryFile {
+public class LocalFile extends AbstractRepositoryFile {
 
 	private File root;
 
@@ -68,15 +65,6 @@ public class LocalFile implements RepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getId()
-	 */
-	@Override
-	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
 	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getName()
 	 */
 	@Override
@@ -112,22 +100,6 @@ public class LocalFile implements RepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getAncestors()
-	 */
-	@Override
-	public List<RepositoryFile> getAncestors() throws IOException {
-		List<RepositoryFile> ancestors = new ArrayList<RepositoryFile>();
-
-		RepositoryFile parent = this;
-
-		while ((parent = parent.getParent()) != null) {
-			ancestors.add(parent);
-		}
-
-		return ancestors;
-	}
-
-	/**
 	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#isDirectory()
 	 */
 	@Override
@@ -136,40 +108,10 @@ public class LocalFile implements RepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#isRoot()
+	 * @see com.eyeq.pivot4j.analytics.repository.AbstractRepositoryFile#isRoot()
 	 */
 	@Override
 	public boolean isRoot() {
 		return root.equals(file);
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(file).toHashCode();
-	}
-
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof LocalFile)) {
-			return false;
-		}
-
-		LocalFile other = (LocalFile) obj;
-
-		return ObjectUtils.equals(file, other.getFile());
-	}
-
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return file.toString();
 	}
 }

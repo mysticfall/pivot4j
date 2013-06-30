@@ -74,7 +74,7 @@
 			<plugin>
 				<groupId>org.carlspring.maven</groupId>
 				<artifactId>derby-maven-plugin</artifactId>
-				<version>1.5</version>
+				<version>${derby.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>start-derby</id>
@@ -154,16 +154,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.6</version>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.13</version>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
@@ -190,13 +183,13 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>mondrian</artifactId>
-			<version>3.5.4</version>
+			<version>${mondrian.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbyclient</artifactId>
-			<version>10.9.1.0</version>
+			<version>${derby.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
