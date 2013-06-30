@@ -13,4 +13,8 @@
 	<extension qualifier="webdriver">
 		<property name="browserCapabilities">firefox</property>
 	</extension>
+
+	<extension qualifier="jacoco">
+		<property name="includes">com.eyeq.pivot4j.*</property>
+	</extension>
 </arquillian>
