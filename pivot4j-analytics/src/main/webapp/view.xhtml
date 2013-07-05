@@ -206,7 +206,7 @@
 							<p:treeNode type="level" icon="ui-icon-level#{node.depth}">
 								<h:outputText id="level-node" value="#{node.name}"
 									styleClass="node-level" />
-								<!-- workaround for issue #1 -->
+								<!-- workaround for PrimeFaces issue #4748 -->
 								<p:draggable for="level-node" helper="clone', appendTo: 'body"
 									revert="true" />
 							</p:treeNode>
@@ -214,13 +214,13 @@
 							<p:treeNode type="measure" icon="ui-icon-measure">
 								<h:outputText id="member-node" value="#{node.name}"
 									styleClass="node-member" />
-								<!-- workaround for issue #1 -->
+								<!-- workaround for PrimeFaces issue #4748 -->
 								<p:draggable for="member-node" helper="clone', appendTo: 'body"
 									revert="true" />
 							</p:treeNode>
 						</p:tree>
 						<p:droppable for="cube-navigator"
-							hoverStyleClass="ui-widget-header">
+							hoverStyleClass="ui-widget-header" tolerance="pointer">
 							<p:ajax listener="#{navigatorHandler.onDrop}"
 								update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 								oncomplete="onViewChanged()" />
@@ -240,7 +240,7 @@
 								<h:outputText id="columns-node" value="#{msg['label.columns']}"
 									styleClass="node-axis" />
 								<p:droppable for="columns-node"
-									hoverStyleClass="ui-widget-header">
+									hoverStyleClass="ui-widget-header" tolerance="pointer">
 									<p:ajax listener="#{navigatorHandler.onDropOnAxis}"
 										update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 										oncomplete="onViewChanged()" />
@@ -250,14 +250,16 @@
 							<p:treeNode type="rows" icon="ui-icon-rows">
 								<h:outputText id="rows-node" value="#{msg['label.rows']}"
 									styleClass="node-axis" />
-								<p:droppable for="rows-node" hoverStyleClass="ui-widget-header">
+								<p:droppable for="rows-node" hoverStyleClass="ui-widget-header"
+									tolerance="pointer">
 									<p:ajax listener="#{navigatorHandler.onDropOnAxis}"
 										update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 										oncomplete="onViewChanged()" />
 								</p:droppable>
 							</p:treeNode>
 
-							<p:treeNode type="hierarchy" icon="ui-icon-hier">
+							<p:treeNode type="hierarchy" icon="ui-icon-hier"
+								tolerance="pointer">
 								<h:outputText id="hierarchy-node" value="#{node.caption}"
 									styleClass="node-hierarchy" />
 								<p:commandButton icon="ui-button-icon-only ui-icon-search"
@@ -266,11 +268,11 @@
 									title="#{msg['button.hierarchyConfig.tooltip']}">
 									<f:param name="hierarchy" value="#{node.name}" />
 								</p:commandButton>
-								<!-- workaround for issue #1 -->
+								<!-- workaround for PrimeFaces issue #4748 -->
 								<p:draggable for="hierarchy-node"
 									helper="clone', appendTo: 'body" revert="true" />
 								<p:droppable for="hierarchy-node"
-									hoverStyleClass="ui-widget-header">
+									hoverStyleClass="ui-widget-header" tolerance="pointer">
 									<p:ajax listener="#{navigatorHandler.onDropOnHierarchy}"
 										update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 										oncomplete="onViewChanged()" />
@@ -280,7 +282,7 @@
 							<p:treeNode type="level" icon="ui-icon-level#{node.depth}">
 								<h:outputText id="level-node" value="#{node.caption}"
 									styleClass="node-level" />
-								<!-- workaround for issue #1 -->
+								<!-- workaround for PrimeFaces issue #4748 -->
 								<p:draggable for="level-node" helper="clone', appendTo: 'body"
 									revert="true" />
 							</p:treeNode>
@@ -288,11 +290,11 @@
 							<p:treeNode type="measure" icon="ui-icon-measure">
 								<h:outputText id="member-node" value="#{node.caption}"
 									styleClass="node-member" />
-								<!-- workaround for issue #1 -->
+								<!-- workaround for PrimeFaces issue #4748 -->
 								<p:draggable for="member-node" helper="clone', appendTo: 'body"
 									revert="true" />
 								<p:droppable for="member-node"
-									hoverStyleClass="ui-widget-header">
+									hoverStyleClass="ui-widget-header" tolerance="pointer">
 									<p:ajax listener="#{navigatorHandler.onDropOnMember}"
 										update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 										oncomplete="onViewChanged()" />
