@@ -15,7 +15,7 @@ public abstract class TabPanel<T extends PageObject> implements PageFragment {
 	@Root
 	private WebElement panel;
 
-	@FindBy(jquery = ".ui-tabs-nav a")
+	@FindBy(css = ".ui-tabs-nav a")
 	private List<WebElement> headers;
 
 	@FindBy(tagName = "iframe")
@@ -36,8 +36,7 @@ public abstract class TabPanel<T extends PageObject> implements PageFragment {
 		List<Tab<T>> tabs = new LinkedList<Tab<T>>();
 
 		while (headerIt.hasNext() && panelIt.hasNext()) {
-			tabs.add(new Tab<T>(headerIt.next(), panelIt.next(),
-					getPageType()));
+			tabs.add(new Tab<T>(headerIt.next(), panelIt.next(), getPageType()));
 		}
 
 		return tabs;

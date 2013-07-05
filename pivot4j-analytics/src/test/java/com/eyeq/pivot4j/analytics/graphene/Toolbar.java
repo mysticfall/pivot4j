@@ -12,7 +12,7 @@ public class Toolbar implements PageFragment {
 	@Root
 	private WebElement toolbar;
 
-	@FindBy(jquery = ".ui-button:visible")
+	@FindBy(className = "ui-button")
 	private List<Button> buttons;
 
 	public Dimension getSize() {

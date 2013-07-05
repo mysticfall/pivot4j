@@ -155,7 +155,7 @@ public class LayoutIT extends AbstractIntegrationTestCase {
 				is(notNullValue()));
 
 		assertThat("Wrong number of toobar buttons.", buttons.size(),
-				is(equalTo(10)));
+				is(equalTo(12)));
 
 		Iterator<Button> it = buttons.iterator();
 

@@ -3,6 +3,7 @@ package com.eyeq.pivot4j.analytics;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -25,7 +26,9 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,12 +114,25 @@ public abstract class AbstractIntegrationTestCase {
 		return new File(path.replace('/', File.separatorChar));
 	}
 
+	public Dimension getWindowSize() {
+		return new Dimension(1024, 768);
+	}
+
 	@Before
 	public void setUp() {
 		String address = url.toExternalForm();
 		if (!driver.getCurrentUrl().equals(address)) {
+			configureDriverOptions(driver.manage());
 			driver.get(address);
 		}
+	}
+
+	/**
+	 * @param options
+	 */
+	protected void configureDriverOptions(Options options) {
+		options.timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+		options.window().setSize(getWindowSize());
 	}
 
 	@After
