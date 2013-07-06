@@ -255,7 +255,7 @@ public class WorkbenchHandler {
 		return viewState != null && viewState.isDirty();
 	}
 
-	public boolean isSaveAsEnabled() {
+	public boolean isViewActive() {
 		ViewState viewState = repositoryHandler.getActiveView();
 		return viewState != null;
 	}

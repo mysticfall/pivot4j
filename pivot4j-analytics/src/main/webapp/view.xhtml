@@ -473,7 +473,8 @@
 
 		<h:form id="poll-form">
 			<p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true"
-				listener="#{pivotStateManager.keepAlive}" process="@form"
+				listener="#{pivotStateManager.keepAlive}" process="@this"
+				global="false"
 				rendered="#{facesContext.application.projectStage != 'UnitTest'}">
 				<f:param name="skipRender" value="true" />
 			</p:poll>
