@@ -153,7 +153,7 @@
 							</p:treeNode>
 
 							<p:ajax event="select"
-								action="#{repositoryHandler.onSelectionChange}"
+								action="#{repositoryHandler.onSelectionChange}" global="false"
 								update=":repository-form:navigator-menu,:toolbar-form:toolbar" />
 						</p:tree>
 
