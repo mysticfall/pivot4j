@@ -459,21 +459,15 @@
 		<ui:include src="drillthrough.xhtml" />
 		<ui:include src="extension.xhtml" />
 
-		<p:ajaxStatus styleClass="ajax-status">
-			<f:facet name="start">
+		<p:ajaxStatus styleClass="ajax-status" onstart="waitDialog.block()"
+			oncomplete="waitDialog.unblock()" />
+
+		<pe:blockUI widgetVar="waitDialog" targetSelector="body">
+			<h:panelGrid columns="2">
 				<p:graphicImage library="pivot4j" name="images/loading.gif" />
-			</f:facet>
-
-			<f:facet name="success">
-				<script type="text/javascript">
-					
-				</script>
-			</f:facet>
-
-			<f:facet name="complete">
-				<h:outputText value="" />
-			</f:facet>
-		</p:ajaxStatus>
+				<h:outputText value="#{msg['message.loading']}" />
+			</h:panelGrid>
+		</pe:blockUI>
 
 		<p:growl id="growl" showDetail="true" sticky="true" />
 

@@ -16,6 +16,10 @@ form {
 	padding-left: 3px;
 }
 
+.pe-blockui-content span {
+	white-space: nowrap;
+}
+
 #main-content-pane {
 	padding: 0;
 	border: none;
@@ -366,14 +370,6 @@ span.ui-button-icon-only {
 #content-pane .info-panel {
 	padding: 10px;
 	font-weight: bold;
-}
-
-.ajax-status {
-	width: 64px;
-	height: 64px;
-	position: fixed;
-	right: 5px;
-	bottom: 5px;
 }
 
 .ui-draggable {
