@@ -16,6 +16,14 @@ form {
 	padding-left: 3px;
 }
 
+.blockOverlay {
+	z-index: 2000 !important;
+}
+
+.blockMsg {
+	z-index: 2100 !important;
+}
+
 .pe-blockui-content span {
 	white-space: nowrap;
 }
