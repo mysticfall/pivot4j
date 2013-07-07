@@ -90,7 +90,7 @@
 							icon="ui-icon-disk" ajax="false"
 							onclick="PrimeFaces.monitorDownload(function() {waitDialog.block();}, function() {waitDialog.unblock();})">
 							<p:dataExporter type="xls" target="drillthrough-grid"
-								fileName="test" />
+								fileName="#{pivotStateManager.model.cube.caption}" />
 						</p:commandButton>
 
 						<p:commandButton value="#{msg['button.close']}"
