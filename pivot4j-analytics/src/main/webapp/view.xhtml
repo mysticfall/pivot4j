@@ -459,7 +459,7 @@
 		<ui:include src="drillthrough.xhtml" />
 		<ui:include src="extension.xhtml" />
 
-		<p:ajaxStatus styleClass="ajax-status" onstart="waitDialog.block()"
+		<p:ajaxStatus styleClass="ajax-status" onstart="if(window.waitDialog) waitDialog.block()"
 			oncomplete="waitDialog.unblock()" />
 
 		<pe:blockUI widgetVar="waitDialog" targetSelector="body">
@@ -474,8 +474,7 @@
 		<h:form id="poll-form">
 			<p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true"
 				listener="#{pivotStateManager.keepAlive}" process="@this"
-				global="false"
-				rendered="#{facesContext.application.projectStage != 'UnitTest'}">
+				global="false">
 				<f:param name="skipRender" value="true" />
 			</p:poll>
 		</h:form>
