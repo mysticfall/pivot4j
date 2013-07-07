@@ -12,12 +12,15 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.olap4j.OlapConnection;
+
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.ChangeSlicer;
 import com.eyeq.pivot4j.transform.DrillExpandMember;
 import com.eyeq.pivot4j.transform.DrillExpandPosition;
 import com.eyeq.pivot4j.transform.DrillReplace;
+import com.eyeq.pivot4j.transform.DrillThrough;
 import com.eyeq.pivot4j.transform.NonEmpty;
 import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
 import com.eyeq.pivot4j.transform.PlaceLevelsOnAxes;
@@ -53,6 +56,7 @@ public class TransformFactoryImpl implements TransformFactory {
 		transforms
 				.put(DrillExpandPosition.class, DrillExpandPositionImpl.class);
 		transforms.put(DrillReplace.class, DrillReplaceImpl.class);
+		transforms.put(DrillThrough.class, DrillThroughImpl.class);
 		transforms.put(NonEmpty.class, NonEmptyImpl.class);
 		transforms.put(SwapAxes.class, SwapAxesImpl.class);
 		transforms.put(PlaceHierarchiesOnAxes.class,
@@ -64,10 +68,10 @@ public class TransformFactoryImpl implements TransformFactory {
 
 	/**
 	 * @see com.eyeq.pivot4j.transform.TransformFactory#createTransform(java.lang.Class,
-	 *      com.eyeq.pivot4j.query.QueryAdapter)
+	 *      com.eyeq.pivot4j.query.QueryAdapter, org.olap4j.OlapConnection)
 	 */
 	public <T extends Transform> T createTransform(Class<T> type,
-			QueryAdapter queryAdapter) {
+			QueryAdapter queryAdapter, OlapConnection connection) {
 		T transform = null;
 
 		@SuppressWarnings("unchecked")
@@ -75,9 +79,9 @@ public class TransformFactoryImpl implements TransformFactory {
 
 		if (implementationType != null) {
 			try {
-				Constructor<T> constructor = implementationType
-						.getConstructor(QueryAdapter.class);
-				transform = constructor.newInstance(queryAdapter);
+				Constructor<T> constructor = implementationType.getConstructor(
+						QueryAdapter.class, OlapConnection.class);
+				transform = constructor.newInstance(queryAdapter, connection);
 			} catch (NoSuchMethodException e) {
 				String msg = "The registered implementation class does not have a suitable constructor : "
 						+ implementationType;

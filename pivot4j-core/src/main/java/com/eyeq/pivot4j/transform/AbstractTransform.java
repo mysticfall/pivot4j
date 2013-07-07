@@ -12,6 +12,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
+import org.olap4j.OlapConnection;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.query.QueryAdapter;
@@ -20,15 +21,24 @@ public abstract class AbstractTransform implements Transform {
 
 	private QueryAdapter queryAdapter;
 
+	private OlapConnection connection;
+
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public AbstractTransform(QueryAdapter queryAdapter) {
+	public AbstractTransform(QueryAdapter queryAdapter,
+			OlapConnection connection) {
 		if (queryAdapter == null) {
 			throw new NullArgumentException("queryAdapter");
 		}
 
+		if (connection == null) {
+			throw new NullArgumentException("connection");
+		}
+
 		this.queryAdapter = queryAdapter;
+		this.connection = connection;
 	}
 
 	/**
@@ -44,6 +54,13 @@ public abstract class AbstractTransform implements Transform {
 	 */
 	protected QueryAdapter getQueryAdapter() {
 		return queryAdapter;
+	}
+
+	/**
+	 * @return the connection
+	 */
+	protected OlapConnection getConnection() {
+		return connection;
 	}
 
 	/**

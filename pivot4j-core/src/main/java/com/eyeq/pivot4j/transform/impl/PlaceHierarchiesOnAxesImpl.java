@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.olap4j.Axis;
+import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
@@ -36,9 +37,11 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public PlaceHierarchiesOnAxesImpl(QueryAdapter queryAdapter) {
-		super(queryAdapter);
+	public PlaceHierarchiesOnAxesImpl(QueryAdapter queryAdapter,
+			OlapConnection connection) {
+		super(queryAdapter, connection);
 	}
 
 	/**

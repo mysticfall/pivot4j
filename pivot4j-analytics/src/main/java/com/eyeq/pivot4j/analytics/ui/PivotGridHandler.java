@@ -1,6 +1,7 @@
 package com.eyeq.pivot4j.analytics.ui;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,14 @@ import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
+import org.olap4j.Cell;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapDataSource;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Schema;
 import org.primefaces.component.panelgrid.PanelGrid;
+import org.primefaces.context.RequestContext;
 
 import com.eyeq.pivot4j.ModelChangeEvent;
 import com.eyeq.pivot4j.ModelChangeListener;
@@ -33,6 +36,8 @@ import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
 import com.eyeq.pivot4j.transform.NonEmpty;
 import com.eyeq.pivot4j.transform.SwapAxes;
+import com.eyeq.pivot4j.ui.PivotUIRenderer;
+import com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.CellParameters;
 import com.eyeq.pivot4j.ui.command.DrillDownCommand;
@@ -47,6 +52,9 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 
 	@ManagedProperty(value = "#{navigatorHandler}")
 	private NavigatorHandler navigator;
+
+	@ManagedProperty(value = "#{drillThroughHandler}")
+	private DrillThroughHandler drillThroughHandler;
 
 	private PivotModel model;
 
@@ -105,6 +113,8 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		renderer.setEnableColumnDrillDown(!readOnly);
 		renderer.setEnableRowDrillDown(!readOnly);
 		renderer.setEnableSort(!readOnly);
+
+		renderer.addCommand(new DrillThroughCommandImpl(renderer));
 	}
 
 	@PreDestroy
@@ -135,6 +145,21 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	 */
 	public void setStateManager(PivotStateManager stateManager) {
 		this.stateManager = stateManager;
+	}
+
+	/**
+	 * @return the drillThroughHandler
+	 */
+	public DrillThroughHandler getDrillThroughHandler() {
+		return drillThroughHandler;
+	}
+
+	/**
+	 * @param drillThroughHandler
+	 *            the drillThroughHandler to set
+	 */
+	public void setDrillThroughHandler(DrillThroughHandler drillThroughHandler) {
+		this.drillThroughHandler = drillThroughHandler;
 	}
 
 	/**
@@ -534,5 +559,32 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	@Override
 	public void structureChanged(ModelChangeEvent e) {
 		render();
+	}
+
+	class DrillThroughCommandImpl extends BasicDrillThroughCommand {
+
+		/**
+		 * @param renderer
+		 */
+		public DrillThroughCommandImpl(PivotUIRenderer renderer) {
+			super(renderer);
+		}
+
+		/**
+		 * @see com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand#execute(com.eyeq.pivot4j.PivotModel,
+		 *      com.eyeq.pivot4j.ui.command.CellParameters)
+		 */
+		@Override
+		public ResultSet execute(PivotModel model, CellParameters parameters) {
+			Cell cell = model.getCellSet().getCell(parameters.getCellOrdinal());
+
+			drillThroughHandler.update(cell);
+
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.update("drillthrough-form");
+			context.execute("drillThroughDialog.show()");
+
+			return null;
+		}
 	}
 }

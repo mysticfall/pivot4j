@@ -18,6 +18,7 @@ import java.util.Map;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
+import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
@@ -46,9 +47,11 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public PlaceLevelsOnAxesImpl(QueryAdapter queryAdapter) {
-		super(queryAdapter);
+	public PlaceLevelsOnAxesImpl(QueryAdapter queryAdapter,
+			OlapConnection connection) {
+		super(queryAdapter, connection);
 	}
 
 	/**

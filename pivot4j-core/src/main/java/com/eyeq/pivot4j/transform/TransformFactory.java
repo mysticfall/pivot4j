@@ -8,10 +8,18 @@
  */
 package com.eyeq.pivot4j.transform;
 
+import org.olap4j.OlapConnection;
+
 import com.eyeq.pivot4j.query.QueryAdapter;
 
 public interface TransformFactory {
 
+	/**
+	 * @param type
+	 * @param queryAdapter
+	 * @param connection
+	 * @return
+	 */
 	<T extends Transform> T createTransform(Class<T> type,
-			QueryAdapter queryAdapter);
+			QueryAdapter queryAdapter, OlapConnection connection);
 }

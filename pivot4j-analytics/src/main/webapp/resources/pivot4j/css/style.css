@@ -28,6 +28,10 @@ form {
 	white-space: nowrap;
 }
 
+.ui-helper-hidden {
+	display: none !important;
+}
+
 #main-content-pane {
 	padding: 0;
 	border: none;
@@ -507,6 +511,29 @@ span.ui-button-icon-only {
 	height: 200px;
 }
 
+.drillthrough .ui-tree {
+	width: auto;
+	border: none;
+}
+
+.drillthrough .ui-tree-container {
+	overflow: visible !important;
+}
+
+.drillthrough .field-set {
+	float: left;
+	margin: 0.5em;
+}
+
+.ui-paginator .ui-paginator-rpp-options {
+	margin-left: 0.5em !important;
+}
+
+.ui-paginator .ui-paginator-jtp-select {
+	margin-left: 0.5em !important;
+	margin-right: 1.0em !important;
+}
+
 .CodeMirror-completions {
 	z-index: 2000 !important;
 }
@@ -548,6 +575,11 @@ span.ui-button-icon-only {
 
 .ui-dialog .ui-dialog-content {
 	cursor: default;
+}
+
+.ui-dialog-content .ui-layout-container {
+	width: 100% !important;
+	height: 100% !important;
 }
 
 .ui-confirm-dialog .ui-outputlabel {

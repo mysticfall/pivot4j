@@ -3,38 +3,110 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 	<h:form id="drillthrough-form">
 		<p:dialog id="drillthrough-dialog" header="#{title.drillthrough}"
 			widgetVar="drillThroughDialog" modal="true" width="860" height="430"
-			closable="true" resizable="true" styleClass="drillthrough"
-			dynamic="false" visible="#{drillThroughData.dataAvailable}">
-			<p:dataTable id="drillthrough-grid" var="row"
-				widgetVar="drillThroughGrid" value="#{drillThroughData}" lazy="true"
-				paginator="true" first="0" rows="15"
-				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-				rendered="#{drillThroughData.dataAvailable}">
-				<p:columns value="#{drillThroughData.columns}" var="column">
-					<f:facet name="header">
-						<h:outputText value="#{column.label}" />
-					</f:facet>
+			closable="true" styleClass="drillthrough" dynamic="true"
+			visible="#{!empty drillThroughData.columns}">
+			<p:layout widgetVar="drillThroughLayout"
+				onClose="showDrillThroughSettingsButton.jq.removeClass('ui-helper-hidden')">
+				<p:layoutUnit position="west" resizable="true" size="180"
+					closable="true" header="#{msg['header.drillThrough.selection']}">
+					<p:tree value="#{drillThroughHandler.cubeNode}" dynamic="true"
+						cache="true" var="node" animate="true" selectionMode="checkbox"
+						selection="#{drillThroughHandler.selection}"
+						styleClass="navigator cube-navigator">
+						<p:treeNode type="dimension" icon="ui-icon-dim">
+							<h:outputText id="dimension-node" value="#{node.name}"
+								styleClass="node-dimension" />
+						</p:treeNode>
 
-					<h:outputText value="#{row[column.name]}" />
-				</p:columns>
-			</p:dataTable>
+						<p:treeNode type="hierarchy" icon="ui-icon-hier">
+							<h:outputText id="hierarchy-node" value="#{node.name}"
+								styleClass="node-hierarchy" />
+						</p:treeNode>
 
-			<p:growl id="growl" showDetail="true" sticky="true" />
+						<p:treeNode type="level" icon="ui-icon-level#{node.depth}">
+							<h:outputText id="level-node" value="#{node.name}"
+								styleClass="node-level" />
+						</p:treeNode>
+
+						<p:treeNode type="measure" icon="ui-icon-measure">
+							<h:outputText id="member-node" value="#{node.name}"
+								styleClass="node-member" />
+						</p:treeNode>
+					</p:tree>
+				</p:layoutUnit>
+
+				<p:layoutUnit position="center">
+					<p:dataTable id="drillthrough-grid" var="row"
+						widgetVar="drillThroughGrid" value="#{drillThroughData}"
+						lazy="true" paginator="true"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink} &amp;nbsp;&amp;nbsp; #{msg['label.paginator.jumpTo']}: {JumpToPageDropdown} #{msg['label.paginator.pageSize']}: {RowsPerPageDropdown}"
+						rowsPerPageTemplate="15, 30, 60, 100" rows="15"
+						resizableColumns="true"
+						rendered="#{!empty drillThroughData.columns}"
+						emptyMessage="#{msg['message.noData']}"
+						binding="#{drillThroughHandler.table}">
+						<c:forEach var="column" items="#{drillThroughData.columns}">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{column.label}" />
+								</f:facet>
+								<h:outputText value="#{row[column.name]}" />
+							</p:column>
+						</c:forEach>
+					</p:dataTable>
+				</p:layoutUnit>
+			</p:layout>
 
 			<f:facet name="footer">
-				<h:panelGroup layout="block" styleClass="ui-dialog-buttonpane">
-					<p:commandButton value="#{msg['button.close']}"
-						action="#{drillThroughData.reset}" update="drillthrough-dialog"
-						icon="ui-icon-close" />
+				<h:panelGroup layout="block">
+					<h:panelGrid columns="3"
+						columnClasses="field-name,field-input,field-desc"
+						styleClass="field-set">
+						<p:outputLabel value="#{msg['label.drillThrough.maxRows']}"
+							for="max-rows" />
+						<p:spinner id="max-rows"
+							value="#{drillThroughHandler.maximumRows}" min="0" size="6" />
+						<h:outputText value="#{msg['label.drillThrough.maxRows.info']}" />
+					</h:panelGrid>
+
+					<h:panelGroup layout="block" styleClass="ui-dialog-buttonpane">
+						<p:commandButton widgetVar="showDrillThroughSettingsButton"
+							value="#{msg['button.show.settings']}" icon="ui-icon-gear"
+							type="button" styleClass="ui-helper-hidden"
+							onclick="showDrillThroughSettingsButton.jq.addClass('ui-helper-hidden'); drillThroughLayout.show('west')" />
+
+						<p:commandButton value="#{msg['button.apply']}"
+							icon="ui-icon-check" action="#{drillThroughHandler.update}"
+							update="drillthrough-grid,:growl" process="@form">
+							<f:param name="skipRender" value="true" />
+						</p:commandButton>
+
+						<p:commandButton value="#{msg['button.export']}"
+							icon="ui-icon-disk" ajax="false"
+							onclick="PrimeFaces.monitorDownload(function() {waitDialog.block();}, function() {waitDialog.unblock();})">
+							<p:dataExporter type="xls" target="drillthrough-grid"
+								fileName="test" />
+						</p:commandButton>
+
+						<p:commandButton value="#{msg['button.close']}"
+							icon="ui-icon-close" action="#{drillThroughData.reset}"
+							update="drillthrough-dialog,:growl" process="@form"
+							immediate="true">
+							<f:param name="skipRender" value="true" />
+						</p:commandButton>
+					</h:panelGroup>
 				</h:panelGroup>
 			</f:facet>
-		</p:dialog>
 
-		<p:remoteCommand name="drillThrough" update="drillthrough-form"
-			oncomplete="drillThroughGrid.getPaginator().setPage(0)" />
+			<p:ajax event="close" listener="#{drillThroughData.reset}"
+				immediate="true">
+				<f:param name="skipRender" value="true" />
+			</p:ajax>
+		</p:dialog>
 	</h:form>
 </ui:composition>

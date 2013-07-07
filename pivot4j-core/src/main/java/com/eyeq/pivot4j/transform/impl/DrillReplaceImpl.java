@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
+import org.olap4j.OlapConnection;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 
@@ -19,9 +20,10 @@ public class DrillReplaceImpl extends AbstractTransform implements DrillReplace 
 
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public DrillReplaceImpl(QueryAdapter queryAdapter) {
-		super(queryAdapter);
+	public DrillReplaceImpl(QueryAdapter queryAdapter, OlapConnection connection) {
+		super(queryAdapter, connection);
 	}
 
 	/**

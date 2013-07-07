@@ -8,6 +8,7 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
+import org.olap4j.OlapConnection;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.query.QueryAdapter;
@@ -19,9 +20,11 @@ public class DrillExpandMemberImpl extends AbstractTransform implements
 
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public DrillExpandMemberImpl(QueryAdapter queryAdapter) {
-		super(queryAdapter);
+	public DrillExpandMemberImpl(QueryAdapter queryAdapter,
+			OlapConnection connection) {
+		super(queryAdapter, connection);
 	}
 
 	/**

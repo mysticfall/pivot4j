@@ -1,6 +1,5 @@
 package com.eyeq.pivot4j.analytics.ui;
 
-import java.sql.ResultSet;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -19,24 +18,19 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
-import org.olap4j.Cell;
 import org.olap4j.metadata.Measure;
 import org.primefaces.component.column.Column;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.component.row.Row;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.el.EvaluationFailedException;
 import com.eyeq.pivot4j.ui.AbstractPivotUIRenderer;
 import com.eyeq.pivot4j.ui.CellType;
-import com.eyeq.pivot4j.ui.PivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.aggregator.Aggregator;
-import com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.CellParameters;
 import com.eyeq.pivot4j.ui.property.PropertySupport;
@@ -123,16 +117,6 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	 */
 	protected ResourceBundle getBundle() {
 		return bundle;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotUIRenderer#registerCommands()
-	 */
-	@Override
-	protected void registerCommands() {
-		super.registerCommands();
-
-		addCommand(new DrillThroughCommandImpl(this));
 	}
 
 	/**
@@ -509,41 +493,5 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	@Override
 	public void endTable(RenderContext context) {
 		this.commandIndex = 0;
-	}
-
-	/**
-	 * Workaround to implement lazy rendering due to limitation in Olap4J's API
-	 * :
-	 * 
-	 * @see http://sourceforge.net/p/olap4j/bugs/15/
-	 */
-	class DrillThroughCommandImpl extends BasicDrillThroughCommand {
-
-		/**
-		 * @param renderer
-		 */
-		public DrillThroughCommandImpl(PivotUIRenderer renderer) {
-			super(renderer);
-		}
-
-		/**
-		 * @see com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand#execute(com.eyeq.pivot4j.PivotModel,
-		 *      com.eyeq.pivot4j.ui.command.CellParameters)
-		 */
-		@Override
-		public ResultSet execute(PivotModel model, CellParameters parameters) {
-			Cell cell = model.getCellSet().getCell(parameters.getCellOrdinal());
-
-			DrillThroughDataModel data = facesContext.getApplication()
-					.evaluateExpressionGet(facesContext, "#{drillThroughData}",
-							DrillThroughDataModel.class);
-			data.initialize(cell);
-			data.setPageSize(15);
-
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("drillThrough();");
-
-			return null;
-		}
 	}
 }

@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
+import org.olap4j.OlapConnection;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
@@ -34,9 +35,10 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public ChangeSlicerImpl(QueryAdapter queryAdapter) {
-		super(queryAdapter);
+	public ChangeSlicerImpl(QueryAdapter queryAdapter, OlapConnection connection) {
+		super(queryAdapter, connection);
 	}
 
 	/**

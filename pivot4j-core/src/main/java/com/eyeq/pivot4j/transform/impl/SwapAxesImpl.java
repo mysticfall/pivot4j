@@ -8,6 +8,8 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
+import org.olap4j.OlapConnection;
+
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.SwapAxes;
@@ -19,9 +21,10 @@ public class SwapAxesImpl extends AbstractTransform implements SwapAxes {
 
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public SwapAxesImpl(QueryAdapter queryAdapter) {
-		super(queryAdapter);
+	public SwapAxesImpl(QueryAdapter queryAdapter, OlapConnection connection) {
+		super(queryAdapter, connection);
 	}
 
 	/**

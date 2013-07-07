@@ -205,7 +205,7 @@ public class QueryAdapter implements Bookmarkable {
 	/**
 	 * @return the XMLA Query object
 	 */
-	protected MdxStatement getParsedQuery() {
+	public MdxStatement getParsedQuery() {
 		return parsedQuery;
 	}
 

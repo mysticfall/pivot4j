@@ -8,6 +8,8 @@
  */
 package com.eyeq.pivot4j.transform.impl;
 
+import org.olap4j.OlapConnection;
+
 import com.eyeq.pivot4j.query.QueryAdapter;
 import com.eyeq.pivot4j.transform.AbstractTransform;
 import com.eyeq.pivot4j.transform.NonEmpty;
@@ -19,9 +21,10 @@ public class NonEmptyImpl extends AbstractTransform implements NonEmpty {
 
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public NonEmptyImpl(QueryAdapter queryAdapter) {
-		super(queryAdapter);
+	public NonEmptyImpl(QueryAdapter queryAdapter, OlapConnection connection) {
+		super(queryAdapter, connection);
 	}
 
 	/**

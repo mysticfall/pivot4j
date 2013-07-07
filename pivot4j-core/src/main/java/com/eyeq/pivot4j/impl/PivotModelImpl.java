@@ -750,7 +750,7 @@ public class PivotModelImpl implements PivotModel {
 					"No transform factory instance is available.");
 		}
 
-		return transformFactory.createTransform(type, queryAdapter);
+		return transformFactory.createTransform(type, queryAdapter, connection);
 	}
 
 	/**

@@ -11,6 +11,7 @@ package com.eyeq.pivot4j.transform.impl;
 import java.util.Collections;
 import java.util.List;
 
+import org.olap4j.OlapConnection;
 import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
@@ -23,9 +24,11 @@ public class DrillExpandPositionImpl extends AbstractTransform implements
 
 	/**
 	 * @param queryAdapter
+	 * @param connection
 	 */
-	public DrillExpandPositionImpl(QueryAdapter queryAdapter) {
-		super(queryAdapter);
+	public DrillExpandPositionImpl(QueryAdapter queryAdapter,
+			OlapConnection connection) {
+		super(queryAdapter, connection);
 	}
 
 	/**
