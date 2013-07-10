@@ -28,7 +28,7 @@ form {
 	white-space: nowrap;
 }
 
-.ui-helper-hidden {
+.ui-force-hidden {
 	display: none !important;
 }
 
