@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 
 import com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager;
 import com.eyeq.pivot4j.analytics.datasource.CatalogInfo;
+import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.datasource.CubeInfo;
 
 public class PentahoDataSourceManager extends
@@ -134,6 +135,28 @@ public class PentahoDataSourceManager extends
 		for (MondrianCatalog catalog : catalogs) {
 			registerDefinition(new PentahoDataSourceDefinition(catalog));
 		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#getDefinition(com.eyeq.pivot4j.analytics.datasource.ConnectionInfo)
+	 */
+	@Override
+	protected synchronized PentahoDataSourceDefinition getDefinition(
+			ConnectionInfo connectionInfo) {
+		PentahoDataSourceDefinition definition = super
+				.getDefinition(connectionInfo);
+
+		if (definition == null) {
+			MondrianCatalog catalog = catalogService.getCatalog(
+					connectionInfo.getCatalogName(), session);
+
+			if (catalog != null) {
+				definition = new PentahoDataSourceDefinition(catalog);
+				registerDefinition(definition);
+			}
+		}
+
+		return definition;
 	}
 
 	/**
