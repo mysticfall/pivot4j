@@ -84,7 +84,8 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 		writer.flush();
 		writer.close();
 
-		String result = writer.toString().trim();
+		String result = writer.toString().trim()
+				.replace(System.getProperty("line.separator"), "\n");
 
 		String expected = readTestResource(fileName);
 
