@@ -19,6 +19,7 @@
 		<root.logger.level>warn</root.logger.level>
 		<web.test.port>9090</web.test.port>
 		<derby.home>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF</derby.home>
+		<skip.test>true</skip.test>
 	</properties>
 	<build>
 		<plugins>
@@ -72,6 +73,12 @@
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
+						<configuration>
+							<systemProperties>
+								<arq.extension.webdriver.browserCapabilities>${browser.capabilities}</arq.extension.webdriver.browserCapabilities>
+							</systemProperties>
+							<skipTests>${skip.test}</skipTests>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -466,6 +473,28 @@
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
+		</profile>
+
+		<profile>
+			<id>firefox</id>
+			<properties>
+				<browser.capabilities>firefox</browser.capabilities>
+				<skip.test>false</skip.test>
+			</properties>
+		</profile>
+		<profile>
+			<id>internetExplorer</id>
+			<properties>
+				<browser.capabilities>internetExplorer</browser.capabilities>
+				<skip.test>false</skip.test>
+			</properties>
+		</profile>
+		<profile>
+			<id>chrome</id>
+			<properties>
+				<browser.capabilities>chrome</browser.capabilities>
+				<skip.test>false</skip.test>
+			</properties>
 		</profile>
 	</profiles>
 </project>

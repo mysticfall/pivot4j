@@ -115,7 +115,7 @@ public abstract class AbstractIntegrationTestCase {
 	}
 
 	public Dimension getWindowSize() {
-		return new Dimension(1024, 768);
+		return new Dimension(1280, 1024);
 	}
 
 	@Before
@@ -132,6 +132,7 @@ public abstract class AbstractIntegrationTestCase {
 	 */
 	protected void configureDriverOptions(Options options) {
 		options.timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+		options.timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 		options.window().setSize(getWindowSize());
 	}
 
