@@ -252,16 +252,16 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 	public void restoreState(FacesContext context, Object state) {
 		Object[] states = (Object[]) state;
 
-		setSelectable((Boolean) states[0]);
-		setSelected((Boolean) states[1]);
-		setExpanded((Boolean) states[2]);
-		setViewId((String) states[3]);
-
 		try {
 			setObject(repository.getFile((String) states[4]));
 		} catch (IOException e) {
 			throw new FacesException(e);
 		}
+
+		setSelectable((Boolean) states[0]);
+		setSelected((Boolean) states[1]);
+		setExpanded((Boolean) states[2]);
+		setViewId((String) states[3]);
 	}
 
 	/**
