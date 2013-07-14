@@ -50,7 +50,7 @@
 								update=":repository-form:repository-panel,toolbar,:growl"
 								title="#{msg['toolbar.open.tooltip']}"
 								icon="ui-icon-folder-open"
-								disabled="#{!workbenchHandler.openEnabled}"
+								disabled="#{!repositoryHandler.openEnabled}"
 								widgetVar="openButton" />
 							<p:commandButton value="#{msg['toolbar.save']}"
 								action="#{repositoryHandler.save}"
@@ -63,7 +63,7 @@
 								disabled="#{!workbenchHandler.viewActive}" />
 							<p:commandButton value="#{msg['toolbar.delete']}"
 								title="#{msg['toolbar.delete.tooltip']}" icon="ui-icon-trash"
-								type="button" onclick="confirmDeleteDialog.show();"
+								type="button" onclick="confirmDeleteReportDialog.show();"
 								disabled="#{!workbenchHandler.deleteEnabled}" />
 							<p:separator />
 							<p:commandButton value="#{msg['toolbar.refresh']}"
@@ -167,13 +167,23 @@
 							action="#{repositoryHandler.open}"
 							update=":toolbar-form,repository-panel,navigator-menu,:growl"
 							oncomplete="addTab(args.report);" icon="ui-icon-folder-open"
-							rendered="#{repositoryHandler.selection != null and !repositoryHandler.selection.object.directory}"
-							disabled="#{!workbenchHandler.openEnabled}" />
+							rendered="#{!repositoryHandler.selection.object.directory}"
+							disabled="#{!repositoryHandler.openEnabled}" />
 						<p:menuitem value="#{msg['menu.new.folder']}"
 							title="#{msg['menu.new.folder.tooltip']}"
 							icon="ui-icon-folder-collapsed" update=":new-folder-form:dialog"
 							oncomplete="newFolderDialog.show();"
-							rendered="#{repositoryHandler.selection != null and repositoryHandler.selection.object.directory}" />
+							rendered="#{repositoryHandler.selection.object.directory}" />
+						<p:menuitem value="#{msg['menu.delete']}"
+							title="#{msg['menu.delete.folder.tooltip']}" icon="ui-icon-trash"
+							rendered="#{repositoryHandler.selection.object.directory}"
+							onclick="confirmDeleteFolderDialog.show(); return false;"
+							disabled="#{!repositoryHandler.deleteEnabled}" />
+						<p:menuitem value="#{msg['menu.delete']}"
+							title="#{msg['menu.delete.report.tooltip']}" icon="ui-icon-trash"
+							rendered="#{!repositoryHandler.selection.object.directory}"
+							onclick="confirmDeleteFileDialog.show(); return false;"
+							disabled="#{!repositoryHandler.deleteEnabled}" />
 					</p:contextMenu>
 
 					<p:remoteCommand name="openReport"
@@ -264,17 +274,46 @@
 				<p:commandButton value="#{msg['button.cancel']}"
 					onclick="confirmCloseDialog.hide(); return false;" type="button" />
 			</p:confirmDialog>
+		</h:form>
 
-			<p:confirmDialog id="confirm-delete-dialog"
+		<h:form id="dialog-form">
+			<p:confirmDialog id="confirm-delete-report"
 				message="#{msg['confirm.report.delete']}"
 				header="#{msg['title.confirm']}" severity="alert"
-				widgetVar="confirmDeleteDialog">
+				widgetVar="confirmDeleteReportDialog">
 				<p:commandButton value="#{msg['button.ok']}"
-					action="#{repositoryHandler.delete}" oncomplete="closeActiveTab()"
-					onsuccess="confirmDeleteDialog.hide()" process="@this"
+					action="#{repositoryHandler.delete}"
+					onsuccess="confirmDeleteReportDialog.hide()" process="@this"
 					update=":repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
 				<p:commandButton value="#{msg['button.cancel']}"
-					onclick="confirmDeleteDialog.hide(); return false;" type="button" />
+					onclick="confirmDeleteReportDialog.hide(); return false;"
+					type="button" />
+			</p:confirmDialog>
+
+			<p:confirmDialog id="confirm-delete-file"
+				message="#{msg['confirm.report.delete']}"
+				header="#{msg['title.confirm']}" severity="alert"
+				widgetVar="confirmDeleteFileDialog">
+				<p:commandButton value="#{msg['button.ok']}"
+					action="#{repositoryHandler.deleteFile}"
+					onsuccess="confirmDeleteFileDialog.hide()" process="@this"
+					update=":repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
+				<p:commandButton value="#{msg['button.cancel']}"
+					onclick="confirmDeleteFileDialog.hide(); return false;"
+					type="button" />
+			</p:confirmDialog>
+
+			<p:confirmDialog id="confirm-delete-folder"
+				message="#{msg['confirm.folder.delete']}"
+				header="#{msg['title.confirm']}" severity="alert"
+				widgetVar="confirmDeleteFolderDialog">
+				<p:commandButton value="#{msg['button.ok']}"
+					action="#{repositoryHandler.deleteDirectory}"
+					onsuccess="confirmDeleteFolderDialog.hide()" process="@this"
+					update=":repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
+				<p:commandButton value="#{msg['button.cancel']}"
+					onclick="confirmDeleteFolderDialog.hide(); return false;"
+					type="button" />
 			</p:confirmDialog>
 		</h:form>
 

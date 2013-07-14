@@ -1,6 +1,5 @@
 package com.eyeq.pivot4j.analytics.ui;
 
-import java.util.List;
 import java.util.Locale;
 
 import javax.faces.bean.ManagedBean;
@@ -14,9 +13,7 @@ import org.primefaces.extensions.model.layout.LayoutOptions;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.config.Settings;
-import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
 import com.eyeq.pivot4j.analytics.state.ViewState;
-import com.eyeq.pivot4j.analytics.ui.navigator.RepositoryNode;
 
 @ManagedBean(name = "workbenchHandler")
 @RequestScoped
@@ -222,27 +219,6 @@ public class WorkbenchHandler {
 		} else {
 			context.getSessionMap().put("ui-theme", theme);
 		}
-	}
-
-	public boolean isOpenEnabled() {
-		RepositoryNode selection = (RepositoryNode) repositoryHandler
-				.getSelection();
-		if (selection != null) {
-			RepositoryFile file = selection.getObject();
-			if (!file.isDirectory()) {
-				List<ViewState> states = repositoryHandler.getViewStateHolder()
-						.getStates();
-				for (ViewState state : states) {
-					if (file.equals(state.getFile())) {
-						return false;
-					}
-				}
-
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public boolean isDeleteEnabled() {

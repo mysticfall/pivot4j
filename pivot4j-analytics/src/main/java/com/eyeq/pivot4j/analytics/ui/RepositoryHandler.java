@@ -450,20 +450,145 @@ public class RepositoryHandler implements ViewStateListener {
 	}
 
 	public void delete() {
-		ViewState state = viewStateHolder.getState(activeViewId);
-		if (state == null) {
-			return;
+		ViewState state = getActiveView();
+		RepositoryFile file = state.getFile();
+
+		delete(state);
+
+		if (file != null) {
+			delete(file);
 		}
 
 		FacesContext context = FacesContext.getCurrentInstance();
 		ResourceBundle bundle = context.getApplication().getResourceBundle(
 				context, "msg");
 
-		RepositoryFile file = state.getFile();
+		String title = bundle.getString("message.delete.report.title");
+		String message = bundle.getString("message.delete.report.message");
 
+		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+				title, message));
+	}
+
+	public void deleteFile() {
+		RepositoryNode node = (RepositoryNode) selection;
+
+		if (node.getViewId() != null) {
+			delete(viewStateHolder.getState(node.getViewId()));
+		}
+
+		delete(node.getObject());
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		ResourceBundle bundle = context.getApplication().getResourceBundle(
+				context, "msg");
+
+		String title = bundle.getString("message.delete.report.title");
+		String message = bundle.getString("message.delete.report.message");
+
+		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+				title, message));
+	}
+
+	public void deleteDirectory() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		ResourceBundle bundle = context.getApplication().getResourceBundle(
+				context, "msg");
+
+		RepositoryNode node = (RepositoryNode) selection;
+		RepositoryFile directory = node.getObject();
+
+		try {
+			List<ViewState> states = viewStateHolder.getStates();
+
+			for (ViewState state : states) {
+				if (state.getFile() == null) {
+					continue;
+				}
+
+				RepositoryFile file = state.getFile();
+
+				List<RepositoryFile> ancestors = file.getAncestors();
+
+				if (ancestors.contains(directory)) {
+					String title = bundle.getString("warn.folder.delete.title");
+					String message = bundle
+							.getString("warn.folder.delete.openReport.message");
+
+					context.addMessage(null, new FacesMessage(
+							FacesMessage.SEVERITY_WARN, title, message));
+
+					return;
+				}
+			}
+
+			repository.deleteFile(directory);
+
+			selection.getParent().getChildren().remove(selection);
+
+			this.selection = null;
+
+			String title = bundle.getString("message.delete.folder.title");
+			String message = bundle.getString("message.delete.folder.message");
+
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_INFO, title, message));
+		} catch (IOException e) {
+			String title = bundle.getString("error.delete.folder.title");
+			String message = bundle.getString("error.delete.folder.message")
+					+ e;
+
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, title, message));
+
+			if (log.isErrorEnabled()) {
+				log.error(title, e);
+			}
+		}
+	}
+
+	/**
+	 * @param state
+	 */
+	protected void delete(ViewState state) {
+		String viewId = state.getId();
+
+		viewStateHolder.unregisterState(viewId);
+
+		if (viewId.equals(activeViewId)) {
+			this.activeViewId = null;
+
+			synchronized (viewStateHolder) {
+				List<ViewState> states = viewStateHolder.getStates();
+
+				int index = states.indexOf(state);
+				if (index >= states.size() - 1) {
+					index--;
+				} else {
+					index++;
+				}
+
+				if (index > -1 && index < states.size()) {
+					this.activeViewId = states.get(index).getId();
+				}
+			}
+		}
+
+		RequestContext.getCurrentInstance().execute(
+				String.format("closeTab(getTabIndex('%s'))", viewId));
+	}
+
+	/**
+	 * @param file
+	 */
+	protected void delete(RepositoryFile file) {
 		try {
 			repository.deleteFile(file);
 		} catch (IOException e) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			ResourceBundle bundle = context.getApplication().getResourceBundle(
+					context, "msg");
+
 			String title = bundle.getString("error.delete.report.title");
 			String message = bundle.getString("error.delete.report.message")
 					+ e;
@@ -478,10 +603,6 @@ public class RepositoryHandler implements ViewStateListener {
 			return;
 		}
 
-		viewStateHolder.unregisterState(activeViewId);
-
-		this.activeViewId = null;
-
 		if (selection instanceof RepositoryNode) {
 			RepositoryNode node = (RepositoryNode) selection;
 			if (node.getObject().equals(file)) {
@@ -490,29 +611,6 @@ public class RepositoryHandler implements ViewStateListener {
 				this.selection = null;
 			}
 		}
-
-		this.activeViewId = null;
-
-		synchronized (viewStateHolder) {
-			List<ViewState> states = viewStateHolder.getStates();
-
-			int index = states.indexOf(state);
-			if (index >= states.size() - 1) {
-				index--;
-			} else {
-				index++;
-			}
-
-			if (index > -1 && index < states.size()) {
-				this.activeViewId = states.get(index).getId();
-			}
-		}
-
-		String title = bundle.getString("message.delete.report.title");
-		String message = bundle.getString("message.delete.report.message");
-
-		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-				title, message));
 	}
 
 	public void close() {
@@ -545,6 +643,37 @@ public class RepositoryHandler implements ViewStateListener {
 
 		RequestContext.getCurrentInstance().execute(
 				String.format("closeTab(%s)", index));
+	}
+
+	public boolean isOpenEnabled() {
+		if (selection != null) {
+			RepositoryNode node = (RepositoryNode) selection;
+			RepositoryFile file = node.getObject();
+
+			if (!file.isDirectory()) {
+				List<ViewState> states = viewStateHolder.getStates();
+				for (ViewState state : states) {
+					if (file.equals(state.getFile())) {
+						return false;
+					}
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public boolean isDeleteEnabled() {
+		if (selection != null) {
+			RepositoryNode node = (RepositoryNode) selection;
+			RepositoryFile file = node.getObject();
+
+			return !file.isRoot();
+		}
+
+		return false;
 	}
 
 	public void onTabChange() {
