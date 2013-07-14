@@ -21,6 +21,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.NullArgumentException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -319,7 +320,8 @@ public class LocalFileSystemRepository implements ReportRepository {
 		}
 
 		String filePath = root.getFile().getCanonicalPath()
-				+ path.replaceAll(RepositoryFile.SEPARATOR, File.separator);
+				+ StringUtils.replaceChars(path, RepositoryFile.SEPARATOR,
+						File.separator);
 
 		return new File(filePath);
 	}

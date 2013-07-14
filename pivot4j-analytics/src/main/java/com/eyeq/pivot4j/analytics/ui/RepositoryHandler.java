@@ -133,7 +133,16 @@ public class RepositoryHandler implements ViewStateListener {
 
 		RepositoryFile newFile;
 
-		String path = parent.getPath() + "/" + folderName;
+		StringBuilder builder = new StringBuilder();
+		builder.append(parent.getPath());
+
+		if (!parent.getPath().endsWith(RepositoryFile.SEPARATOR)) {
+			builder.append(RepositoryFile.SEPARATOR);
+		}
+
+		builder.append(folderName);
+
+		String path = builder.toString();
 
 		if (log.isInfoEnabled()) {
 			log.info("Creating a new folder : " + path);

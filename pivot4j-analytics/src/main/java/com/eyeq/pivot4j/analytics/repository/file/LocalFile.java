@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.lang.NullArgumentException;
+import org.apache.commons.lang3.StringUtils;
 
 import com.eyeq.pivot4j.analytics.repository.AbstractRepositoryFile;
 import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
@@ -46,7 +47,7 @@ public class LocalFile extends AbstractRepositoryFile {
 		if (path.length() == 0) {
 			path = SEPARATOR;
 		} else {
-			path = path.replaceAll(File.separator, SEPARATOR);
+			path = StringUtils.replaceChars(path, File.separator, SEPARATOR);
 		}
 	}
 
