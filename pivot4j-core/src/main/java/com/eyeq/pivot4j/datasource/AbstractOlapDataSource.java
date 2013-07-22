@@ -92,7 +92,7 @@ public abstract class AbstractOlapDataSource implements OlapDataSource {
 	 * @see org.olap4j.OlapDataSource#getConnection()
 	 */
 	public OlapConnection getConnection() throws SQLException {
-		return createConnection(null, null);
+		return getConnection(null, null);
 	}
 
 	/**
