@@ -65,7 +65,8 @@
 						<p:messages showDetail="true" autoUpdate="true" closable="true" />
 
 						<p:commandButton id="btn-ok" value="#{msg['button.ok']}"
-							icon="ui-icon-check" ajax="false"
+							icon="ui-icon-check" 
+							onstart="if(window.waitDialog) waitDialog.block()"
 							action="#{catalogChooser.proceed}"
 							disabled="#{empty catalogChooser.cubeName}" />
 					</h:panelGroup>
