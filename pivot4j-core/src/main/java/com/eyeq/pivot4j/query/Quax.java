@@ -186,7 +186,7 @@ public class Quax implements Bookmarkable {
 		this.nHierExclude = 0;
 		this.qubonMode = true;
 
-		if (positions.isEmpty()) {
+		if (positions.isEmpty() || positions.get(0).getMembers().isEmpty()) {
 			// the axis does not have any positions
 			posMembers = new ArrayList<List<Member>>(0);
 			setHierarchies(new ArrayList<Hierarchy>(0));
@@ -250,7 +250,7 @@ public class Quax implements Bookmarkable {
 	 */
 	private void initPositions(List<List<Member>> posMemStart) {
 		// no positions - no tree
-		if (posMemStart.isEmpty()) {
+		if (posMemStart.isEmpty() || posMemStart.get(0).isEmpty()) {
 			this.posTreeRoot = null;
 			return;
 		}

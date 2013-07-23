@@ -12,16 +12,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
+import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
 
+import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.mdx.Exp;
 import com.eyeq.pivot4j.mdx.FunCall;
 import com.eyeq.pivot4j.mdx.Syntax;
@@ -57,7 +63,23 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 
 		CellSetAxis slicer = cellSet.getFilterAxis();
 
-		return slicer.getAxisMetaData().getHierarchies();
+		Set<Hierarchy> hierarchies = new LinkedHashSet<Hierarchy>();
+		for (Position position : slicer.getPositions()) {
+			for (Member member : position.getMembers()) {
+				try {
+					if (!OlapUtils.equals(member, member.getHierarchy()
+							.getDefaultMember())
+							&& !(member instanceof Measure)
+							&& !hierarchies.contains(member.getHierarchy())) {
+						hierarchies.add(member.getHierarchy());
+					}
+				} catch (OlapException e) {
+					throw new PivotException(e);
+				}
+			}
+		}
+
+		return new LinkedList<Hierarchy>(hierarchies);
 	}
 
 	/**
