@@ -26,6 +26,8 @@ import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Schema;
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.ModelChangeEvent;
 import com.eyeq.pivot4j.ModelChangeListener;
@@ -270,7 +272,26 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 			model.setMdx(mdx);
 
 			if (!model.isInitialized()) {
-				model.initialize();
+				try {
+					model.initialize();
+				} catch (Exception e) {
+					FacesContext context = FacesContext.getCurrentInstance();
+					ResourceBundle bundle = context.getApplication()
+							.getResourceBundle(context, "msg");
+
+					String title = bundle.getString("error.unhandled.title");
+					String message = bundle
+							.getString("error.unhandled.message") + e;
+
+					Logger log = LoggerFactory.getLogger(getClass());
+					if (log.isErrorEnabled()) {
+						log.error(title, e);
+					}
+
+					context.addMessage(null, new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, title, message));
+
+				}
 			}
 		}
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -13,6 +14,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 
 import org.olap4j.OlapDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.analytics.config.Settings;
 import com.eyeq.pivot4j.analytics.datasource.CatalogInfo;
@@ -59,25 +62,38 @@ public class CatalogChooser {
 			ResourceBundle messages = context.getApplication()
 					.getResourceBundle(context, "msg");
 
-			List<CatalogInfo> catalogs = dataSourceManager.getCatalogs();
+			try {
+				List<CatalogInfo> catalogs = dataSourceManager.getCatalogs();
 
-			this.catalogItems = new ArrayList<UISelectItem>(catalogs.size());
+				this.catalogItems = new ArrayList<UISelectItem>(catalogs.size());
 
-			UISelectItem defaultItem = new UISelectItem();
-			defaultItem.setItemLabel(messages
-					.getString("message.catalog.chooser.default"));
-			defaultItem.setItemValue("");
+				UISelectItem defaultItem = new UISelectItem();
+				defaultItem.setItemLabel(messages
+						.getString("message.catalog.chooser.default"));
+				defaultItem.setItemValue("");
 
-			catalogItems.add(defaultItem);
+				catalogItems.add(defaultItem);
 
-			for (CatalogInfo catalog : catalogs) {
-				UISelectItem item = new UISelectItem();
+				for (CatalogInfo catalog : catalogs) {
+					UISelectItem item = new UISelectItem();
 
-				item.setItemValue(catalog.getName());
-				item.setItemLabel(catalog.getLabel());
-				item.setItemDescription(catalog.getDescription());
+					item.setItemValue(catalog.getName());
+					item.setItemLabel(catalog.getLabel());
+					item.setItemDescription(catalog.getDescription());
 
-				catalogItems.add(item);
+					catalogItems.add(item);
+				}
+			} catch (Exception e) {
+				String title = messages.getString("error.catalogList.title");
+				String msg = e.getMessage();
+
+				context.addMessage(null, new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, title, msg));
+
+				Logger log = LoggerFactory.getLogger(getClass());
+				if (log.isErrorEnabled()) {
+					log.error(msg, e);
+				}
 			}
 		}
 
@@ -100,16 +116,33 @@ public class CatalogChooser {
 			cubeItems.add(defaultItem);
 
 			if (catalogName != null) {
-				List<CubeInfo> cubes = dataSourceManager.getCubes(catalogName);
+				try {
+					List<CubeInfo> cubes = dataSourceManager
+							.getCubes(catalogName);
 
-				for (CubeInfo cube : cubes) {
-					UISelectItem item = new UISelectItem();
+					for (CubeInfo cube : cubes) {
+						UISelectItem item = new UISelectItem();
 
-					item.setItemValue(cube.getName());
-					item.setItemLabel(cube.getLabel());
-					item.setItemDescription(cube.getDescription());
+						item.setItemValue(cube.getName());
+						item.setItemLabel(cube.getLabel());
+						item.setItemDescription(cube.getDescription());
 
-					cubeItems.add(item);
+						cubeItems.add(item);
+					}
+				} catch (Exception e) {
+					ResourceBundle bundle = context.getApplication()
+							.getResourceBundle(context, "msg");
+
+					String title = bundle.getString("error.cubeList.title");
+					String msg = e.getMessage();
+
+					context.addMessage(null, new FacesMessage(
+							FacesMessage.SEVERITY_ERROR, title, msg));
+
+					Logger log = LoggerFactory.getLogger(getClass());
+					if (log.isErrorEnabled()) {
+						log.error(msg, e);
+					}
 				}
 			}
 		}
