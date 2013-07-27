@@ -7,6 +7,10 @@
 			<base-name>com.eyeq.pivot4j.analytics.i18n.messages</base-name>
 			<var>msg</var>
 		</resource-bundle>
+		<resource-bundle>
+			<base-name>webapp.resources.pivot4j.i18n.messages</base-name>
+			<var>plugin_msg</var>
+		</resource-bundle>
 		<message-bundle>com.eyeq.pivot4j.analytics.i18n.messages</message-bundle>
 		<locale-config>
 			<default-locale>en</default-locale>
@@ -29,16 +33,8 @@
 	</managed-bean>
 
 	<managed-bean>
-		<managed-bean-name>pivotStateManager</managed-bean-name>
-		<managed-bean-class>com.eyeq.pivot4j.analytics.ui.PivotStateManager</managed-bean-class>
-		<managed-bean-scope>view</managed-bean-scope>
-		<managed-property>
-			<property-name>settings</property-name>
-			<value>#{settings}</value>
-		</managed-property>
-		<managed-property>
-			<property-name>viewStateHolder</property-name>
-			<value>#{viewStateHolder}</value>
-		</managed-property>
+		<managed-bean-name>reportRepository</managed-bean-name>
+		<managed-bean-class>com.eyeq.pivot4j.pentaho.repository.PentahoReportRepository</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 </faces-config>

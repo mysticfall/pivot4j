@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
-import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
+import com.eyeq.pivot4j.analytics.repository.ReportFile;
 
 public class ViewState {
 
@@ -18,7 +18,7 @@ public class ViewState {
 
 	private boolean dirty = false;
 
-	private RepositoryFile file;
+	private ReportFile file;
 
 	private boolean readOnly = false;
 
@@ -55,7 +55,7 @@ public class ViewState {
 	 * @param file
 	 */
 	public ViewState(String id, String name, ConnectionInfo connectionInfo,
-			PivotModel model, RepositoryFile file) {
+			PivotModel model, ReportFile file) {
 		if (id == null) {
 			throw new NullArgumentException("id");
 		}
@@ -96,7 +96,7 @@ public class ViewState {
 	/**
 	 * @return the file
 	 */
-	public RepositoryFile getFile() {
+	public ReportFile getFile() {
 		return file;
 	}
 
@@ -104,7 +104,7 @@ public class ViewState {
 	 * @param file
 	 *            the file to set
 	 */
-	public void setFile(RepositoryFile file) {
+	public void setFile(ReportFile file) {
 		this.file = file;
 	}
 

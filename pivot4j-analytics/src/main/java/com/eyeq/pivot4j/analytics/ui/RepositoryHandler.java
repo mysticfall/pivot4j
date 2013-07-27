@@ -34,7 +34,7 @@ import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.analytics.repository.DataSourceNotFoundException;
 import com.eyeq.pivot4j.analytics.repository.ReportContent;
 import com.eyeq.pivot4j.analytics.repository.ReportRepository;
-import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
+import com.eyeq.pivot4j.analytics.repository.ReportFile;
 import com.eyeq.pivot4j.analytics.repository.RepositoryFileComparator;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.state.ViewStateEvent;
@@ -129,15 +129,15 @@ public class RepositoryHandler implements ViewStateListener {
 		ResourceBundle bundle = context.getApplication().getResourceBundle(
 				context, "msg");
 
-		RepositoryFile parent = getTargetDirectory();
+		ReportFile parent = getTargetDirectory();
 
-		RepositoryFile newFile;
+		ReportFile newFile;
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(parent.getPath());
 
-		if (!parent.getPath().endsWith(RepositoryFile.SEPARATOR)) {
-			builder.append(RepositoryFile.SEPARATOR);
+		if (!parent.getPath().endsWith(ReportFile.SEPARATOR)) {
+			builder.append(ReportFile.SEPARATOR);
 		}
 
 		builder.append(folderName);
@@ -212,7 +212,7 @@ public class RepositoryHandler implements ViewStateListener {
 
 		ViewState state = viewStateHolder.getState(viewId);
 
-		RepositoryFile file = state.getFile();
+		ReportFile file = state.getFile();
 
 		if (file == null) {
 			suggestNewName();
@@ -228,7 +228,7 @@ public class RepositoryHandler implements ViewStateListener {
 				"growl" }));
 
 		try {
-			repository.setContent(file, new ReportContent(state));
+			repository.setReportContent(file, new ReportContent(state));
 		} catch (ConfigurationException e) {
 			String title = bundle.getString("error.save.report.title");
 			String message = bundle.getString("error.save.report.format") + e;
@@ -287,7 +287,7 @@ public class RepositoryHandler implements ViewStateListener {
 		ResourceBundle bundle = context.getApplication().getResourceBundle(
 				context, "msg");
 
-		RepositoryFile parent = getTargetDirectory();
+		ReportFile parent = getTargetDirectory();
 
 		RepositoryNode root = getRepositoryRootNode();
 
@@ -302,7 +302,7 @@ public class RepositoryHandler implements ViewStateListener {
 
 		ReportContent content = new ReportContent(state);
 
-		RepositoryFile file;
+		ReportFile file;
 
 		try {
 			file = repository.createFile(parent, reportName, content);
@@ -399,7 +399,7 @@ public class RepositoryHandler implements ViewStateListener {
 				context, "msg");
 
 		RepositoryNode node = (RepositoryNode) selection;
-		RepositoryFile file = node.getObject();
+		ReportFile file = node.getObject();
 
 		String viewId = UUID.randomUUID().toString();
 
@@ -410,7 +410,7 @@ public class RepositoryHandler implements ViewStateListener {
 		Exception exception = null;
 
 		try {
-			ReportContent content = repository.getContent(file);
+			ReportContent content = repository.getReportContent(file);
 			content.read(state, dataSourceManager);
 		} catch (ConfigurationException e) {
 			exception = e;
@@ -448,10 +448,14 @@ public class RepositoryHandler implements ViewStateListener {
 		RequestContext requestContext = RequestContext.getCurrentInstance();
 		requestContext.addCallbackParam("report", new ViewInfo(state));
 	}
+	
+	public void openFromUrl() {
+		
+	}
 
 	public void delete() {
 		ViewState state = getActiveView();
-		RepositoryFile file = state.getFile();
+		ReportFile file = state.getFile();
 
 		delete(state);
 
@@ -496,7 +500,7 @@ public class RepositoryHandler implements ViewStateListener {
 				context, "msg");
 
 		RepositoryNode node = (RepositoryNode) selection;
-		RepositoryFile directory = node.getObject();
+		ReportFile directory = node.getObject();
 
 		try {
 			List<ViewState> states = viewStateHolder.getStates();
@@ -506,9 +510,9 @@ public class RepositoryHandler implements ViewStateListener {
 					continue;
 				}
 
-				RepositoryFile file = state.getFile();
+				ReportFile file = state.getFile();
 
-				List<RepositoryFile> ancestors = file.getAncestors();
+				List<ReportFile> ancestors = file.getAncestors();
 
 				if (ancestors.contains(directory)) {
 					String title = bundle.getString("warn.folder.delete.title");
@@ -581,7 +585,7 @@ public class RepositoryHandler implements ViewStateListener {
 	/**
 	 * @param file
 	 */
-	protected void delete(RepositoryFile file) {
+	protected void delete(ReportFile file) {
 		try {
 			repository.deleteFile(file);
 		} catch (IOException e) {
@@ -648,7 +652,7 @@ public class RepositoryHandler implements ViewStateListener {
 	public boolean isOpenEnabled() {
 		if (selection != null) {
 			RepositoryNode node = (RepositoryNode) selection;
-			RepositoryFile file = node.getObject();
+			ReportFile file = node.getObject();
 
 			if (!file.isDirectory()) {
 				List<ViewState> states = viewStateHolder.getStates();
@@ -668,7 +672,7 @@ public class RepositoryHandler implements ViewStateListener {
 	public boolean isDeleteEnabled() {
 		if (selection != null) {
 			RepositoryNode node = (RepositoryNode) selection;
-			RepositoryFile file = node.getObject();
+			ReportFile file = node.getObject();
 
 			return !file.isRoot();
 		}
@@ -730,16 +734,16 @@ public class RepositoryHandler implements ViewStateListener {
 			return;
 		}
 
-		RepositoryFile parent = getTargetDirectory();
+		ReportFile parent = getTargetDirectory();
 
 		Set<String> names;
 
 		try {
-			List<RepositoryFile> children = repository.getFiles(parent);
+			List<ReportFile> children = repository.getFiles(parent);
 
 			names = new HashSet<String>(children.size());
 
-			for (RepositoryFile child : children) {
+			for (ReportFile child : children) {
 				names.add(child.getName());
 			}
 		} catch (IOException e) {
@@ -770,13 +774,13 @@ public class RepositoryHandler implements ViewStateListener {
 		this.reportName = name;
 	}
 
-	protected RepositoryFile getTargetDirectory() {
-		RepositoryFile parent = null;
+	protected ReportFile getTargetDirectory() {
+		ReportFile parent = null;
 
 		if (selection != null) {
 			RepositoryNode node = (RepositoryNode) selection;
 
-			RepositoryFile selectedFile = node.getObject();
+			ReportFile selectedFile = node.getObject();
 			if (selectedFile.isDirectory()) {
 				parent = selectedFile;
 			} else {
@@ -789,7 +793,11 @@ public class RepositoryHandler implements ViewStateListener {
 		}
 
 		if (parent == null) {
-			parent = repository.getRoot();
+			try {
+				parent = repository.getRoot();
+			} catch (IOException e) {
+				throw new FacesException(e);
+			}
 		}
 
 		return parent;
@@ -804,8 +812,14 @@ public class RepositoryHandler implements ViewStateListener {
 
 			rootNode.setExpanded(true);
 
-			RepositoryNode node = new RepositoryNode(repository.getRoot(),
-					repository);
+			RepositoryNode node;
+
+			try {
+				node = new RepositoryNode(repository.getRoot(), repository);
+			} catch (IOException e) {
+				throw new FacesException(e);
+			}
+
 			node.setExpanded(true);
 
 			rootNode.getChildren().add(node);
@@ -824,7 +838,7 @@ public class RepositoryHandler implements ViewStateListener {
 	@Override
 	public void viewRegistered(ViewStateEvent e) {
 		final String viewId = e.getState().getId();
-		final RepositoryFile file = e.getState().getFile();
+		final ReportFile file = e.getState().getFile();
 
 		if (file == null) {
 			return;

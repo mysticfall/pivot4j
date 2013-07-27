@@ -21,7 +21,9 @@
 			<menubar id="newmenu">
 				<menuitem id="mi-pivot4j-new" label="${plugin.menu.new}"
 					command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/catalog.xhtml')" />
-			</menubar>		
+				<menuitem id="mi-pivot4j-migrate" label="${plugin.menu.migrate}"
+					command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/migrate.xhtml')" />
+			</menubar>
 		</overlay>
 	</overlays>
 

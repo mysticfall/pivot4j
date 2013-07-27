@@ -13,10 +13,8 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapDataSource;
 import org.pentaho.platform.api.engine.IPentahoSession;
-import org.pentaho.platform.api.repository.ISolutionRepository;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
-import org.pentaho.platform.engine.services.solution.SolutionReposHelper;
 import org.pentaho.platform.plugin.action.mondrian.catalog.IMondrianCatalogService;
 import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCatalog;
 import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCube;
@@ -178,9 +176,6 @@ public class PentahoDataSourceManager extends
 			return null;
 		}
 
-		ISolutionRepository repository = PentahoSystem.get(
-				ISolutionRepository.class, session);
-
 		MondrianCatalog catalog = getCatalog(definition.getName());
 
 		if (catalog == null) {
@@ -192,8 +187,6 @@ public class PentahoDataSourceManager extends
 
 			return null;
 		}
-
-		SolutionReposHelper.setSolutionRepositoryThreadVariable(repository);
 
 		Util.PropertyList parsedProperties = Util.parseConnectString(catalog
 				.getDataSourceInfo());

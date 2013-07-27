@@ -1,33 +1,40 @@
 package com.eyeq.pivot4j.analytics.repository;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 
 public interface ReportRepository {
 
-	RepositoryFile getRoot();
+	ReportFile getRoot() throws IOException;
 
-	RepositoryFile getFile(String path) throws IOException;
+	ReportFile getFile(String path) throws IOException;
 
 	boolean exists(String path) throws IOException;
 
-	List<RepositoryFile> getFiles(RepositoryFile parent) throws IOException;
+	List<ReportFile> getFiles(ReportFile parent) throws IOException;
 
-	RepositoryFile createDirectory(RepositoryFile parent, String name)
+	List<ReportFile> getFiles(ReportFile parent,
+			RepositoryFileFilter filter) throws IOException;
+
+	ReportFile createDirectory(ReportFile parent, String name)
 			throws IOException;
 
-	RepositoryFile createFile(RepositoryFile parent, String name,
+	ReportFile createFile(ReportFile parent, String name,
 			ReportContent content) throws IOException, ConfigurationException;
 
-	RepositoryFile renameFile(RepositoryFile file, String newName)
+	ReportFile renameFile(ReportFile file, String newName)
 			throws IOException;
 
-	ReportContent getContent(RepositoryFile file) throws IOException, ConfigurationException;
+	void deleteFile(ReportFile file) throws IOException;
 
-	void setContent(RepositoryFile file, ReportContent content)
+	ReportContent getReportContent(ReportFile file) throws IOException,
+			ConfigurationException;
+
+	void setReportContent(ReportFile file, ReportContent content)
 			throws IOException, ConfigurationException;
 
-	void deleteFile(RepositoryFile file) throws IOException;
+	InputStream readContent(ReportFile file) throws IOException;
 }

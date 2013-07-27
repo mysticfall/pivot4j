@@ -1,11 +1,14 @@
 package com.eyeq.pivot4j.analytics.ui.navigator;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.component.StateHolder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -15,13 +18,16 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.primefaces.model.TreeNode;
 
+import com.eyeq.pivot4j.analytics.repository.ReportFile;
 import com.eyeq.pivot4j.analytics.repository.ReportRepository;
-import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
+import com.eyeq.pivot4j.analytics.repository.RepositoryFileFilter;
 
-public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
+public class RepositoryNode extends NavigatorNode<ReportFile> implements
 		StateHolder {
 
 	private ReportRepository repository;
+
+	private RepositoryFileFilter filter;
 
 	private boolean transientState = false;
 
@@ -41,7 +47,7 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 	 * @param file
 	 * @param repository
 	 */
-	public RepositoryNode(RepositoryFile file, ReportRepository repository) {
+	public RepositoryNode(ReportFile file, ReportRepository repository) {
 		super(file);
 
 		if (repository == null) {
@@ -104,10 +110,25 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 	}
 
 	/**
+	 * @return the filter
+	 */
+	public RepositoryFileFilter getFilter() {
+		return filter;
+	}
+
+	/**
+	 * @param filter
+	 *            the filter to set
+	 */
+	public void setFilter(RepositoryFileFilter filter) {
+		this.filter = filter;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.analytics.ui.navigator.NavigatorNode#createData(java.lang.Object)
 	 */
 	@Override
-	protected NodeData createData(RepositoryFile object) {
+	protected NodeData createData(ReportFile object) {
 		return new NodeData(object.getPath(), object.getName());
 	}
 
@@ -119,15 +140,18 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 		List<TreeNode> children;
 
 		try {
-			List<RepositoryFile> files = repository.getFiles(getObject());
+			List<ReportFile> files = repository.getFiles(getObject());
 
 			children = new ArrayList<TreeNode>(files.size());
 
-			for (RepositoryFile file : files) {
-				RepositoryNode child = new RepositoryNode(file, repository);
-				child.setParent(this);
+			for (ReportFile file : files) {
+				if (filter == null || filter.accept(file)) {
+					RepositoryNode child = new RepositoryNode(file, repository);
+					child.setParent(this);
+					child.setFilter(filter);
 
-				children.add(child);
+					children.add(child);
+				}
 			}
 		} catch (IOException e) {
 			throw new FacesException(e);
@@ -139,7 +163,7 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 	/**
 	 * @param file
 	 */
-	public RepositoryNode selectNode(RepositoryFile file) {
+	public RepositoryNode selectNode(ReportFile file) {
 		RepositoryNode node = findNode(file);
 
 		if (node != null) {
@@ -158,14 +182,14 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 	/**
 	 * @param file
 	 */
-	public RepositoryNode findNode(RepositoryFile file) {
+	public RepositoryNode findNode(ReportFile file) {
 		if (file == null) {
 			throw new NullArgumentException("file");
 		}
 
 		RepositoryNode selectedNode = null;
 
-		List<RepositoryFile> ancestors;
+		List<ReportFile> ancestors;
 
 		try {
 			ancestors = file.getAncestors();
@@ -173,7 +197,7 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 			throw new FacesException(e);
 		}
 
-		RepositoryFile thisFile = getObject();
+		ReportFile thisFile = getObject();
 
 		if (file.equals(thisFile)) {
 			selectedNode = this;
@@ -240,8 +264,19 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 	 */
 	@Override
 	public Object saveState(FacesContext context) {
-		return new Object[] { isSelectable(), isSelected(), isExpanded(),
-				viewId, getObject().getPath() };
+		List<Object> states = new LinkedList<Object>();
+
+		states.add(isSelectable());
+		states.add(isSelected());
+		states.add(isExpanded());
+		states.add(viewId);
+		states.add(getObject().getPath());
+
+		if (filter instanceof Serializable) {
+			states.add(filter);
+		}
+
+		return states.toArray(new Object[states.size()]);
 	}
 
 	/**
@@ -251,6 +286,12 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 	@Override
 	public void restoreState(FacesContext context, Object state) {
 		Object[] states = (Object[]) state;
+
+		if (repository == null) {
+			Application application = context.getApplication();
+			this.repository = application.evaluateExpressionGet(context,
+					"#{reportRepository}", ReportRepository.class);
+		}
 
 		try {
 			setObject(repository.getFile((String) states[4]));
@@ -262,6 +303,10 @@ public class RepositoryNode extends NavigatorNode<RepositoryFile> implements
 		setSelected((Boolean) states[1]);
 		setExpanded((Boolean) states[2]);
 		setViewId((String) states[3]);
+
+		if (states.length > 5) {
+			this.filter = (RepositoryFileFilter) states[5];
+		}
 	}
 
 	/**

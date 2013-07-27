@@ -8,7 +8,7 @@
 		<p:remoteCommand name="savePentahoReport"
 			actionListener="#{pentahoFileHandler.save}" update="growl"
 			rendered="#{!pivotStateManager.readOnly}" 
-			onsuccess="parent.mantle_refreshRepository();" />
+			onsuccess="onPentahoReportSave()" />
 
 		<p:growl id="growl" showDetail="true" life="5000" />
 	</h:form>
@@ -30,12 +30,19 @@
 			} ]);
 		}
 
+		function onPentahoReportSave() {
+			if (parent &amp;&amp; typeof parent.enableSave == "function") {
+				parent.enableSave(false);
+				parent.mantle_refreshRepository();
+			}
+		}
+
 		function getPossibleFileExtensions() {
 			return [".pivot4j"];
 		}
 
 		if (parent &amp;&amp; parent.enableSave) {
-			parent.enableSave(false);
+			parent.enableSave(#{pivotStateManager.dirty});
 		}
 	</script>
 

@@ -26,14 +26,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.analytics.config.Settings;
+import com.eyeq.pivot4j.analytics.repository.AbstractFileSystemRepository;
 import com.eyeq.pivot4j.analytics.repository.ReportContent;
-import com.eyeq.pivot4j.analytics.repository.ReportRepository;
-import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
+import com.eyeq.pivot4j.analytics.repository.ReportFile;
 import com.eyeq.pivot4j.analytics.repository.RepositoryFileComparator;
 
 @ManagedBean(name = "reportRepository")
 @ApplicationScoped
-public class LocalFileSystemRepository implements ReportRepository {
+public class LocalFileSystemRepository extends AbstractFileSystemRepository {
 
 	@ManagedProperty(value = "#{settings}")
 	private Settings settings;
@@ -74,7 +74,7 @@ public class LocalFileSystemRepository implements ReportRepository {
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getRoot()
 	 */
 	@Override
-	public RepositoryFile getRoot() {
+	public ReportFile getRoot() {
 		return root;
 	}
 
@@ -90,7 +90,7 @@ public class LocalFileSystemRepository implements ReportRepository {
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFile(java.lang.String)
 	 */
 	@Override
-	public RepositoryFile getFile(String path) throws IOException {
+	public ReportFile getFile(String path) throws IOException {
 		File file = getSystemFile(path);
 
 		if (!file.exists()) {
@@ -102,11 +102,10 @@ public class LocalFileSystemRepository implements ReportRepository {
 
 	/**
 	 * @throws IOException
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFiles(com.eyeq.pivot4j.analytics.repository.RepositoryFile)
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFiles(com.eyeq.pivot4j.analytics.repository.ReportFile)
 	 */
 	@Override
-	public List<RepositoryFile> getFiles(RepositoryFile parent)
-			throws IOException {
+	public List<ReportFile> getFiles(ReportFile parent) throws IOException {
 		if (parent == null) {
 			throw new NullArgumentException("parent");
 		}
@@ -119,8 +118,7 @@ public class LocalFileSystemRepository implements ReportRepository {
 			return Collections.emptyList();
 		}
 
-		List<RepositoryFile> files = new ArrayList<RepositoryFile>(
-				children.length);
+		List<ReportFile> files = new ArrayList<ReportFile>(children.length);
 
 		for (File child : children) {
 			files.add(new LocalFile(child, root.getRoot()));
@@ -132,11 +130,11 @@ public class LocalFileSystemRepository implements ReportRepository {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#createDirectory(com.eyeq.pivot4j.analytics.repository.RepositoryFile,
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#createDirectory(com.eyeq.pivot4j.analytics.repository.ReportFile,
 	 *      java.lang.String)
 	 */
 	@Override
-	public RepositoryFile createDirectory(RepositoryFile parent, String name)
+	public ReportFile createDirectory(ReportFile parent, String name)
 			throws IOException {
 		if (parent == null) {
 			throw new NullArgumentException("parent");
@@ -162,12 +160,12 @@ public class LocalFileSystemRepository implements ReportRepository {
 
 	/**
 	 * @throws IOException
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#createFile(com.eyeq.pivot4j.analytics.repository.RepositoryFile,
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#createFile(com.eyeq.pivot4j.analytics.repository.ReportFile,
 	 *      java.lang.String,
 	 *      com.eyeq.pivot4j.analytics.repository.ReportContent)
 	 */
 	@Override
-	public RepositoryFile createFile(RepositoryFile parent, String name,
+	public ReportFile createFile(ReportFile parent, String name,
 			ReportContent content) throws IOException, ConfigurationException {
 		if (parent == null) {
 			throw new NullArgumentException("parent");
@@ -188,47 +186,32 @@ public class LocalFileSystemRepository implements ReportRepository {
 
 		File file = new File(path);
 
-		RepositoryFile localFile = new LocalFile(file, root.getFile());
+		ReportFile localFile = new LocalFile(file, root.getFile());
 
-		setContent(localFile, content);
+		setReportContent(localFile, content);
 
 		return localFile;
 	}
 
 	/**
-	 * @throws IOException
-	 * @throws ConfigurationException
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getContent(com.eyeq.pivot4j.analytics.repository.RepositoryFile)
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#readContent(com.eyeq.pivot4j.analytics.repository.ReportFile)
 	 */
 	@Override
-	public ReportContent getContent(RepositoryFile file) throws IOException,
-			ConfigurationException {
+	public InputStream readContent(ReportFile file) throws IOException {
 		if (file == null) {
 			throw new NullArgumentException("file");
 		}
 
-		ReportContent content = null;
-
-		InputStream in = null;
-
-		try {
-			in = new FileInputStream(getLocalFile(file).getFile());
-
-			content = new ReportContent(in);
-		} catch (IOException e) {
-			IOUtils.closeQuietly(in);
-		}
-
-		return content;
+		return new FileInputStream(getLocalFile(file).getFile());
 	}
 
 	/**
 	 * @throws ConfigurationException
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#setContent(com.eyeq.pivot4j.analytics.repository.RepositoryFile,
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#setReportContent(com.eyeq.pivot4j.analytics.repository.ReportFile,
 	 *      com.eyeq.pivot4j.analytics.repository.ReportContent)
 	 */
 	@Override
-	public void setContent(RepositoryFile file, ReportContent content)
+	public void setReportContent(ReportFile file, ReportContent content)
 			throws IOException, ConfigurationException {
 		if (file == null) {
 			throw new NullArgumentException("file");
@@ -255,11 +238,11 @@ public class LocalFileSystemRepository implements ReportRepository {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#renameFile(com.eyeq.pivot4j.analytics.repository.RepositoryFile,
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#renameFile(com.eyeq.pivot4j.analytics.repository.ReportFile,
 	 *      java.lang.String)
 	 */
 	@Override
-	public RepositoryFile renameFile(RepositoryFile file, String newName)
+	public ReportFile renameFile(ReportFile file, String newName)
 			throws IOException {
 		if (file == null) {
 			throw new NullArgumentException("file");
@@ -284,10 +267,10 @@ public class LocalFileSystemRepository implements ReportRepository {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#deleteFile(com.eyeq.pivot4j.analytics.repository.RepositoryFile)
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#deleteFile(com.eyeq.pivot4j.analytics.repository.ReportFile)
 	 */
 	@Override
-	public void deleteFile(RepositoryFile file) throws IOException {
+	public void deleteFile(ReportFile file) throws IOException {
 		if (file == null) {
 			throw new NullArgumentException("file");
 		}
@@ -315,12 +298,12 @@ public class LocalFileSystemRepository implements ReportRepository {
 			throw new NullArgumentException("file");
 		}
 
-		if (path.equals(RepositoryFile.SEPARATOR)) {
+		if (path.equals(ReportFile.SEPARATOR)) {
 			return root.getFile();
 		}
 
 		String filePath = root.getFile().getCanonicalPath()
-				+ StringUtils.replaceChars(path, RepositoryFile.SEPARATOR,
+				+ StringUtils.replaceChars(path, ReportFile.SEPARATOR,
 						File.separator);
 
 		return new File(filePath);
@@ -331,7 +314,7 @@ public class LocalFileSystemRepository implements ReportRepository {
 	 * @return
 	 * @throws IOException
 	 */
-	protected LocalFile getLocalFile(RepositoryFile file) throws IOException {
+	protected LocalFile getLocalFile(ReportFile file) throws IOException {
 		LocalFile localFile;
 
 		if (file instanceof LocalFile) {

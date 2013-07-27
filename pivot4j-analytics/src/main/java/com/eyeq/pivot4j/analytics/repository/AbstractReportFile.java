@@ -1,6 +1,7 @@
 package com.eyeq.pivot4j.analytics.repository;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,24 +9,24 @@ import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public abstract class AbstractRepositoryFile implements RepositoryFile {
+public abstract class AbstractReportFile implements ReportFile {
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getId()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getId()
 	 */
 	@Override
-	public String getId() {
+	public Serializable getId() {
 		return getPath();
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getAncestors()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getAncestors()
 	 */
 	@Override
-	public List<RepositoryFile> getAncestors() throws IOException {
-		List<RepositoryFile> ancestors = new ArrayList<RepositoryFile>();
+	public List<ReportFile> getAncestors() throws IOException {
+		List<ReportFile> ancestors = new ArrayList<ReportFile>();
 
-		RepositoryFile parent = this;
+		ReportFile parent = this;
 
 		while ((parent = parent.getParent()) != null) {
 			ancestors.add(parent);
@@ -36,7 +37,7 @@ public abstract class AbstractRepositoryFile implements RepositoryFile {
 
 	/**
 	 * @throws IOException
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#isRoot()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#isRoot()
 	 */
 	@Override
 	public boolean isRoot() {
@@ -45,6 +46,22 @@ public abstract class AbstractRepositoryFile implements RepositoryFile {
 		} catch (IOException e) {
 			throw new UnhandledException(e);
 		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getExtension()
+	 */
+	@Override
+	public String getExtension() {
+		String name = getName();
+
+		int index = name.lastIndexOf('.');
+
+		if (index != -1) {
+			return name.substring(index + 1);
+		}
+
+		return null;
 	}
 
 	/**
@@ -60,11 +77,11 @@ public abstract class AbstractRepositoryFile implements RepositoryFile {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof RepositoryFile)) {
+		if (!(obj instanceof ReportFile)) {
 			return false;
 		}
 
-		RepositoryFile other = (RepositoryFile) obj;
+		ReportFile other = (ReportFile) obj;
 
 		return new EqualsBuilder().append(getClass(), other.getClass())
 				.append(getPath(), other.getPath()).build();

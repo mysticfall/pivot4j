@@ -5,3 +5,11 @@
 span.hide-on-embed, button.hide-on-embed {
 	display: inline !important;
 }
+
+.migration-dialog td.column-status {
+	text-align: center;
+}
+
+.migration-dialog span.error {
+	color: red;
+}

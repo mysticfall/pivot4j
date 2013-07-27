@@ -2,14 +2,15 @@ package com.eyeq.pivot4j.analytics.repository.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang3.StringUtils;
 
-import com.eyeq.pivot4j.analytics.repository.AbstractRepositoryFile;
-import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
+import com.eyeq.pivot4j.analytics.repository.AbstractReportFile;
+import com.eyeq.pivot4j.analytics.repository.ReportFile;
 
-public class LocalFile extends AbstractRepositoryFile {
+public class LocalFile extends AbstractReportFile {
 
 	private File root;
 
@@ -66,7 +67,7 @@ public class LocalFile extends AbstractRepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getName()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getName()
 	 */
 	@Override
 	public String getName() {
@@ -74,7 +75,7 @@ public class LocalFile extends AbstractRepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getPath()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getPath()
 	 */
 	@Override
 	public String getPath() {
@@ -83,10 +84,10 @@ public class LocalFile extends AbstractRepositoryFile {
 
 	/**
 	 * @throws IOException
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getParent()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getParent()
 	 */
 	@Override
-	public RepositoryFile getParent() throws IOException {
+	public ReportFile getParent() throws IOException {
 		if (isRoot()) {
 			return null;
 		}
@@ -101,7 +102,7 @@ public class LocalFile extends AbstractRepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#isDirectory()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#isDirectory()
 	 */
 	@Override
 	public boolean isDirectory() {
@@ -109,10 +110,26 @@ public class LocalFile extends AbstractRepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.AbstractRepositoryFile#isRoot()
+	 * @see com.eyeq.pivot4j.analytics.repository.AbstractReportFile#isRoot()
 	 */
 	@Override
 	public boolean isRoot() {
 		return root.equals(file);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getCretedDate()
+	 */
+	@Override
+	public Date getLastModifiedDate() {
+		return new Date(file.lastModified());
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getSize()
+	 */
+	@Override
+	public long getSize() {
+		return file.length();
 	}
 }

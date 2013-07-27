@@ -119,6 +119,18 @@ public class PivotStateManager {
 	}
 
 	/**
+	 * @return the dirty
+	 */
+	public boolean isDirty() {
+		ViewState state = getState();
+		if (state == null) {
+			return false;
+		}
+
+		return state.isDirty();
+	}
+
+	/**
 	 * @return the settings
 	 */
 	public Settings getSettings() {

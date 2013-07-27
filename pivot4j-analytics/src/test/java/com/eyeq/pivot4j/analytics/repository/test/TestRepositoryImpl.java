@@ -22,11 +22,13 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eyeq.pivot4j.analytics.repository.AbstractFileSystemRepository;
 import com.eyeq.pivot4j.analytics.repository.ReportContent;
-import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
+import com.eyeq.pivot4j.analytics.repository.ReportFile;
 import com.eyeq.pivot4j.analytics.repository.RepositoryFileComparator;
 
-public class TestRepositoryImpl implements TestRepository {
+public class TestRepositoryImpl extends AbstractFileSystemRepository implements
+		TestRepository {
 
 	private static final String RESOURCE_PREFIX = "/com/eyeq/pivot4j/analytics/repository/test";
 
@@ -87,7 +89,7 @@ public class TestRepositoryImpl implements TestRepository {
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getRoot()
 	 */
 	@Override
-	public RepositoryFile getRoot() {
+	public ReportFile getRoot() {
 		return root;
 	}
 
@@ -95,7 +97,7 @@ public class TestRepositoryImpl implements TestRepository {
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFile(java.lang.String)
 	 */
 	@Override
-	public RepositoryFile getFile(String path) {
+	public ReportFile getFile(String path) {
 		return files.get(path);
 	}
 
@@ -108,14 +110,14 @@ public class TestRepositoryImpl implements TestRepository {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFiles(com.eyeq.pivot4j.analytics.repository.RepositoryFile)
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFiles(com.eyeq.pivot4j.analytics.repository.ReportFile)
 	 */
 	@Override
-	public synchronized List<RepositoryFile> getFiles(RepositoryFile parent)
+	public synchronized List<ReportFile> getFiles(ReportFile parent)
 			throws IOException {
-		List<RepositoryFile> children = new LinkedList<RepositoryFile>();
+		List<ReportFile> children = new LinkedList<ReportFile>();
 
-		for (RepositoryFile child : files.values()) {
+		for (ReportFile child : files.values()) {
 			if (parent.equals(child.getParent())) {
 				children.add(child);
 			}
@@ -127,11 +129,11 @@ public class TestRepositoryImpl implements TestRepository {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#createDirectory(com.eyeq.pivot4j.analytics.repository.RepositoryFile,
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#createDirectory(com.eyeq.pivot4j.analytics.repository.ReportFile,
 	 *      java.lang.String)
 	 */
 	@Override
-	public synchronized RepositoryFile createDirectory(RepositoryFile parent,
+	public synchronized ReportFile createDirectory(ReportFile parent,
 			String name) throws IOException {
 		TestFile directory = new TestFile(name, (TestFile) parent, true);
 
@@ -141,14 +143,13 @@ public class TestRepositoryImpl implements TestRepository {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#createFile(com.eyeq.pivot4j.analytics.repository.RepositoryFile,
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#createFile(com.eyeq.pivot4j.analytics.repository.ReportFile,
 	 *      java.lang.String,
 	 *      com.eyeq.pivot4j.analytics.repository.ReportContent)
 	 */
 	@Override
-	public synchronized RepositoryFile createFile(RepositoryFile parent,
-			String name, ReportContent content) throws IOException,
-			ConfigurationException {
+	public synchronized ReportFile createFile(ReportFile parent, String name,
+			ReportContent content) throws IOException, ConfigurationException {
 		TestFile file = new TestFile(name, (TestFile) parent, false);
 
 		String path = file.getPath();
@@ -165,12 +166,12 @@ public class TestRepositoryImpl implements TestRepository {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#renameFile(com.eyeq.pivot4j.analytics.repository.RepositoryFile,
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#renameFile(com.eyeq.pivot4j.analytics.repository.ReportFile,
 	 *      java.lang.String)
 	 */
 	@Override
-	public synchronized RepositoryFile renameFile(RepositoryFile file,
-			String newName) throws IOException {
+	public synchronized ReportFile renameFile(ReportFile file, String newName)
+			throws IOException {
 		TestFile newFile = new TestFile(newName, (TestFile) file.getParent(),
 				file.isDirectory());
 
@@ -191,7 +192,7 @@ public class TestRepositoryImpl implements TestRepository {
 						child.setName(newName);
 					}
 
-					for (RepositoryFile ancestor : child.getAncestors()) {
+					for (ReportFile ancestor : child.getAncestors()) {
 						if (ancestor.equals(newFile)) {
 							((TestFile) ancestor).setName(newName);
 							break;
@@ -220,10 +221,10 @@ public class TestRepositoryImpl implements TestRepository {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getContent(com.eyeq.pivot4j.analytics.repository.RepositoryFile)
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getReportContent(com.eyeq.pivot4j.analytics.repository.ReportFile)
 	 */
 	@Override
-	public synchronized ReportContent getContent(RepositoryFile file)
+	public synchronized ReportContent getReportContent(ReportFile file)
 			throws IOException, ConfigurationException {
 		String path = RESOURCE_PREFIX + file.getPath();
 
@@ -234,37 +235,35 @@ public class TestRepositoryImpl implements TestRepository {
 		ReportContent content = contents.get(path);
 
 		if (content == null) {
-			InputStream in = getClass().getResourceAsStream(path);
-
-			try {
-				content = new ReportContent(in);
-			} finally {
-				if (in != null) {
-					in.close();
-				}
-			}
-
-			contents.put(path, content);
+			content = super.getReportContent(file);
 		}
 
 		return content;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#setContent(com.eyeq.pivot4j.analytics.repository.RepositoryFile,
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#readContent(com.eyeq.pivot4j.analytics.repository.ReportFile)
+	 */
+	@Override
+	public InputStream readContent(ReportFile file) throws IOException {
+		return getClass().getResourceAsStream(RESOURCE_PREFIX + file.getPath());
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#setReportContent(com.eyeq.pivot4j.analytics.repository.ReportFile,
 	 *      com.eyeq.pivot4j.analytics.repository.ReportContent)
 	 */
 	@Override
-	public synchronized void setContent(RepositoryFile file,
+	public synchronized void setReportContent(ReportFile file,
 			ReportContent content) throws IOException, ConfigurationException {
 		contents.put(file.getPath(), content);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#deleteFile(com.eyeq.pivot4j.analytics.repository.RepositoryFile)
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#deleteFile(com.eyeq.pivot4j.analytics.repository.ReportFile)
 	 */
 	@Override
-	public synchronized void deleteFile(RepositoryFile file) throws IOException {
+	public synchronized void deleteFile(ReportFile file) throws IOException {
 		List<String> names = new LinkedList<String>(files.keySet());
 
 		String parentPath = file.getPath();

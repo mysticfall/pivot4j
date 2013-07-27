@@ -1,11 +1,12 @@
 package com.eyeq.pivot4j.analytics.repository.test;
 
 import java.io.IOException;
+import java.util.Date;
 
-import com.eyeq.pivot4j.analytics.repository.AbstractRepositoryFile;
-import com.eyeq.pivot4j.analytics.repository.RepositoryFile;
+import com.eyeq.pivot4j.analytics.repository.AbstractReportFile;
+import com.eyeq.pivot4j.analytics.repository.ReportFile;
 
-public class TestFile extends AbstractRepositoryFile {
+public class TestFile extends AbstractReportFile {
 
 	private String name;
 
@@ -30,7 +31,7 @@ public class TestFile extends AbstractRepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getName()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getName()
 	 */
 	@Override
 	public String getName() {
@@ -45,7 +46,7 @@ public class TestFile extends AbstractRepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getPath()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getPath()
 	 */
 	@Override
 	public String getPath() {
@@ -57,18 +58,34 @@ public class TestFile extends AbstractRepositoryFile {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#getParent()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getParent()
 	 */
 	@Override
-	public RepositoryFile getParent() throws IOException {
+	public ReportFile getParent() throws IOException {
 		return parent;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.repository.RepositoryFile#isDirectory()
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#isDirectory()
 	 */
 	@Override
 	public boolean isDirectory() {
 		return directory;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getLastModifiedDate()
+	 */
+	@Override
+	public Date getLastModifiedDate() {
+		return new Date();
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getSize()
+	 */
+	@Override
+	public long getSize() {
+		return 0;
 	}
 }

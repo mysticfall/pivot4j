@@ -650,3 +650,27 @@ body.ie-compat .ui-toolbar .ui-selectonebutton {
 body.ie-compat .ui-toolbar .ui-separator {
 	float: left;
 }
+
+.migration-dialog .ui-tree {
+	border: none;
+	padding: 0;
+	margin: 0;
+	width: auto;
+}
+
+.migration-dialog .ui-layout-container {
+	width: 100%;
+	height: 300px !important;
+}
+
+.migration-dialog .ui-layout-resizer {
+	display: none !important;
+}
+
+.migration-dialog .ui-layout-pane-center {
+	width: auto !important;
+}
+
+.migration-dialog .ui-layout-container .ui-layout-pane-north {
+	border: none;
+}
