@@ -114,6 +114,7 @@
 							<p:commandButton value="#{msg['toolbar.properties']}"
 								title="#{msg['toolbar.properties.tooltip']}" type="button"
 								icon="ui-icon-gear" disabled="#{!pivotGridHandler.valid}"
+								rendered="#{!pivotStateManager.readOnly}"
 								onclick="propertiesConfig.show(); return false;">
 								<f:param name="skipRender" value="true" />
 							</p:commandButton>
@@ -459,7 +460,8 @@
 		<ui:include src="drillthrough.xhtml" />
 		<ui:include src="extension.xhtml" />
 
-		<p:ajaxStatus styleClass="ajax-status" onstart="if(window.waitDialog) waitDialog.block()"
+		<p:ajaxStatus styleClass="ajax-status"
+			onstart="if(window.waitDialog) waitDialog.block()"
 			oncomplete="waitDialog.unblock()" />
 
 		<pe:blockUI widgetVar="waitDialog" targetSelector="body">
