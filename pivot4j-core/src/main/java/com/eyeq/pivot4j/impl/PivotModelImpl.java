@@ -969,7 +969,11 @@ public class PivotModelImpl implements PivotModel {
 	public synchronized Serializable saveState() {
 		Serializable[] state = new Serializable[3];
 
-		state[0] = getCurrentMdx(false);
+		if (isInitialized()) {
+			state[0] = getCurrentMdx(false);
+		} else {
+			state[0] = mdxQuery;
+		}
 
 		if (sortPosMembers == null) {
 			state[1] = null;
@@ -1070,7 +1074,11 @@ public class PivotModelImpl implements PivotModel {
 			configuration.setLogger(LogFactory.getLog(getClass()));
 		}
 
-		configuration.addProperty("mdx", getCurrentMdx());
+		if (isInitialized()) {
+			configuration.addProperty("mdx", getCurrentMdx());
+		} else {
+			configuration.addProperty("mdx", mdxQuery);
+		}
 
 		if (sorting) {
 			configuration.addProperty("sort[@enabled]", sorting);
