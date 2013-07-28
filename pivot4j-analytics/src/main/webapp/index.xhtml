@@ -184,6 +184,11 @@
 							rendered="#{!repositoryHandler.selection.object.directory}"
 							onclick="confirmDeleteFileDialog.show(); return false;"
 							disabled="#{!repositoryHandler.deleteEnabled}" />
+						<p:menuitem value="#{msg['menu.refresh']}"
+							title="#{msg['menu.refresh.tooltip']}" icon="ui-icon-refresh"
+							action="#{repositoryHandler.refresh}"
+							rendered="#{repositoryHandler.selection.object.directory}"
+							update=":toolbar-form,repository-panel,navigator-menu,:growl" />
 					</p:contextMenu>
 
 					<p:remoteCommand name="openReport"

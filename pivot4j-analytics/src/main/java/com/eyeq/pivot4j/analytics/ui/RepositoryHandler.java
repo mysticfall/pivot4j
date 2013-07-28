@@ -448,9 +448,10 @@ public class RepositoryHandler implements ViewStateListener {
 		RequestContext requestContext = RequestContext.getCurrentInstance();
 		requestContext.addCallbackParam("report", new ViewInfo(state));
 	}
-	
-	public void openFromUrl() {
-		
+
+	public void refresh() {
+		RepositoryNode node = (RepositoryNode) selection;
+		node.refresh();
 	}
 
 	public void delete() {
