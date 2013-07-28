@@ -18,10 +18,10 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.junit.Test;
 
-import com.eyeq.pivot4j.ui.AbstractRenderTest;
+import com.eyeq.pivot4j.ui.AbstractMockRenderTestCase;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class SimplePropertyTest extends AbstractRenderTest {
+public class SimplePropertyTest extends AbstractMockRenderTestCase {
 
 	@Test
 	public void testSimpleExpression() {

@@ -19,15 +19,16 @@ import java.util.List;
 import org.junit.Test;
 import org.olap4j.Axis;
 
+import com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase;
 import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
-public class CombinedAggregationWith3DimsIT extends AbstractAggregatorTestCase {
+public class CombinedAggregationWith3DimsIT extends AbstractHtmlTableTestCase {
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#getQueryName()
+	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#getQueryName()
 	 */
 	@Override
 	protected String getQueryName() {
@@ -35,11 +36,12 @@ public class CombinedAggregationWith3DimsIT extends AbstractAggregatorTestCase {
 	}
 
 	/**
-	 * @param renderer
-	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#configureAggregators(com.eyeq.pivot4j.ui.PivotRenderer)
+	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(com.eyeq.pivot4j.ui.PivotRenderer)
 	 */
 	@Override
-	protected void configureAggregators(PivotRenderer renderer) {
+	protected void configureRenderer(PivotRenderer renderer) {
+		super.configureRenderer(renderer);
+
 		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Hierarchy,
 				AverageAggregator.NAME);
 		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Member,

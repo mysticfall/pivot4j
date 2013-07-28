@@ -1,5 +1,6 @@
 package com.eyeq.pivot4j.analytics.ui;
 
+import java.io.StringWriter;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
 import org.olap4j.metadata.Measure;
@@ -34,6 +36,7 @@ import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.CellParameters;
 import com.eyeq.pivot4j.ui.property.PropertySupport;
+import com.eyeq.pivot4j.util.CssWriter;
 
 public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 
@@ -199,6 +202,9 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 
 		String styleClass;
 
+		StringWriter writer = new StringWriter();
+		CssWriter cssWriter = new CssWriter(writer);
+
 		switch (context.getCellType()) {
 		case Header:
 		case Title:
@@ -215,7 +221,7 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 
 			if (!getShowParentMembers() && context.getMember() != null) {
 				int padding = context.getMember().getDepth() * 10;
-				column.setStyle("padding-left: " + padding + "px");
+				cssWriter.writeStyle("padding-left", padding + "px");
 			}
 
 			break;
@@ -230,7 +236,7 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 
 			if (!getShowParentMembers() && context.getMember() != null) {
 				int padding = context.getMember().getDepth() * 10;
-				column.setStyle("padding-left: " + padding + "px");
+				cssWriter.writeStyle("padding-left", padding + "px");
 			}
 
 			break;
@@ -323,30 +329,36 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 		PropertySupport properties = getProperties(context);
 
 		if (properties != null) {
-			StringBuilder builder = new StringBuilder();
+			cssWriter.writeStyle("color",
+					getPropertyValue("fgColor", properties, context));
 
-			addPropertyStyle("fgColor", "color", properties, builder, context);
-			addPropertyStyle("bgColor", "background-color", properties,
-					builder, context);
+			String bgColor = getPropertyValue("bgColor", properties, context);
+			if (bgColor != null) {
+				cssWriter.writeStyle("background-color", bgColor);
+				cssWriter.writeStyle("background-image", "none");
+			}
 
-			addPropertyStyle("fontFamily", "font-family", properties, builder,
-					context);
-			addPropertyStyle("fontSize", "font-size", properties, builder,
-					context);
+			cssWriter.writeStyle("font-family",
+					getPropertyValue("fontFamily", properties, context));
+			cssWriter.writeStyle("font-size",
+					getPropertyValue("fontSize", properties, context));
 
 			String fontStyle = getPropertyValue("fontStyle", properties,
 					context);
 			if (fontStyle != null) {
 				if (fontStyle.contains("bold")) {
-					builder.append("font-weight: bold;");
+					cssWriter.writeStyle("font-weight", "bold");
 				}
 
 				if (fontStyle.contains("italic")) {
-					builder.append("font-style: oblique;");
+					cssWriter.writeStyle("font-style", "oblique");
 				}
 			}
 
-			String style = builder.toString();
+			writer.flush();
+			IOUtils.closeQuietly(writer);
+
+			String style = writer.toString();
 
 			if (StringUtils.isNotEmpty(style)) {
 				column.setStyle(style);
@@ -367,63 +379,34 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @param key
-	 * @param style
-	 * @param properties
-	 * @param builder
-	 * @param context
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#onPropertyEvaluationFailure(java.lang.String,
+	 *      com.eyeq.pivot4j.ui.RenderContext,
+	 *      com.eyeq.pivot4j.el.EvaluationFailedException)
 	 */
-	private void addPropertyStyle(String key, String style,
-			PropertySupport properties, StringBuilder builder,
-			RenderContext context) {
-		String value = getPropertyValue(key, properties, context);
-		if (value != null) {
-			builder.append(style);
-			builder.append(": ");
-			builder.append(value);
-			builder.append(";");
+	@Override
+	protected void onPropertyEvaluationFailure(String key,
+			RenderContext context, EvaluationFailedException e) {
+		super.onPropertyEvaluationFailure(key, context, e);
 
-			if (style.equals("background-color")) {
-				builder.append("background-image: none;");
+		// In order not to bombard users with similar error messages.
+		String attributeName = "property.hasError." + key;
+
+		if (context.getAttribute(attributeName) == null) {
+			MessageFormat mf = new MessageFormat(
+					bundle.getString("error.property.expression.title"));
+
+			String title = mf.format(new String[] { bundle
+					.getString("properties." + key) });
+
+			facesContext.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, title, e.getMessage()));
+
+			if (logger.isWarnEnabled()) {
+				logger.warn(title, e);
 			}
+
+			context.setAttribute(attributeName, true);
 		}
-	}
-
-	/**
-	 * @param key
-	 * @param properties
-	 * @param context
-	 * @return
-	 */
-	protected String getPropertyValue(String key, PropertySupport properties,
-			RenderContext context) {
-		String value = null;
-
-		try {
-			value = properties.getString(key, null, context);
-		} catch (EvaluationFailedException e) {
-			// In order not to bombard users with similar error messages.
-			String attributeName = "property.hasError." + key;
-
-			if (context.getAttribute(attributeName) == null) {
-				MessageFormat mf = new MessageFormat(
-						bundle.getString("error.property.expression.title"));
-
-				String title = mf.format(new String[] { bundle
-						.getString("properties." + key) });
-
-				facesContext.addMessage(null, new FacesMessage(
-						FacesMessage.SEVERITY_ERROR, title, e.getMessage()));
-
-				if (logger.isWarnEnabled()) {
-					logger.warn(title, e);
-				}
-
-				context.setAttribute(attributeName, true);
-			}
-		}
-
-		return value;
 	}
 
 	/**

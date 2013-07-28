@@ -19,16 +19,17 @@ import java.util.List;
 import org.junit.Test;
 import org.olap4j.Axis;
 
+import com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase;
 import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 import com.gargoylesoftware.htmlunit.html.HtmlTableHeader;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
-public class AggregationWithParentHiddenIT extends AbstractAggregatorTestCase {
+public class AggregationWithParentHiddenIT extends AbstractHtmlTableTestCase {
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#getQueryName()
+	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#getQueryName()
 	 */
 	@Override
 	protected String getQueryName() {
@@ -36,11 +37,15 @@ public class AggregationWithParentHiddenIT extends AbstractAggregatorTestCase {
 	}
 
 	/**
-	 * @param renderer
-	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#configureAggregators(com.eyeq.pivot4j.ui.PivotRenderer)
+	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(com.eyeq.pivot4j.ui.PivotRenderer)
 	 */
 	@Override
-	protected void configureAggregators(PivotRenderer renderer) {
+	protected void configureRenderer(PivotRenderer renderer) {
+		super.configureRenderer(renderer);
+
+		renderer.setShowDimensionTitle(false);
+		renderer.setShowParentMembers(false);
+
 		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Grand,
 				MinimumAggregator.NAME);
 		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Hierarchy,
@@ -54,17 +59,6 @@ public class AggregationWithParentHiddenIT extends AbstractAggregatorTestCase {
 				TotalAggregator.NAME);
 		renderer.addAggregator(Axis.COLUMNS, AggregatorPosition.Member,
 				AverageAggregator.NAME);
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregatorTestCase#configureRenderer(com.eyeq.pivot4j.ui.PivotRenderer)
-	 */
-	@Override
-	protected void configureRenderer(PivotRenderer renderer) {
-		super.configureRenderer(renderer);
-
-		renderer.setShowDimensionTitle(false);
-		renderer.setShowParentMembers(false);
 	}
 
 	@Test

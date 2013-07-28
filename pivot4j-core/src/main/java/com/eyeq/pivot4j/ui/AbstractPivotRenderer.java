@@ -23,9 +23,11 @@ import org.apache.commons.logging.LogFactory;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.OlapException;
+import org.slf4j.Logger;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
+import com.eyeq.pivot4j.el.EvaluationFailedException;
 import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorFactory;
 import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
@@ -58,6 +60,8 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	private PropertySupport cellProperties;
 
 	private PropertySupport headerProperties;
+
+	private boolean suppressPropertyErrors = true;
 
 	public AbstractPivotRenderer() {
 		this.renderStrategy = createRenderStrategy();
@@ -407,6 +411,21 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 	}
 
 	/**
+	 * @return the suppressPropertyErrors
+	 */
+	public boolean getSuppressPropertyErrors() {
+		return suppressPropertyErrors;
+	}
+
+	/**
+	 * @param suppressPropertyErrors
+	 *            the suppressPropertyErrors to set
+	 */
+	public void setSuppressPropertyErrors(boolean suppressPropertyErrors) {
+		this.suppressPropertyErrors = suppressPropertyErrors;
+	}
+
+	/**
 	 * @param axis
 	 * @param type
 	 * @return
@@ -422,6 +441,45 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		}
 
 		return properties;
+	}
+
+	/**
+	 * @param key
+	 * @param properties
+	 * @param context
+	 * @return
+	 */
+	protected String getPropertyValue(String key, PropertySupport properties,
+			RenderContext context) {
+		String value = null;
+
+		try {
+			value = properties.getString(key, null, context);
+		} catch (EvaluationFailedException e) {
+			onPropertyEvaluationFailure(key, context, e);
+		}
+
+		return value;
+	}
+
+	/**
+	 * @param key
+	 * @param context
+	 * @param e
+	 */
+	protected void onPropertyEvaluationFailure(String key,
+			RenderContext context, EvaluationFailedException e) {
+		if (suppressPropertyErrors) {
+			Logger logger = context.getLogger();
+
+			if (logger.isWarnEnabled()) {
+				logger.warn(String.format(
+						"Property evaluation failed for '%s' : %s", key,
+						e.toString()), e);
+			}
+		} else {
+			throw e;
+		}
 	}
 
 	/**

@@ -23,14 +23,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.eyeq.pivot4j.ui.AbstractRenderTest;
+import com.eyeq.pivot4j.ui.AbstractMockRenderTestCase;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.condition.ConditionFactory;
 import com.eyeq.pivot4j.ui.condition.DefaultConditionFactory;
 import com.eyeq.pivot4j.ui.condition.ExpressionCondition;
 import com.eyeq.pivot4j.ui.condition.OrCondition;
 
-public class ConditionalPropertyTest extends AbstractRenderTest {
+public class ConditionalPropertyTest extends AbstractMockRenderTestCase {
 
 	private ConditionalProperty property;
 

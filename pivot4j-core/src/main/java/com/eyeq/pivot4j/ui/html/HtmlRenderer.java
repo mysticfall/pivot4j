@@ -9,18 +9,23 @@
 package com.eyeq.pivot4j.ui.html;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
 
 import com.eyeq.pivot4j.ui.AbstractPivotUIRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.command.CellCommand;
+import com.eyeq.pivot4j.ui.property.PropertySupport;
+import com.eyeq.pivot4j.util.CssWriter;
 import com.eyeq.pivot4j.util.MarkupWriter;
 
 public class HtmlRenderer extends AbstractPivotUIRenderer {
@@ -521,7 +526,9 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	 */
 	protected Map<String, String> getCellAttributes(RenderContext context) {
 		String styleClass = null;
-		String style = null;
+
+		StringWriter writer = new StringWriter();
+		CssWriter cssWriter = new CssWriter(writer);
 
 		switch (context.getCellType()) {
 		case Header:
@@ -533,9 +540,8 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 				if (rowHeaderLevelPadding > 0) {
 					int padding = rowHeaderLevelPadding
 							* (1 + context.getMember().getDepth());
-					style = "padding-left: " + padding + "px;";
+					cssWriter.writeStyle("padding-left", padding + "px");
 				}
-
 			}
 			break;
 		case Title:
@@ -558,16 +564,63 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 
 		Map<String, String> attributes = new TreeMap<String, String>();
 
+		PropertySupport properties = getProperties(context);
+
+		if (properties != null) {
+			cssWriter.writeStyle("color",
+					getPropertyValue("fgColor", properties, context));
+
+			String bgColor = getPropertyValue("bgColor", properties, context);
+			if (bgColor != null) {
+				cssWriter.writeStyle("background-color", bgColor);
+				cssWriter.writeStyle("background-image", "none");
+			}
+
+			cssWriter.writeStyle("font-family",
+					getPropertyValue("fontFamily", properties, context));
+			cssWriter.writeStyle("font-size",
+					getPropertyValue("fontSize", properties, context));
+
+			String fontStyle = getPropertyValue("fontStyle", properties,
+					context);
+			if (fontStyle != null) {
+				if (fontStyle.contains("bold")) {
+					cssWriter.writeStyle("font-weight", "bold");
+				}
+
+				if (fontStyle.contains("italic")) {
+					cssWriter.writeStyle("font-style", "oblique");
+				}
+			}
+
+			String styleClassValue = getPropertyValue("styleClass", properties,
+					context);
+
+			if (styleClassValue != null) {
+				if (styleClass == null) {
+					styleClass = styleClassValue;
+				} else {
+					styleClass += " " + styleClassValue;
+				}
+			}
+		}
+
 		if (styleClass != null) {
 			attributes.put("class", styleClass);
 		}
 
-		if (style != null) {
+		writer.flush();
+		IOUtils.closeQuietly(writer);
+
+		String style = writer.toString();
+
+		if (StringUtils.isNotEmpty(style)) {
 			attributes.put("style", style);
 		}
 
 		if (context.getColumnSpan() > 1) {
-			attributes.put("colspan", Integer.toString(context.getColumnSpan()));
+			attributes
+					.put("colspan", Integer.toString(context.getColumnSpan()));
 		}
 
 		if (context.getRowSpan() > 1) {
@@ -598,7 +651,24 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	 */
 	@Override
 	public void cellContent(RenderContext context, String label) {
-		writer.writeContent(label);
+		String link = null;
+
+		PropertySupport properties = getProperties(context);
+
+		if (properties != null) {
+			link = getPropertyValue("link", properties, context);
+		}
+
+		if (link == null) {
+			writer.writeContent(label);
+		} else {
+			Map<String, String> attributes = new HashMap<String, String>(1);
+			attributes.put("href", link);
+
+			writer.startElement("a", attributes);
+			writer.writeContent(label);
+			writer.endElement("a");
+		}
 	}
 
 	/**
@@ -608,6 +678,29 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	protected String getCellLabel(RenderContext context) {
 		return StringUtils
 				.defaultIfEmpty(super.getCellLabel(context), "&nbsp;");
+	}
+
+	/**
+	 * @param key
+	 * @param style
+	 * @param properties
+	 * @param builder
+	 * @param context
+	 */
+	private void addPropertyStyle(String key, String style,
+			PropertySupport properties, StringBuilder builder,
+			RenderContext context) {
+		String value = getPropertyValue(key, properties, context);
+		if (value != null) {
+			builder.append(style);
+			builder.append(": ");
+			builder.append(value);
+			builder.append(";");
+
+			if (style.equals("background-color")) {
+				builder.append("background-image: none;");
+			}
+		}
 	}
 
 	/**

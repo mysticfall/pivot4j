@@ -23,6 +23,8 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.el.ExpressionContext;
@@ -78,6 +80,8 @@ public class RenderContext {
 	private Map<String, Member> cachedParents;
 
 	private Map<String, Object> attributes;
+
+	private Logger logger;
 
 	/**
 	 * @param model
@@ -142,6 +146,8 @@ public class RenderContext {
 		}
 
 		this.attributes = new HashMap<String, Object>();
+
+		this.logger = LoggerFactory.getLogger(getClass());
 	}
 
 	/**
@@ -465,6 +471,25 @@ public class RenderContext {
 		}
 
 		return ancestors;
+	}
+
+	/**
+	 * @return the logger
+	 */
+	public Logger getLogger() {
+		return logger;
+	}
+
+	/**
+	 * @param logger
+	 *            the logger to set
+	 */
+	public void setLogger(Logger logger) {
+		if (logger == null) {
+			throw new NullArgumentException("logger");
+		}
+
+		this.logger = logger;
 	}
 
 	/**

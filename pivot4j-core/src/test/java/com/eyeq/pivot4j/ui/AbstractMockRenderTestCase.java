@@ -19,7 +19,7 @@ import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 import com.eyeq.pivot4j.ui.html.HtmlRenderer;
 
-public abstract class AbstractRenderTest {
+public abstract class AbstractMockRenderTestCase {
 
 	protected RenderContext createDummyRenderContext() {
 		PivotModel model = new PivotModelImpl(new SimpleOlapDataSource());

@@ -6,7 +6,7 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.ui.aggregator;
+package com.eyeq.pivot4j.ui;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -18,13 +18,14 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
 import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.html.HtmlRenderer;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -32,7 +33,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.gargoylesoftware.htmlunit.html.HtmlTableCell;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
-public abstract class AbstractAggregatorTestCase extends
+public abstract class AbstractHtmlTableTestCase extends
 		AbstractIntegrationTestCase {
 
 	private boolean deleteTestFile = true;
@@ -90,7 +91,6 @@ public abstract class AbstractAggregatorTestCase extends
 			renderer.setBorder(1);
 
 			configureRenderer(renderer);
-			configureAggregators(renderer);
 
 			renderer.render(model);
 		} finally {
@@ -126,11 +126,6 @@ public abstract class AbstractAggregatorTestCase extends
 	}
 
 	/**
-	 * @param renderer
-	 */
-	protected abstract void configureAggregators(PivotRenderer renderer);
-
-	/**
 	 * @param rows
 	 * @param rowIndex
 	 * @param colIndex
@@ -162,5 +157,40 @@ public abstract class AbstractAggregatorTestCase extends
 			assertThat("Unexpected cell content" + coords,
 					cell.getTextContent(), is(equalToIgnoringWhiteSpace(label)));
 		}
+	}
+
+	/**
+	 * @param rows
+	 * @param rowIndex
+	 * @param colIndex
+	 * @return
+	 */
+	protected Map<String, String> getCellStyles(List<HtmlTableRow> rows,
+			int rowIndex, int colIndex) {
+		Map<String, String> styles = new HashMap<String, String>();
+
+		HtmlTableRow row = rows.get(rowIndex);
+
+		if (row != null) {
+			HtmlTableCell cell = row.getCell(colIndex);
+
+			if (cell != null) {
+				String style = cell.getAttribute("style");
+
+				if (style != null) {
+					String[] pairs = style.split(";");
+
+					for (String pair : pairs) {
+						String[] values = pair.split(":");
+
+						if (values.length == 2) {
+							styles.put(values[0].trim(), values[1].trim());
+						}
+					}
+				}
+			}
+		}
+
+		return styles;
 	}
 }

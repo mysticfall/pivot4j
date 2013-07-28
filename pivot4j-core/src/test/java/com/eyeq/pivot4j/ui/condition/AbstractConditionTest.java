@@ -13,10 +13,10 @@ import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
-import com.eyeq.pivot4j.ui.AbstractRenderTest;
+import com.eyeq.pivot4j.ui.AbstractMockRenderTestCase;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public abstract class AbstractConditionTest extends AbstractRenderTest {
+public abstract class AbstractConditionTest extends AbstractMockRenderTestCase {
 
 	protected static ConditionFactory conditionFactory = new DefaultConditionFactory() {
 
