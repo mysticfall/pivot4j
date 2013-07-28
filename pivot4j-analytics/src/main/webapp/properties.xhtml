@@ -42,24 +42,26 @@
 							</p:selectBooleanCheckbox>
 
 							<p:outputLabel value="#{msg['label.properties.value']}"
-								rendered="#{!propertiesHandler.useExpression}" />
+								styleClass="#{propertiesHandler.useExpression?'ui-force-hidden':''}" />
 							<h:panelGroup id="value-editor"
 								binding="#{propertiesHandler.editorPanel}"
-								rendered="#{!propertiesHandler.useExpression}" />
+								styleClass="#{propertiesHandler.useExpression?'ui-force-hidden':''}" />
 
 							<p:outputLabel value="#{msg['label.properties.expression']}"
-								rendered="#{propertiesHandler.useExpression}" />
-							<pe:codeMirror mode="text/x-freemarker"
-								value="#{propertiesHandler.expression}" lineNumbers="true"
-								lineWrapping="true" matchBrackets="true"
-								theme="#{settings.editorTheme}"
-								extraKeys="{'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.pivot4jHint);}}"
-								rendered="#{propertiesHandler.useExpression}">
-								<p:ajax event="blur"
-									listener="#{propertiesHandler.onPropertyChange}"
-									update="button-bar" />
-								<f:param name="skipRender" value="true" />
-							</pe:codeMirror>
+								styleClass="#{propertiesHandler.useExpression?'':'ui-force-hidden'}" />
+							<p:outputPanel
+								styleClass="#{propertiesHandler.useExpression?'':'ui-force-hidden'}">
+								<pe:codeMirror id="expr-editor" mode="text/x-freemarker"
+									value="#{propertiesHandler.expression}" lineNumbers="true"
+									lineWrapping="true" matchBrackets="true"
+									theme="#{settings.editorTheme}"
+									extraKeys="{'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.pivot4jHint);}}">
+									<p:ajax event="blur"
+										listener="#{propertiesHandler.onPropertyChange}"
+										update="button-bar" />
+									<f:param name="skipRender" value="true" />
+								</pe:codeMirror>
+							</p:outputPanel>
 
 							<f:facet name="footer">
 								<h:panelGroup laayout="block" styleClass="usage-info"
