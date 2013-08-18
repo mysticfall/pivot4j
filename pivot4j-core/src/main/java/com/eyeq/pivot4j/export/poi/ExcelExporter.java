@@ -203,7 +203,15 @@ public class ExcelExporter extends AbstractPivotExporter {
 	 * @return
 	 */
 	protected String getSheetName(RenderContext context, int sheetIndex) {
-		return context.getModel().getCube().getCaption();
+		String name;
+
+		if (context.getAxis() == Axis.FILTER) {
+			name = getResourceBundle().getString("label.filter");
+		} else {
+			name = context.getModel().getCube().getCaption();
+		}
+
+		return name;
 	}
 
 	/**
@@ -443,12 +451,14 @@ public class ExcelExporter extends AbstractPivotExporter {
 	public void cellContent(RenderContext context) {
 		cell.setCellStyle(getCellStyle(context));
 
-		if (context.getCellType() == CellType.Value) {
+		if (context.getCellType() == CellType.Value
+				&& context.getAxis() != Axis.FILTER) {
 			Double value = null;
 
 			if (context.getAggregator() != null) {
 				value = context.getAggregator().getValue(context);
-			} else if (!context.getCell().isEmpty()) {
+			} else if (context.getCell() != null
+					&& !context.getCell().isEmpty()) {
 				try {
 					value = context.getCell().getDoubleValue();
 				} catch (OlapException e) {
@@ -520,6 +530,8 @@ public class ExcelExporter extends AbstractPivotExporter {
 		mergeCells(context, sheet, mergedRegions);
 		adjustColumnSizes(context, sheet);
 
+		mergedRegions.clear();
+
 		this.sheet = null;
 	}
 
@@ -580,7 +592,6 @@ public class ExcelExporter extends AbstractPivotExporter {
 			label = StringUtils.leftPad(label, context.getMember().getDepth()
 					+ label.length());
 		}
-
 		return label;
 	}
 }

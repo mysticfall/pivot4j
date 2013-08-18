@@ -23,6 +23,7 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.fop.fo.FOElementMapping;
+import org.olap4j.Axis;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.DefaultHandler;
@@ -861,6 +862,11 @@ public class FopExporter extends AbstractPivotExporter {
 		attributes.addAttribute("", "table-layout", "table-layout", "CDATA",
 				"fixed");
 
+		if (context.getAxis() == Axis.FILTER) {
+			attributes.addAttribute("", "margin-top", "margin-top", "CDATA",
+					"1.0em");
+		}
+
 		return attributes;
 	}
 
@@ -892,6 +898,31 @@ public class FopExporter extends AbstractPivotExporter {
 	@Override
 	public void endHeader(RenderContext context) {
 		try {
+			if (context.getAxis() == Axis.FILTER) {
+				this.documentHandler.startElement(FOElementMapping.URI,
+						"table-row", "table-row", new AttributesImpl());
+
+				this.documentHandler.startElement(FOElementMapping.URI,
+						"table-cell", "table-cell", new AttributesImpl());
+
+				this.documentHandler.startElement(FOElementMapping.URI,
+						"block", "block",
+						createTitleTextAttributes(context.getModel()));
+
+				String title = getResourceBundle().getString("label.filter");
+
+				this.documentHandler.characters(title.toCharArray(), 0,
+						title.length());
+
+				this.documentHandler.endElement(FOElementMapping.URI, "block",
+						"block");
+
+				this.documentHandler.endElement(FOElementMapping.URI,
+						"table-cell", "table-cell");
+				this.documentHandler.endElement(FOElementMapping.URI,
+						"table-row", "table-row");
+			}
+
 			this.documentHandler.endElement(FOElementMapping.URI,
 					"table-header", "table-header");
 		} catch (SAXException e) {
@@ -974,7 +1005,8 @@ public class FopExporter extends AbstractPivotExporter {
 					Integer.toString(context.getRowSpan()));
 		}
 
-		if (context.getCell() == null) {
+		if (context.getCell() == null
+				&& context.getCellType() != CellType.Value) {
 			attributes.addAttribute("", "background-color", "background-color",
 					"CDATA", "#DEDEDE");
 			attributes.addAttribute("", "font-weight", "font-weight", "CDATA",

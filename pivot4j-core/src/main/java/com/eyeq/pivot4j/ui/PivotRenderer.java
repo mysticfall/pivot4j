@@ -9,6 +9,7 @@
 package com.eyeq.pivot4j.ui;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.olap4j.Axis;
 
@@ -22,6 +23,14 @@ import com.eyeq.pivot4j.ui.property.PropertySource;
 public interface PivotRenderer extends Configurable, Bookmarkable {
 
 	void render(PivotModel model);
+
+	ResourceBundle getResourceBundle();
+
+	void setResourceBundle(ResourceBundle resourceBundle);
+
+	boolean getRenderSlicer();
+
+	void setRenderSlicer(boolean renderSlicer);
 
 	boolean getHideSpans();
 

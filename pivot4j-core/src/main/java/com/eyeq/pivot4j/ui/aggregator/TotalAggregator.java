@@ -42,14 +42,6 @@ public class TotalAggregator extends AbstractAggregator {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregator#getAggregationLabel(com.eyeq.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	protected String getAggregationLabel(RenderContext context) {
-		return "Total";
-	}
-
-	/**
 	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregator#calculate(java.lang.Double,
 	 *      java.lang.Double, org.olap4j.Position,
 	 *      com.eyeq.pivot4j.ui.RenderContext)

@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
@@ -41,15 +42,21 @@ import com.eyeq.pivot4j.ui.property.PropertySupport;
 public abstract class AbstractPivotRenderer implements PivotRenderer,
 		PivotLayoutCallback {
 
+	public static final String RESOURCE_BUNDLE_NAME = "com.eyeq.pivot4j.i18n.messages";
+
 	private boolean hideSpans = false;
 
 	private boolean showParentMembers = false;
 
 	private boolean showDimensionTitle = true;
 
+	private boolean renderSlicer = false;
+
 	private PropertyCollector propertyCollector;
 
 	private RenderStrategy renderStrategy;
+
+	private ResourceBundle resourceBundle;
 
 	private AggregatorFactory aggregatorFactory = new DefaultAggregatorFactory();
 
@@ -91,7 +98,48 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			throw new IllegalStateException("Renderer was not initialized yet.");
 		}
 
+		if (resourceBundle == null) {
+			this.resourceBundle = createDefaultResourceBundle(model);
+		}
+
 		renderStrategy.render(model, this, this);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getResourceBundle()
+	 */
+	public ResourceBundle getResourceBundle() {
+		return resourceBundle;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setResourceBundle(java.util.ResourceBundle)
+	 */
+	public void setResourceBundle(ResourceBundle resourceBundle) {
+		this.resourceBundle = resourceBundle;
+	}
+
+	/**
+	 * @param model
+	 * @return
+	 */
+	protected ResourceBundle createDefaultResourceBundle(PivotModel model) {
+		return ResourceBundle
+				.getBundle(RESOURCE_BUNDLE_NAME, model.getLocale());
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#getRenderSlicer()
+	 */
+	public boolean getRenderSlicer() {
+		return renderSlicer;
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.ui.PivotRenderer#setRenderSlicer(boolean)
+	 */
+	public void setRenderSlicer(boolean renderSlicer) {
+		this.renderSlicer = renderSlicer;
 	}
 
 	/**
@@ -195,7 +243,11 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 		switch (context.getCellType()) {
 		case Header:
 			if (context.getProperty() == null) {
-				label = context.getMember().getCaption();
+				if (context.getMember() == null) {
+					label = context.getHierarchy().getCaption();
+				} else {
+					label = context.getMember().getCaption();
+				}
 			} else {
 				try {
 					label = context.getMember().getPropertyFormattedValue(
@@ -206,24 +258,37 @@ public abstract class AbstractPivotRenderer implements PivotRenderer,
 			}
 			break;
 		case Title:
-			if (context.getProperty() != null) {
-				label = context.getProperty().getCaption();
-			} else if (context.getLevel() != null) {
-				label = context.getLevel().getCaption();
-			} else if (context.getHierarchy() != null) {
-				label = context.getHierarchy().getCaption();
+			if (context.getAxis() == Axis.FILTER) {
+				label = getResourceBundle().getString("label.filter");
 			} else {
-				label = null;
+				if (context.getProperty() != null) {
+					label = context.getProperty().getCaption();
+				} else if (context.getLevel() != null) {
+					label = context.getLevel().getCaption();
+				} else if (context.getHierarchy() != null) {
+					label = context.getHierarchy().getCaption();
+				} else {
+					label = null;
+				}
 			}
+
 			break;
 		case Value:
 			if (cell == null) {
-				Aggregator aggregator = context.getAggregator();
-
-				if (aggregator == null) {
-					label = null;
+				if (context.getAxis() == Axis.FILTER) {
+					if (context.getMember() != null) {
+						label = context.getMember().getCaption();
+					} else {
+						label = context.getHierarchy().getCaption();
+					}
 				} else {
-					label = aggregator.getFormattedValue(context);
+					Aggregator aggregator = context.getAggregator();
+
+					if (aggregator == null) {
+						label = null;
+					} else {
+						label = aggregator.getFormattedValue(context);
+					}
 				}
 			} else {
 				label = cell.getFormattedValue();

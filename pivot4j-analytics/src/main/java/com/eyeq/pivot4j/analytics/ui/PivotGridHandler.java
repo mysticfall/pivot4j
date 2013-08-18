@@ -24,7 +24,6 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.OlapDataSource;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Schema;
-import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,21 +191,6 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	 */
 	public void setNavigator(NavigatorHandler navigator) {
 		this.navigator = navigator;
-	}
-
-	/**
-	 * @return the pivotGrid
-	 */
-	public PanelGrid getPivotGrid() {
-		return renderer.getComponent();
-	}
-
-	/**
-	 * @param pivotGrid
-	 *            the pivotGrid to set
-	 */
-	public void setPivotGrid(PanelGrid pivotGrid) {
-		renderer.setComponent(pivotGrid);
 	}
 
 	/**

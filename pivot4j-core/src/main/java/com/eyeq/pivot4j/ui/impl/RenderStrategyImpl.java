@@ -36,6 +36,7 @@ import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.el.ExpressionEvaluator;
 import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
 import com.eyeq.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory;
+import com.eyeq.pivot4j.transform.ChangeSlicer;
 import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.PivotLayoutCallback;
 import com.eyeq.pivot4j.ui.PivotRenderer;
@@ -114,6 +115,10 @@ public class RenderStrategyImpl implements RenderStrategy {
 		renderBody(context, columnRoot, rowRoot, callback);
 
 		callback.endTable(context);
+
+		if (renderer.getRenderSlicer()) {
+			renderFilter(context, callback);
+		}
 	}
 
 	/**
@@ -1292,5 +1297,91 @@ public class RenderStrategyImpl implements RenderStrategy {
 			AggregatePosition other = (AggregatePosition) obj;
 			return members.equals(other.members);
 		}
+	}
+
+	/**
+	 * @param context
+	 * @param callback
+	 */
+	protected void renderFilter(RenderContext context,
+			PivotLayoutCallback callback) {
+		ChangeSlicer transform = context.getModel().getTransform(
+				ChangeSlicer.class);
+
+		List<Hierarchy> hierarchies = transform.getHierarchies();
+		if (hierarchies.isEmpty()) {
+			return;
+		}
+
+		context.setAxis(Axis.FILTER);
+		context.setHierarchy(null);
+		context.setLevel(null);
+		context.setMember(null);
+		context.setCell(null);
+		context.setAggregator(null);
+
+		callback.startTable(context);
+
+		callback.startHeader(context);
+		callback.endHeader(context);
+
+		int rowIndex = 0;
+
+		callback.startBody(context);
+
+		for (Hierarchy hierarchy : hierarchies) {
+			List<Member> members = transform.getSlicer(hierarchy);
+
+			context.setHierarchy(hierarchy);
+			context.setMember(null);
+
+			context.setRowIndex(rowIndex);
+			context.setColIndex(0);
+
+			callback.startRow(context);
+
+			context.setCellType(CellType.Header);
+
+			context.setColSpan(1);
+			context.setRowSpan(Math.max(1, members.size()));
+
+			callback.startCell(context);
+			callback.cellContent(context);
+			callback.endCell(context);
+
+			boolean firstRow = true;
+
+			for (Member member : members) {
+				if (firstRow) {
+					firstRow = false;
+				} else {
+					callback.endRow(context);
+
+					context.setRowIndex(++rowIndex);
+
+					callback.startRow(context);
+				}
+
+				context.setColIndex(1);
+
+				context.setMember(member);
+				context.setLevel(member.getLevel());
+
+				context.setRowSpan(1);
+
+				context.setCellType(CellType.Value);
+
+				callback.startCell(context);
+				callback.cellContent(context);
+				callback.endCell(context);
+			}
+
+			callback.endRow(context);
+
+			rowIndex++;
+		}
+
+		callback.endBody(context);
+		callback.endTable(context);
 	}
 }

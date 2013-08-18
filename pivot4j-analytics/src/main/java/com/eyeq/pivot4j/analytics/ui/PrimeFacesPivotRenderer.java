@@ -11,6 +11,7 @@ import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
@@ -20,7 +21,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
-import org.olap4j.metadata.Measure;
 import org.primefaces.component.column.Column;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.panelgrid.PanelGrid;
@@ -28,11 +28,11 @@ import org.primefaces.component.row.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.el.EvaluationFailedException;
 import com.eyeq.pivot4j.ui.AbstractPivotUIRenderer;
 import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
-import com.eyeq.pivot4j.ui.aggregator.Aggregator;
 import com.eyeq.pivot4j.ui.command.CellCommand;
 import com.eyeq.pivot4j.ui.command.CellParameters;
 import com.eyeq.pivot4j.ui.property.PropertySupport;
@@ -46,6 +46,8 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 
 	private PanelGrid component;
 
+	private PanelGrid filterComponent;
+
 	private FacesContext facesContext;
 
 	private ExpressionFactory expressionFactory;
@@ -58,8 +60,6 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 
 	private int commandIndex = 0;
 
-	private ResourceBundle bundle;
-
 	/**
 	 * @param facesContext
 	 */
@@ -70,8 +70,6 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 			Application application = facesContext.getApplication();
 
 			this.expressionFactory = application.getExpressionFactory();
-			this.bundle = facesContext.getApplication().getResourceBundle(
-					facesContext, "msg");
 		}
 
 		// Map command mode names to jQuery's predefined icon names. It can be
@@ -109,6 +107,20 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
+	 * @return filterComponent
+	 */
+	public PanelGrid getFilterComponent() {
+		return filterComponent;
+	}
+
+	/**
+	 * @param filterComponent
+	 */
+	public void setFilterComponent(PanelGrid filterComponent) {
+		this.filterComponent = filterComponent;
+	}
+
+	/**
 	 * @return the logger
 	 */
 	protected Logger getLogger() {
@@ -116,33 +128,12 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @return bundle
-	 */
-	protected ResourceBundle getBundle() {
-		return bundle;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#getCellLabel(com.eyeq.pivot4j.ui.RenderContext)
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#createDefaultResourceBundle(com.eyeq.pivot4j.PivotModel)
 	 */
 	@Override
-	protected String getCellLabel(RenderContext context) {
-		String label = super.getCellLabel(context);
-
-		if (context.getCellType() == CellType.Aggregation) {
-			Aggregator aggregator = context.getAggregator();
-
-			if (aggregator != null && !(context.getMember() instanceof Measure)) {
-				String key = "label.aggregation.type." + aggregator.getName();
-				String value = bundle.getString(key);
-
-				if (value != null) {
-					label = value;
-				}
-			}
-		}
-
-		return label;
+	protected ResourceBundle createDefaultResourceBundle(PivotModel model) {
+		return facesContext.getApplication().getResourceBundle(facesContext,
+				"msg");
 	}
 
 	/**
@@ -150,7 +141,11 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	 */
 	@Override
 	public void startTable(RenderContext context) {
-		component.getChildren().clear();
+		if (context.getAxis() == Axis.FILTER) {
+			filterComponent.getChildren().clear();
+		} else {
+			component.getChildren().clear();
+		}
 	}
 
 	/**
@@ -159,7 +154,6 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	@Override
 	public void startHeader(RenderContext context) {
 		this.header = new HtmlPanelGroup();
-		header.setId("pivot-header");
 	}
 
 	/**
@@ -167,7 +161,10 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	 */
 	@Override
 	public void endHeader(RenderContext context) {
-		component.getFacets().put("header", header);
+		if (context.getAxis() != Axis.FILTER) {
+			component.getFacets().put("header", header);
+		}
+
 		this.header = null;
 	}
 
@@ -392,10 +389,10 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 		String attributeName = "property.hasError." + key;
 
 		if (context.getAttribute(attributeName) == null) {
-			MessageFormat mf = new MessageFormat(
-					bundle.getString("error.property.expression.title"));
+			MessageFormat mf = new MessageFormat(getResourceBundle().getString(
+					"error.property.expression.title"));
 
-			String title = mf.format(new String[] { bundle
+			String title = mf.format(new String[] { getResourceBundle()
 					.getString("properties." + key) });
 
 			facesContext.addMessage(null, new FacesMessage(
@@ -455,7 +452,9 @@ public class PrimeFacesPivotRenderer extends AbstractPivotUIRenderer {
 	@Override
 	public void endRow(RenderContext context) {
 		if (header == null) {
-			component.getChildren().add(row);
+			UIComponent parent = context.getAxis() == Axis.FILTER ? filterComponent
+					: component;
+			parent.getChildren().add(row);
 		} else {
 			header.getChildren().add(row);
 		}

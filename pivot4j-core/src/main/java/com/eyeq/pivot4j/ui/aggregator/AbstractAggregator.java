@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
@@ -324,7 +325,17 @@ public abstract class AbstractAggregator implements Aggregator {
 	 * @param context
 	 * @return
 	 */
-	protected abstract String getAggregationLabel(RenderContext context);
+	protected String getAggregationLabel(RenderContext context) {
+		ResourceBundle resources = context.getRenderer().getResourceBundle();
+
+		String label = null;
+
+		if (resources != null) {
+			label = resources.getString("label.aggregation.type." + getName());
+		}
+
+		return label;
+	}
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#reset()

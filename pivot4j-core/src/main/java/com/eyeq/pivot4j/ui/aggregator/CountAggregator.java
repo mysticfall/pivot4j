@@ -49,14 +49,6 @@ public class CountAggregator extends AbstractAggregator {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregator#getAggregationLabel(com.eyeq.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	protected String getAggregationLabel(RenderContext context) {
-		return "Count";
-	}
-
-	/**
 	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregator#getNumberFormat(org.olap4j.Cell)
 	 */
 	@Override

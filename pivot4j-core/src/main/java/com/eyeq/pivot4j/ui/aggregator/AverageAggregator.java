@@ -16,8 +16,6 @@ import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
 
-import com.eyeq.pivot4j.ui.RenderContext;
-
 public class AverageAggregator extends TotalAggregator {
 
 	public static final String NAME = "AVG";
@@ -39,14 +37,6 @@ public class AverageAggregator extends TotalAggregator {
 	@Override
 	public String getName() {
 		return NAME;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.aggregator.AbstractAggregator#getAggregationLabel(com.eyeq.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	protected String getAggregationLabel(RenderContext context) {
-		return "Average";
 	}
 
 	/**

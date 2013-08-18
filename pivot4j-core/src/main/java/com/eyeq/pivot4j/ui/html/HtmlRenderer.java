@@ -681,29 +681,6 @@ public class HtmlRenderer extends AbstractPivotUIRenderer {
 	}
 
 	/**
-	 * @param key
-	 * @param style
-	 * @param properties
-	 * @param builder
-	 * @param context
-	 */
-	private void addPropertyStyle(String key, String style,
-			PropertySupport properties, StringBuilder builder,
-			RenderContext context) {
-		String value = getPropertyValue(key, properties, context);
-		if (value != null) {
-			builder.append(style);
-			builder.append(": ");
-			builder.append(value);
-			builder.append(";");
-
-			if (style.equals("background-color")) {
-				builder.append("background-image: none;");
-			}
-		}
-	}
-
-	/**
 	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#saveState()
 	 */
 	@Override

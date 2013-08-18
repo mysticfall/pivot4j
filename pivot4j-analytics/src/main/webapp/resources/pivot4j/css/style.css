@@ -261,7 +261,7 @@ body.report .pe-layout-pane-header {
 	float: right;
 }
 
-.pivot-grid .value-cell.cell-odd {
+.value-cell.cell-odd {
 	background-color: rgb(242, 245, 249);
 	color: rgb(48, 48, 48);
 }
@@ -290,6 +290,10 @@ body.report .pe-layout-pane-header {
 
 .pivot-grid .ui-panelgrid-header .agg-title {
 	text-align: center;
+}
+
+.filter-info {
+	margin-top: 10px;
 }
 
 button.ui-button-icon-only {

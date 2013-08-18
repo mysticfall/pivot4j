@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.util.Locale;
 
 import mondrian.rolap.RolapConnectionProperties;
 
@@ -99,7 +100,10 @@ public abstract class AbstractIntegrationTestCase {
 	}
 
 	protected PivotModel createPivotModel(OlapDataSource dataSource) {
-		return new PivotModelImpl(dataSource);
+		PivotModel model = new PivotModelImpl(dataSource);
+		model.setLocale(Locale.US);
+
+		return model;
 	}
 
 	/**

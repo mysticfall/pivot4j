@@ -19,6 +19,7 @@ public abstract class AbstractPivotExporter extends AbstractPivotRenderer
 	private OutputStream out;
 
 	public AbstractPivotExporter() {
+		setRenderSlicer(true);
 	}
 
 	/**
@@ -26,6 +27,8 @@ public abstract class AbstractPivotExporter extends AbstractPivotRenderer
 	 */
 	public AbstractPivotExporter(OutputStream out) {
 		this.out = out;
+
+		setRenderSlicer(true);
 	}
 
 	/**
