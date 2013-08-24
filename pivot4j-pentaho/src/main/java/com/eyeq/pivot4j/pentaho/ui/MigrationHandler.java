@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.config.Settings;
-import com.eyeq.pivot4j.analytics.datasource.CatalogInfo;
 import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.datasource.CubeInfo;
 import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
@@ -289,7 +288,7 @@ public class MigrationHandler {
 		String title = report.getString("title");
 		String query = report.getString("query");
 		String cube = report.getString("cube");
-		String catalog = report.getString("jndi");
+		String catalog = report.getString("model");
 
 		if (log.isDebugEnabled()) {
 			log.debug("	- title : " + title);
@@ -333,43 +332,8 @@ public class MigrationHandler {
 			}
 
 			if (!found) {
-				if (log.isWarnEnabled()) {
-					log.warn("Catalog does not contain such a cube. Trying the other catalogs.");
-				}
-
-				List<CatalogInfo> catalogs = dataSourceManager.getCatalogs();
-
-				found = false;
-
-				for (CatalogInfo catalogInfo : catalogs) {
-					if (catalogInfo.getName().equalsIgnoreCase(catalog)) {
-						continue;
-					}
-
-					cubes = dataSourceManager.getCubes(catalogInfo.getName());
-
-					for (CubeInfo cubeInfo : cubes) {
-						found = cubeInfo.getName().equalsIgnoreCase(cube);
-						if (found) {
-							catalog = catalogInfo.getName();
-							break;
-						}
-					}
-
-					if (found) {
-						break;
-					}
-				}
-
-				if (found) {
-					if (log.isInfoEnabled()) {
-						log.info("Found a catalog containing the specified cube : "
-								+ catalog);
-					}
-				} else {
-					throw new InvalidConnectionInfoException(originalCubeName,
-							originalCatalogName);
-				}
+				throw new InvalidConnectionInfoException(originalCubeName,
+						originalCatalogName);
 			}
 		}
 
