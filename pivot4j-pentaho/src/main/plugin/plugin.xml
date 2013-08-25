@@ -27,19 +27,22 @@
 		</overlay>
 	</overlays>
 
-	<content-type type="pivot4j" mime-type="text/html">
-		<title>Pivot4J Analytics</title>
-		<description>Pivot4J analytics report</description>
-		<icon-url>api/repos/pivot4j/webapp/resources/pivot4j/images/logo16.png</icon-url>
-		<operations>
-			<operation>
-				<id>RUN</id>
-			</operation>
-			<operation>
-				<id>EDIT</id>
-			</operation>
-		</operations>
-	</content-type>
+	<content-types>
+		<content-type type="pivot4j" mime-type="text/html">
+			<title>Pivot4J Analytics</title>
+			<description>Pivot4J analytics report</description>
+			<icon-url>api/repos/pivot4j/webapp/resources/pivot4j/images/logo16.png</icon-url>
+			<operations>
+				<operation>
+					<id>RUN</id>
+				</operation>
+				<operation>
+					<id>EDIT</id>
+            		<perspective>editor</perspective>
+				</operation>
+			</operations>
+		</content-type>
+	</content-types>
 
 	<content-generator id="pivot4j" type="pivot4j" title="Pivot4J Analytics Content Generator" 
 		class="com.eyeq.pivot4j.pentaho.content.ReportContentGenerator"/>
