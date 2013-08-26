@@ -3,7 +3,7 @@
             ------
             Xavier Cho
             ------
-             2013-04-14
+             2013-08-25
 
 A New UI Independent JPivot Replacement
 
@@ -39,46 +39,51 @@ A New UI Independent JPivot Replacement
 
 	* Supports most of the original JPivot's features, like drill down, drill through, sort, and more.
 
-	* Supports any OLAP backend which has an Olap4J driver implementation available.
+	* Supports any OLAP backend for which an Olap4J driver implementation is available.
 
-	* Easy to use and very extensible renderer API including a concrete base implementation for web applications. 
+	* Easy to use and very extensible renderer/export API with built-in HTML/PDF/Excel implementations.
 
-	* Built-in PDF and Excel exporters.
+	* Includes a fully functional {{{./example.html}standalone application}} and a Pentaho BI platform {{{./pentaho.html}plugin}}.
 
-	* A fully functional {{{./example.html}sample application}} based on Java Server Faces.
+	* Non-MDX based aggregation('visual total').
 
-	* Visual total(non-MDX aggregation) support.
+	* Powerful formatting support based on a MDX independant expression language.
 
-	* Parameterized MDX support. 
+	* Supports persistent MDX parameters which is preserved through a query transformation like drill down.
 
-* News
+* Pivot4J 0.8 is out!
 
-	* <<[2012-04-14]>> <<Pivot4J 0.7>> has been released. Visual total and expression language support was introduced 
-	with this version. Also, Brazilian Portuguese translation is done by {{{http://www.it4biz.com.br}IT4Biz}} and 
-	Professor Coruja Team.
+	After 4 months of development, <<Pivot4J 0.8>> is released on August 25, 2013 with many new features and 
+	bug fixes. Some of the highlights of the new release include :
 
-	* <<[2013-02-02]>> Decided to bump the version a little bit, so instead of 0.0.6, <<Pivot4J 0.6>> has been released. 
-	New features include PDF, Excel export support, and public MDX parser API. And we no longer maintain a separate 
-	homepage for the sample application project.
+	* New report management UI.
+	
+	* User configurable data sources and themes.
 
-	* <<[2012-11-18]>> <<Pivot4J 0.0.5>> has been released with new features and various bug fixes! The new command API 
-	brings buit-in drill down and sorting support to PivotRenderer interface.
+	* Conditional formatting support(experimental).
 
-	* <<[2012-10-28]>> <<Pivot4J 0.0.4>> has been released. The rendering API has been re-implemented from the 
-	scratch to make it more flexible and easier to extend.
+	* XMLA/SASS compatibility fixes.
 
-	* <<[2012-10-20]>> <<Pivot4J 0.0.3>> has been released with various bug fixes and some new features.
-	Please see the {{{./changes-report.html}changes note}} for details. 
+	* Updated Brazilian Portuguese translation, thanks to {{{http://www.it4biz.com.br}IT4Biz}} and Professor Coruja Team.
 
-	* <<[2012-10-08]>> <<Pivot4J 0.0.2>> has been released with the new table builder API. 
+	[]
 
-	* <<[2012-10-07]>> A JSF based sample application is now available! It's called <<Pivot4J JSF>>, and has a separate 
-	project page {{{http://mysticfall.github.com/pivot4j-jsf/}here}}.
+	For a full list of changes, please see the changelog {{{./changes-report.html}here}}.
+	
 
-	* <<[2012-09-28]>> <<Pivot4J 0.0.1>> has been released. You can download it from 
-	{{{https://github.com/mysticfall/pivot4j/downloads}here}}.
+* What's coming next?
+
+	Some of the planned features for the next release (Pivot4J 0.9) include :
+
+	* Charting support.
+
+	* Declarative conditional formatting.
+
+	* Report management UI improvements.
 
 * Contact
 
 	If you have any question or suggestion for the project, please leave your message at 
 	{{{http://groups.google.com/d/forum/pivot4j-list}the support forum}}.
+
+	And we also have an IRC channel at the Freenode network, <<#pivot4j>>.

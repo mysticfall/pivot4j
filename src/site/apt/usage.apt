@@ -36,7 +36,34 @@ How to Use Pivot4J
         <dependency>
             <groupId>com.eyeq</groupId>
             <artifactId>pivot4j</artifactId>
-            <version>0.7</version>
+            <version>0.8</version>
+        </dependency>
+    </dependencies>
+</project>
++-----+
+
+	For the latest unstable build(recommended for new projects), use below lines instead :
+
++-----+
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>some-project</groupId>
+    <artifactId>some-project</artifactId>
+    <packaging>jar</packaging>
+    <name>My Project</name>
+    <version>1.0.0</version>
+    <repositories>
+        <repository>
+            <id>eyeq</id>
+            <url>http://dev.eyeq.co.kr/artifactory/libs-snapshot/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>com.eyeq</groupId>
+            <artifactId>pivot4j</artifactId>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

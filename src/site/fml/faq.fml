@@ -10,7 +10,8 @@
 				Where can I use Pivot4J?
 			</question>
 			<answer>
-				<p>You can build a pivot grid style GUI frontend to any OLAP server with Pivot4J.</p>
+				<p>If you are a developer, you can build a pivot grid style GUI frontend to any OLAP server with Pivot4J.
+				Also, you can use it as a normal OLAP client to browse and analyse your own OLAP data.</p>
 			</answer>
 		</faq>
 
@@ -59,26 +60,40 @@
 
 		<faq id="difference-with-saiku">
 			<question>
-				What is the differnce between Pivot4J and Saiku?
+				What is the difference between Pivot4J and Saiku?
 			</question>
 			<answer>
 				<p>Although, both projects intends to provide an alternative for now outdated JPivot, 
 				<a href="http://analytical-labs.com" target="_blank">Saiku</a> is rather like a standalone OLAP analysis 
 				application while Pivot4J aims to be a pivot component model which can be easily integrated 
-				with any other project including Saiku itself.</p>
+				with any other project.</p>
 			</answer>
 		</faq>
 
-		<faq id="current-status">
+		<faq id="difference-between-modules">
 			<question>
-				The version number is so low. Is it usable yet?
+				What is Pivot4J Analytics and how is it different from the Pivot4J itself?
 			</question>
 			<answer>
-				<p>Of course! Actually, most of the JPivot's core features are ported and working already.</p>
+				<p>Pivot4J itself is a backend API for building a pivot style OLAP client application 
+				in any kind of UI technology. On the other hand, Pivot4J Analytics is a standalone client 
+				application built using the Pivot4J core API.</p>
+				<p>It is based on JSF, and you can use it as a drop-in replacement for the old JPivot web application also.</p>
+			</answer>
+		</faq>
 
-				<p>However, as Pivot4J aims to provide many additional features and improvement also, 
-				the codebase is under constant change. So we decided to use low version numbers until 
-				the core API is stabilized.</p>
+		<faq id="status-of-sample-application">
+			<question>
+				I heard Pivot4J Analytics is a sample application. Can I use it in a production environment?
+			</question>
+			<answer>
+				<p>It depends on the requirement you need. Even Pivot4J Analytics started as a reference implementation and a sample 
+				application to demonstrate usage of the core API, now it has more features than the original JPivot web application.
+				So, it can be used in many situations as a full fledged OLAP client but it still lacks certain advanced features like 
+				single sign on or ACL support.</p>
+
+				<p>In case you need such features, you can build your own application based on Pivot4J, or use a Pentaho BI plugin 
+				version of the Analytics client, as it delegates all the security related tasks to the platform itself.</p>
 			</answer>
 		</faq>
 	</part>
@@ -88,16 +103,33 @@
 
 		<faq id="ui-for-pivot4j">
 			<question>
-				Is there any UI component for Pivot4J?
+				Where should I start in building my own UI with Pivot4J API?
 			</question>
 			<answer>
-				<p>Different from JPivot, Pivot4J does not come with any specific UI implementation. 
+				<p>Unlike JPivot, Pivot4J core does not come with any specific UI implementation. 
 				However, you can use the 
 				<a href="./apidocs/com/eyeq/pivot4j/ui/package-summary.html" target="_blank">renderer API</a> 
 				to build the actual grid UI of a given PivotModel instance. It's very flexible so you can easily create your 
 				own renderer class to generate output data in a format suitable for your specific need.
 				</p> 
-				<p>Pivot4J also includes a concrete implementation which generates generic HTML source as well.</p>
+				<p>Pivot4J also includes a concrete implementation which generates generic HTML source as well. So, you 
+				can use it, or extend it to make your own implementation, or you can build it from the scratch extending from the
+				<a href="./apidocs/com/eyeq/pivot4j/ui/AbstractPivotUIRenderer.html" target="_blank">AbstractPivotUIRenderer</a> class.
+				</p>
+			</answer>
+		</faq>
+
+		<faq id="extending-analytics">
+			<question>
+				I don't want to write my own client from the scratch. Can I just customize the Pivot4J Analytics instead?
+			</question>
+			<answer>
+				<p>Believe me, writing your own client with the core API is not that much difficult at all! However, 
+				if you all you need is just a few minor tweaks on Pivot4J Analytics, then sure, you can do whatever you 
+				want with it as long as you honor the license.</p>
+				<p>However, unlike the core API itself, the Analytics client never intended to be something easily 
+				extended, you might find it rather difficult to customize or the the code might change without 
+				notification. So, if you decided to take this route, please proceed with care.</p>
 			</answer>
 		</faq>
 
@@ -135,8 +167,80 @@
 				the easiest way to do it is using following code :</p>
 				<source>Cube cube = model.getCube();
 
-Member member = cube.lookupMember(
-	IdentifierNode.parseIdentifier("[Time].[1998]").getSegmentList());</source>
+Member member = OlapUtils.lookupMember("[Time].[1998]", cube);</source>
+			</answer>
+		</faq>
+
+		<faq id="visual-total">
+			<question>
+				What do you mean by non-MDX based aggregation? Isn't there some MDX function to do that?
+			</question>
+			<answer>
+				<p>Yes, Mondrian for example provides a MDX function to aggregate measures and there's 
+				nothing wrong with it. Server side aggregation is more efficient too, so if you are comfortable 
+				with using it, you can continue to do so.</p>
+				<p>However, not all OLAP backends provide such a function and syntax is different from one 
+				another. So, it's not easy for OLAP clients to handle them correctly and of course, not everyone 
+				wants to meddle with MDX themselves when all they need is a simple total column added to the grid.</p>
+				<p>To summarize, you can just think it as a vendor independent, slightly less efficient, but more 
+				intuitive alternative to a MDX aggregation function.</p>
+			</answer>
+		</faq>
+
+		<faq id="conditional-formatting">
+			<question>
+				What do you mean by conditional formatting? Can't we do that in MDX already?
+			</question>
+			<answer>
+				<p>In this case, no, I think something is seriously wrong with the traditional approach, using 
+				<strong>FORMAT_STRING</strong> and <strong>CELL PROPERTIES</strong>. If developers normally stay 
+				away from embeding CSS style rules in their SQL query, why should we do that with MDX?</p>
+				<p>To make the matter worse, if we need some conditional formatting, like say 'only sales below $10,000 
+				in this quarter show in red' there's no other way than nesting multiple <strong>IIf</strong> functions 
+				and mix them with some CSS values all in the MDX query itself. It will make the MDX very hard to understand 
+				and maintain and it will be a nightmare for OLAP client to parse them correctly too.</p>
+				<p>We believe that formatting like colors for fonts should be handled on the client side, separate 
+				from the MDX itself. It will make life easier for everyone, users and server developers, client 
+				developers alike.</p>
+			</answer>
+		</faq>
+
+		<faq id="kinds-of-conditional-formatting">
+			<question>
+				Ok, I'm sold! But when I open the properties dialog, it looks too simple and I don't see much use. 
+				I certainly don't want to paint all values in red! Where's the flexibility you promised?
+			</question>
+			<answer>
+				<p>There are two different UI for the conditional formatting feature, but as for now only 
+				one of them has been implemented. It's less intuitive but fortunately, more flexible as well.</p>
+				<p>But in order to utilize it to its full potential, you need to use a simple expression 
+				language to describe what you want to achieve. For example, if you want to show all the measure 
+				values below 15,000 in red color, you can use below expression in the foreground color property 
+				of the cell area :</p>
+				<source>&lt;#if cell?? &amp;&amp; cell.doubleValue &lt; 15000&gt;&#13;
+	#ff0000&#13;
+&lt;/#if&gt;</source>
+				<p>It's just a simple examle and there's much more possibility of what it can do as shown 
+				in this <a href="http://youtu.be/wbB_B8SvfEE?hd=1" target="_blank">video example</a>.</p>
+			</answer>
+		</faq>
+
+		<faq id="documentation">
+			<question>
+				Is there some documentation or a manual available? Or where can I learn about syntax of 
+				the expression language used in the conditional formatting feature?
+			</question>
+			<answer>
+				<p>Unfortunately, lack of documentation is one of the weakest point of the project so far. For now, 
+				you need to learn how to use them from the source code itself and for some cases you can check the 
+				relevant test cases for reference too.</p>
+				<p>I hope the situation could be improved before the 1.0 release. Till then, if you have any 
+				question about API usage, please ask them in our mailing list or on the IRC channel.</p>
+				<p>As to the expression language syntax, you can refer to the FreeMarker project's documentation 
+				<a href="http://freemarker.org/docs/dgui_template_exp.html" target="_blank">here</a>, as Pivot4J 
+				by default uses it as its expression language support. You can also see the API documentation for 
+				the <a href="./apidocs/com/eyeq/pivot4j/ui/RenderContext.html" target="_blank">RenderContext</a> 
+				class to see what context variables are available when it renders each cells.</p>
 			</answer>
 		</faq>
 
@@ -146,7 +250,7 @@ Member member = cube.lookupMember(
 			</question>
 			<answer>
 				<p>Sorry for the inconvenience. It's still in an early stage of development so please don't 
-				expect to run flawlessly.
+				expect it to run flawlessly.
 
 				 If you encounter a bug or having a problem, feel free to ask a question in the 
 				 <a href="http://groups.google.com/d/forum/pivot4j-list" target="_blank">support forum</a>, 
