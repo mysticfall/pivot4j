@@ -40,6 +40,8 @@ public abstract class AbstractIntegrationTestCase {
 	public void setUp() throws Exception {
 		Class.forName("org.apache.derby.jdbc.ClientDriver");
 
+		Locale.setDefault(Locale.US);
+
 		this.dataSource = createMondrianDataSource();
 		this.model = createPivotModel(dataSource);
 	}
