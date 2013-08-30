@@ -396,14 +396,14 @@
 
 							<p:panelGrid id="filter-grid" styleClass="filter-grid"
 								binding="#{pivotGridHandler.renderer.filterComponent}" />
-
-							<h:panelGroup styleClass="info-panel" layout="block"
-								rendered="#{!pivotGridHandler.valid}">
-								<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
-								<h:outputText value="#{msg['message.query.blank']}"
-									styleClass="message-warn" />
-							</h:panelGroup>
 						</p:fieldset>
+
+						<h:panelGroup styleClass="info-panel" layout="block"
+							rendered="#{!pivotGridHandler.valid}">
+							<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
+							<h:outputText value="#{msg['message.query.blank']}"
+								styleClass="message-warn" />
+						</h:panelGroup>
 
 						<p:growl id="grid-growl" showDetail="true" sticky="true" />
 					</h:form>
