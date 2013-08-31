@@ -28,7 +28,7 @@ mvn verify
 +-----+
 
 	* Choose <<'File > Import > General / Existing Projects into Workspace'>> from Eclipse's main menu. Project that 
-	can be imported are pivot4j(POM only), pivot4j-core, pivot4j-analytics, pivot4j-pantaho respectively.
+	can be imported are pivot4j(POM only), pivot4j-core, pivot4j-analytics, pivot4j-pentaho respectively.
 
 	* If you're using M2E, you will encounter errors like 'Plugin execution not covered by lifecycle configuration' in pom.xml. 
 	Select each message in 'Problems' view, and right click to choose <<'Quick Fix'>> menu. It will show alternative methods to resolve the problem. 

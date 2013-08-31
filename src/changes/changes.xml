@@ -6,6 +6,78 @@
 		<author email="fender@eyeq.co.kr">Xavier Cho</author>
 	</properties>
 	<body>
+		<release version="0.8" date="2013-08-31" description="Pivot4J 0.8 release">
+			<action dev="mysticfall" type="add" issue="59">
+				Basic report content management feature has been implemented.
+			</action>
+			<action dev="mysticfall" type="add" issue="67">
+				Conditional formatting support has been implemented.
+			</action>
+			<action dev="mysticfall" type="add" issue="63">
+				Data source and appearance settings can be configured by users.
+			</action>
+			<action dev="mysticfall" type="add" issue="53">
+				PDF and Excel export now contains filter information.
+			</action>
+			<action dev="mysticfall" type="add" issue="102">
+				Implement legacy JPivot report import feature in Pentaho plugin. 
+			</action>
+			<action dev="mysticfall" type="add" issue="101">
+				Block UI while Ajax request is being processed.
+			</action>
+			<action dev="mysticfall" type="update" issue="100">
+				Make drag &amp; drop operation on axis configuration view more consistent 
+				and responsive.
+			</action>
+			<action dev="mysticfall" type="update" issue="91">
+				Change show parent to include all the ancestor members.
+			</action>
+			<action dev="mysticfall" type="update" issue="98">
+				New Arquillian based integration tests for the UI project.  
+			</action>
+			<action dev="mysticfall" type="fix" issue="76">
+				Fixed problems with ragged hierarchies.
+			</action>
+			<action dev="mysticfall" type="fix" issue="77">
+				Fixed problems with parent-child hierarchies.
+			</action>
+			<action dev="mysticfall" type="fix" issue="79">
+				Support Mondrian/XMLA backend. 
+			</action>
+			<action dev="mysticfall" type="fix" issue="94">
+				Allow the ROW axis to appear before the COLUMN axis in a MDX query.  
+			</action>
+			<action dev="mysticfall" type="fix" issue="83">
+				Fixed a problem with drag &amp; drop reordering in the axis tree node. 
+			</action>
+			<action dev="mysticfall" type="fix" issue="93">
+				Fixed level / measure selection problem when one of the axis is empty.  
+			</action>
+			<action dev="mysticfall" type="fix" issue="81">
+				Fixed rendering problem with drill member/replace process when the 
+				show parent option is enabled. 
+			</action>
+			<action dev="mysticfall" type="fix" issue="78">
+				Fixed a bug in the filter dialog which made it impossible to uncheck 
+				selected members.
+			</action>
+			<action dev="mysticfall" type="fix" issue="74">
+				Fixed occasional view expiration errors.
+			</action>
+			<action dev="mysticfall" type="fix" issue="72">
+				Fixed hierarchy aggregator to correctly handle calculated values.
+			</action>
+			<action dev="mysticfall" type="fix" issue="71">
+				Fixed a bug in count aggregator which wrongly includes other 
+				aggregated values.
+			</action>
+			<action dev="mysticfall" type="fix" issue="73">
+				Preserve hierarchy order in axis when an all member is removed.
+			</action>
+			<action dev="mysticfall" type="fix" issue="86">
+				Fixed a MDX parsing problem with &quot;.Properties()&quot;.  
+			</action>
+		</release>
 		<release version="0.7" date="2013-04-14" description="Pivot4J 0.7 release">
 			<action dev="mysticfall" type="fix" issue="34">
 				Unable to parse MDX with member names containing ']]' escape.

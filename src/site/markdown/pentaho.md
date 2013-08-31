@@ -10,11 +10,10 @@ Pivot4J provides a plugin for the Pentaho BI server by extending the [sample app
 a fully functional analytics application on its own.
 
 The plugin project is still in very early stage of development. And it depends on the unreleased 5.0('Sugar') version of the 
-Pentaho BI platform. So, while we encourage you to download and actively test the plugin, it is **not recommended to use it for 
-the production purpose yet**. Please be patient till the stable version is available, and help us improve the plugin by sending 
+Pentaho BI platform. Please be patient till the stable version is available, and help us improve the plugin by sending 
 feedbacks!
 	
-<iframe width="560" height="315" src="http://www.youtube.com/embed/xXhdgQGAXiI?hd=1" frameborder="0" allowfullscreen="1"></iframe>
+<iframe width="640" height="440" src="http://www.youtube.com/embed/DZg5_vQnIzI" frameborder="0" allowfullscreen="1"></iframe>
 
 
 ### Screenshots
@@ -31,14 +30,5 @@ More screenshots of the plugin below. Click each image to enlarge it.
 
 3. Run the Pentaho BI server. And launch the web interface by opening http://localhost:8080 from the browser.
 
-4. Login using the default account(*'joe'/'password'*), and click the *'Manage existing'* button.
-
-5. (First time only) Click the green plus button, and choose *'Analysis'* to import the OLAP schema. Click the browse button and select one of 
-the Mondrian schema file bundled with the platform - *'./pentaho-solutions/steel-wheels/analysis/steelwheels.mondrian.xml'* or 
-*'./pentaho-solutions/bi-developers/analysis/SampleData.mondrian.xml'*. You can repeat the process to import both the schema files.
-
-6. Click the Pivot4J toolbar button, or select *'File > New > Pivot4J Analytics View'* from the menu to create a new report.
-
-* Note that after save the report first time, the file is not visible until the directory is manually refreshed. It's a known 
-issue and hopefully will get resolved soon.
-
+4. Select *'File > New > Pivot4J View'* from the menu to create a new report, or if you already have reports made with 
+the legacy JPivot plugin, you can convert them by selecting *'Pivot4J View (from JPivot Reports)'* menu.  

@@ -14,7 +14,6 @@ A New UI Independent JPivot Replacement
 	{{{http://jpivot.sourceforge.net}JPivot}} project's	codebase to make it a general	purpose OLAP API library which is 
 	independent of any particular GUI implementation.
 
-
 * Motivation
 
 	For a long time, JPivot has remained as a <de facto> standard for creating a pivot grid style OLAP frontend application 
