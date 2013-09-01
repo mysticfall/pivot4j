@@ -4,7 +4,7 @@
 
 	<groupId>com.eyeq</groupId>
 	<artifactId>pivot4j</artifactId>
-	<version>0.8-SNAPSHOT</version>
+	<version>0.8</version>
 	<name>Pivot4J</name>
 	<description>Pivot4J provides a common API for OLAP servers which can be used to build an analytical service frontend with pivot style GUI.
 

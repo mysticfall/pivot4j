@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.eyeq</groupId>
 		<artifactId>pivot4j</artifactId>
-		<version>0.8-SNAPSHOT</version>
+		<version>0.8</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -163,7 +163,7 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-core</artifactId>
-			<version>TRUNK-SNAPSHOT</version>
+			<version>5.0.0</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
@@ -174,20 +174,14 @@
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
-			<artifactId>pentaho-bi-platform-api</artifactId>
-			<version>TRUNK-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>pentaho</groupId>
-			<artifactId>pentaho-bi-platform-engine-core</artifactId>
-			<version>TRUNK-SNAPSHOT</version>
+			<artifactId>pentaho-platform-api</artifactId>
+			<version>5.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-extensions</artifactId>
-			<version>TRUNK-SNAPSHOT</version>
+			<version>5.0.0</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
@@ -215,13 +209,7 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-connections</artifactId>
-			<version>TRUNK-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>pentaho</groupId>
-			<artifactId>mondrian</artifactId>
-			<version>TRUNK-SNAPSHOT</version>
+			<version>5.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
