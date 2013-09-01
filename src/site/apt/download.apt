@@ -11,11 +11,11 @@ Download
 
 ** Stable Release
 
-	* Library Jar : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j/0.8/pivot4j-0.8.jar}pivot4j-0.8.jar}}
+	* Library Jar : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-core/0.8/pivot4j-core-0.8.jar}pivot4j-core-0.8.jar}}
 
-	* JavaDoc API : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j/0.8/pivot4j-0.8-javadoc.jar}pivot4j-0.8-javadoc.jar}}
+	* JavaDoc API : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-core/0.8/pivot4j-core-0.8-javadoc.jar}pivot4j-core-0.8-javadoc.jar}}
 
-	* Source Archive : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j/0.8/pivot4j-0.8-sources.jar}pivot4j-0.8-sources.jar}}
+	* Source Archive : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-core/0.8/pivot4j-core-0.8-sources.jar}pivot4j-core-0.8-sources.jar}}
 
 ** Development Snapshot
 

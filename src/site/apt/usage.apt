@@ -35,7 +35,7 @@ How to Use Pivot4J
     <dependencies>
         <dependency>
             <groupId>com.eyeq</groupId>
-            <artifactId>pivot4j</artifactId>
+            <artifactId>pivot4j-core</artifactId>
             <version>0.8</version>
         </dependency>
     </dependencies>
@@ -62,7 +62,7 @@ How to Use Pivot4J
     <dependencies>
         <dependency>
             <groupId>com.eyeq</groupId>
-            <artifactId>pivot4j</artifactId>
+            <artifactId>pivot4j-core</artifactId>
             <version>0.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
