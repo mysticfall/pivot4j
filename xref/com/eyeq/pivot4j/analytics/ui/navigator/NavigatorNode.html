@@ -173,50 +173,54 @@
 <a class="jxr_linenumber" name="163" href="#163">163</a> 		<strong class="jxr_keyword">return</strong> children;
 <a class="jxr_linenumber" name="164" href="#164">164</a> 	}
 <a class="jxr_linenumber" name="165" href="#165">165</a> 
-<a class="jxr_linenumber" name="166" href="#166">166</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isLoaded() {
-<a class="jxr_linenumber" name="167" href="#167">167</a> 		<strong class="jxr_keyword">return</strong> children != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="166" href="#166">166</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> refresh() {
+<a class="jxr_linenumber" name="167" href="#167">167</a> 		<strong class="jxr_keyword">this</strong>.children = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="168" href="#168">168</a> 	}
 <a class="jxr_linenumber" name="169" href="#169">169</a> 
-<a class="jxr_linenumber" name="170" href="#170">170</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> clearSelection() {
-<a class="jxr_linenumber" name="171" href="#171">171</a> 		setSelected(false);
-<a class="jxr_linenumber" name="172" href="#172">172</a> 
-<a class="jxr_linenumber" name="173" href="#173">173</a> 		<strong class="jxr_keyword">if</strong> (children != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="174" href="#174">174</a> 			<strong class="jxr_keyword">for</strong> (TreeNode child : children) {
-<a class="jxr_linenumber" name="175" href="#175">175</a> 				<strong class="jxr_keyword">if</strong> (child instanceof NavigatorNode) {
-<a class="jxr_linenumber" name="176" href="#176">176</a> 					((NavigatorNode&lt;?&gt;) child).clearSelection();
-<a class="jxr_linenumber" name="177" href="#177">177</a> 				}
-<a class="jxr_linenumber" name="178" href="#178">178</a> 			}
-<a class="jxr_linenumber" name="179" href="#179">179</a> 		}
-<a class="jxr_linenumber" name="180" href="#180">180</a> 	}
-<a class="jxr_linenumber" name="181" href="#181">181</a> 
-<a class="jxr_linenumber" name="182" href="#182">182</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="183" href="#183">183</a> <em class="jxr_javadoccomment">	 * @param element</em>
-<a class="jxr_linenumber" name="184" href="#184">184</a> <em class="jxr_javadoccomment">	 * @param child</em>
-<a class="jxr_linenumber" name="185" href="#185">185</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="186" href="#186">186</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="187" href="#187">187</a> 	<strong class="jxr_keyword">protected</strong> &lt;TC <strong class="jxr_keyword">extends</strong> MetadataElement&gt; <strong class="jxr_keyword">boolean</strong> configureChildNode(
-<a class="jxr_linenumber" name="188" href="#188">188</a> 			TC element, NavigatorNode&lt;?&gt; child) {
-<a class="jxr_linenumber" name="189" href="#189">189</a> 		child.setParent(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="190" href="#190">190</a> 
-<a class="jxr_linenumber" name="191" href="#191">191</a> 		<strong class="jxr_keyword">if</strong> (nodeFilter != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="192" href="#192">192</a> 			<strong class="jxr_keyword">if</strong> (nodeFilter.isVisible(element)) {
-<a class="jxr_linenumber" name="193" href="#193">193</a> 				child.setNodeFilter(nodeFilter);
-<a class="jxr_linenumber" name="194" href="#194">194</a> 				child.setExpanded(nodeFilter.isExpanded(element));
-<a class="jxr_linenumber" name="195" href="#195">195</a> 				child.setSelectable(nodeFilter.isSelectable(element));
-<a class="jxr_linenumber" name="196" href="#196">196</a> 				child.setSelected(nodeFilter.isSelected(element));
-<a class="jxr_linenumber" name="197" href="#197">197</a> 
-<a class="jxr_linenumber" name="198" href="#198">198</a> 				NodeData data = child.getData();
-<a class="jxr_linenumber" name="199" href="#199">199</a> 				data.setSelected(nodeFilter.isActive(element));
-<a class="jxr_linenumber" name="200" href="#200">200</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="201" href="#201">201</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="202" href="#202">202</a> 			}
-<a class="jxr_linenumber" name="203" href="#203">203</a> 		}
-<a class="jxr_linenumber" name="204" href="#204">204</a> 
-<a class="jxr_linenumber" name="205" href="#205">205</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="206" href="#206">206</a> 	}
-<a class="jxr_linenumber" name="207" href="#207">207</a> 
-<a class="jxr_linenumber" name="208" href="#208">208</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> List&lt;TreeNode&gt; createChildren();
-<a class="jxr_linenumber" name="209" href="#209">209</a> }
+<a class="jxr_linenumber" name="170" href="#170">170</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isLoaded() {
+<a class="jxr_linenumber" name="171" href="#171">171</a> 		<strong class="jxr_keyword">return</strong> children != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="172" href="#172">172</a> 	}
+<a class="jxr_linenumber" name="173" href="#173">173</a> 
+<a class="jxr_linenumber" name="174" href="#174">174</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> clearSelection() {
+<a class="jxr_linenumber" name="175" href="#175">175</a> 		setSelected(false);
+<a class="jxr_linenumber" name="176" href="#176">176</a> 
+<a class="jxr_linenumber" name="177" href="#177">177</a> 		<strong class="jxr_keyword">if</strong> (children != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="178" href="#178">178</a> 			<strong class="jxr_keyword">for</strong> (TreeNode child : children) {
+<a class="jxr_linenumber" name="179" href="#179">179</a> 				<strong class="jxr_keyword">if</strong> (child instanceof NavigatorNode) {
+<a class="jxr_linenumber" name="180" href="#180">180</a> 					((NavigatorNode&lt;?&gt;) child).clearSelection();
+<a class="jxr_linenumber" name="181" href="#181">181</a> 				}
+<a class="jxr_linenumber" name="182" href="#182">182</a> 			}
+<a class="jxr_linenumber" name="183" href="#183">183</a> 		}
+<a class="jxr_linenumber" name="184" href="#184">184</a> 	}
+<a class="jxr_linenumber" name="185" href="#185">185</a> 
+<a class="jxr_linenumber" name="186" href="#186">186</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="187" href="#187">187</a> <em class="jxr_javadoccomment">	 * @param element</em>
+<a class="jxr_linenumber" name="188" href="#188">188</a> <em class="jxr_javadoccomment">	 * @param child</em>
+<a class="jxr_linenumber" name="189" href="#189">189</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="190" href="#190">190</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="191" href="#191">191</a> 	<strong class="jxr_keyword">protected</strong> &lt;C <strong class="jxr_keyword">extends</strong> MetadataElement&gt; <strong class="jxr_keyword">boolean</strong> configureChildNode(C element,
+<a class="jxr_linenumber" name="192" href="#192">192</a> 			NavigatorNode&lt;?&gt; child) {
+<a class="jxr_linenumber" name="193" href="#193">193</a> 		child.setParent(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="194" href="#194">194</a> 
+<a class="jxr_linenumber" name="195" href="#195">195</a> 		<strong class="jxr_keyword">if</strong> (nodeFilter != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="196" href="#196">196</a> 			<strong class="jxr_keyword">if</strong> (nodeFilter.isVisible(element)) {
+<a class="jxr_linenumber" name="197" href="#197">197</a> 				child.setNodeFilter(nodeFilter);
+<a class="jxr_linenumber" name="198" href="#198">198</a> 				child.setExpanded(nodeFilter.isExpanded(element));
+<a class="jxr_linenumber" name="199" href="#199">199</a> 				child.setSelectable(nodeFilter.isSelectable(element));
+<a class="jxr_linenumber" name="200" href="#200">200</a> 				child.setSelected(nodeFilter.isSelected(element));
+<a class="jxr_linenumber" name="201" href="#201">201</a> 
+<a class="jxr_linenumber" name="202" href="#202">202</a> 				NodeData nodeData = child.getData();
+<a class="jxr_linenumber" name="203" href="#203">203</a> 				nodeData.setSelected(nodeFilter.isActive(element));
+<a class="jxr_linenumber" name="204" href="#204">204</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="205" href="#205">205</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="206" href="#206">206</a> 			}
+<a class="jxr_linenumber" name="207" href="#207">207</a> 		}
+<a class="jxr_linenumber" name="208" href="#208">208</a> 
+<a class="jxr_linenumber" name="209" href="#209">209</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="210" href="#210">210</a> 	}
+<a class="jxr_linenumber" name="211" href="#211">211</a> 
+<a class="jxr_linenumber" name="212" href="#212">212</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> List&lt;TreeNode&gt; createChildren();
+<a class="jxr_linenumber" name="213" href="#213">213</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

@@ -17,8 +17,8 @@
 <a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> org.apache.commons.lang.builder.ToStringBuilder;
 <a class="jxr_linenumber" name="8" href="#8">8</a>   
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.PivotModel;
-<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.analytics.datasource.ConnectionMetadata;
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.analytics.repository.RepositoryFile;
+<a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.analytics.repository.ReportFile;
 <a class="jxr_linenumber" name="12" href="#12">12</a>  
 <a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/state/ViewState.html">ViewState</a> {
 <a class="jxr_linenumber" name="14" href="#14">14</a>  
@@ -28,13 +28,13 @@
 <a class="jxr_linenumber" name="18" href="#18">18</a>  
 <a class="jxr_linenumber" name="19" href="#19">19</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> dirty = false;
 <a class="jxr_linenumber" name="20" href="#20">20</a>  
-<a class="jxr_linenumber" name="21" href="#21">21</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/repository/RepositoryFile.html">RepositoryFile</a> file;
+<a class="jxr_linenumber" name="21" href="#21">21</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/repository/ReportFile.html">ReportFile</a> file;
 <a class="jxr_linenumber" name="22" href="#22">22</a>  
 <a class="jxr_linenumber" name="23" href="#23">23</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> readOnly = false;
 <a class="jxr_linenumber" name="24" href="#24">24</a>  
 <a class="jxr_linenumber" name="25" href="#25">25</a>  	<strong class="jxr_keyword">private</strong> Date lastActive = <strong class="jxr_keyword">new</strong> Date();
 <a class="jxr_linenumber" name="26" href="#26">26</a>  
-<a class="jxr_linenumber" name="27" href="#27">27</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/datasource/ConnectionMetadata.html">ConnectionMetadata</a> connectionInfo;
+<a class="jxr_linenumber" name="27" href="#27">27</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/datasource/ConnectionInfo.html">ConnectionInfo</a> connectionInfo;
 <a class="jxr_linenumber" name="28" href="#28">28</a>  
 <a class="jxr_linenumber" name="29" href="#29">29</a>  	<strong class="jxr_keyword">private</strong> <a href="../../../../../com/eyeq/pivot4j/PivotModel.html">PivotModel</a> model;
 <a class="jxr_linenumber" name="30" href="#30">30</a>  
@@ -64,8 +64,8 @@
 <a class="jxr_linenumber" name="54" href="#54">54</a>  <em class="jxr_javadoccomment">	 * @param model</em>
 <a class="jxr_linenumber" name="55" href="#55">55</a>  <em class="jxr_javadoccomment">	 * @param file</em>
 <a class="jxr_linenumber" name="56" href="#56">56</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="57" href="#57">57</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/state/ViewState.html">ViewState</a>(String id, String name, <a href="../../../../../com/eyeq/pivot4j/analytics/datasource/ConnectionMetadata.html">ConnectionMetadata</a> connectionInfo,
-<a class="jxr_linenumber" name="58" href="#58">58</a>  			PivotModel model, <a href="../../../../../com/eyeq/pivot4j/analytics/repository/RepositoryFile.html">RepositoryFile</a> file) {
+<a class="jxr_linenumber" name="57" href="#57">57</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/state/ViewState.html">ViewState</a>(String id, String name, <a href="../../../../../com/eyeq/pivot4j/analytics/datasource/ConnectionInfo.html">ConnectionInfo</a> connectionInfo,
+<a class="jxr_linenumber" name="58" href="#58">58</a>  			PivotModel model, <a href="../../../../../com/eyeq/pivot4j/analytics/repository/ReportFile.html">ReportFile</a> file) {
 <a class="jxr_linenumber" name="59" href="#59">59</a>  		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="60" href="#60">60</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"id"</span>);
 <a class="jxr_linenumber" name="61" href="#61">61</a>  		}
@@ -106,7 +106,7 @@
 <a class="jxr_linenumber" name="96" href="#96">96</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="97" href="#97">97</a>  <em class="jxr_javadoccomment">	 * @return the file</em>
 <a class="jxr_linenumber" name="98" href="#98">98</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="99" href="#99">99</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/repository/RepositoryFile.html">RepositoryFile</a> getFile() {
+<a class="jxr_linenumber" name="99" href="#99">99</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/repository/ReportFile.html">ReportFile</a> getFile() {
 <a class="jxr_linenumber" name="100" href="#100">100</a> 		<strong class="jxr_keyword">return</strong> file;
 <a class="jxr_linenumber" name="101" href="#101">101</a> 	}
 <a class="jxr_linenumber" name="102" href="#102">102</a> 
@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="104" href="#104">104</a> <em class="jxr_javadoccomment">	 * @param file</em>
 <a class="jxr_linenumber" name="105" href="#105">105</a> <em class="jxr_javadoccomment">	 *            the file to set</em>
 <a class="jxr_linenumber" name="106" href="#106">106</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="107" href="#107">107</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setFile(<a href="../../../../../com/eyeq/pivot4j/analytics/repository/RepositoryFile.html">RepositoryFile</a> file) {
+<a class="jxr_linenumber" name="107" href="#107">107</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setFile(<a href="../../../../../com/eyeq/pivot4j/analytics/repository/ReportFile.html">ReportFile</a> file) {
 <a class="jxr_linenumber" name="108" href="#108">108</a> 		<strong class="jxr_keyword">this</strong>.file = file;
 <a class="jxr_linenumber" name="109" href="#109">109</a> 	}
 <a class="jxr_linenumber" name="110" href="#110">110</a> 
@@ -128,7 +128,7 @@
 <a class="jxr_linenumber" name="118" href="#118">118</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="119" href="#119">119</a> <em class="jxr_javadoccomment">	 * @return the connectionInfo</em>
 <a class="jxr_linenumber" name="120" href="#120">120</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="121" href="#121">121</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/datasource/ConnectionMetadata.html">ConnectionMetadata</a> getConnectionInfo() {
+<a class="jxr_linenumber" name="121" href="#121">121</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/datasource/ConnectionInfo.html">ConnectionInfo</a> getConnectionInfo() {
 <a class="jxr_linenumber" name="122" href="#122">122</a> 		<strong class="jxr_keyword">return</strong> connectionInfo;
 <a class="jxr_linenumber" name="123" href="#123">123</a> 	}
 <a class="jxr_linenumber" name="124" href="#124">124</a> 
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="126" href="#126">126</a> <em class="jxr_javadoccomment">	 * @param connectionInfo</em>
 <a class="jxr_linenumber" name="127" href="#127">127</a> <em class="jxr_javadoccomment">	 *            the connectionInfo to set</em>
 <a class="jxr_linenumber" name="128" href="#128">128</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="129" href="#129">129</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setConnectionInfo(<a href="../../../../../com/eyeq/pivot4j/analytics/datasource/ConnectionMetadata.html">ConnectionMetadata</a> connectionInfo) {
+<a class="jxr_linenumber" name="129" href="#129">129</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setConnectionInfo(<a href="../../../../../com/eyeq/pivot4j/analytics/datasource/ConnectionInfo.html">ConnectionInfo</a> connectionInfo) {
 <a class="jxr_linenumber" name="130" href="#130">130</a> 		<strong class="jxr_keyword">this</strong>.connectionInfo = connectionInfo;
 <a class="jxr_linenumber" name="131" href="#131">131</a> 	}
 <a class="jxr_linenumber" name="132" href="#132">132</a> 

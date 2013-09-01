@@ -45,7 +45,7 @@
 <a class="jxr_linenumber" name="35" href="#35">35</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSimpleExpression() {
 <a class="jxr_linenumber" name="36" href="#36">36</a>  		String query = <span class="jxr_string">"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "</span>
 <a class="jxr_linenumber" name="37" href="#37">37</a>  				+ <span class="jxr_string">"{([Promotion Media].[All Media], "</span>
-<a class="jxr_linenumber" name="38" href="#38">38</a>  				+ <span class="jxr_string">"[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[s:year]"</span>;
+<a class="jxr_linenumber" name="38" href="#38">38</a>  				+ <span class="jxr_string">"[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[year]"</span>;
 <a class="jxr_linenumber" name="39" href="#39">39</a>  
 <a class="jxr_linenumber" name="40" href="#40">40</a>  		PivotModel model = getPivotModel();
 <a class="jxr_linenumber" name="41" href="#41">41</a>  
@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="48" href="#48">48</a>  
 <a class="jxr_linenumber" name="49" href="#49">49</a>  		List&lt;Member&gt; members = transform.getSlicer();
 <a class="jxr_linenumber" name="50" href="#50">50</a>  
-<a class="jxr_linenumber" name="51" href="#51">51</a>  		assertThat(<span class="jxr_string">"Slicer axis should contain one member."</span>, members.size(),
+<a class="jxr_linenumber" name="51" href="#51">51</a>  		assertThat(<span class="jxr_string">"Slicer axis should contain ONE member."</span>, members.size(),
 <a class="jxr_linenumber" name="52" href="#52">52</a>  				is(1));
 <a class="jxr_linenumber" name="53" href="#53">53</a>  		assertThat(<span class="jxr_string">"Wrong member found on the slicer axis."</span>, members.get(0)
 <a class="jxr_linenumber" name="54" href="#54">54</a>  				.getUniqueName(), equalTo(<span class="jxr_string">"[Time].[1997]"</span>));
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="58" href="#58">58</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testFreeMarkerExpression() {
 <a class="jxr_linenumber" name="59" href="#59">59</a>  		String query = <span class="jxr_string">"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "</span>
 <a class="jxr_linenumber" name="60" href="#60">60</a>  				+ <span class="jxr_string">"{([Promotion Media].[All Media], "</span>
-<a class="jxr_linenumber" name="61" href="#61">61</a>  				+ <span class="jxr_string">"$[fm:${cube.dimensions.get(\&quot;Product\&quot;).defaultHierarchy.defaultMember.uniqueName}]"</span>
+<a class="jxr_linenumber" name="61" href="#61">61</a>  				+ <span class="jxr_string">"$[cube.dimensions.get(\&quot;Product\&quot;).defaultHierarchy.defaultMember.uniqueName]"</span>
 <a class="jxr_linenumber" name="62" href="#62">62</a>  				+ <span class="jxr_string">")} ON ROWS FROM [Sales] WHERE [Time].[1997]"</span>;
 <a class="jxr_linenumber" name="63" href="#63">63</a>  
 <a class="jxr_linenumber" name="64" href="#64">64</a>  		PivotModel model = getPivotModel();
@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="70" href="#70">70</a>  
 <a class="jxr_linenumber" name="71" href="#71">71</a>  		List&lt;Position&gt; positions = cellSet.getAxes()
 <a class="jxr_linenumber" name="72" href="#72">72</a>  				.get(Axis.ROWS.axisOrdinal()).getPositions();
-<a class="jxr_linenumber" name="73" href="#73">73</a>  		assertThat(<span class="jxr_string">"Row axis should contain one positions."</span>, positions.size(),
+<a class="jxr_linenumber" name="73" href="#73">73</a>  		assertThat(<span class="jxr_string">"Row axis should contain ONE positions."</span>, positions.size(),
 <a class="jxr_linenumber" name="74" href="#74">74</a>  				is(1));
 <a class="jxr_linenumber" name="75" href="#75">75</a>  
 <a class="jxr_linenumber" name="76" href="#76">76</a>  		Position position = positions.get(0);
@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="85" href="#85">85</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testPreserveParameterOnSlicerAfterDrillDown() {
 <a class="jxr_linenumber" name="86" href="#86">86</a>  		String query = <span class="jxr_string">"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "</span>
 <a class="jxr_linenumber" name="87" href="#87">87</a>  				+ <span class="jxr_string">"{([Promotion Media].[All Media], "</span>
-<a class="jxr_linenumber" name="88" href="#88">88</a>  				+ <span class="jxr_string">"[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[s:year]"</span>;
+<a class="jxr_linenumber" name="88" href="#88">88</a>  				+ <span class="jxr_string">"[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[year]"</span>;
 <a class="jxr_linenumber" name="89" href="#89">89</a>  
 <a class="jxr_linenumber" name="90" href="#90">90</a>  		PivotModel model = getPivotModel();
 <a class="jxr_linenumber" name="91" href="#91">91</a>  
@@ -108,14 +108,14 @@
 <a class="jxr_linenumber" name="98" href="#98">98</a>  
 <a class="jxr_linenumber" name="99" href="#99">99</a>  		List&lt;Member&gt; members = slicerTransform.getSlicer();
 <a class="jxr_linenumber" name="100" href="#100">100</a> 
-<a class="jxr_linenumber" name="101" href="#101">101</a> 		assertThat(<span class="jxr_string">"Slicer axis should contain one member."</span>, members.size(),
+<a class="jxr_linenumber" name="101" href="#101">101</a> 		assertThat(<span class="jxr_string">"Slicer axis should contain ONE member."</span>, members.size(),
 <a class="jxr_linenumber" name="102" href="#102">102</a> 				is(1));
 <a class="jxr_linenumber" name="103" href="#103">103</a> 
 <a class="jxr_linenumber" name="104" href="#104">104</a> 		assertThat(<span class="jxr_string">"Wrong member found on the slicer axis."</span>, members.get(0)
 <a class="jxr_linenumber" name="105" href="#105">105</a> 				.getUniqueName(), equalTo(<span class="jxr_string">"[Time].[1997]"</span>));
 <a class="jxr_linenumber" name="106" href="#106">106</a> 
-<a class="jxr_linenumber" name="107" href="#107">107</a> 		Member member = OlapUtils.lookupMember(model.getCube(),
-<a class="jxr_linenumber" name="108" href="#108">108</a> 				<span class="jxr_string">"[Product].[All Products]"</span>);
+<a class="jxr_linenumber" name="107" href="#107">107</a> 		Member member = OlapUtils.lookupMember(<span class="jxr_string">"[Product].[All Products]"</span>,
+<a class="jxr_linenumber" name="108" href="#108">108</a> 				model.getCube());
 <a class="jxr_linenumber" name="109" href="#109">109</a> 
 <a class="jxr_linenumber" name="110" href="#110">110</a> 		DrillExpandMember drillTransform = model
 <a class="jxr_linenumber" name="111" href="#111">111</a> 				.getTransform(DrillExpandMember.<strong class="jxr_keyword">class</strong>);
@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="123" href="#123">123</a> 	@Test
 <a class="jxr_linenumber" name="124" href="#124">124</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testPreserveParameterOnSlicerAfterAddingHierarchy() {
 <a class="jxr_linenumber" name="125" href="#125">125</a> 		String query = <span class="jxr_string">"SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "</span>
-<a class="jxr_linenumber" name="126" href="#126">126</a> 				+ <span class="jxr_string">"[Promotion Media].[All Media] ON ROWS FROM [Sales] WHERE $[s:year]"</span>;
+<a class="jxr_linenumber" name="126" href="#126">126</a> 				+ <span class="jxr_string">"[Promotion Media].[All Media] ON ROWS FROM [Sales] WHERE $[year]"</span>;
 <a class="jxr_linenumber" name="127" href="#127">127</a> 
 <a class="jxr_linenumber" name="128" href="#128">128</a> 		PivotModel model = getPivotModel();
 <a class="jxr_linenumber" name="129" href="#129">129</a> 
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="136" href="#136">136</a> 
 <a class="jxr_linenumber" name="137" href="#137">137</a> 		List&lt;Member&gt; members = slicerTransform.getSlicer();
 <a class="jxr_linenumber" name="138" href="#138">138</a> 
-<a class="jxr_linenumber" name="139" href="#139">139</a> 		assertThat(<span class="jxr_string">"Slicer axis should contain one member."</span>, members.size(),
+<a class="jxr_linenumber" name="139" href="#139">139</a> 		assertThat(<span class="jxr_string">"Slicer axis should contain ONE member."</span>, members.size(),
 <a class="jxr_linenumber" name="140" href="#140">140</a> 				is(1));
 <a class="jxr_linenumber" name="141" href="#141">141</a> 
 <a class="jxr_linenumber" name="142" href="#142">142</a> 		assertThat(<span class="jxr_string">"Wrong member found on the slicer axis."</span>, members.get(0)
@@ -170,7 +170,7 @@
 <a class="jxr_linenumber" name="160" href="#160">160</a> 
 <a class="jxr_linenumber" name="161" href="#161">161</a> 	@Test
 <a class="jxr_linenumber" name="162" href="#162">162</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSimpleValueExpression() <strong class="jxr_keyword">throws</strong> OlapException {
-<a class="jxr_linenumber" name="163" href="#163">163</a> 		String query = <span class="jxr_string">"WITH MEMBER [Measures].[Calc Cost] AS '[Measures].[Store Cost] * ${s:ratio}' "</span>
+<a class="jxr_linenumber" name="163" href="#163">163</a> 		String query = <span class="jxr_string">"WITH MEMBER [Measures].[Calc Cost] AS '[Measures].[Store Cost] * ${ratio}' "</span>
 <a class="jxr_linenumber" name="164" href="#164">164</a> 				+ <span class="jxr_string">"SELECT {[Measures].[Calc Cost], [Measures].[Store Sales]} ON COLUMNS, "</span>
 <a class="jxr_linenumber" name="165" href="#165">165</a> 				+ <span class="jxr_string">"{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]"</span>;
 <a class="jxr_linenumber" name="166" href="#166">166</a> 

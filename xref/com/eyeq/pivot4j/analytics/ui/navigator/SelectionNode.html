@@ -120,8 +120,8 @@
 <a class="jxr_linenumber" name="110" href="#110">110</a> 		List&lt;org.primefaces.model.TreeNode&gt; children = <strong class="jxr_keyword">new</strong> ArrayList&lt;org.primefaces.model.TreeNode&gt;(
 <a class="jxr_linenumber" name="111" href="#111">111</a> 				nodes.size());
 <a class="jxr_linenumber" name="112" href="#112">112</a> 
-<a class="jxr_linenumber" name="113" href="#113">113</a> 		<strong class="jxr_keyword">for</strong> (TreeNode&lt;Member&gt; node : nodes) {
-<a class="jxr_linenumber" name="114" href="#114">114</a> 			SelectionNode child = <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/eyeq/pivot4j/util/MemberSelection.html">SelectionNode</a>(node, selection);
+<a class="jxr_linenumber" name="113" href="#113">113</a> 		<strong class="jxr_keyword">for</strong> (TreeNode&lt;Member&gt; memberNode : nodes) {
+<a class="jxr_linenumber" name="114" href="#114">114</a> 			SelectionNode child = <strong class="jxr_keyword">new</strong> <a href="../../../../../../com/eyeq/pivot4j/util/MemberSelection.html">SelectionNode</a>(memberNode, selection);
 <a class="jxr_linenumber" name="115" href="#115">115</a> 			child.setParent(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="116" href="#116">116</a> 
 <a class="jxr_linenumber" name="117" href="#117">117</a> 			children.add(child);
