@@ -12,6 +12,12 @@
 	<description>Pivot4J Pentatho is an OLAP analysis plugin for BI platform based on Pivot4J library.</description>
 	<packaging>jar</packaging>
 
+	<properties>
+		<pentaho.plugin.branch>Development</pentaho.plugin.branch>
+		<pentaho.plugin.buildId>${maven.build.timestamp}</pentaho.plugin.buildId>
+		<maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
