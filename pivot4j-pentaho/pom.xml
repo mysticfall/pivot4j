@@ -36,7 +36,7 @@
 			<plugin>
 				<groupId>org.apache.portals.jetspeed-2</groupId>
 				<artifactId>jetspeed-unpack-maven-plugin</artifactId>
-				<version>2.2.2</version>
+				<version>${version.plugin.jetspeed}</version>
 				<executions>
 					<execution>
 						<phase>validate</phase>
@@ -81,7 +81,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+				<version>${version.plugin.resources}</version>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
@@ -113,7 +113,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.4</version>
+				<version>${version.plugin.assembly}</version>
 				<configuration>
 					<descriptor>${basedir}/src/main/assembly/plugin.xml</descriptor>
 					<finalName>${project.artifactId}-${project.version}</finalName>
@@ -144,7 +144,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>${source.plugin.version}</version>
+				<version>${version.plugin.source}</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -168,7 +168,7 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-core</artifactId>
-			<version>5.0.0</version>
+			<version>${version.pentaho}</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
@@ -180,13 +180,13 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-api</artifactId>
-			<version>5.0.0</version>
+			<version>${version.pentaho}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-extensions</artifactId>
-			<version>5.0.0</version>
+			<version>${version.pentaho}</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
@@ -214,25 +214,25 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-connections</artifactId>
-			<version>5.0.0</version>
+			<version>${version.pentaho}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>eigenbase</groupId>
 			<artifactId>eigenbase-xom</artifactId>
-			<version>1.3.1</version>
+			<version>${version.eigenbase.xom}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<version>${version.servlet}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.el</groupId>
 			<artifactId>javax.el-api</artifactId>
-			<version>2.2.2</version>
+			<version>${version.el}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

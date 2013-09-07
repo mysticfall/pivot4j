@@ -25,7 +25,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
+				<version>${version.plugin.antrun}</version>
 				<executions>
 					<execution>
 						<phase>prepare-package</phase>
@@ -42,7 +42,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
+				<version>${version.plugin.war}</version>
 				<configuration>
 					<warName>pivot4j</warName>
 					<archiveClasses>true</archiveClasses>
@@ -64,7 +64,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>${failsafe.plugin.version}</version>
+				<version>${version.plugin.failsafe}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -83,7 +83,7 @@
 			<plugin>
 				<groupId>org.carlspring.maven</groupId>
 				<artifactId>derby-maven-plugin</artifactId>
-				<version>${derby.plugin.version}</version>
+				<version>${version.plugin.derby}</version>
 				<executions>
 					<execution>
 						<id>start-derby</id>
@@ -131,7 +131,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>xml-maven-plugin</artifactId>
-				<version>${xml.plugin.version}</version>
+				<version>${version.plugin.xml}</version>
 				<executions>
 					<execution>
 						<phase>prepare-package</phase>
@@ -191,7 +191,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>${source.plugin.version}</version>
+				<version>${version.plugin.source}</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -226,97 +226,97 @@
 		<dependency>
 			<groupId>org.olap4j</groupId>
 			<artifactId>olap4j-xmla</artifactId>
-			<version>1.1.0</version>
+			<version>${version.olap4j}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-dbutils</groupId>
 			<artifactId>commons-dbutils</artifactId>
-			<version>1.5</version>
+			<version>${version.commons.dbutils}</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.0.13</version>
+			<version>${version.logback}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<version>${version.servlet}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
+			<version>${version.jsp}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.el</groupId>
 			<artifactId>javax.el-api</artifactId>
-			<version>2.2.2</version>
+			<version>${version.el}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>3.5</version>
+			<version>${version.primefaces}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>primefaces-extensions</artifactId>
-			<version>0.6.3</version>
+			<version>${version.primefaces.extensions}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>resources-codemirror</artifactId>
-			<version>0.6.3</version>
+			<version>${version.primefaces.extensions}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>black-tie</artifactId>
-			<version>1.0.9</version>
+			<version>${version.primefaces.themes}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>bootstrap</artifactId>
-			<version>1.0.9</version>
+			<version>${version.primefaces.themes}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>cruze</artifactId>
-			<version>1.0.9</version>
+			<version>${version.primefaces.themes}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>humanity</artifactId>
-			<version>1.0.9</version>
+			<version>${version.primefaces.themes}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>redmond</artifactId>
-			<version>1.0.9</version>
+			<version>${version.primefaces.themes}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
 			<artifactId>rocket</artifactId>
-			<version>1.0.9</version>
+			<version>${version.primefaces.themes}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
+			<version>${version.derby}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbyclient</artifactId>
-			<version>${derby.version}</version>
+			<version>${version.derby}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>mondrian</artifactId>
-			<version>${mondrian.version}</version>
+			<version>${version.mondrian}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.servlet</groupId>
@@ -327,11 +327,6 @@
 					<artifactId>javacup</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.shrinkwrap.resolver</groupId>
@@ -349,7 +344,7 @@
 			<artifactId>graphene-webdriver</artifactId>
 			<type>pom</type>
 			<scope>test</scope>
-			<version>2.0.0.Alpha4</version>
+			<version>${version.arquillian.graphene}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
@@ -361,13 +356,13 @@
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-jacoco</artifactId>
 			<scope>test</scope>
-			<version>1.0.0.Alpha5</version>
+			<version>${version.arquillian.jacoco}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>org.jacoco.core</artifactId>
 			<scope>test</scope>
-			<version>${jacoco.version}</version>
+			<version>${version.jacoco}</version>
 		</dependency>
 	</dependencies>
 
@@ -376,21 +371,21 @@
 			<dependency>
 				<groupId>org.jboss.shrinkwrap.resolver</groupId>
 				<artifactId>shrinkwrap-resolver-bom</artifactId>
-				<version>2.0.0</version>
+				<version>${version.shrinkwrap}</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.arquillian.extension</groupId>
 				<artifactId>arquillian-drone-bom</artifactId>
-				<version>1.2.0.Alpha2</version>
+				<version>${version.arquillian.drone}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>
-				<version>1.0.4.Final</version>
+				<version>${version.arquillian.bom}</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -409,14 +404,11 @@
 	<profiles>
 		<profile>
 			<id>mojarra</id>
-			<properties>
-				<jsfVersion>Mojarra-2.1.10</jsfVersion>
-			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>org.glassfish</groupId>
 					<artifactId>javax.faces</artifactId>
-					<version>2.1.10</version>
+					<version>${version.jsf}</version>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -430,12 +422,12 @@
 				<dependency>
 					<groupId>org.apache.myfaces.core</groupId>
 					<artifactId>myfaces-api</artifactId>
-					<version>2.1.10</version>
+					<version>${version.jsf}</version>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.myfaces.core</groupId>
 					<artifactId>myfaces-impl</artifactId>
-					<version>2.1.10</version>
+					<version>${version.jsf}</version>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -449,25 +441,25 @@
 				<dependency>
 					<groupId>org.jboss.arquillian.container</groupId>
 					<artifactId>arquillian-tomcat-embedded-6</artifactId>
-					<version>1.0.0.CR4</version>
+					<version>${version.arquillian.tomcat6}</version>
 					<scope>test</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.tomcat</groupId>
 					<artifactId>catalina</artifactId>
-					<version>6.0.37</version>
+					<version>${version.tomcat6}</version>
 					<scope>test</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.tomcat</groupId>
 					<artifactId>coyote</artifactId>
-					<version>6.0.37</version>
+					<version>${version.tomcat6}</version>
 					<scope>provided</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.tomcat</groupId>
 					<artifactId>jasper</artifactId>
-					<version>6.0.37</version>
+					<version>${version.tomcat6}</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>

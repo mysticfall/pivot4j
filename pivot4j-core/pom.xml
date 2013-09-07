@@ -16,7 +16,7 @@
 			<plugin>
 				<groupId>edu.tum.cs</groupId>
 				<artifactId>cup-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>${version.plugin.cup}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -34,7 +34,7 @@
 			<plugin>
 				<groupId>de.jflex</groupId>
 				<artifactId>maven-jflex-plugin</artifactId>
-				<version>1.4.3-r1</version>
+				<version>${version.jflex}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -53,7 +53,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
+				<version>${version.plugin.antrun}</version>
 				<executions>
 					<execution>
 						<phase>pre-integration-test</phase>
@@ -72,7 +72,7 @@
 			<plugin>
 				<groupId>org.carlspring.maven</groupId>
 				<artifactId>derby-maven-plugin</artifactId>
-				<version>${derby.plugin.version}</version>
+				<version>${version.plugin.derby}</version>
 				<executions>
 					<execution>
 						<id>start-derby</id>
@@ -93,7 +93,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>${failsafe.plugin.version}</version>
+				<version>${version.plugin.failsafe}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -143,7 +143,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>${source.plugin.version}</version>
+				<version>${version.plugin.source}</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -161,61 +161,61 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.0.13</version>
+			<version>${version.logback}</version>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.olap4j</groupId>
 			<artifactId>olap4j</artifactId>
-			<version>1.1.0</version>
+			<version>${version.olap4j}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
-			<version>1.6</version>
+			<version>${version.commons.pool}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
-			<version>1.9</version>
+			<version>${version.commons.configuration}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.jflex</groupId>
 			<artifactId>jflex</artifactId>
-			<version>1.4.3</version>
+			<version>${version.jflex}</version>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>mondrian</artifactId>
-			<version>${mondrian.version}</version>
+			<version>${version.mondrian}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbyclient</artifactId>
-			<version>${derby.version}</version>
+			<version>${version.derby}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>3.9</version>
+			<version>${version.poi}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>3.9</version>
+			<version>${version.poi}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>fop</artifactId>
-			<version>1.0</version>
+			<version>${version.fop}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>2.3.19</version>
+			<version>${version.freemarker}</version>
 		</dependency>
 	</dependencies>
 
