@@ -35,7 +35,7 @@
 			options="#{workbenchHandler.workspaceLayoutOptions}"
 			widgetVar="workbench">
 			<pe:layoutPane id="toolbar-pane" position="north"
-				styleClass="toolbar-area">
+				styleClassContent="toolbar-area">
 				<h:form id="toolbar-form">
 					<p:toolbar id="toolbar">
 						<p:toolbarGroup align="left">
@@ -70,17 +70,17 @@
 								title="#{msg['toolbar.refresh.tooltip']}" type="button"
 								icon="ui-icon-refresh"
 								disabled="#{!workbenchHandler.viewActive}"
-								onclick="getActiveWindow().document.location.reload()" />
+								onclick="getActiveWindow().document.location.reload();" />
 							<p:separator />
 							<p:menuButton value="#{msg['toolbar.export']}"
 								styleClass="export-menu">
 								<p:menuitem value="#{msg['toolbar.export.format.xls']}"
 									icon="ui-icon-disk"
-									onclick="getActiveWindow().$('#toolbar-form\\:mi-export-xls').click()"
+									onclick="getActiveWindow().$('#toolbar-form\\:mi-export-xls').click();"
 									disabled="#{!workbenchHandler.viewValid}" />
 								<p:menuitem value="#{msg['toolbar.export.format.xlsx']}"
 									icon="ui-icon-disk"
-									onclick="getActiveWindow().$('#toolbar-form\\:mi-export-xlsx').click()"
+									onclick="getActiveWindow().$('#toolbar-form\\:mi-export-xlsx').click();"
 									disabled="#{!workbenchHandler.viewValid}" />
 								<p:menuitem value="#{msg['toolbar.export.format.pdf']}"
 									icon="ui-icon-print"
@@ -90,7 +90,7 @@
 							<p:commandButton value="#{msg['toolbar.print']}"
 								title="#{msg['toolbar.print.tooltip']}" type="button"
 								icon="ui-icon-print"
-								onclick="getActiveWindow().$('table.pivot-grid:first').jqprint()"
+								onclick="getActiveWindow().$('table.pivot-grid:first').jqprint();"
 								disabled="#{!workbenchHandler.viewValid}" />
 						</p:toolbarGroup>
 						<p:toolbarGroup align="right">
@@ -153,7 +153,7 @@
 							</p:treeNode>
 
 							<p:ajax event="select"
-								action="#{repositoryHandler.onSelectionChange}" global="false"
+								listener="#{repositoryHandler.onSelectionChange}" global="false"
 								update=":repository-form:navigator-menu,:toolbar-form:toolbar" />
 						</p:tree>
 

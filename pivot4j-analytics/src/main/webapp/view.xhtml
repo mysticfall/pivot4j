@@ -36,7 +36,7 @@
 		<pe:layout id="workbench" fullPage="true"
 			options="#{workbenchHandler.layoutOptions}" widgetVar="workbench">
 			<pe:layoutPane id="toolbar-pane" position="north"
-				styleClass="toolbar-area">
+				styleClassContent="toolbar-area">
 				<h:form id="toolbar-form">
 					<p:toolbar id="toolbar">
 						<p:toolbarGroup align="left">
@@ -151,7 +151,7 @@
 							<p:commandButton value="#{msg['toolbar.print']}"
 								title="#{msg['toolbar.print.tooltip']}" type="button"
 								icon="ui-icon-print" disabled="#{!pivotGridHandler.valid}"
-								onclick="$('table.pivot-grid:first').jqprint()"
+								onclick="$('table.pivot-grid:first').jqprint();"
 								styleClass="hide-on-embed" />
 						</p:toolbarGroup>
 					</p:toolbar>
