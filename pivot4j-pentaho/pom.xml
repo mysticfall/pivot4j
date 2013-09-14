@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.eyeq</groupId>
@@ -58,7 +59,7 @@
 										<path>WEB-INF/lib</path>
 										<destination>lib</destination>
 										<include>*.jar</include>
-										<exclude>olap4j*,xercesImpl*,xml-apis*,xalan*,eigenbase*,derby*,mondrian*,commons-logging*,log4j*,slfj*</exclude>
+										<exclude>olap4j*,xercesImpl*,xml-apis*,xalan*,xmlParser*,eigenbase*,derby*,mondrian*,commons-logging*,log4j*,slfj*</exclude>
 									</resource>
 									<resource>
 										<path>resources</path>
@@ -175,6 +176,10 @@
 					<groupId>gnujaxp</groupId>
 					<artifactId>gnujaxp</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xmlParserAPIs</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -212,6 +217,14 @@
 				<exclusion>
 					<groupId>janino</groupId>
 					<artifactId>janino</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xmlParserAPIs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xerces</groupId>
+					<artifactId>xmlParserAPIs</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
