@@ -14,6 +14,17 @@
 			<includes>
 				<include>**/*</include>
 			</includes>
+			<excludes>
+				<exclude>*.xml</exclude>
+			</excludes>
+			<filtered>false</filtered>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/plugin</directory>
+			<outputDirectory>/pivot4j</outputDirectory>
+			<includes>
+				<include>*.xml</include>
+			</includes>
 			<filtered>true</filtered>
 		</fileSet>
 	</fileSets>
