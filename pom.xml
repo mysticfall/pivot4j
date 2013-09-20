@@ -56,8 +56,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.jsp>2.1</version.jsp>
 		<version.servlet>2.5</version.servlet>
 
-		<version.logback>1.0.13</version.logback>
 		<version.slf4j>1.7.5</version.slf4j>
+		<version.log4j>2.0-beta9</version.log4j>
 
 		<version.mondrian>3.6.0</version.mondrian>
 		<version.olap4j>1.1.0</version.olap4j>
@@ -92,6 +92,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.poi>3.9</version.poi>
 		<version.shrinkwrap>2.0.0</version.shrinkwrap>
 		<version.tomcat6>6.0.37</version.tomcat6>
+		<version.xerces>2.11.0</version.xerces>
 	</properties>
 
 	<modules>

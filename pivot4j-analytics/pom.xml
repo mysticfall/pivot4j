@@ -52,8 +52,7 @@
 						<resource>
 							<directory>${project.build.directory}/generated-resources/xml/xslt</directory>
 							<includes>
-								<include>logback-test.xml</include>
-								<include>log4j.xml</include>
+								<include>log4j-test.xml</include>
 								<include>mondrian.properties</include>
 							</includes>
 							<targetPath>WEB-INF/classes</targetPath>
@@ -208,8 +207,7 @@
 			<resource>
 				<directory>${basedir}/src/main/resources</directory>
 				<excludes>
-					<exclude>logback-test.xml</exclude>
-					<exclude>log4j.xml</exclude>
+					<exclude>log4j-test.xml</exclude>
 					<exclude>mondrian.properties</exclude>
 				</excludes>
 				<filtering>false</filtering>
@@ -224,6 +222,42 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${version.log4j}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${version.log4j}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${version.log4j}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-1.2-api</artifactId>
+			<version>${version.log4j}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jcl</artifactId>
+			<version>${version.log4j}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>${version.xerces}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.olap4j</groupId>
 			<artifactId>olap4j-xmla</artifactId>
 			<version>${version.olap4j}</version>
@@ -232,12 +266,6 @@
 			<groupId>commons-dbutils</groupId>
 			<artifactId>commons-dbutils</artifactId>
 			<version>${version.commons.dbutils}</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${version.logback}</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
