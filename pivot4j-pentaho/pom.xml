@@ -59,7 +59,7 @@
 										<path>WEB-INF/lib</path>
 										<destination>lib</destination>
 										<include>*.jar</include>
-										<exclude>olap4j*,xercesImpl*,xml-apis*,xalan*,xmlParser*,eigenbase*,derby*,mondrian*,commons-logging*,log4j*,slfj*</exclude>
+										<exclude>olap4j*,xercesImpl*,xml-apis*,xalan*,xmlParser*,eigenbase*,derby*,mondrian*,commons-logging*,log4j*,slf4j*</exclude>
 									</resource>
 									<resource>
 										<path>resources</path>
