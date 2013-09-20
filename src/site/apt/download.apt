@@ -45,12 +45,6 @@ Download
 
 * Pentaho BI Plugin
 
-** Stable Release
-
-	* Tar.gz Archive : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-pentaho/0.8/pivot4j-pentaho-0.8-plugin.zip}pivot4j-pentaho-0.8-plugin.zip}}
-
-	* Zip Archive : {{{http://dev.eyeq.co.kr/artifactory/simple/libs-release/com/eyeq/pivot4j-pentaho/0.8/pivot4j-pentaho-0.8-plugin.tar.gz}pivot4j-pentaho-0.8-plugin.tar.gz}}
-
 ** Development Snapshot
 
 	* Tar.gz Archive : {{{http://dev.eyeq.co.kr/jenkins/job/Pivot4J/lastSuccessfulBuild/artifact/pivot4j-pentaho/target/pivot4j-pentaho-0.9-SNAPSHOT-plugin.tar.gz}pivot4j-pentaho-0.9-SNAPSHOT-plugin.tar.gz}}
