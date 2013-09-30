@@ -25,6 +25,7 @@ import com.eyeq.pivot4j.analytics.repository.ReportContent;
 import com.eyeq.pivot4j.analytics.repository.ReportFile;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.state.ViewStateHolder;
+import com.eyeq.pivot4j.pentaho.repository.PentahoReportFile;
 import com.eyeq.pivot4j.pentaho.repository.PentahoReportRepository;
 
 @ManagedBean(name = "pentahoFileHandler")
@@ -127,9 +128,11 @@ public class PentahoFileHandler {
 				.getRequestParameterMap();
 		String viewId = parameters.get("viewId");
 
+		String extension = "." + PentahoReportFile.DEFAULT_EXTENSION;
+
 		String fileName = parameters.get("fileName");
-		if (!fileName.endsWith(".pivot4j")) {
-			fileName += ".pivot4j";
+		if (!fileName.endsWith(extension)) {
+			fileName += extension;
 		}
 
 		String path = parameters.get("path");

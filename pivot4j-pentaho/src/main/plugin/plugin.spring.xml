@@ -29,7 +29,8 @@
 					<value>false</value>
 				</entry>
 				<entry key="javax.faces.FACELETS_RESOURCE_RESOLVER">
-					<value>com.eyeq.pivot4j.pentaho.servlet.PluginResourceResolver</value>
+					<value>com.eyeq.pivot4j.pentaho.servlet.PluginResourceResolver
+					</value>
 				</entry>
 				<entry key="primefaces.THEME">
 					<value>#{workbenchHandler.theme}</value>
@@ -40,4 +41,8 @@
 			</map>
 		</property>
 	</bean>
+
+	<bean id="converterRegistryHelper"
+		class="com.eyeq.pivot4j.pentaho.content.ConverterRegistrationHelper"
+		lazy-init="false" />
 </beans>

@@ -12,6 +12,8 @@ import com.eyeq.pivot4j.analytics.repository.ReportFile;
 
 public class PentahoReportFile extends AbstractReportFile {
 
+	public static final String DEFAULT_EXTENSION = "pivot4j";
+
 	private RepositoryFile file;
 
 	private PentahoReportFile parent;
