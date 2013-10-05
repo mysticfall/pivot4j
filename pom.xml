@@ -52,7 +52,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.extension.wagon>0.3.1</version.extension.wagon>
 
 		<version.el>2.2.2</version.el>
-		<version.jsf>2.1.10</version.jsf>
+		<version.jsf>2.1.12</version.jsf>
 		<version.jsp>2.1</version.jsp>
 		<version.servlet>2.5</version.servlet>
 
@@ -74,8 +74,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.junit>4.11</version.junit>
 
 		<version.primefaces>3.5</version.primefaces>
-		<version.primefaces.extensions>0.6.3</version.primefaces.extensions>
-		<version.primefaces.themes>1.0.9</version.primefaces.themes>
+		<version.primefaces.extensions>0.7.1</version.primefaces.extensions>
+		<version.primefaces.themes>1.0.10</version.primefaces.themes>
 
 		<version.arquillian.bom>1.1.1.Final</version.arquillian.bom>
 		<version.arquillian.drone>1.2.0.Alpha3</version.arquillian.drone>
