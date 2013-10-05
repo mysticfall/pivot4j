@@ -88,13 +88,13 @@ public class StateSavingIT extends AbstractIntegrationTestCase {
 		assertThat("MDX has been changed after the state restoration", newMdx,
 				is(equalTo(mdx)));
 		assertThat(
-				"Property 'sorting' has been changed after the state restoration",
+				"RenderProperty 'sorting' has been changed after the state restoration",
 				newModel.isSorting(), is(true));
 		assertThat(
-				"Property 'topBottomCount' has been changed after the state restoration",
+				"RenderProperty 'topBottomCount' has been changed after the state restoration",
 				newModel.getTopBottomCount(), is(equalTo(3)));
 		assertThat(
-				"Property 'sortMode' has been changed after the state restoration",
+				"RenderProperty 'sortMode' has been changed after the state restoration",
 				newModel.getSortCriteria(),
 				is(equalTo(SortCriteria.BOTTOMCOUNT)));
 	}
@@ -149,13 +149,13 @@ public class StateSavingIT extends AbstractIntegrationTestCase {
 		assertThat("MDX has been changed after the state restoration", newMdx,
 				is(equalTo(mdx)));
 		assertThat(
-				"Property 'sorting' has been changed after the state restoration",
+				"RenderProperty 'sorting' has been changed after the state restoration",
 				newModel.isSorting(), is(true));
 		assertThat(
-				"Property 'topBottomCount' has been changed after the state restoration",
+				"RenderProperty 'topBottomCount' has been changed after the state restoration",
 				newModel.getTopBottomCount(), is(equalTo(3)));
 		assertThat(
-				"Property 'sortMode' has been changed after the state restoration",
+				"RenderProperty 'sortMode' has been changed after the state restoration",
 				newModel.getSortCriteria(),
 				is(equalTo(SortCriteria.BOTTOMCOUNT)));
 	}

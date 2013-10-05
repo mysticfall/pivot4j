@@ -386,7 +386,7 @@
 				<pe:layoutPane id="grid-content-pane" position="center">
 					<h:form id="grid-form">
 						<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
-							binding="#{pivotGridHandler.renderer.component}"
+							binding="#{pivotGridHandler.component}"
 							rendered="#{pivotGridHandler.valid}" />
 
 						<p:fieldset styleClass="filter-info"
@@ -395,7 +395,7 @@
 							rendered="#{pivotGridHandler.valid and pivotGridHandler.renderer.renderSlicer}">
 
 							<p:panelGrid id="filter-grid" styleClass="filter-grid"
-								binding="#{pivotGridHandler.renderer.filterComponent}" />
+								binding="#{pivotGridHandler.filterComponent}" />
 						</p:fieldset>
 
 						<h:panelGroup styleClass="info-panel" layout="block"

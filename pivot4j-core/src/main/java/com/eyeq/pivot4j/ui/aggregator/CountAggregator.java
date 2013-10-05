@@ -8,6 +8,8 @@
  */
 package com.eyeq.pivot4j.ui.aggregator;
 
+import static com.eyeq.pivot4j.ui.CellTypes.AGG_VALUE;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
@@ -19,7 +21,6 @@ import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
 
-import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class CountAggregator extends AbstractAggregator {
@@ -70,7 +71,7 @@ public class CountAggregator extends AbstractAggregator {
 	@Override
 	public void aggregate(RenderContext context) {
 		if (context.getAggregator() != null
-				|| context.getCellType() == CellType.Aggregation) {
+				|| AGG_VALUE.equals(context.getCellType())) {
 			return;
 		}
 

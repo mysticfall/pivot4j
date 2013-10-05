@@ -19,6 +19,7 @@ import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.el.ExpressionContext;
+import com.eyeq.pivot4j.el.ExpressionEvaluatorFactory;
 import com.eyeq.pivot4j.sort.SortCriteria;
 import com.eyeq.pivot4j.state.Bookmarkable;
 import com.eyeq.pivot4j.state.Configurable;
@@ -125,6 +126,8 @@ public interface PivotModel extends Configurable, Bookmarkable {
 	 * Returns the registered transform instance for the given type.
 	 */
 	<T extends Transform> T getTransform(Class<T> type);
+
+	ExpressionEvaluatorFactory getExpressionEvaluatorFactory();
 
 	/**
 	 * Changes current sorting. If <code>mode</code> is <code>TOPCOUNT</code> or

@@ -8,7 +8,7 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
-public interface DrillDownCommand extends CellCommand<Void> {
+public interface DrillDownCommand extends UICommand<Void> {
 
 	String MODE_POSITION = "position";
 

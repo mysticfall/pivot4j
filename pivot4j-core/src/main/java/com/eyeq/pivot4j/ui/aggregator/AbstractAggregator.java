@@ -120,7 +120,7 @@ public abstract class AbstractAggregator implements Aggregator {
 	 */
 	@Override
 	public void aggregate(RenderContext context) {
-		Position targetPosition = getTargetPosition(context);
+		Position targetPosition = context.getAggregationTarget(getAxis());
 
 		Double cellValue = null;
 
@@ -228,38 +228,6 @@ public abstract class AbstractAggregator implements Aggregator {
 	}
 
 	/**
-	 * @param context
-	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getPosition(com.eyeq.pivot4j.ui.RenderContext)
-	 */
-	public Position getPosition(RenderContext context) {
-		Position position = null;
-
-		if (axis == Axis.COLUMNS) {
-			position = context.getColumnPosition();
-		} else if (axis == Axis.ROWS) {
-			position = context.getRowPosition();
-		}
-
-		return position;
-	}
-
-	/**
-	 * @param context
-	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getTargetPosition(com.eyeq.pivot4j.ui.RenderContext)
-	 */
-	public Position getTargetPosition(RenderContext context) {
-		Position targetPosition = null;
-
-		if (axis == Axis.COLUMNS) {
-			targetPosition = context.getRowPosition();
-		} else if (axis == Axis.ROWS) {
-			targetPosition = context.getColumnPosition();
-		}
-
-		return targetPosition;
-	}
-
-	/**
 	 * @param position
 	 * @return
 	 */
@@ -279,7 +247,7 @@ public abstract class AbstractAggregator implements Aggregator {
 	 */
 	@Override
 	public Double getValue(RenderContext context) {
-		Position targetPosition = getTargetPosition(context);
+		Position targetPosition = context.getAggregationTarget(getAxis());
 		return getValue(targetPosition);
 	}
 
@@ -295,7 +263,7 @@ public abstract class AbstractAggregator implements Aggregator {
 	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getFormattedValue(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	public String getFormattedValue(RenderContext context) {
-		Position position = getTargetPosition(context);
+		Position position = context.getAggregationTarget(getAxis());
 
 		Double value = getValue(position);
 
@@ -326,7 +294,7 @@ public abstract class AbstractAggregator implements Aggregator {
 	 * @return
 	 */
 	protected String getAggregationLabel(RenderContext context) {
-		ResourceBundle resources = context.getRenderer().getResourceBundle();
+		ResourceBundle resources = context.getResourceBundle();
 
 		String label = null;
 

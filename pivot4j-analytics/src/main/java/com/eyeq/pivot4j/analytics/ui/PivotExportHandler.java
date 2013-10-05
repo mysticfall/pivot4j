@@ -19,15 +19,14 @@ import javax.print.attribute.standard.MediaSize;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 
-import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.export.fop.FopExporter;
-import com.eyeq.pivot4j.export.poi.ExcelExporter;
-import com.eyeq.pivot4j.export.poi.Format;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.fop.FopExporter;
+import com.eyeq.pivot4j.ui.poi.ExcelExporter;
+import com.eyeq.pivot4j.ui.poi.Format;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 
 @ManagedBean(name = "pivotExportHandler")
 @RequestScoped
@@ -320,14 +319,6 @@ public class PivotExportHandler {
 	 * @throws IOException
 	 */
 	protected void exportExcel(Format format) throws IOException {
-		HierarchicalConfiguration configuration = new HierarchicalConfiguration();
-
-		PivotRenderer renderer = gridHandler.getRenderer();
-		renderer.saveSettings(configuration);
-
-		ExcelExporter exporter = new ExcelExporter();
-		exporter.restoreSettings(configuration);
-
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		String disposition = String.format("attachment; filename=\"%s.%s\"",
@@ -335,30 +326,41 @@ public class PivotExportHandler {
 
 		ExternalContext externalContext = context.getExternalContext();
 		externalContext.setResponseHeader("Content-Disposition", disposition);
-		externalContext.setResponseContentType(exporter.getContentType());
+
+		TableRenderer renderer = gridHandler.getRenderer();
+
+		boolean renderSlicer = renderer.getRenderSlicer();
 
 		OutputStream out = externalContext.getResponseOutputStream();
 
-		try {
-			exporter.setFormat(format);
-			exporter.setOutputStream(out);
+		ExcelExporter exporter = new ExcelExporter(out);
+		exporter.setFormat(format);
 
-			exporter.render(model);
+		externalContext.setResponseContentType(exporter.getContentType());
+
+		try {
+			renderer.setRenderSlicer(true);
+			renderer.render(model, exporter);
 		} finally {
+			renderer.setRenderSlicer(renderSlicer);
 			out.flush();
 			IOUtils.closeQuietly(out);
 		}
 	}
 
 	public void exportPdf() throws IOException, IllegalAccessException {
-		HierarchicalConfiguration configuration = new HierarchicalConfiguration();
+		TableRenderer renderer = gridHandler.getRenderer();
 
-		PivotRenderer renderer = gridHandler.getRenderer();
-		renderer.saveSettings(configuration);
+		FacesContext context = FacesContext.getCurrentInstance();
 
-		FopExporter exporter = new FopExporter();
-		exporter.restoreSettings(configuration);
+		String disposition = String.format("attachment; filename=\"%s.%s\"",
+				model.getCube().getName(), "pdf");
 
+		ExternalContext externalContext = context.getExternalContext();
+
+		OutputStream out = externalContext.getResponseOutputStream();
+
+		FopExporter exporter = new FopExporter(out);
 		exporter.setShowHeader(showHeader);
 
 		if (StringUtils.isNotBlank(headerText)) {
@@ -374,7 +376,6 @@ public class PivotExportHandler {
 		exporter.setFontSize(fontSize + "pt");
 		exporter.setTitleFontSize(headerFontSize + "pt");
 		exporter.setFooterFontSize(footerFontSize + "pt");
-
 		exporter.setOrientation(orientation.getValue());
 
 		MediaSize mediaSize = null;
@@ -390,21 +391,18 @@ public class PivotExportHandler {
 
 		exporter.setMediaSize(mediaSize);
 
-		FacesContext context = FacesContext.getCurrentInstance();
-
-		String disposition = String.format("attachment; filename=\"%s.%s\"",
-				model.getCube().getName(), "pdf");
-
-		ExternalContext externalContext = context.getExternalContext();
-		externalContext.setResponseHeader("Content-Disposition", disposition);
 		externalContext.setResponseContentType(exporter.getContentType());
+		externalContext.setResponseHeader("Content-Disposition", disposition);
 
-		OutputStream out = externalContext.getResponseOutputStream();
+		boolean renderSlicer = renderer.getRenderSlicer();
 
 		try {
-			exporter.setOutputStream(out);
-			exporter.render(model);
+			renderer.setRenderSlicer(true);
+
+			renderer.render(model, exporter);
 		} finally {
+			renderer.setRenderSlicer(renderSlicer);
+
 			out.flush();
 			IOUtils.closeQuietly(out);
 		}

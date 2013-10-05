@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.Axis;
@@ -30,73 +31,53 @@ import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.el.ExpressionContext;
 import com.eyeq.pivot4j.el.ExpressionEvaluator;
 import com.eyeq.pivot4j.ui.aggregator.Aggregator;
+import com.eyeq.pivot4j.ui.property.RenderPropertyList;
 
-public class RenderContext {
+public abstract class RenderContext {
+
+	public static final String RESOURCE_BUNDLE_NAME = "com.eyeq.pivot4j.i18n.messages";
+
+	public static final String ATTRIBUTE_CACHED_MEMBERS = "pivot4j.cached.members";
+
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private PivotModel model;
 
-	private PivotRenderer renderer;
+	private PivotRenderer<?> renderer;
 
-	private Axis axis;
-
-	private Position columnPosition;
-
-	private Position rowPosition;
-
-	private Hierarchy hierarchy;
-
-	private Member member;
-
-	private Property property;
-
-	private Level level;
-
-	private Cell cell;
-
-	private CellType cellType;
-
-	private Aggregator aggregator;
-
-	private int columnCount;
-
-	private int rowCount;
-
-	private int columnHeaderCount;
-
-	private int rowHeaderCount;
-
-	private int colIndex;
-
-	private int rowIndex;
-
-	private int colSpan = 1;
-
-	private int rowSpan = 1;
+	private ResourceBundle resourceBundle;
 
 	private ExpressionContext expressionContext;
 
 	private ExpressionEvaluator expressionEvaluator;
 
-	private Map<String, Member> cachedParents;
+	private Axis axis;
+
+	private Hierarchy hierarchy;
+
+	private Level level;
+
+	private Member member;
+
+	private Property property;
+
+	private Position position;
+
+	private Cell cell;
+
+	private String cellType;
+
+	private String renderPropertyCategory;
+
+	private Aggregator aggregator;
 
 	private Map<String, Object> attributes;
-
-	private Logger logger;
 
 	/**
 	 * @param model
 	 * @param renderer
-	 * @param columnCount
-	 * @param rowCount
-	 * @param columnHeaderCount
-	 * @param rowHeaderCount
-	 * @param expressionEvaluator
-	 * @param cachedParents
 	 */
-	public RenderContext(PivotModel model, PivotRenderer renderer,
-			int columnCount, int rowCount, int columnHeaderCount,
-			int rowHeaderCount, ExpressionEvaluator expressionEvaluator,
-			Map<String, Member> cachedParents) {
+	public RenderContext(PivotModel model, PivotRenderer<?> renderer) {
 		if (model == null) {
 			throw new NullArgumentException("model");
 		}
@@ -105,49 +86,35 @@ public class RenderContext {
 			throw new NullArgumentException("renderer");
 		}
 
-		if (expressionEvaluator == null) {
-			throw new NullArgumentException("expressionEvaluator");
-		}
-
-		if (columnCount < 0) {
-			throw new IllegalArgumentException(
-					"Column count should be ZERO or positive integer.");
-		}
-
-		if (rowCount < 0) {
-			throw new IllegalArgumentException(
-					"Row count should be ZERO or positive integer.");
-		}
-
-		if (columnHeaderCount < 0) {
-			throw new IllegalArgumentException(
-					"Column header count should be ZERO or positive integer.");
-		}
-
-		if (rowHeaderCount < 0) {
-			throw new IllegalArgumentException(
-					"Row header count should be ZERO or positive integer.");
-		}
-
 		this.model = model;
 		this.renderer = renderer;
-		this.columnCount = columnCount;
-		this.rowCount = rowCount;
-		this.columnHeaderCount = columnHeaderCount;
-		this.rowHeaderCount = rowHeaderCount;
+
+		this.resourceBundle = createDefaultResourceBundle(model);
 
 		this.expressionContext = createExpressionContext(model);
-		this.expressionEvaluator = expressionEvaluator;
-
-		if (cachedParents == null) {
-			this.cachedParents = new HashMap<String, Member>();
-		} else {
-			this.cachedParents = cachedParents;
-		}
+		this.expressionEvaluator = model.getExpressionEvaluatorFactory()
+				.createEvaluator();
 
 		this.attributes = new HashMap<String, Object>();
+	}
 
-		this.logger = LoggerFactory.getLogger(getClass());
+	/**
+	 * @return the logger
+	 */
+	public Logger getLogger() {
+		return logger;
+	}
+
+	/**
+	 * @param logger
+	 *            the logger to set
+	 */
+	public void setLogger(Logger logger) {
+		if (logger == null) {
+			throw new NullArgumentException("logger");
+		}
+
+		this.logger = logger;
 	}
 
 	/**
@@ -160,8 +127,148 @@ public class RenderContext {
 	/**
 	 * @return the renderer
 	 */
-	public PivotRenderer getRenderer() {
+	public PivotRenderer<?> getRenderer() {
 		return renderer;
+	}
+
+	/**
+	 * @return the expressionContext
+	 */
+	public ExpressionContext getExpressionContext() {
+		return expressionContext;
+	}
+
+	/**
+	 * @param model
+	 * @return
+	 */
+	protected ExpressionContext createExpressionContext(PivotModel model) {
+		ExpressionContext context = new ExpressionContext(
+				model.getExpressionContext());
+
+		context.put("axis", new ExpressionContext.ValueBinding<Axis>() {
+
+			@Override
+			public Axis getValue() {
+				return axis;
+			}
+		});
+
+		context.put("hierarchy",
+				new ExpressionContext.ValueBinding<Hierarchy>() {
+
+					@Override
+					public Hierarchy getValue() {
+						return hierarchy;
+					}
+				});
+
+		context.put("level", new ExpressionContext.ValueBinding<Level>() {
+
+			@Override
+			public Level getValue() {
+				return level;
+			}
+		});
+
+		context.put("member", new ExpressionContext.ValueBinding<Member>() {
+
+			@Override
+			public Member getValue() {
+				return member;
+			}
+		});
+
+		context.put("cell", new ExpressionContext.ValueBinding<Cell>() {
+
+			@Override
+			public Cell getValue() {
+				return cell;
+			}
+		});
+
+		context.put("cellType", new ExpressionContext.ValueBinding<String>() {
+
+			@Override
+			public String getValue() {
+				return cellType;
+			}
+		});
+
+		context.put("renderPropertyCategory",
+				new ExpressionContext.ValueBinding<String>() {
+
+					@Override
+					public String getValue() {
+						return renderPropertyCategory;
+					}
+				});
+
+		context.put("position", new ExpressionContext.ValueBinding<Position>() {
+
+			@Override
+			public Position getValue() {
+				return position;
+			}
+		});
+
+		context.put("property", new ExpressionContext.ValueBinding<Property>() {
+
+			@Override
+			public Property getValue() {
+				return property;
+			}
+		});
+
+		context.put("aggregator",
+				new ExpressionContext.ValueBinding<Aggregator>() {
+
+					@Override
+					public Aggregator getValue() {
+						return aggregator;
+					}
+				});
+
+		context.put("attributes",
+				new ExpressionContext.ValueBinding<Map<String, Object>>() {
+
+					@Override
+					public Map<String, Object> getValue() {
+						return attributes;
+					}
+				});
+
+		return context;
+	}
+
+	/**
+	 * @return the expressionEvaluator
+	 */
+	public ExpressionEvaluator getExpressionEvaluator() {
+		return expressionEvaluator;
+	}
+
+	/**
+	 * @return the resourceBundle
+	 */
+	public ResourceBundle getResourceBundle() {
+		return resourceBundle;
+	}
+
+	/**
+	 * @param resourceBundle
+	 */
+	public void setResourceBundle(ResourceBundle resourceBundle) {
+		this.resourceBundle = resourceBundle;
+	}
+
+	/**
+	 * @param model
+	 * @return
+	 */
+	protected ResourceBundle createDefaultResourceBundle(PivotModel model) {
+		return ResourceBundle
+				.getBundle(RESOURCE_BUNDLE_NAME, model.getLocale());
 	}
 
 	/**
@@ -185,6 +292,8 @@ public class RenderContext {
 	public void setAxis(Axis axis) {
 		this.axis = axis;
 	}
+
+	public abstract List<Axis> getAxes();
 
 	/**
 	 * @return the hierarchy
@@ -261,54 +370,10 @@ public class RenderContext {
 		this.cell = cell;
 	}
 
-	public Position getPosition() {
-		if (axis == null) {
-			return null;
-		}
-
-		if (axis.equals(Axis.COLUMNS)) {
-			return columnPosition;
-		} else if (axis.equals(Axis.ROWS)) {
-			return rowPosition;
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * @return the columnPosition
-	 */
-	public Position getColumnPosition() {
-		return columnPosition;
-	}
-
-	/**
-	 * @param columnPosition
-	 *            the columnPosition to set
-	 */
-	public void setColumnPosition(Position columnPosition) {
-		this.columnPosition = columnPosition;
-	}
-
-	/**
-	 * @return the rowPosition
-	 */
-	public Position getRowPosition() {
-		return rowPosition;
-	}
-
-	/**
-	 * @param rowPosition
-	 *            the rowPosition to set
-	 */
-	public void setRowPosition(Position rowPosition) {
-		this.rowPosition = rowPosition;
-	}
-
 	/**
 	 * @return the cellType
 	 */
-	public CellType getCellType() {
+	public String getCellType() {
 		return cellType;
 	}
 
@@ -316,97 +381,45 @@ public class RenderContext {
 	 * @param cellType
 	 *            the cellType to set
 	 */
-	public void setCellType(CellType cellType) {
+	public void setCellType(String cellType) {
 		this.cellType = cellType;
 	}
 
 	/**
-	 * @return the columnCount
+	 * @return the renderPropertyCategory
 	 */
-	public int getColumnCount() {
-		return columnCount;
+	public String getRenderPropertyCategory() {
+		return renderPropertyCategory;
 	}
 
 	/**
-	 * @return the rowCount
+	 * @param renderPropertyCategory
+	 *            the renderPropertyCategory to set
 	 */
-	public int getRowCount() {
-		return rowCount;
+	public void setRenderPropertyCategory(String renderPropertyCategory) {
+		this.renderPropertyCategory = renderPropertyCategory;
 	}
 
 	/**
-	 * @return the columnHeaderCount
+	 * @return the position
 	 */
-	public int getColumnHeaderCount() {
-		return columnHeaderCount;
+	public Position getPosition() {
+		return position;
 	}
 
 	/**
-	 * @return the rowHeaderCount
+	 * @param position
+	 *            the position to set
 	 */
-	public int getRowHeaderCount() {
-		return rowHeaderCount;
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 
 	/**
-	 * @return the colIndex
+	 * @param axis
+	 * @return
 	 */
-	public int getColumnIndex() {
-		return colIndex;
-	}
-
-	/**
-	 * @param colIndex
-	 *            the colIndex to set
-	 */
-	public void setColIndex(int colIndex) {
-		this.colIndex = colIndex;
-	}
-
-	/**
-	 * @return the rowIndex
-	 */
-	public int getRowIndex() {
-		return rowIndex;
-	}
-
-	/**
-	 * @param rowIndex
-	 *            the rowIndex to set
-	 */
-	public void setRowIndex(int rowIndex) {
-		this.rowIndex = rowIndex;
-	}
-
-	/**
-	 * @return the colSpan
-	 */
-	public int getColumnSpan() {
-		return colSpan;
-	}
-
-	/**
-	 * @param colSpan
-	 *            the colSpan to set
-	 */
-	public void setColSpan(int colSpan) {
-		this.colSpan = colSpan;
-	}
-
-	/**
-	 * @return the rowSpan
-	 */
-	public int getRowSpan() {
-		return rowSpan;
-	}
-
-	/**
-	 * @param rowSpan
-	 *            the rowSpan to set
-	 */
-	public void setRowSpan(int rowSpan) {
-		this.rowSpan = rowSpan;
-	}
+	public abstract Position getPosition(Axis axis);
 
 	/**
 	 * @return the aggregator
@@ -424,7 +437,13 @@ public class RenderContext {
 	}
 
 	/**
+	 * @param axis
 	 * @return
+	 */
+	public abstract Position getAggregationTarget(Axis axis);
+
+	/**
+	 * @return the cellSetAxis
 	 */
 	public CellSetAxis getCellSetAxis() {
 		if (axis == null) {
@@ -432,78 +451,6 @@ public class RenderContext {
 		}
 
 		return getCellSet().getAxes().get(axis.axisOrdinal());
-	}
-
-	/**
-	 * Temporary workaround for performance issue.
-	 * 
-	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
-	 * 
-	 * @param member
-	 * @return
-	 */
-	public Member getParentMember(Member member) {
-		Member parent = cachedParents.get(member.getUniqueName());
-
-		if (parent == null) {
-			parent = member.getParentMember();
-			cachedParents.put(member.getUniqueName(), parent);
-		}
-
-		return parent;
-	}
-
-	/**
-	 * Temporary workaround for performance issue.
-	 * 
-	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
-	 * 
-	 * @param member
-	 * @return
-	 */
-	public List<Member> getAncestorMembers(Member member) {
-		List<Member> ancestors = new ArrayList<Member>();
-
-		Member parent = member;
-
-		while ((parent = getParentMember(parent)) != null) {
-			ancestors.add(parent);
-		}
-
-		return ancestors;
-	}
-
-	/**
-	 * @return the logger
-	 */
-	public Logger getLogger() {
-		return logger;
-	}
-
-	/**
-	 * @param logger
-	 *            the logger to set
-	 */
-	public void setLogger(Logger logger) {
-		if (logger == null) {
-			throw new NullArgumentException("logger");
-		}
-
-		this.logger = logger;
-	}
-
-	/**
-	 * @return the expressionContext
-	 */
-	public ExpressionContext getExpressionContext() {
-		return expressionContext;
-	}
-
-	/**
-	 * @return the expressionEvaluator
-	 */
-	public ExpressionEvaluator getExpressionEvaluator() {
-		return expressionEvaluator;
 	}
 
 	/**
@@ -538,183 +485,58 @@ public class RenderContext {
 	}
 
 	/**
-	 * @param model
 	 * @return
 	 */
-	protected ExpressionContext createExpressionContext(PivotModel model) {
-		ExpressionContext context = new ExpressionContext(
-				model.getExpressionContext());
+	public Map<String, RenderPropertyList> getRenderProperties() {
+		return renderer.getRenderProperties();
+	}
 
-		context.put("axis", new ExpressionContext.ValueBinding<Axis>() {
+	/**
+	 * Temporary workaround for performance issue.
+	 * 
+	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * 
+	 * @param member
+	 * @return
+	 */
+	public Member getParentMember(Member member) {
+		Member parent = null;
 
-			@Override
-			public Axis getValue() {
-				return getAxis();
-			}
-		});
+		@SuppressWarnings("unchecked")
+		Map<String, Member> cachedParents = (Map<String, Member>) getAttribute(ATTRIBUTE_CACHED_MEMBERS);
 
-		context.put("hierarchy",
-				new ExpressionContext.ValueBinding<Hierarchy>() {
+		if (cachedParents == null) {
+			cachedParents = new HashMap<String, Member>();
+			setAttribute(ATTRIBUTE_CACHED_MEMBERS, cachedParents);
+		}
 
-					@Override
-					public Hierarchy getValue() {
-						return getHierarchy();
-					}
-				});
+		parent = cachedParents.get(member.getUniqueName());
 
-		context.put("level", new ExpressionContext.ValueBinding<Level>() {
+		if (parent == null) {
+			parent = member.getParentMember();
+			cachedParents.put(member.getUniqueName(), parent);
+		}
 
-			@Override
-			public Level getValue() {
-				return getLevel();
-			}
-		});
+		return parent;
+	}
 
-		context.put("member", new ExpressionContext.ValueBinding<Member>() {
+	/**
+	 * Temporary workaround for performance issue.
+	 * 
+	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
+	 * 
+	 * @param member
+	 * @return
+	 */
+	public List<Member> getAncestorMembers(Member member) {
+		List<Member> ancestors = new ArrayList<Member>();
 
-			@Override
-			public Member getValue() {
-				return getMember();
-			}
-		});
+		Member parent = member;
 
-		context.put("cell", new ExpressionContext.ValueBinding<Cell>() {
+		while ((parent = getParentMember(parent)) != null) {
+			ancestors.add(parent);
+		}
 
-			@Override
-			public Cell getValue() {
-				return getCell();
-			}
-		});
-
-		context.put("cellType", new ExpressionContext.ValueBinding<CellType>() {
-
-			@Override
-			public CellType getValue() {
-				return getCellType();
-			}
-		});
-
-		context.put("position", new ExpressionContext.ValueBinding<Position>() {
-
-			@Override
-			public Position getValue() {
-				return getPosition();
-			}
-		});
-
-		context.put("columnPosition",
-				new ExpressionContext.ValueBinding<Position>() {
-
-					@Override
-					public Position getValue() {
-						return getColumnPosition();
-					}
-				});
-
-		context.put("rowPosition",
-				new ExpressionContext.ValueBinding<Position>() {
-
-					@Override
-					public Position getValue() {
-						return getRowPosition();
-					}
-				});
-
-		context.put("property", new ExpressionContext.ValueBinding<Property>() {
-
-			@Override
-			public Property getValue() {
-				return getProperty();
-			}
-		});
-
-		context.put("columnCount",
-				new ExpressionContext.ValueBinding<Integer>() {
-
-					@Override
-					public Integer getValue() {
-						return getColumnCount();
-					}
-				});
-
-		context.put("rowCount", new ExpressionContext.ValueBinding<Integer>() {
-
-			@Override
-			public Integer getValue() {
-				return getRowCount();
-			}
-		});
-
-		context.put("columnHeaderCount",
-				new ExpressionContext.ValueBinding<Integer>() {
-
-					@Override
-					public Integer getValue() {
-						return getColumnHeaderCount();
-					}
-				});
-
-		context.put("rowHeaderCount",
-				new ExpressionContext.ValueBinding<Integer>() {
-
-					@Override
-					public Integer getValue() {
-						return getRowHeaderCount();
-					}
-				});
-
-		context.put("columnIndex",
-				new ExpressionContext.ValueBinding<Integer>() {
-
-					@Override
-					public Integer getValue() {
-						return getColumnIndex();
-					}
-				});
-
-		context.put("rowIndex", new ExpressionContext.ValueBinding<Integer>() {
-
-			@Override
-			public Integer getValue() {
-				return getRowIndex();
-			}
-		});
-
-		context.put("columnSpan",
-				new ExpressionContext.ValueBinding<Integer>() {
-
-					@Override
-					public Integer getValue() {
-						return getColumnSpan();
-					}
-				});
-
-		context.put("rowSpan", new ExpressionContext.ValueBinding<Integer>() {
-
-			@Override
-			public Integer getValue() {
-				return getRowSpan();
-			}
-		});
-
-		context.put("aggregator",
-				new ExpressionContext.ValueBinding<Aggregator>() {
-
-					@Override
-					public Aggregator getValue() {
-						return getAggregator();
-					}
-				});
-
-		context.put("attributes",
-				new ExpressionContext.ValueBinding<Map<String, Object>>() {
-
-					@Override
-					public Map<String, Object> getValue() {
-						return attributes;
-					}
-				});
-
-		return context;
+		return ancestors;
 	}
 }

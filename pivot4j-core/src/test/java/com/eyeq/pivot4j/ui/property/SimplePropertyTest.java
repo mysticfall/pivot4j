@@ -16,59 +16,62 @@ import java.io.Serializable;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.lang.ObjectUtils;
 import org.junit.Test;
 
 import com.eyeq.pivot4j.ui.AbstractMockRenderTestCase;
-import com.eyeq.pivot4j.ui.RenderContext;
+import com.eyeq.pivot4j.ui.table.TableRenderContext;
 
 public class SimplePropertyTest extends AbstractMockRenderTestCase {
 
 	@Test
 	public void testSimpleExpression() {
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(2);
 		context.setRowIndex(1);
 
-		Property property = new SimpleProperty("label",
+		RenderProperty property = new SimpleRenderProperty("label",
 				"(${rowIndex}, ${columnIndex})");
 
-		String result = property.getValue(context);
+		String result = ObjectUtils.toString(property.getValue(context));
 
 		assertThat("Wrong property value.", result, is(equalTo("(1, 2)")));
 	}
 
 	@Test
 	public void testStateManagement() {
-		SimpleProperty property = new SimpleProperty("bgColor", "red");
+		SimpleRenderProperty property = new SimpleRenderProperty("bgColor",
+				"red");
 
 		Serializable state = property.saveState();
 
-		SimpleProperty property2 = new SimpleProperty();
+		SimpleRenderProperty property2 = new SimpleRenderProperty();
 
 		property2.restoreState(state);
 
-		assertThat("Property name has been changed.", property2.getName(),
-				is(equalTo(property.getName())));
-		assertThat("Property value has been changed.", property2.getValue(),
-				is(equalTo(property.getValue())));
+		assertThat("RenderProperty name has been changed.",
+				property2.getName(), is(equalTo(property.getName())));
+		assertThat("RenderProperty value has been changed.",
+				property2.getValue(), is(equalTo(property.getValue())));
 	}
 
 	@Test
 	public void testSettingsManagement() throws ConfigurationException {
-		SimpleProperty property = new SimpleProperty("bgColor", "red");
+		SimpleRenderProperty property = new SimpleRenderProperty("bgColor",
+				"red");
 
 		XMLConfiguration configuration = new XMLConfiguration();
 		configuration.setRootElementName("property");
 
 		property.saveSettings(configuration);
 
-		SimpleProperty property2 = new SimpleProperty();
+		SimpleRenderProperty property2 = new SimpleRenderProperty();
 		property2.restoreSettings(configuration);
 
-		assertThat("Property name has been changed.", property2.getName(),
-				is(equalTo(property.getName())));
-		assertThat("Property value has been changed.", property2.getValue(),
-				is(equalTo(property.getValue())));
+		assertThat("RenderProperty name has been changed.",
+				property2.getName(), is(equalTo(property.getName())));
+		assertThat("RenderProperty value has been changed.",
+				property2.getValue(), is(equalTo(property.getValue())));
 
 		System.out.println("Saved configuration : ");
 

@@ -38,12 +38,12 @@ import com.eyeq.pivot4j.analytics.repository.ReportRepository;
 import com.eyeq.pivot4j.analytics.repository.RepositoryFileFilter;
 import com.eyeq.pivot4j.analytics.state.ViewState;
 import com.eyeq.pivot4j.analytics.state.ViewStateHolder;
-import com.eyeq.pivot4j.analytics.ui.PrimeFacesPivotRenderer;
 import com.eyeq.pivot4j.analytics.ui.navigator.RepositoryNode;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
 import com.eyeq.pivot4j.mdx.MdxParser;
 import com.eyeq.pivot4j.mdx.MdxStatement;
 import com.eyeq.pivot4j.mdx.impl.MdxParserImpl;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 
 @ManagedBean(name = "migrationHandler")
 @ViewScoped
@@ -345,8 +345,7 @@ public class MigrationHandler {
 		PivotModel model = new PivotModelImpl(dataSource);
 		model.setMdx(query);
 
-		FacesContext context = FacesContext.getCurrentInstance();
-		PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(context);
+		TableRenderer renderer = new TableRenderer();
 
 		// NOTE : Pentaho JPivot plugin does not preserve rendering states in
 		// saved reports, despite they contain related

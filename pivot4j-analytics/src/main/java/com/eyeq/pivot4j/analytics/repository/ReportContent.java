@@ -7,8 +7,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import javax.faces.context.FacesContext;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration.HierarchicalConfiguration;
@@ -20,8 +18,8 @@ import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.analytics.datasource.DataSourceManager;
 import com.eyeq.pivot4j.analytics.state.ViewState;
-import com.eyeq.pivot4j.analytics.ui.PrimeFacesPivotRenderer;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 
 public class ReportContent implements Serializable {
 
@@ -54,8 +52,7 @@ public class ReportContent implements Serializable {
 		}
 
 		if (state.getRendererState() != null) {
-			PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
-					FacesContext.getCurrentInstance());
+			TableRenderer renderer = new TableRenderer();
 
 			renderer.restoreState(state.getRendererState());
 
@@ -139,8 +136,7 @@ public class ReportContent implements Serializable {
 		state.setModel(model);
 
 		try {
-			PrimeFacesPivotRenderer renderer = new PrimeFacesPivotRenderer(
-					FacesContext.getCurrentInstance());
+			TableRenderer renderer = new TableRenderer();
 			renderer.restoreSettings(configuration.configurationAt("render"));
 
 			state.setRendererState(renderer.saveState());

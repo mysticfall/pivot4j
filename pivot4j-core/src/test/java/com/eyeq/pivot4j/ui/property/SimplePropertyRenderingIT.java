@@ -8,6 +8,8 @@
  */
 package com.eyeq.pivot4j.ui.property;
 
+import static com.eyeq.pivot4j.ui.table.TablePropertyCategories.CELL;
+import static com.eyeq.pivot4j.ui.table.TablePropertyCategories.HEADER;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.object.IsCompatibleType.typeCompatibleWith;
@@ -20,7 +22,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
@@ -44,42 +46,34 @@ public class SimplePropertyRenderingIT extends AbstractHtmlTableTestCase {
 	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(com.eyeq.pivot4j.ui.PivotRenderer)
 	 */
 	@Override
-	protected void configureRenderer(PivotRenderer renderer) {
+	protected void configureRenderer(TableRenderer renderer) {
 		super.configureRenderer(renderer);
 
-		renderer.getHeaderProperties()
-				.setProperty(
-						new SimpleProperty("bgColor",
-								"<#if member?? && member.level.depth == 2>#990000</#if>"));
+		RenderPropertyList headerProperties = renderer.getRenderProperties()
+				.get(HEADER);
+		RenderPropertyList cellProperties = renderer.getRenderProperties().get(
+				CELL);
 
-		renderer.getHeaderProperties().setProperty(
-				new SimpleProperty("fontFamily", "serif"));
-		renderer.getHeaderProperties()
-				.setProperty(
-						new SimpleProperty("fontStyle",
-								"<#if member?? && member.caption == 'Drink'>italic</#if>"));
+		headerProperties.setRenderProperty(new SimpleRenderProperty("bgColor",
+				"<#if member?? && member.level.depth == 2>#990000</#if>"));
+		headerProperties.setRenderProperty(new SimpleRenderProperty(
+				"fontFamily", "serif"));
+		headerProperties.setRenderProperty(new SimpleRenderProperty(
+				"fontStyle",
+				"<#if member?? && member.caption == 'Drink'>italic</#if>"));
+		headerProperties
+				.setRenderProperty(new SimpleRenderProperty(
+						"link",
+						"<#if member?? && member.all>javascript: alert('Unique name : ${member.uniqueName}');</#if>"));
 
-		renderer.getHeaderProperties()
-				.setProperty(
-						new SimpleProperty(
-								"link",
-								"<#if member?? && member.all>javascript: alert('Unique name : ${member.uniqueName}');</#if>"));
-
-		renderer.getCellProperties()
-				.setProperty(
-						new SimpleProperty("fgColor",
-								"<#if cell?? && cell.doubleValue < 15000>#ff0000</#if>"));
-		renderer.getCellProperties()
-				.setProperty(
-						new SimpleProperty("bgColor",
-								"<#if aggregator?? && cellType == 'Value'>#00aa00</#if>"));
-
-		renderer.getCellProperties().setProperty(
-				new SimpleProperty("fontStyle",
-						"<#if cell?? && cell.doubleValue < 15000>bold</#if>"));
-		renderer.getCellProperties().setProperty(
-				new SimpleProperty("label",
-						"<#if cell??>${'$'}${cell.formattedValue}</#if>"));
+		cellProperties.setRenderProperty(new SimpleRenderProperty("fgColor",
+				"<#if cell?? && cell.doubleValue < 15000>#ff0000</#if>"));
+		cellProperties.setRenderProperty(new SimpleRenderProperty("bgColor",
+				"<#if aggregator?? && cellType == 'VALUE'>#00aa00</#if>"));
+		cellProperties.setRenderProperty(new SimpleRenderProperty("fontStyle",
+				"<#if cell?? && cell.doubleValue < 15000>bold</#if>"));
+		cellProperties.setRenderProperty(new SimpleRenderProperty("label",
+				"<#if cell??>${'$'}${cell.formattedValue}</#if>"));
 	}
 
 	@Test

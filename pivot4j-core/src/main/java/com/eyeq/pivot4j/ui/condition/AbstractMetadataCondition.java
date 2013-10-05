@@ -11,6 +11,7 @@ package com.eyeq.pivot4j.ui.condition;
 import java.io.Serializable;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.olap4j.Axis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 
@@ -63,9 +64,19 @@ public abstract class AbstractMetadataCondition extends AbstractCondition {
 					"Unique name of the metadata is not specified.");
 		}
 
-		return matches(context.getMember())
-				|| matches(context.getRowPosition())
-				|| matches(context.getColumnPosition());
+		if (matches(context.getMember())) {
+			return true;
+		}
+
+		for (Axis axis : context.getAxes()) {
+			Position pos = context.getPosition(axis);
+
+			if (pos != null && matches(pos)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

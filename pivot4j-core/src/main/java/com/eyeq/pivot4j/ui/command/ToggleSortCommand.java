@@ -14,7 +14,7 @@ import org.olap4j.Position;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.sort.SortMode;
-import com.eyeq.pivot4j.ui.PivotUIRenderer;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 
 public class ToggleSortCommand extends AbstractSortCommand {
 
@@ -23,12 +23,12 @@ public class ToggleSortCommand extends AbstractSortCommand {
 	/**
 	 * @param renderer
 	 */
-	public ToggleSortCommand(PivotUIRenderer renderer) {
+	public ToggleSortCommand(PivotRenderer<?> renderer) {
 		super(renderer);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getName()
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#getName()
 	 */
 	@Override
 	public String getName() {
@@ -36,11 +36,11 @@ public class ToggleSortCommand extends AbstractSortCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#execute(com.eyeq.pivot4j.PivotModel
-	 *      , com.eyeq.pivot4j.ui.command.CellParameters)
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#execute(com.eyeq.pivot4j.PivotModel
+	 *      , com.eyeq.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
-	public Void execute(PivotModel model, CellParameters parameters) {
+	public Void execute(PivotModel model, UICommandParameters parameters) {
 		CellSet cellSet = model.getCellSet();
 
 		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());

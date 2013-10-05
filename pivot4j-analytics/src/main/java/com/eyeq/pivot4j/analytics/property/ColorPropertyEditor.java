@@ -8,8 +8,8 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.lang3.StringUtils;
 
 import com.eyeq.pivot4j.analytics.component.AjaxColorPicker;
-import com.eyeq.pivot4j.ui.property.PropertySource;
-import com.eyeq.pivot4j.ui.property.SimpleProperty;
+import com.eyeq.pivot4j.ui.property.RenderPropertyList;
+import com.eyeq.pivot4j.ui.property.SimpleRenderProperty;
 
 public class ColorPropertyEditor extends AbstractPropertyInputEditor {
 
@@ -29,10 +29,10 @@ public class ColorPropertyEditor extends AbstractPropertyInputEditor {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleProperty)
+	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleRenderProperty)
 	 */
 	@Override
-	protected Object getValue(SimpleProperty property) {
+	protected Object getValue(SimpleRenderProperty property) {
 		String value = StringUtils
 				.trimToNull((String) super.getValue(property));
 
@@ -48,11 +48,11 @@ public class ColorPropertyEditor extends AbstractPropertyInputEditor {
 	/**
 	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#setValue(com
 	 *      .eyeq.pivot4j.analytics.property.PropertyDescriptor,
-	 *      com.eyeq.pivot4j.ui.property.PropertySource, java.lang.Object)
+	 *      com.eyeq.pivot4j.ui.property.RenderPropertyList, java.lang.Object)
 	 */
 	@Override
 	public void setValue(PropertyDescriptor descriptor,
-			PropertySource properties, Object value) {
+			RenderPropertyList properties, Object value) {
 		String stringValue = StringUtils.trimToNull((String) value);
 
 		if (stringValue != null && stringValue.matches("[a-fA-F0-9]+")) {

@@ -9,12 +9,14 @@
 package com.eyeq.pivot4j.ui.condition;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.ObjectUtils;
+import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
@@ -22,6 +24,7 @@ import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.ui.RenderContext;
+import com.eyeq.pivot4j.util.OlapUtils;
 
 public class CellValueCondition extends AbstractCondition {
 
@@ -188,7 +191,7 @@ public class CellValueCondition extends AbstractCondition {
 	@Override
 	public boolean matches(RenderContext context) {
 		if (value == null) {
-			throw new IllegalStateException("Value is not specified.");
+			throw new IllegalStateException("VALUE is not specified.");
 		}
 
 		if (criteria == null) {
@@ -211,22 +214,30 @@ public class CellValueCondition extends AbstractCondition {
 
 		if (position == null) {
 			cell = context.getCell();
-		} else {
-			Position columnPosition = null;
-			Position rowPosition = null;
+		} else if (position.getMembers() != null
+				&& !position.getMembers().isEmpty()) {
+			List<Position> positions = new ArrayList<Position>(context
+					.getAxes().size());
 
-			if (position.equals(context.getColumnPosition())) {
-				columnPosition = position;
-				rowPosition = context.getRowPosition();
-			} else if (position.equals(context.getRowPosition())) {
-				columnPosition = context.getColumnPosition();
-				rowPosition = position;
+			for (Axis axis : context.getAxes()) {
+				Position pos = context.getPosition(axis);
+
+				if (pos == null) {
+					return null;
+				}
+
+				if (pos.getMembers() != null
+						&& !pos.getMembers().isEmpty()
+						&& OlapUtils.equals(pos.getMembers().get(0), position
+								.getMembers().get(0))) {
+					pos = position;
+				}
+
+				positions.add(pos);
 			}
 
-			if (columnPosition != null && rowPosition != null) {
-				cell = context.getCellSet()
-						.getCell(columnPosition, rowPosition);
-			}
+			cell = context.getCellSet().getCell(
+					positions.toArray(new Position[positions.size()]));
 		}
 
 		if (cell == null) {
@@ -255,10 +266,13 @@ public class CellValueCondition extends AbstractCondition {
 			}
 
 			if (position == null) {
-				if (matches(context.getColumnPosition())) {
-					position = context.getColumnPosition();
-				} else if (matches(context.getRowPosition())) {
-					position = context.getRowPosition();
+				for (Axis axis : context.getAxes()) {
+					Position pos = context.getPosition(axis);
+
+					if (pos != null && matches(pos)) {
+						position = pos;
+						break;
+					}
 				}
 
 				if (position != null) {

@@ -8,40 +8,33 @@
  */
 package com.eyeq.pivot4j.ui.command;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.olap4j.Axis;
+import static com.eyeq.pivot4j.ui.CellTypes.AGG_VALUE;
 
-import com.eyeq.pivot4j.ui.CellType;
-import com.eyeq.pivot4j.ui.PivotUIRenderer;
+import org.apache.commons.lang.ObjectUtils;
+
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public abstract class AbstractDrillDownCommand extends
-		AbstractCellCommand<Void> implements DrillDownCommand {
+public abstract class AbstractDrillDownCommand extends AbstractUICommand<Void>
+		implements DrillDownCommand {
 
 	/**
 	 * @param renderer
 	 */
-	public AbstractDrillDownCommand(PivotUIRenderer renderer) {
+	public AbstractDrillDownCommand(PivotRenderer<?> renderer) {
 		super(renderer);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#canExecute(com.eyeq.pivot4j.ui
 	 *      .RenderContext)
 	 */
 	@Override
 	public boolean canExecute(RenderContext context) {
-		boolean enabled = ObjectUtils.equals(getMode(context), getRenderer()
-				.getDrillDownMode())
-				&& context.getAxis() != null
-				&& context.getCellType() != CellType.Aggregation;
-
-		if (enabled) {
-			enabled = (getRenderer().getEnableColumnDrillDown() && context
-					.getAxis().equals(Axis.COLUMNS))
-					|| (getRenderer().getEnableRowDrillDown() && context
-							.getAxis().equals(Axis.ROWS));
-		}
+		boolean enabled = getRenderer().getEnableDrillDown()
+				&& ObjectUtils.equals(getMode(context), getRenderer()
+						.getDrillDownMode()) && context.getAxis() != null
+				&& !AGG_VALUE.equals(context.getCellType());
 
 		return enabled;
 	}

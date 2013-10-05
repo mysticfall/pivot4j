@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.olap4j.Axis;
 
 import com.eyeq.pivot4j.ui.RenderContext;
+import com.eyeq.pivot4j.ui.table.TableRenderContext;
 
 public class ExpressionConditionTest extends AbstractConditionTest {
 
@@ -34,7 +35,7 @@ public class ExpressionConditionTest extends AbstractConditionTest {
 
 	@Test
 	public void testSimpleExpression() {
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 
 		ExpressionCondition expression = new ExpressionCondition(
 				conditionFactory);
@@ -56,7 +57,7 @@ public class ExpressionConditionTest extends AbstractConditionTest {
 
 	@Test
 	public void testConditionalExpression() {
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(2);
 		context.setRowIndex(1);
 		context.setAxis(Axis.ROWS);
@@ -88,7 +89,7 @@ public class ExpressionConditionTest extends AbstractConditionTest {
 
 	@Test
 	public void testStateManagement() {
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(2);
 		context.setRowIndex(1);
 		context.setAxis(Axis.ROWS);
@@ -112,7 +113,7 @@ public class ExpressionConditionTest extends AbstractConditionTest {
 
 	@Test
 	public void testSettingsManagement() throws ConfigurationException {
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(2);
 		context.setRowIndex(1);
 		context.setAxis(Axis.ROWS);

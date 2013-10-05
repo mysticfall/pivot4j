@@ -24,6 +24,7 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.OlapDataSource;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Schema;
+import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,11 +38,12 @@ import com.eyeq.pivot4j.analytics.datasource.ConnectionInfo;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
 import com.eyeq.pivot4j.transform.NonEmpty;
 import com.eyeq.pivot4j.transform.SwapAxes;
-import com.eyeq.pivot4j.ui.PivotUIRenderer;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand;
-import com.eyeq.pivot4j.ui.command.CellCommand;
-import com.eyeq.pivot4j.ui.command.CellParameters;
 import com.eyeq.pivot4j.ui.command.DrillDownCommand;
+import com.eyeq.pivot4j.ui.command.UICommand;
+import com.eyeq.pivot4j.ui.command.UICommandParameters;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 import com.eyeq.pivot4j.util.OlapUtils;
 
 @ManagedBean(name = "pivotGridHandler")
@@ -59,7 +61,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 
 	private PivotModel model;
 
-	private PrimeFacesPivotRenderer renderer;
+	private TableRenderer renderer;
 
 	private List<UISelectItem> cubeItems;
 
@@ -68,6 +70,10 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	private String currentMdx;
 
 	private Long duration;
+
+	private PanelGrid component;
+
+	private PanelGrid filterComponent;
 
 	@PostConstruct
 	protected void initialize() {
@@ -93,9 +99,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 			}
 		}
 
-		FacesContext context = FacesContext.getCurrentInstance();
-
-		this.renderer = new PrimeFacesPivotRenderer(context);
+		this.renderer = new TableRenderer();
 
 		Serializable state = stateManager.getRendererState();
 
@@ -111,8 +115,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 
 		boolean readOnly = stateManager.isReadOnly();
 
-		renderer.setEnableColumnDrillDown(!readOnly);
-		renderer.setEnableRowDrillDown(!readOnly);
+		renderer.setEnableDrillDown(!readOnly);
 		renderer.setEnableSort(!readOnly);
 
 		renderer.addCommand(new DrillThroughCommandImpl(renderer));
@@ -129,7 +132,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	/**
 	 * @return the renderer
 	 */
-	public PrimeFacesPivotRenderer getRenderer() {
+	public TableRenderer getRenderer() {
 		return renderer;
 	}
 
@@ -191,6 +194,36 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	 */
 	public void setNavigator(NavigatorHandler navigator) {
 		this.navigator = navigator;
+	}
+
+	/**
+	 * @return the component
+	 */
+	public PanelGrid getComponent() {
+		return component;
+	}
+
+	/**
+	 * @param component
+	 *            the component to set
+	 */
+	public void setComponent(PanelGrid component) {
+		this.component = component;
+	}
+
+	/**
+	 * @return the filterComponent
+	 */
+	public PanelGrid getFilterComponent() {
+		return filterComponent;
+	}
+
+	/**
+	 * @param filterComponent
+	 *            the filterComponent to set
+	 */
+	public void setFilterComponent(PanelGrid filterComponent) {
+		this.filterComponent = filterComponent;
 	}
 
 	/**
@@ -311,7 +344,12 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 				return;
 			}
 
-			renderer.render(model);
+			PrimeFacesRendererCallback callback = new PrimeFacesRendererCallback(
+					context);
+			callback.setComponent(component);
+			callback.setFilterComponent(filterComponent);
+
+			renderer.render(model, callback);
 
 			stateManager.setRendererState(renderer.saveState());
 		}
@@ -323,7 +361,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		Map<String, String> requestParameters = context.getExternalContext()
 				.getRequestParameterMap();
 
-		CellParameters parameters = new CellParameters();
+		UICommandParameters parameters = new UICommandParameters();
 
 		if (requestParameters.containsKey("axis")) {
 			parameters.setAxisOrdinal(Integer.parseInt(requestParameters
@@ -350,7 +388,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 					.get("cell")));
 		}
 
-		CellCommand<?> command = renderer.getCommand(requestParameters
+		UICommand<?> command = renderer.getCommand(requestParameters
 				.get("command"));
 		command.execute(model, parameters);
 	}
@@ -571,16 +609,17 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		/**
 		 * @param renderer
 		 */
-		public DrillThroughCommandImpl(PivotUIRenderer renderer) {
+		public DrillThroughCommandImpl(PivotRenderer<?> renderer) {
 			super(renderer);
 		}
 
 		/**
 		 * @see com.eyeq.pivot4j.ui.command.BasicDrillThroughCommand#execute(com.eyeq.pivot4j.PivotModel,
-		 *      com.eyeq.pivot4j.ui.command.CellParameters)
+		 *      com.eyeq.pivot4j.ui.command.UICommandParameters)
 		 */
 		@Override
-		public ResultSet execute(PivotModel model, CellParameters parameters) {
+		public ResultSet execute(PivotModel model,
+				UICommandParameters parameters) {
 			Cell cell = model.getCellSet().getCell(parameters.getCellOrdinal());
 
 			drillThroughHandler.update(cell);

@@ -1,5 +1,8 @@
 package com.eyeq.pivot4j.analytics.ui;
 
+import static com.eyeq.pivot4j.ui.table.TablePropertyCategories.CELL;
+import static com.eyeq.pivot4j.ui.table.TablePropertyCategories.HEADER;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,10 +30,10 @@ import com.eyeq.pivot4j.analytics.property.PropertyCategory;
 import com.eyeq.pivot4j.analytics.property.PropertyDescriptor;
 import com.eyeq.pivot4j.analytics.property.PropertyDescriptorFactory;
 import com.eyeq.pivot4j.analytics.property.PropertyEditor;
-import com.eyeq.pivot4j.ui.PivotRenderer;
-import com.eyeq.pivot4j.ui.property.Property;
-import com.eyeq.pivot4j.ui.property.PropertySource;
-import com.eyeq.pivot4j.ui.property.SimpleProperty;
+import com.eyeq.pivot4j.ui.property.RenderProperty;
+import com.eyeq.pivot4j.ui.property.RenderPropertyList;
+import com.eyeq.pivot4j.ui.property.SimpleRenderProperty;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 
 @ManagedBean(name = "propertiesHandler")
 @RequestScoped
@@ -40,7 +43,7 @@ public class PropertiesHandler {
 	private PropertyDescriptorFactory descriptorFactory;
 
 	@ManagedProperty(value = "#{pivotGridHandler.renderer}")
-	private PivotRenderer renderer;
+	private TableRenderer renderer;
 
 	private ResourceBundle bundle;
 
@@ -118,10 +121,10 @@ public class PropertiesHandler {
 
 		this.descriptor = descriptorFactory.getDescriptor(category, key);
 
-		PropertySource properties = getProperties(descriptor.getCategory());
+		RenderPropertyList properties = getProperties(descriptor.getCategory());
 
-		SimpleProperty property = (SimpleProperty) properties
-				.getProperty(descriptor.getKey());
+		SimpleRenderProperty property = (SimpleRenderProperty) properties
+				.getRenderProperty(descriptor.getKey());
 
 		if (property == null) {
 			this.expression = null;
@@ -170,9 +173,9 @@ public class PropertiesHandler {
 	}
 
 	public void onEditorModeChange() {
-		PropertySource properties = getProperties(getCategory());
-		SimpleProperty property = (SimpleProperty) properties
-				.getProperty(getKey());
+		RenderPropertyList properties = getProperties(getCategory());
+		SimpleRenderProperty property = (SimpleRenderProperty) properties
+				.getRenderProperty(getKey());
 
 		if (getUseExpression()) {
 			if (expression == null) {
@@ -197,15 +200,15 @@ public class PropertiesHandler {
 	 * @param category
 	 * @return
 	 */
-	protected PropertySource getProperties(PropertyCategory category) {
-		PropertySource properties = null;
+	protected RenderPropertyList getProperties(PropertyCategory category) {
+		RenderPropertyList properties = null;
 
 		switch (category) {
 		case Header:
-			properties = renderer.getHeaderProperties();
+			properties = renderer.getRenderProperties().get(HEADER);
 			break;
 		case Cell:
-			properties = renderer.getCellProperties();
+			properties = renderer.getRenderProperties().get(CELL);
 			break;
 		default:
 			assert false;
@@ -228,15 +231,15 @@ public class PropertiesHandler {
 	}
 
 	public void apply() {
-		PropertySource properties = getProperties(descriptor.getCategory());
+		RenderPropertyList properties = getProperties(descriptor.getCategory());
 
 		if (getUseExpression()) {
 			if (expression == null) {
-				properties.removeProperty(descriptor.getKey());
+				properties.removeRenderProperty(descriptor.getKey());
 			} else {
-				SimpleProperty property = new SimpleProperty(
+				SimpleRenderProperty property = new SimpleRenderProperty(
 						descriptor.getKey(), expression);
-				properties.setProperty(property);
+				properties.setRenderProperty(property);
 			}
 		} else {
 			PropertyEditor editor = descriptor.getEditor();
@@ -420,8 +423,8 @@ public class PropertiesHandler {
 		boolean isSet = false;
 
 		if (descriptor != null) {
-			Property property = getProperties(getCategory()).getProperty(
-					getKey());
+			RenderProperty property = getProperties(getCategory())
+					.getRenderProperty(getKey());
 			isSet = property != null;
 		}
 
@@ -485,7 +488,7 @@ public class PropertiesHandler {
 	/**
 	 * @return the renderer
 	 */
-	public PivotRenderer getRenderer() {
+	public TableRenderer getRenderer() {
 		return renderer;
 	}
 
@@ -493,7 +496,7 @@ public class PropertiesHandler {
 	 * @param renderer
 	 *            the renderer to set
 	 */
-	public void setRenderer(PivotRenderer renderer) {
+	public void setRenderer(TableRenderer renderer) {
 		this.renderer = renderer;
 	}
 

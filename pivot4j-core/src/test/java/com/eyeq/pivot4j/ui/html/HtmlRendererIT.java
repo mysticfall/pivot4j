@@ -19,7 +19,8 @@ import org.junit.Test;
 
 import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.ui.impl.NonInternalPropertyCollector;
+import com.eyeq.pivot4j.ui.collector.NonInternalPropertyCollector;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 
 public class HtmlRendererIT extends AbstractIntegrationTestCase {
 
@@ -68,9 +69,8 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 
 		StringWriter writer = new StringWriter();
 
-		HtmlRenderer renderer = new HtmlRenderer(writer);
+		TableRenderer renderer = new TableRenderer();
 
-		renderer.setBorder(1);
 		renderer.setHideSpans(hideSpans);
 		renderer.setShowDimensionTitle(showDimensionTitle);
 		renderer.setShowParentMembers(showParentMembers);
@@ -79,7 +79,10 @@ public class HtmlRendererIT extends AbstractIntegrationTestCase {
 			renderer.setPropertyCollector(new NonInternalPropertyCollector());
 		}
 
-		renderer.render(model);
+		HtmlRenderCallback callback = new HtmlRenderCallback(writer);
+		callback.setBorder(1);
+
+		renderer.render(model, callback);
 
 		writer.flush();
 		writer.close();

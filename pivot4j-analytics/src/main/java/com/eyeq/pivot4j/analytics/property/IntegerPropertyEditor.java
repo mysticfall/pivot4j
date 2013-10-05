@@ -9,7 +9,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.component.spinner.Spinner;
 
-import com.eyeq.pivot4j.ui.property.SimpleProperty;
+import com.eyeq.pivot4j.ui.property.SimpleRenderProperty;
 
 public class IntegerPropertyEditor extends AbstractPropertyInputEditor {
 
@@ -64,10 +64,10 @@ public class IntegerPropertyEditor extends AbstractPropertyInputEditor {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleProperty)
+	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleRenderProperty)
 	 */
 	@Override
-	protected Object getValue(SimpleProperty property) {
+	protected Object getValue(SimpleRenderProperty property) {
 		String stringValue = StringUtils.trimToNull((String) super
 				.getValue(property));
 

@@ -10,5 +10,5 @@ package com.eyeq.pivot4j.ui.command;
 
 import java.sql.ResultSet;
 
-public interface DrillThroughCommand extends CellCommand<ResultSet> {
+public interface DrillThroughCommand extends UICommand<ResultSet> {
 }

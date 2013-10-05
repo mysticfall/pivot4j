@@ -8,8 +8,8 @@ import javax.faces.component.html.HtmlOutputText;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.eyeq.pivot4j.ui.property.PropertySource;
-import com.eyeq.pivot4j.ui.property.SimpleProperty;
+import com.eyeq.pivot4j.ui.property.RenderPropertyList;
+import com.eyeq.pivot4j.ui.property.SimpleRenderProperty;
 
 public class FontSizePropertyEditor extends IntegerPropertyEditor {
 
@@ -36,10 +36,10 @@ public class FontSizePropertyEditor extends IntegerPropertyEditor {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.analytics.property.IntegerPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleProperty)
+	 * @see com.eyeq.pivot4j.analytics.property.IntegerPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleRenderProperty)
 	 */
 	@Override
-	protected Object getValue(SimpleProperty property) {
+	protected Object getValue(SimpleRenderProperty property) {
 		String stringValue = StringUtils.trimToNull(property.getValue());
 
 		Object value = null;
@@ -56,11 +56,11 @@ public class FontSizePropertyEditor extends IntegerPropertyEditor {
 
 	/**
 	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#setValue(com.eyeq.pivot4j.analytics.property.PropertyDescriptor,
-	 *      com.eyeq.pivot4j.ui.property.PropertySource, java.lang.Object)
+	 *      com.eyeq.pivot4j.ui.property.RenderPropertyList, java.lang.Object)
 	 */
 	@Override
 	public void setValue(PropertyDescriptor descriptor,
-			PropertySource properties, Object value) {
+			RenderPropertyList properties, Object value) {
 		String fontSize = StringUtils.trimToNull(ObjectUtils.toString(value));
 
 		if (fontSize != null) {

@@ -4,7 +4,7 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 
-import com.eyeq.pivot4j.ui.property.PropertySource;
+import com.eyeq.pivot4j.ui.property.RenderPropertyList;
 
 public interface PropertyEditor {
 
@@ -23,13 +23,13 @@ public interface PropertyEditor {
 	 * @param properties
 	 * @return
 	 */
-	Object getValue(PropertyDescriptor descriptor, PropertySource properties);
+	Object getValue(PropertyDescriptor descriptor, RenderPropertyList properties);
 
 	/**
 	 * @param descriptor
 	 * @param properties
 	 * @param value
 	 */
-	void setValue(PropertyDescriptor descriptor, PropertySource properties,
+	void setValue(PropertyDescriptor descriptor, RenderPropertyList properties,
 			Object value);
 }

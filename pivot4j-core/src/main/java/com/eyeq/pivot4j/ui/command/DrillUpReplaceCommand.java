@@ -17,7 +17,7 @@ import org.olap4j.metadata.Hierarchy;
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillReplace;
 import com.eyeq.pivot4j.transform.PlaceHierarchiesOnAxes;
-import com.eyeq.pivot4j.ui.PivotUIRenderer;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
@@ -27,12 +27,12 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	/**
 	 * @param renderer
 	 */
-	public DrillUpReplaceCommand(PivotUIRenderer renderer) {
+	public DrillUpReplaceCommand(PivotRenderer<?> renderer) {
 		super(renderer);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getName()
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#getName()
 	 */
 	@Override
 	public String getName() {
@@ -40,7 +40,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
+	 * @see com.eyeq.pivot4j.ui.command.AbstractUICommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public String getMode(RenderContext context) {
@@ -48,7 +48,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#canExecute(com.eyeq.pivot4j.ui
 	 *      .RenderContext)
 	 */
 	@Override
@@ -70,18 +70,18 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#createParameters(com.eyeq.pivot4j
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#createParameters(com.eyeq.pivot4j
 	 *      .ui.RenderContext)
 	 */
 	@Override
-	public CellParameters createParameters(RenderContext context) {
+	public UICommandParameters createParameters(RenderContext context) {
 		PlaceHierarchiesOnAxes transform = context.getModel().getTransform(
 				PlaceHierarchiesOnAxes.class);
 
 		List<Hierarchy> hierarchies = transform.findVisibleHierarchies(context
 				.getAxis());
 
-		CellParameters parameters = new CellParameters();
+		UICommandParameters parameters = new UICommandParameters();
 		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
 		parameters.setHierarchyOrdinal(hierarchies.indexOf(context
 				.getHierarchy()));
@@ -90,11 +90,11 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#execute(com.eyeq.pivot4j.PivotModel
-	 *      , com.eyeq.pivot4j.ui.command.CellParameters)
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#execute(com.eyeq.pivot4j.PivotModel
+	 *      , com.eyeq.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
-	public Void execute(PivotModel model, CellParameters parameters) {
+	public Void execute(PivotModel model, UICommandParameters parameters) {
 		CellSet cellSet = model.getCellSet();
 
 		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());

@@ -9,21 +9,21 @@
 package com.eyeq.pivot4j.ui.command;
 
 import com.eyeq.pivot4j.sort.SortMode;
-import com.eyeq.pivot4j.ui.PivotUIRenderer;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public abstract class AbstractSortCommand extends AbstractCellCommand<Void>
+public abstract class AbstractSortCommand extends AbstractUICommand<Void>
 		implements SortCommand {
 
 	/**
 	 * @param renderer
 	 */
-	public AbstractSortCommand(PivotUIRenderer renderer) {
+	public AbstractSortCommand(PivotRenderer<?> renderer) {
 		super(renderer);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
+	 * @see com.eyeq.pivot4j.ui.command.AbstractUICommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public String getMode(RenderContext context) {
@@ -67,12 +67,12 @@ public abstract class AbstractSortCommand extends AbstractCellCommand<Void>
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#createParameters(com.eyeq.pivot4j
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#createParameters(com.eyeq.pivot4j
 	 *      .ui.RenderContext)
 	 */
 	@Override
-	public CellParameters createParameters(RenderContext context) {
-		CellParameters parameters = new CellParameters();
+	public UICommandParameters createParameters(RenderContext context) {
+		UICommandParameters parameters = new UICommandParameters();
 		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
 		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
 		parameters.setMemberOrdinal(context.getPosition().getMembers()
@@ -82,7 +82,7 @@ public abstract class AbstractSortCommand extends AbstractCellCommand<Void>
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#canExecute(com.eyeq.pivot4j.ui
 	 *      .RenderContext)
 	 */
 	@Override

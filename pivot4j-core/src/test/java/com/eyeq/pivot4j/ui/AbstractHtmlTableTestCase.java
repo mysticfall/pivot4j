@@ -26,7 +26,8 @@ import org.apache.commons.io.IOUtils;
 
 import com.eyeq.pivot4j.AbstractIntegrationTestCase;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.ui.html.HtmlRenderer;
+import com.eyeq.pivot4j.ui.html.HtmlRenderCallback;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
@@ -84,15 +85,16 @@ public abstract class AbstractHtmlTableTestCase extends
 		}
 
 		try {
-			writer = new FileWriter(file);
-
-			HtmlRenderer renderer = new HtmlRenderer(writer);
-			renderer.setTableId("pivot");
-			renderer.setBorder(1);
-
+			TableRenderer renderer = new TableRenderer();
 			configureRenderer(renderer);
 
-			renderer.render(model);
+			writer = new FileWriter(file);
+
+			HtmlRenderCallback callback = new HtmlRenderCallback(writer);
+			callback.setTableId("pivot");
+			callback.setBorder(1);
+
+			renderer.render(model, callback);
 		} finally {
 			writer.flush();
 			IOUtils.closeQuietly(writer);
@@ -119,7 +121,7 @@ public abstract class AbstractHtmlTableTestCase extends
 	/**
 	 * @param renderer
 	 */
-	protected void configureRenderer(PivotRenderer renderer) {
+	protected void configureRenderer(TableRenderer renderer) {
 		renderer.setHideSpans(false);
 		renderer.setShowDimensionTitle(true);
 		renderer.setShowParentMembers(true);

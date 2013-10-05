@@ -15,13 +15,14 @@ import org.olap4j.Axis;
 import org.primefaces.model.DualListModel;
 
 import com.eyeq.pivot4j.ui.aggregator.AggregatorPosition;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 
 @ManagedBean(name = "aggregationHandler")
 @RequestScoped
 public class AggregationHandler {
 
 	@ManagedProperty(value = "#{pivotGridHandler.renderer}")
-	private PrimeFacesPivotRenderer renderer;
+	private TableRenderer renderer;
 
 	private DualListModel<SelectItem> columnAggregators;
 
@@ -134,7 +135,7 @@ public class AggregationHandler {
 	/**
 	 * @return the renderer
 	 */
-	public PrimeFacesPivotRenderer getRenderer() {
+	public TableRenderer getRenderer() {
 		return renderer;
 	}
 
@@ -142,7 +143,7 @@ public class AggregationHandler {
 	 * @param renderer
 	 *            the renderer to set
 	 */
-	public void setRenderer(PrimeFacesPivotRenderer renderer) {
+	public void setRenderer(TableRenderer renderer) {
 		this.renderer = renderer;
 	}
 

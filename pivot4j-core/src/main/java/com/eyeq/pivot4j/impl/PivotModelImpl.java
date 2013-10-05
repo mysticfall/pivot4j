@@ -646,6 +646,7 @@ public class PivotModelImpl implements PivotModel {
 
 	/**
 	 * @return the expressionEvaluatorFactory
+	 * @see com.eyeq.pivot4j.PivotModel#getExpressionEvaluatorFactory()
 	 */
 	public ExpressionEvaluatorFactory getExpressionEvaluatorFactory() {
 		return expressionEvaluatorFactory;

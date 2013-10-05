@@ -205,7 +205,7 @@ public class MdxParserTest {
 				is(notNullValue()));
 
 		List<SapVariable.Value> values = variable.getValues();
-		assertThat("Value list of the SAP varaible should not be null.",
+		assertThat("VALUE list of the SAP varaible should not be null.",
 				values, is(notNullValue()));
 		assertThat("Number of the SAP variable value should be 1.",
 				values.size(), is(equalTo(1)));

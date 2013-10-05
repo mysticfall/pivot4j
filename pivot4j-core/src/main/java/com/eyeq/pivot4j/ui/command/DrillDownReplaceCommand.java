@@ -15,7 +15,7 @@ import org.olap4j.metadata.Member;
 
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.transform.DrillReplace;
-import com.eyeq.pivot4j.ui.PivotUIRenderer;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
@@ -25,12 +25,12 @@ public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
 	/**
 	 * @param renderer
 	 */
-	public DrillDownReplaceCommand(PivotUIRenderer renderer) {
+	public DrillDownReplaceCommand(PivotRenderer<?> renderer) {
 		super(renderer);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getName()
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#getName()
 	 */
 	@Override
 	public String getName() {
@@ -38,7 +38,7 @@ public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.AbstractCellCommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
+	 * @see com.eyeq.pivot4j.ui.command.AbstractUICommand#getMode(com.eyeq.pivot4j.ui.RenderContext)
 	 */
 	@Override
 	public String getMode(RenderContext context) {
@@ -46,7 +46,7 @@ public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#canExecute(com.eyeq.pivot4j.ui
 	 *      .RenderContext)
 	 */
 	@Override
@@ -68,12 +68,12 @@ public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#createParameters(com.eyeq.pivot4j
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#createParameters(com.eyeq.pivot4j
 	 *      .ui.RenderContext)
 	 */
 	@Override
-	public CellParameters createParameters(RenderContext context) {
-		CellParameters parameters = new CellParameters();
+	public UICommandParameters createParameters(RenderContext context) {
+		UICommandParameters parameters = new UICommandParameters();
 		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
 		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
 		parameters.setMemberOrdinal(context.getPosition().getMembers()
@@ -83,11 +83,11 @@ public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#execute(com.eyeq.pivot4j.PivotModel
-	 *      , com.eyeq.pivot4j.ui.command.CellParameters)
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#execute(com.eyeq.pivot4j.PivotModel
+	 *      , com.eyeq.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
-	public Void execute(PivotModel model, CellParameters parameters) {
+	public Void execute(PivotModel model, UICommandParameters parameters) {
 		CellSet cellSet = model.getCellSet();
 
 		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());

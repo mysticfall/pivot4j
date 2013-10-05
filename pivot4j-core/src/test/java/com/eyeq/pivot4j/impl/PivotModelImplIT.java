@@ -80,7 +80,7 @@ public class PivotModelImplIT extends AbstractIntegrationTestCase {
 
 		List<CellSetAxis> axes = cellSet.getAxes();
 
-		assertThat("Cell axes list is null.", axes, is(notNullValue()));
+		assertThat("CELL axes list is null.", axes, is(notNullValue()));
 		assertThat("Invalid cell axes size.", axes.size(), is(equalTo(2)));
 	}
 

@@ -59,7 +59,7 @@ public class TestRepositoryImpl extends AbstractFileSystemRepository implements
 
 		TestFile basic = new TestFile("Basic Tests", root, true);
 		TestFile advanced = new TestFile("Advanced Tests", root, true);
-		TestFile aggregation = new TestFile("Aggregation", advanced, true);
+		TestFile aggregation = new TestFile("AGG_VALUE", advanced, true);
 		TestFile ragged = new TestFile("Ragged Dimension", advanced, true);
 		TestFile properties = new TestFile("Properties", advanced, true);
 

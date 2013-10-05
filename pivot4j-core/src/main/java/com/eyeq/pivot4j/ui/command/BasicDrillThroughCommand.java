@@ -15,10 +15,10 @@ import org.olap4j.OlapException;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.PivotModel;
-import com.eyeq.pivot4j.ui.PivotUIRenderer;
+import com.eyeq.pivot4j.ui.PivotRenderer;
 import com.eyeq.pivot4j.ui.RenderContext;
 
-public class BasicDrillThroughCommand extends AbstractCellCommand<ResultSet>
+public class BasicDrillThroughCommand extends AbstractUICommand<ResultSet>
 		implements DrillThroughCommand {
 
 	public static final String NAME = "drillThrough";
@@ -26,12 +26,12 @@ public class BasicDrillThroughCommand extends AbstractCellCommand<ResultSet>
 	/**
 	 * @param renderer
 	 */
-	public BasicDrillThroughCommand(PivotUIRenderer renderer) {
+	public BasicDrillThroughCommand(PivotRenderer<?> renderer) {
 		super(renderer);
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getName()
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#getName()
 	 */
 	@Override
 	public String getName() {
@@ -39,7 +39,7 @@ public class BasicDrillThroughCommand extends AbstractCellCommand<ResultSet>
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#canExecute(com.eyeq.pivot4j.ui
 	 *      .RenderContext)
 	 */
 	@Override
@@ -50,23 +50,23 @@ public class BasicDrillThroughCommand extends AbstractCellCommand<ResultSet>
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#createParameters(com.eyeq.pivot4j
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#createParameters(com.eyeq.pivot4j
 	 *      .ui.RenderContext)
 	 */
 	@Override
-	public CellParameters createParameters(RenderContext context) {
-		CellParameters parameters = new CellParameters();
+	public UICommandParameters createParameters(RenderContext context) {
+		UICommandParameters parameters = new UICommandParameters();
 		parameters.setCellOrdinal(context.getCell().getOrdinal());
 
 		return parameters;
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.command.CellCommand#execute(com.eyeq.pivot4j.PivotModel
-	 *      , com.eyeq.pivot4j.ui.command.CellParameters)
+	 * @see com.eyeq.pivot4j.ui.command.UICommand#execute(com.eyeq.pivot4j.PivotModel
+	 *      , com.eyeq.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
-	public ResultSet execute(PivotModel model, CellParameters parameters) {
+	public ResultSet execute(PivotModel model, UICommandParameters parameters) {
 		Cell cell = model.getCellSet().getCell(parameters.getCellOrdinal());
 
 		try {

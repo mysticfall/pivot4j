@@ -12,14 +12,13 @@ import java.io.Serializable;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
-import com.eyeq.pivot4j.ui.CellType;
 import com.eyeq.pivot4j.ui.RenderContext;
 
 public class CellTypeCondition extends AbstractCondition {
 
 	public static final String NAME = "cellType";
 
-	private CellType cellType;
+	private String cellType;
 
 	/**
 	 * @param conditionFactory
@@ -32,8 +31,7 @@ public class CellTypeCondition extends AbstractCondition {
 	 * @param conditionFactory
 	 * @param cellType
 	 */
-	public CellTypeCondition(ConditionFactory conditionFactory,
-			CellType cellType) {
+	public CellTypeCondition(ConditionFactory conditionFactory, String cellType) {
 		super(conditionFactory);
 
 		this.cellType = cellType;
@@ -49,7 +47,7 @@ public class CellTypeCondition extends AbstractCondition {
 	/**
 	 * @return the cellType
 	 */
-	public CellType getCellType() {
+	public String getCellType() {
 		return cellType;
 	}
 
@@ -57,7 +55,7 @@ public class CellTypeCondition extends AbstractCondition {
 	 * @param cellType
 	 *            the cellType to set
 	 */
-	public void setCellType(CellType cellType) {
+	public void setCellType(String cellType) {
 		this.cellType = cellType;
 	}
 
@@ -67,7 +65,7 @@ public class CellTypeCondition extends AbstractCondition {
 	@Override
 	public boolean matches(RenderContext context) {
 		if (cellType == null) {
-			throw new IllegalStateException("Cell type was not specified.");
+			throw new IllegalStateException("CELL type was not specified.");
 		}
 
 		return cellType == context.getCellType();
@@ -82,7 +80,7 @@ public class CellTypeCondition extends AbstractCondition {
 			return null;
 		}
 
-		return cellType.name();
+		return cellType;
 	}
 
 	/**
@@ -93,7 +91,7 @@ public class CellTypeCondition extends AbstractCondition {
 		if (state == null) {
 			this.cellType = null;
 		} else {
-			this.cellType = CellType.valueOf((String) state);
+			this.cellType = (String) state;
 		}
 	}
 
@@ -108,7 +106,7 @@ public class CellTypeCondition extends AbstractCondition {
 			return;
 		}
 
-		configuration.setProperty("value", cellType.name());
+		configuration.setProperty("value", cellType);
 	}
 
 	/**
@@ -121,7 +119,7 @@ public class CellTypeCondition extends AbstractCondition {
 		if (value == null) {
 			this.cellType = null;
 		} else {
-			this.cellType = CellType.valueOf(value);
+			this.cellType = value;
 		}
 	}
 
@@ -136,7 +134,7 @@ public class CellTypeCondition extends AbstractCondition {
 		if (cellType == null) {
 			builder.append("[MISSING]");
 		} else {
-			builder.append(cellType.name());
+			builder.append(cellType);
 		}
 
 		return builder.toString();

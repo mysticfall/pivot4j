@@ -8,29 +8,16 @@
  */
 package com.eyeq.pivot4j.ui;
 
-import java.io.StringWriter;
-
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.datasource.SimpleOlapDataSource;
-import com.eyeq.pivot4j.el.ExpressionEvaluator;
-import com.eyeq.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory;
 import com.eyeq.pivot4j.impl.PivotModelImpl;
-import com.eyeq.pivot4j.ui.PivotRenderer;
-import com.eyeq.pivot4j.ui.RenderContext;
-import com.eyeq.pivot4j.ui.html.HtmlRenderer;
+import com.eyeq.pivot4j.ui.table.TableRenderContext;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 
 public abstract class AbstractMockRenderTestCase {
 
-	protected RenderContext createDummyRenderContext() {
+	protected TableRenderContext createDummyRenderContext() {
 		PivotModel model = new PivotModelImpl(new SimpleOlapDataSource());
-		PivotRenderer renderer = new HtmlRenderer(new StringWriter());
-
-		ExpressionEvaluator evaluator = new FreeMarkerExpressionEvaluatorFactory()
-				.createEvaluator();
-
-		RenderContext context = new RenderContext(model, renderer, 0, 0, 0, 0,
-				evaluator, null);
-
-		return context;
+		return new TableRenderContext(model, new TableRenderer(), 5, 10, 2, 2);
 	}
 }

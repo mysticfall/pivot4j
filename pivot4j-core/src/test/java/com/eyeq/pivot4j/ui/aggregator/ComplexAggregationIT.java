@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.olap4j.Axis;
 
 import com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase;
-import com.eyeq.pivot4j.ui.PivotRenderer;
+import com.eyeq.pivot4j.ui.table.TableRenderer;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 import com.gargoylesoftware.htmlunit.html.HtmlTableHeader;
@@ -37,10 +37,10 @@ public class ComplexAggregationIT extends AbstractHtmlTableTestCase {
 	}
 
 	/**
-	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(com.eyeq.pivot4j.ui.PivotRenderer)
+	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(com.eyeq.pivot4j.ui.table.TableRenderer)
 	 */
 	@Override
-	protected void configureRenderer(PivotRenderer renderer) {
+	protected void configureRenderer(TableRenderer renderer) {
 		super.configureRenderer(renderer);
 
 		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Grand,

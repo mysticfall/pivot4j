@@ -29,16 +29,17 @@ import com.eyeq.pivot4j.ui.condition.ConditionFactory;
 import com.eyeq.pivot4j.ui.condition.DefaultConditionFactory;
 import com.eyeq.pivot4j.ui.condition.ExpressionCondition;
 import com.eyeq.pivot4j.ui.condition.OrCondition;
+import com.eyeq.pivot4j.ui.table.TableRenderContext;
 
 public class ConditionalPropertyTest extends AbstractMockRenderTestCase {
 
-	private ConditionalProperty property;
+	private ConditionalRenderProperty property;
 
 	@Before
 	public void setUp() throws Exception {
 		ConditionFactory factory = new DefaultConditionFactory();
 
-		this.property = new ConditionalProperty("bgColor", factory);
+		this.property = new ConditionalRenderProperty("bgColor", factory);
 
 		ExpressionCondition expression1 = new ExpressionCondition(factory,
 				"<#if rowIndex = 3>true</#if>");
@@ -75,7 +76,7 @@ public class ConditionalPropertyTest extends AbstractMockRenderTestCase {
 
 	@Test
 	public void testDefaultValue() {
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(2);
 		context.setRowIndex(1);
 
@@ -86,7 +87,7 @@ public class ConditionalPropertyTest extends AbstractMockRenderTestCase {
 
 	@Test
 	public void testSimpleValue() {
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(1);
 		context.setRowIndex(2);
 
@@ -97,7 +98,7 @@ public class ConditionalPropertyTest extends AbstractMockRenderTestCase {
 
 	@Test
 	public void testConditionValue() {
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(2);
 		context.setRowIndex(4);
 
@@ -110,18 +111,18 @@ public class ConditionalPropertyTest extends AbstractMockRenderTestCase {
 	public void testStateManagement() {
 		Serializable state = property.saveState();
 
-		ConditionalProperty property2 = new ConditionalProperty(
+		ConditionalRenderProperty property2 = new ConditionalRenderProperty(
 				new DefaultConditionFactory());
 
 		property2.restoreState(state);
 
-		assertThat("Property name has been changed.", property2.getName(),
-				is(equalTo(property.getName())));
+		assertThat("RenderProperty name has been changed.",
+				property2.getName(), is(equalTo(property.getName())));
 		assertThat("Default value has been changed.",
 				property2.getDefaultValue(),
 				is(equalTo(property.getDefaultValue())));
 
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(2);
 		context.setRowIndex(4);
 
@@ -138,17 +139,17 @@ public class ConditionalPropertyTest extends AbstractMockRenderTestCase {
 		property.saveSettings(configuration);
 		System.out.println("Saved configuration : ");
 		configuration.save(System.out);
-		ConditionalProperty property2 = new ConditionalProperty(
+		ConditionalRenderProperty property2 = new ConditionalRenderProperty(
 				new DefaultConditionFactory());
 		property2.restoreSettings(configuration);
 
-		assertThat("Property name has been changed.", property2.getName(),
-				is(equalTo(property.getName())));
+		assertThat("RenderProperty name has been changed.",
+				property2.getName(), is(equalTo(property.getName())));
 		assertThat("Default value has been changed.",
 				property2.getDefaultValue(),
 				is(equalTo(property.getDefaultValue())));
 
-		RenderContext context = createDummyRenderContext();
+		TableRenderContext context = createDummyRenderContext();
 		context.setColIndex(2);
 		context.setRowIndex(4);
 
