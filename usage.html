@@ -352,7 +352,7 @@ renderer.render(model, new HtmlRenderCallback(writer)); // Render the result as 
 
 writer.flush();
 writer.close();</pre></div>
-<p>You can make your own renderer class to generate a markup output of the pivot model in a suitable format. It can also be used to build a custom table model instead of writing the output immediately. Customizing the layout structure (i.e. adding arbitary headers) is also possible by implementing the <a href="./apidocs/com/eyeq/pivot4j/ui/RenderStrategy.html">RenderStrategy</a> interface, or extending one of its concrete implementations. But this feature is still experimental and might be changed in a future version.</p></div>
+<p>You can make your own render callback class to generate a client view of the pivot model in a suitable format. If you need to customize the layout structure, or when you need a completely different way to represent your data, you can extend one of the existing PivotRenderer implementations or write one yourself. </p></div>
 <div class="section">
 <h3>Saving and Restoring the Model State<a name="Saving_and_Restoring_the_Model_State"></a></h3>
 <p>In a certain runtime environment, you need to store the current state of the PivotModel instance to be used later. For example, when you deploy on a server which distributes its sessions across the cluster you can't just store the model instance in a session as it's not serializable.</p>
