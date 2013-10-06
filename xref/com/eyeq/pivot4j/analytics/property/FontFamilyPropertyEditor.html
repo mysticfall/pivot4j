@@ -18,8 +18,8 @@
 <a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> org.apache.commons.lang.ObjectUtils;
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.property.PropertySource;
-<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.property.SimpleProperty;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.property.RenderPropertyList;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.property.SimpleRenderProperty;
 <a class="jxr_linenumber" name="13" href="#13">13</a>  
 <a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/property/FontFamilyPropertyEditor.html">FontFamilyPropertyEditor</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/property/SelectStringPropertyEditor.html">SelectStringPropertyEditor</a> {
 <a class="jxr_linenumber" name="15" href="#15">15</a>  
@@ -43,10 +43,10 @@
 <a class="jxr_linenumber" name="33" href="#33">33</a>  	}
 <a class="jxr_linenumber" name="34" href="#34">34</a>  
 <a class="jxr_linenumber" name="35" href="#35">35</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleProperty)</em>
+<a class="jxr_linenumber" name="36" href="#36">36</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleRenderProperty)</em>
 <a class="jxr_linenumber" name="37" href="#37">37</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="38" href="#38">38</a>  	@Override
-<a class="jxr_linenumber" name="39" href="#39">39</a>  	<strong class="jxr_keyword">protected</strong> Object getValue(<a href="../../../../../com/eyeq/pivot4j/ui/property/SimpleProperty.html">SimpleProperty</a> property) {
+<a class="jxr_linenumber" name="39" href="#39">39</a>  	<strong class="jxr_keyword">protected</strong> Object getValue(<a href="../../../../../com/eyeq/pivot4j/ui/property/SimpleRenderProperty.html">SimpleRenderProperty</a> property) {
 <a class="jxr_linenumber" name="40" href="#40">40</a>  		String stringValue = StringUtils.trimToNull(property.getValue());
 <a class="jxr_linenumber" name="41" href="#41">41</a>  
 <a class="jxr_linenumber" name="42" href="#42">42</a>  		List&lt;UISelectItem&gt; items = getItems();
@@ -71,11 +71,11 @@
 <a class="jxr_linenumber" name="61" href="#61">61</a>  
 <a class="jxr_linenumber" name="62" href="#62">62</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="63" href="#63">63</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#setValue(com.eyeq.pivot4j.analytics.property.PropertyDescriptor,</em>
-<a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment">	 *      com.eyeq.pivot4j.ui.property.PropertySource, java.lang.Object)</em>
+<a class="jxr_linenumber" name="64" href="#64">64</a>  <em class="jxr_javadoccomment">	 *      com.eyeq.pivot4j.ui.property.RenderPropertyList, java.lang.Object)</em>
 <a class="jxr_linenumber" name="65" href="#65">65</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="66" href="#66">66</a>  	@Override
 <a class="jxr_linenumber" name="67" href="#67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setValue(<a href="../../../../../com/eyeq/pivot4j/analytics/property/PropertyDescriptor.html">PropertyDescriptor</a> descriptor,
-<a class="jxr_linenumber" name="68" href="#68">68</a>  			PropertySource properties, Object value) {
+<a class="jxr_linenumber" name="68" href="#68">68</a>  			RenderPropertyList properties, Object value) {
 <a class="jxr_linenumber" name="69" href="#69">69</a>  		<strong class="jxr_keyword">super</strong>.setValue(descriptor, properties,
 <a class="jxr_linenumber" name="70" href="#70">70</a>  				StringUtils.trimToNull(ObjectUtils.toString(value)));
 <a class="jxr_linenumber" name="71" href="#71">71</a>  	}

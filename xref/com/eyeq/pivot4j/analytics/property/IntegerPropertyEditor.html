@@ -19,7 +19,7 @@
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
 <a class="jxr_linenumber" name="10" href="#10">10</a>  <strong class="jxr_keyword">import</strong> org.primefaces.component.spinner.Spinner;
 <a class="jxr_linenumber" name="11" href="#11">11</a>  
-<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.property.SimpleProperty;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.property.SimpleRenderProperty;
 <a class="jxr_linenumber" name="13" href="#13">13</a>  
 <a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/property/IntegerPropertyEditor.html">IntegerPropertyEditor</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/property/AbstractPropertyInputEditor.html">AbstractPropertyInputEditor</a> {
 <a class="jxr_linenumber" name="15" href="#15">15</a>  
@@ -74,10 +74,10 @@
 <a class="jxr_linenumber" name="64" href="#64">64</a>  	}
 <a class="jxr_linenumber" name="65" href="#65">65</a>  
 <a class="jxr_linenumber" name="66" href="#66">66</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleProperty)</em>
+<a class="jxr_linenumber" name="67" href="#67">67</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.analytics.property.AbstractPropertyEditor#getValue(com.eyeq.pivot4j.ui.property.SimpleRenderProperty)</em>
 <a class="jxr_linenumber" name="68" href="#68">68</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="69" href="#69">69</a>  	@Override
-<a class="jxr_linenumber" name="70" href="#70">70</a>  	<strong class="jxr_keyword">protected</strong> Object getValue(<a href="../../../../../com/eyeq/pivot4j/ui/property/SimpleProperty.html">SimpleProperty</a> property) {
+<a class="jxr_linenumber" name="70" href="#70">70</a>  	<strong class="jxr_keyword">protected</strong> Object getValue(<a href="../../../../../com/eyeq/pivot4j/ui/property/SimpleRenderProperty.html">SimpleRenderProperty</a> property) {
 <a class="jxr_linenumber" name="71" href="#71">71</a>  		String stringValue = StringUtils.trimToNull((String) <strong class="jxr_keyword">super</strong>
 <a class="jxr_linenumber" name="72" href="#72">72</a>  				.getValue(property));
 <a class="jxr_linenumber" name="73" href="#73">73</a>  

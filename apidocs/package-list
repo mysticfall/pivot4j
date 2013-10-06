@@ -14,9 +14,6 @@ com.eyeq.pivot4j.analytics.ui.navigator
 com.eyeq.pivot4j.datasource
 com.eyeq.pivot4j.el
 com.eyeq.pivot4j.el.freemarker
-com.eyeq.pivot4j.export
-com.eyeq.pivot4j.export.fop
-com.eyeq.pivot4j.export.poi
 com.eyeq.pivot4j.impl
 com.eyeq.pivot4j.mdx
 com.eyeq.pivot4j.mdx.impl
@@ -33,9 +30,12 @@ com.eyeq.pivot4j.transform
 com.eyeq.pivot4j.transform.impl
 com.eyeq.pivot4j.ui
 com.eyeq.pivot4j.ui.aggregator
+com.eyeq.pivot4j.ui.collector
 com.eyeq.pivot4j.ui.command
 com.eyeq.pivot4j.ui.condition
+com.eyeq.pivot4j.ui.fop
 com.eyeq.pivot4j.ui.html
-com.eyeq.pivot4j.ui.impl
+com.eyeq.pivot4j.ui.poi
 com.eyeq.pivot4j.ui.property
+com.eyeq.pivot4j.ui.table
 com.eyeq.pivot4j.util

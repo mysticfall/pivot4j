@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> org.olap4j.Axis;
 <a class="jxr_linenumber" name="21" href="#21">21</a>  
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase;
-<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PivotRenderer;
+<a class="jxr_linenumber" name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.table.TableRenderer;
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> com.gargoylesoftware.htmlunit.html.HtmlTable;
 <a class="jxr_linenumber" name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 <a class="jxr_linenumber" name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> com.gargoylesoftware.htmlunit.html.HtmlTableRow;
@@ -46,10 +46,10 @@
 <a class="jxr_linenumber" name="36" href="#36">36</a>  	}
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
 <a class="jxr_linenumber" name="38" href="#38">38</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(com.eyeq.pivot4j.ui.PivotRenderer)</em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(com.eyeq.pivot4j.ui.table.TableRenderer)</em>
 <a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="41" href="#41">41</a>  	@Override
-<a class="jxr_linenumber" name="42" href="#42">42</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> configureRenderer(PivotRenderer renderer) {
+<a class="jxr_linenumber" name="42" href="#42">42</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> configureRenderer(TableRenderer renderer) {
 <a class="jxr_linenumber" name="43" href="#43">43</a>  		<strong class="jxr_keyword">super</strong>.configureRenderer(renderer);
 <a class="jxr_linenumber" name="44" href="#44">44</a>  
 <a class="jxr_linenumber" name="45" href="#45">45</a>  		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Hierarchy,

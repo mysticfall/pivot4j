@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="14" href="#14">14</a>  
 <a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.PivotModel;
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.sort.SortMode;
-<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PivotUIRenderer;
+<a class="jxr_linenumber" name="17" href="#17">17</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PivotRenderer;
 <a class="jxr_linenumber" name="18" href="#18">18</a>  
 <a class="jxr_linenumber" name="19" href="#19">19</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/ToggleSortCommand.html">ToggleSortCommand</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/AbstractSortCommand.html">AbstractSortCommand</a> {
 <a class="jxr_linenumber" name="20" href="#20">20</a>  
@@ -33,12 +33,12 @@
 <a class="jxr_linenumber" name="23" href="#23">23</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment">	 * @param renderer</em>
 <a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="26" href="#26">26</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/ToggleSortCommand.html">ToggleSortCommand</a>(<a href="../../../../../com/eyeq/pivot4j/ui/PivotUIRenderer.html">PivotUIRenderer</a> renderer) {
+<a class="jxr_linenumber" name="26" href="#26">26</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/ToggleSortCommand.html">ToggleSortCommand</a>(PivotRenderer&lt;?&gt; renderer) {
 <a class="jxr_linenumber" name="27" href="#27">27</a>  		<strong class="jxr_keyword">super</strong>(renderer);
 <a class="jxr_linenumber" name="28" href="#28">28</a>  	}
 <a class="jxr_linenumber" name="29" href="#29">29</a>  
 <a class="jxr_linenumber" name="30" href="#30">30</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.CellCommand#getName()</em>
+<a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.UICommand#getName()</em>
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="33" href="#33">33</a>  	@Override
 <a class="jxr_linenumber" name="34" href="#34">34</a>  	<strong class="jxr_keyword">public</strong> String getName() {
@@ -46,11 +46,11 @@
 <a class="jxr_linenumber" name="36" href="#36">36</a>  	}
 <a class="jxr_linenumber" name="37" href="#37">37</a>  
 <a class="jxr_linenumber" name="38" href="#38">38</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.CellCommand#execute(com.eyeq.pivot4j.PivotModel</em>
-<a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">	 *      , com.eyeq.pivot4j.ui.command.CellParameters)</em>
+<a class="jxr_linenumber" name="39" href="#39">39</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.UICommand#execute(com.eyeq.pivot4j.PivotModel</em>
+<a class="jxr_linenumber" name="40" href="#40">40</a>  <em class="jxr_javadoccomment">	 *      , com.eyeq.pivot4j.ui.command.UICommandParameters)</em>
 <a class="jxr_linenumber" name="41" href="#41">41</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="42" href="#42">42</a>  	@Override
-<a class="jxr_linenumber" name="43" href="#43">43</a>  	<strong class="jxr_keyword">public</strong> Void execute(<a href="../../../../../com/eyeq/pivot4j/PivotModel.html">PivotModel</a> model, <a href="../../../../../com/eyeq/pivot4j/ui/command/CellParameters.html">CellParameters</a> parameters) {
+<a class="jxr_linenumber" name="43" href="#43">43</a>  	<strong class="jxr_keyword">public</strong> Void execute(<a href="../../../../../com/eyeq/pivot4j/PivotModel.html">PivotModel</a> model, <a href="../../../../../com/eyeq/pivot4j/ui/command/UICommandParameters.html">UICommandParameters</a> parameters) {
 <a class="jxr_linenumber" name="44" href="#44">44</a>  		CellSet cellSet = model.getCellSet();
 <a class="jxr_linenumber" name="45" href="#45">45</a>  
 <a class="jxr_linenumber" name="46" href="#46">46</a>  		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());

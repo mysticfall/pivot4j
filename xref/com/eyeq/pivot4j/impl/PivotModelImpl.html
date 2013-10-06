@@ -656,555 +656,556 @@
 <a class="jxr_linenumber" name="646" href="#646">646</a> 
 <a class="jxr_linenumber" name="647" href="#647">647</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="648" href="#648">648</a> <em class="jxr_javadoccomment">	 * @return the expressionEvaluatorFactory</em>
-<a class="jxr_linenumber" name="649" href="#649">649</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="650" href="#650">650</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../../com/eyeq/pivot4j/el/ExpressionEvaluatorFactory.html">ExpressionEvaluatorFactory</a> getExpressionEvaluatorFactory() {
-<a class="jxr_linenumber" name="651" href="#651">651</a> 		<strong class="jxr_keyword">return</strong> expressionEvaluatorFactory;
-<a class="jxr_linenumber" name="652" href="#652">652</a> 	}
-<a class="jxr_linenumber" name="653" href="#653">653</a> 
-<a class="jxr_linenumber" name="654" href="#654">654</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="655" href="#655">655</a> <em class="jxr_javadoccomment">	 * @param factory</em>
-<a class="jxr_linenumber" name="656" href="#656">656</a> <em class="jxr_javadoccomment">	 *            the expressionEvaluatorFactory to set</em>
-<a class="jxr_linenumber" name="657" href="#657">657</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="658" href="#658">658</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setExpressionEvaluatorFactory(<a href="../../../../com/eyeq/pivot4j/el/ExpressionEvaluatorFactory.html">ExpressionEvaluatorFactory</a> factory) {
-<a class="jxr_linenumber" name="659" href="#659">659</a> 		<strong class="jxr_keyword">this</strong>.expressionEvaluatorFactory = factory;
-<a class="jxr_linenumber" name="660" href="#660">660</a> 	}
-<a class="jxr_linenumber" name="661" href="#661">661</a> 
-<a class="jxr_linenumber" name="662" href="#662">662</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="663" href="#663">663</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#addModelChangeListener(com.eyeq.pivot4j.ModelChangeListener)</em>
-<a class="jxr_linenumber" name="664" href="#664">664</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="665" href="#665">665</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addModelChangeListener(<a href="../../../../com/eyeq/pivot4j/ModelChangeListener.html">ModelChangeListener</a> listener) {
-<a class="jxr_linenumber" name="666" href="#666">666</a> 		modelListeners.add(listener);
-<a class="jxr_linenumber" name="667" href="#667">667</a> 	}
-<a class="jxr_linenumber" name="668" href="#668">668</a> 
-<a class="jxr_linenumber" name="669" href="#669">669</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="670" href="#670">670</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#removeModelChangeListener(com.eyeq.pivot4j.ModelChangeListener)</em>
-<a class="jxr_linenumber" name="671" href="#671">671</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="672" href="#672">672</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeModelChangeListener(<a href="../../../../com/eyeq/pivot4j/ModelChangeListener.html">ModelChangeListener</a> listener) {
-<a class="jxr_linenumber" name="673" href="#673">673</a> 		modelListeners.remove(listener);
-<a class="jxr_linenumber" name="674" href="#674">674</a> 	}
-<a class="jxr_linenumber" name="675" href="#675">675</a> 
-<a class="jxr_linenumber" name="676" href="#676">676</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireModelInitialized() {
-<a class="jxr_linenumber" name="677" href="#677">677</a> 		ModelChangeEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/ModelChangeEvent.html">ModelChangeEvent</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="678" href="#678">678</a> 
-<a class="jxr_linenumber" name="679" href="#679">679</a> 		List&lt;ModelChangeListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;ModelChangeListener&gt;(
-<a class="jxr_linenumber" name="680" href="#680">680</a> 				modelListeners);
-<a class="jxr_linenumber" name="681" href="#681">681</a> 		<strong class="jxr_keyword">for</strong> (ModelChangeListener listener : copiedListeners) {
-<a class="jxr_linenumber" name="682" href="#682">682</a> 			listener.modelInitialized(e);
-<a class="jxr_linenumber" name="683" href="#683">683</a> 		}
-<a class="jxr_linenumber" name="684" href="#684">684</a> 	}
-<a class="jxr_linenumber" name="685" href="#685">685</a> 
-<a class="jxr_linenumber" name="686" href="#686">686</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireModelChanged() {
-<a class="jxr_linenumber" name="687" href="#687">687</a> 		<strong class="jxr_keyword">this</strong>.cellSet = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="688" href="#688">688</a> 
-<a class="jxr_linenumber" name="689" href="#689">689</a> 		ModelChangeEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/ModelChangeEvent.html">ModelChangeEvent</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="690" href="#690">690</a> 
-<a class="jxr_linenumber" name="691" href="#691">691</a> 		List&lt;ModelChangeListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;ModelChangeListener&gt;(
-<a class="jxr_linenumber" name="692" href="#692">692</a> 				modelListeners);
-<a class="jxr_linenumber" name="693" href="#693">693</a> 		<strong class="jxr_keyword">for</strong> (ModelChangeListener listener : copiedListeners) {
-<a class="jxr_linenumber" name="694" href="#694">694</a> 			listener.modelChanged(e);
-<a class="jxr_linenumber" name="695" href="#695">695</a> 		}
-<a class="jxr_linenumber" name="696" href="#696">696</a> 	}
-<a class="jxr_linenumber" name="697" href="#697">697</a> 
-<a class="jxr_linenumber" name="698" href="#698">698</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireStructureChanged() {
-<a class="jxr_linenumber" name="699" href="#699">699</a> 		<strong class="jxr_keyword">this</strong>.cellSet = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="700" href="#700">700</a> 
-<a class="jxr_linenumber" name="701" href="#701">701</a> 		ModelChangeEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/ModelChangeEvent.html">ModelChangeEvent</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="702" href="#702">702</a> 
-<a class="jxr_linenumber" name="703" href="#703">703</a> 		List&lt;ModelChangeListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;ModelChangeListener&gt;(
-<a class="jxr_linenumber" name="704" href="#704">704</a> 				modelListeners);
-<a class="jxr_linenumber" name="705" href="#705">705</a> 		<strong class="jxr_keyword">for</strong> (ModelChangeListener listener : copiedListeners) {
-<a class="jxr_linenumber" name="706" href="#706">706</a> 			listener.structureChanged(e);
-<a class="jxr_linenumber" name="707" href="#707">707</a> 		}
-<a class="jxr_linenumber" name="708" href="#708">708</a> 	}
-<a class="jxr_linenumber" name="709" href="#709">709</a> 
-<a class="jxr_linenumber" name="710" href="#710">710</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireModelDestroyed() {
-<a class="jxr_linenumber" name="711" href="#711">711</a> 		ModelChangeEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/ModelChangeEvent.html">ModelChangeEvent</a>(<strong class="jxr_keyword">this</strong>);
-<a class="jxr_linenumber" name="712" href="#712">712</a> 
-<a class="jxr_linenumber" name="713" href="#713">713</a> 		List&lt;ModelChangeListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;ModelChangeListener&gt;(
-<a class="jxr_linenumber" name="714" href="#714">714</a> 				modelListeners);
-<a class="jxr_linenumber" name="715" href="#715">715</a> 		<strong class="jxr_keyword">for</strong> (ModelChangeListener listener : copiedListeners) {
-<a class="jxr_linenumber" name="716" href="#716">716</a> 			listener.modelDestroyed(e);
-<a class="jxr_linenumber" name="717" href="#717">717</a> 		}
-<a class="jxr_linenumber" name="718" href="#718">718</a> 	}
-<a class="jxr_linenumber" name="719" href="#719">719</a> 
-<a class="jxr_linenumber" name="720" href="#720">720</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="721" href="#721">721</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#addQueryListener(com.eyeq.pivot4j.QueryListener)</em>
-<a class="jxr_linenumber" name="722" href="#722">722</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="723" href="#723">723</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addQueryListener(<a href="../../../../com/eyeq/pivot4j/QueryListener.html">QueryListener</a> listener) {
-<a class="jxr_linenumber" name="724" href="#724">724</a> 		queryListeners.add(listener);
-<a class="jxr_linenumber" name="725" href="#725">725</a> 	}
-<a class="jxr_linenumber" name="726" href="#726">726</a> 
-<a class="jxr_linenumber" name="727" href="#727">727</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="728" href="#728">728</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#removeQueryListener(com.eyeq.pivot4j.QueryListener)</em>
-<a class="jxr_linenumber" name="729" href="#729">729</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="730" href="#730">730</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeQueryListener(<a href="../../../../com/eyeq/pivot4j/QueryListener.html">QueryListener</a> listener) {
-<a class="jxr_linenumber" name="731" href="#731">731</a> 		queryListeners.remove(listener);
-<a class="jxr_linenumber" name="732" href="#732">732</a> 	}
-<a class="jxr_linenumber" name="733" href="#733">733</a> 
-<a class="jxr_linenumber" name="734" href="#734">734</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireQueryExecuted(Date start, <strong class="jxr_keyword">long</strong> duration, String mdx) {
-<a class="jxr_linenumber" name="735" href="#735">735</a> 		QueryEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/QueryEvent.html">QueryEvent</a>(<strong class="jxr_keyword">this</strong>, start, duration, mdx, cellSet);
-<a class="jxr_linenumber" name="736" href="#736">736</a> 
-<a class="jxr_linenumber" name="737" href="#737">737</a> 		List&lt;QueryListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;QueryListener&gt;(
-<a class="jxr_linenumber" name="738" href="#738">738</a> 				queryListeners);
-<a class="jxr_linenumber" name="739" href="#739">739</a> 		<strong class="jxr_keyword">for</strong> (QueryListener listener : copiedListeners) {
-<a class="jxr_linenumber" name="740" href="#740">740</a> 			listener.queryExecuted(e);
-<a class="jxr_linenumber" name="741" href="#741">741</a> 		}
-<a class="jxr_linenumber" name="742" href="#742">742</a> 	}
-<a class="jxr_linenumber" name="743" href="#743">743</a> 
-<a class="jxr_linenumber" name="744" href="#744">744</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="745" href="#745">745</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#getTransform(java.lang.Class)</em>
-<a class="jxr_linenumber" name="746" href="#746">746</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="747" href="#747">747</a> 	<strong class="jxr_keyword">public</strong> &lt;T <strong class="jxr_keyword">extends</strong> Transform&gt; T getTransform(Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="748" href="#748">748</a> 		<strong class="jxr_keyword">if</strong> (transformFactory == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="749" href="#749">749</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(
-<a class="jxr_linenumber" name="750" href="#750">750</a> 					<span class="jxr_string">"No transform factory instance is available."</span>);
-<a class="jxr_linenumber" name="751" href="#751">751</a> 		}
-<a class="jxr_linenumber" name="752" href="#752">752</a> 
-<a class="jxr_linenumber" name="753" href="#753">753</a> 		<strong class="jxr_keyword">return</strong> transformFactory.createTransform(type, queryAdapter, connection);
-<a class="jxr_linenumber" name="754" href="#754">754</a> 	}
-<a class="jxr_linenumber" name="755" href="#755">755</a> 
-<a class="jxr_linenumber" name="756" href="#756">756</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="757" href="#757">757</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#isSorting()</em>
-<a class="jxr_linenumber" name="758" href="#758">758</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="759" href="#759">759</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSorting() {
-<a class="jxr_linenumber" name="760" href="#760">760</a> 		<strong class="jxr_keyword">return</strong> sorting;
-<a class="jxr_linenumber" name="761" href="#761">761</a> 	}
-<a class="jxr_linenumber" name="762" href="#762">762</a> 
-<a class="jxr_linenumber" name="763" href="#763">763</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="764" href="#764">764</a> <em class="jxr_javadoccomment">	 * @param position</em>
-<a class="jxr_linenumber" name="765" href="#765">765</a> <em class="jxr_javadoccomment">	 *            to be checked</em>
-<a class="jxr_linenumber" name="766" href="#766">766</a> <em class="jxr_javadoccomment">	 * @return true, if position is the current sorting position</em>
-<a class="jxr_linenumber" name="767" href="#767">767</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#isSorting(org.olap4j.Position)</em>
-<a class="jxr_linenumber" name="768" href="#768">768</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="769" href="#769">769</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSorting(Position position) {
-<a class="jxr_linenumber" name="770" href="#770">770</a> 		<strong class="jxr_keyword">if</strong> (!isSortOnQuery()) {
-<a class="jxr_linenumber" name="771" href="#771">771</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="772" href="#772">772</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="773" href="#773">773</a> 			<strong class="jxr_keyword">if</strong> (sortPosMembers.size() != position.getMembers().size()) {
-<a class="jxr_linenumber" name="774" href="#774">774</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="775" href="#775">775</a> 			}
-<a class="jxr_linenumber" name="776" href="#776">776</a> 
-<a class="jxr_linenumber" name="777" href="#777">777</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sortPosMembers.size(); i++) {
-<a class="jxr_linenumber" name="778" href="#778">778</a> 				Member member1 = sortPosMembers.get(i);
-<a class="jxr_linenumber" name="779" href="#779">779</a> 				Member member2 = position.getMembers().get(i);
-<a class="jxr_linenumber" name="780" href="#780">780</a> 				<em class="jxr_comment">// any null does not compare</em>
-<a class="jxr_linenumber" name="781" href="#781">781</a> 				<strong class="jxr_keyword">if</strong> (member1 == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="782" href="#782">782</a> 					<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="783" href="#783">783</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!OlapUtils.equals(member1, member2)) {
-<a class="jxr_linenumber" name="784" href="#784">784</a> 					<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="785" href="#785">785</a> 				}
-<a class="jxr_linenumber" name="786" href="#786">786</a> 			}
-<a class="jxr_linenumber" name="787" href="#787">787</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="788" href="#788">788</a> 		}
-<a class="jxr_linenumber" name="789" href="#789">789</a> 	}
-<a class="jxr_linenumber" name="790" href="#790">790</a> 
-<a class="jxr_linenumber" name="791" href="#791">791</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="792" href="#792">792</a> <em class="jxr_javadoccomment">	 * @task support for natural sorting</em>
-<a class="jxr_linenumber" name="793" href="#793">793</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#setSorting(boolean)</em>
-<a class="jxr_linenumber" name="794" href="#794">794</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="795" href="#795">795</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSorting(<strong class="jxr_keyword">boolean</strong> sorting) {
-<a class="jxr_linenumber" name="796" href="#796">796</a> 		<strong class="jxr_keyword">if</strong> (sorting == <strong class="jxr_keyword">this</strong>.sorting) {
-<a class="jxr_linenumber" name="797" href="#797">797</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="798" href="#798">798</a> 		}
-<a class="jxr_linenumber" name="799" href="#799">799</a> 
-<a class="jxr_linenumber" name="800" href="#800">800</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
-<a class="jxr_linenumber" name="801" href="#801">801</a> 			logger.info(<span class="jxr_string">"Change sorting to "</span> + sorting);
-<a class="jxr_linenumber" name="802" href="#802">802</a> 		}
-<a class="jxr_linenumber" name="803" href="#803">803</a> 
-<a class="jxr_linenumber" name="804" href="#804">804</a> 		<strong class="jxr_keyword">this</strong>.sorting = sorting;
-<a class="jxr_linenumber" name="805" href="#805">805</a> 
-<a class="jxr_linenumber" name="806" href="#806">806</a> 		fireModelChanged();
-<a class="jxr_linenumber" name="807" href="#807">807</a> 	}
-<a class="jxr_linenumber" name="808" href="#808">808</a> 
-<a class="jxr_linenumber" name="809" href="#809">809</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="810" href="#810">810</a> <em class="jxr_javadoccomment">	 * @return sort criteria (ASC,DESC,BASC,BDESC,TOPCOUNT,BOTTOMCOUNT)</em>
-<a class="jxr_linenumber" name="811" href="#811">811</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="812" href="#812">812</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../../com/eyeq/pivot4j/sort/SortCriteria.html">SortCriteria</a> getSortCriteria() {
-<a class="jxr_linenumber" name="813" href="#813">813</a> 		<strong class="jxr_keyword">return</strong> sortCriteria;
-<a class="jxr_linenumber" name="814" href="#814">814</a> 	}
-<a class="jxr_linenumber" name="815" href="#815">815</a> 
-<a class="jxr_linenumber" name="816" href="#816">816</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="817" href="#817">817</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#setSortCriteria(com.eyeq.pivot4j.sort.SortCriteria)</em>
-<a class="jxr_linenumber" name="818" href="#818">818</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="819" href="#819">819</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSortCriteria(<a href="../../../../com/eyeq/pivot4j/sort/SortCriteria.html">SortCriteria</a> sortCriteria) {
-<a class="jxr_linenumber" name="820" href="#820">820</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.sortCriteria == sortCriteria) {
-<a class="jxr_linenumber" name="821" href="#821">821</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="822" href="#822">822</a> 		}
-<a class="jxr_linenumber" name="823" href="#823">823</a> 
-<a class="jxr_linenumber" name="824" href="#824">824</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
-<a class="jxr_linenumber" name="825" href="#825">825</a> 			logger.info(<span class="jxr_string">"Change sort mode from "</span> + <strong class="jxr_keyword">this</strong>.sortCriteria + <span class="jxr_string">" to "</span>
-<a class="jxr_linenumber" name="826" href="#826">826</a> 					+ sortCriteria);
-<a class="jxr_linenumber" name="827" href="#827">827</a> 		}
-<a class="jxr_linenumber" name="828" href="#828">828</a> 
-<a class="jxr_linenumber" name="829" href="#829">829</a> 		<strong class="jxr_keyword">this</strong>.sortCriteria = sortCriteria;
-<a class="jxr_linenumber" name="830" href="#830">830</a> 
-<a class="jxr_linenumber" name="831" href="#831">831</a> 		<strong class="jxr_keyword">if</strong> (isSortOnQuery()) {
-<a class="jxr_linenumber" name="832" href="#832">832</a> 			fireModelChanged();
-<a class="jxr_linenumber" name="833" href="#833">833</a> 		}
-<a class="jxr_linenumber" name="834" href="#834">834</a> 	}
-<a class="jxr_linenumber" name="835" href="#835">835</a> 
-<a class="jxr_linenumber" name="836" href="#836">836</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="837" href="#837">837</a> <em class="jxr_javadoccomment">	 * returns true, if ONE of the members is a measure</em>
-<a class="jxr_linenumber" name="838" href="#838">838</a> <em class="jxr_javadoccomment">	 * </em>
-<a class="jxr_linenumber" name="839" href="#839">839</a> <em class="jxr_javadoccomment">	 * @param position</em>
-<a class="jxr_linenumber" name="840" href="#840">840</a> <em class="jxr_javadoccomment">	 *            the position to check for sortability</em>
-<a class="jxr_linenumber" name="841" href="#841">841</a> <em class="jxr_javadoccomment">	 * @return true, if the position is sortable</em>
-<a class="jxr_linenumber" name="842" href="#842">842</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="843" href="#843">843</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSortable(Position position) {
-<a class="jxr_linenumber" name="844" href="#844">844</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="845" href="#845">845</a> 			List&lt;Member&gt; members = position.getMembers();
-<a class="jxr_linenumber" name="846" href="#846">846</a> 			<strong class="jxr_keyword">for</strong> (Member member : members) {
-<a class="jxr_linenumber" name="847" href="#847">847</a> 				<strong class="jxr_keyword">if</strong> (member.getLevel().getHierarchy().getDimension()
-<a class="jxr_linenumber" name="848" href="#848">848</a> 						.getDimensionType() == Type.MEASURE) {
-<a class="jxr_linenumber" name="849" href="#849">849</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="850" href="#850">850</a> 				}
-<a class="jxr_linenumber" name="851" href="#851">851</a> 			}
-<a class="jxr_linenumber" name="852" href="#852">852</a> 		} <strong class="jxr_keyword">catch</strong> (OlapException e) {
-<a class="jxr_linenumber" name="853" href="#853">853</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(e);
-<a class="jxr_linenumber" name="854" href="#854">854</a> 		}
-<a class="jxr_linenumber" name="855" href="#855">855</a> 
-<a class="jxr_linenumber" name="856" href="#856">856</a> 		<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="857" href="#857">857</a> 	}
-<a class="jxr_linenumber" name="858" href="#858">858</a> 
-<a class="jxr_linenumber" name="859" href="#859">859</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="860" href="#860">860</a> <em class="jxr_javadoccomment">	 * @return true, if there is a sort for the query</em>
-<a class="jxr_linenumber" name="861" href="#861">861</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="862" href="#862">862</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isSortOnQuery() {
-<a class="jxr_linenumber" name="863" href="#863">863</a> 		<strong class="jxr_keyword">return</strong> sorting &amp;&amp; sortPosMembers != <strong class="jxr_keyword">null</strong> &amp;&amp; !sortPosMembers.isEmpty();
-<a class="jxr_linenumber" name="864" href="#864">864</a> 	}
-<a class="jxr_linenumber" name="865" href="#865">865</a> 
-<a class="jxr_linenumber" name="866" href="#866">866</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="867" href="#867">867</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#getSortPosMembers()</em>
-<a class="jxr_linenumber" name="868" href="#868">868</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="869" href="#869">869</a> 	<strong class="jxr_keyword">public</strong> List&lt;Member&gt; getSortPosMembers() {
-<a class="jxr_linenumber" name="870" href="#870">870</a> 		<strong class="jxr_keyword">return</strong> Collections.unmodifiableList(sortPosMembers);
-<a class="jxr_linenumber" name="871" href="#871">871</a> 	}
-<a class="jxr_linenumber" name="872" href="#872">872</a> 
-<a class="jxr_linenumber" name="873" href="#873">873</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="874" href="#874">874</a> <em class="jxr_javadoccomment">	 * @return top/bottom count</em>
-<a class="jxr_linenumber" name="875" href="#875">875</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#getTopBottomCount()</em>
-<a class="jxr_linenumber" name="876" href="#876">876</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="877" href="#877">877</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getTopBottomCount() {
-<a class="jxr_linenumber" name="878" href="#878">878</a> 		<strong class="jxr_keyword">return</strong> topBottomCount;
-<a class="jxr_linenumber" name="879" href="#879">879</a> 	}
-<a class="jxr_linenumber" name="880" href="#880">880</a> 
-<a class="jxr_linenumber" name="881" href="#881">881</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="882" href="#882">882</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#setTopBottomCount(int)</em>
-<a class="jxr_linenumber" name="883" href="#883">883</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="884" href="#884">884</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTopBottomCount(<strong class="jxr_keyword">int</strong> topBottomCount) {
-<a class="jxr_linenumber" name="885" href="#885">885</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.topBottomCount == topBottomCount) {
-<a class="jxr_linenumber" name="886" href="#886">886</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="887" href="#887">887</a> 		}
-<a class="jxr_linenumber" name="888" href="#888">888</a> 
-<a class="jxr_linenumber" name="889" href="#889">889</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
-<a class="jxr_linenumber" name="890" href="#890">890</a> 			logger.info(<span class="jxr_string">"Change topBottomCount from "</span> + <strong class="jxr_keyword">this</strong>.topBottomCount
-<a class="jxr_linenumber" name="891" href="#891">891</a> 					+ <span class="jxr_string">" to "</span> + topBottomCount);
-<a class="jxr_linenumber" name="892" href="#892">892</a> 		}
-<a class="jxr_linenumber" name="893" href="#893">893</a> 
-<a class="jxr_linenumber" name="894" href="#894">894</a> 		<strong class="jxr_keyword">this</strong>.topBottomCount = topBottomCount;
-<a class="jxr_linenumber" name="895" href="#895">895</a> 
-<a class="jxr_linenumber" name="896" href="#896">896</a> 		<strong class="jxr_keyword">if</strong> (sorting
-<a class="jxr_linenumber" name="897" href="#897">897</a> 				&amp;&amp; sortPosMembers != <strong class="jxr_keyword">null</strong>
-<a class="jxr_linenumber" name="898" href="#898">898</a> 				&amp;&amp; (sortCriteria == SortCriteria.TOPCOUNT || sortCriteria == SortCriteria.BOTTOMCOUNT)) {
-<a class="jxr_linenumber" name="899" href="#899">899</a> 			fireModelChanged();
-<a class="jxr_linenumber" name="900" href="#900">900</a> 		}
-<a class="jxr_linenumber" name="901" href="#901">901</a> 	}
-<a class="jxr_linenumber" name="902" href="#902">902</a> 
-<a class="jxr_linenumber" name="903" href="#903">903</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="904" href="#904">904</a> <em class="jxr_javadoccomment">	 * @param axisToSort</em>
-<a class="jxr_linenumber" name="905" href="#905">905</a> <em class="jxr_javadoccomment">	 *            Axis containing the members to be sorted</em>
-<a class="jxr_linenumber" name="906" href="#906">906</a> <em class="jxr_javadoccomment">	 * @param position</em>
-<a class="jxr_linenumber" name="907" href="#907">907</a> <em class="jxr_javadoccomment">	 *            Position on "other axis" defining the members by which the</em>
-<a class="jxr_linenumber" name="908" href="#908">908</a> <em class="jxr_javadoccomment">	 *            membersToSort are sorted</em>
-<a class="jxr_linenumber" name="909" href="#909">909</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="910" href="#910">910</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sort(CellSetAxis axisToSort, Position position) {
-<a class="jxr_linenumber" name="911" href="#911">911</a> 		List&lt;Position&gt; positions = axisToSort.getPositions();
-<a class="jxr_linenumber" name="912" href="#912">912</a> 
-<a class="jxr_linenumber" name="913" href="#913">913</a> 		<em class="jxr_comment">// if the axis to sort does not contain any positions - sorting is not</em>
-<a class="jxr_linenumber" name="914" href="#914">914</a> 		<em class="jxr_comment">// posssible</em>
-<a class="jxr_linenumber" name="915" href="#915">915</a> 		<strong class="jxr_keyword">if</strong> (positions.isEmpty()) {
-<a class="jxr_linenumber" name="916" href="#916">916</a> 			<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
-<a class="jxr_linenumber" name="917" href="#917">917</a> 				logger.warn(<span class="jxr_string">"Reject sort, the axis to be sorted is empty."</span>);
-<a class="jxr_linenumber" name="918" href="#918">918</a> 			}
-<a class="jxr_linenumber" name="919" href="#919">919</a> 
-<a class="jxr_linenumber" name="920" href="#920">920</a> 			<strong class="jxr_keyword">this</strong>.sorting = false;
-<a class="jxr_linenumber" name="921" href="#921">921</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="922" href="#922">922</a> 		}
-<a class="jxr_linenumber" name="923" href="#923">923</a> 
-<a class="jxr_linenumber" name="924" href="#924">924</a> 		<strong class="jxr_keyword">this</strong>.sortPosMembers = position.getMembers();
-<a class="jxr_linenumber" name="925" href="#925">925</a> 
-<a class="jxr_linenumber" name="926" href="#926">926</a> 		<em class="jxr_comment">// find the axis to sort</em>
-<a class="jxr_linenumber" name="927" href="#927">927</a> 		Dimension dim = positions.get(0).getMembers().get(0).getDimension();
-<a class="jxr_linenumber" name="928" href="#928">928</a> 
-<a class="jxr_linenumber" name="929" href="#929">929</a> 		Quax quaxToSort = getQueryAdapter().findQuax(dim);
-<a class="jxr_linenumber" name="930" href="#930">930</a> 
-<a class="jxr_linenumber" name="931" href="#931">931</a> 		<strong class="jxr_keyword">if</strong> (quaxToSort == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="932" href="#932">932</a> 			<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
-<a class="jxr_linenumber" name="933" href="#933">933</a> 				logger.warn(<span class="jxr_string">"Reject sort, the Quax is null"</span>);
-<a class="jxr_linenumber" name="934" href="#934">934</a> 			}
-<a class="jxr_linenumber" name="935" href="#935">935</a> 			<strong class="jxr_keyword">this</strong>.sorting = false;
-<a class="jxr_linenumber" name="936" href="#936">936</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="937" href="#937">937</a> 		}
-<a class="jxr_linenumber" name="938" href="#938">938</a> 
-<a class="jxr_linenumber" name="939" href="#939">939</a> 		getQueryAdapter().setQuaxToSort(quaxToSort);
-<a class="jxr_linenumber" name="940" href="#940">940</a> 
-<a class="jxr_linenumber" name="941" href="#941">941</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
-<a class="jxr_linenumber" name="942" href="#942">942</a> 			StringBuilder builder = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="943" href="#943">943</a> 			builder.append(<span class="jxr_string">"Change Sort Position "</span>);
-<a class="jxr_linenumber" name="944" href="#944">944</a> 
-<a class="jxr_linenumber" name="945" href="#945">945</a> 			<strong class="jxr_keyword">boolean</strong> first = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="946" href="#946">946</a> 
-<a class="jxr_linenumber" name="947" href="#947">947</a> 			List&lt;Member&gt; members = position.getMembers();
-<a class="jxr_linenumber" name="948" href="#948">948</a> 			<strong class="jxr_keyword">for</strong> (Member member : members) {
-<a class="jxr_linenumber" name="949" href="#949">949</a> 				<strong class="jxr_keyword">if</strong> (first) {
-<a class="jxr_linenumber" name="950" href="#950">950</a> 					first = false;
-<a class="jxr_linenumber" name="951" href="#951">951</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="952" href="#952">952</a> 					builder.append(<span class="jxr_string">" "</span>);
-<a class="jxr_linenumber" name="953" href="#953">953</a> 				}
-<a class="jxr_linenumber" name="954" href="#954">954</a> 				builder.append(member.getUniqueName());
-<a class="jxr_linenumber" name="955" href="#955">955</a> 			}
-<a class="jxr_linenumber" name="956" href="#956">956</a> 			builder.append(<span class="jxr_string">" iAxisToSort="</span>);
-<a class="jxr_linenumber" name="957" href="#957">957</a> 			builder.append(Integer.toString(quaxToSort.getOrdinal()));
-<a class="jxr_linenumber" name="958" href="#958">958</a> 
-<a class="jxr_linenumber" name="959" href="#959">959</a> 			logger.info(builder.toString());
-<a class="jxr_linenumber" name="960" href="#960">960</a> 		}
-<a class="jxr_linenumber" name="961" href="#961">961</a> 
-<a class="jxr_linenumber" name="962" href="#962">962</a> 		fireModelChanged();
-<a class="jxr_linenumber" name="963" href="#963">963</a> 	}
-<a class="jxr_linenumber" name="964" href="#964">964</a> 
-<a class="jxr_linenumber" name="965" href="#965">965</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="966" href="#966">966</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()</em>
-<a class="jxr_linenumber" name="967" href="#967">967</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="968" href="#968">968</a> 	@Override
-<a class="jxr_linenumber" name="969" href="#969">969</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> Serializable saveState() {
-<a class="jxr_linenumber" name="970" href="#970">970</a> 		Serializable[] state = <strong class="jxr_keyword">new</strong> Serializable[3];
-<a class="jxr_linenumber" name="971" href="#971">971</a> 
-<a class="jxr_linenumber" name="972" href="#972">972</a> 		<strong class="jxr_keyword">if</strong> (isInitialized()) {
-<a class="jxr_linenumber" name="973" href="#973">973</a> 			state[0] = getCurrentMdx(false);
-<a class="jxr_linenumber" name="974" href="#974">974</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="975" href="#975">975</a> 			state[0] = mdxQuery;
-<a class="jxr_linenumber" name="976" href="#976">976</a> 		}
-<a class="jxr_linenumber" name="977" href="#977">977</a> 
-<a class="jxr_linenumber" name="978" href="#978">978</a> 		<strong class="jxr_keyword">if</strong> (sortPosMembers == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="979" href="#979">979</a> 			state[1] = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="980" href="#980">980</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="981" href="#981">981</a> 			Serializable[] sortState = <strong class="jxr_keyword">new</strong> Serializable[4];
-<a class="jxr_linenumber" name="982" href="#982">982</a> 
-<a class="jxr_linenumber" name="983" href="#983">983</a> 			String[] uniqueNames = <strong class="jxr_keyword">new</strong> String[sortPosMembers.size()];
-<a class="jxr_linenumber" name="984" href="#984">984</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; uniqueNames.length; i++) {
-<a class="jxr_linenumber" name="985" href="#985">985</a> 				uniqueNames[i] = sortPosMembers.get(i).getUniqueName();
-<a class="jxr_linenumber" name="986" href="#986">986</a> 			}
-<a class="jxr_linenumber" name="987" href="#987">987</a> 
-<a class="jxr_linenumber" name="988" href="#988">988</a> 			sortState[0] = uniqueNames;
-<a class="jxr_linenumber" name="989" href="#989">989</a> 			sortState[1] = getTopBottomCount();
-<a class="jxr_linenumber" name="990" href="#990">990</a> 			sortState[2] = getSortCriteria();
-<a class="jxr_linenumber" name="991" href="#991">991</a> 			sortState[3] = isSorting();
-<a class="jxr_linenumber" name="992" href="#992">992</a> 
-<a class="jxr_linenumber" name="993" href="#993">993</a> 			state[1] = sortState;
-<a class="jxr_linenumber" name="994" href="#994">994</a> 		}
-<a class="jxr_linenumber" name="995" href="#995">995</a> 
-<a class="jxr_linenumber" name="996" href="#996">996</a> 		state[2] = getQueryAdapter().saveState();
-<a class="jxr_linenumber" name="997" href="#997">997</a> 
-<a class="jxr_linenumber" name="998" href="#998">998</a> 		<strong class="jxr_keyword">return</strong> state;
-<a class="jxr_linenumber" name="999" href="#999">999</a> 	}
-<a class="jxr_linenumber" name="1000" href="#1000">1000</a> 
-<a class="jxr_linenumber" name="1001" href="#1001">1001</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="1002" href="#1002">1002</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)</em>
-<a class="jxr_linenumber" name="1003" href="#1003">1003</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="1004" href="#1004">1004</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> restoreState(Serializable state) {
-<a class="jxr_linenumber" name="1005" href="#1005">1005</a> 		<strong class="jxr_keyword">if</strong> (state == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1006" href="#1006">1006</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"state"</span>);
-<a class="jxr_linenumber" name="1007" href="#1007">1007</a> 		}
-<a class="jxr_linenumber" name="1008" href="#1008">1008</a> 
-<a class="jxr_linenumber" name="1009" href="#1009">1009</a> 		Serializable[] states = (Serializable[]) state;
-<a class="jxr_linenumber" name="1010" href="#1010">1010</a> 
-<a class="jxr_linenumber" name="1011" href="#1011">1011</a> 		setMdx((String) states[0]);
-<a class="jxr_linenumber" name="1012" href="#1012">1012</a> 
-<a class="jxr_linenumber" name="1013" href="#1013">1013</a> 		<strong class="jxr_keyword">if</strong> (!isInitialized()) {
-<a class="jxr_linenumber" name="1014" href="#1014">1014</a> 			initialize();
-<a class="jxr_linenumber" name="1015" href="#1015">1015</a> 		}
-<a class="jxr_linenumber" name="1016" href="#1016">1016</a> 
-<a class="jxr_linenumber" name="1017" href="#1017">1017</a> 		<em class="jxr_comment">// sorting</em>
-<a class="jxr_linenumber" name="1018" href="#1018">1018</a> 		<strong class="jxr_keyword">if</strong> (states[1] == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1019" href="#1019">1019</a> 			<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1020" href="#1020">1020</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1021" href="#1021">1021</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="1022" href="#1022">1022</a> 				Cube cube = getCube();
-<a class="jxr_linenumber" name="1023" href="#1023">1023</a> 
-<a class="jxr_linenumber" name="1024" href="#1024">1024</a> 				Serializable[] sortStates = (Serializable[]) states[1];
-<a class="jxr_linenumber" name="1025" href="#1025">1025</a> 
-<a class="jxr_linenumber" name="1026" href="#1026">1026</a> 				String[] sortPosUniqueNames = (String[]) sortStates[0];
-<a class="jxr_linenumber" name="1027" href="#1027">1027</a> 				<strong class="jxr_keyword">if</strong> (sortPosUniqueNames == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1028" href="#1028">1028</a> 					<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1029" href="#1029">1029</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1030" href="#1030">1030</a> 					<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
-<a class="jxr_linenumber" name="1031" href="#1031">1031</a> 							sortPosUniqueNames.length);
-<a class="jxr_linenumber" name="1032" href="#1032">1032</a> 
-<a class="jxr_linenumber" name="1033" href="#1033">1033</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sortPosUniqueNames.length; i++) {
-<a class="jxr_linenumber" name="1034" href="#1034">1034</a> 						Member member = cube.lookupMember(IdentifierNode
-<a class="jxr_linenumber" name="1035" href="#1035">1035</a> 								.parseIdentifier(sortPosUniqueNames[i])
-<a class="jxr_linenumber" name="1036" href="#1036">1036</a> 								.getSegmentList());
-<a class="jxr_linenumber" name="1037" href="#1037">1037</a> 						<strong class="jxr_keyword">if</strong> (member == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1038" href="#1038">1038</a> 							<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
-<a class="jxr_linenumber" name="1039" href="#1039">1039</a> 								logger.warn(<span class="jxr_string">"Sort position member not found "</span>
-<a class="jxr_linenumber" name="1040" href="#1040">1040</a> 										+ sortPosUniqueNames[i]);
-<a class="jxr_linenumber" name="1041" href="#1041">1041</a> 							}
-<a class="jxr_linenumber" name="1042" href="#1042">1042</a> 
-<a class="jxr_linenumber" name="1043" href="#1043">1043</a> 							<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="1044" href="#1044">1044</a> 						}
-<a class="jxr_linenumber" name="1045" href="#1045">1045</a> 
-<a class="jxr_linenumber" name="1046" href="#1046">1046</a> 						sortPosMembers.add(member);
-<a class="jxr_linenumber" name="1047" href="#1047">1047</a> 					}
-<a class="jxr_linenumber" name="1048" href="#1048">1048</a> 
-<a class="jxr_linenumber" name="1049" href="#1049">1049</a> 					<strong class="jxr_keyword">this</strong>.topBottomCount = (Integer) sortStates[1];
-<a class="jxr_linenumber" name="1050" href="#1050">1050</a> 					<strong class="jxr_keyword">this</strong>.sortCriteria = (SortCriteria) sortStates[2];
-<a class="jxr_linenumber" name="1051" href="#1051">1051</a> 					<strong class="jxr_keyword">this</strong>.sorting = (Boolean) sortStates[3];
-<a class="jxr_linenumber" name="1052" href="#1052">1052</a> 				}
-<a class="jxr_linenumber" name="1053" href="#1053">1053</a> 			} <strong class="jxr_keyword">catch</strong> (OlapException e) {
-<a class="jxr_linenumber" name="1054" href="#1054">1054</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(e);
-<a class="jxr_linenumber" name="1055" href="#1055">1055</a> 			}
-<a class="jxr_linenumber" name="1056" href="#1056">1056</a> 		}
-<a class="jxr_linenumber" name="1057" href="#1057">1057</a> 
-<a class="jxr_linenumber" name="1058" href="#1058">1058</a> 		<strong class="jxr_keyword">this</strong>.cellSet = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1059" href="#1059">1059</a> 
-<a class="jxr_linenumber" name="1060" href="#1060">1060</a> 		queryAdapter.restoreState(states[2]);
-<a class="jxr_linenumber" name="1061" href="#1061">1061</a> 	}
-<a class="jxr_linenumber" name="1062" href="#1062">1062</a> 
-<a class="jxr_linenumber" name="1063" href="#1063">1063</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="1064" href="#1064">1064</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)</em>
-<a class="jxr_linenumber" name="1065" href="#1065">1065</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="1066" href="#1066">1066</a> 	@Override
-<a class="jxr_linenumber" name="1067" href="#1067">1067</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> saveSettings(
-<a class="jxr_linenumber" name="1068" href="#1068">1068</a> 			HierarchicalConfiguration configuration) {
-<a class="jxr_linenumber" name="1069" href="#1069">1069</a> 		<strong class="jxr_keyword">if</strong> (configuration == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1070" href="#1070">1070</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"configuration"</span>);
-<a class="jxr_linenumber" name="1071" href="#1071">1071</a> 		}
-<a class="jxr_linenumber" name="1072" href="#1072">1072</a> 
-<a class="jxr_linenumber" name="1073" href="#1073">1073</a> 		<strong class="jxr_keyword">if</strong> (configuration.getLogger() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1074" href="#1074">1074</a> 			configuration.setLogger(LogFactory.getLog(getClass()));
-<a class="jxr_linenumber" name="1075" href="#1075">1075</a> 		}
-<a class="jxr_linenumber" name="1076" href="#1076">1076</a> 
-<a class="jxr_linenumber" name="1077" href="#1077">1077</a> 		<strong class="jxr_keyword">if</strong> (isInitialized()) {
-<a class="jxr_linenumber" name="1078" href="#1078">1078</a> 			configuration.addProperty(<span class="jxr_string">"mdx"</span>, getCurrentMdx());
-<a class="jxr_linenumber" name="1079" href="#1079">1079</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="1080" href="#1080">1080</a> 			configuration.addProperty(<span class="jxr_string">"mdx"</span>, mdxQuery);
-<a class="jxr_linenumber" name="1081" href="#1081">1081</a> 		}
-<a class="jxr_linenumber" name="1082" href="#1082">1082</a> 
-<a class="jxr_linenumber" name="1083" href="#1083">1083</a> 		<strong class="jxr_keyword">if</strong> (sorting) {
-<a class="jxr_linenumber" name="1084" href="#1084">1084</a> 			configuration.addProperty(<span class="jxr_string">"sort[@enabled]"</span>, sorting);
-<a class="jxr_linenumber" name="1085" href="#1085">1085</a> 
-<a class="jxr_linenumber" name="1086" href="#1086">1086</a> 			<strong class="jxr_keyword">if</strong> (queryAdapter.getQuaxToSort() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1087" href="#1087">1087</a> 				configuration.addProperty(<span class="jxr_string">"sort[@ordinal]"</span>, queryAdapter
-<a class="jxr_linenumber" name="1088" href="#1088">1088</a> 						.getQuaxToSort().getOrdinal());
-<a class="jxr_linenumber" name="1089" href="#1089">1089</a> 			}
-<a class="jxr_linenumber" name="1090" href="#1090">1090</a> 
-<a class="jxr_linenumber" name="1091" href="#1091">1091</a> 			<strong class="jxr_keyword">if</strong> (sortCriteria != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1092" href="#1092">1092</a> 				configuration.addProperty(<span class="jxr_string">"sort[@criteria]"</span>,
-<a class="jxr_linenumber" name="1093" href="#1093">1093</a> 						sortCriteria.name());
-<a class="jxr_linenumber" name="1094" href="#1094">1094</a> 				configuration.addProperty(<span class="jxr_string">"sort[@topBottomCount]"</span>,
-<a class="jxr_linenumber" name="1095" href="#1095">1095</a> 						topBottomCount);
-<a class="jxr_linenumber" name="1096" href="#1096">1096</a> 				<strong class="jxr_keyword">if</strong> (isSorting() &amp;&amp; sortPosMembers != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1097" href="#1097">1097</a> 					<strong class="jxr_keyword">int</strong> index = 0;
-<a class="jxr_linenumber" name="1098" href="#1098">1098</a> 					<strong class="jxr_keyword">for</strong> (Member member : sortPosMembers) {
-<a class="jxr_linenumber" name="1099" href="#1099">1099</a> 						configuration.addProperty(
-<a class="jxr_linenumber" name="1100" href="#1100">1100</a> 								String.format(<span class="jxr_string">"sort.member(%s)"</span>, index++),
-<a class="jxr_linenumber" name="1101" href="#1101">1101</a> 								member.getUniqueName());
-<a class="jxr_linenumber" name="1102" href="#1102">1102</a> 					}
-<a class="jxr_linenumber" name="1103" href="#1103">1103</a> 				}
-<a class="jxr_linenumber" name="1104" href="#1104">1104</a> 			}
-<a class="jxr_linenumber" name="1105" href="#1105">1105</a> 		}
-<a class="jxr_linenumber" name="1106" href="#1106">1106</a> 	}
-<a class="jxr_linenumber" name="1107" href="#1107">1107</a> 
-<a class="jxr_linenumber" name="1108" href="#1108">1108</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="1109" href="#1109">1109</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)</em>
-<a class="jxr_linenumber" name="1110" href="#1110">1110</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="1111" href="#1111">1111</a> 	@Override
-<a class="jxr_linenumber" name="1112" href="#1112">1112</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> restoreSettings(
-<a class="jxr_linenumber" name="1113" href="#1113">1113</a> 			HierarchicalConfiguration configuration) {
-<a class="jxr_linenumber" name="1114" href="#1114">1114</a> 		<strong class="jxr_keyword">if</strong> (configuration == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1115" href="#1115">1115</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"configuration"</span>);
-<a class="jxr_linenumber" name="1116" href="#1116">1116</a> 		}
-<a class="jxr_linenumber" name="1117" href="#1117">1117</a> 
-<a class="jxr_linenumber" name="1118" href="#1118">1118</a> 		String mdx = configuration.getString(<span class="jxr_string">"mdx"</span>);
-<a class="jxr_linenumber" name="1119" href="#1119">1119</a> 
-<a class="jxr_linenumber" name="1120" href="#1120">1120</a> 		setMdx(mdx);
-<a class="jxr_linenumber" name="1121" href="#1121">1121</a> 
-<a class="jxr_linenumber" name="1122" href="#1122">1122</a> 		<strong class="jxr_keyword">if</strong> (mdx == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1123" href="#1123">1123</a> 			<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
-<a class="jxr_linenumber" name="1124" href="#1124">1124</a> 				logger.warn(<span class="jxr_string">"The configuration does not contain valid MDX query."</span>);
-<a class="jxr_linenumber" name="1125" href="#1125">1125</a> 			}
-<a class="jxr_linenumber" name="1126" href="#1126">1126</a> 
-<a class="jxr_linenumber" name="1127" href="#1127">1127</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="1128" href="#1128">1128</a> 		}
-<a class="jxr_linenumber" name="1129" href="#1129">1129</a> 
-<a class="jxr_linenumber" name="1130" href="#1130">1130</a> 		<strong class="jxr_keyword">if</strong> (!isInitialized()) {
-<a class="jxr_linenumber" name="1131" href="#1131">1131</a> 			initialize();
-<a class="jxr_linenumber" name="1132" href="#1132">1132</a> 		}
-<a class="jxr_linenumber" name="1133" href="#1133">1133</a> 
-<a class="jxr_linenumber" name="1134" href="#1134">1134</a> 		<strong class="jxr_keyword">this</strong>.sorting = configuration.getBoolean(<span class="jxr_string">"sort[@enabled]"</span>, false);
-<a class="jxr_linenumber" name="1135" href="#1135">1135</a> 
-<a class="jxr_linenumber" name="1136" href="#1136">1136</a> 		<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1137" href="#1137">1137</a> 		<strong class="jxr_keyword">this</strong>.sortCriteria = SortCriteria.ASC;
-<a class="jxr_linenumber" name="1138" href="#1138">1138</a> 		<strong class="jxr_keyword">this</strong>.topBottomCount = 10;
-<a class="jxr_linenumber" name="1139" href="#1139">1139</a> 
-<a class="jxr_linenumber" name="1140" href="#1140">1140</a> 		Quax quaxToSort = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1141" href="#1141">1141</a> 
-<a class="jxr_linenumber" name="1142" href="#1142">1142</a> 		<strong class="jxr_keyword">if</strong> (sorting) {
-<a class="jxr_linenumber" name="1143" href="#1143">1143</a> 			List&lt;Object&gt; sortPosUniqueNames = configuration
-<a class="jxr_linenumber" name="1144" href="#1144">1144</a> 					.getList(<span class="jxr_string">"sort.member"</span>);
-<a class="jxr_linenumber" name="1145" href="#1145">1145</a> 			<strong class="jxr_keyword">if</strong> (sortPosUniqueNames != <strong class="jxr_keyword">null</strong> &amp;&amp; !sortPosUniqueNames.isEmpty()) {
-<a class="jxr_linenumber" name="1146" href="#1146">1146</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="1147" href="#1147">1147</a> 					Cube cube = getCube();
-<a class="jxr_linenumber" name="1148" href="#1148">1148</a> 
-<a class="jxr_linenumber" name="1149" href="#1149">1149</a> 					<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
-<a class="jxr_linenumber" name="1150" href="#1150">1150</a> 							sortPosUniqueNames.size());
-<a class="jxr_linenumber" name="1151" href="#1151">1151</a> 
-<a class="jxr_linenumber" name="1152" href="#1152">1152</a> 					<strong class="jxr_keyword">for</strong> (Object uniqueName : sortPosUniqueNames) {
-<a class="jxr_linenumber" name="1153" href="#1153">1153</a> 						Member member = cube.lookupMember(IdentifierNode
-<a class="jxr_linenumber" name="1154" href="#1154">1154</a> 								.parseIdentifier(uniqueName.toString())
-<a class="jxr_linenumber" name="1155" href="#1155">1155</a> 								.getSegmentList());
-<a class="jxr_linenumber" name="1156" href="#1156">1156</a> 						<strong class="jxr_keyword">if</strong> (member == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1157" href="#1157">1157</a> 							<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
-<a class="jxr_linenumber" name="1158" href="#1158">1158</a> 								logger.warn(<span class="jxr_string">"Sort position member not found "</span>
-<a class="jxr_linenumber" name="1159" href="#1159">1159</a> 										+ uniqueName);
-<a class="jxr_linenumber" name="1160" href="#1160">1160</a> 							}
-<a class="jxr_linenumber" name="1161" href="#1161">1161</a> 
-<a class="jxr_linenumber" name="1162" href="#1162">1162</a> 							<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="1163" href="#1163">1163</a> 						}
-<a class="jxr_linenumber" name="1164" href="#1164">1164</a> 
-<a class="jxr_linenumber" name="1165" href="#1165">1165</a> 						sortPosMembers.add(member);
-<a class="jxr_linenumber" name="1166" href="#1166">1166</a> 					}
-<a class="jxr_linenumber" name="1167" href="#1167">1167</a> 				} <strong class="jxr_keyword">catch</strong> (OlapException e) {
-<a class="jxr_linenumber" name="1168" href="#1168">1168</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(e);
-<a class="jxr_linenumber" name="1169" href="#1169">1169</a> 				}
-<a class="jxr_linenumber" name="1170" href="#1170">1170</a> 			}
-<a class="jxr_linenumber" name="1171" href="#1171">1171</a> 
-<a class="jxr_linenumber" name="1172" href="#1172">1172</a> 			<strong class="jxr_keyword">this</strong>.topBottomCount = configuration.getInt(<span class="jxr_string">"sort[@topBottomCount]"</span>,
-<a class="jxr_linenumber" name="1173" href="#1173">1173</a> 					10);
-<a class="jxr_linenumber" name="1174" href="#1174">1174</a> 
-<a class="jxr_linenumber" name="1175" href="#1175">1175</a> 			String sortName = configuration.getString(<span class="jxr_string">"sort[@criteria]"</span>);
-<a class="jxr_linenumber" name="1176" href="#1176">1176</a> 			<strong class="jxr_keyword">if</strong> (sortName != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="1177" href="#1177">1177</a> 				<strong class="jxr_keyword">this</strong>.sortCriteria = SortCriteria.valueOf(sortName);
-<a class="jxr_linenumber" name="1178" href="#1178">1178</a> 			}
-<a class="jxr_linenumber" name="1179" href="#1179">1179</a> 
-<a class="jxr_linenumber" name="1180" href="#1180">1180</a> 			<strong class="jxr_keyword">int</strong> ordinal = configuration.getInt(<span class="jxr_string">"sort[@ordinal]"</span>, -1);
-<a class="jxr_linenumber" name="1181" href="#1181">1181</a> 
-<a class="jxr_linenumber" name="1182" href="#1182">1182</a> 			<strong class="jxr_keyword">if</strong> (ordinal &gt; 0) {
-<a class="jxr_linenumber" name="1183" href="#1183">1183</a> 				<strong class="jxr_keyword">for</strong> (Axis axis : queryAdapter.getAxes()) {
-<a class="jxr_linenumber" name="1184" href="#1184">1184</a> 					Quax quax = queryAdapter.getQuax(axis);
-<a class="jxr_linenumber" name="1185" href="#1185">1185</a> 					<strong class="jxr_keyword">if</strong> (quax.getOrdinal() == ordinal) {
-<a class="jxr_linenumber" name="1186" href="#1186">1186</a> 						quaxToSort = quax;
-<a class="jxr_linenumber" name="1187" href="#1187">1187</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="1188" href="#1188">1188</a> 					}
-<a class="jxr_linenumber" name="1189" href="#1189">1189</a> 				}
-<a class="jxr_linenumber" name="1190" href="#1190">1190</a> 			}
-<a class="jxr_linenumber" name="1191" href="#1191">1191</a> 		}
-<a class="jxr_linenumber" name="1192" href="#1192">1192</a> 
-<a class="jxr_linenumber" name="1193" href="#1193">1193</a> 		queryAdapter.setQuaxToSort(quaxToSort);
-<a class="jxr_linenumber" name="1194" href="#1194">1194</a> 
-<a class="jxr_linenumber" name="1195" href="#1195">1195</a> 		<strong class="jxr_keyword">this</strong>.cellSet = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="1196" href="#1196">1196</a> 	}
-<a class="jxr_linenumber" name="1197" href="#1197">1197</a> }
+<a class="jxr_linenumber" name="649" href="#649">649</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#getExpressionEvaluatorFactory()</em>
+<a class="jxr_linenumber" name="650" href="#650">650</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="651" href="#651">651</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../../com/eyeq/pivot4j/el/ExpressionEvaluatorFactory.html">ExpressionEvaluatorFactory</a> getExpressionEvaluatorFactory() {
+<a class="jxr_linenumber" name="652" href="#652">652</a> 		<strong class="jxr_keyword">return</strong> expressionEvaluatorFactory;
+<a class="jxr_linenumber" name="653" href="#653">653</a> 	}
+<a class="jxr_linenumber" name="654" href="#654">654</a> 
+<a class="jxr_linenumber" name="655" href="#655">655</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="656" href="#656">656</a> <em class="jxr_javadoccomment">	 * @param factory</em>
+<a class="jxr_linenumber" name="657" href="#657">657</a> <em class="jxr_javadoccomment">	 *            the expressionEvaluatorFactory to set</em>
+<a class="jxr_linenumber" name="658" href="#658">658</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="659" href="#659">659</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setExpressionEvaluatorFactory(<a href="../../../../com/eyeq/pivot4j/el/ExpressionEvaluatorFactory.html">ExpressionEvaluatorFactory</a> factory) {
+<a class="jxr_linenumber" name="660" href="#660">660</a> 		<strong class="jxr_keyword">this</strong>.expressionEvaluatorFactory = factory;
+<a class="jxr_linenumber" name="661" href="#661">661</a> 	}
+<a class="jxr_linenumber" name="662" href="#662">662</a> 
+<a class="jxr_linenumber" name="663" href="#663">663</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="664" href="#664">664</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#addModelChangeListener(com.eyeq.pivot4j.ModelChangeListener)</em>
+<a class="jxr_linenumber" name="665" href="#665">665</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="666" href="#666">666</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addModelChangeListener(<a href="../../../../com/eyeq/pivot4j/ModelChangeListener.html">ModelChangeListener</a> listener) {
+<a class="jxr_linenumber" name="667" href="#667">667</a> 		modelListeners.add(listener);
+<a class="jxr_linenumber" name="668" href="#668">668</a> 	}
+<a class="jxr_linenumber" name="669" href="#669">669</a> 
+<a class="jxr_linenumber" name="670" href="#670">670</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="671" href="#671">671</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#removeModelChangeListener(com.eyeq.pivot4j.ModelChangeListener)</em>
+<a class="jxr_linenumber" name="672" href="#672">672</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="673" href="#673">673</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeModelChangeListener(<a href="../../../../com/eyeq/pivot4j/ModelChangeListener.html">ModelChangeListener</a> listener) {
+<a class="jxr_linenumber" name="674" href="#674">674</a> 		modelListeners.remove(listener);
+<a class="jxr_linenumber" name="675" href="#675">675</a> 	}
+<a class="jxr_linenumber" name="676" href="#676">676</a> 
+<a class="jxr_linenumber" name="677" href="#677">677</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireModelInitialized() {
+<a class="jxr_linenumber" name="678" href="#678">678</a> 		ModelChangeEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/ModelChangeEvent.html">ModelChangeEvent</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="679" href="#679">679</a> 
+<a class="jxr_linenumber" name="680" href="#680">680</a> 		List&lt;ModelChangeListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;ModelChangeListener&gt;(
+<a class="jxr_linenumber" name="681" href="#681">681</a> 				modelListeners);
+<a class="jxr_linenumber" name="682" href="#682">682</a> 		<strong class="jxr_keyword">for</strong> (ModelChangeListener listener : copiedListeners) {
+<a class="jxr_linenumber" name="683" href="#683">683</a> 			listener.modelInitialized(e);
+<a class="jxr_linenumber" name="684" href="#684">684</a> 		}
+<a class="jxr_linenumber" name="685" href="#685">685</a> 	}
+<a class="jxr_linenumber" name="686" href="#686">686</a> 
+<a class="jxr_linenumber" name="687" href="#687">687</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireModelChanged() {
+<a class="jxr_linenumber" name="688" href="#688">688</a> 		<strong class="jxr_keyword">this</strong>.cellSet = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="689" href="#689">689</a> 
+<a class="jxr_linenumber" name="690" href="#690">690</a> 		ModelChangeEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/ModelChangeEvent.html">ModelChangeEvent</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="691" href="#691">691</a> 
+<a class="jxr_linenumber" name="692" href="#692">692</a> 		List&lt;ModelChangeListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;ModelChangeListener&gt;(
+<a class="jxr_linenumber" name="693" href="#693">693</a> 				modelListeners);
+<a class="jxr_linenumber" name="694" href="#694">694</a> 		<strong class="jxr_keyword">for</strong> (ModelChangeListener listener : copiedListeners) {
+<a class="jxr_linenumber" name="695" href="#695">695</a> 			listener.modelChanged(e);
+<a class="jxr_linenumber" name="696" href="#696">696</a> 		}
+<a class="jxr_linenumber" name="697" href="#697">697</a> 	}
+<a class="jxr_linenumber" name="698" href="#698">698</a> 
+<a class="jxr_linenumber" name="699" href="#699">699</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireStructureChanged() {
+<a class="jxr_linenumber" name="700" href="#700">700</a> 		<strong class="jxr_keyword">this</strong>.cellSet = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="701" href="#701">701</a> 
+<a class="jxr_linenumber" name="702" href="#702">702</a> 		ModelChangeEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/ModelChangeEvent.html">ModelChangeEvent</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="703" href="#703">703</a> 
+<a class="jxr_linenumber" name="704" href="#704">704</a> 		List&lt;ModelChangeListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;ModelChangeListener&gt;(
+<a class="jxr_linenumber" name="705" href="#705">705</a> 				modelListeners);
+<a class="jxr_linenumber" name="706" href="#706">706</a> 		<strong class="jxr_keyword">for</strong> (ModelChangeListener listener : copiedListeners) {
+<a class="jxr_linenumber" name="707" href="#707">707</a> 			listener.structureChanged(e);
+<a class="jxr_linenumber" name="708" href="#708">708</a> 		}
+<a class="jxr_linenumber" name="709" href="#709">709</a> 	}
+<a class="jxr_linenumber" name="710" href="#710">710</a> 
+<a class="jxr_linenumber" name="711" href="#711">711</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireModelDestroyed() {
+<a class="jxr_linenumber" name="712" href="#712">712</a> 		ModelChangeEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/ModelChangeEvent.html">ModelChangeEvent</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="713" href="#713">713</a> 
+<a class="jxr_linenumber" name="714" href="#714">714</a> 		List&lt;ModelChangeListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;ModelChangeListener&gt;(
+<a class="jxr_linenumber" name="715" href="#715">715</a> 				modelListeners);
+<a class="jxr_linenumber" name="716" href="#716">716</a> 		<strong class="jxr_keyword">for</strong> (ModelChangeListener listener : copiedListeners) {
+<a class="jxr_linenumber" name="717" href="#717">717</a> 			listener.modelDestroyed(e);
+<a class="jxr_linenumber" name="718" href="#718">718</a> 		}
+<a class="jxr_linenumber" name="719" href="#719">719</a> 	}
+<a class="jxr_linenumber" name="720" href="#720">720</a> 
+<a class="jxr_linenumber" name="721" href="#721">721</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="722" href="#722">722</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#addQueryListener(com.eyeq.pivot4j.QueryListener)</em>
+<a class="jxr_linenumber" name="723" href="#723">723</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="724" href="#724">724</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addQueryListener(<a href="../../../../com/eyeq/pivot4j/QueryListener.html">QueryListener</a> listener) {
+<a class="jxr_linenumber" name="725" href="#725">725</a> 		queryListeners.add(listener);
+<a class="jxr_linenumber" name="726" href="#726">726</a> 	}
+<a class="jxr_linenumber" name="727" href="#727">727</a> 
+<a class="jxr_linenumber" name="728" href="#728">728</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="729" href="#729">729</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#removeQueryListener(com.eyeq.pivot4j.QueryListener)</em>
+<a class="jxr_linenumber" name="730" href="#730">730</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="731" href="#731">731</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeQueryListener(<a href="../../../../com/eyeq/pivot4j/QueryListener.html">QueryListener</a> listener) {
+<a class="jxr_linenumber" name="732" href="#732">732</a> 		queryListeners.remove(listener);
+<a class="jxr_linenumber" name="733" href="#733">733</a> 	}
+<a class="jxr_linenumber" name="734" href="#734">734</a> 
+<a class="jxr_linenumber" name="735" href="#735">735</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> fireQueryExecuted(Date start, <strong class="jxr_keyword">long</strong> duration, String mdx) {
+<a class="jxr_linenumber" name="736" href="#736">736</a> 		QueryEvent e = <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/QueryEvent.html">QueryEvent</a>(<strong class="jxr_keyword">this</strong>, start, duration, mdx, cellSet);
+<a class="jxr_linenumber" name="737" href="#737">737</a> 
+<a class="jxr_linenumber" name="738" href="#738">738</a> 		List&lt;QueryListener&gt; copiedListeners = <strong class="jxr_keyword">new</strong> ArrayList&lt;QueryListener&gt;(
+<a class="jxr_linenumber" name="739" href="#739">739</a> 				queryListeners);
+<a class="jxr_linenumber" name="740" href="#740">740</a> 		<strong class="jxr_keyword">for</strong> (QueryListener listener : copiedListeners) {
+<a class="jxr_linenumber" name="741" href="#741">741</a> 			listener.queryExecuted(e);
+<a class="jxr_linenumber" name="742" href="#742">742</a> 		}
+<a class="jxr_linenumber" name="743" href="#743">743</a> 	}
+<a class="jxr_linenumber" name="744" href="#744">744</a> 
+<a class="jxr_linenumber" name="745" href="#745">745</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="746" href="#746">746</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#getTransform(java.lang.Class)</em>
+<a class="jxr_linenumber" name="747" href="#747">747</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="748" href="#748">748</a> 	<strong class="jxr_keyword">public</strong> &lt;T <strong class="jxr_keyword">extends</strong> Transform&gt; T getTransform(Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="749" href="#749">749</a> 		<strong class="jxr_keyword">if</strong> (transformFactory == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="750" href="#750">750</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(
+<a class="jxr_linenumber" name="751" href="#751">751</a> 					<span class="jxr_string">"No transform factory instance is available."</span>);
+<a class="jxr_linenumber" name="752" href="#752">752</a> 		}
+<a class="jxr_linenumber" name="753" href="#753">753</a> 
+<a class="jxr_linenumber" name="754" href="#754">754</a> 		<strong class="jxr_keyword">return</strong> transformFactory.createTransform(type, queryAdapter, connection);
+<a class="jxr_linenumber" name="755" href="#755">755</a> 	}
+<a class="jxr_linenumber" name="756" href="#756">756</a> 
+<a class="jxr_linenumber" name="757" href="#757">757</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="758" href="#758">758</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#isSorting()</em>
+<a class="jxr_linenumber" name="759" href="#759">759</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="760" href="#760">760</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSorting() {
+<a class="jxr_linenumber" name="761" href="#761">761</a> 		<strong class="jxr_keyword">return</strong> sorting;
+<a class="jxr_linenumber" name="762" href="#762">762</a> 	}
+<a class="jxr_linenumber" name="763" href="#763">763</a> 
+<a class="jxr_linenumber" name="764" href="#764">764</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="765" href="#765">765</a> <em class="jxr_javadoccomment">	 * @param position</em>
+<a class="jxr_linenumber" name="766" href="#766">766</a> <em class="jxr_javadoccomment">	 *            to be checked</em>
+<a class="jxr_linenumber" name="767" href="#767">767</a> <em class="jxr_javadoccomment">	 * @return true, if position is the current sorting position</em>
+<a class="jxr_linenumber" name="768" href="#768">768</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#isSorting(org.olap4j.Position)</em>
+<a class="jxr_linenumber" name="769" href="#769">769</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="770" href="#770">770</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSorting(Position position) {
+<a class="jxr_linenumber" name="771" href="#771">771</a> 		<strong class="jxr_keyword">if</strong> (!isSortOnQuery()) {
+<a class="jxr_linenumber" name="772" href="#772">772</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="773" href="#773">773</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="774" href="#774">774</a> 			<strong class="jxr_keyword">if</strong> (sortPosMembers.size() != position.getMembers().size()) {
+<a class="jxr_linenumber" name="775" href="#775">775</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="776" href="#776">776</a> 			}
+<a class="jxr_linenumber" name="777" href="#777">777</a> 
+<a class="jxr_linenumber" name="778" href="#778">778</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sortPosMembers.size(); i++) {
+<a class="jxr_linenumber" name="779" href="#779">779</a> 				Member member1 = sortPosMembers.get(i);
+<a class="jxr_linenumber" name="780" href="#780">780</a> 				Member member2 = position.getMembers().get(i);
+<a class="jxr_linenumber" name="781" href="#781">781</a> 				<em class="jxr_comment">// any null does not compare</em>
+<a class="jxr_linenumber" name="782" href="#782">782</a> 				<strong class="jxr_keyword">if</strong> (member1 == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="783" href="#783">783</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="784" href="#784">784</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!OlapUtils.equals(member1, member2)) {
+<a class="jxr_linenumber" name="785" href="#785">785</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="786" href="#786">786</a> 				}
+<a class="jxr_linenumber" name="787" href="#787">787</a> 			}
+<a class="jxr_linenumber" name="788" href="#788">788</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="789" href="#789">789</a> 		}
+<a class="jxr_linenumber" name="790" href="#790">790</a> 	}
+<a class="jxr_linenumber" name="791" href="#791">791</a> 
+<a class="jxr_linenumber" name="792" href="#792">792</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="793" href="#793">793</a> <em class="jxr_javadoccomment">	 * @task support for natural sorting</em>
+<a class="jxr_linenumber" name="794" href="#794">794</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#setSorting(boolean)</em>
+<a class="jxr_linenumber" name="795" href="#795">795</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="796" href="#796">796</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSorting(<strong class="jxr_keyword">boolean</strong> sorting) {
+<a class="jxr_linenumber" name="797" href="#797">797</a> 		<strong class="jxr_keyword">if</strong> (sorting == <strong class="jxr_keyword">this</strong>.sorting) {
+<a class="jxr_linenumber" name="798" href="#798">798</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="799" href="#799">799</a> 		}
+<a class="jxr_linenumber" name="800" href="#800">800</a> 
+<a class="jxr_linenumber" name="801" href="#801">801</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
+<a class="jxr_linenumber" name="802" href="#802">802</a> 			logger.info(<span class="jxr_string">"Change sorting to "</span> + sorting);
+<a class="jxr_linenumber" name="803" href="#803">803</a> 		}
+<a class="jxr_linenumber" name="804" href="#804">804</a> 
+<a class="jxr_linenumber" name="805" href="#805">805</a> 		<strong class="jxr_keyword">this</strong>.sorting = sorting;
+<a class="jxr_linenumber" name="806" href="#806">806</a> 
+<a class="jxr_linenumber" name="807" href="#807">807</a> 		fireModelChanged();
+<a class="jxr_linenumber" name="808" href="#808">808</a> 	}
+<a class="jxr_linenumber" name="809" href="#809">809</a> 
+<a class="jxr_linenumber" name="810" href="#810">810</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="811" href="#811">811</a> <em class="jxr_javadoccomment">	 * @return sort criteria (ASC,DESC,BASC,BDESC,TOPCOUNT,BOTTOMCOUNT)</em>
+<a class="jxr_linenumber" name="812" href="#812">812</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="813" href="#813">813</a> 	<strong class="jxr_keyword">public</strong> <a href="../../../../com/eyeq/pivot4j/sort/SortCriteria.html">SortCriteria</a> getSortCriteria() {
+<a class="jxr_linenumber" name="814" href="#814">814</a> 		<strong class="jxr_keyword">return</strong> sortCriteria;
+<a class="jxr_linenumber" name="815" href="#815">815</a> 	}
+<a class="jxr_linenumber" name="816" href="#816">816</a> 
+<a class="jxr_linenumber" name="817" href="#817">817</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="818" href="#818">818</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#setSortCriteria(com.eyeq.pivot4j.sort.SortCriteria)</em>
+<a class="jxr_linenumber" name="819" href="#819">819</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="820" href="#820">820</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSortCriteria(<a href="../../../../com/eyeq/pivot4j/sort/SortCriteria.html">SortCriteria</a> sortCriteria) {
+<a class="jxr_linenumber" name="821" href="#821">821</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.sortCriteria == sortCriteria) {
+<a class="jxr_linenumber" name="822" href="#822">822</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="823" href="#823">823</a> 		}
+<a class="jxr_linenumber" name="824" href="#824">824</a> 
+<a class="jxr_linenumber" name="825" href="#825">825</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
+<a class="jxr_linenumber" name="826" href="#826">826</a> 			logger.info(<span class="jxr_string">"Change sort mode from "</span> + <strong class="jxr_keyword">this</strong>.sortCriteria + <span class="jxr_string">" to "</span>
+<a class="jxr_linenumber" name="827" href="#827">827</a> 					+ sortCriteria);
+<a class="jxr_linenumber" name="828" href="#828">828</a> 		}
+<a class="jxr_linenumber" name="829" href="#829">829</a> 
+<a class="jxr_linenumber" name="830" href="#830">830</a> 		<strong class="jxr_keyword">this</strong>.sortCriteria = sortCriteria;
+<a class="jxr_linenumber" name="831" href="#831">831</a> 
+<a class="jxr_linenumber" name="832" href="#832">832</a> 		<strong class="jxr_keyword">if</strong> (isSortOnQuery()) {
+<a class="jxr_linenumber" name="833" href="#833">833</a> 			fireModelChanged();
+<a class="jxr_linenumber" name="834" href="#834">834</a> 		}
+<a class="jxr_linenumber" name="835" href="#835">835</a> 	}
+<a class="jxr_linenumber" name="836" href="#836">836</a> 
+<a class="jxr_linenumber" name="837" href="#837">837</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="838" href="#838">838</a> <em class="jxr_javadoccomment">	 * returns true, if ONE of the members is a measure</em>
+<a class="jxr_linenumber" name="839" href="#839">839</a> <em class="jxr_javadoccomment">	 * </em>
+<a class="jxr_linenumber" name="840" href="#840">840</a> <em class="jxr_javadoccomment">	 * @param position</em>
+<a class="jxr_linenumber" name="841" href="#841">841</a> <em class="jxr_javadoccomment">	 *            the position to check for sortability</em>
+<a class="jxr_linenumber" name="842" href="#842">842</a> <em class="jxr_javadoccomment">	 * @return true, if the position is sortable</em>
+<a class="jxr_linenumber" name="843" href="#843">843</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="844" href="#844">844</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isSortable(Position position) {
+<a class="jxr_linenumber" name="845" href="#845">845</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="846" href="#846">846</a> 			List&lt;Member&gt; members = position.getMembers();
+<a class="jxr_linenumber" name="847" href="#847">847</a> 			<strong class="jxr_keyword">for</strong> (Member member : members) {
+<a class="jxr_linenumber" name="848" href="#848">848</a> 				<strong class="jxr_keyword">if</strong> (member.getLevel().getHierarchy().getDimension()
+<a class="jxr_linenumber" name="849" href="#849">849</a> 						.getDimensionType() == Type.MEASURE) {
+<a class="jxr_linenumber" name="850" href="#850">850</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="851" href="#851">851</a> 				}
+<a class="jxr_linenumber" name="852" href="#852">852</a> 			}
+<a class="jxr_linenumber" name="853" href="#853">853</a> 		} <strong class="jxr_keyword">catch</strong> (OlapException e) {
+<a class="jxr_linenumber" name="854" href="#854">854</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(e);
+<a class="jxr_linenumber" name="855" href="#855">855</a> 		}
+<a class="jxr_linenumber" name="856" href="#856">856</a> 
+<a class="jxr_linenumber" name="857" href="#857">857</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="858" href="#858">858</a> 	}
+<a class="jxr_linenumber" name="859" href="#859">859</a> 
+<a class="jxr_linenumber" name="860" href="#860">860</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="861" href="#861">861</a> <em class="jxr_javadoccomment">	 * @return true, if there is a sort for the query</em>
+<a class="jxr_linenumber" name="862" href="#862">862</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="863" href="#863">863</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isSortOnQuery() {
+<a class="jxr_linenumber" name="864" href="#864">864</a> 		<strong class="jxr_keyword">return</strong> sorting &amp;&amp; sortPosMembers != <strong class="jxr_keyword">null</strong> &amp;&amp; !sortPosMembers.isEmpty();
+<a class="jxr_linenumber" name="865" href="#865">865</a> 	}
+<a class="jxr_linenumber" name="866" href="#866">866</a> 
+<a class="jxr_linenumber" name="867" href="#867">867</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="868" href="#868">868</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#getSortPosMembers()</em>
+<a class="jxr_linenumber" name="869" href="#869">869</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="870" href="#870">870</a> 	<strong class="jxr_keyword">public</strong> List&lt;Member&gt; getSortPosMembers() {
+<a class="jxr_linenumber" name="871" href="#871">871</a> 		<strong class="jxr_keyword">return</strong> Collections.unmodifiableList(sortPosMembers);
+<a class="jxr_linenumber" name="872" href="#872">872</a> 	}
+<a class="jxr_linenumber" name="873" href="#873">873</a> 
+<a class="jxr_linenumber" name="874" href="#874">874</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="875" href="#875">875</a> <em class="jxr_javadoccomment">	 * @return top/bottom count</em>
+<a class="jxr_linenumber" name="876" href="#876">876</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#getTopBottomCount()</em>
+<a class="jxr_linenumber" name="877" href="#877">877</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="878" href="#878">878</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getTopBottomCount() {
+<a class="jxr_linenumber" name="879" href="#879">879</a> 		<strong class="jxr_keyword">return</strong> topBottomCount;
+<a class="jxr_linenumber" name="880" href="#880">880</a> 	}
+<a class="jxr_linenumber" name="881" href="#881">881</a> 
+<a class="jxr_linenumber" name="882" href="#882">882</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="883" href="#883">883</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.PivotModel#setTopBottomCount(int)</em>
+<a class="jxr_linenumber" name="884" href="#884">884</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="885" href="#885">885</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTopBottomCount(<strong class="jxr_keyword">int</strong> topBottomCount) {
+<a class="jxr_linenumber" name="886" href="#886">886</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.topBottomCount == topBottomCount) {
+<a class="jxr_linenumber" name="887" href="#887">887</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="888" href="#888">888</a> 		}
+<a class="jxr_linenumber" name="889" href="#889">889</a> 
+<a class="jxr_linenumber" name="890" href="#890">890</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
+<a class="jxr_linenumber" name="891" href="#891">891</a> 			logger.info(<span class="jxr_string">"Change topBottomCount from "</span> + <strong class="jxr_keyword">this</strong>.topBottomCount
+<a class="jxr_linenumber" name="892" href="#892">892</a> 					+ <span class="jxr_string">" to "</span> + topBottomCount);
+<a class="jxr_linenumber" name="893" href="#893">893</a> 		}
+<a class="jxr_linenumber" name="894" href="#894">894</a> 
+<a class="jxr_linenumber" name="895" href="#895">895</a> 		<strong class="jxr_keyword">this</strong>.topBottomCount = topBottomCount;
+<a class="jxr_linenumber" name="896" href="#896">896</a> 
+<a class="jxr_linenumber" name="897" href="#897">897</a> 		<strong class="jxr_keyword">if</strong> (sorting
+<a class="jxr_linenumber" name="898" href="#898">898</a> 				&amp;&amp; sortPosMembers != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="899" href="#899">899</a> 				&amp;&amp; (sortCriteria == SortCriteria.TOPCOUNT || sortCriteria == SortCriteria.BOTTOMCOUNT)) {
+<a class="jxr_linenumber" name="900" href="#900">900</a> 			fireModelChanged();
+<a class="jxr_linenumber" name="901" href="#901">901</a> 		}
+<a class="jxr_linenumber" name="902" href="#902">902</a> 	}
+<a class="jxr_linenumber" name="903" href="#903">903</a> 
+<a class="jxr_linenumber" name="904" href="#904">904</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="905" href="#905">905</a> <em class="jxr_javadoccomment">	 * @param axisToSort</em>
+<a class="jxr_linenumber" name="906" href="#906">906</a> <em class="jxr_javadoccomment">	 *            Axis containing the members to be sorted</em>
+<a class="jxr_linenumber" name="907" href="#907">907</a> <em class="jxr_javadoccomment">	 * @param position</em>
+<a class="jxr_linenumber" name="908" href="#908">908</a> <em class="jxr_javadoccomment">	 *            Position on "other axis" defining the members by which the</em>
+<a class="jxr_linenumber" name="909" href="#909">909</a> <em class="jxr_javadoccomment">	 *            membersToSort are sorted</em>
+<a class="jxr_linenumber" name="910" href="#910">910</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="911" href="#911">911</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sort(CellSetAxis axisToSort, Position position) {
+<a class="jxr_linenumber" name="912" href="#912">912</a> 		List&lt;Position&gt; positions = axisToSort.getPositions();
+<a class="jxr_linenumber" name="913" href="#913">913</a> 
+<a class="jxr_linenumber" name="914" href="#914">914</a> 		<em class="jxr_comment">// if the axis to sort does not contain any positions - sorting is not</em>
+<a class="jxr_linenumber" name="915" href="#915">915</a> 		<em class="jxr_comment">// posssible</em>
+<a class="jxr_linenumber" name="916" href="#916">916</a> 		<strong class="jxr_keyword">if</strong> (positions.isEmpty()) {
+<a class="jxr_linenumber" name="917" href="#917">917</a> 			<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
+<a class="jxr_linenumber" name="918" href="#918">918</a> 				logger.warn(<span class="jxr_string">"Reject sort, the axis to be sorted is empty."</span>);
+<a class="jxr_linenumber" name="919" href="#919">919</a> 			}
+<a class="jxr_linenumber" name="920" href="#920">920</a> 
+<a class="jxr_linenumber" name="921" href="#921">921</a> 			<strong class="jxr_keyword">this</strong>.sorting = false;
+<a class="jxr_linenumber" name="922" href="#922">922</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="923" href="#923">923</a> 		}
+<a class="jxr_linenumber" name="924" href="#924">924</a> 
+<a class="jxr_linenumber" name="925" href="#925">925</a> 		<strong class="jxr_keyword">this</strong>.sortPosMembers = position.getMembers();
+<a class="jxr_linenumber" name="926" href="#926">926</a> 
+<a class="jxr_linenumber" name="927" href="#927">927</a> 		<em class="jxr_comment">// find the axis to sort</em>
+<a class="jxr_linenumber" name="928" href="#928">928</a> 		Dimension dim = positions.get(0).getMembers().get(0).getDimension();
+<a class="jxr_linenumber" name="929" href="#929">929</a> 
+<a class="jxr_linenumber" name="930" href="#930">930</a> 		Quax quaxToSort = getQueryAdapter().findQuax(dim);
+<a class="jxr_linenumber" name="931" href="#931">931</a> 
+<a class="jxr_linenumber" name="932" href="#932">932</a> 		<strong class="jxr_keyword">if</strong> (quaxToSort == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="933" href="#933">933</a> 			<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
+<a class="jxr_linenumber" name="934" href="#934">934</a> 				logger.warn(<span class="jxr_string">"Reject sort, the Quax is null"</span>);
+<a class="jxr_linenumber" name="935" href="#935">935</a> 			}
+<a class="jxr_linenumber" name="936" href="#936">936</a> 			<strong class="jxr_keyword">this</strong>.sorting = false;
+<a class="jxr_linenumber" name="937" href="#937">937</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="938" href="#938">938</a> 		}
+<a class="jxr_linenumber" name="939" href="#939">939</a> 
+<a class="jxr_linenumber" name="940" href="#940">940</a> 		getQueryAdapter().setQuaxToSort(quaxToSort);
+<a class="jxr_linenumber" name="941" href="#941">941</a> 
+<a class="jxr_linenumber" name="942" href="#942">942</a> 		<strong class="jxr_keyword">if</strong> (logger.isInfoEnabled()) {
+<a class="jxr_linenumber" name="943" href="#943">943</a> 			StringBuilder builder = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="944" href="#944">944</a> 			builder.append(<span class="jxr_string">"Change Sort Position "</span>);
+<a class="jxr_linenumber" name="945" href="#945">945</a> 
+<a class="jxr_linenumber" name="946" href="#946">946</a> 			<strong class="jxr_keyword">boolean</strong> first = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="947" href="#947">947</a> 
+<a class="jxr_linenumber" name="948" href="#948">948</a> 			List&lt;Member&gt; members = position.getMembers();
+<a class="jxr_linenumber" name="949" href="#949">949</a> 			<strong class="jxr_keyword">for</strong> (Member member : members) {
+<a class="jxr_linenumber" name="950" href="#950">950</a> 				<strong class="jxr_keyword">if</strong> (first) {
+<a class="jxr_linenumber" name="951" href="#951">951</a> 					first = false;
+<a class="jxr_linenumber" name="952" href="#952">952</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="953" href="#953">953</a> 					builder.append(<span class="jxr_string">" "</span>);
+<a class="jxr_linenumber" name="954" href="#954">954</a> 				}
+<a class="jxr_linenumber" name="955" href="#955">955</a> 				builder.append(member.getUniqueName());
+<a class="jxr_linenumber" name="956" href="#956">956</a> 			}
+<a class="jxr_linenumber" name="957" href="#957">957</a> 			builder.append(<span class="jxr_string">" iAxisToSort="</span>);
+<a class="jxr_linenumber" name="958" href="#958">958</a> 			builder.append(Integer.toString(quaxToSort.getOrdinal()));
+<a class="jxr_linenumber" name="959" href="#959">959</a> 
+<a class="jxr_linenumber" name="960" href="#960">960</a> 			logger.info(builder.toString());
+<a class="jxr_linenumber" name="961" href="#961">961</a> 		}
+<a class="jxr_linenumber" name="962" href="#962">962</a> 
+<a class="jxr_linenumber" name="963" href="#963">963</a> 		fireModelChanged();
+<a class="jxr_linenumber" name="964" href="#964">964</a> 	}
+<a class="jxr_linenumber" name="965" href="#965">965</a> 
+<a class="jxr_linenumber" name="966" href="#966">966</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="967" href="#967">967</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.state.Bookmarkable#saveState()</em>
+<a class="jxr_linenumber" name="968" href="#968">968</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="969" href="#969">969</a> 	@Override
+<a class="jxr_linenumber" name="970" href="#970">970</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> Serializable saveState() {
+<a class="jxr_linenumber" name="971" href="#971">971</a> 		Serializable[] state = <strong class="jxr_keyword">new</strong> Serializable[3];
+<a class="jxr_linenumber" name="972" href="#972">972</a> 
+<a class="jxr_linenumber" name="973" href="#973">973</a> 		<strong class="jxr_keyword">if</strong> (isInitialized()) {
+<a class="jxr_linenumber" name="974" href="#974">974</a> 			state[0] = getCurrentMdx(false);
+<a class="jxr_linenumber" name="975" href="#975">975</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="976" href="#976">976</a> 			state[0] = mdxQuery;
+<a class="jxr_linenumber" name="977" href="#977">977</a> 		}
+<a class="jxr_linenumber" name="978" href="#978">978</a> 
+<a class="jxr_linenumber" name="979" href="#979">979</a> 		<strong class="jxr_keyword">if</strong> (sortPosMembers == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="980" href="#980">980</a> 			state[1] = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="981" href="#981">981</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="982" href="#982">982</a> 			Serializable[] sortState = <strong class="jxr_keyword">new</strong> Serializable[4];
+<a class="jxr_linenumber" name="983" href="#983">983</a> 
+<a class="jxr_linenumber" name="984" href="#984">984</a> 			String[] uniqueNames = <strong class="jxr_keyword">new</strong> String[sortPosMembers.size()];
+<a class="jxr_linenumber" name="985" href="#985">985</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; uniqueNames.length; i++) {
+<a class="jxr_linenumber" name="986" href="#986">986</a> 				uniqueNames[i] = sortPosMembers.get(i).getUniqueName();
+<a class="jxr_linenumber" name="987" href="#987">987</a> 			}
+<a class="jxr_linenumber" name="988" href="#988">988</a> 
+<a class="jxr_linenumber" name="989" href="#989">989</a> 			sortState[0] = uniqueNames;
+<a class="jxr_linenumber" name="990" href="#990">990</a> 			sortState[1] = getTopBottomCount();
+<a class="jxr_linenumber" name="991" href="#991">991</a> 			sortState[2] = getSortCriteria();
+<a class="jxr_linenumber" name="992" href="#992">992</a> 			sortState[3] = isSorting();
+<a class="jxr_linenumber" name="993" href="#993">993</a> 
+<a class="jxr_linenumber" name="994" href="#994">994</a> 			state[1] = sortState;
+<a class="jxr_linenumber" name="995" href="#995">995</a> 		}
+<a class="jxr_linenumber" name="996" href="#996">996</a> 
+<a class="jxr_linenumber" name="997" href="#997">997</a> 		state[2] = getQueryAdapter().saveState();
+<a class="jxr_linenumber" name="998" href="#998">998</a> 
+<a class="jxr_linenumber" name="999" href="#999">999</a> 		<strong class="jxr_keyword">return</strong> state;
+<a class="jxr_linenumber" name="1000" href="#1000">1000</a> 	}
+<a class="jxr_linenumber" name="1001" href="#1001">1001</a> 
+<a class="jxr_linenumber" name="1002" href="#1002">1002</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="1003" href="#1003">1003</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)</em>
+<a class="jxr_linenumber" name="1004" href="#1004">1004</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="1005" href="#1005">1005</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> restoreState(Serializable state) {
+<a class="jxr_linenumber" name="1006" href="#1006">1006</a> 		<strong class="jxr_keyword">if</strong> (state == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1007" href="#1007">1007</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"state"</span>);
+<a class="jxr_linenumber" name="1008" href="#1008">1008</a> 		}
+<a class="jxr_linenumber" name="1009" href="#1009">1009</a> 
+<a class="jxr_linenumber" name="1010" href="#1010">1010</a> 		Serializable[] states = (Serializable[]) state;
+<a class="jxr_linenumber" name="1011" href="#1011">1011</a> 
+<a class="jxr_linenumber" name="1012" href="#1012">1012</a> 		setMdx((String) states[0]);
+<a class="jxr_linenumber" name="1013" href="#1013">1013</a> 
+<a class="jxr_linenumber" name="1014" href="#1014">1014</a> 		<strong class="jxr_keyword">if</strong> (!isInitialized()) {
+<a class="jxr_linenumber" name="1015" href="#1015">1015</a> 			initialize();
+<a class="jxr_linenumber" name="1016" href="#1016">1016</a> 		}
+<a class="jxr_linenumber" name="1017" href="#1017">1017</a> 
+<a class="jxr_linenumber" name="1018" href="#1018">1018</a> 		<em class="jxr_comment">// sorting</em>
+<a class="jxr_linenumber" name="1019" href="#1019">1019</a> 		<strong class="jxr_keyword">if</strong> (states[1] == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1020" href="#1020">1020</a> 			<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1021" href="#1021">1021</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1022" href="#1022">1022</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="1023" href="#1023">1023</a> 				Cube cube = getCube();
+<a class="jxr_linenumber" name="1024" href="#1024">1024</a> 
+<a class="jxr_linenumber" name="1025" href="#1025">1025</a> 				Serializable[] sortStates = (Serializable[]) states[1];
+<a class="jxr_linenumber" name="1026" href="#1026">1026</a> 
+<a class="jxr_linenumber" name="1027" href="#1027">1027</a> 				String[] sortPosUniqueNames = (String[]) sortStates[0];
+<a class="jxr_linenumber" name="1028" href="#1028">1028</a> 				<strong class="jxr_keyword">if</strong> (sortPosUniqueNames == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1029" href="#1029">1029</a> 					<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1030" href="#1030">1030</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1031" href="#1031">1031</a> 					<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
+<a class="jxr_linenumber" name="1032" href="#1032">1032</a> 							sortPosUniqueNames.length);
+<a class="jxr_linenumber" name="1033" href="#1033">1033</a> 
+<a class="jxr_linenumber" name="1034" href="#1034">1034</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; sortPosUniqueNames.length; i++) {
+<a class="jxr_linenumber" name="1035" href="#1035">1035</a> 						Member member = cube.lookupMember(IdentifierNode
+<a class="jxr_linenumber" name="1036" href="#1036">1036</a> 								.parseIdentifier(sortPosUniqueNames[i])
+<a class="jxr_linenumber" name="1037" href="#1037">1037</a> 								.getSegmentList());
+<a class="jxr_linenumber" name="1038" href="#1038">1038</a> 						<strong class="jxr_keyword">if</strong> (member == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1039" href="#1039">1039</a> 							<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
+<a class="jxr_linenumber" name="1040" href="#1040">1040</a> 								logger.warn(<span class="jxr_string">"Sort position member not found "</span>
+<a class="jxr_linenumber" name="1041" href="#1041">1041</a> 										+ sortPosUniqueNames[i]);
+<a class="jxr_linenumber" name="1042" href="#1042">1042</a> 							}
+<a class="jxr_linenumber" name="1043" href="#1043">1043</a> 
+<a class="jxr_linenumber" name="1044" href="#1044">1044</a> 							<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="1045" href="#1045">1045</a> 						}
+<a class="jxr_linenumber" name="1046" href="#1046">1046</a> 
+<a class="jxr_linenumber" name="1047" href="#1047">1047</a> 						sortPosMembers.add(member);
+<a class="jxr_linenumber" name="1048" href="#1048">1048</a> 					}
+<a class="jxr_linenumber" name="1049" href="#1049">1049</a> 
+<a class="jxr_linenumber" name="1050" href="#1050">1050</a> 					<strong class="jxr_keyword">this</strong>.topBottomCount = (Integer) sortStates[1];
+<a class="jxr_linenumber" name="1051" href="#1051">1051</a> 					<strong class="jxr_keyword">this</strong>.sortCriteria = (SortCriteria) sortStates[2];
+<a class="jxr_linenumber" name="1052" href="#1052">1052</a> 					<strong class="jxr_keyword">this</strong>.sorting = (Boolean) sortStates[3];
+<a class="jxr_linenumber" name="1053" href="#1053">1053</a> 				}
+<a class="jxr_linenumber" name="1054" href="#1054">1054</a> 			} <strong class="jxr_keyword">catch</strong> (OlapException e) {
+<a class="jxr_linenumber" name="1055" href="#1055">1055</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(e);
+<a class="jxr_linenumber" name="1056" href="#1056">1056</a> 			}
+<a class="jxr_linenumber" name="1057" href="#1057">1057</a> 		}
+<a class="jxr_linenumber" name="1058" href="#1058">1058</a> 
+<a class="jxr_linenumber" name="1059" href="#1059">1059</a> 		<strong class="jxr_keyword">this</strong>.cellSet = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1060" href="#1060">1060</a> 
+<a class="jxr_linenumber" name="1061" href="#1061">1061</a> 		queryAdapter.restoreState(states[2]);
+<a class="jxr_linenumber" name="1062" href="#1062">1062</a> 	}
+<a class="jxr_linenumber" name="1063" href="#1063">1063</a> 
+<a class="jxr_linenumber" name="1064" href="#1064">1064</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="1065" href="#1065">1065</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)</em>
+<a class="jxr_linenumber" name="1066" href="#1066">1066</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="1067" href="#1067">1067</a> 	@Override
+<a class="jxr_linenumber" name="1068" href="#1068">1068</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> saveSettings(
+<a class="jxr_linenumber" name="1069" href="#1069">1069</a> 			HierarchicalConfiguration configuration) {
+<a class="jxr_linenumber" name="1070" href="#1070">1070</a> 		<strong class="jxr_keyword">if</strong> (configuration == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1071" href="#1071">1071</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"configuration"</span>);
+<a class="jxr_linenumber" name="1072" href="#1072">1072</a> 		}
+<a class="jxr_linenumber" name="1073" href="#1073">1073</a> 
+<a class="jxr_linenumber" name="1074" href="#1074">1074</a> 		<strong class="jxr_keyword">if</strong> (configuration.getLogger() == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1075" href="#1075">1075</a> 			configuration.setLogger(LogFactory.getLog(getClass()));
+<a class="jxr_linenumber" name="1076" href="#1076">1076</a> 		}
+<a class="jxr_linenumber" name="1077" href="#1077">1077</a> 
+<a class="jxr_linenumber" name="1078" href="#1078">1078</a> 		<strong class="jxr_keyword">if</strong> (isInitialized()) {
+<a class="jxr_linenumber" name="1079" href="#1079">1079</a> 			configuration.addProperty(<span class="jxr_string">"mdx"</span>, getCurrentMdx());
+<a class="jxr_linenumber" name="1080" href="#1080">1080</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="1081" href="#1081">1081</a> 			configuration.addProperty(<span class="jxr_string">"mdx"</span>, mdxQuery);
+<a class="jxr_linenumber" name="1082" href="#1082">1082</a> 		}
+<a class="jxr_linenumber" name="1083" href="#1083">1083</a> 
+<a class="jxr_linenumber" name="1084" href="#1084">1084</a> 		<strong class="jxr_keyword">if</strong> (sorting) {
+<a class="jxr_linenumber" name="1085" href="#1085">1085</a> 			configuration.addProperty(<span class="jxr_string">"sort[@enabled]"</span>, sorting);
+<a class="jxr_linenumber" name="1086" href="#1086">1086</a> 
+<a class="jxr_linenumber" name="1087" href="#1087">1087</a> 			<strong class="jxr_keyword">if</strong> (queryAdapter.getQuaxToSort() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1088" href="#1088">1088</a> 				configuration.addProperty(<span class="jxr_string">"sort[@ordinal]"</span>, queryAdapter
+<a class="jxr_linenumber" name="1089" href="#1089">1089</a> 						.getQuaxToSort().getOrdinal());
+<a class="jxr_linenumber" name="1090" href="#1090">1090</a> 			}
+<a class="jxr_linenumber" name="1091" href="#1091">1091</a> 
+<a class="jxr_linenumber" name="1092" href="#1092">1092</a> 			<strong class="jxr_keyword">if</strong> (sortCriteria != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1093" href="#1093">1093</a> 				configuration.addProperty(<span class="jxr_string">"sort[@criteria]"</span>,
+<a class="jxr_linenumber" name="1094" href="#1094">1094</a> 						sortCriteria.name());
+<a class="jxr_linenumber" name="1095" href="#1095">1095</a> 				configuration.addProperty(<span class="jxr_string">"sort[@topBottomCount]"</span>,
+<a class="jxr_linenumber" name="1096" href="#1096">1096</a> 						topBottomCount);
+<a class="jxr_linenumber" name="1097" href="#1097">1097</a> 				<strong class="jxr_keyword">if</strong> (isSorting() &amp;&amp; sortPosMembers != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1098" href="#1098">1098</a> 					<strong class="jxr_keyword">int</strong> index = 0;
+<a class="jxr_linenumber" name="1099" href="#1099">1099</a> 					<strong class="jxr_keyword">for</strong> (Member member : sortPosMembers) {
+<a class="jxr_linenumber" name="1100" href="#1100">1100</a> 						configuration.addProperty(
+<a class="jxr_linenumber" name="1101" href="#1101">1101</a> 								String.format(<span class="jxr_string">"sort.member(%s)"</span>, index++),
+<a class="jxr_linenumber" name="1102" href="#1102">1102</a> 								member.getUniqueName());
+<a class="jxr_linenumber" name="1103" href="#1103">1103</a> 					}
+<a class="jxr_linenumber" name="1104" href="#1104">1104</a> 				}
+<a class="jxr_linenumber" name="1105" href="#1105">1105</a> 			}
+<a class="jxr_linenumber" name="1106" href="#1106">1106</a> 		}
+<a class="jxr_linenumber" name="1107" href="#1107">1107</a> 	}
+<a class="jxr_linenumber" name="1108" href="#1108">1108</a> 
+<a class="jxr_linenumber" name="1109" href="#1109">1109</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="1110" href="#1110">1110</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)</em>
+<a class="jxr_linenumber" name="1111" href="#1111">1111</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="1112" href="#1112">1112</a> 	@Override
+<a class="jxr_linenumber" name="1113" href="#1113">1113</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> restoreSettings(
+<a class="jxr_linenumber" name="1114" href="#1114">1114</a> 			HierarchicalConfiguration configuration) {
+<a class="jxr_linenumber" name="1115" href="#1115">1115</a> 		<strong class="jxr_keyword">if</strong> (configuration == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1116" href="#1116">1116</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NullArgumentException(<span class="jxr_string">"configuration"</span>);
+<a class="jxr_linenumber" name="1117" href="#1117">1117</a> 		}
+<a class="jxr_linenumber" name="1118" href="#1118">1118</a> 
+<a class="jxr_linenumber" name="1119" href="#1119">1119</a> 		String mdx = configuration.getString(<span class="jxr_string">"mdx"</span>);
+<a class="jxr_linenumber" name="1120" href="#1120">1120</a> 
+<a class="jxr_linenumber" name="1121" href="#1121">1121</a> 		setMdx(mdx);
+<a class="jxr_linenumber" name="1122" href="#1122">1122</a> 
+<a class="jxr_linenumber" name="1123" href="#1123">1123</a> 		<strong class="jxr_keyword">if</strong> (mdx == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1124" href="#1124">1124</a> 			<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
+<a class="jxr_linenumber" name="1125" href="#1125">1125</a> 				logger.warn(<span class="jxr_string">"The configuration does not contain valid MDX query."</span>);
+<a class="jxr_linenumber" name="1126" href="#1126">1126</a> 			}
+<a class="jxr_linenumber" name="1127" href="#1127">1127</a> 
+<a class="jxr_linenumber" name="1128" href="#1128">1128</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="1129" href="#1129">1129</a> 		}
+<a class="jxr_linenumber" name="1130" href="#1130">1130</a> 
+<a class="jxr_linenumber" name="1131" href="#1131">1131</a> 		<strong class="jxr_keyword">if</strong> (!isInitialized()) {
+<a class="jxr_linenumber" name="1132" href="#1132">1132</a> 			initialize();
+<a class="jxr_linenumber" name="1133" href="#1133">1133</a> 		}
+<a class="jxr_linenumber" name="1134" href="#1134">1134</a> 
+<a class="jxr_linenumber" name="1135" href="#1135">1135</a> 		<strong class="jxr_keyword">this</strong>.sorting = configuration.getBoolean(<span class="jxr_string">"sort[@enabled]"</span>, false);
+<a class="jxr_linenumber" name="1136" href="#1136">1136</a> 
+<a class="jxr_linenumber" name="1137" href="#1137">1137</a> 		<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1138" href="#1138">1138</a> 		<strong class="jxr_keyword">this</strong>.sortCriteria = SortCriteria.ASC;
+<a class="jxr_linenumber" name="1139" href="#1139">1139</a> 		<strong class="jxr_keyword">this</strong>.topBottomCount = 10;
+<a class="jxr_linenumber" name="1140" href="#1140">1140</a> 
+<a class="jxr_linenumber" name="1141" href="#1141">1141</a> 		Quax quaxToSort = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1142" href="#1142">1142</a> 
+<a class="jxr_linenumber" name="1143" href="#1143">1143</a> 		<strong class="jxr_keyword">if</strong> (sorting) {
+<a class="jxr_linenumber" name="1144" href="#1144">1144</a> 			List&lt;Object&gt; sortPosUniqueNames = configuration
+<a class="jxr_linenumber" name="1145" href="#1145">1145</a> 					.getList(<span class="jxr_string">"sort.member"</span>);
+<a class="jxr_linenumber" name="1146" href="#1146">1146</a> 			<strong class="jxr_keyword">if</strong> (sortPosUniqueNames != <strong class="jxr_keyword">null</strong> &amp;&amp; !sortPosUniqueNames.isEmpty()) {
+<a class="jxr_linenumber" name="1147" href="#1147">1147</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="1148" href="#1148">1148</a> 					Cube cube = getCube();
+<a class="jxr_linenumber" name="1149" href="#1149">1149</a> 
+<a class="jxr_linenumber" name="1150" href="#1150">1150</a> 					<strong class="jxr_keyword">this</strong>.sortPosMembers = <strong class="jxr_keyword">new</strong> ArrayList&lt;Member&gt;(
+<a class="jxr_linenumber" name="1151" href="#1151">1151</a> 							sortPosUniqueNames.size());
+<a class="jxr_linenumber" name="1152" href="#1152">1152</a> 
+<a class="jxr_linenumber" name="1153" href="#1153">1153</a> 					<strong class="jxr_keyword">for</strong> (Object uniqueName : sortPosUniqueNames) {
+<a class="jxr_linenumber" name="1154" href="#1154">1154</a> 						Member member = cube.lookupMember(IdentifierNode
+<a class="jxr_linenumber" name="1155" href="#1155">1155</a> 								.parseIdentifier(uniqueName.toString())
+<a class="jxr_linenumber" name="1156" href="#1156">1156</a> 								.getSegmentList());
+<a class="jxr_linenumber" name="1157" href="#1157">1157</a> 						<strong class="jxr_keyword">if</strong> (member == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1158" href="#1158">1158</a> 							<strong class="jxr_keyword">if</strong> (logger.isWarnEnabled()) {
+<a class="jxr_linenumber" name="1159" href="#1159">1159</a> 								logger.warn(<span class="jxr_string">"Sort position member not found "</span>
+<a class="jxr_linenumber" name="1160" href="#1160">1160</a> 										+ uniqueName);
+<a class="jxr_linenumber" name="1161" href="#1161">1161</a> 							}
+<a class="jxr_linenumber" name="1162" href="#1162">1162</a> 
+<a class="jxr_linenumber" name="1163" href="#1163">1163</a> 							<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="1164" href="#1164">1164</a> 						}
+<a class="jxr_linenumber" name="1165" href="#1165">1165</a> 
+<a class="jxr_linenumber" name="1166" href="#1166">1166</a> 						sortPosMembers.add(member);
+<a class="jxr_linenumber" name="1167" href="#1167">1167</a> 					}
+<a class="jxr_linenumber" name="1168" href="#1168">1168</a> 				} <strong class="jxr_keyword">catch</strong> (OlapException e) {
+<a class="jxr_linenumber" name="1169" href="#1169">1169</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../com/eyeq/pivot4j/PivotException.html">PivotException</a>(e);
+<a class="jxr_linenumber" name="1170" href="#1170">1170</a> 				}
+<a class="jxr_linenumber" name="1171" href="#1171">1171</a> 			}
+<a class="jxr_linenumber" name="1172" href="#1172">1172</a> 
+<a class="jxr_linenumber" name="1173" href="#1173">1173</a> 			<strong class="jxr_keyword">this</strong>.topBottomCount = configuration.getInt(<span class="jxr_string">"sort[@topBottomCount]"</span>,
+<a class="jxr_linenumber" name="1174" href="#1174">1174</a> 					10);
+<a class="jxr_linenumber" name="1175" href="#1175">1175</a> 
+<a class="jxr_linenumber" name="1176" href="#1176">1176</a> 			String sortName = configuration.getString(<span class="jxr_string">"sort[@criteria]"</span>);
+<a class="jxr_linenumber" name="1177" href="#1177">1177</a> 			<strong class="jxr_keyword">if</strong> (sortName != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="1178" href="#1178">1178</a> 				<strong class="jxr_keyword">this</strong>.sortCriteria = SortCriteria.valueOf(sortName);
+<a class="jxr_linenumber" name="1179" href="#1179">1179</a> 			}
+<a class="jxr_linenumber" name="1180" href="#1180">1180</a> 
+<a class="jxr_linenumber" name="1181" href="#1181">1181</a> 			<strong class="jxr_keyword">int</strong> ordinal = configuration.getInt(<span class="jxr_string">"sort[@ordinal]"</span>, -1);
+<a class="jxr_linenumber" name="1182" href="#1182">1182</a> 
+<a class="jxr_linenumber" name="1183" href="#1183">1183</a> 			<strong class="jxr_keyword">if</strong> (ordinal &gt; 0) {
+<a class="jxr_linenumber" name="1184" href="#1184">1184</a> 				<strong class="jxr_keyword">for</strong> (Axis axis : queryAdapter.getAxes()) {
+<a class="jxr_linenumber" name="1185" href="#1185">1185</a> 					Quax quax = queryAdapter.getQuax(axis);
+<a class="jxr_linenumber" name="1186" href="#1186">1186</a> 					<strong class="jxr_keyword">if</strong> (quax.getOrdinal() == ordinal) {
+<a class="jxr_linenumber" name="1187" href="#1187">1187</a> 						quaxToSort = quax;
+<a class="jxr_linenumber" name="1188" href="#1188">1188</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="1189" href="#1189">1189</a> 					}
+<a class="jxr_linenumber" name="1190" href="#1190">1190</a> 				}
+<a class="jxr_linenumber" name="1191" href="#1191">1191</a> 			}
+<a class="jxr_linenumber" name="1192" href="#1192">1192</a> 		}
+<a class="jxr_linenumber" name="1193" href="#1193">1193</a> 
+<a class="jxr_linenumber" name="1194" href="#1194">1194</a> 		queryAdapter.setQuaxToSort(quaxToSort);
+<a class="jxr_linenumber" name="1195" href="#1195">1195</a> 
+<a class="jxr_linenumber" name="1196" href="#1196">1196</a> 		<strong class="jxr_keyword">this</strong>.cellSet = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="1197" href="#1197">1197</a> 	}
+<a class="jxr_linenumber" name="1198" href="#1198">1198</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

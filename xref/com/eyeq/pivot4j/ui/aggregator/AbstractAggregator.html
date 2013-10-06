@@ -130,7 +130,7 @@
 <a class="jxr_linenumber" name="120" href="#120">120</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="121" href="#121">121</a> 	@Override
 <a class="jxr_linenumber" name="122" href="#122">122</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> aggregate(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
-<a class="jxr_linenumber" name="123" href="#123">123</a> 		Position targetPosition = getTargetPosition(context);
+<a class="jxr_linenumber" name="123" href="#123">123</a> 		Position targetPosition = context.getAggregationTarget(getAxis());
 <a class="jxr_linenumber" name="124" href="#124">124</a> 
 <a class="jxr_linenumber" name="125" href="#125">125</a> 		Double cellValue = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="126" href="#126">126</a> 
@@ -238,134 +238,102 @@
 <a class="jxr_linenumber" name="228" href="#228">228</a> 	}
 <a class="jxr_linenumber" name="229" href="#229">229</a> 
 <a class="jxr_linenumber" name="230" href="#230">230</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_javadoccomment">	 * @param context</em>
-<a class="jxr_linenumber" name="232" href="#232">232</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getPosition(com.eyeq.pivot4j.ui.RenderContext)</em>
+<a class="jxr_linenumber" name="231" href="#231">231</a> <em class="jxr_javadoccomment">	 * @param position</em>
+<a class="jxr_linenumber" name="232" href="#232">232</a> <em class="jxr_javadoccomment">	 * @return</em>
 <a class="jxr_linenumber" name="233" href="#233">233</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="234" href="#234">234</a> 	<strong class="jxr_keyword">public</strong> Position getPosition(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
-<a class="jxr_linenumber" name="235" href="#235">235</a> 		Position position = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="234" href="#234">234</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">int</strong> getCount(Position position) {
+<a class="jxr_linenumber" name="235" href="#235">235</a> 		Integer count = counts.get(position);
 <a class="jxr_linenumber" name="236" href="#236">236</a> 
-<a class="jxr_linenumber" name="237" href="#237">237</a> 		<strong class="jxr_keyword">if</strong> (axis == Axis.COLUMNS) {
-<a class="jxr_linenumber" name="238" href="#238">238</a> 			position = context.getColumnPosition();
-<a class="jxr_linenumber" name="239" href="#239">239</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (axis == Axis.ROWS) {
-<a class="jxr_linenumber" name="240" href="#240">240</a> 			position = context.getRowPosition();
-<a class="jxr_linenumber" name="241" href="#241">241</a> 		}
-<a class="jxr_linenumber" name="242" href="#242">242</a> 
-<a class="jxr_linenumber" name="243" href="#243">243</a> 		<strong class="jxr_keyword">return</strong> position;
-<a class="jxr_linenumber" name="244" href="#244">244</a> 	}
-<a class="jxr_linenumber" name="245" href="#245">245</a> 
-<a class="jxr_linenumber" name="246" href="#246">246</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="247" href="#247">247</a> <em class="jxr_javadoccomment">	 * @param context</em>
-<a class="jxr_linenumber" name="248" href="#248">248</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getTargetPosition(com.eyeq.pivot4j.ui.RenderContext)</em>
-<a class="jxr_linenumber" name="249" href="#249">249</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="250" href="#250">250</a> 	<strong class="jxr_keyword">public</strong> Position getTargetPosition(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
-<a class="jxr_linenumber" name="251" href="#251">251</a> 		Position targetPosition = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="252" href="#252">252</a> 
-<a class="jxr_linenumber" name="253" href="#253">253</a> 		<strong class="jxr_keyword">if</strong> (axis == Axis.COLUMNS) {
-<a class="jxr_linenumber" name="254" href="#254">254</a> 			targetPosition = context.getRowPosition();
-<a class="jxr_linenumber" name="255" href="#255">255</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (axis == Axis.ROWS) {
-<a class="jxr_linenumber" name="256" href="#256">256</a> 			targetPosition = context.getColumnPosition();
-<a class="jxr_linenumber" name="257" href="#257">257</a> 		}
-<a class="jxr_linenumber" name="258" href="#258">258</a> 
-<a class="jxr_linenumber" name="259" href="#259">259</a> 		<strong class="jxr_keyword">return</strong> targetPosition;
+<a class="jxr_linenumber" name="237" href="#237">237</a> 		<strong class="jxr_keyword">if</strong> (count == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="238" href="#238">238</a> 			count = 0;
+<a class="jxr_linenumber" name="239" href="#239">239</a> 		}
+<a class="jxr_linenumber" name="240" href="#240">240</a> 
+<a class="jxr_linenumber" name="241" href="#241">241</a> 		<strong class="jxr_keyword">return</strong> count;
+<a class="jxr_linenumber" name="242" href="#242">242</a> 	}
+<a class="jxr_linenumber" name="243" href="#243">243</a> 
+<a class="jxr_linenumber" name="244" href="#244">244</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="245" href="#245">245</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getValue(com.eyeq.pivot4j.ui</em>
+<a class="jxr_linenumber" name="246" href="#246">246</a> <em class="jxr_javadoccomment">	 *      .RenderContext)</em>
+<a class="jxr_linenumber" name="247" href="#247">247</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="248" href="#248">248</a> 	@Override
+<a class="jxr_linenumber" name="249" href="#249">249</a> 	<strong class="jxr_keyword">public</strong> Double getValue(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
+<a class="jxr_linenumber" name="250" href="#250">250</a> 		Position targetPosition = context.getAggregationTarget(getAxis());
+<a class="jxr_linenumber" name="251" href="#251">251</a> 		<strong class="jxr_keyword">return</strong> getValue(targetPosition);
+<a class="jxr_linenumber" name="252" href="#252">252</a> 	}
+<a class="jxr_linenumber" name="253" href="#253">253</a> 
+<a class="jxr_linenumber" name="254" href="#254">254</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="255" href="#255">255</a> <em class="jxr_javadoccomment">	 * @param position</em>
+<a class="jxr_linenumber" name="256" href="#256">256</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="257" href="#257">257</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="258" href="#258">258</a> 	<strong class="jxr_keyword">protected</strong> Double getValue(Position position) {
+<a class="jxr_linenumber" name="259" href="#259">259</a> 		<strong class="jxr_keyword">return</strong> values.get(position);
 <a class="jxr_linenumber" name="260" href="#260">260</a> 	}
 <a class="jxr_linenumber" name="261" href="#261">261</a> 
 <a class="jxr_linenumber" name="262" href="#262">262</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="263" href="#263">263</a> <em class="jxr_javadoccomment">	 * @param position</em>
-<a class="jxr_linenumber" name="264" href="#264">264</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="265" href="#265">265</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="266" href="#266">266</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">int</strong> getCount(Position position) {
-<a class="jxr_linenumber" name="267" href="#267">267</a> 		Integer count = counts.get(position);
-<a class="jxr_linenumber" name="268" href="#268">268</a> 
-<a class="jxr_linenumber" name="269" href="#269">269</a> 		<strong class="jxr_keyword">if</strong> (count == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="270" href="#270">270</a> 			count = 0;
-<a class="jxr_linenumber" name="271" href="#271">271</a> 		}
-<a class="jxr_linenumber" name="272" href="#272">272</a> 
-<a class="jxr_linenumber" name="273" href="#273">273</a> 		<strong class="jxr_keyword">return</strong> count;
-<a class="jxr_linenumber" name="274" href="#274">274</a> 	}
-<a class="jxr_linenumber" name="275" href="#275">275</a> 
-<a class="jxr_linenumber" name="276" href="#276">276</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="277" href="#277">277</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getValue(com.eyeq.pivot4j.ui</em>
-<a class="jxr_linenumber" name="278" href="#278">278</a> <em class="jxr_javadoccomment">	 *      .RenderContext)</em>
-<a class="jxr_linenumber" name="279" href="#279">279</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="280" href="#280">280</a> 	@Override
-<a class="jxr_linenumber" name="281" href="#281">281</a> 	<strong class="jxr_keyword">public</strong> Double getValue(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
-<a class="jxr_linenumber" name="282" href="#282">282</a> 		Position targetPosition = getTargetPosition(context);
-<a class="jxr_linenumber" name="283" href="#283">283</a> 		<strong class="jxr_keyword">return</strong> getValue(targetPosition);
-<a class="jxr_linenumber" name="284" href="#284">284</a> 	}
-<a class="jxr_linenumber" name="285" href="#285">285</a> 
-<a class="jxr_linenumber" name="286" href="#286">286</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="287" href="#287">287</a> <em class="jxr_javadoccomment">	 * @param position</em>
-<a class="jxr_linenumber" name="288" href="#288">288</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="289" href="#289">289</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="290" href="#290">290</a> 	<strong class="jxr_keyword">protected</strong> Double getValue(Position position) {
-<a class="jxr_linenumber" name="291" href="#291">291</a> 		<strong class="jxr_keyword">return</strong> values.get(position);
-<a class="jxr_linenumber" name="292" href="#292">292</a> 	}
-<a class="jxr_linenumber" name="293" href="#293">293</a> 
-<a class="jxr_linenumber" name="294" href="#294">294</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="295" href="#295">295</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getFormattedValue(com.eyeq.pivot4j.ui.RenderContext)</em>
-<a class="jxr_linenumber" name="296" href="#296">296</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="297" href="#297">297</a> 	<strong class="jxr_keyword">public</strong> String getFormattedValue(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
-<a class="jxr_linenumber" name="298" href="#298">298</a> 		Position position = getTargetPosition(context);
-<a class="jxr_linenumber" name="299" href="#299">299</a> 
-<a class="jxr_linenumber" name="300" href="#300">300</a> 		Double value = getValue(position);
-<a class="jxr_linenumber" name="301" href="#301">301</a> 
-<a class="jxr_linenumber" name="302" href="#302">302</a> 		NumberFormat format = getNumberFormat(position);
-<a class="jxr_linenumber" name="303" href="#303">303</a> 
-<a class="jxr_linenumber" name="304" href="#304">304</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="305" href="#305">305</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="306" href="#306">306</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (format == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="307" href="#307">307</a> 			<strong class="jxr_keyword">return</strong> Double.toString(value);
-<a class="jxr_linenumber" name="308" href="#308">308</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="309" href="#309">309</a> 			<strong class="jxr_keyword">return</strong> format.format(value);
-<a class="jxr_linenumber" name="310" href="#310">310</a> 		}
-<a class="jxr_linenumber" name="311" href="#311">311</a> 	}
-<a class="jxr_linenumber" name="312" href="#312">312</a> 
-<a class="jxr_linenumber" name="313" href="#313">313</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="314" href="#314">314</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getLabel(com.eyeq.pivot4j.ui.RenderContext)</em>
-<a class="jxr_linenumber" name="315" href="#315">315</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="316" href="#316">316</a> 	<strong class="jxr_keyword">public</strong> String getLabel(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
-<a class="jxr_linenumber" name="317" href="#317">317</a> 		<strong class="jxr_keyword">if</strong> (measure != <strong class="jxr_keyword">null</strong> &amp;&amp; OlapUtils.equals(measure, context.getMember())) {
-<a class="jxr_linenumber" name="318" href="#318">318</a> 			<strong class="jxr_keyword">return</strong> measure.getCaption();
-<a class="jxr_linenumber" name="319" href="#319">319</a> 		}
-<a class="jxr_linenumber" name="320" href="#320">320</a> 
-<a class="jxr_linenumber" name="321" href="#321">321</a> 		<strong class="jxr_keyword">return</strong> getAggregationLabel(context);
-<a class="jxr_linenumber" name="322" href="#322">322</a> 	}
-<a class="jxr_linenumber" name="323" href="#323">323</a> 
-<a class="jxr_linenumber" name="324" href="#324">324</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="325" href="#325">325</a> <em class="jxr_javadoccomment">	 * @param context</em>
-<a class="jxr_linenumber" name="326" href="#326">326</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="327" href="#327">327</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="328" href="#328">328</a> 	<strong class="jxr_keyword">protected</strong> String getAggregationLabel(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
-<a class="jxr_linenumber" name="329" href="#329">329</a> 		ResourceBundle resources = context.getRenderer().getResourceBundle();
-<a class="jxr_linenumber" name="330" href="#330">330</a> 
-<a class="jxr_linenumber" name="331" href="#331">331</a> 		String label = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="332" href="#332">332</a> 
-<a class="jxr_linenumber" name="333" href="#333">333</a> 		<strong class="jxr_keyword">if</strong> (resources != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="334" href="#334">334</a> 			label = resources.getString(<span class="jxr_string">"label.aggregation.type."</span> + getName());
-<a class="jxr_linenumber" name="335" href="#335">335</a> 		}
-<a class="jxr_linenumber" name="336" href="#336">336</a> 
-<a class="jxr_linenumber" name="337" href="#337">337</a> 		<strong class="jxr_keyword">return</strong> label;
-<a class="jxr_linenumber" name="338" href="#338">338</a> 	}
-<a class="jxr_linenumber" name="339" href="#339">339</a> 
-<a class="jxr_linenumber" name="340" href="#340">340</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="341" href="#341">341</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#reset()</em>
-<a class="jxr_linenumber" name="342" href="#342">342</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="343" href="#343">343</a> 	@Override
-<a class="jxr_linenumber" name="344" href="#344">344</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reset() {
-<a class="jxr_linenumber" name="345" href="#345">345</a> 		values.clear();
-<a class="jxr_linenumber" name="346" href="#346">346</a> 		counts.clear();
-<a class="jxr_linenumber" name="347" href="#347">347</a> 	}
-<a class="jxr_linenumber" name="348" href="#348">348</a> 
-<a class="jxr_linenumber" name="349" href="#349">349</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="350" href="#350">350</a> <em class="jxr_javadoccomment">	 * @param value</em>
-<a class="jxr_linenumber" name="351" href="#351">351</a> <em class="jxr_javadoccomment">	 * @param aggregation</em>
-<a class="jxr_linenumber" name="352" href="#352">352</a> <em class="jxr_javadoccomment">	 * @param position</em>
-<a class="jxr_linenumber" name="353" href="#353">353</a> <em class="jxr_javadoccomment">	 * @param context</em>
-<a class="jxr_linenumber" name="354" href="#354">354</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="355" href="#355">355</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="356" href="#356">356</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> Double calculate(Double value, Double aggregation,
-<a class="jxr_linenumber" name="357" href="#357">357</a> 			Position position, <a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context);
-<a class="jxr_linenumber" name="358" href="#358">358</a> }
+<a class="jxr_linenumber" name="263" href="#263">263</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getFormattedValue(com.eyeq.pivot4j.ui.RenderContext)</em>
+<a class="jxr_linenumber" name="264" href="#264">264</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="265" href="#265">265</a> 	<strong class="jxr_keyword">public</strong> String getFormattedValue(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
+<a class="jxr_linenumber" name="266" href="#266">266</a> 		Position position = context.getAggregationTarget(getAxis());
+<a class="jxr_linenumber" name="267" href="#267">267</a> 
+<a class="jxr_linenumber" name="268" href="#268">268</a> 		Double value = getValue(position);
+<a class="jxr_linenumber" name="269" href="#269">269</a> 
+<a class="jxr_linenumber" name="270" href="#270">270</a> 		NumberFormat format = getNumberFormat(position);
+<a class="jxr_linenumber" name="271" href="#271">271</a> 
+<a class="jxr_linenumber" name="272" href="#272">272</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="273" href="#273">273</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="274" href="#274">274</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (format == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="275" href="#275">275</a> 			<strong class="jxr_keyword">return</strong> Double.toString(value);
+<a class="jxr_linenumber" name="276" href="#276">276</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="277" href="#277">277</a> 			<strong class="jxr_keyword">return</strong> format.format(value);
+<a class="jxr_linenumber" name="278" href="#278">278</a> 		}
+<a class="jxr_linenumber" name="279" href="#279">279</a> 	}
+<a class="jxr_linenumber" name="280" href="#280">280</a> 
+<a class="jxr_linenumber" name="281" href="#281">281</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="282" href="#282">282</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#getLabel(com.eyeq.pivot4j.ui.RenderContext)</em>
+<a class="jxr_linenumber" name="283" href="#283">283</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="284" href="#284">284</a> 	<strong class="jxr_keyword">public</strong> String getLabel(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
+<a class="jxr_linenumber" name="285" href="#285">285</a> 		<strong class="jxr_keyword">if</strong> (measure != <strong class="jxr_keyword">null</strong> &amp;&amp; OlapUtils.equals(measure, context.getMember())) {
+<a class="jxr_linenumber" name="286" href="#286">286</a> 			<strong class="jxr_keyword">return</strong> measure.getCaption();
+<a class="jxr_linenumber" name="287" href="#287">287</a> 		}
+<a class="jxr_linenumber" name="288" href="#288">288</a> 
+<a class="jxr_linenumber" name="289" href="#289">289</a> 		<strong class="jxr_keyword">return</strong> getAggregationLabel(context);
+<a class="jxr_linenumber" name="290" href="#290">290</a> 	}
+<a class="jxr_linenumber" name="291" href="#291">291</a> 
+<a class="jxr_linenumber" name="292" href="#292">292</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="293" href="#293">293</a> <em class="jxr_javadoccomment">	 * @param context</em>
+<a class="jxr_linenumber" name="294" href="#294">294</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="295" href="#295">295</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="296" href="#296">296</a> 	<strong class="jxr_keyword">protected</strong> String getAggregationLabel(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
+<a class="jxr_linenumber" name="297" href="#297">297</a> 		ResourceBundle resources = context.getResourceBundle();
+<a class="jxr_linenumber" name="298" href="#298">298</a> 
+<a class="jxr_linenumber" name="299" href="#299">299</a> 		String label = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="300" href="#300">300</a> 
+<a class="jxr_linenumber" name="301" href="#301">301</a> 		<strong class="jxr_keyword">if</strong> (resources != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="302" href="#302">302</a> 			label = resources.getString(<span class="jxr_string">"label.aggregation.type."</span> + getName());
+<a class="jxr_linenumber" name="303" href="#303">303</a> 		}
+<a class="jxr_linenumber" name="304" href="#304">304</a> 
+<a class="jxr_linenumber" name="305" href="#305">305</a> 		<strong class="jxr_keyword">return</strong> label;
+<a class="jxr_linenumber" name="306" href="#306">306</a> 	}
+<a class="jxr_linenumber" name="307" href="#307">307</a> 
+<a class="jxr_linenumber" name="308" href="#308">308</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="309" href="#309">309</a> <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.aggregator.Aggregator#reset()</em>
+<a class="jxr_linenumber" name="310" href="#310">310</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="311" href="#311">311</a> 	@Override
+<a class="jxr_linenumber" name="312" href="#312">312</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reset() {
+<a class="jxr_linenumber" name="313" href="#313">313</a> 		values.clear();
+<a class="jxr_linenumber" name="314" href="#314">314</a> 		counts.clear();
+<a class="jxr_linenumber" name="315" href="#315">315</a> 	}
+<a class="jxr_linenumber" name="316" href="#316">316</a> 
+<a class="jxr_linenumber" name="317" href="#317">317</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="318" href="#318">318</a> <em class="jxr_javadoccomment">	 * @param value</em>
+<a class="jxr_linenumber" name="319" href="#319">319</a> <em class="jxr_javadoccomment">	 * @param aggregation</em>
+<a class="jxr_linenumber" name="320" href="#320">320</a> <em class="jxr_javadoccomment">	 * @param position</em>
+<a class="jxr_linenumber" name="321" href="#321">321</a> <em class="jxr_javadoccomment">	 * @param context</em>
+<a class="jxr_linenumber" name="322" href="#322">322</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="323" href="#323">323</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="324" href="#324">324</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> Double calculate(Double value, Double aggregation,
+<a class="jxr_linenumber" name="325" href="#325">325</a> 			Position position, <a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context);
+<a class="jxr_linenumber" name="326" href="#326">326</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

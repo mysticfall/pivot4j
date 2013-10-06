@@ -18,44 +18,37 @@
 <a class="jxr_linenumber" name="8" href="#8">8</a>   <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">package</strong> com.eyeq.pivot4j.ui.command;
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
-<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.ObjectUtils;
-<a class="jxr_linenumber" name="12" href="#12">12</a>  <strong class="jxr_keyword">import</strong> org.olap4j.Axis;
-<a class="jxr_linenumber" name="13" href="#13">13</a>  
-<a class="jxr_linenumber" name="14" href="#14">14</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.CellType;
-<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PivotUIRenderer;
+<a class="jxr_linenumber" name="11" href="#11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.eyeq.pivot4j.ui.CellTypes.AGG_VALUE;
+<a class="jxr_linenumber" name="12" href="#12">12</a>  
+<a class="jxr_linenumber" name="13" href="#13">13</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang.ObjectUtils;
+<a class="jxr_linenumber" name="14" href="#14">14</a>  
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.PivotRenderer;
 <a class="jxr_linenumber" name="16" href="#16">16</a>  <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.RenderContext;
 <a class="jxr_linenumber" name="17" href="#17">17</a>  
-<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/AbstractDrillDownCommand.html">AbstractDrillDownCommand</a> <strong class="jxr_keyword">extends</strong>
-<a class="jxr_linenumber" name="19" href="#19">19</a>  		AbstractCellCommand&lt;Void&gt; <strong class="jxr_keyword">implements</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/DrillDownCommand.html">DrillDownCommand</a> {
+<a class="jxr_linenumber" name="18" href="#18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/AbstractDrillDownCommand.html">AbstractDrillDownCommand</a> <strong class="jxr_keyword">extends</strong> AbstractUICommand&lt;Void&gt;
+<a class="jxr_linenumber" name="19" href="#19">19</a>  		<strong class="jxr_keyword">implements</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/DrillDownCommand.html">DrillDownCommand</a> {
 <a class="jxr_linenumber" name="20" href="#20">20</a>  
 <a class="jxr_linenumber" name="21" href="#21">21</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="22" href="#22">22</a>  <em class="jxr_javadoccomment">	 * @param renderer</em>
 <a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="24" href="#24">24</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/AbstractDrillDownCommand.html">AbstractDrillDownCommand</a>(<a href="../../../../../com/eyeq/pivot4j/ui/PivotUIRenderer.html">PivotUIRenderer</a> renderer) {
+<a class="jxr_linenumber" name="24" href="#24">24</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/eyeq/pivot4j/ui/command/AbstractDrillDownCommand.html">AbstractDrillDownCommand</a>(PivotRenderer&lt;?&gt; renderer) {
 <a class="jxr_linenumber" name="25" href="#25">25</a>  		<strong class="jxr_keyword">super</strong>(renderer);
 <a class="jxr_linenumber" name="26" href="#26">26</a>  	}
 <a class="jxr_linenumber" name="27" href="#27">27</a>  
 <a class="jxr_linenumber" name="28" href="#28">28</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.CellCommand#canExecute(com.eyeq.pivot4j.ui</em>
+<a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">	 * @see com.eyeq.pivot4j.ui.command.UICommand#canExecute(com.eyeq.pivot4j.ui</em>
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment">	 *      .RenderContext)</em>
 <a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="32" href="#32">32</a>  	@Override
 <a class="jxr_linenumber" name="33" href="#33">33</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExecute(<a href="../../../../../com/eyeq/pivot4j/ui/RenderContext.html">RenderContext</a> context) {
-<a class="jxr_linenumber" name="34" href="#34">34</a>  		<strong class="jxr_keyword">boolean</strong> enabled = ObjectUtils.equals(getMode(context), getRenderer()
-<a class="jxr_linenumber" name="35" href="#35">35</a>  				.getDrillDownMode())
-<a class="jxr_linenumber" name="36" href="#36">36</a>  				&amp;&amp; context.getAxis() != <strong class="jxr_keyword">null</strong>
-<a class="jxr_linenumber" name="37" href="#37">37</a>  				&amp;&amp; context.getCellType() != CellType.Aggregation;
+<a class="jxr_linenumber" name="34" href="#34">34</a>  		<strong class="jxr_keyword">boolean</strong> enabled = getRenderer().getEnableDrillDown()
+<a class="jxr_linenumber" name="35" href="#35">35</a>  				&amp;&amp; ObjectUtils.equals(getMode(context), getRenderer()
+<a class="jxr_linenumber" name="36" href="#36">36</a>  						.getDrillDownMode()) &amp;&amp; context.getAxis() != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="37" href="#37">37</a>  				&amp;&amp; !AGG_VALUE.equals(context.getCellType());
 <a class="jxr_linenumber" name="38" href="#38">38</a>  
-<a class="jxr_linenumber" name="39" href="#39">39</a>  		<strong class="jxr_keyword">if</strong> (enabled) {
-<a class="jxr_linenumber" name="40" href="#40">40</a>  			enabled = (getRenderer().getEnableColumnDrillDown() &amp;&amp; context
-<a class="jxr_linenumber" name="41" href="#41">41</a>  					.getAxis().equals(Axis.COLUMNS))
-<a class="jxr_linenumber" name="42" href="#42">42</a>  					|| (getRenderer().getEnableRowDrillDown() &amp;&amp; context
-<a class="jxr_linenumber" name="43" href="#43">43</a>  							.getAxis().equals(Axis.ROWS));
-<a class="jxr_linenumber" name="44" href="#44">44</a>  		}
-<a class="jxr_linenumber" name="45" href="#45">45</a>  
-<a class="jxr_linenumber" name="46" href="#46">46</a>  		<strong class="jxr_keyword">return</strong> enabled;
-<a class="jxr_linenumber" name="47" href="#47">47</a>  	}
-<a class="jxr_linenumber" name="48" href="#48">48</a>  }
+<a class="jxr_linenumber" name="39" href="#39">39</a>  		<strong class="jxr_keyword">return</strong> enabled;
+<a class="jxr_linenumber" name="40" href="#40">40</a>  	}
+<a class="jxr_linenumber" name="41" href="#41">41</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

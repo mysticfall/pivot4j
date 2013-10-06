@@ -14,7 +14,7 @@
 <a class="jxr_linenumber" name="4" href="#4">4</a>   <strong class="jxr_keyword">import</strong> javax.el.ValueExpression;
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> javax.faces.component.UIComponent;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   
-<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.property.PropertySource;
+<a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> com.eyeq.pivot4j.ui.property.RenderPropertyList;
 <a class="jxr_linenumber" name="8" href="#8">8</a>   
 <a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../com/eyeq/pivot4j/analytics/property/PropertyEditor.html">PropertyEditor</a> {
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
@@ -33,14 +33,14 @@
 <a class="jxr_linenumber" name="23" href="#23">23</a>  <em class="jxr_javadoccomment">	 * @param properties</em>
 <a class="jxr_linenumber" name="24" href="#24">24</a>  <em class="jxr_javadoccomment">	 * @return</em>
 <a class="jxr_linenumber" name="25" href="#25">25</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="26" href="#26">26</a>  	Object getValue(<a href="../../../../../com/eyeq/pivot4j/analytics/property/PropertyDescriptor.html">PropertyDescriptor</a> descriptor, <a href="../../../../../com/eyeq/pivot4j/ui/property/PropertySource.html">PropertySource</a> properties);
+<a class="jxr_linenumber" name="26" href="#26">26</a>  	Object getValue(<a href="../../../../../com/eyeq/pivot4j/analytics/property/PropertyDescriptor.html">PropertyDescriptor</a> descriptor, <a href="../../../../../com/eyeq/pivot4j/ui/property/RenderPropertyList.html">RenderPropertyList</a> properties);
 <a class="jxr_linenumber" name="27" href="#27">27</a>  
 <a class="jxr_linenumber" name="28" href="#28">28</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="29" href="#29">29</a>  <em class="jxr_javadoccomment">	 * @param descriptor</em>
 <a class="jxr_linenumber" name="30" href="#30">30</a>  <em class="jxr_javadoccomment">	 * @param properties</em>
 <a class="jxr_linenumber" name="31" href="#31">31</a>  <em class="jxr_javadoccomment">	 * @param value</em>
 <a class="jxr_linenumber" name="32" href="#32">32</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="33" href="#33">33</a>  	<strong class="jxr_keyword">void</strong> setValue(<a href="../../../../../com/eyeq/pivot4j/analytics/property/PropertyDescriptor.html">PropertyDescriptor</a> descriptor, <a href="../../../../../com/eyeq/pivot4j/ui/property/PropertySource.html">PropertySource</a> properties,
+<a class="jxr_linenumber" name="33" href="#33">33</a>  	<strong class="jxr_keyword">void</strong> setValue(<a href="../../../../../com/eyeq/pivot4j/analytics/property/PropertyDescriptor.html">PropertyDescriptor</a> descriptor, <a href="../../../../../com/eyeq/pivot4j/ui/property/RenderPropertyList.html">RenderPropertyList</a> properties,
 <a class="jxr_linenumber" name="34" href="#34">34</a>  			Object value);
 <a class="jxr_linenumber" name="35" href="#35">35</a>  }
 </pre>
