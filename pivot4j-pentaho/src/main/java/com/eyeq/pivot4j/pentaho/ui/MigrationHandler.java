@@ -513,9 +513,12 @@ public class MigrationHandler {
 		 */
 		@Override
 		public boolean accept(ReportFile file) {
-			return file.isDirectory()
-					|| "xaction".equalsIgnoreCase(file.getExtension())
-					|| "xjpivot".equalsIgnoreCase(file.getExtension());
+			if (file.isDirectory()) {
+				return !file.getPath().startsWith(ReportFile.SEPARATOR + "etc");
+			} else {
+				return "xaction".equalsIgnoreCase(file.getExtension())
+						|| "xjpivot".equalsIgnoreCase(file.getExtension());
+			}
 		}
 	}
 
