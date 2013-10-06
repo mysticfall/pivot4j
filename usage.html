@@ -343,12 +343,12 @@ CellSet cellSet = model.getCellSet();</pre></div></div>
 <h3>Generating HTML source from the PivotModel<a name="Generating_HTML_source_from_the_PivotModel"></a></h3>
 <p>You can use the <a href="./apidocs/com/eyeq/pivot4j/ui/html/HtmlRenderer.html">HtmlRenderer</a> class to generate HTML source out of a PivotModel instance as below example :</p>
 <div class="source">
-<pre>HtmlRenderer renderer = new HtmlRenderer(writer);
+<pre>TableRenderer renderer = new TableRenderer();
 
 renderer.setShowDimensionTitle(false); // Optionally hide the dimension title headers.
 renderer.setShowParentMembers(true); // Optionally make the parent members visible.
 
-renderer.render(model);
+renderer.render(model, new HtmlRenderCallback(writer)); // Render the result as a HTML page.
 
 writer.flush();
 writer.close();</pre></div>
