@@ -44,18 +44,18 @@
 	</context-param>
 
 	<listener>
-		<listener-class>org.apache.logging.log4j.core.web.Log4jServletContextListener</listener-class>
+		<listener-class>com.eyeq.pivot4j.analytics.logging.Log4jServletContextListenerFallback</listener-class>
 	</listener>
 	<listener>
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
 	</listener>
 
 	<filter>
-		<filter-name>log4jServletFilter</filter-name>
-		<filter-class>org.apache.logging.log4j.core.web.Log4jServletFilter</filter-class>
+		<filter-name>log4jServletFilterFallback</filter-name>
+		<filter-class>com.eyeq.pivot4j.analytics.logging.Log4jServletFilterFallback</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>log4jServletFilter</filter-name>
+		<filter-name>log4jServletFilterFallback</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
