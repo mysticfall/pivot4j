@@ -16,7 +16,7 @@ import java.io.Reader;
 import org.olap4j.Axis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
 
 action code {:
   private MdxStatement pQuery = new MdxStatement();
@@ -25,8 +25,22 @@ action code {:
 parser code {: 
   protected Logger logger = LoggerFactory.getLogger(getClass());
 
+  private SymbolFactory symbolFactory = new DefaultSymbolFactory() {
+    public Symbol newSymbol(String name, int id, Symbol left, Symbol right, Object value){
+      return new Symbol(id,left.left,right.right,value);
+    }
+
+    public Symbol newSymbol(String name, int id, Symbol left, Symbol right){
+      return new Symbol(id,left.left,right.right);
+    }
+  };
+
   public CupParser(Reader reader) {
     super(new Yylex(reader));
+  }
+
+  public SymbolFactory getSymbolFactory() {
+    return symbolFactory;
   }
 
   @Override
