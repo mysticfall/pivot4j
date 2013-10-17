@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.FacesException;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -24,6 +26,22 @@ import com.eyeq.pivot4j.datasource.SimpleOlapDataSource;
 @ApplicationScoped
 public class SimpleDataSourceManager extends
 		AbstractDataSourceManager<SimpleDataSourceInfo> {
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#initialize()
+	 */
+	@PostConstruct
+	protected void initialize() {
+		super.initialize();
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#destroy()
+	 */
+	@PreDestroy
+	protected void destroy() {
+		super.destroy();
+	}
 
 	/**
 	 * @see com.eyeq.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSourceDefinition(org.apache.commons.configuration.HierarchicalConfiguration)
