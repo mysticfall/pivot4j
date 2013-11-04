@@ -170,6 +170,34 @@ public class TableRenderer extends
 	/**
 	 * @param context
 	 * @return
+	 * @see com.eyeq.pivot4j.ui.AbstractPivotRenderer#getValue(com.eyeq.pivot4j.ui.RenderContext)
+	 */
+	@Override
+	protected Double getValue(TableRenderContext context) {
+		Double value = null;
+
+		Aggregator aggregator = context.getAggregator();
+
+		Cell cell = context.getCell();
+
+		if (aggregator == null) {
+			if (cell != null && !cell.isEmpty()) {
+				try {
+					value = cell.getDoubleValue();
+				} catch (OlapException e) {
+					throw new PivotException(e);
+				}
+			}
+		} else {
+			value = aggregator.getValue(context);
+		}
+
+		return value;
+	}
+
+	/**
+	 * @param context
+	 * @return
 	 */
 	protected String getHeaderLabel(TableRenderContext context) {
 		String label;
@@ -493,7 +521,8 @@ public class TableRenderer extends
 							callback.startCell(context);
 							callback.renderCommands(context,
 									getCommands(context));
-							callback.renderContent(context, getLabel(context));
+							callback.renderContent(context, getLabel(context),
+									getValue(context));
 							callback.endCell(context);
 
 							return TreeNodeCallback.CONTINUE;
@@ -566,7 +595,8 @@ public class TableRenderer extends
 							callback.startCell(context);
 							callback.renderCommands(context,
 									getCommands(context));
-							callback.renderContent(context, getLabel(context));
+							callback.renderContent(context, getLabel(context),
+									getValue(context));
 							callback.endCell(context);
 
 							if (headerNode.getChildCount() == 0) {
@@ -641,7 +671,8 @@ public class TableRenderer extends
 
 			callback.startCell(context);
 			callback.renderCommands(context, getCommands(context));
-			callback.renderContent(context, getLabel(context));
+			callback.renderContent(context, getLabel(context),
+					getValue(context));
 			callback.endCell(context);
 
 			context.setPosition(context.getRowPosition());
@@ -796,7 +827,8 @@ public class TableRenderer extends
 
 			callback.startCell(context);
 			callback.renderCommands(context, getCommands(context));
-			callback.renderContent(context, getLabel(context));
+			callback.renderContent(context, getLabel(context),
+					getValue(context));
 			callback.endCell(context);
 		} else if (renderDimensionTitle) {
 			final Map<Hierarchy, Integer> spans = new HashMap<Hierarchy, Integer>();
@@ -853,7 +885,8 @@ public class TableRenderer extends
 
 				callback.startCell(context);
 				callback.renderCommands(context, getCommands(context));
-				callback.renderContent(context, getLabel(context));
+				callback.renderContent(context, getLabel(context),
+						getValue(context));
 				callback.endCell(context);
 
 				context.setColIndex(context.getColumnIndex() + span);
@@ -867,7 +900,8 @@ public class TableRenderer extends
 
 						callback.startCell(context);
 						callback.renderCommands(context, getCommands(context));
-						callback.renderContent(context, getLabel(context));
+						callback.renderContent(context, getLabel(context),
+								getValue(context));
 						callback.endCell(context);
 					}
 				}
@@ -919,7 +953,8 @@ public class TableRenderer extends
 
 				callback.startCell(context);
 				callback.renderCommands(context, getCommands(context));
-				callback.renderContent(context, getLabel(context));
+				callback.renderContent(context, getLabel(context),
+						getValue(context));
 				callback.endCell(context);
 			}
 		}
@@ -1607,7 +1642,8 @@ public class TableRenderer extends
 
 			callback.startCell(context);
 			callback.renderCommands(context, getCommands(context));
-			callback.renderContent(context, getLabel(context));
+			callback.renderContent(context, getLabel(context),
+					getValue(context));
 			callback.endCell(context);
 
 			boolean firstRow = true;
@@ -1634,7 +1670,8 @@ public class TableRenderer extends
 
 				callback.startCell(context);
 				callback.renderCommands(context, getCommands(context));
-				callback.renderContent(context, getLabel(context));
+				callback.renderContent(context, getLabel(context),
+						getValue(context));
 				callback.endCell(context);
 			}
 

@@ -334,7 +334,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	}
 
 	public void render() {
-		if (model != null && model.isInitialized()) {
+		if (model != null && model.isInitialized() && component.isRendered()) {
 			FacesContext context = FacesContext.getCurrentInstance();
 
 			Map<String, String> parameters = context.getExternalContext()
@@ -344,8 +344,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 				return;
 			}
 
-			PrimeFacesRendererCallback callback = new PrimeFacesRendererCallback(
-					context);
+			PivotComponentBuilder callback = new PivotComponentBuilder(context);
 			callback.setComponent(component);
 			callback.setFilterComponent(filterComponent);
 

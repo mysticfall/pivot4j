@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.eyeq.pivot4j.el.EvaluationFailedException;
+import com.eyeq.pivot4j.el.ExpressionContext;
 import com.eyeq.pivot4j.ui.AbstractRenderCallback;
 import com.eyeq.pivot4j.ui.command.UICommand;
 import com.eyeq.pivot4j.ui.command.UICommandParameters;
@@ -43,7 +44,7 @@ import com.eyeq.pivot4j.ui.table.TableRenderContext;
 import com.eyeq.pivot4j.util.CssWriter;
 import com.eyeq.pivot4j.util.RenderPropertyUtils;
 
-public class PrimeFacesRendererCallback extends
+public class PivotComponentBuilder extends
 		AbstractRenderCallback<TableRenderContext> implements
 		TableRenderCallback {
 
@@ -70,7 +71,7 @@ public class PrimeFacesRendererCallback extends
 	/**
 	 * @param facesContext
 	 */
-	public PrimeFacesRendererCallback(FacesContext facesContext) {
+	public PivotComponentBuilder(FacesContext facesContext) {
 		this.facesContext = facesContext;
 
 		if (facesContext != null) {
@@ -422,11 +423,15 @@ public class PrimeFacesRendererCallback extends
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.RenderCallback#renderContent(com.eyeq.pivot4j.ui.RenderContext,
-	 *      java.lang.String)
+	 *      java.lang.String, java.lang.Double)
 	 */
 	@Override
-	public void renderContent(TableRenderContext context, String label) {
-		context.getExpressionContext().put("label", label);
+	public void renderContent(TableRenderContext context, String label,
+			Double value) {
+		ExpressionContext elContext = context.getExpressionContext();
+
+		elContext.put("label", label);
+		elContext.put("value", value);
 
 		String labelText;
 
@@ -437,7 +442,8 @@ public class PrimeFacesRendererCallback extends
 					propertyUtils.getString("label",
 							context.getRenderPropertyCategory(), label), "");
 		} finally {
-			context.getExpressionContext().remove("label");
+			elContext.remove("label");
+			elContext.remove("value");
 		}
 
 		HtmlOutputText text = new HtmlOutputText();

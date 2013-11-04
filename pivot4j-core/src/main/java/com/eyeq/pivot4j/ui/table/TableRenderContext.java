@@ -8,22 +8,11 @@
  */
 package com.eyeq.pivot4j.ui.table;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.commons.lang.NullArgumentException;
-import org.olap4j.Axis;
-import org.olap4j.Position;
-
 import com.eyeq.pivot4j.PivotModel;
 import com.eyeq.pivot4j.el.ExpressionContext;
-import com.eyeq.pivot4j.ui.RenderContext;
+import com.eyeq.pivot4j.ui.CartesianRenderContext;
 
-public class TableRenderContext extends RenderContext {
-
-	private static List<Axis> AXES = Collections.unmodifiableList(Arrays
-			.asList(new Axis[] { Axis.COLUMNS, Axis.ROWS }));
+public class TableRenderContext extends CartesianRenderContext {
 
 	private int columnCount;
 
@@ -40,10 +29,6 @@ public class TableRenderContext extends RenderContext {
 	private int colSpan = 1;
 
 	private int rowSpan = 1;
-
-	private Position columnPosition;
-
-	private Position rowPosition;
 
 	/**
 	 * @param model
@@ -90,76 +75,6 @@ public class TableRenderContext extends RenderContext {
 	@Override
 	public TableRenderer getRenderer() {
 		return (TableRenderer) super.getRenderer();
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.RenderContext#getAxes()
-	 */
-	@Override
-	public List<Axis> getAxes() {
-		return AXES;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.RenderContext#getAggregationTarget(org.olap4j.Axis)
-	 */
-	@Override
-	public Position getAggregationTarget(Axis axis) {
-		if (axis == null) {
-			throw new NullArgumentException("axis");
-		}
-
-		if (axis.equals(Axis.COLUMNS)) {
-			return rowPosition;
-		} else if (axis.equals(Axis.ROWS)) {
-			return columnPosition;
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * @return the columnPosition
-	 */
-	public Position getColumnPosition() {
-		return columnPosition;
-	}
-
-	/**
-	 * @param columnPosition
-	 *            the columnPosition to set
-	 */
-	public void setColumnPosition(Position columnPosition) {
-		this.columnPosition = columnPosition;
-	}
-
-	/**
-	 * @return the rowPosition
-	 */
-	public Position getRowPosition() {
-		return rowPosition;
-	}
-
-	/**
-	 * @param rowPosition
-	 *            the rowPosition to set
-	 */
-	public void setRowPosition(Position rowPosition) {
-		this.rowPosition = rowPosition;
-	}
-
-	/**
-	 * @see com.eyeq.pivot4j.ui.RenderContext#getPosition(org.olap4j.Axis)
-	 */
-	@Override
-	public Position getPosition(Axis axis) {
-		if (axis == Axis.COLUMNS) {
-			return columnPosition;
-		} else if (axis == Axis.ROWS) {
-			return rowPosition;
-		}
-
-		return null;
 	}
 
 	/**
@@ -253,29 +168,11 @@ public class TableRenderContext extends RenderContext {
 	/**
 	 * @param model
 	 * @return
-	 * @see com.eyeq.pivot4j.ui.RenderContext#createExpressionContext(com.eyeq.pivot4j.PivotModel)
+	 * @see com.eyeq.pivot4j.ui.CartesianRenderContext#createExpressionContext(com.eyeq.pivot4j.PivotModel)
 	 */
 	@Override
 	protected ExpressionContext createExpressionContext(PivotModel model) {
 		ExpressionContext context = super.createExpressionContext(model);
-
-		context.put("columnPosition",
-				new ExpressionContext.ValueBinding<Position>() {
-
-					@Override
-					public Position getValue() {
-						return getColumnPosition();
-					}
-				});
-
-		context.put("rowPosition",
-				new ExpressionContext.ValueBinding<Position>() {
-
-					@Override
-					public Position getValue() {
-						return getRowPosition();
-					}
-				});
 
 		context.put("columnCount",
 				new ExpressionContext.ValueBinding<Integer>() {

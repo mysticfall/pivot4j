@@ -27,6 +27,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
 
+import com.eyeq.pivot4j.el.ExpressionContext;
 import com.eyeq.pivot4j.ui.AbstractMarkupRenderCallback;
 import com.eyeq.pivot4j.ui.command.UICommand;
 import com.eyeq.pivot4j.ui.table.TableRenderCallback;
@@ -575,14 +576,16 @@ public class HtmlRenderCallback extends
 	}
 
 	/**
-	 * @param context
-	 * @param label
 	 * @see com.eyeq.pivot4j.ui.RenderCallback#renderContent(com.eyeq.pivot4j.ui.RenderContext,
-	 *      java.lang.String)
+	 *      java.lang.String, java.lang.Double)
 	 */
 	@Override
-	public void renderContent(TableRenderContext context, String label) {
-		context.getExpressionContext().put("label", label);
+	public void renderContent(TableRenderContext context, String label,
+			Double value) {
+		ExpressionContext elContext = context.getExpressionContext();
+
+		elContext.put("label", label);
+		elContext.put("value", value);
 
 		String propertyCategory = context.getRenderPropertyCategory();
 
@@ -595,7 +598,8 @@ public class HtmlRenderCallback extends
 					propertyUtils.getString("label", propertyCategory, label),
 					"&nbsp;");
 		} finally {
-			context.getExpressionContext().remove("label");
+			elContext.remove("label");
+			elContext.remove("value");
 		}
 
 		String link = propertyUtils.getString("link", propertyCategory, null);

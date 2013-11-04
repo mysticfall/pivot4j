@@ -32,7 +32,6 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.olap4j.Axis;
-import org.olap4j.OlapException;
 
 import com.eyeq.pivot4j.PivotException;
 import com.eyeq.pivot4j.ui.AbstractContentRenderCallback;
@@ -201,28 +200,20 @@ public class ExcelExporter extends
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.RenderCallback#renderContent(com.eyeq.pivot4j.ui.RenderContext,
-	 *      java.lang.String)
+	 *      java.lang.String, java.lang.Double)
 	 */
 	@Override
-	public void renderContent(TableRenderContext context, String label) {
+	public void renderContent(TableRenderContext context, String label,
+			Double value) {
 		cell.setCellStyle(getCellStyle(context));
 
 		if (VALUE.equals(context.getCellType())
 				&& context.getAxis() != Axis.FILTER) {
-			Double value = null;
-
-			if (context.getAggregator() != null) {
-				value = context.getAggregator().getValue(context);
-			} else if (context.getCell() != null
-					&& !context.getCell().isEmpty()) {
-				try {
-					value = context.getCell().getDoubleValue();
-				} catch (OlapException e) {
-					throw new PivotException(e);
-				}
+			if (value == null) {
+				cell.setCellValue("");
+			} else {
+				cell.setCellValue(value);
 			}
-
-			renderContent(context, value);
 		} else {
 			boolean showParentMembers = context.getRenderer()
 					.getShowParentMembers();
@@ -236,18 +227,6 @@ public class ExcelExporter extends
 
 			cell.setCellValue(label);
 			cell.setCellType(Cell.CELL_TYPE_STRING);
-		}
-	}
-
-	/**
-	 * @param context
-	 * @param value
-	 */
-	protected void renderContent(TableRenderContext context, Double value) {
-		if (value == null) {
-			cell.setCellValue("");
-		} else {
-			cell.setCellValue(value);
 		}
 	}
 

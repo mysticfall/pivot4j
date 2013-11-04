@@ -30,6 +30,7 @@
 
 	<f:metadata>
 		<f:event type="preRenderView" listener="#{pivotGridHandler.render}" />
+		<f:event type="preRenderView" listener="#{chartHandler.render}" />
 	</f:metadata>
 
 	<h:body id="body" styleClass="report">
@@ -153,6 +154,13 @@
 								icon="ui-icon-print" disabled="#{!pivotGridHandler.valid}"
 								onclick="$('table.pivot-grid:first').jqprint();"
 								styleClass="hide-on-embed" />
+							<p:separator />
+							<p:selectOneMenu value="#{chartHandler.chartName}"
+								disabled="#{!pivotGridHandler.valid}">
+								<f:selectItems value="#{chartHandler.charts}" />
+
+								<p:ajax event="change" update=":toolbar-form,:grid-form,:growl" />
+							</p:selectOneMenu>
 						</p:toolbarGroup>
 					</p:toolbar>
 				</h:form>
@@ -177,7 +185,7 @@
 								itemLabel="#{cube.itemLabel}" itemValue="#{cube.itemValue}" />
 							<p:ajax event="change"
 								listener="#{pivotGridHandler.onCubeChange}"
-								update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:toolbar-form"
+								update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:growl"
 								oncomplete="onViewChanged()" />
 						</p:selectOneMenu>
 					</h:form>
@@ -345,7 +353,7 @@
 						<p:overlayPanel widgetVar="filterDialog" hideEffect="fade"
 							for=":filter-items" dynamic="true" showEvent="none"
 							appendToBody="true" styleClass="ui-dialog filter-dialog"
-							onHide="onFilterDialogClose();">
+							onHide="onFilterDialogClose();" at="left top" my="left bottom">
 							<h:form id="filter-form">
 								<p:tree value="#{filterHandler.filterNode}" dynamic="true"
 									cache="true" var="node" selectionMode="checkbox" animate="true"
@@ -387,7 +395,11 @@
 					<h:form id="grid-form">
 						<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
 							binding="#{pivotGridHandler.component}"
-							rendered="#{pivotGridHandler.valid}" />
+							rendered="#{pivotGridHandler.valid and empty chartHandler.chartName}" />
+
+						<h:panelGroup id="chart-panel" styleClass="chart-panel"
+							binding="#{chartHandler.component}" layout="block"
+							rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
 
 						<p:fieldset styleClass="filter-info"
 							legend="#{msg['label.filter']}" toggleable="true"

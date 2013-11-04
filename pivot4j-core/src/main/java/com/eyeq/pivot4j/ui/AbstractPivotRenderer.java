@@ -83,6 +83,8 @@ public abstract class AbstractPivotRenderer<T1 extends RenderContext, T2 extends
 
 	protected abstract String getLabel(T1 context);
 
+	protected abstract Double getValue(T1 context);
+
 	protected void registerCommands() {
 		addCommand(new DrillExpandPositionCommand(this));
 		addCommand(new DrillCollapsePositionCommand(this));

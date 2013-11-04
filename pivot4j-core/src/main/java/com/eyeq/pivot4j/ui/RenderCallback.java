@@ -33,8 +33,9 @@ public interface RenderCallback<T extends RenderContext> extends Configurable,
 	/**
 	 * @param context
 	 * @param label
+	 * @param value
 	 */
-	void renderContent(T context, String label);
+	void renderContent(T context, String label, Double value);
 
 	/**
 	 * @param context

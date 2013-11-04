@@ -456,10 +456,11 @@ public class FopExporter extends
 
 	/**
 	 * @see com.eyeq.pivot4j.ui.RenderCallback#renderContent(com.eyeq.pivot4j.ui.RenderContext,
-	 *      java.lang.String)
+	 *      java.lang.String, java.lang.Double)
 	 */
 	@Override
-	public void renderContent(TableRenderContext context, String label) {
+	public void renderContent(TableRenderContext context, String label,
+			Double value) {
 		try {
 			this.documentHandler.startElement(FOElementMapping.URI, "block",
 					"block", createCellContentAttributes(context));

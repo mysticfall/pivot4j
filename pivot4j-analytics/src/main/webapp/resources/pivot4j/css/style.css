@@ -292,10 +292,6 @@ body.report .pe-layout-pane-header {
 	text-align: center;
 }
 
-.filter-info {
-	margin-top: 10px;
-}
-
 button.ui-button-icon-only {
 	width: 16px;
 	height: 16px;
@@ -307,6 +303,10 @@ button.ui-button-icon-only {
 span.ui-button-icon-only {
 	width: 16px;
 	height: 16px;
+}
+
+.filter-info {
+	margin-top: 10px;
 }
 
 .filter-panel {
@@ -350,6 +350,18 @@ span.ui-button-icon-only {
 	width: 16px;
 	height: 16px;
 	vertical-align: middle;
+}
+
+.filter-dialog .ui-tree {
+	margin-top: 0.4em;
+}
+
+.filter-dialog .ui-tree-container {
+	height: 240px !important;
+}
+
+.filter-dialog .ui-dialog-buttonpane {
+	padding: 0.3em 0 0 0 !important;
 }
 
 #mdx-editor-pane {
