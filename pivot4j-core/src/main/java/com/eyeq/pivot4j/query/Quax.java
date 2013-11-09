@@ -319,7 +319,7 @@ public class Quax implements Bookmarkable {
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("after initPositions " + this.toString());
+			logger.debug("after initPositions {}", this);
 		}
 	}
 
@@ -706,7 +706,7 @@ public class Quax implements Bookmarkable {
 			resolveUnions();
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("Expand after resolveUnions " + this.toString());
+				logger.debug("Expand after resolveUnions {}", this);
 			}
 		}
 
@@ -787,7 +787,7 @@ public class Quax implements Bookmarkable {
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("After expand " + this.toString());
+			logger.debug("After expand {}", this);
 		}
 
 		this.qubonMode = false;
@@ -834,7 +834,7 @@ public class Quax implements Bookmarkable {
 			resolveUnions();
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("Expand after resolveUnions " + this.toString());
+				logger.debug("Expand after resolveUnions {}", this);
 			}
 		}
 
@@ -894,7 +894,7 @@ public class Quax implements Bookmarkable {
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("After expand member " + this.toString());
+			logger.debug("After expand member {}", this);
 		}
 
 		this.hierarchizeNeeded = true;
@@ -944,7 +944,7 @@ public class Quax implements Bookmarkable {
 			resolveUnions();
 
 			if (logger.isDebugEnabled()) {
-				logger.debug("Collapse after resolveUnions " + this.toString());
+				logger.debug("Collapse after resolveUnions {}", this);
 			}
 		}
 
@@ -1163,7 +1163,7 @@ public class Quax implements Bookmarkable {
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("After collapse " + this.toString());
+			logger.debug("After collapse {}", this);
 		}
 
 		fireQuaxChanged(false);
@@ -1268,7 +1268,7 @@ public class Quax implements Bookmarkable {
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("After collapse " + this.toString());
+			logger.debug("After collapse {}", this);
 		}
 
 		fireQuaxChanged(false);
@@ -1517,8 +1517,8 @@ public class Quax implements Bookmarkable {
 		// we expect the hierarchies >= generateIndex to be excluded
 		// from hierarchize.
 		if (nDimension - generateIndex > nHierExclude && logger.isWarnEnabled()) {
-			logger.warn("Unexpected values: nHierExclude=" + nHierExclude
-					+ " generateIndex=" + generateIndex);
+			logger.warn("Unexpected values: nHierExclude={}, generateIndex={}",
+					nHierExclude, generateIndex);
 		}
 
 		// assume following situation:
@@ -2457,7 +2457,7 @@ public class Quax implements Bookmarkable {
 			// latest result
 			// the "Unknown Functions" are probably not properly resolved
 			if (logger.isErrorEnabled()) {
-				logger.error("Unkown FunCall " + quaxUtil.funCallName(oFun));
+				logger.error("Unkown FunCall {}", quaxUtil.funCallName(oFun));
 			}
 
 			if (ufMemberLists.get(hierIndex) == null) {
@@ -2581,7 +2581,7 @@ public class Quax implements Bookmarkable {
 			// latest result
 			// the "Unknown Functions" are probably not properly resolved
 			if (logger.isErrorEnabled()) {
-				logger.error("Unkown FunCall " + quaxUtil.funCallName(oFun));
+				logger.error("Unkown FunCall {}", quaxUtil.funCallName(oFun));
 			}
 
 			if (ufMemberLists.get(hierIndex) == null) {

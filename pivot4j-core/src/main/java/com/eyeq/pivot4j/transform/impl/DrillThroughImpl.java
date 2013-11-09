@@ -167,7 +167,7 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 		String mdx = builder.toString();
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Drill through MDX : " + mdx);
+			logger.debug("Drill through MDX : {}", mdx);
 		}
 
 		ResultSet result;

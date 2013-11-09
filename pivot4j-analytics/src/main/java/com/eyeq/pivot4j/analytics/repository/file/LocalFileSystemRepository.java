@@ -47,7 +47,7 @@ public class LocalFileSystemRepository extends AbstractFileSystemRepository {
 		String path = getRootPath();
 
 		if (log.isInfoEnabled()) {
-			log.info("Root repository path : " + path);
+			log.info("Root repository path : {}", path);
 		}
 
 		try {

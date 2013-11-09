@@ -74,7 +74,7 @@ public class PivotStateManager {
 		}
 
 		if (log.isInfoEnabled()) {
-			log.info("Using an existing view state : " + viewId);
+			log.info("Using an existing view state : {}", viewId);
 		}
 	}
 

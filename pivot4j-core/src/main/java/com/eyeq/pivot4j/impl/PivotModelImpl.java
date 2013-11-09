@@ -203,7 +203,7 @@ public class PivotModelImpl implements PivotModel {
 
 		Logger log = LoggerFactory.getLogger(getClass());
 		if (log.isDebugEnabled()) {
-			log.debug("Initializing model with MDX : " + mdxQuery);
+			log.debug("Initializing model with MDX : {}", mdxQuery);
 		}
 
 		this.queryAdapter = createQueryAdapter();
@@ -262,7 +262,7 @@ public class PivotModelImpl implements PivotModel {
 
 		if (connection != null) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Closing OLAP connection " + connection);
+				logger.debug("Closing OLAP connection {}", connection);
 			}
 
 			try {
@@ -599,7 +599,7 @@ public class PivotModelImpl implements PivotModel {
 	 */
 	protected void onMdxChanged(String mdx) {
 		if (logger.isInfoEnabled()) {
-			logger.info("setMdx: " + mdx);
+			logger.info("MDX has been changed : {}", mdx);
 		}
 
 		this.cellSet = null;
@@ -799,7 +799,7 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Change sorting to " + sorting);
+			logger.info("Change sorting to {}", sorting);
 		}
 
 		this.sorting = sorting;
@@ -823,8 +823,8 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Change sort mode from " + this.sortCriteria + " to "
-					+ sortCriteria);
+			logger.info("Change sort mode from {} to {}", this.sortCriteria,
+					sortCriteria);
 		}
 
 		this.sortCriteria = sortCriteria;
@@ -888,8 +888,8 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Change topBottomCount from " + this.topBottomCount
-					+ " to " + topBottomCount);
+			logger.info("Change topBottomCount from {} to {}",
+					this.topBottomCount, topBottomCount);
 		}
 
 		this.topBottomCount = topBottomCount;
@@ -1037,8 +1037,9 @@ public class PivotModelImpl implements PivotModel {
 								.getSegmentList());
 						if (member == null) {
 							if (logger.isWarnEnabled()) {
-								logger.warn("Sort position member not found "
-										+ sortPosUniqueNames[i]);
+								logger.warn(
+										"Sort position member not found {}",
+										sortPosUniqueNames[i]);
 							}
 
 							break;

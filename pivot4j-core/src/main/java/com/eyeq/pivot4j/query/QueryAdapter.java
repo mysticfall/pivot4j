@@ -902,11 +902,11 @@ public class QueryAdapter implements Bookmarkable {
 		Quax quax = findQuax(dim);
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Expand member" + getPositionString(null, member));
+			logger.info("Expand member{}", getPositionString(null, member));
 		}
 
 		if ((quax == null) || !quax.canExpand(member)) {
-			String msg = "Expand member failed for" + member.getUniqueName();
+			String msg = "Expand member failed for " + member.getUniqueName();
 			throw new PivotException(msg);
 		}
 
@@ -925,7 +925,7 @@ public class QueryAdapter implements Bookmarkable {
 		Quax quax = findQuax(dim);
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Expand path" + getPositionString(pathMembers, null));
+			logger.info("Expand path{}", getPositionString(pathMembers, null));
 		}
 
 		if ((quax == null) || !quax.canExpand(pathMembers)) {
@@ -967,14 +967,15 @@ public class QueryAdapter implements Bookmarkable {
 	 */
 	public void collapse(List<Member> pathMembers) {
 		if (logger.isDebugEnabled()) {
-			logger.debug("Collapse" + getPositionString(pathMembers, null));
+			logger.debug("Collapse{}", getPositionString(pathMembers, null));
 		}
 
 		Member member = pathMembers.get(pathMembers.size() - 1);
 		Dimension dim = member.getLevel().getHierarchy().getDimension();
+
 		Quax quax = findQuax(dim);
 		if (quax == null) {
-			String msg = "Collapse quax was null"
+			String msg = "Target quax was null"
 					+ getPositionString(pathMembers, null);
 			throw new PivotException(msg);
 		}
@@ -998,6 +999,7 @@ public class QueryAdapter implements Bookmarkable {
 		}
 
 		Dimension dim = member.getLevel().getHierarchy().getDimension();
+
 		Quax quax = findQuax(dim);
 		return (quax == null) ? false : quax.canDrillDown(member);
 	}
@@ -1022,16 +1024,16 @@ public class QueryAdapter implements Bookmarkable {
 		Quax quax = findQuax(member.getLevel().getHierarchy().getDimension());
 
 		if (quax == null) {
-			logger.info("drillDown Quax was null"
-					+ getPositionString(null, member));
-			return;
+			String msg = "Target quax was null"
+					+ getPositionString(null, member);
+			throw new PivotException(msg);
 		}
 
 		// replace dimension iDim by monMember.children
 		quax.drillDown(member);
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Drill down " + getPositionString(null, member));
+			logger.info("Drill down{}", getPositionString(null, member));
 		}
 	}
 
@@ -1051,7 +1053,7 @@ public class QueryAdapter implements Bookmarkable {
 		quax.drillUp(hierarchy);
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Drill up hierarchy " + hierarchy.getCaption());
+			logger.info("Drill up hierarchy {}", hierarchy.getCaption());
 		}
 	}
 

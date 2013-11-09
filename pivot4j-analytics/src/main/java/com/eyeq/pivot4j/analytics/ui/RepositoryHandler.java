@@ -117,7 +117,7 @@ public class RepositoryHandler implements ViewStateListener {
 		this.activeViewId = state.getId();
 
 		if (log.isInfoEnabled()) {
-			log.info("Created a new view state : " + state.getId());
+			log.info("Created a new view state : {}", state.getId());
 		}
 
 		RequestContext requestContext = RequestContext.getCurrentInstance();
@@ -145,7 +145,7 @@ public class RepositoryHandler implements ViewStateListener {
 		String path = builder.toString();
 
 		if (log.isInfoEnabled()) {
-			log.info("Creating a new folder : " + path);
+			log.info("Creating a new folder : {}", path);
 		}
 
 		try {
@@ -440,7 +440,7 @@ public class RepositoryHandler implements ViewStateListener {
 		viewStateHolder.registerState(state);
 
 		if (log.isInfoEnabled()) {
-			log.info("Created a new view state : " + viewId);
+			log.info("Created a new view state : {}", viewId);
 		}
 
 		this.activeViewId = viewId;

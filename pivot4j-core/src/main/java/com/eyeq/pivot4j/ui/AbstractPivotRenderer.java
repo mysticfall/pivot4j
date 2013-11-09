@@ -596,7 +596,8 @@ public abstract class AbstractPivotRenderer<T1 extends RenderContext, T2 extends
 		if (sortMode == null) {
 			Logger logger = LoggerFactory.getLogger(getClass());
 			if (logger.isWarnEnabled()) {
-				logger.warn("Ignoring unknown sort mode name : " + sortModeName);
+				logger.warn("Ignoring unknown sort mode name : {}",
+						sortModeName);
 			}
 
 			this.sortMode = SortMode.BASIC;

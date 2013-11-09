@@ -85,10 +85,10 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		// generate the crossjoins
 		quax.regeneratePosTree(sets, true);
 
-		if (logger.isInfoEnabled()) {
-			logger.info("setQueryAxis axis=" + quax.getOrdinal()
-					+ " nDimension=" + nDimension);
-			logger.info("Expression for Axis=" + quax.toString());
+		if (logger.isDebugEnabled()) {
+			logger.debug("setQueryAxis axis={}, nDimension={}",
+					quax.getOrdinal(), nDimension);
+			logger.debug("Expression for the axis : ", quax);
 		}
 	}
 

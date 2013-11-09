@@ -95,7 +95,7 @@ public class ViewStateHolder {
 	@PreDestroy
 	protected void destroy() {
 		if (log.isInfoEnabled()) {
-			log.info("Destroying view state holder for session : " + sessionId);
+			log.info("Destroying view state holder for session : {}", sessionId);
 		}
 
 		this.timer.cancel();
@@ -110,7 +110,8 @@ public class ViewStateHolder {
 		if (log.isDebugEnabled()) {
 			log.debug("Checking for abandoned view states for session : "
 					+ sessionId);
-			log.debug("Current view state count for session : " + states.size());
+			log.debug("Current view state count for session : {}",
+					states.size());
 		}
 
 		Set<String> keys = new HashSet<String>(states.keySet());
@@ -124,7 +125,7 @@ public class ViewStateHolder {
 
 			if (expires * 1000 <= elapsed) {
 				if (log.isInfoEnabled()) {
-					log.info("Found an abandoned view sate : " + state);
+					log.info("Found an abandoned view sate : {}", state);
 				}
 
 				unregisterState(state);
@@ -139,7 +140,7 @@ public class ViewStateHolder {
 		ViewState state = getState(id);
 
 		if (log.isDebugEnabled()) {
-			log.debug("Received a keep alive request : " + state);
+			log.debug("Received a keep alive request : {}", state);
 		}
 
 		if (state != null) {
@@ -188,8 +189,8 @@ public class ViewStateHolder {
 		fireViewRegistered(state);
 
 		if (log.isInfoEnabled()) {
-			log.info("View state is registered : " + state);
-			log.info("Current view state count for session : " + states.size());
+			log.info("View state is registered : {}", state);
+			log.info("Current view state count for session : {}", states.size());
 		}
 	}
 
@@ -223,8 +224,8 @@ public class ViewStateHolder {
 		fireViewUnregistered(state);
 
 		if (log.isInfoEnabled()) {
-			log.info("View state is unregistered : " + state);
-			log.info("Current view state count for session : " + states.size());
+			log.info("View state is unregistered : {}", state);
+			log.info("Current view state count for session : {}", states.size());
 		}
 	}
 

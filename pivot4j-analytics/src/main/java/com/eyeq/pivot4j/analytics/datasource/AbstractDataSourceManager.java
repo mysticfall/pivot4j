@@ -111,7 +111,7 @@ public abstract class AbstractDataSourceManager<T extends DataSourceInfo>
 
 		synchronized (this) {
 			if (logger.isInfoEnabled()) {
-				logger.info("Disposing data source : " + definition);
+				logger.info("Disposing data source : {}", definition);
 			}
 
 			OlapDataSource dataSource = dataSources.get(definition);
@@ -124,8 +124,8 @@ public abstract class AbstractDataSourceManager<T extends DataSourceInfo>
 						closeable.close();
 					} catch (SQLException e) {
 						if (logger.isErrorEnabled()) {
-							logger.error("Failed to close data source : "
-									+ definition, e);
+							logger.error("Failed to close data source : {}",
+									definition, e);
 						}
 					}
 				}
@@ -158,7 +158,7 @@ public abstract class AbstractDataSourceManager<T extends DataSourceInfo>
 		synchronized (this) {
 			if (!dataSources.containsKey(definition)) {
 				if (logger.isInfoEnabled()) {
-					logger.info("Registering data source : " + definition);
+					logger.info("Registering data source : {}", definition);
 				}
 
 				OlapDataSource dataSource = createDataSource(definition);

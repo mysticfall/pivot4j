@@ -24,7 +24,7 @@ public abstract class AbstractExpressionEvaluator implements
 	public Object evaluate(String expression, ExpressionContext context) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Evaluating expression : ");
-			logger.debug("	- expression : " + expression);
+			logger.debug("	- expression : {}", expression);
 		}
 
 		Object result;
@@ -39,7 +39,7 @@ public abstract class AbstractExpressionEvaluator implements
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("	- result : " + result);
+			logger.debug("	- result : {}", result);
 		}
 
 		return result;

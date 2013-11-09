@@ -71,7 +71,7 @@ public class DefaultAggregatorFactory implements AggregatorFactory {
 		if (aggregator == null) {
 			Logger logger = LoggerFactory.getLogger(getClass());
 			if (logger.isWarnEnabled()) {
-				logger.warn("Unknown aggregator name : " + name);
+				logger.warn("Unknown aggregator name : {}", name);
 			}
 		}
 

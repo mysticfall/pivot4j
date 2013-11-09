@@ -150,10 +150,10 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		// generate the crossjoins
 		quax.regeneratePosTree(expressions, true);
 
-		if (logger.isInfoEnabled()) {
-			logger.info("setQueryAxis axis=" + quax.getOrdinal()
-					+ " nDimension=" + hierarchies.size());
-			logger.info("Expression for Axis=" + quax.toString());
+		if (logger.isDebugEnabled()) {
+			logger.debug("setQueryAxis axis={}, nDimension={}",
+					quax.getOrdinal(), hierarchies.size());
+			logger.debug("Expression for the axis : {}", quax);
 		}
 	}
 
@@ -313,8 +313,9 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 				findVisibleMembers(hierarchy));
 		if (!selection.contains(member)) {
 			if (logger.isWarnEnabled()) {
-				logger.warn("The specified member is not visible on the current result : "
-						+ member.getUniqueName());
+				logger.warn(
+						"The specified member is not visible on the current result : {}",
+						member.getUniqueName());
 			}
 			return;
 		}

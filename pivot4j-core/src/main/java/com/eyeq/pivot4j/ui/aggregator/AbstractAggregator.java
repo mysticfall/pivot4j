@@ -157,10 +157,10 @@ public abstract class AbstractAggregator implements Aggregator {
 
 		if (members.isEmpty() && logger.isTraceEnabled()) {
 			logger.trace("Calculation result : ");
-			logger.trace("	- count : " + count);
-			logger.trace("	- value : " + cellValue);
-			logger.trace("	- old value : " + value);
-			logger.trace("	- new value : " + newValue);
+			logger.trace("	- count : {}", count);
+			logger.trace("	- value : {}", cellValue);
+			logger.trace("	- old value : {}", value);
+			logger.trace("	- new value : {}", newValue);
 		}
 	}
 
@@ -202,7 +202,7 @@ public abstract class AbstractAggregator implements Aggregator {
 				format = new DecimalFormat(pattern);
 			} catch (IllegalArgumentException e) {
 				if (logger.isWarnEnabled()) {
-					logger.warn("Illegal number format : " + pattern);
+					logger.warn("Illegal number format : {}", pattern);
 				}
 			}
 		}

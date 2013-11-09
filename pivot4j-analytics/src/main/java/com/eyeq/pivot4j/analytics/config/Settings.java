@@ -87,7 +87,7 @@ public class Settings {
 		}
 
 		if (logger.isInfoEnabled()) {
-			logger.info("Using application home : " + path);
+			logger.info("Using application home : {}", path);
 		}
 
 		this.applicationHome = new File(path);

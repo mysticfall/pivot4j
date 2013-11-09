@@ -110,10 +110,10 @@ public class PooledOlapDataSource extends AbstractOlapDataSource implements
 			GenericObjectPool.Config config) {
 		if (logger.isInfoEnabled()) {
 			logger.info("Creating connection pool with following parameters : ");
-			logger.info("	- max active : " + config.maxActive);
-			logger.info("	- max idle : " + config.maxIdle);
-			logger.info("	- min idle: " + config.minIdle);
-			logger.info("	- max wait : " + config.maxWait);
+			logger.info("	- max active : {}", config.maxActive);
+			logger.info("	- max idle : {}", config.maxIdle);
+			logger.info("	- min idle: {}", config.minIdle);
+			logger.info("	- max wait : {}", config.maxWait);
 		}
 		return new GenericObjectPool<OlapConnection>(factory, config);
 	}
@@ -282,7 +282,7 @@ public class PooledOlapDataSource extends AbstractOlapDataSource implements
 		@Override
 		public void destroyObject(OlapConnection con) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Closing a returned connection object : " + con);
+				logger.debug("Closing a returned connection object : {}", con);
 			}
 
 			try {

@@ -121,10 +121,10 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 			// generate the crossjoins
 			quax.regeneratePosTree(expressions, true);
 
-			if (logger.isInfoEnabled()) {
-				logger.info("setQueryAxis axis=" + quax.getOrdinal()
-						+ " nDimension=" + hierarchies.size());
-				logger.info("Expression for Axis=" + quax.toString());
+			if (logger.isDebugEnabled()) {
+				logger.debug("setQueryAxis axis={}, nDimension={}",
+						quax.getOrdinal(), hierarchies.size());
+				logger.debug("Expression for the axis : ", quax);
 			}
 		} catch (OlapException e) {
 			throw new PivotException(e);

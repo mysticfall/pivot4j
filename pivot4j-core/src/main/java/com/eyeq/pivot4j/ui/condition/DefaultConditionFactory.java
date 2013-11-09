@@ -71,7 +71,7 @@ public class DefaultConditionFactory implements ConditionFactory {
 
 		if (type != null) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Instantiating a new condition : " + type);
+				logger.debug("Instantiating a new condition : {}", type);
 			}
 
 			try {
@@ -84,7 +84,7 @@ public class DefaultConditionFactory implements ConditionFactory {
 		}
 
 		if (condition == null && logger.isWarnEnabled()) {
-			logger.warn("Unknown condition name : " + name);
+			logger.warn("Unknown condition name : {}", name);
 		}
 
 		return condition;

@@ -1305,7 +1305,7 @@ public class TableRenderer extends
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Original axis tree root for " + axis);
+			logger.debug("Original axis tree root for {}", axis);
 
 			axisRoot.walkTree(new TreeNodeCallback<TableAxisContext>() {
 
@@ -1476,7 +1476,7 @@ public class TableRenderer extends
 		}
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("Configured axis tree root for " + axis);
+			logger.debug("Configured axis tree root for {}", axis);
 
 			node.walkTree(new TreeNodeCallback<TableAxisContext>() {
 
