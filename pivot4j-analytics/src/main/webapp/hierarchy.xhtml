@@ -22,8 +22,7 @@
 
 				<p:panel styleClass="source-panel">
 					<f:facet name="header">
-						<h:outputText
-							value="#{msg['header.hierarchyConfig.members.all']}" />
+						<h:outputText value="#{msg['header.hierarchyConfig.members.all']}" />
 					</f:facet>
 
 					<p:tree id="member-tree" styleClass="navigator"
@@ -37,7 +36,9 @@
 						</p:treeNode>
 
 						<p:ajax event="select" update=":hierarchy-form:source-ctrl-panel"
-							listener="#{memberSelectionHandler.onSourceNodeSelected}" />
+							listener="#{memberSelectionHandler.onSourceNodeSelected}">
+							<f:param name="skipRender" value="true" />
+						</p:ajax>
 					</p:tree>
 
 					<p:contextMenu id="hierarchy-source-menu"
@@ -46,24 +47,26 @@
 							action="#{memberSelectionHandler.add}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
 							<f:param name="mode" value="Single" />
+							<f:param name="skipRender" value="true" />
 						</p:menuitem>
-						<p:menuitem
-							value="#{msg['menu.hierarchyConfig.select.siblings']}"
+						<p:menuitem value="#{msg['menu.hierarchyConfig.select.siblings']}"
 							action="#{memberSelectionHandler.add}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
 							<f:param name="mode" value="Sibling" />
+							<f:param name="skipRender" value="true" />
 						</p:menuitem>
-						<p:menuitem
-							value="#{msg['menu.hierarchyConfig.select.children']}"
+						<p:menuitem value="#{msg['menu.hierarchyConfig.select.children']}"
 							action="#{memberSelectionHandler.add}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
 							<f:param name="mode" value="Children" />
+							<f:param name="skipRender" value="true" />
 						</p:menuitem>
 						<p:menuitem
 							value="#{msg['menu.hierarchyConfig.select.descendants']}"
 							action="#{memberSelectionHandler.add}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-plus">
 							<f:param name="mode" value="Descendants" />
+							<f:param name="skipRender" value="true" />
 						</p:menuitem>
 					</p:contextMenu>
 				</p:panel>
@@ -75,13 +78,17 @@
 							action="#{memberSelectionHandler.add}"
 							binding="#{memberSelectionHandler.buttonAdd}"
 							update="hierarchy-config-grid,button-bar"
-							disabled="#{!memberSelectionHandler.addButtonEnabled}" />
+							disabled="#{!memberSelectionHandler.addButtonEnabled}">
+							<f:param name="skipRender" value="true" />
+						</p:commandButton>
 						<p:commandButton id="button-remove" icon="ui-icon-carat-1-w"
 							value="#{msg['button.remove']}"
 							action="#{memberSelectionHandler.remove}"
 							binding="#{memberSelectionHandler.buttonRemove}"
 							update="hierarchy-config-grid,button-bar"
-							disabled="#{!memberSelectionHandler.removeButtonEnabled}" />
+							disabled="#{!memberSelectionHandler.removeButtonEnabled}">
+							<f:param name="skipRender" value="true" />
+						</p:commandButton>
 					</p:outputPanel>
 				</h:panelGroup>
 
@@ -102,7 +109,9 @@
 
 						<p:ajax event="select"
 							update=":hierarchy-form:source-ctrl-panel,:hierarchy-form:target-ctrl-panel"
-							listener="#{memberSelectionHandler.onTargetNodeSelected}" />
+							listener="#{memberSelectionHandler.onTargetNodeSelected}">
+							<f:param name="skipRender" value="true" />
+						</p:ajax>
 					</p:tree>
 
 					<p:contextMenu id="hierarchy-target-menu"
@@ -111,24 +120,26 @@
 							action="#{memberSelectionHandler.remove}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
 							<f:param name="mode" value="Single" />
+							<f:param name="skipRender" value="true" />
 						</p:menuitem>
-						<p:menuitem
-							value="#{msg['menu.hierarchyConfig.remove.siblings']}"
+						<p:menuitem value="#{msg['menu.hierarchyConfig.remove.siblings']}"
 							action="#{memberSelectionHandler.remove}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
 							<f:param name="mode" value="Sibling" />
+							<f:param name="skipRender" value="true" />
 						</p:menuitem>
-						<p:menuitem
-							value="#{msg['menu.hierarchyConfig.remove.children']}"
+						<p:menuitem value="#{msg['menu.hierarchyConfig.remove.children']}"
 							action="#{memberSelectionHandler.remove}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
 							<f:param name="mode" value="Children" />
+							<f:param name="skipRender" value="true" />
 						</p:menuitem>
 						<p:menuitem
 							value="#{msg['menu.hierarchyConfig.remove.descendants']}"
 							action="#{memberSelectionHandler.remove}"
 							update="hierarchy-config-grid,button-bar" icon="ui-icon-trash">
 							<f:param name="mode" value="Descendants" />
+							<f:param name="skipRender" value="true" />
 						</p:menuitem>
 					</p:contextMenu>
 				</p:panel>
@@ -140,13 +151,17 @@
 							action="#{memberSelectionHandler.moveUp}"
 							binding="#{memberSelectionHandler.buttonUp}"
 							update="selection-tree,target-ctrl-panel,:hierarchy-form:button-bar"
-							disabled="#{!memberSelectionHandler.upButtonEnabled}" />
+							disabled="#{!memberSelectionHandler.upButtonEnabled}">
+							<f:param name="skipRender" value="true" />
+						</p:commandButton>
 						<p:commandButton id="button-down" icon="ui-icon-carat-1-s"
 							value="#{msg['button.down']}"
 							action="#{memberSelectionHandler.moveDown}"
 							binding="#{memberSelectionHandler.buttonDown}"
 							update="selection-tree,target-ctrl-panel,:hierarchy-form:button-bar"
-							disabled="#{!memberSelectionHandler.downButtonEnabled}" />
+							disabled="#{!memberSelectionHandler.downButtonEnabled}">
+							<f:param name="skipRender" value="true" />
+						</p:commandButton>
 					</p:outputPanel>
 				</h:panelGroup>
 			</h:panelGrid>

@@ -276,6 +276,7 @@
 									update=":hierarchy-form" oncomplete="hierarchyConfig.show();"
 									title="#{msg['button.hierarchyConfig.tooltip']}">
 									<f:param name="hierarchy" value="#{node.name}" />
+									<f:param name="skipRender" value="true" />
 								</p:commandButton>
 								<!-- workaround for PrimeFaces issue #4748 -->
 								<p:draggable for="hierarchy-node"
