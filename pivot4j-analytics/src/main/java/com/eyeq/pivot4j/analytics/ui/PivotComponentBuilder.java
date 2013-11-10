@@ -23,12 +23,18 @@ import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.DoubleConverter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.olap4j.Axis;
+import org.olap4j.Cell;
+import org.primefaces.component.behavior.ajax.AjaxBehavior;
+import org.primefaces.component.behavior.ajax.AjaxBehaviorListenerImpl;
 import org.primefaces.component.column.Column;
 import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.inplace.Inplace;
+import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.component.row.Row;
 import org.slf4j.Logger;
@@ -67,6 +73,8 @@ public class PivotComponentBuilder extends
 	private Column column;
 
 	private int commandIndex = 0;
+
+	private boolean scenarioEnabled = false;
 
 	/**
 	 * @param facesContext
@@ -155,6 +163,8 @@ public class PivotComponentBuilder extends
 		getRenderPropertyUtils().setSuppressErrors(true);
 
 		this.commandIndex = 0;
+		this.scenarioEnabled = context.getModel().isScenarioSupported()
+				&& context.getModel().getScenario() != null;
 	}
 
 	/**
@@ -385,6 +395,7 @@ public class PivotComponentBuilder extends
 				button.setActionExpression(expression);
 				button.setUpdate(":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:source-tree-form,:target-tree-form");
 				button.setOncomplete("onViewChanged()");
+				button.setProcess("@this");
 
 				UIParameter commandParam = new UIParameter();
 				commandParam.setName("command");
@@ -446,23 +457,59 @@ public class PivotComponentBuilder extends
 			elContext.remove("value");
 		}
 
-		HtmlOutputText text = new HtmlOutputText();
-		String id = "txt-" + text.hashCode();
+		Cell cell = context.getCell();
 
-		text.setId(id);
-		text.setValue(labelText);
+		if (scenarioEnabled && context.getCellType().equals(VALUE)
+				&& cell != null) {
+			Inplace inplace = new Inplace();
+			inplace.setId("inplace-" + context.getCell().getOrdinal());
+			inplace.setLabel(labelText);
+			inplace.setEditor(true);
 
-		String link = propertyUtils.getString("link",
-				context.getRenderPropertyCategory(), null);
+			InputText input = new InputText();
+			input.setId("input-" + context.getCell().getOrdinal());
+			input.setValue(value);
+			input.setConverter(new DoubleConverter());
 
-		if (link == null) {
-			column.getChildren().add(text);
+			MethodExpression expression = expressionFactory
+					.createMethodExpression(facesContext.getELContext(),
+							"#{pivotGridHandler.updateCell}", Void.class,
+							new Class<?>[0]);
+
+			AjaxBehavior behavior = new AjaxBehavior();
+			behavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(
+					expression, expression));
+			behavior.setProcess("@this");
+			behavior.setUpdate("@form");
+
+			UIParameter commandParam = new UIParameter();
+			commandParam.setName("cell");
+			commandParam.setValue(Integer.toString(cell.getOrdinal()));
+
+			inplace.addClientBehavior("save", behavior);
+			inplace.getChildren().add(commandParam);
+			inplace.getChildren().add(input);
+
+			column.getChildren().add(inplace);
 		} else {
-			HtmlOutputLink anchor = new HtmlOutputLink();
-			anchor.setValue(link);
-			anchor.getChildren().add(text);
+			HtmlOutputText text = new HtmlOutputText();
+			String id = "txt-" + text.hashCode();
 
-			column.getChildren().add(anchor);
+			text.setId(id);
+			text.setValue(labelText);
+
+			String link = propertyUtils.getString("link",
+					context.getRenderPropertyCategory(), null);
+
+			if (link == null) {
+				column.getChildren().add(text);
+			} else {
+				HtmlOutputLink anchor = new HtmlOutputLink();
+				anchor.setValue(link);
+				anchor.getChildren().add(text);
+
+				column.getChildren().add(anchor);
+			}
 		}
 	}
 
@@ -536,6 +583,7 @@ public class PivotComponentBuilder extends
 		}
 
 		this.commandIndex = 0;
+		this.scenarioEnabled = false;
 
 		super.endRender(context);
 	}

@@ -10,18 +10,23 @@ import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIInput;
 import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
+import org.olap4j.AllocationPolicy;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapDataSource;
+import org.olap4j.OlapException;
+import org.olap4j.Scenario;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Schema;
 import org.primefaces.component.panelgrid.PanelGrid;
@@ -392,6 +397,30 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		command.execute(model, parameters);
 	}
 
+	public void updateCell() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		Map<String, String> parameters = context.getExternalContext()
+				.getRequestParameterMap();
+
+		int ordinal = Integer.parseInt(parameters.get("cell"));
+
+		String id = "input-" + ordinal;
+
+		UIInput input = (UIInput) component.findComponent(id);
+		Double value = (Double) input.getValue();
+
+		Cell cell = model.getCellSet().getCell(ordinal);
+
+		try {
+			cell.setValue(value, AllocationPolicy.EQUAL_ALLOCATION);
+		} catch (OlapException e) {
+			throw new FacesException(e);
+		}
+
+		model.refresh();
+	}
+
 	public void executeMdx() {
 		String oldMdx = model.getCurrentMdx();
 
@@ -542,6 +571,28 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	public void setNonEmpty(boolean nonEmpty) {
 		NonEmpty transform = model.getTransform(NonEmpty.class);
 		transform.setNonEmpty(nonEmpty);
+	}
+
+	/**
+	 * @return the scenarioEnabled
+	 */
+	public boolean isScenarioEnabled() {
+		return model.getScenario() != null;
+	}
+
+	/**
+	 * @param scenarioEnabled
+	 *            the scenarioEnabled to set
+	 */
+	public void setScenarioEnabled(boolean scenarioEnabled) {
+		if (scenarioEnabled) {
+			if (model.getScenario() == null) {
+				Scenario scenario = model.createScenario();
+				model.setScenario(scenario);
+			}
+		} else {
+			model.setScenario(null);
+		}
 	}
 
 	/**

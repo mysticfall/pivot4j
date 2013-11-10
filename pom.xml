@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.eyeq</groupId>
@@ -59,7 +60,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.slf4j>1.7.5</version.slf4j>
 		<version.log4j>2.0-beta9</version.log4j>
 
-		<version.mondrian>3.6.0</version.mondrian>
+		<version.mondrian>3.6.1</version.mondrian>
 		<version.olap4j>1.1.0</version.olap4j>
 		<version.pentaho>5.0.0</version.pentaho>
 

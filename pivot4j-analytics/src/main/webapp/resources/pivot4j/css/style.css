@@ -253,7 +253,7 @@ body.report .pe-layout-pane-header {
 	border: none;
 }
 
-.pivot-grid .value-cell {
+.pivot-grid .value-cell, .pivot-grid .value-cell .ui-inputfield {
 	text-align: right;
 }
 

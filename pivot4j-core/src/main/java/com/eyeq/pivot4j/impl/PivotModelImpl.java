@@ -10,6 +10,7 @@ package com.eyeq.pivot4j.impl;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +31,7 @@ import org.olap4j.OlapDatabaseMetaData;
 import org.olap4j.OlapException;
 import org.olap4j.OlapStatement;
 import org.olap4j.Position;
+import org.olap4j.Scenario;
 import org.olap4j.mdx.IdentifierNode;
 import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.Cube;
@@ -76,6 +78,8 @@ public class PivotModelImpl implements PivotModel {
 	private Locale locale;
 
 	private boolean initialized = false;
+
+	private Boolean scenarioSupported;
 
 	private Collection<ModelChangeListener> modelListeners = new LinkedList<ModelChangeListener>();
 
@@ -367,6 +371,95 @@ public class PivotModelImpl implements PivotModel {
 		return connection;
 	}
 
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#isScenarioSupported()
+	 */
+	@Override
+	public boolean isScenarioSupported() {
+		if (scenarioSupported == null) {
+			Cube cube = getCube();
+
+			Schema schema = cube.getSchema();
+			Catalog catalog = schema.getCatalog();
+
+			OlapDatabaseMetaData metadata = cube.getSchema().getCatalog()
+					.getMetaData();
+
+			ResultSet rs = null;
+
+			try {
+				// TODO See Olap4J's issue #116
+				if (metadata.getDriverName().startsWith("Mondrian")) {
+					Dimension dimension = cube.getDimensions().get("Scenario");
+					this.scenarioSupported = dimension != null;
+				} else {
+					rs = metadata.getCubes(catalog.getName(), schema.getName(),
+							cube.getName());
+					if (rs.next()) {
+						scenarioSupported = rs.getBoolean("IS_WRITE_ENABLED");
+					}
+				}
+			} catch (SQLException e) {
+				throw new PivotException(e);
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+					}
+				}
+			}
+		}
+
+		return Boolean.TRUE.equals(scenarioSupported);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#createScenario()
+	 */
+	@Override
+	public Scenario createScenario() {
+		checkInitialization();
+
+		try {
+			return connection.createScenario();
+		} catch (OlapException e) {
+			throw new PivotException(e);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#getScenario()
+	 */
+	@Override
+	public Scenario getScenario() {
+		checkInitialization();
+
+		try {
+			return connection.getScenario();
+		} catch (OlapException e) {
+			throw new PivotException(e);
+		}
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.PivotModel#setScenario(org.olap4j.Scenario)
+	 */
+	@Override
+	public void setScenario(Scenario scenario) {
+		checkInitialization();
+
+		try {
+			connection.setScenario(scenario);
+		} catch (OlapException e) {
+			throw new PivotException(e);
+		}
+
+		refresh();
+
+		fireModelChanged();
+	}
+
 	public OlapDataSource getDataSource() {
 		return dataSource;
 	}
@@ -603,6 +696,7 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		this.cellSet = null;
+		this.scenarioSupported = null;
 		this.topBottomCount = 10;
 		this.sortCriteria = SortCriteria.ASC;
 		this.sorting = false;

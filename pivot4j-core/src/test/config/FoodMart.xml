@@ -291,6 +291,17 @@ fullname
       <Level name="Yearly Income" column="yearly_income" uniqueMembers="true"/>
     </Hierarchy>
   </Dimension>
+  <Dimension name="Scenario" foreignKey="time_id">
+    <Hierarchy primaryKey="time_id" hasAll="true">
+      <InlineTable alias="_dummy">
+        <ColumnDefs>
+          <ColumnDef name="foo" type="Numeric"/>
+        </ColumnDefs>
+        <Rows/>
+      </InlineTable>
+      <Level name="Scenario" column="foo"/>
+    </Hierarchy>
+  </Dimension>
 
   <Measure name="Unit Sales" column="unit_sales" aggregator="sum"
       formatString="Standard"/>

@@ -15,6 +15,7 @@ import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapDatabaseMetaData;
 import org.olap4j.Position;
+import org.olap4j.Scenario;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
@@ -60,6 +61,34 @@ public interface PivotModel extends Configurable, Bookmarkable {
 	 * @throws NotInitializedException
 	 */
 	CellSet getCellSet();
+
+	/**
+	 * Returns if the current cube supports scenario (cell writeback feature).
+	 * 
+	 * @throws NotInitializedException
+	 */
+	boolean isScenarioSupported();
+
+	/**
+	 * Create a new scenario.
+	 * 
+	 * @throws NotInitializedException
+	 */
+	Scenario createScenario();
+
+	/**
+	 * Returns a scenario for the active connection.
+	 * 
+	 * @throws NotInitializedException
+	 */
+	Scenario getScenario();
+
+	/**
+	 * Sets the specified scenario for the active connection.
+	 * 
+	 * @throws NotInitializedException
+	 */
+	void setScenario(Scenario scenario);
 
 	/**
 	 * Flushes the last query result.

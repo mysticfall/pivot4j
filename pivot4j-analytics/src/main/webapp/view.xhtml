@@ -111,6 +111,15 @@
 								rendered="#{!pivotStateManager.readOnly}">
 								<p:ajax update=":grid-form" />
 							</p:selectBooleanButton>
+							<p:selectBooleanButton
+								value="#{pivotGridHandler.scenarioEnabled}"
+								title="#{msg['toolbar.scenario.tooltip']}"
+								onLabel="#{msg['toolbar.scenario']}"
+								offLabel="#{msg['toolbar.scenario']}"
+								disabled="#{!pivotGridHandler.valid or !pivotStateManager.model.scenarioSupported}"
+								rendered="#{!pivotStateManager.readOnly}">
+								<p:ajax update=":grid-form" />
+							</p:selectBooleanButton>
 							<p:separator rendered="#{!pivotStateManager.readOnly}" />
 							<p:commandButton value="#{msg['toolbar.properties']}"
 								title="#{msg['toolbar.properties.tooltip']}" type="button"
@@ -393,7 +402,7 @@
 				</pe:layoutPane>
 
 				<pe:layoutPane id="grid-content-pane" position="center">
-					<h:form id="grid-form">
+					<h:form id="grid-form" onkeypress="return event.keyCode != 13;">
 						<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
 							binding="#{pivotGridHandler.component}"
 							rendered="#{pivotGridHandler.valid and empty chartHandler.chartName}" />
