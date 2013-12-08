@@ -109,7 +109,7 @@
 								offLabel="#{msg['toolbar.drill.through']}"
 								disabled="#{!pivotGridHandler.valid or !pivotStateManager.model.cube.drillThroughEnabled}"
 								rendered="#{!pivotStateManager.readOnly}">
-								<p:ajax update=":grid-form" />
+								<p:ajax update=":grid-form" oncomplete="onViewChanged()" />
 							</p:selectBooleanButton>
 							<p:selectBooleanButton
 								value="#{pivotGridHandler.scenarioEnabled}"
