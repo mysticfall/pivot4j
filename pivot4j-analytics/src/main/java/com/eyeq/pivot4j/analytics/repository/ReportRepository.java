@@ -12,21 +12,24 @@ public interface ReportRepository {
 
 	ReportFile getFile(String path) throws IOException;
 
+	ReportFile getFileById(String id) throws IOException;
+
 	boolean exists(String path) throws IOException;
+
+	boolean fileWithIdExists(String id) throws IOException;
 
 	List<ReportFile> getFiles(ReportFile parent) throws IOException;
 
-	List<ReportFile> getFiles(ReportFile parent,
-			RepositoryFileFilter filter) throws IOException;
+	List<ReportFile> getFiles(ReportFile parent, RepositoryFileFilter filter)
+			throws IOException;
 
 	ReportFile createDirectory(ReportFile parent, String name)
 			throws IOException;
 
-	ReportFile createFile(ReportFile parent, String name,
-			ReportContent content) throws IOException, ConfigurationException;
+	ReportFile createFile(ReportFile parent, String name, ReportContent content)
+			throws IOException, ConfigurationException;
 
-	ReportFile renameFile(ReportFile file, String newName)
-			throws IOException;
+	ReportFile renameFile(ReportFile file, String newName) throws IOException;
 
 	void deleteFile(ReportFile file) throws IOException;
 

@@ -2,6 +2,7 @@ package com.eyeq.pivot4j.analytics.state;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -29,6 +30,8 @@ public class ViewState {
 	private PivotModel model;
 
 	private Serializable rendererState;
+
+	private Map<String, Object> parameters;
 
 	/**
 	 * @param id
@@ -90,6 +93,10 @@ public class ViewState {
 	 *            the name to set
 	 */
 	public void setName(String name) {
+		if (name == null) {
+			throw new NullArgumentException("name");
+		}
+
 		this.name = name;
 	}
 
@@ -173,6 +180,21 @@ public class ViewState {
 	 */
 	public void setRendererState(Serializable rendererState) {
 		this.rendererState = rendererState;
+	}
+
+	/**
+	 * @return the parameters
+	 */
+	public Map<String, Object> getParameters() {
+		return parameters;
+	}
+
+	/**
+	 * @param parameters
+	 *            the parameters to set
+	 */
+	public void setParameters(Map<String, Object> parameters) {
+		this.parameters = parameters;
 	}
 
 	/**

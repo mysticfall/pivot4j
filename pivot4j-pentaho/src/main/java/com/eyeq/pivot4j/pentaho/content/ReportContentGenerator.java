@@ -54,7 +54,7 @@ public class ReportContentGenerator extends BaseContentGenerator {
 
 		request.setAttribute("file", file);
 		request.getRequestDispatcher(
-				"/plugin/pivot4j/faces/pentaho.xhtml?editable=" + isEditable())
+				"/plugin/pivot4j/faces/open.xhtml?editable=" + isEditable())
 				.forward(request, response);
 	}
 }

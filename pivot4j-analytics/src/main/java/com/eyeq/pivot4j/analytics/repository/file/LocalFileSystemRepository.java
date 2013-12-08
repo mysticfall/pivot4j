@@ -87,6 +87,14 @@ public class LocalFileSystemRepository extends AbstractFileSystemRepository {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#fileWithIdExists(java.lang.String)
+	 */
+	@Override
+	public boolean fileWithIdExists(String id) throws IOException {
+		return exists(id);
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFile(java.lang.String)
 	 */
 	@Override
@@ -98,6 +106,14 @@ public class LocalFileSystemRepository extends AbstractFileSystemRepository {
 		}
 
 		return new LocalFile(file, root.getRoot());
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFileById(java.lang.String)
+	 */
+	@Override
+	public ReportFile getFileById(String id) throws IOException {
+		return getFile(id);
 	}
 
 	/**

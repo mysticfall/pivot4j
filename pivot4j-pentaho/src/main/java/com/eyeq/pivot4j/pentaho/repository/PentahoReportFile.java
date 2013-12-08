@@ -54,6 +54,10 @@ public class PentahoReportFile extends AbstractReportFile {
 		return file.getName();
 	}
 
+	public String getTitle() {
+		return file.getTitle();
+	}
+
 	/**
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportFile#getPath()
 	 */

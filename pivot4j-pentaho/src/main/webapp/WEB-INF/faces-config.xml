@@ -22,8 +22,7 @@
 
 	<factory>
 		<exception-handler-factory>
-			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
-		</exception-handler-factory>
+			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
 	</factory>
 
 	<managed-bean>
@@ -36,5 +35,27 @@
 		<managed-bean-name>reportRepository</managed-bean-name>
 		<managed-bean-class>com.eyeq.pivot4j.pentaho.repository.PentahoReportRepository</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>reportOpener</managed-bean-name>
+		<managed-bean-class>com.eyeq.pivot4j.pentaho.ui.PentahoReportOpener</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>settings</property-name>
+			<value>#{settings}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>viewStateHolder</property-name>
+			<value>#{viewStateHolder}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>dataSourceManager</property-name>
+			<value>#{dataSourceManager}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>reportRepository</property-name>
+			<value>#{reportRepository}</value>
+		</managed-property>
 	</managed-bean>
 </faces-config>

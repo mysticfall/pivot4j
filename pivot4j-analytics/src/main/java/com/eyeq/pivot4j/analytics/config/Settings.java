@@ -58,6 +58,10 @@ public class Settings {
 
 	private String viewParameterName;
 
+	private String fileParameterName;
+
+	private String pathParameterName;
+
 	private String localeAttributeName;
 
 	private SortedMap<String, String> availableThemes;
@@ -293,13 +297,27 @@ public class Settings {
 		if (viewParameterName == null) {
 			this.viewParameterName = configuration.getString(
 					"web.view-parameter", "viewId").trim();
-
-			if (viewParameterName == null) {
-				this.viewParameterName = "viewId";
-			}
 		}
 
 		return viewParameterName;
+	}
+
+	public String getFileParameterName() {
+		if (fileParameterName == null) {
+			this.fileParameterName = configuration.getString(
+					"web.file-parameter", "fileId").trim();
+		}
+
+		return fileParameterName;
+	}
+
+	public String getPathParameterName() {
+		if (pathParameterName == null) {
+			this.pathParameterName = configuration.getString(
+					"web.path-parameter", "path").trim();
+		}
+
+		return pathParameterName;
 	}
 
 	public String getLocaleAttributeName() {

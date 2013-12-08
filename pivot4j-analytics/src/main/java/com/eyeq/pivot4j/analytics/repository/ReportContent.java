@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Map;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.FileConfiguration;
@@ -132,6 +134,14 @@ public class ReportContent implements Serializable {
 			model.restoreSettings(configuration.configurationAt("model"));
 		} catch (IllegalArgumentException e) {
 		}
+
+		Map<String, Object> parameters = state.getParameters();
+
+		if (parameters == null) {
+			parameters = Collections.emptyMap();
+		}
+
+		model.getExpressionContext().put("parameters", parameters);
 
 		state.setModel(model);
 

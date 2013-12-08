@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -50,11 +49,6 @@ public class CatalogChooser {
 	private String viewId;
 
 	private boolean editable;
-
-	@PostConstruct
-	protected void initialized() {
-
-	}
 
 	public List<UISelectItem> getCatalogs() {
 		if (catalogItems == null) {

@@ -56,5 +56,7 @@
 		<resource-prefix />
 		<locale-attribute>locale</locale-attribute>
 		<view-parameter>viewId</view-parameter>
+		<file-parameter>fileId</file-parameter>
+		<path-parameter>path</path-parameter>
 	</web>
 </config>

@@ -102,11 +102,27 @@ public class TestRepositoryImpl extends AbstractFileSystemRepository implements
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFileById(java.lang.String)
+	 */
+	@Override
+	public ReportFile getFileById(String id) throws IOException {
+		return getFile(id);
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#exists(java.lang.String)
 	 */
 	@Override
 	public boolean exists(String path) {
 		return files.containsKey(path);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#fileWithIdExists(java.lang.String)
+	 */
+	@Override
+	public boolean fileWithIdExists(String id) throws IOException {
+		return exists(id);
 	}
 
 	/**

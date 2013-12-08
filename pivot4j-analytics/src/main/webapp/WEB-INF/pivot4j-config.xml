@@ -102,5 +102,11 @@
 
 		<!-- Name of a request parameter for view id. -->
 		<view-parameter>viewId</view-parameter>
+
+		<!-- Name of a request parameter for file id. -->
+		<file-parameter>fileId</file-parameter>
+
+		<!-- Name of a request parameter for file path. -->
+		<path-parameter>path</path-parameter>
 	</web>
 </config>

@@ -71,6 +71,14 @@ public class PentahoReportRepository extends AbstractFileSystemRepository {
 	}
 
 	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#fileWithIdExists(java.lang.String)
+	 */
+	@Override
+	public boolean fileWithIdExists(String id) throws IOException {
+		return repository.getFileById(id) != null;
+	}
+
+	/**
 	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFile(java.lang.String)
 	 */
 	@Override
@@ -109,6 +117,20 @@ public class PentahoReportRepository extends AbstractFileSystemRepository {
 		}
 
 		return ancestors.get(ancestors.size() - 1);
+	}
+
+	/**
+	 * @see com.eyeq.pivot4j.analytics.repository.ReportRepository#getFileById(java.lang.String)
+	 */
+	@Override
+	public PentahoReportFile getFileById(String id) throws IOException {
+		RepositoryFile file = repository.getFileById(id);
+
+		if (file == null) {
+			return null;
+		}
+
+		return getFile(file.getPath());
 	}
 
 	/**

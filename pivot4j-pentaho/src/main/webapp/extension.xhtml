@@ -6,7 +6,7 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 	<h:form id="extension-form">
 		<p:remoteCommand name="savePentahoReport"
-			actionListener="#{pentahoFileHandler.save}" update="growl"
+			actionListener="#{reportOpener.save}" update="growl"
 			rendered="#{!pivotStateManager.readOnly}" 
 			onsuccess="onPentahoReportSave()" />
 
