@@ -41,27 +41,9 @@ function initNavigatorDroppables() {
 }
 
 function initializeTabs(tabs) {
-	var tabView = jQuery("#tab-panel")
-			.tabs(
-					{
-						heightStyleType : "fill",
-						tabTemplate : "<li><a href='#{href}'>#{label}</a><span class='ui-icon ui-icon-close'></span></li>"
-					});
-
-	tabView.bind("tabsshow", onTabSelected);
-	tabView.on("click", "span.ui-icon-close", function() {
-		var tab = jQuery(this).parent();
-
-		var href = tab.find("a").attr("href");
-		var id = href.substring(6);
-
-		setViewToClose(id);
-
-		if (tab.data("dirty")) {
-			confirmCloseDialog.show();
-		} else {
-			closeReport(id);
-		}
+	var tabView = jQuery("#tab-panel").tabs({
+		heightStyleType : "fill",
+		activate : onTabSelected
 	});
 
 	var activeId = getActiveViewId();
@@ -80,7 +62,7 @@ function initializeTabs(tabs) {
 	tabView.tabs("refresh");
 
 	if (activeIndex > -1) {
-		tabView.tabs("select", activeIndex);
+		tabView.tabs("option", "active", activeIndex);
 	}
 }
 
@@ -120,7 +102,7 @@ function getActiveViewIndex() {
 
 function getActiveTab() {
 	var tabView = jQuery("#tab-panel");
-	var activeTab = tabView.find("li.ui-tabs-selected:first");
+	var activeTab = tabView.find("li.ui-tabs-active:first");
 
 	if (activeTab.size() == 0) {
 		activeTab = undefined;
@@ -131,7 +113,7 @@ function getActiveTab() {
 
 function getActiveWindow() {
 	var tabView = jQuery("#tab-panel");
-	var selector = tabView.find("li.ui-tabs-selected:first a").attr("href");
+	var selector = tabView.find("li.ui-tabs-active:first a").attr("href");
 
 	var query = jQuery(selector).find("iframe");
 	if (query.size() == 0) {
@@ -148,14 +130,12 @@ function addTab(tab) {
 
 	var index = Math.max(0, tabView.find("li").size() - 1);
 
-	tabView.tabs("select", index);
+	tabView.tabs("option", "active", index);
 
 	setActiveViewId(tab.id);
 }
 
 function createTab(tab) {
-	var viewId = "#view-" + tab.id;
-
 	var name = tab.name;
 
 	if (!tab.path) {
@@ -177,21 +157,34 @@ function createTab(tab) {
 	var iframe = jQuery(document.createElement("iframe"));
 	iframe.attr("frameborder", "0").attr("src", url);
 
-	var panel = tabView.tabs("add", viewId, name).find(viewId);
-	panel.append(iframe);
+	var link = jQuery(document.createElement("a"));
+	link.attr("href", "#view-" + tab.id);
+	link.text(name);
 
-	var newTab = tabView.find("li:last");
-	newTab.data("id", tab.id);
-	newTab.data("name", tab.name);
+	var button = jQuery(document.createElement("span")).addClass("ui-icon")
+			.addClass("ui-icon-close").on("click", onTabClose);
+
+	var header = jQuery(document.createElement("li"));
+	header.append(link);
+	header.append(button);
+	header.data("id", tab.id);
+	header.data("name", tab.name);
 
 	if (tab.path) {
-		newTab.data("path", tab.path);
+		header.data("path", tab.path);
 	}
 
 	if (tab.dirty) {
-		newTab.data("dirty", tab.dirty);
-		newTab.addClass("dirty");
+		header.data("dirty", tab.dirty);
+		header.addClass("dirty");
 	}
+
+	var panel = jQuery(document.createElement("div"));
+	panel.attr("id", "view-" + tab.id);
+	panel.append(iframe);
+
+	tabView.find("ul").append(header);
+	tabView.append(panel);
 }
 
 function closeActiveTab() {
@@ -199,7 +192,12 @@ function closeActiveTab() {
 }
 
 function closeTab(index) {
-	jQuery("#tab-panel").tabs("remove", index);
+	var tabView = jQuery("#tab-panel");
+
+	tabView.find("ul.ui-tabs-nav li:eq(" + index + ")").remove();
+	tabView.find("div.ui-tabs-panel:eq(" + index + ")").remove();
+
+	tabView.tabs("refresh");
 
 	setViewToClose(null);
 }
@@ -248,8 +246,23 @@ function selectTab(id) {
 	tabView.tabs("select", index);
 }
 
+function onTabClose(event) {
+	var tab = jQuery(this).parent();
+
+	var href = tab.find("a").attr("href");
+	var id = href.substring(6);
+
+	setViewToClose(id);
+
+	if (tab.data("dirty")) {
+		confirmCloseDialog.show();
+	} else {
+		closeReport(id);
+	}
+}
+
 function onTabSelected(event, ui) {
-	var iframe = jQuery(ui.panel).find("iframe");
+	var iframe = jQuery(ui.newPanel).find("iframe");
 
 	if (iframe.size() == 0) {
 		return;
@@ -257,25 +270,11 @@ function onTabSelected(event, ui) {
 
 	var contentWin = iframe.get(0).contentWindow;
 
-	if (!contentWin || !contentWin.workbench) {
-		return;
+	if (contentWin && typeof contentWin.initLayout == "function") {
+		contentWin.initLayout();
 	}
 
-	// Fix layout abnormalities due to a hidden initialization.
-	if (!contentWin.workbench.layout) {
-		contentWin.workbench.createLayout();
-
-		if (contentWin.mdxEditor
-				&& !contentWin.mdxEditor.getCodeMirrorInstance()) {
-			contentWin.mdxEditor.initialize();
-		}
-
-		if (contentWin.cubeList) {
-			contentWin.cubeList.initWidths();
-		}
-	}
-
-	var href = getActiveTab().find("a:first").attr("href");
+	var href = jQuery(ui.newTab).find("a:first").attr("href");
 	var id = href.substring(6);
 
 	if (getActiveViewId() != id) {
@@ -295,7 +294,7 @@ function onViewChanged() {
 }
 
 function onThemeChanged() {
-	jQuery(".ui-tabs-panel iframe").each(function(index, elem) {
+	jQuery("#tab-panel .ui-tabs-panel iframe").each(function(index, elem) {
 		var pf = elem.contentWindow.PrimeFaces;
 		if (pf) {
 			pf.changeTheme(themeSwitcher.value);
@@ -310,4 +309,20 @@ function applyThemeToCMEditor(selector) {
 
 	jQuery(selector).addClass(
 			"ui-state-default ui-inputfield ui-widget ui-corner-all");
+}
+
+function showWaitDialog() {
+	var waitDialog = PrimeFaces.widgets["waitDialog"];
+
+	if (waitDialog) {
+		waitDialog.block();
+	}
+}
+
+function hideWaitDialog() {
+	var waitDialog = PrimeFaces.widgets["waitDialog"];
+
+	if (waitDialog) {
+		waitDialog.unblock();
+	}
 }

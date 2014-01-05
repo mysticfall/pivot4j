@@ -10,7 +10,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 import org.primefaces.component.breadcrumb.BreadCrumb;
 import org.primefaces.component.chart.UIChart;
-import org.primefaces.component.menuitem.MenuItem;
+import org.primefaces.component.menuitem.UIMenuItem;
 import org.primefaces.model.chart.ChartModel;
 
 import com.eyeq.pivot4j.ui.AbstractRenderCallback;
@@ -127,7 +127,7 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 	protected BreadCrumb createBreadCrumb(ChartRenderContext context) {
 		BreadCrumb breadCrumb = new BreadCrumb();
 
-		MenuItem rootItem = new MenuItem();
+		UIMenuItem rootItem = new UIMenuItem();
 
 		rootItem.setValue("");
 		breadCrumb.getChildren().add(rootItem);
@@ -135,7 +135,7 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 		List<Member> members = context.getPagePath();
 
 		for (Member member : members) {
-			MenuItem item = new MenuItem();
+			UIMenuItem item = new UIMenuItem();
 
 			item.setValue(member.getCaption());
 			item.setTitle(member.getDescription());

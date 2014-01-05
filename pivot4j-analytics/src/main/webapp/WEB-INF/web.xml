@@ -46,9 +46,6 @@
 	<listener>
 		<listener-class>com.eyeq.pivot4j.analytics.logging.Log4jServletContextListenerFallback</listener-class>
 	</listener>
-	<listener>
-		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
-	</listener>
 
 	<filter>
 		<filter-name>log4jServletFilterFallback</filter-name>

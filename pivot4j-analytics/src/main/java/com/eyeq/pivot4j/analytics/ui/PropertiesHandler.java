@@ -20,11 +20,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.component.menuitem.MenuItem;
-import org.primefaces.component.submenu.Submenu;
+import org.primefaces.component.menuitem.UIMenuItem;
+import org.primefaces.component.panelmenu.PanelMenu;
+import org.primefaces.component.submenu.UISubmenu;
 import org.primefaces.extensions.event.CompleteEvent;
-import org.primefaces.model.DefaultMenuModel;
-import org.primefaces.model.MenuModel;
 
 import com.eyeq.pivot4j.analytics.property.PropertyCategory;
 import com.eyeq.pivot4j.analytics.property.PropertyDescriptor;
@@ -49,7 +48,7 @@ public class PropertiesHandler {
 
 	private PropertyDescriptor descriptor;
 
-	private MenuModel menu;
+	private PanelMenu menu;
 
 	private UIComponent editorPanel;
 
@@ -252,30 +251,37 @@ public class PropertiesHandler {
 	/**
 	 * @return the menu
 	 */
-	public MenuModel getMenu() {
-		if (menu == null) {
-			this.menu = new DefaultMenuModel();
-
-			menu.addSubmenu(createSubMenu(PropertyCategory.Header));
-			menu.addSubmenu(createSubMenu(PropertyCategory.Cell));
-		}
-
+	public PanelMenu getMenu() {
 		return menu;
+	}
+
+	/**
+	 * @param menu
+	 *            the menu to set
+	 */
+	public void setMenu(PanelMenu menu) {
+		List<UIComponent> children = menu.getChildren();
+
+		children.clear();
+		children.add(createSubMenu(PropertyCategory.Header));
+		children.add(createSubMenu(PropertyCategory.Cell));
+
+		this.menu = menu;
 	}
 
 	/**
 	 * @param category
 	 * @return
 	 */
-	protected Submenu createSubMenu(PropertyCategory category) {
+	protected UISubmenu createSubMenu(PropertyCategory category) {
 		String postfix = category.name().toLowerCase();
 
-		Submenu categoryMenu = new Submenu();
+		UISubmenu categoryMenu = new UISubmenu();
 		categoryMenu.setId("menu-" + postfix);
 		categoryMenu.setLabel(bundle.getString("properties.category."
 				+ category.name()));
 
-		Submenu colorMenu = new Submenu();
+		UISubmenu colorMenu = new UISubmenu();
 		colorMenu.setId("menu-color-" + postfix);
 		colorMenu.setLabel(bundle.getString("properties.category.color"));
 		colorMenu.setIcon("ui-icon-image");
@@ -284,7 +290,7 @@ public class PropertiesHandler {
 
 		categoryMenu.getChildren().add(colorMenu);
 
-		Submenu fontMenu = new Submenu();
+		UISubmenu fontMenu = new UISubmenu();
 		fontMenu.setId("menu-font-" + postfix);
 		fontMenu.setLabel(bundle.getString("properties.category.font"));
 		fontMenu.setIcon("ui-icon-pencil");
@@ -306,7 +312,7 @@ public class PropertiesHandler {
 	 * @param key
 	 * @return
 	 */
-	protected MenuItem createMenuItem(PropertyCategory category, String key) {
+	protected UIMenuItem createMenuItem(PropertyCategory category, String key) {
 		PropertyDescriptor property = descriptorFactory.getDescriptor(category,
 				key);
 
@@ -315,7 +321,7 @@ public class PropertiesHandler {
 		Application application = context.getApplication();
 		ExpressionFactory factory = application.getExpressionFactory();
 
-		MenuItem item = new MenuItem();
+		UIMenuItem item = new UIMenuItem();
 		item.setId("mi-" + key.toLowerCase() + "-"
 				+ category.name().toLowerCase());
 		item.setValue(property.getName(context));
@@ -330,7 +336,9 @@ public class PropertiesHandler {
 				context.getELContext(), "#{propertiesHandler.selectProperty}",
 				Void.TYPE, new Class[0]);
 		item.setActionExpression(exp);
-		item.setUpdate("properties-menu,content,button-bar,:growl");
+		item.setUpdate("content,button-bar,:growl");
+		item.setOnclick("jQuery('.ui-menuitem-link').removeClass('ui-state-highlight'); "
+				+ "jQuery(this).addClass('ui-state-highlight');");
 		item.setOncomplete("applyThemeToCMEditor('.properties-config .CodeMirror')");
 
 		UIParameter keyParam = new UIParameter();

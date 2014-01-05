@@ -11,6 +11,8 @@ import org.primefaces.model.TreeNode;
 
 public class MemberNode extends MetadataNode<Member> {
 
+	private static final long serialVersionUID = -6049680709062616590L;
+
 	/**
 	 * @param member
 	 */
@@ -45,7 +47,6 @@ public class MemberNode extends MetadataNode<Member> {
 	protected List<TreeNode> createChildren() {
 		try {
 			List<? extends Member> members = getObject().getChildMembers();
-
 			List<TreeNode> children = new ArrayList<TreeNode>(members.size());
 
 			for (Member member : members) {

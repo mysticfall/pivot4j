@@ -88,7 +88,7 @@
 
 						<p:commandButton value="#{msg['button.export']}"
 							icon="ui-icon-disk" ajax="false"
-							onclick="PrimeFaces.monitorDownload(function() {waitDialog.block();}, function() {waitDialog.unblock();})">
+							onclick="PrimeFaces.monitorDownload(showWaitDialog, hideWaitDialog);">
 							<p:dataExporter type="xls" target="drillthrough-grid"
 								fileName="#{pivotStateManager.model.cube.caption}" />
 						</p:commandButton>

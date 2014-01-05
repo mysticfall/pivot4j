@@ -25,6 +25,8 @@ import com.eyeq.pivot4j.analytics.repository.RepositoryFileFilter;
 public class RepositoryNode extends NavigatorNode<ReportFile> implements
 		StateHolder {
 
+	private static final long serialVersionUID = -323347713084004285L;
+
 	private ReportRepository repository;
 
 	private RepositoryFileFilter filter;

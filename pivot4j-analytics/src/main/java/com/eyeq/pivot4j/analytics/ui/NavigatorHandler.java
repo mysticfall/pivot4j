@@ -225,19 +225,15 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 			if (targetNode == null) {
 				this.targetNode = new DefaultTreeNode();
 
-				DefaultTreeNode columns = new DefaultTreeNode();
+				DefaultTreeNode columns = new DefaultTreeNode("columns",
+						Axis.COLUMNS, targetNode);
 				columns.setExpanded(true);
-				columns.setType("columns");
-				columns.setData(Axis.COLUMNS);
-				columns.setParent(targetNode);
 
 				configureAxis(columns, Axis.COLUMNS);
 
-				DefaultTreeNode rows = new DefaultTreeNode();
+				DefaultTreeNode rows = new DefaultTreeNode("rows", Axis.ROWS,
+						targetNode);
 				rows.setExpanded(true);
-				rows.setType("rows");
-				rows.setData(Axis.ROWS);
-				rows.setParent(targetNode);
 
 				configureAxis(rows, Axis.ROWS);
 			}
@@ -263,13 +259,12 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 	protected void configureAxis(TreeNode axisRoot, Axis axis) {
 		List<Hierarchy> hierarchyList = getHierarchies(axis);
 		for (Hierarchy hierarchy : hierarchyList) {
-			DefaultTreeNode hierarchyNode = new DefaultTreeNode();
-			hierarchyNode.setData(hierarchy);
-			hierarchyNode.setType("hierarchy");
+			DefaultTreeNode hierarchyNode = new DefaultTreeNode("hierarchy",
+					hierarchy, axisRoot);
 			hierarchyNode.setExpanded(true);
-			hierarchyNode.setParent(axisRoot);
 
 			Type type;
+
 			try {
 				type = hierarchy.getDimension().getDimensionType();
 			} catch (OlapException e) {
@@ -279,18 +274,12 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 			if (type == Type.MEASURE) {
 				List<Member> memberList = getMembers(hierarchy);
 				for (Member member : memberList) {
-					DefaultTreeNode memberNode = new DefaultTreeNode();
-					memberNode.setData(member);
-					memberNode.setType("measure");
-					memberNode.setParent(hierarchyNode);
+					new DefaultTreeNode("measure", member, hierarchyNode);
 				}
 			} else {
 				List<Level> levelList = getLevels(hierarchy);
 				for (Level level : levelList) {
-					DefaultTreeNode levelNode = new DefaultTreeNode();
-					levelNode.setData(level);
-					levelNode.setType("level");
-					levelNode.setParent(hierarchyNode);
+					new DefaultTreeNode("level", level, hierarchyNode);
 				}
 			}
 		}

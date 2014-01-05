@@ -9,6 +9,8 @@ import org.primefaces.model.TreeNode;
 
 public class DimensionNode extends MetadataNode<Dimension> {
 
+	private static final long serialVersionUID = -7864021397557127461L;
+
 	/**
 	 * @param dimension
 	 */
@@ -38,12 +40,14 @@ public class DimensionNode extends MetadataNode<Dimension> {
 	@Override
 	protected List<TreeNode> createChildren() {
 		List<Hierarchy> hierarchies = getObject().getHierarchies();
-
 		List<TreeNode> children = new ArrayList<TreeNode>(hierarchies.size());
+
 		for (Hierarchy hierarchy : hierarchies) {
 			HierarchyNode node = new HierarchyNode(hierarchy);
 
 			if (configureChildNode(hierarchy, node)) {
+				node.setParent(this);
+
 				children.add(node);
 			}
 		}

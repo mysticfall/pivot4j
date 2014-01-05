@@ -442,6 +442,7 @@ span.ui-button-icon-only {
 
 .hierarchy-config .ui-tree {
 	height: 100%;
+	overflow: auto;
 }
 
 .hierarchy-config .control-panel {

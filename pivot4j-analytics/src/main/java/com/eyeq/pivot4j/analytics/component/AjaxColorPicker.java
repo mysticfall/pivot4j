@@ -70,7 +70,7 @@ public class AjaxColorPicker extends ColorPicker implements
 			Map<String, String> params = context.getExternalContext()
 					.getRequestParameterMap();
 			String eventName = params
-					.get(Constants.PARTIAL_BEHAVIOR_EVENT_PARAM);
+					.get(Constants.RequestParams.PARTIAL_BEHAVIOR_EVENT_PARAM);
 			String clientId = this.getClientId(context);
 
 			if (eventName.equals("change")) {

@@ -40,8 +40,8 @@ public class CubeNode extends MetadataNode<Cube> {
 	@Override
 	protected List<TreeNode> createChildren() {
 		List<Dimension> dimensions = getObject().getDimensions();
-
 		List<TreeNode> children = new ArrayList<TreeNode>(dimensions.size());
+
 		for (Dimension dimension : dimensions) {
 			MetadataElement element;
 
@@ -58,6 +58,8 @@ public class CubeNode extends MetadataNode<Cube> {
 			}
 
 			if (configureChildNode(element, node)) {
+				node.setParent(this);
+
 				children.add(node);
 			}
 		}

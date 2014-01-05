@@ -22,8 +22,13 @@
 
 	<factory>
 		<exception-handler-factory>
-			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
+			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
+		</exception-handler-factory>
 	</factory>
+
+	<lifecycle>
+		<phase-listener>com.eyeq.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
+	</lifecycle>
 
 	<managed-bean>
 		<managed-bean-name>dataSourceManager</managed-bean-name>

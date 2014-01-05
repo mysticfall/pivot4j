@@ -5,10 +5,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jboss.arquillian.graphene.enricher.findby.FindBy;
-import org.jboss.arquillian.graphene.spi.annotations.Root;
+import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.jboss.arquillian.graphene.fragment.Root;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public abstract class TabPanel<T extends PageObject> implements PageFragment {
 
@@ -20,6 +22,9 @@ public abstract class TabPanel<T extends PageObject> implements PageFragment {
 
 	@FindBy(tagName = "iframe")
 	private List<WebElement> panels;
+
+	@Drone
+	private WebDriver driver;
 
 	public Dimension getSize() {
 		return panel.getSize();
@@ -36,7 +41,8 @@ public abstract class TabPanel<T extends PageObject> implements PageFragment {
 		List<Tab<T>> tabs = new LinkedList<Tab<T>>();
 
 		while (headerIt.hasNext() && panelIt.hasNext()) {
-			tabs.add(new Tab<T>(headerIt.next(), panelIt.next(), getPageType()));
+			tabs.add(new Tab<T>(headerIt.next(), panelIt.next(), getPageType(),
+					driver));
 		}
 
 		return tabs;

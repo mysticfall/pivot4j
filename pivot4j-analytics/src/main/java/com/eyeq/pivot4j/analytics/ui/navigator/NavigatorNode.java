@@ -7,6 +7,8 @@ import org.primefaces.model.TreeNode;
 
 public abstract class NavigatorNode<T> implements TreeNode {
 
+	private static final String ROOT_ROW_KEY = "root";
+
 	private TreeNode parent;
 
 	private T object;
@@ -18,6 +20,8 @@ public abstract class NavigatorNode<T> implements TreeNode {
 	private boolean selectable = false;
 
 	private boolean selected = false;
+
+	private boolean partialSelected = false;
 
 	private List<TreeNode> children;
 
@@ -121,6 +125,48 @@ public abstract class NavigatorNode<T> implements TreeNode {
 	}
 
 	/**
+	 * @return the rowKey
+	 */
+	public String getRowKey() {
+		if (getParent() == null) {
+			return ROOT_ROW_KEY;
+		}
+
+		int index = getParent().getChildren().indexOf(this);
+
+		String parentKey = getParent().getRowKey();
+
+		if (parentKey == null || parentKey.equals(ROOT_ROW_KEY)) {
+			return Integer.toString(index);
+		}
+
+		return parentKey + "_" + index;
+	}
+
+	/**
+	 * @param rowKey
+	 *            the rowKey to set
+	 */
+	public void setRowKey(String rowKey) {
+		// Not supported
+	}
+
+	/**
+	 * @return the partialSelected
+	 */
+	public boolean isPartialSelected() {
+		return partialSelected;
+	}
+
+	/**
+	 * @param partialSelected
+	 *            the partialSelected to set
+	 */
+	public void setPartialSelected(boolean partialSelected) {
+		this.partialSelected = partialSelected;
+	}
+
+	/**
 	 * @see org.primefaces.model.TreeNode#getData()
 	 */
 	@Override
@@ -156,8 +202,10 @@ public abstract class NavigatorNode<T> implements TreeNode {
 	 */
 	@Override
 	public List<TreeNode> getChildren() {
-		if (!isLoaded()) {
-			this.children = createChildren();
+		synchronized (this) {
+			if (!isLoaded()) {
+				this.children = createChildren();
+			}
 		}
 
 		return children;

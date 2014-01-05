@@ -1,7 +1,7 @@
 package com.eyeq.pivot4j.analytics.graphene;
 
-import org.jboss.arquillian.graphene.enricher.findby.FindBy;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class WorkbenchPage implements PageObject {
 

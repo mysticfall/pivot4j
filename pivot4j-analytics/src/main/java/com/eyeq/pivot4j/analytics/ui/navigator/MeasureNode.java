@@ -8,6 +8,8 @@ import org.primefaces.model.TreeNode;
 
 public class MeasureNode extends MetadataNode<Member> {
 
+	private static final long serialVersionUID = -9037287398432845150L;
+
 	/**
 	 * @param parent
 	 * @param member

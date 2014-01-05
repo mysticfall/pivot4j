@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jboss.arquillian.graphene.spi.annotations.Page;
+import org.jboss.arquillian.graphene.page.Page;
 import org.junit.Test;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;

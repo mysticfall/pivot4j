@@ -18,6 +18,16 @@
 
 	<factory>
 		<exception-handler-factory>
-			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
+			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
+		</exception-handler-factory>
 	</factory>
+
+	<lifecycle>
+		<phase-listener>com.eyeq.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
+	</lifecycle>
+
+	<component>
+		<component-type>javax.faces.ViewRoot</component-type>
+		<component-class>com.eyeq.pivot4j.analytics.component.workaround.UIViewRootFix</component-class>
+	</component>
 </faces-config>

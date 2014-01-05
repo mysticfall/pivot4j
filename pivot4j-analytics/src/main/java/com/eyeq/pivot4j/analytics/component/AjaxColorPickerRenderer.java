@@ -13,7 +13,6 @@ import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.ClientBehaviorHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import javax.faces.render.FacesRenderer;
 
 import org.primefaces.component.colorpicker.ColorPicker;
@@ -43,20 +42,17 @@ public class AjaxColorPickerRenderer extends ColorPickerRenderer {
 	@Override
 	protected void encodeScript(FacesContext context, ColorPicker colorPicker)
 			throws IOException {
-		ResponseWriter writer = context.getResponseWriter();
 		String clientId = colorPicker.getClientId(context);
 		String value = (String) colorPicker.getValue();
+
 		WidgetBuilder wb = getWidgetBuilder(context);
 
-		wb.widget("AjaxColorPicker", colorPicker.resolveWidgetVar(), clientId,
-				"colorpicker", true).attr("mode", colorPicker.getMode())
+		wb.init("AjaxColorPicker", colorPicker.resolveWidgetVar(), clientId,
+				"colorpicker").attr("mode", colorPicker.getMode())
 				.attr("color", value, null);
 
-		encodeClientBehaviors(context, (ClientBehaviorHolder) colorPicker, wb);
+		encodeClientBehaviors(context, (ClientBehaviorHolder) colorPicker);
 
-		startScript(writer, clientId);
-		writer.write(wb.build());
-
-		endScript(writer);
+		wb.finish();
 	}
 }

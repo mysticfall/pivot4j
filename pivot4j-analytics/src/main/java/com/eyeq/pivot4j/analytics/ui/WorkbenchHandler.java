@@ -1,13 +1,10 @@
 package com.eyeq.pivot4j.analytics.ui;
 
-import java.util.Locale;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import org.primefaces.extensions.model.layout.LayoutOptions;
 
@@ -32,8 +29,6 @@ public class WorkbenchHandler {
 	private LayoutOptions layoutOptions;
 
 	private LayoutOptions workspaceLayoutOptions;
-
-	private Locale locale;
 
 	/**
 	 * @return the layoutOptions
@@ -150,45 +145,6 @@ public class WorkbenchHandler {
 		}
 
 		return workspaceLayoutOptions;
-	}
-
-	/**
-	 * @return
-	 */
-	public Locale getLocale() {
-		if (locale == null) {
-			FacesContext context = FacesContext.getCurrentInstance();
-
-			HttpSession session = (HttpSession) context.getExternalContext()
-					.getSession(false);
-
-			if (session != null) {
-				String key = settings.getLocaleAttributeName();
-
-				if (key != null) {
-					Object value = session.getAttribute(key);
-					if (value instanceof Locale) {
-						this.locale = (Locale) value;
-					} else if (value != null) {
-						String[] args = value.toString().split("_");
-
-						if (args.length == 1) {
-							this.locale = new Locale(args[0]);
-						} else if (args.length == 2) {
-							this.locale = new Locale(args[0], args[1]);
-						} else if (args.length == 3) {
-							this.locale = new Locale(args[0], args[1], args[2]);
-						}
-					}
-				}
-			}
-
-			if (locale == null) {
-				this.locale = context.getViewRoot().getLocale();
-			}
-		}
-
-		return locale;
 	}
 
 	/**

@@ -5,6 +5,8 @@ import org.olap4j.metadata.MetadataElement;
 public abstract class MetadataNode<T extends MetadataElement> extends
 		NavigatorNode<T> {
 
+	private static final long serialVersionUID = -4131026137106022312L;
+
 	/**
 	 * @param object
 	 */

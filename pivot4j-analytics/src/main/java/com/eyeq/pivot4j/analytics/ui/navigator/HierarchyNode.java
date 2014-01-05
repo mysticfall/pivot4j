@@ -14,6 +14,8 @@ import org.primefaces.model.TreeNode;
 
 public class HierarchyNode extends MetadataNode<Hierarchy> {
 
+	private static final long serialVersionUID = 6955911089410961135L;
+
 	/**
 	 * @param hierarchy
 	 */
@@ -54,6 +56,8 @@ public class HierarchyNode extends MetadataNode<Hierarchy> {
 					MeasureNode node = new MeasureNode(this, member);
 
 					if (configureChildNode(member, node)) {
+						node.setParent(this);
+
 						children.add(node);
 					}
 				}
@@ -67,6 +71,8 @@ public class HierarchyNode extends MetadataNode<Hierarchy> {
 					LevelNode node = new LevelNode(level);
 
 					if (configureChildNode(level, node)) {
+						node.setParent(this);
+
 						children.add(node);
 					}
 				}

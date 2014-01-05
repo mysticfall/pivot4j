@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.eyeq</groupId>
@@ -31,7 +32,8 @@
 						<phase>prepare-package</phase>
 						<configuration>
 							<target unless="maven.test.skip">
-								<unzip src="${project.basedir}/../src/test/data/derby-foodmart.zip" dest="${derby.home}" overwrite="false" />
+								<unzip src="${project.basedir}/../src/test/data/derby-foodmart.zip"
+									dest="${derby.home}" overwrite="false" />
 							</target>
 						</configuration>
 						<goals>
@@ -284,6 +286,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${version.jstl}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 			<version>${version.primefaces}</version>
@@ -434,7 +441,7 @@
 				<dependency>
 					<groupId>org.glassfish</groupId>
 					<artifactId>javax.faces</artifactId>
-					<version>${version.jsf}</version>
+					<version>${version.mojarra}</version>
 				</dependency>
 			</dependencies>
 		</profile>
@@ -448,12 +455,12 @@
 				<dependency>
 					<groupId>org.apache.myfaces.core</groupId>
 					<artifactId>myfaces-api</artifactId>
-					<version>${version.jsf}</version>
+					<version>${version.myfaces}</version>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.myfaces.core</groupId>
 					<artifactId>myfaces-impl</artifactId>
-					<version>${version.jsf}</version>
+					<version>${version.myfaces}</version>
 				</dependency>
 			</dependencies>
 		</profile>

@@ -11,7 +11,8 @@
 			styleClass="properties-config">
 			<p:layout id="layout" style="height: 100%;">
 				<p:layoutUnit position="west" resizable="true" size="180">
-					<p:panelMenu id="properties-menu" model="#{propertiesHandler.menu}" />
+					<p:panelMenu id="properties-menu"
+						binding="#{propertiesHandler.menu}" />
 				</p:layoutUnit>
 
 				<p:layoutUnit position="center">
@@ -20,15 +21,15 @@
 							<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
 							<h:outputText value="#{msg['message.properties.select']}"
 								styleClass="message-warn"
-								rendered="#{empty propertiesHandler.descriptor}" />
+								rendered="#{propertiesHandler.descriptor == null}" />
 							<h:outputText value="#{propertiesHandler.description}"
 								styleClass="message-warn"
-								rendered="#{!empty propertiesHandler.descriptor}" />
+								rendered="#{propertiesHandler.descriptor != null}" />
 						</h:panelGroup>
 
 						<h:panelGrid id="editor-panel" styleClass="editor-panel"
 							columns="2" columnClasses="field-name,field-input"
-							rendered="#{!empty propertiesHandler.descriptor}">
+							rendered="#{propertiesHandler.descriptor != null}">
 							<p:outputLabel for="use-expression"
 								value="#{msg['label.properties.useExpression']}" />
 							<p:selectBooleanCheckbox id="use-expression"
@@ -67,15 +68,19 @@
 								<h:panelGroup laayout="block" styleClass="usage-info"
 									rendered="#{propertiesHandler.useExpression}">
 									<ul>
-										<li><h:outputText
-												value="#{msg['message.properties.expr.help.0']}" /></li>
-										<li><h:outputFormat
+										<li>
+											<h:outputText
+												value="#{msg['message.properties.expr.help.0']}" />
+										</li>
+										<li>
+											<h:outputFormat
 												value="#{msg['message.properties.expr.help.1']}"
 												escape="false">
 												<f:param
 													value="&lt;a href='http://freemarker.sourceforge.net/docs/dgui_template_exp.html' target='_blank'&gt;" />
 												<f:param value="&lt;/a&gt;" />
-											</h:outputFormat></li>
+											</h:outputFormat>
+										</li>
 									</ul>
 								</h:panelGroup>
 							</f:facet>
