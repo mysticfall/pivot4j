@@ -16,8 +16,8 @@
 		</xsl:copy>
 	</xsl:template>
 
-	<xsl:template match="*/logger[@name='com.eyeq.pivot4j']">
-		<logger name="com.eyeq.pivot4j">
+	<xsl:template match="*/logger[@name='org.pivot4j']">
+		<logger name="org.pivot4j">
 			<xsl:attribute name="level">
 				<xsl:value-of select="$logger.level" />
 			</xsl:attribute>

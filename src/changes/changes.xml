@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
 	<properties>
 		<title>Pivot4J Project</title>
-		<author email="fender@eyeq.co.kr">Xavier Cho</author>
+		<author email="mysticfallband@gmail.com">Xavier Cho</author>
 	</properties>
 	<body>
 		<release version="0.8" date="2013-08-31" description="Pivot4J 0.8 release">

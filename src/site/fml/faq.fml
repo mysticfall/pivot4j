@@ -108,13 +108,13 @@
 			<answer>
 				<p>Unlike JPivot, Pivot4J core does not come with any specific UI implementation. 
 				However, you can use the 
-				<a href="./apidocs/com/eyeq/pivot4j/ui/package-summary.html" target="_blank">renderer API</a> 
+				<a href="./apidocs/org/pivot4j/ui/package-summary.html" target="_blank">renderer API</a> 
 				to build the actual grid UI of a given PivotModel instance. It's very flexible so you can easily create your 
 				own renderer class to generate output data in a format suitable for your specific need.
 				</p> 
 				<p>Pivot4J also includes a concrete implementation which generates generic HTML source as well. So, you 
 				can use it, or extend it to make your own implementation, or you can build it from the scratch extending from the
-				<a href="./apidocs/com/eyeq/pivot4j/ui/AbstractPivotUIRenderer.html" target="_blank">AbstractPivotUIRenderer</a> class.
+				<a href="./apidocs/org/pivot4j/ui/AbstractPivotUIRenderer.html" target="_blank">AbstractPivotUIRenderer</a> class.
 				</p>
 			</answer>
 		</faq>
@@ -138,11 +138,11 @@
 				How can I add drill down or sort buttons to the generated HTML? 
 			</question>
 			<answer>
-				<p>Override the <a href="./apidocs/com/eyeq/pivot4j/ui/AbstractPivotRenderer.html#startCell%28com.eyeq.pivot4j.ui.RenderContext,%20java.util.List%29">startCell</a>
-				method of <a href="./apidocs/com/eyeq/pivot4j/ui/AbstractPivotRenderer.html">AbstractPivotRenderer</a> class then 
+				<p>Override the <a href="./apidocs/org/pivot4j/ui/AbstractPivotRenderer.html#startCell%28org.pivot4j.ui.RenderContext,%20java.util.List%29">startCell</a>
+				method of <a href="./apidocs/org/pivot4j/ui/AbstractPivotRenderer.html">AbstractPivotRenderer</a> class then 
 				write suitable event handling code(write an 'a' tag, adding an 'onclick' attribute or whatever) using the 
-				<a href="./apidocs/com/eyeq/pivot4j/ui/command/CellCommand.html">CellCommand</a> and 
-				<a href="./apidocs/com/eyeq/pivot4j/ui/command/CellParameters.html">CellParameters</a> class. 
+				<a href="./apidocs/org/pivot4j/ui/command/CellCommand.html">CellCommand</a> and 
+				<a href="./apidocs/org/pivot4j/ui/command/CellParameters.html">CellParameters</a> class. 
 				Generally, you don't have to write separate code for different operations.</p>
 			</answer>
 		</faq>
@@ -239,7 +239,7 @@ Member member = OlapUtils.lookupMember("[Time].[1998]", cube);</source>
 				<p>As to the expression language syntax, you can refer to the FreeMarker project's documentation 
 				<a href="http://freemarker.org/docs/dgui_template_exp.html" target="_blank">here</a>, as Pivot4J 
 				by default uses it as its expression language support. You can also see the API documentation for 
-				the <a href="./apidocs/com/eyeq/pivot4j/ui/RenderContext.html" target="_blank">RenderContext</a> 
+				the <a href="./apidocs/org/pivot4j/ui/RenderContext.html" target="_blank">RenderContext</a> 
 				class to see what context variables are available when it renders each cells.</p>
 			</answer>
 		</faq>

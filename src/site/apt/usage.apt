@@ -28,15 +28,15 @@ How to Use Pivot4J
     <version>1.0.0</version>
     <repositories>
         <repository>
-            <id>eyeq</id>
-            <url>http://dev.eyeq.co.kr/artifactory/libs-release/</url>
+            <id>pivot4j</id>
+            <url>http://www.pivot4j.org/artifactory/libs-release/</url>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>com.eyeq</groupId>
+            <groupId>org.pivot4j</groupId>
             <artifactId>pivot4j-core</artifactId>
-            <version>0.8</version>
+            <version>0.9</version>
         </dependency>
     </dependencies>
 </project>
@@ -55,13 +55,13 @@ How to Use Pivot4J
     <version>1.0.0</version>
     <repositories>
         <repository>
-            <id>eyeq</id>
-            <url>http://dev.eyeq.co.kr/artifactory/libs-snapshot/</url>
+            <id>pivot4j</id>
+            <url>http://www.pivot4j.org/artifactory/libs-snapshot/</url>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>com.eyeq</groupId>
+            <groupId>org.pivot4j</groupId>
             <artifactId>pivot4j-core</artifactId>
             <version>0.9-SNAPSHOT</version>
         </dependency>
@@ -76,9 +76,9 @@ How to Use Pivot4J
 * Setting up a Data Source
 
 	You need to create a data source to connect to the OLAP server. There are several implementations in 
-	{{{./apidocs/com/eyeq/pivot4j/datasource/package-summary.html}com.eyeq.pivot4j.datasource}} package.
+	{{{./apidocs/org/pivot4j/datasource/package-summary.html}org.pivot4j.datasource}} package.
 
-	For most of the cases, you can use {{{./apidocs/com/eyeq/pivot4j/datasource/SimpleOlapDataSource.html}SimpleOlapDataSource}} as below :
+	For most of the cases, you can use {{{./apidocs/org/pivot4j/datasource/SimpleOlapDataSource.html}SimpleOlapDataSource}} as below :
 
 +-----+
 SimpleOlapDataSource dataSource = new SimpleOlapDataSource();
@@ -89,11 +89,11 @@ dataSource.setConnectionString("jdbc:mondrian:Jdbc=jdbc:odbc:MondrianFoodMart;Ca
 	{{{http://www.olap4j.org/olap4j_fs.html#Connections}Olap4J manual}} for reference. 
 
 	If you have already an active OlapConnection or DataSource instance, then you can use either 
-	{{{./apidocs/com/eyeq/pivot4j/datasource/SingleConnectionOlapDataSource.html}SingleConnectionOlapDataSource}} or 
-	{{{./apidocs/com/eyeq/pivot4j/datasource/WrappingOlapDataSource.html}WrappingOlapDataSource}} to wrap them as 
+	{{{./apidocs/org/pivot4j/datasource/SingleConnectionOlapDataSource.html}SingleConnectionOlapDataSource}} or 
+	{{{./apidocs/org/pivot4j/datasource/WrappingOlapDataSource.html}WrappingOlapDataSource}} to wrap them as 
 	an OlapDataSource.
 
-	For connection pooling, you can use the {{{./apidocs/com/eyeq/pivot4j/datasource/PooledOlapDataSource.html}PooledOlapDataSource}} 
+	For connection pooling, you can use the {{{./apidocs/org/pivot4j/datasource/PooledOlapDataSource.html}PooledOlapDataSource}} 
 	as below :
 
 +-----+
@@ -126,7 +126,7 @@ model.initialize();
 
 * Executing a Query
 
-	Call {{{./apidocs/com/eyeq/pivot4j/PivotModel.html#getCellSet%28%29}PivotModel.getCellSet()}} method to execute the initial MDX 
+	Call {{{./apidocs/org/pivot4j/PivotModel.html#getCellSet%28%29}PivotModel.getCellSet()}} method to execute the initial MDX 
 	query and get the query result as below :
 
 +-----+
@@ -150,7 +150,7 @@ List<Position> positions = rows.getPositions();
 * Transforming a Query
 
 	There are several query transform operations like swapping the axes, drilling down on position, and so on defined in 
-	{{{./apidocs/com/eyeq/pivot4j/transform/package-summary.html}com.eyeq.pivot4j.transform}} package.
+	{{{./apidocs/org/pivot4j/transform/package-summary.html}org.pivot4j.transform}} package.
 
 	To perform a transform operation, get a proper Transform instance then invoke the proper methods for each transformation.
 
@@ -166,7 +166,7 @@ CellSet cellSet = model.getCellSet();
 
 * Generating HTML source from the PivotModel
 
-	You can use the {{{./apidocs/com/eyeq/pivot4j/ui/html/HtmlRenderer.html}HtmlRenderer}} class to 
+	You can use the {{{./apidocs/org/pivot4j/ui/html/HtmlRenderer.html}HtmlRenderer}} class to 
 	generate HTML source out of a PivotModel instance as below example :
 
 +-----+

@@ -10,7 +10,7 @@
                            http://jax-ws.dev.java.net/spring/servlet http://jax-ws.dev.java.net/spring/servlet.xsd">
 	<context:annotation-config />
 
-	<bean id="faces" class="com.eyeq.pivot4j.pentaho.servlet.FacesDispatcherServlet">
+	<bean id="faces" class="org.pivot4j.pentaho.servlet.FacesDispatcherServlet">
 		<property name="initParameters">
 			<map>
 				<entry key="javax.faces.PROJECT_STAGE">
@@ -29,7 +29,7 @@
 					<value>false</value>
 				</entry>
 				<entry key="javax.faces.FACELETS_RESOURCE_RESOLVER">
-					<value>com.eyeq.pivot4j.pentaho.servlet.PluginResourceResolver
+					<value>org.pivot4j.pentaho.servlet.PluginResourceResolver
 					</value>
 				</entry>
 				<entry key="primefaces.THEME">
@@ -43,6 +43,6 @@
 	</bean>
 
 	<bean id="converterRegistryHelper"
-		class="com.eyeq.pivot4j.pentaho.content.ConverterRegistrationHelper"
+		class="org.pivot4j.pentaho.content.ConverterRegistrationHelper"
 		lazy-init="false" />
 </beans>

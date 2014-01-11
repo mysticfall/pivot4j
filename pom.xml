@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.eyeq</groupId>
+	<groupId>org.pivot4j</groupId>
 	<artifactId>pivot4j</artifactId>
 	<version>0.9-SNAPSHOT</version>
 	<name>Pivot4J</name>
@@ -19,7 +19,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 
 		<github.global.server>github</github.global.server>
 
-		<sonar.host.url>http://dev.eyeq.co.kr/sonar</sonar.host.url>
+		<sonar.host.url>http://www.pivot4j.org/sonar</sonar.host.url>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
@@ -117,7 +117,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<developer>
 			<id>mysticfall</id>
 			<name>Xavier Cho</name>
-			<email>fender@eyeq.co.kr</email>
+			<email>mysticfallband@gmail.com</email>
 			<url>https://github.com/mysticfall</url>
 			<roles>
 				<role>project lead</role>
@@ -173,8 +173,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		</license>
 	</licenses>
 	<organization>
-		<name>Eyeq MC</name>
-		<url>http://www.eyeq.co.kr</url>
+		<name>Pivot4J Team</name>
+		<url>https://github.com/mysticfall/pivot4j</url>
 	</organization>
 	<issueManagement>
 		<system>GitHub</system>
@@ -187,7 +187,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 	</scm>
 	<ciManagement>
 		<system>jenkins</system>
-		<url>http://dev.eyeq.co.kr/jenkins/job/Pivot4J/</url>
+		<url>http://www.pivot4j.org/jenkins/job/Pivot4J/</url>
 	</ciManagement>
 
 	<mailingLists>
@@ -460,14 +460,14 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 
 	<distributionManagement>
 		<repository>
-			<id>dev.eyeq.co.kr</id>
-			<name>dev.eyeq.co.kr-releases</name>
-			<url>http://dev.eyeq.co.kr/artifactory/libs-release-local</url>
+			<id>pivot4j</id>
+			<name>pivot4j-releases</name>
+			<url>http://www.pivot4j.org/artifactory/libs-release-local</url>
 		</repository>
 		<snapshotRepository>
-			<id>dev.eyeq.co.kr</id>
-			<name>dev.eyeq.co.kr-snapshots</name>
-			<url>http://dev.eyeq.co.kr/artifactory/libs-snapshot-local</url>
+			<id>pivot4j-dev</id>
+			<name>pivot4j-snapshots</name>
+			<url>http://www.pivot4j.org/artifactory/libs-snapshot-local</url>
 		</snapshotRepository>
 		<site>
 			<id>github</id>

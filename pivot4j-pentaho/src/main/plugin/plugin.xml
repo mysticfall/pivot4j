@@ -39,8 +39,8 @@
 	</content-types>
 
 	<content-generator id="pivot4j" type="pivot4j" title="Pivot4J Analytics Content Generator" 
-		class="com.eyeq.pivot4j.pentaho.content.ReportContentGenerator"/>
+		class="org.pivot4j.pentaho.content.ReportContentGenerator"/>
 
-	<bean id="pivot4j.generator" class="com.eyeq.pivot4j.pentaho.content.ReportContentGenerator" />
-	<bean id="pivot4j.editor" class="com.eyeq.pivot4j.pentaho.content.ReportContentEditor" />
+	<bean id="pivot4j.generator" class="org.pivot4j.pentaho.content.ReportContentGenerator" />
+	<bean id="pivot4j.editor" class="org.pivot4j.pentaho.content.ReportContentEditor" />
 </plugin>

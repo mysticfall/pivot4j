@@ -44,12 +44,12 @@
 	</context-param>
 
 	<listener>
-		<listener-class>com.eyeq.pivot4j.analytics.logging.Log4jServletContextListenerFallback</listener-class>
+		<listener-class>org.pivot4j.analytics.logging.Log4jServletContextListenerFallback</listener-class>
 	</listener>
 
 	<filter>
 		<filter-name>log4jServletFilterFallback</filter-name>
-		<filter-class>com.eyeq.pivot4j.analytics.logging.Log4jServletFilterFallback</filter-class>
+		<filter-class>org.pivot4j.analytics.logging.Log4jServletFilterFallback</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>log4jServletFilterFallback</filter-name>

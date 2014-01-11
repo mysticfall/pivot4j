@@ -4,14 +4,14 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
 	<application>
 		<resource-bundle>
-			<base-name>com.eyeq.pivot4j.analytics.i18n.messages</base-name>
+			<base-name>org.pivot4j.analytics.i18n.messages</base-name>
 			<var>msg</var>
 		</resource-bundle>
 		<resource-bundle>
 			<base-name>webapp.resources.pivot4j.i18n.messages</base-name>
 			<var>plugin_msg</var>
 		</resource-bundle>
-		<message-bundle>com.eyeq.pivot4j.analytics.i18n.messages</message-bundle>
+		<message-bundle>org.pivot4j.analytics.i18n.messages</message-bundle>
 		<locale-config>
 			<default-locale>en</default-locale>
 			<supported-locale>en</supported-locale>
@@ -22,29 +22,29 @@
 
 	<factory>
 		<exception-handler-factory>
-			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
+			org.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
 		</exception-handler-factory>
 	</factory>
 
 	<lifecycle>
-		<phase-listener>com.eyeq.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
+		<phase-listener>org.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
 	</lifecycle>
 
 	<managed-bean>
 		<managed-bean-name>dataSourceManager</managed-bean-name>
-		<managed-bean-class>com.eyeq.pivot4j.pentaho.datasource.PentahoDataSourceManager</managed-bean-class>
+		<managed-bean-class>org.pivot4j.pentaho.datasource.PentahoDataSourceManager</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>reportRepository</managed-bean-name>
-		<managed-bean-class>com.eyeq.pivot4j.pentaho.repository.PentahoReportRepository</managed-bean-class>
+		<managed-bean-class>org.pivot4j.pentaho.repository.PentahoReportRepository</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>reportOpener</managed-bean-name>
-		<managed-bean-class>com.eyeq.pivot4j.pentaho.ui.PentahoReportOpener</managed-bean-class>
+		<managed-bean-class>org.pivot4j.pentaho.ui.PentahoReportOpener</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
 			<property-name>settings</property-name>

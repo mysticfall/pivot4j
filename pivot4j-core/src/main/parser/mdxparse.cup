@@ -6,9 +6,9 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package com.eyeq.pivot4j.mdx.impl;
+package org.pivot4j.mdx.impl;
 
-import com.eyeq.pivot4j.mdx.*;
+import org.pivot4j.mdx.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;

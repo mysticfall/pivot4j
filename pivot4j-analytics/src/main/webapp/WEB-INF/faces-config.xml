@@ -4,10 +4,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
 	<application>
 		<resource-bundle>
-			<base-name>com.eyeq.pivot4j.analytics.i18n.messages</base-name>
+			<base-name>org.pivot4j.analytics.i18n.messages</base-name>
 			<var>msg</var>
 		</resource-bundle>
-		<message-bundle>com.eyeq.pivot4j.analytics.i18n.messages</message-bundle>
+		<message-bundle>org.pivot4j.analytics.i18n.messages</message-bundle>
 		<locale-config>
 			<default-locale>en</default-locale>
 			<supported-locale>en</supported-locale>
@@ -18,16 +18,16 @@
 
 	<factory>
 		<exception-handler-factory>
-			com.eyeq.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
+			org.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
 		</exception-handler-factory>
 	</factory>
 
 	<lifecycle>
-		<phase-listener>com.eyeq.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
+		<phase-listener>org.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
 	</lifecycle>
 
 	<component>
 		<component-type>javax.faces.ViewRoot</component-type>
-		<component-class>com.eyeq.pivot4j.analytics.component.workaround.UIViewRootFix</component-class>
+		<component-class>org.pivot4j.analytics.component.workaround.UIViewRootFix</component-class>
 	</component>
 </faces-config>
