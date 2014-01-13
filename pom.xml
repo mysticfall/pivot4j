@@ -1,6 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 
 	<groupId>org.pivot4j</groupId>
 	<artifactId>pivot4j</artifactId>
@@ -9,7 +14,7 @@
 	<description>Pivot4J provides a common API for OLAP servers which can be used to build an analytical service frontend with pivot style GUI.
 
 It aims to leverage mature but now discontinued JPivot project's codebase to make it a general purpose OLAP API library which is independent of any particular GUI implementation.</description>
-	<url>http://mysticfall.github.com/pivot4j</url>
+	<url>http://www.pivot4j.org</url>
 	<packaging>pom</packaging>
 	<inceptionYear>2012</inceptionYear>
 
@@ -19,7 +24,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 
 		<github.global.server>github</github.global.server>
 
-		<sonar.host.url>http://www.pivot4j.org/sonar</sonar.host.url>
+		<sonar.host.url>http://sonar.pivot4j.org</sonar.host.url>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
@@ -54,7 +59,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.plugin.xml>1.0</version.plugin.xml>
 
 		<version.extension.scm>1.3</version.extension.scm>
-		<version.extension.wagon>0.3.1</version.extension.wagon>
+		<version.extension.wagon>2.6</version.extension.wagon>
 
 		<version.el>3.0.0</version.el>
 		<version.jsp>2.1</version.jsp>
@@ -123,7 +128,6 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<role>project lead</role>
 				<role>developer</role>
 			</roles>
-			<organization>Eyeq MC</organization>
 			<timezone>+9</timezone>
 		</developer>
 	</developers>
@@ -187,7 +191,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 	</scm>
 	<ciManagement>
 		<system>jenkins</system>
-		<url>http://www.pivot4j.org/jenkins/job/Pivot4J/</url>
+		<url>http://ci.pivot4j.org/job/Pivot4J/</url>
 	</ciManagement>
 
 	<mailingLists>
@@ -212,7 +216,15 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 							<artifactId>doxia-module-markdown</artifactId>
 							<version>${version.doxia.markdown}</version>
 						</dependency>
+						<dependency>
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>${version.extension.wagon}</version>
+						</dependency>
 					</dependencies>
+					<configuration>
+						<siteDirectory>/var/www</siteDirectory>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -288,11 +300,6 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<groupId>org.apache.maven.scm</groupId>
 				<artifactId>maven-scm-manager-plexus</artifactId>
 				<version>${version.extension.scm}</version>
-			</extension>
-			<extension>
-				<groupId>org.kathrynhuxtable.maven.wagon</groupId>
-				<artifactId>wagon-gitsite</artifactId>
-				<version>${version.extension.wagon}</version>
 			</extension>
 		</extensions>
 	</build>
@@ -460,20 +467,20 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 
 	<distributionManagement>
 		<repository>
-			<id>pivot4j</id>
+			<id>sonatype-nexus-staging</id>
 			<name>pivot4j-releases</name>
-			<url>http://www.pivot4j.org/artifactory/libs-release-local</url>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 		<snapshotRepository>
-			<id>pivot4j-dev</id>
+			<id>sonatype-nexus-snapshots</id>
 			<name>pivot4j-snapshots</name>
-			<url>http://www.pivot4j.org/artifactory/libs-snapshot-local</url>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 		</snapshotRepository>
 		<site>
-			<id>github</id>
-			<name>GitHub</name>
-			<url>gitsite:git@github.com/mysticfall/pivot4j.git</url>
+			<id>pivot4j</id>
+			<name>Pivot4J Home</name>
+			<url>scp://www.pivot4j.org/var/www</url>
 		</site>
-		<downloadUrl>http://mysticfall.github.com/pivot4j/download.html</downloadUrl>
+		<downloadUrl>http://www.pivot4j.org/download.html</downloadUrl>
 	</distributionManagement>
 </project>
