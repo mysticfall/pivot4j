@@ -370,9 +370,7 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 	 * @return
 	 */
 	protected UIComponent createFilterItem(Hierarchy hierarchy) {
-		String id = "filter-item-"
-				+ hierarchy.getName().replaceAll("[\\[\\]]", "")
-						.replaceAll("[\\s\\.]", "_").toLowerCase();
+		String id = "filter-item-" + hierarchy.getUniqueName().hashCode();
 
 		HtmlPanelGroup panel = new HtmlPanelGroup();
 		panel.setId(id);
