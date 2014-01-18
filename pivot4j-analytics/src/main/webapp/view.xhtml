@@ -33,14 +33,14 @@
 			if (!workbench.layout) {
 				workbench._render();
 
-				var mdxEditor = PrimeFaces.widgets["mdxEditor"];
 				var cubeList = PrimeFaces.widgets["cubeList"];
-
-				if (!mdxEditor.getCodeMirrorInstance()) {
-					mdxEditor.render();
-				}
-
 				cubeList.render();
+			}
+
+			var mdxEditor = PrimeFaces.widgets["mdxEditor"];
+
+			if (!mdxEditor.getCodeMirrorInstance()) {
+				mdxEditor.render();
 			}
 		}
 	</script>
@@ -496,8 +496,7 @@
 			</pe:layoutPane>
 		</pe:layoutPane>
 
-		<p:ajax event="open"
-			oncomplete="if(!mdxEditor.getCodeMirrorInstance()) mdxEditor.initialize();" />
+		<p:ajax event="open" oncomplete="initLayout();" />
 	</pe:layout>
 
 	<ui:include src="hierarchy.xhtml" />
