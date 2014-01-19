@@ -36,6 +36,13 @@ public class LocaleInitializer implements PhaseListener {
 	 */
 	@Override
 	public void beforePhase(PhaseEvent event) {
+	}
+
+	/**
+	 * @param event
+	 */
+	@Override
+	public void afterPhase(PhaseEvent event) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		ExternalContext externalContext = context.getExternalContext();
 
@@ -67,15 +74,8 @@ public class LocaleInitializer implements PhaseListener {
 			}
 		}
 
-		if (locale != null) {
+		if (locale != null && context.getViewRoot() != null) {
 			context.getViewRoot().setLocale(locale);
 		}
-	}
-
-	/**
-	 * @param event
-	 */
-	@Override
-	public void afterPhase(PhaseEvent event) {
 	}
 }
