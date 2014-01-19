@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.4.0 http://maven.apache.org/xsd/decoration-1.4.0.xsd"
 	name="Pivot4J">
 	<googleAnalyticsAccountId>UA-38197551-1</googleAnalyticsAccountId>
-	<publishDate position="bottom" format="yyyy-MM-dd" />
+	<publishDate position="bottom" format="yyyy-MM-dd HH:mm:ss" />
 	<version position="right" />
 
 	<skin>
