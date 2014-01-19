@@ -159,9 +159,9 @@
 						<transformationSet>
 							<dir>${basedir}/src/main/resources/</dir>
 							<includes>
-								<include>logback-test.xml</include>
+								<include>log4j2-test.xml</include>
 							</includes>
-							<stylesheet>${basedir}/src/main/xsl/logback-test.xsl</stylesheet>
+							<stylesheet>${basedir}/src/main/xsl/log4j2-test.xsl</stylesheet>
 							<parameters>
 								<parameter>
 									<name>logger.level</name>
@@ -175,33 +175,6 @@
 						</transformationSet>
 					</transformationSets>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>javadoc-jar</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>${version.plugin.source}</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 
@@ -450,6 +423,10 @@
 			<id>myfaces</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>arquillian.test</name>
+					<value>true</value>
+				</property>
 			</activation>
 			<dependencies>
 				<dependency>
@@ -469,6 +446,10 @@
 			<id>tomcat6</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>arquillian.test</name>
+					<value>true</value>
+				</property>
 			</activation>
 			<dependencies>
 				<dependency>

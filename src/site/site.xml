@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/DECORATION/1.3.0"
+<project xmlns="http://maven.apache.org/DECORATION/1.4.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.3.0 http://maven.apache.org/xsd/decoration-1.3.0.xsd"
+	xsi:schemaLocation="http://maven.apache.org/DECORATION/1.4.0 http://maven.apache.org/xsd/decoration-1.4.0.xsd"
 	name="Pivot4J">
 	<googleAnalyticsAccountId>UA-38197551-1</googleAnalyticsAccountId>
+	<publishDate position="bottom" format="yyyy-MM-dd" />
+	<version position="right" />
 
 	<skin>
-		<groupId>org.apache.maven.skins</groupId>
-		<artifactId>maven-fluido-skin</artifactId>
-		<version>1.3.0</version>
+		<groupId>lt.velykis.maven.skins</groupId>
+		<artifactId>reflow-maven-skin</artifactId>
+		<version>1.0.0</version>
 	</skin>
 
 	<body>
@@ -16,43 +18,114 @@
 			<meta name="google-site-verification" content="1eTr2b9TBltzvRgJMurNfI32T-3xJVGEV-E-lqfGMwU" />
 			<link rel="shortcut icon" href="./favicon.ico" />
 		</head>
-
 		<links>
-			<item name="Issue Tracker" href="https://github.com/mysticfall/pivot4j/issues" />
-			<item name="Discussions" href="http://groups.google.com/d/forum/pivot4j-list" />
-			<item name="JPivot Project" href="http://jpivot.sourceforge.net" />
-			<item name="Pentaho Community" href="http://community.pentaho.com" />
-			<item name="Olap4J Project" href="http://www.olap4j.org" />
-			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j" />
-		</links>
-		<menu name="Overview">
-			<item name="Introduction" href="index.html" />
-			<item name="Pivot4J Analytics" href="example.html" />
-			<item name="Pentaho BI Plugin" href="pentaho.html" />
+			<item name="Home" href="index.html" />
 			<item name="Download" href="download.html" />
+			<item name="Forum" href="http://groups.google.com/d/forum/pivot4j-list" />
+		</links>
+		<breadcrumbs>
+			<item name="Pivot4J" href="/" />
+		</breadcrumbs>
+		<menu name="Home" inherit="top">
+			<item name="Home" href="index.html" />
+			<item name="About Pivot4J" href="about.html" />
+		</menu>
+		<menu name="Projects" inherit="top">
+			<item name="Pivot4J Analytics" href="analytics.html" />
+			<item name="Pentaho Plugin" href="pentaho.html" />
+		</menu>
+		<menu name="Documentation" inherit="top">
 			<item name="How to Use" href="usage.html" />
 			<item name="For Developers" href="developer.html" />
 			<item name="FAQ" href="faq.html" />
 		</menu>
-		<menu ref="reports" />
+		<menu name="Download" inherit="top">
+			<item name="Download" href="download.html" />
+			<item name="License" href="license.html" />
+		</menu>
+		<menu name="Contribute" inherit="top">
+			<item name="GitHub Project Page" href="https://github.com/mysticfall/pivot4j" />
+			<item name="Issue Tracker" href="https://github.com/mysticfall/pivot4j/issues" />
+		</menu>
+		<menu name="Links" inherit="top">
+			<item name="JPivot Project" href="http://jpivot.sourceforge.net" />
+			<item name="Olap4J Project" href="http://www.olap4j.org" />
+			<item name="Pentaho Community" href="http://community.pentaho.com" />
+		</menu>
+		<menu name="Project Reports" ref="reports" inherit="top" />
 	</body>
 
 	<custom>
-		<fluidoSkin>
-			<sideBarEnabled>true</sideBarEnabled>
-			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
-			<profile>production</profile>
-			<gitHub>
-				<projectId>mysticfall/pivot4j</projectId>
-				<ribbonOrientation>right</ribbonOrientation>
-				<ribbonColor>red</ribbonColor>
-			</gitHub>
-			<twitter>
-				<user>pivot4j</user>
-				<showUser>true</showUser>
-				<showFollowers>true</showFollowers>
-			</twitter>
-			<googleSearch />
-		</fluidoSkin>
+		<reflowSkin>
+			<theme>default</theme>
+			<brand>
+				<name>Pivot4J</name>
+				<href>http://www.pivot4j.org/</href>
+			</brand>
+			<slogan>A New UI Independent JPivot Replacement.</slogan>
+			<titleTemplate>%1$s - %2$s</titleTemplate>
+			<toc>sidebar</toc>
+			<topNav>Projects|Documentation|Contribute</topNav>
+			<bottomNav>
+				<column>Home|Projects</column>
+				<column>Download|Documentation</column>
+				<column>reports|modules</column>
+				<column>Contribute|Links</column>
+			</bottomNav>
+			<bottomDescription>
+				This project was made possible thanks to JPivot
+				and Olap4J, hence the name Pivot4J came about.
+				There are so many
+				other great open source projects this project depends
+				on, so here we
+				want to show our gratitude for their developers.
+			</bottomDescription>
+			<highlightJs>true</highlightJs>
+			<highlightJsTheme>github</highlightJsTheme>
+			<smoothScroll>true</smoothScroll>
+			<absoluteResourceURL>http://www.pivot4j.org/</absoluteResourceURL>
+			<pages>
+				<index>
+					<shortTitle>New UI Independent JPivot Replacement</shortTitle>
+					<sections>
+						<carousel />
+						<columns>2</columns>
+						<body />
+						<sidebar />
+					</sections>
+				</index>
+				<about>
+					<shortTitle>About Pivot4J</shortTitle>
+				</about>
+				<download>
+					<shortTitle>Download</shortTitle>
+				</download>
+				<usage>
+					<shortTitle>How to Use Pivot4J</shortTitle>
+				</usage>
+				<developer>
+					<shortTitle>How to Develeop Pivot4J</shortTitle>
+				</developer>
+				<analytics>
+					<shortTitle>Pivot4J Analytics (Sample Application)</shortTitle>
+					<sections>
+						<body />
+						<body />
+						<thumbs>3</thumbs>
+						<sidebar />
+					</sections>
+				</analytics>
+				<pentaho>
+					<shortTitle>Pivot4J Pentaho BI Plugin</shortTitle>
+					<sections>
+						<body />
+						<body />
+						<thumbs>3</thumbs>
+						<body />
+						<sidebar />
+					</sections>
+				</pentaho>
+			</pages>
+		</reflowSkin>
 	</custom>
 </project>

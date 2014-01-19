@@ -24,6 +24,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 
 		<github.global.server>github</github.global.server>
 
+		<arquillian.test>false</arquillian.test>
+
 		<sonar.host.url>http://sonar.pivot4j.org</sonar.host.url>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
@@ -50,9 +52,9 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.plugin.jetspeed>2.2.2</version.plugin.jetspeed>
 		<version.plugin.jxr>2.4</version.plugin.jxr>
 		<version.plugin.l10n>1.0-alpha-2</version.plugin.l10n>
+		<version.plugin.site>3.3</version.plugin.site>
 		<version.plugin.project.info>2.7</version.plugin.project.info>
 		<version.plugin.resources>2.6</version.plugin.resources>
-		<version.plugin.site>3.3</version.plugin.site>
 		<version.plugin.sonar>0.1</version.plugin.sonar>
 		<version.plugin.source>2.2.1</version.plugin.source>
 		<version.plugin.war>2.4</version.plugin.war>
@@ -106,10 +108,12 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.shrinkwrap>2.0.0</version.shrinkwrap>
 		<version.tomcat6>6.0.37</version.tomcat6>
 		<version.xerces>2.11.0</version.xerces>
+		<version.reflow.velocity>1.0.0</version.reflow.velocity>
+		<version.velocity>1.7</version.velocity>
 	</properties>
 
 	<prerequisites>
-		<maven>2.2.1</maven>
+		<maven>3.0.0</maven>
 	</prerequisites>
 
 	<modules>
@@ -191,7 +195,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 	</scm>
 	<ciManagement>
 		<system>jenkins</system>
-		<url>http://ci.pivot4j.org/job/Pivot4J/</url>
+		<url>http://ci.greencatsoft.com/job/Pivot4J/</url>
 	</ciManagement>
 
 	<mailingLists>
@@ -222,9 +226,6 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 							<version>${version.extension.wagon}</version>
 						</dependency>
 					</dependencies>
-					<configuration>
-						<siteDirectory>/var/www</siteDirectory>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -247,20 +248,6 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 							</manifest>
 						</archive>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${version.plugin.javadoc}</version>
-					<executions>
-						<execution>
-							<id>aggregate</id>
-							<phase>site</phase>
-							<goals>
-								<goal>aggregate</goal>
-							</goals>
-						</execution>
-					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.jacoco</groupId>
@@ -290,6 +277,25 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			</plugins>
 		</pluginManagement>
 
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>lt.velykis.maven.skins</groupId>
+						<artifactId>reflow-velocity-tools</artifactId>
+						<version>${version.reflow.velocity}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.velocity</groupId>
+						<artifactId>velocity</artifactId>
+						<version>${version.velocity}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.scm</groupId>
@@ -313,8 +319,6 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<configuration>
 					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-					<artifactId>pivot4j-core</artifactId>
-					<packaging>jar</packaging>
 				</configuration>
 				<reportSets>
 					<reportSet>
@@ -350,7 +354,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>${failsafe.plugin.version}</version>
+				<version>${version.plugin.surefire}</version>
 				<configuration>
 					<aggregate>true</aggregate>
 					<linkXRef>true</linkXRef>
@@ -367,16 +371,16 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${javadoc.plugin.version}</version>
+				<version>${version.plugin.javadoc}</version>
 				<configuration>
 					<links>
 						<link>http://docs.oracle.com/javase/7/docs/api/</link>
-						<link>http://docs.oracle.com/cd/E17802_01/products/products/servlet/2.5/docs/servlet-2_5-mr2/</link>
+						<link>http://tomcat.apache.org/tomcat-7.0-doc/servletapi/</link>
 						<link>http://www.olap4j.org/head/api/</link>
 						<link>http://commons.apache.org/pool/apidocs/</link>
 						<link>http://commons.apache.org/proper/commons-configuration/apidocs/</link>
-						<link>http://javaserverfaces.java.net/nonav/docs/2.1/javadocs/</link>
-						<link>http://www.primefaces.org/docs/api/3.4/</link>
+						<link>http://javaserverfaces.java.net/nonav/docs/2.2/javadocs/</link>
+						<link>http://www.primefaces.org/docs/api/4.0/</link>
 					</links>
 				</configuration>
 				<reportSets>
@@ -384,10 +388,12 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<id>non-aggregate</id>
 						<reports>
 							<report>javadoc</report>
+							<report>test-javadoc</report>
 						</reports>
 					</reportSet>
 					<reportSet>
 						<id>aggregate</id>
+						<inherited>false</inherited>
 						<reports>
 							<report>aggregate</report>
 						</reports>
@@ -468,18 +474,18 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 	<distributionManagement>
 		<repository>
 			<id>sonatype-nexus-staging</id>
-			<name>pivot4j-releases</name>
+			<name>Sonatype Staging</name>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 		<snapshotRepository>
 			<id>sonatype-nexus-snapshots</id>
-			<name>pivot4j-snapshots</name>
+			<name>Sonatype Snapshots</name>
 			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 		</snapshotRepository>
 		<site>
 			<id>pivot4j</id>
-			<name>Pivot4J Home</name>
-			<url>scp://www.pivot4j.org/var/www</url>
+			<name>Pivot4J Home Page</name>
+			<url>scp://www.pivot4j.org/var/www/pivot4j</url>
 		</site>
 		<downloadUrl>http://www.pivot4j.org/download.html</downloadUrl>
 	</distributionManagement>
