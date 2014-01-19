@@ -22,6 +22,10 @@ form {
 
 .blockMsg {
 	z-index: 2100 !important;
+	top: 50% !important;
+	left: 50% !important;
+	margin-top: -35px !important;
+	margin-left: -107px !important;
 }
 
 .pe-blockui-content span {
