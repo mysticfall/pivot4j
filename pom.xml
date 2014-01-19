@@ -25,6 +25,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<github.global.server>github</github.global.server>
 
 		<arquillian.test>false</arquillian.test>
+		<deploy.site.url>scp://www.pivot4j.org/var/www/pivot4j</deploy.site.url>
 
 		<sonar.host.url>http://sonar.pivot4j.org</sonar.host.url>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -485,7 +486,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<site>
 			<id>pivot4j</id>
 			<name>Pivot4J Home Page</name>
-			<url>scp://www.pivot4j.org/var/www/pivot4j</url>
+			<url>${deploy.site.url}</url>
 		</site>
 		<downloadUrl>http://www.pivot4j.org/download.html</downloadUrl>
 	</distributionManagement>
