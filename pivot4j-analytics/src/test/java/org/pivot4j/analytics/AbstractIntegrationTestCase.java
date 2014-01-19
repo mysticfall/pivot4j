@@ -93,7 +93,7 @@ public abstract class AbstractIntegrationTestCase {
 				.addAsWebInfResource(
 						getFileForPath("src/test/resources/pivot4j-config.xml"))
 				.addAsResource(
-						getFileForPath("src/main/resources/logback-test.xml"))
+						getFileForPath("src/main/resources/log4j2-test.xml"))
 				.addAsResource(
 						getFileForPath("src/main/resources/mondrian.properties"));
 
