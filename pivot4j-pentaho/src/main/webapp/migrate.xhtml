@@ -18,6 +18,8 @@
 
 	<h:outputStylesheet library="pivot4j" name="css/style.css" />
 	<h:outputStylesheet library="pivot4j" name="css/pentaho.css" />
+
+	<h:outputScript library="pivot4j" name="js/pivot4j.js" />
 </h:head>
 
 <f:metadata>
@@ -117,9 +119,8 @@
 		</p:dialog>
 	</h:form>
 
-	<p:ajaxStatus styleClass="ajax-status"
-		onstart="if(window.waitDialog) waitDialog.block()"
-		oncomplete="waitDialog.unblock()" />
+	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
+		oncomplete="hideWaitDialog();" />
 
 	<pe:blockUI widgetVar="waitDialog" targetSelector=".ui-dialog">
 		<h:panelGrid columns="2">
