@@ -576,7 +576,8 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	 * @return the scenarioEnabled
 	 */
 	public boolean isScenarioEnabled() {
-		return model.isInitialized() && model.getScenario() != null;
+		return model.isInitialized() && model.isScenarioSupported()
+				&& model.getScenario() != null;
 	}
 
 	/**
