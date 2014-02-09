@@ -25,9 +25,4 @@
 	<lifecycle>
 		<phase-listener>org.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
 	</lifecycle>
-
-	<component>
-		<component-type>javax.faces.ViewRoot</component-type>
-		<component-class>org.pivot4j.analytics.component.workaround.UIViewRootFix</component-class>
-	</component>
 </faces-config>
