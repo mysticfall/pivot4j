@@ -52,7 +52,7 @@ public abstract class AbstractIntegrationTestCase {
 				.getLogger(AbstractIntegrationTestCase.class);
 
 		TransformerFactory factory = TransformerFactory.newInstance();
-		Source template = new StreamSource(new File("src/main/xsl/web.xsl"));
+		Source template = new StreamSource(new File("src/test/xsl/web.xsl"));
 
 		Transformer transformer = factory.newTransformer(template);
 
@@ -62,7 +62,6 @@ public abstract class AbstractIntegrationTestCase {
 		StringWriter writer = new StringWriter();
 		Result out = new StreamResult(writer);
 
-		transformer.setParameter("jsf.project.stage", "UnitTest");
 		transformer.transform(source, out);
 
 		WebArchive archive = ShrinkWrap
