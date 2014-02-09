@@ -14,9 +14,9 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<jsf.project.stage>Production</jsf.project.stage>
-		<logger.level>warn</logger.level>
-		<root.logger.level>warn</root.logger.level>
+		<jsf.project.stage>Development</jsf.project.stage>
+		<logger.level>debug</logger.level>
+		<root.logger.level>info</root.logger.level>
 		<web.test.port>9090</web.test.port>
 		<derby.home>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF</derby.home>
 		<skip.test>true</skip.test>

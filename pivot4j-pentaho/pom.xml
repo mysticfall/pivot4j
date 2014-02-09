@@ -56,6 +56,11 @@
 										<include>*.xhtml</include>
 									</resource>
 									<resource>
+										<path>WEB-INF</path>
+										<destination>webapp/WEB-INF</destination>
+										<include>*.xml</include>
+									</resource>
+									<resource>
 										<path>WEB-INF/lib</path>
 										<destination>lib</destination>
 										<include>*.jar</include>
@@ -79,6 +84,37 @@
 						<type>war</type>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<version>${version.plugin.xml}</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformationSets>
+						<transformationSet>
+							<dir>${project.build.directory}/plugin/webapp/WEB-INF</dir>
+							<includes>
+								<include>web.xml</include>
+							</includes>
+							<stylesheet>${basedir}/src/main/xsl/web.xsl</stylesheet>
+						</transformationSet>
+						<transformationSet>
+							<dir>${project.build.directory}/plugin/webapp/WEB-INF</dir>
+							<includes>
+								<include>faces-config.xml</include>
+							</includes>
+							<stylesheet>${basedir}/src/main/xsl/faces-config.xsl</stylesheet>
+						</transformationSet>
+					</transformationSets>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -166,6 +202,22 @@
 			<artifactId>pivot4j-analytics</artifactId>
 			<version>${project.version}</version>
 			<classifier>classes</classifier>
+			<exclusions>
+				<exclusion>
+					<groupId>org.glassfish</groupId>
+					<artifactId>javax.faces</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.myfaces.core</groupId>
+			<artifactId>myfaces-api</artifactId>
+			<version>${version.myfaces}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.myfaces.core</groupId>
+			<artifactId>myfaces-impl</artifactId>
+			<version>${version.myfaces}</version>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>

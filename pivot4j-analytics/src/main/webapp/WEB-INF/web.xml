@@ -42,6 +42,10 @@
 		<param-name>primefaces.THEME</param-name>
 		<param-value>#{workbenchHandler.theme}</param-value>
 	</context-param>
+	<context-param>
+		<param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
+		<param-value>true</param-value>
+	</context-param>
 
 	<listener>
 		<listener-class>org.pivot4j.analytics.logging.Log4jServletContextListenerFallback</listener-class>

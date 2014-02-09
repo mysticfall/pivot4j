@@ -16,7 +16,18 @@
 			</includes>
 			<excludes>
 				<exclude>*.xml</exclude>
+				<exclude>**/web.xml</exclude>
+				<exclude>**/faces-config.xml</exclude>
 			</excludes>
+			<filtered>false</filtered>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/generated-resources/xml/xslt</directory>
+			<outputDirectory>/pivot4j/webapp/WEB-INF</outputDirectory>
+			<includes>
+				<include>**/web.xml</include>
+				<include>**/faces-config.xml</include>
+			</includes>
 			<filtered>false</filtered>
 		</fileSet>
 		<fileSet>
