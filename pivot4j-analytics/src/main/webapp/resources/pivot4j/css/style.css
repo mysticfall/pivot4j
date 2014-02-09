@@ -198,11 +198,6 @@ body.report .pe-layout-pane-header {
 	background-position: 0 0;
 }
 
-.ui-treenode-icon.ui-icon-filter {
-	background-image: url('#{resource['pivot4j:images/filter.gif']}');
-	background-position: 0 0;
-}
-
 #source-tree-pane .ui-treenode .ui-state-highlight {
 	background: none !important;
 	text-shadow: none !important;
