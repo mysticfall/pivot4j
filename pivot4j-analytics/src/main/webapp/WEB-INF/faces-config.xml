@@ -13,6 +13,12 @@
 			<supported-locale>en</supported-locale>
 			<supported-locale>ko</supported-locale>
 			<supported-locale>pt_BR</supported-locale>
+			<supported-locale>fr</supported-locale>
+			<supported-locale>de</supported-locale>
+			<supported-locale>es</supported-locale>
+			<supported-locale>es_MX</supported-locale>
+			<supported-locale>hi</supported-locale>
+			<supported-locale>nl</supported-locale>
 		</locale-config>
 	</application>
 

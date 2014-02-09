@@ -130,8 +130,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<email>mysticfallband@gmail.com</email>
 			<url>https://github.com/mysticfall</url>
 			<roles>
-				<role>project lead</role>
-				<role>developer</role>
+				<role>Project Lead</role>
+				<role>Developer</role>
 			</roles>
 			<timezone>+9</timezone>
 		</developer>
@@ -143,7 +143,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<organization>Eyeq MC</organization>
 			<url>https://github.com/jmlim</url>
 			<roles>
-				<role>bugfix</role>
+				<role>Bug Fix</role>
 			</roles>
 		</contributor>
 		<contributor>
@@ -152,7 +152,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<organization>IT4biz and Professor Coruja Team</organization>
 			<url>http://www.it4biz.com.br</url>
 			<roles>
-				<role>translation</role>
+				<role>Brazilian Portuguese Translation</role>
 			</roles>
 		</contributor>
 		<contributor>
@@ -161,7 +161,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<organization>IT4biz and Professor Coruja Team</organization>
 			<url>http://www.it4biz.com.br</url>
 			<roles>
-				<role>translation</role>
+				<role>Brazilian Portuguese Translation</role>
 			</roles>
 		</contributor>
 		<contributor>
@@ -170,7 +170,47 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<organization>IT4biz and Professor Coruja Team</organization>
 			<url>http://www.it4biz.com.br</url>
 			<roles>
-				<role>translation</role>
+				<role>Brazilian Portuguese Translation</role>
+			</roles>
+		</contributor>
+		<contributor>
+			<name>Sylvain Decloix</name>
+			<email>s.decloix@atolcd.com</email>
+			<url>http://www.atolcd.com</url>
+			<roles>
+				<role>French Translation</role>
+			</roles>
+		</contributor>
+		<contributor>
+			<name>Thomas Starl</name>
+			<email>pentaho-localization@tink.de</email>
+			<url>http://www.pentaho.com</url>
+			<roles>
+				<role>German Translation</role>
+			</roles>
+		</contributor>
+		<contributor>
+			<name>Domingo Lavin</name>
+			<email>domingo.lavin@vinkos.com</email>
+			<url>http://www.pentaho.com</url>
+			<roles>
+				<role>Spanish Translation</role>
+			</roles>
+		</contributor>
+		<contributor>
+			<name>InfoAxon Technologies</name>
+			<email>nikhil.kapoor@infoaxon.com</email>
+			<url>http://www.infoaxon.com</url>
+			<roles>
+				<role>Hindi Translation</role>
+			</roles>
+		</contributor>
+		<contributor>
+			<name>C. van Kemenade</name>
+			<email>pentaho_nl@vinzi.nl</email>
+			<url>http://www.vinzi.nl</url>
+			<roles>
+				<role>Dutch Translation</role>
 			</roles>
 		</contributor>
 	</contributors>

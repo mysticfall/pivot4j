@@ -15,6 +15,14 @@
 		</xsl:copy>
 	</xsl:template>
 
+	<xsl:template match="*/faces-config:resource-bundle[last()]">
+		<xsl:copy-of select="." />&cr;&tab;&tab;
+		<resource-bundle>&cr;&tab;&tab;&tab;
+			<base-name>webapp.resources.pivot4j.i18n.messages</base-name>&cr;&tab;&tab;&tab;
+			<var>plugin_msg</var>&cr;&tab;&tab;
+		</resource-bundle>&cr;
+	</xsl:template>
+
 	<xsl:template match="*/faces-config:lifecycle[last()]">
 		<xsl:copy-of select="." />&cr;&cr;&tab;
 		<managed-bean>&cr;&tab;&tab;
