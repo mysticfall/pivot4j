@@ -199,8 +199,6 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 	 */
 	public void setFilterPanel(UIComponent filterPanel) {
 		this.filterPanel = filterPanel;
-
-		configureFilter();
 	}
 
 	/**

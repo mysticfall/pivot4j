@@ -361,31 +361,34 @@
 					columnClasses="ui-widget-header,filter-items">
 					<h:outputText value="#{msg['label.filter']}" />
 					<h:panelGroup layout="block">
-						<h:panelGroup id="filter-items" layout="block"
-							binding="#{filterHandler.filterPanel}">
-						</h:panelGroup>
-						<p:droppable for="filter-items"
-							hoverStyleClass="filter-items-hover">
-							<p:ajax listener="#{filterHandler.onDrop}"
-								update=":filter-panel,:filter-form" />
-						</p:droppable>
+						<h:form id="filter-items-form">
+							<h:panelGroup id="filter-items" layout="block"
+								binding="#{filterHandler.filterPanel}">
+							</h:panelGroup>
+							<p:droppable for="filter-items"
+								hoverStyleClass="filter-items-hover">
+								<p:ajax listener="#{filterHandler.onDrop}"
+									update=":filter-panel,:filter-form" />
+							</p:droppable>
 
-						<p:growl showDetail="true" sticky="true" />
+							<p:growl showDetail="true" sticky="true" />
+						</h:form>
 					</h:panelGroup>
 				</h:panelGrid>
 
 				<h:panelGroup id="filter-dialog" layout="block"
 					rendered="#{!pivotStateManager.readOnly}">
 					<p:overlayPanel widgetVar="filterDialog" hideEffect="fade"
-						for=":filter-items" dynamic="true" showEvent="none"
+						for=":filter-items-form:filter-items" dynamic="true" showEvent="none"
 						appendToBody="true" styleClass="ui-dialog filter-dialog"
 						onHide="onFilterDialogClose();" at="left top" my="left bottom">
 						<h:form id="filter-form">
-							<p:tree value="#{filterHandler.filterNode}" dynamic="true"
-								cache="true" var="node" selectionMode="checkbox" animate="true"
-								propagateSelectionUp="false" propagateSelectionDown="false"
+							<p:tree id="filter-tree" value="#{filterHandler.filterNode}"
+								dynamic="true" cache="true" var="node" selectionMode="checkbox"
+								animate="true" propagateSelectionUp="false"
+								propagateSelectionDown="false"
 								selection="#{filterHandler.selection}">
-								<p:treeNode type="member" icon="ui-icon-member">
+								<p:treeNode id="filter-node" type="member" icon="ui-icon-member">
 									<h:outputText value="#{node.name}" styleClass="node-member" />
 								</p:treeNode>
 
