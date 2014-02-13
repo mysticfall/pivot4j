@@ -1,5 +1,6 @@
 package org.pivot4j.analytics.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,7 +27,9 @@ import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "catalogChooser")
 @ViewScoped
-public class CatalogChooser {
+public class CatalogChooser implements Serializable {
+
+	private static final long serialVersionUID = 9032548845357820921L;
 
 	@ManagedProperty(value = "#{settings}")
 	private Settings settings;

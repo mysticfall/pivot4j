@@ -1,5 +1,6 @@
 package org.pivot4j.analytics.ui.chart;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,9 @@ import org.pivot4j.ui.chart.ChartRenderer;
 
 @ManagedBean(name = "chartHandler")
 @ViewScoped
-public class ChartHandler implements ModelChangeListener {
+public class ChartHandler implements ModelChangeListener, Serializable {
+
+	private static final long serialVersionUID = 8929886836467291035L;
 
 	@ManagedProperty(value = "#{pivotStateManager}")
 	private PivotStateManager stateManager;

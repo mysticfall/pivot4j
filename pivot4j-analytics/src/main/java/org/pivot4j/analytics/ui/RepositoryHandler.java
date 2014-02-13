@@ -43,7 +43,9 @@ import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "repositoryHandler")
 @SessionScoped
-public class RepositoryHandler implements ViewStateListener {
+public class RepositoryHandler implements ViewStateListener, Serializable {
+
+	private static final long serialVersionUID = -860723075484210684L;
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 

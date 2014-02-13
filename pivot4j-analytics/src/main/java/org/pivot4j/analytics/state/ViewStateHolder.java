@@ -1,5 +1,6 @@
 package org.pivot4j.analytics.state;
 
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +36,9 @@ import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "viewStateHolder")
 @SessionScoped
-public class ViewStateHolder {
+public class ViewStateHolder implements Serializable {
+
+	private static final long serialVersionUID = -7947800606762703855L;
 
 	private static final long MINUTE = 60;
 

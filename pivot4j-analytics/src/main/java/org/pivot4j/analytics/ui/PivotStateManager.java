@@ -24,7 +24,9 @@ import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "pivotStateManager")
 @ViewScoped
-public class PivotStateManager {
+public class PivotStateManager implements Serializable {
+
+	private static final long serialVersionUID = -146698046524588064L;
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 

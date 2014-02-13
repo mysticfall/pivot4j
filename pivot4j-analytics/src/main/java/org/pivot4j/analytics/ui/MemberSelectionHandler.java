@@ -1,5 +1,6 @@
 package org.pivot4j.analytics.ui;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,9 @@ import org.primefaces.model.TreeNode;
 
 @ManagedBean(name = "memberSelectionHandler")
 @ViewScoped
-public class MemberSelectionHandler implements NodeFilter {
+public class MemberSelectionHandler implements NodeFilter, Serializable {
+
+	private static final long serialVersionUID = -2124965576827229229L;
 
 	@ManagedProperty(value = "#{pivotStateManager.model}")
 	private PivotModel model;
