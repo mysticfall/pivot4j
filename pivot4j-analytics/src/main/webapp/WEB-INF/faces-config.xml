@@ -19,6 +19,7 @@
 			<supported-locale>es_MX</supported-locale>
 			<supported-locale>hi</supported-locale>
 			<supported-locale>nl</supported-locale>
+			<supported-locale>it</supported-locale>
 		</locale-config>
 	</application>
 

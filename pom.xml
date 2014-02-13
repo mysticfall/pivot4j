@@ -213,6 +213,13 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<role>Dutch Translation</role>
 			</roles>
 		</contributor>
+		<contributor>
+			<name>Manuel Castellin</name>
+			<email>mancast89@gmail.com</email>
+			<roles>
+				<role>Italian Translation</role>
+			</roles>
+		</contributor>
 	</contributors>
 	<licenses>
 		<license>
