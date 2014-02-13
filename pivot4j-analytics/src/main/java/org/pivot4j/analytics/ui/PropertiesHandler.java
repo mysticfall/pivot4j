@@ -40,8 +40,8 @@ public class PropertiesHandler {
 	@ManagedProperty(value = "#{propertyDescriptorFactory}")
 	private PropertyDescriptorFactory descriptorFactory;
 
-	@ManagedProperty(value = "#{pivotGridHandler.renderer}")
-	private TableRenderer renderer;
+	@ManagedProperty(value = "#{pivotGridHandler}")
+	private PivotGridHandler pivotGridHandler;
 
 	private ResourceBundle bundle;
 
@@ -199,6 +199,8 @@ public class PropertiesHandler {
 	 * @return
 	 */
 	protected RenderPropertyList getProperties(PropertyCategory category) {
+		TableRenderer renderer = pivotGridHandler.getRenderer();
+
 		RenderPropertyList properties = null;
 
 		switch (category) {
@@ -245,6 +247,8 @@ public class PropertiesHandler {
 		}
 
 		setDirty(false);
+
+		pivotGridHandler.render();
 	}
 
 	/**
@@ -351,12 +355,6 @@ public class PropertiesHandler {
 		categoryParam.setValue(category.name());
 
 		item.getChildren().add(categoryParam);
-
-		UIParameter renderParam = new UIParameter();
-		renderParam.setName("skipRender");
-		renderParam.setValue(true);
-
-		item.getChildren().add(renderParam);
 
 		return item;
 	}
@@ -493,18 +491,18 @@ public class PropertiesHandler {
 	}
 
 	/**
-	 * @return the renderer
+	 * @return the pivotGridHandler
 	 */
-	public TableRenderer getRenderer() {
-		return renderer;
+	public PivotGridHandler getPivotGridHandler() {
+		return pivotGridHandler;
 	}
 
 	/**
-	 * @param renderer
-	 *            the renderer to set
+	 * @param pivotGridHandler
+	 *            the pivotGridHandler to set
 	 */
-	public void setRenderer(TableRenderer renderer) {
-		this.renderer = renderer;
+	public void setPivotGridHandler(PivotGridHandler pivotGridHandler) {
+		this.pivotGridHandler = pivotGridHandler;
 	}
 
 	/**

@@ -4,7 +4,6 @@ import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.component.behavior.ajax.AjaxBehavior;
@@ -36,12 +35,6 @@ public abstract class AbstractPropertyInputEditor extends
 			behavior.setUpdate(update);
 
 			input.addClientBehavior("change", behavior);
-
-			UIParameter parameter = new UIParameter();
-			parameter.setName("skipRender");
-			parameter.setValue("true");
-
-			input.getChildren().add(parameter);
 		}
 
 		parent.getChildren().add(input);

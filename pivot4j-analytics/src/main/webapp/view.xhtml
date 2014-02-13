@@ -47,8 +47,10 @@
 </h:head>
 
 <f:metadata>
-	<f:event type="preRenderView" listener="#{pivotGridHandler.render}" />
-	<f:event type="preRenderView" listener="#{chartHandler.render}" />
+	<f:event type="preRenderView"
+		listener="#{pivotGridHandler.onPreRenderView}" />
+	<f:event type="preRenderView" listener="#{chartHandler.render}"
+		rendered="#{!facesContext.postback}" />
 </f:metadata>
 
 <h:body id="body" styleClass="report">
@@ -68,7 +70,8 @@
 							offIcon="ui-icon-arrowthickstop-1-n"
 							disabled="#{!pivotGridHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax update=":grid-form" oncomplete="onViewChanged()" />
+							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
 						<p:selectBooleanButton value="#{pivotGridHandler.hideSpans}"
 							title="#{msg['toolbar.spans.tooltip']}"
@@ -78,7 +81,8 @@
 							offIcon="ui-icon-circlesmall-minus"
 							disabled="#{!pivotGridHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax update=":grid-form" oncomplete="onViewChanged()" />
+							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
 						<p:selectBooleanButton value="#{pivotGridHandler.nonEmpty}"
 							title="#{msg['toolbar.nonEmpty.tooltip']}"
@@ -88,7 +92,7 @@
 							offIcon="ui-icon-circlesmall-close"
 							disabled="#{!pivotGridHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax
+							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
 								update=":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 								oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
@@ -98,7 +102,7 @@
 							offLabel="#{msg['toolbar.swap_axes']}" onIcon="ui-icon-refresh"
 							offIcon="ui-icon-refresh" disabled="#{!pivotGridHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax
+							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
 								update=":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:target-tree-form"
 								oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
@@ -117,8 +121,8 @@
 							<f:selectItem itemLabel="#{msg['toolbar.drill.replace']}"
 								itemValue="replace"
 								itemDescription="#{msg['toolbar.drill.replace.tooltip']}" />
-							<p:ajax update=":grid-form"
-								rendered="#{!pivotStateManager.readOnly}"
+							<p:ajax update=":grid-form" listener="#{pivotGridHandler.render}"
+								process="@this" rendered="#{!pivotStateManager.readOnly}"
 								oncomplete="onViewChanged()" />
 						</p:selectOneButton>
 						<p:selectBooleanButton value="#{pivotGridHandler.drillThrough}"
@@ -127,7 +131,8 @@
 							offLabel="#{msg['toolbar.drill.through']}"
 							disabled="#{!pivotGridHandler.valid or !pivotStateManager.model.cube.drillThroughEnabled}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax update=":grid-form" oncomplete="onViewChanged()" />
+							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
 						<p:selectBooleanButton value="#{pivotGridHandler.scenarioEnabled}"
 							title="#{msg['toolbar.scenario.tooltip']}"
@@ -135,25 +140,22 @@
 							offLabel="#{msg['toolbar.scenario']}"
 							disabled="#{!pivotGridHandler.valid or !pivotStateManager.model.scenarioSupported}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax update=":grid-form" />
+							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+								update=":grid-form" />
 						</p:selectBooleanButton>
 						<p:separator rendered="#{!pivotStateManager.readOnly}" />
 						<p:commandButton value="#{msg['toolbar.properties']}"
 							title="#{msg['toolbar.properties.tooltip']}" type="button"
 							icon="ui-icon-gear" disabled="#{!pivotGridHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}"
-							onclick="propertiesConfig.show(); return false;">
-							<f:param name="skipRender" value="true" />
-						</p:commandButton>
+							onclick="propertiesConfig.show(); return false;" />
 						<p:commandButton value="#{msg['toolbar.aggregation']}"
 							title="#{msg['toolbar.aggregation.tooltip']}"
 							icon="ui-icon-calculator" update=":aggregation-form"
 							process=":aggregation-form"
 							oncomplete="aggregationConfig.show();"
 							disabled="#{!pivotGridHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}">
-							<f:param name="skipRender" value="true" />
-						</p:commandButton>
+							rendered="#{!pivotStateManager.readOnly}" />
 						<p:separator rendered="#{!pivotStateManager.readOnly}"
 							styleClass="ui-hide-display" />
 						<p:menuButton value="#{msg['toolbar.export']}"
@@ -301,7 +303,6 @@
 								oncomplete="hierarchyConfig.show();"
 								title="#{msg['button.hierarchyConfig.tooltip']}">
 								<f:param name="hierarchy" value="#{node.name}" />
-								<f:param name="skipRender" value="true" />
 							</p:commandButton>
 							<!-- workaround for PrimeFaces issue #4748 -->
 							<p:draggable for="hierarchy-node"
@@ -379,8 +380,9 @@
 				<h:panelGroup id="filter-dialog" layout="block"
 					rendered="#{!pivotStateManager.readOnly}">
 					<p:overlayPanel widgetVar="filterDialog" hideEffect="fade"
-						for=":filter-items-form:filter-items" dynamic="true" showEvent="none"
-						appendToBody="true" styleClass="ui-dialog filter-dialog"
+						for=":filter-items-form:filter-items" dynamic="true"
+						showEvent="none" appendToBody="true"
+						styleClass="ui-dialog filter-dialog"
 						onHide="onFilterDialogClose();" at="left top" my="left bottom">
 						<h:form id="filter-form">
 							<p:tree id="filter-tree" value="#{filterHandler.filterNode}"
@@ -524,9 +526,7 @@
 	<h:form id="poll-form">
 		<p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true"
 			listener="#{pivotStateManager.keepAlive}" process="@this"
-			global="false">
-			<f:param name="skipRender" value="true" />
-		</p:poll>
+			global="false" />
 	</h:form>
 </h:body>
 </html>

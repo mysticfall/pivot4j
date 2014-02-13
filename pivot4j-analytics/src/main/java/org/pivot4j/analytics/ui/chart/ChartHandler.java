@@ -3,7 +3,6 @@ package org.pivot4j.analytics.ui.chart;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
@@ -180,13 +179,6 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 		if (model != null && model.isInitialized()
 				&& StringUtils.isNotBlank(chartName)) {
 			FacesContext context = FacesContext.getCurrentInstance();
-
-			Map<String, String> parameters = context.getExternalContext()
-					.getRequestParameterMap();
-
-			if ("true".equals(parameters.get("skipRender"))) {
-				return;
-			}
 
 			ChartBuilder builder = chartBuilderFactory.createChartBuilder(
 					chartName, context);

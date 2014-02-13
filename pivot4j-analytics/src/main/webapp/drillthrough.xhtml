@@ -82,9 +82,7 @@
 
 						<p:commandButton value="#{msg['button.apply']}"
 							icon="ui-icon-check" action="#{drillThroughHandler.update}"
-							update="drillthrough-grid,:growl" process="@form">
-							<f:param name="skipRender" value="true" />
-						</p:commandButton>
+							update="drillthrough-grid,:growl" process="@form" />
 
 						<p:commandButton value="#{msg['button.export']}"
 							icon="ui-icon-disk" ajax="false"
@@ -96,17 +94,13 @@
 						<p:commandButton value="#{msg['button.close']}"
 							icon="ui-icon-close" action="#{drillThroughData.reset}"
 							update="drillthrough-dialog,:growl" process="@form"
-							immediate="true">
-							<f:param name="skipRender" value="true" />
-						</p:commandButton>
+							immediate="true" />
 					</h:panelGroup>
 				</h:panelGroup>
 			</f:facet>
 
 			<p:ajax event="close" listener="#{drillThroughData.reset}"
-				immediate="true">
-				<f:param name="skipRender" value="true" />
-			</p:ajax>
+				immediate="true" />
 		</p:dialog>
 	</h:form>
 </ui:composition>

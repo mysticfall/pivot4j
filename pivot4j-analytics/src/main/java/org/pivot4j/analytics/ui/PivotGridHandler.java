@@ -317,6 +317,14 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		}
 	}
 
+	public void onPreRenderView() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if (!context.isPostback()) {
+			render();
+		}
+	}
+
 	public boolean isValid() {
 		if (model == null || !model.isInitialized()) {
 			return false;
@@ -340,13 +348,6 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	public void render() {
 		if (model != null && model.isInitialized() && component.isRendered()) {
 			FacesContext context = FacesContext.getCurrentInstance();
-
-			Map<String, String> parameters = context.getExternalContext()
-					.getRequestParameterMap();
-
-			if ("true".equals(parameters.get("skipRender"))) {
-				return;
-			}
 
 			PivotComponentBuilder callback = new PivotComponentBuilder(context);
 			callback.setComponent(component);
@@ -394,6 +395,8 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		UICommand<?> command = renderer.getCommand(requestParameters
 				.get("command"));
 		command.execute(model, parameters);
+
+		render();
 	}
 
 	public void updateCell() {

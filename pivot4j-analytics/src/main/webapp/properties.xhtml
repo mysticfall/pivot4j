@@ -39,7 +39,6 @@
 									listener="#{propertiesHandler.onEditorModeChange}"
 									update="editor-panel" process="editor-panel"
 									oncomplete="applyThemeToCMEditor('.properties-config .CodeMirror')" />
-								<f:param name="skipRender" value="true" />
 							</p:selectBooleanCheckbox>
 
 							<p:outputLabel value="#{msg['label.properties.value']}"
@@ -60,7 +59,6 @@
 									<p:ajax event="blur"
 										listener="#{propertiesHandler.onPropertyChange}"
 										update="button-bar" />
-									<f:param name="skipRender" value="true" />
 								</pe:codeMirror>
 							</p:outputPanel>
 
@@ -103,10 +101,7 @@
 						disabled="#{!propertiesHandler.dirty}" />
 					<p:commandButton value="#{msg['button.reset']}"
 						icon="ui-icon-arrowreturn-1-w" action="#{propertiesHandler.reset}"
-						update="content,button-bar" disabled="#{!propertiesHandler.set}">
-						<f:param name="skipRender" value="true" />
-					</p:commandButton>
-
+						update="content,button-bar" disabled="#{!propertiesHandler.set}" />
 					<p:commandButton value="#{msg['button.close']}"
 						icon="ui-icon-close"
 						onclick="propertiesConfig.hide(); return false;" />
