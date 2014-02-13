@@ -50,6 +50,8 @@
 	<f:event type="preRenderView"
 		listener="#{pivotGridHandler.onPreRenderView}" />
 	<f:event type="preRenderView"
+		listener="#{filterHandler.onPreRenderView}" />
+	<f:event type="preRenderView"
 		listener="#{chartHandler.onPreRenderView}" />
 </f:metadata>
 
@@ -384,7 +386,8 @@
 						for=":filter-items-form:filter-items" dynamic="true"
 						showEvent="none" appendToBody="true"
 						styleClass="ui-dialog filter-dialog"
-						onHide="onFilterDialogClose();" at="left top" my="left bottom">
+						onHide="onFilterDialogClose();" at="left top" my="left bottom"
+						dismissable="false">
 						<h:form id="filter-form">
 							<p:tree id="filter-tree" value="#{filterHandler.filterNode}"
 								dynamic="true" cache="true" var="node" selectionMode="checkbox"

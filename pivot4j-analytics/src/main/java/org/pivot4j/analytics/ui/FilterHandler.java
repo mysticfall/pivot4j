@@ -225,6 +225,8 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 		}
 
 		this.filterMembers = null;
+		this.filterNode = null;
+		this.selection = null;
 	}
 
 	protected Hierarchy getHierarchy() {
@@ -431,6 +433,14 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 						.replaceAll("[\\s\\.]", "_").toLowerCase();
 	}
 
+	public void onPreRenderView() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if (!context.isPostback()) {
+			configureFilter();
+		}
+	}
+
 	public void show() {
 		FacesContext context = FacesContext.getCurrentInstance();
 
@@ -445,8 +455,6 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 	 * @param hierarchyName
 	 */
 	public void show(String hierarchyName) {
-		this.filterNode = null;
-
 		setHierarchyName(hierarchyName);
 
 		buttonApply.setDisabled(true);
