@@ -20,6 +20,7 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
+import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
 import org.pivot4j.PivotException;
@@ -28,6 +29,7 @@ import org.pivot4j.mdx.Exp;
 import org.pivot4j.query.QueryAdapter;
 import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.DrillThrough;
+import org.pivot4j.util.OlapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +103,8 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 	protected ResultSet performDrillThroughMdx(Cell cell,
 			List<MetadataElement> selection, int maximumRows) {
 		PivotModel model = getModel();
+		Cube cube = model.getCube();
+
 		QueryAdapter query = getQueryAdapter();
 
 		StringBuilder builder = new StringBuilder();
@@ -133,12 +137,13 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 					builder.append(", ");
 				}
 
-				builder.append(member.getUniqueName());
+				builder.append(OlapUtils.wrapRaggedIfNecessary(member, cube)
+						.getUniqueName());
 			}
 		}
 
 		builder.append(") ON COLUMNS FROM ");
-		builder.append(model.getCube().getUniqueName());
+		builder.append(cube.getUniqueName());
 
 		Exp slicer = query.getParsedQuery().getSlicer();
 
@@ -157,6 +162,10 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 					isFirst = false;
 				} else {
 					builder.append(", ");
+				}
+
+				if (elem instanceof Member) {
+					elem = OlapUtils.wrapRaggedIfNecessary((Member) elem, cube);
 				}
 
 				builder.append(elem.getUniqueName());
