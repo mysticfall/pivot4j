@@ -468,6 +468,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<locale>es_MX</locale>
 						<locale>hi</locale>
 						<locale>nl</locale>
+						<locale>it</locale>
 					</locales>
 					<aggregate>true</aggregate>
 					<includes>
