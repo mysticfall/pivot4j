@@ -49,8 +49,8 @@
 <f:metadata>
 	<f:event type="preRenderView"
 		listener="#{pivotGridHandler.onPreRenderView}" />
-	<f:event type="preRenderView" listener="#{chartHandler.render}"
-		rendered="#{!facesContext.postback}" />
+	<f:event type="preRenderView"
+		listener="#{chartHandler.onPreRenderView}" />
 </f:metadata>
 
 <h:body id="body" styleClass="report">
@@ -187,7 +187,8 @@
 							disabled="#{!pivotGridHandler.valid}">
 							<f:selectItems value="#{chartHandler.charts}" />
 
-							<p:ajax event="change" update=":toolbar-form,:grid-form,:growl" />
+							<p:ajax process="@this" listener="#{chartHandler.render}"
+								event="change" update=":toolbar-form,:grid-form,:growl" />
 						</p:selectOneMenu>
 					</p:toolbarGroup>
 				</p:toolbar>

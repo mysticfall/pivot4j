@@ -172,9 +172,14 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 				&& axes.get(1).getPositionCount() > 0;
 	}
 
-	/**
-	 * 
-	 */
+	public void onPreRenderView() {
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if (!context.isPostback()) {
+			render();
+		}
+	}
+
 	public void render() {
 		if (model != null && model.isInitialized()
 				&& StringUtils.isNotBlank(chartName)) {
