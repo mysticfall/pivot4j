@@ -221,6 +221,12 @@
 			<artifactId>mondrian</artifactId>
 			<version>${version.mondrian}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
