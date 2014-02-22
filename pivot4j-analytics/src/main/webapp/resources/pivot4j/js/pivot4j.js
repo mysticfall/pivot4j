@@ -302,6 +302,15 @@ function onThemeChanged() {
 	});
 }
 
+function onViewResize() {
+	for ( var name in PrimeFaces.widgets) {
+		var widget = PF(name);
+		if (widget.plot) {
+			widget.plot.replot();
+		}
+	}
+}
+
 function applyThemeToCMEditor(selector) {
 	if (!selector) {
 		selector = ".properties-config .CodeMirror";

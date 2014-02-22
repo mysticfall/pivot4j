@@ -74,6 +74,7 @@ public class WorkbenchHandler {
 			layoutOptions.setCenterOptions(contentOptions);
 
 			LayoutOptions childCenterOptions = new LayoutOptions();
+			childCenterOptions.addOption("onresize_end", "onViewResize");
 			contentOptions.setChildOptions(childCenterOptions);
 
 			LayoutOptions filterOptions = new LayoutOptions();
