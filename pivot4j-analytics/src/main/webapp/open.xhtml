@@ -4,7 +4,13 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 <f:view>
 	<f:metadata>
-		<f:event type="preRenderView" listener="#{reportOpener.load}" />
+		<f:viewParam name="#{settings.fileParameterName}"
+			value="#{reportOpener.fileId}" />
+		<f:viewParam name="#{settings.pathParameterName}"
+			value="#{reportOpener.path}" />
+		<f:viewParam name="embeded" value="#{reportOpener.embeded}" />
+
+		<f:viewAction action="#{reportOpener.load}" />
 	</f:metadata>
 </f:view>
 </html>

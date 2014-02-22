@@ -43,6 +43,12 @@ public class ReportOpener {
 	@ManagedProperty(value = "#{reportRepository}")
 	private ReportRepository reportRepository;
 
+	private String fileId;
+
+	private String path;
+
+	private boolean embeded = false;
+
 	public void load() throws IOException, ClassNotFoundException,
 			ConfigurationException, DataSourceNotFoundException {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -70,7 +76,9 @@ public class ReportOpener {
 		NavigationHandler navigationHandler = context.getApplication()
 				.getNavigationHandler();
 
-		String path = String.format("view?faces-redirect=true&%s=%s",
+		String target = embeded ? "embed" : "view";
+
+		String path = String.format("%s?faces-redirect=true&%s=%s", target,
 				settings.getViewParameterName(), state.getId());
 
 		navigationHandler.handleNavigation(context, null, path);
@@ -120,6 +128,7 @@ public class ReportOpener {
 
 		state.setFile(file);
 		state.setParameters(parameters);
+		state.setReadOnly(embeded);
 
 		return state;
 	}
@@ -131,9 +140,6 @@ public class ReportOpener {
 	 */
 	protected ReportFile getReportFromRequest(HttpServletRequest request)
 			throws IOException {
-		String fileId = request.getParameter(settings.getFileParameterName());
-		String path = request.getParameter(settings.getPathParameterName());
-
 		ReportFile file = null;
 
 		if (fileId != null) {
@@ -151,6 +157,51 @@ public class ReportOpener {
 		}
 
 		return file;
+	}
+
+	/**
+	 * @return the fileId
+	 */
+	public String getFileId() {
+		return fileId;
+	}
+
+	/**
+	 * @param fileId
+	 *            the fileId to set
+	 */
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
+	}
+
+	/**
+	 * @return the path
+	 */
+	public String getPath() {
+		return path;
+	}
+
+	/**
+	 * @param path
+	 *            the path to set
+	 */
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	/**
+	 * @return the embeded
+	 */
+	public boolean isEmbeded() {
+		return embeded;
+	}
+
+	/**
+	 * @param embeded
+	 *            the embeded to set
+	 */
+	public void setEmbeded(boolean embeded) {
+		this.embeded = embeded;
 	}
 
 	/**

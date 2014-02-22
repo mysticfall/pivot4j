@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>#{msg['title']}</title>
+
+	<c:set var="contextPath"
+		value="#{facesContext.externalContext.requestContextPath}" />
+
+	<link rel="shortcut icon"
+		href="#{resource['pivot4j:images/logo16.png']}" />
+
+	<h:outputStylesheet library="primefaces"
+		name="colorpicker/colorpicker.css" />
+	<h:outputStylesheet library="pivot4j" name="css/style.css" />
+
+	<h:outputScript library="pivot4j" name="js/pivot4j.js" />
+</h:head>
+
+<f:metadata>
+	<f:event type="preRenderView"
+		listener="#{pivotGridHandler.onPreRenderView}" />
+	<f:event type="preRenderView"
+		listener="#{chartHandler.onPreRenderView}" />
+</f:metadata>
+
+<h:body id="body" styleClass="embeded report">
+	<h:form id="grid-form">
+		<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
+			binding="#{pivotGridHandler.component}"
+			rendered="#{pivotGridHandler.valid and empty chartHandler.chartName}" />
+
+		<h:panelGroup id="chart-panel" styleClass="chart-panel"
+			binding="#{chartHandler.component}" layout="block"
+			rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
+
+		<p:fieldset styleClass="filter-info" legend="#{msg['label.filter']}"
+			toggleable="true" toggleSpeed="500"
+			rendered="#{pivotGridHandler.valid and pivotGridHandler.renderer.renderSlicer}">
+
+			<p:panelGrid id="filter-grid" styleClass="filter-grid"
+				binding="#{pivotGridHandler.filterComponent}" />
+		</p:fieldset>
+
+		<h:panelGroup styleClass="info-panel" layout="block"
+			rendered="#{!pivotGridHandler.valid}">
+			<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
+			<h:outputText value="#{msg['message.query.blank']}"
+				styleClass="message-warn" />
+		</h:panelGroup>
+
+		<p:growl id="grid-growl" showDetail="true" sticky="true" />
+	</h:form>
+
+	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
+		oncomplete="hideWaitDialog();" />
+
+	<pe:blockUI widgetVar="waitDialog" targetSelector="body">
+		<h:panelGrid columns="2">
+			<p:graphicImage library="pivot4j" name="images/loading.gif" />
+			<h:outputText value="#{msg['message.loading']}" />
+		</h:panelGrid>
+	</pe:blockUI>
+
+	<p:growl id="growl" showDetail="true" sticky="true" />
+
+	<h:form id="poll-form">
+		<p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true"
+			listener="#{pivotStateManager.keepAlive}" process="@this"
+			global="false" />
+	</h:form>
+</h:body>
+</html>
