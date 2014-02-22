@@ -20,6 +20,7 @@ import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -79,6 +80,8 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 
 	private PanelGrid filterComponent;
 
+	private Exception lastError;
+
 	@PostConstruct
 	protected void initialize() {
 		this.model = stateManager.getModel();
@@ -89,16 +92,16 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 
 			if (model.isInitialized()) {
 				this.cubeName = model.getCube().getName();
+
+				checkError(model);
 			} else {
 				ConnectionInfo connectionInfo = stateManager
 						.getConnectionInfo();
 
-				if (connectionInfo != null) {
-					if (!model.isInitialized()) {
-						this.cubeName = connectionInfo.getCubeName();
+				if (connectionInfo != null && !model.isInitialized()) {
+					this.cubeName = connectionInfo.getCubeName();
 
-						onCubeChange();
-					}
+					onCubeChange();
 				}
 			}
 		}
@@ -123,6 +126,36 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		renderer.setEnableSort(!readOnly);
 
 		renderer.addCommand(new DrillThroughCommandImpl(renderer));
+	}
+
+	/**
+	 * @param model
+	 */
+	private void checkError(PivotModel model) {
+		Exception error = null;
+
+		try {
+			model.getCellSet();
+		} catch (Exception e) {
+			model.destroy();
+
+			Logger logger = LoggerFactory.getLogger(getClass());
+			logger.error("Failed to get query result.", e);
+
+			error = e;
+
+			FacesContext context = FacesContext.getCurrentInstance();
+			ResourceBundle bundle = context.getApplication().getResourceBundle(
+					context, "msg");
+
+			String title = bundle.getString("error.unhandled.title");
+			String message = bundle.getString("error.unhandled.message") + e;
+
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, title, message));
+		}
+
+		this.lastError = error;
 	}
 
 	@PreDestroy
@@ -326,7 +359,7 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	}
 
 	public boolean isValid() {
-		if (model == null || !model.isInitialized()) {
+		if (model == null || !model.isInitialized() || lastError != null) {
 			return false;
 		}
 
@@ -345,8 +378,23 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 				&& axes.get(1).getPositionCount() > 0;
 	}
 
+	/**
+	 * @return the lastError
+	 */
+	public Exception getLastError() {
+		return lastError;
+	}
+
+	public String getLastErrorMessage() {
+		if (lastError == null) {
+			return null;
+		}
+
+		return ExceptionUtils.getRootCauseMessage(lastError);
+	}
+
 	public void render() {
-		if (model != null && model.isInitialized() && component.isRendered()) {
+		if (component.isRendered()) {
 			FacesContext context = FacesContext.getCurrentInstance();
 
 			PivotComponentBuilder callback = new PivotComponentBuilder(context);
@@ -424,15 +472,21 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	}
 
 	public void executeMdx() {
-		String oldMdx = model.getCurrentMdx();
-
 		try {
 			model.setMdx(currentMdx);
 
 			if (!model.isInitialized()) {
 				model.initialize();
 			}
+
+			render();
 		} catch (Exception e) {
+			this.lastError = e;
+
+			if (model.isInitialized()) {
+				model.destroy();
+			}
+
 			FacesContext context = FacesContext.getCurrentInstance();
 
 			ResourceBundle bundle = context.getApplication().getResourceBundle(
@@ -442,10 +496,6 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, title, e.getMessage()));
-
-			if (oldMdx != null) {
-				model.setMdx(oldMdx);
-			}
 		}
 	}
 
@@ -455,6 +505,10 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 	public String getCurrentMdx() {
 		if (model == null) {
 			return null;
+		}
+
+		if (lastError != null && StringUtils.isBlank(model.getCurrentMdx())) {
+			return model.getMdx();
 		}
 
 		return model.getCurrentMdx();
@@ -626,6 +680,8 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		} else {
 			this.cubeName = model.getCube().getName();
 		}
+
+		this.lastError = null;
 	}
 
 	/**

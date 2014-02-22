@@ -274,7 +274,8 @@
 				<h:form id="target-tree-form">
 					<p:tree id="target-navigator" styleClass="navigator"
 						value="#{navigatorHandler.targetNode}" dynamic="true" cache="true"
-						var="node" animate="true">
+						var="node" animate="true"
+						rendered="#{pivotGridHandler.lastError == null}">
 						<p:treeNode type="columns" icon="ui-icon-cols">
 							<h:outputText id="columns-node" value="#{msg['label.columns']}"
 								styleClass="node-axis" />
@@ -446,7 +447,7 @@
 					</p:fieldset>
 
 					<h:panelGroup styleClass="info-panel" layout="block"
-						rendered="#{!pivotGridHandler.valid}">
+						rendered="#{!pivotGridHandler.valid and pivotGridHandler.lastError == null}">
 						<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
 						<h:outputText value="#{msg['message.query.blank']}"
 							styleClass="message-warn" />
