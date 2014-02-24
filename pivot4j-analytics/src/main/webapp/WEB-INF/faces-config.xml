@@ -20,6 +20,7 @@
 			<supported-locale>hi</supported-locale>
 			<supported-locale>nl</supported-locale>
 			<supported-locale>it</supported-locale>
+			<supported-locale>ru</supported-locale>
 		</locale-config>
 	</application>
 

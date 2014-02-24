@@ -220,6 +220,13 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<role>Italian Translation</role>
 			</roles>
 		</contributor>
+		<contributor>
+			<name>Сергей Шкарин</name>
+			<email>kouki.sergey@gmail.com</email>
+			<roles>
+				<role>Russian Translation</role>
+			</roles>
+		</contributor>
 	</contributors>
 	<licenses>
 		<license>
@@ -469,6 +476,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						<locale>hi</locale>
 						<locale>nl</locale>
 						<locale>it</locale>
+						<locale>ru</locale>
 					</locales>
 					<aggregate>true</aggregate>
 					<includes>
