@@ -134,6 +134,18 @@ public class PivotComponentBuilder extends
 	}
 
 	/**
+	 * @param context
+	 * @return
+	 */
+	protected UIComponent getTargetComponent(TableRenderContext context) {
+		if (context.getAxis() == Axis.FILTER) {
+			return filterComponent;
+		} else {
+			return component;
+		}
+	}
+
+	/**
 	 * @see org.pivot4j.ui.RenderCallback#getContentType()
 	 */
 	@Override
@@ -171,11 +183,7 @@ public class PivotComponentBuilder extends
 	 */
 	@Override
 	public void startTable(TableRenderContext context) {
-		if (context.getAxis() == Axis.FILTER) {
-			filterComponent.getChildren().clear();
-		} else {
-			component.getChildren().clear();
-		}
+		getTargetComponent(context).getChildren().clear();
 	}
 
 	/**
@@ -184,6 +192,22 @@ public class PivotComponentBuilder extends
 	@Override
 	public void startHeader(TableRenderContext context) {
 		this.header = new HtmlPanelGroup();
+
+		if (context.getAxis() == Axis.FILTER) {
+			ResourceBundle resources = context.getResourceBundle();
+
+			HtmlOutputText title = new HtmlOutputText();
+			title.setValue(resources.getString("label.filter"));
+
+			Column headerColumn = new Column();
+			headerColumn.setColspan(2);
+			headerColumn.getChildren().add(title);
+
+			Row headerRow = new Row();
+			headerRow.getChildren().add(headerColumn);
+
+			header.getChildren().add(headerRow);
+		}
 	}
 
 	/**
@@ -191,8 +215,8 @@ public class PivotComponentBuilder extends
 	 */
 	@Override
 	public void endHeader(TableRenderContext context) {
-		if (context.getAxis() != Axis.FILTER) {
-			component.getFacets().put("header", header);
+		if (header.getChildCount() > 0) {
+			getTargetComponent(context).getFacets().put("header", header);
 		}
 
 		this.header = null;
@@ -491,11 +515,24 @@ public class PivotComponentBuilder extends
 
 			column.getChildren().add(inplace);
 		} else {
+			if (context.getAxis() == Axis.FILTER
+					&& context.getColumnIndex() > 1) {
+				HtmlOutputText comma = new HtmlOutputText();
+				comma.setStyleClass("separator");
+				comma.setValue(",");
+
+				column.getChildren().add(comma);
+			}
+
 			HtmlOutputText text = new HtmlOutputText();
 			String id = "txt-" + text.hashCode();
 
 			text.setId(id);
 			text.setValue(labelText);
+
+			if (context.getMember() != null) {
+				text.setTitle(context.getMember().getUniqueName());
+			}
 
 			String link = propertyUtils.getString("link",
 					context.getRenderPropertyCategory(), null);

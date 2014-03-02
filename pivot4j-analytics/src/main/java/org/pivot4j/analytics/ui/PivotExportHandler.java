@@ -329,6 +329,7 @@ public class PivotExportHandler {
 		TableRenderer renderer = viewHandler.getRenderer();
 
 		boolean renderSlicer = renderer.getRenderSlicer();
+		boolean inline = renderer.getShowSlicerMembersInline();
 
 		OutputStream out = externalContext.getResponseOutputStream();
 
@@ -339,9 +340,13 @@ public class PivotExportHandler {
 
 		try {
 			renderer.setRenderSlicer(true);
+			renderer.setShowSlicerMembersInline(false);
+
 			renderer.render(model, exporter);
 		} finally {
 			renderer.setRenderSlicer(renderSlicer);
+			renderer.setShowSlicerMembersInline(inline);
+
 			out.flush();
 			IOUtils.closeQuietly(out);
 		}

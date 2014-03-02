@@ -296,6 +296,14 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 	}
 
 	public void onClose() {
+		ChangeSlicer transform = model.getTransform(ChangeSlicer.class);
+
+		Hierarchy hierarchy = getHierarchy();
+
+		if (!transform.getHierarchies().contains(hierarchy)) {
+			removeHierarchy(getHierarchyName());
+		}
+
 		setHierarchyName(null);
 	}
 
@@ -407,7 +415,7 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 				context.getELContext(), "#{filterHandler.removeHierarchy}",
 				Void.class, new Class<?>[0]));
 		closeButton
-				.setUpdate(":filter-panel,:source-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar");
+				.setUpdate(":filter-items-form,:source-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar");
 		closeButton.setOncomplete("onViewChanged()");
 
 		UIParameter parameter2 = new UIParameter();

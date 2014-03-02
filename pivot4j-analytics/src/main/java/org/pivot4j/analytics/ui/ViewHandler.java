@@ -813,6 +813,21 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	}
 
 	/**
+	 * @return the renderSlicer
+	 */
+	public boolean getRenderSlicer() {
+		return renderer.getRenderSlicer();
+	}
+
+	/**
+	 * @param renderSlicer
+	 *            the renderSlicer to set
+	 */
+	public void setRenderSlicer(boolean renderSlicer) {
+		renderer.setRenderSlicer(renderSlicer);
+	}
+
+	/**
 	 * @see org.pivot4j.QueryListener#queryExecuted(org.pivot4j.QueryEvent)
 	 */
 	@Override

@@ -357,33 +357,37 @@
 
 			<pe:layoutPane id="grid-header-pane" position="north"
 				rendered="#{!pivotStateManager.readOnly}">
-				<h:panelGrid id="filter-panel" styleClass="filter-panel" columns="2"
-					columnClasses="ui-widget-header,filter-items">
-					<h:outputText value="#{msg['label.filter']}" />
-					<h:panelGroup layout="block">
-						<h:form id="filter-items-form">
+				<h:form id="filter-items-form">
+					<h:panelGrid id="filter-panel" styleClass="filter-panel"
+						columns="3"
+						columnClasses="ui-widget-header,filter-items,filter-options">
+						<h:outputText value="#{msg['label.filter']}" />
+						<h:panelGroup layout="block">
 							<h:panelGroup id="filter-items" layout="block"
 								binding="#{filterHandler.filterPanel}">
 							</h:panelGroup>
 							<p:droppable for="filter-items"
 								hoverStyleClass="filter-items-hover">
 								<p:ajax listener="#{filterHandler.onDrop}"
-									update=":filter-panel,:filter-form" />
+									update=":filter-items-form,:filter-form" process="@this" />
 							</p:droppable>
-
-							<p:growl showDetail="true" sticky="true" />
-						</h:form>
-					</h:panelGroup>
-				</h:panelGrid>
+						</h:panelGroup>
+						<p:selectBooleanCheckbox value="#{viewHandler.renderSlicer}"
+							itemLabel="#{msg['label.filter.show.members']}">
+							<p:ajax listener="#{viewHandler.render}" update=":grid-form"
+								process="@this" oncomplete="onViewChanged()" />
+						</p:selectBooleanCheckbox>
+					</h:panelGrid>
+					<p:growl showDetail="true" sticky="true" />
+				</h:form>
 
 				<h:panelGroup id="filter-dialog" layout="block"
 					rendered="#{!pivotStateManager.readOnly}">
 					<p:overlayPanel widgetVar="filterDialog" hideEffect="fade"
 						for=":filter-items-form:filter-items" dynamic="true"
 						showEvent="none" appendToBody="true"
-						styleClass="ui-dialog filter-dialog"
-						onHide="onFilterDialogClose();" at="left top" my="left bottom"
-						dismissable="false">
+						styleClass="ui-dialog filter-dialog" at="left top"
+						my="left bottom" dismissable="false">
 						<h:form id="filter-form">
 							<p:tree id="filter-tree" value="#{filterHandler.filterNode}"
 								dynamic="true" cache="true" var="node" selectionMode="checkbox"
@@ -396,10 +400,10 @@
 
 								<p:ajax event="select"
 									listener="#{filterHandler.onNodeSelected}"
-									update=":filter-form:filter-button-bar" />
+									update=":filter-form:filter-button-bar" process="@this" />
 								<p:ajax event="unselect"
 									listener="#{filterHandler.onNodeUnselected}"
-									update=":filter-form:filter-button-bar" />
+									update=":filter-form:filter-button-bar" process="@this" />
 							</p:tree>
 
 							<p:messages showDetail="true" closable="true" />
@@ -409,14 +413,13 @@
 								<p:commandButton value="#{msg['button.ok']}"
 									icon="ui-icon-check" binding="#{filterHandler.buttonApply}"
 									action="#{filterHandler.apply}"
-									update=":filter-panel,:source-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
+									update=":filter-items-form,:source-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 									oncomplete="onViewChanged(); filterDialog.hide();" />
-								<p:button value="#{msg['button.close']}" icon="ui-icon-close"
-									onclick="filterDialog.hide(); return false;" />
+								<p:commandButton value="#{msg['button.close']}"
+									icon="ui-icon-close" action="#{filterHandler.onClose}"
+									process="@this" update=":filter-items-form"
+									oncomplete="filterDialog.hide();" />
 							</h:panelGroup>
-
-							<p:remoteCommand name="onFilterDialogClose"
-								action="#{filterHandler.onClose}" update=":filter-panel" />
 						</h:form>
 					</p:overlayPanel>
 				</h:panelGroup>
@@ -432,14 +435,13 @@
 						binding="#{chartHandler.component}" layout="block"
 						rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
 
-					<p:fieldset styleClass="filter-info"
-						legend="#{msg['label.filter']}" toggleable="true"
-						toggleSpeed="500"
+					<h:panelGroup styleClass="filter-info"
+						legend="#{msg['label.filter']}"
 						rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
 
 						<p:panelGrid id="filter-grid" styleClass="filter-grid"
 							binding="#{viewHandler.filterComponent}" />
-					</p:fieldset>
+					</h:panelGroup>
 
 					<h:panelGroup styleClass="info-panel" layout="block"
 						rendered="#{!viewHandler.valid and viewHandler.lastError == null}">
@@ -469,7 +471,7 @@
 								<p:commandButton value="#{msg['button.run']}"
 									title="#{msg['button.run.tooltip']}" icon="ui-icon-play"
 									action="#{viewHandler.executeMdx}"
-									update=":cube-list-form,:source-tree-form,:target-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:filter-panel,:toolbar-form"
+									update=":cube-list-form,:source-tree-form,:target-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:filter-items-form,:toolbar-form"
 									oncomplete="onViewChanged()" />
 								<p:commandButton value="#{msg['button.reset']}"
 									title="#{msg['button.reset.tooltip']}"

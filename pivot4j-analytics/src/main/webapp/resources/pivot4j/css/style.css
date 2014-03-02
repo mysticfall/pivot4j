@@ -269,7 +269,7 @@ body.report .pe-layout-pane-header {
 	white-space: nowrap;
 }
 
-.pivot-grid .row-hdr-cell {
+.pivot-grid .row-hdr-cell,.filter-grid .row-hdr-cell {
 	vertical-align: top;
 	white-space: nowrap;
 	background-image: none;
@@ -289,6 +289,14 @@ body.report .pe-layout-pane-header {
 
 .pivot-grid .ui-panelgrid-header .agg-title {
 	text-align: center;
+}
+
+.filter-grid {
+	margin-top: 10px;
+}
+
+.filter-grid .separator {
+	margin-right: 0.3em;
 }
 
 button.ui-button-icon-only {
@@ -312,6 +320,11 @@ span.ui-button-icon-only {
 	width: 100%;
 }
 
+.filter-panel td {
+	white-space: nowrap;
+	padding: 2px;
+}
+
 .filter-panel .ui-widget-header {
 	width: 80px;
 	padding: 0 5px 0 5px;
@@ -320,7 +333,7 @@ span.ui-button-icon-only {
 
 .filter-panel td.filter-items {
 	border: 1px dotted #a8a8a8;
-	padding: 2px;
+	width: 100%;
 }
 
 .filter-panel td.filter-items .ui-droppable {

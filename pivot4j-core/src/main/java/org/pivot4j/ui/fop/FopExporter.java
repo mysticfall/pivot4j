@@ -439,6 +439,8 @@ public class FopExporter extends
 		try {
 			this.documentHandler.startElement(FOElementMapping.URI,
 					"table-cell", "table-cell", createCellAttributes(context));
+			this.documentHandler.startElement(FOElementMapping.URI, "block",
+					"block", createCellContentAttributes(context));
 		} catch (SAXException e) {
 			throw new PivotException(e);
 		}
@@ -461,14 +463,20 @@ public class FopExporter extends
 	public void renderContent(TableRenderContext context, String label,
 			Double value) {
 		try {
-			this.documentHandler.startElement(FOElementMapping.URI, "block",
-					"block", createCellContentAttributes(context));
+			this.documentHandler.startElement(FOElementMapping.URI, "inline",
+					"inline", new AttributesImpl());
+
+			if (context.getAxis() == Axis.FILTER
+					&& context.getColumnIndex() > 1) {
+				this.documentHandler.characters(", ".toCharArray(), 0, 2);
+			}
+
 			if (label != null) {
 				this.documentHandler.characters(label.toCharArray(), 0,
 						label.length());
 			}
-			this.documentHandler.endElement(FOElementMapping.URI, "block",
-					"block");
+			this.documentHandler.endElement(FOElementMapping.URI, "inline",
+					"inline");
 		} catch (SAXException e) {
 			throw new PivotException(e);
 		}
@@ -480,6 +488,8 @@ public class FopExporter extends
 	@Override
 	public void endCell(TableRenderContext context) {
 		try {
+			this.documentHandler.endElement(FOElementMapping.URI, "block",
+					"block");
 			this.documentHandler.endElement(FOElementMapping.URI, "table-cell",
 					"table-cell");
 		} catch (SAXException e) {

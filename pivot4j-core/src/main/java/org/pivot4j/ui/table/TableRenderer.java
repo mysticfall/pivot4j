@@ -66,6 +66,8 @@ public class TableRenderer extends
 
 	private boolean showDimensionTitle = true;
 
+	private boolean showSlicerMembersInline = true;
+
 	/**
 	 * @see org.pivot4j.ui.AbstractPivotRenderer#getRenderPropertyCategories()
 	 */
@@ -123,6 +125,21 @@ public class TableRenderer extends
 	 */
 	public void setShowDimensionTitle(boolean showDimensionTitle) {
 		this.showDimensionTitle = showDimensionTitle;
+	}
+
+	/**
+	 * @return the showSlicerMembersInline
+	 */
+	public boolean getShowSlicerMembersInline() {
+		return showSlicerMembersInline;
+	}
+
+	/**
+	 * @param showSlicerMembersInline
+	 *            the showSlicerMembersInline to set
+	 */
+	public void setShowSlicerMembersInline(boolean showSlicerMembersInline) {
+		this.showSlicerMembersInline = showSlicerMembersInline;
 	}
 
 	public void swapAxes() {
@@ -312,7 +329,7 @@ public class TableRenderer extends
 	 */
 	@Override
 	public Serializable saveState() {
-		Serializable[] states = new Serializable[6];
+		Serializable[] states = new Serializable[7];
 
 		int index = 0;
 
@@ -320,6 +337,7 @@ public class TableRenderer extends
 		states[index++] = showParentMembers;
 		states[index++] = showDimensionTitle;
 		states[index++] = hideSpans;
+		states[index++] = showSlicerMembersInline;
 
 		return states;
 	}
@@ -342,6 +360,7 @@ public class TableRenderer extends
 		this.showParentMembers = (Boolean) states[index++];
 		this.showDimensionTitle = (Boolean) states[index++];
 		this.hideSpans = (Boolean) states[index++];
+		this.showSlicerMembersInline = (Boolean) states[index++];
 	}
 
 	/**
@@ -354,6 +373,7 @@ public class TableRenderer extends
 		configuration.addProperty("showDimensionTitle", showDimensionTitle);
 		configuration.addProperty("showParentMembers", showParentMembers);
 		configuration.addProperty("hideSpans", hideSpans);
+		configuration.addProperty("filter[@inline]", showSlicerMembersInline);
 	}
 
 	/**
@@ -368,6 +388,8 @@ public class TableRenderer extends
 		this.showParentMembers = configuration.getBoolean("showParentMembers",
 				false);
 		this.hideSpans = configuration.getBoolean("hideSpans", false);
+		this.showSlicerMembersInline = configuration.getBoolean(
+				"filter[@inline]", true);
 	}
 
 	/**
@@ -1637,7 +1659,12 @@ public class TableRenderer extends
 			context.setCellType(LABEL);
 
 			context.setColSpan(1);
-			context.setRowSpan(Math.max(1, members.size()));
+
+			if (showSlicerMembersInline) {
+				context.setRowSpan(1);
+			} else {
+				context.setRowSpan(Math.max(1, members.size()));
+			}
 
 			callback.startCell(context);
 			callback.renderCommands(context, getCommands(context));
@@ -1645,12 +1672,25 @@ public class TableRenderer extends
 					getValue(context));
 			callback.endCell(context);
 
-			boolean firstRow = true;
+			if (showSlicerMembersInline) {
+				context.setColIndex(1);
+
+				context.setMember(null);
+				context.setLevel(null);
+
+				context.setCellType(VALUE);
+
+				callback.startCell(context);
+			}
+
+			boolean first = true;
+
+			int colIndex = 0;
 
 			for (Member member : members) {
-				if (firstRow) {
-					firstRow = false;
-				} else {
+				if (first) {
+					first = false;
+				} else if (!showSlicerMembersInline) {
 					callback.endRow(context);
 
 					context.setRowIndex(++rowIndex);
@@ -1658,19 +1698,30 @@ public class TableRenderer extends
 					callback.startRow(context);
 				}
 
-				context.setColIndex(1);
-
 				context.setMember(member);
 				context.setLevel(member.getLevel());
 
-				context.setRowSpan(1);
+				if (showSlicerMembersInline) {
+					context.setColIndex(++colIndex);
+				} else {
+					context.setColIndex(1);
+					context.setRowSpan(1);
 
-				context.setCellType(VALUE);
+					context.setCellType(VALUE);
 
-				callback.startCell(context);
+					callback.startCell(context);
+				}
+
 				callback.renderCommands(context, getCommands(context));
 				callback.renderContent(context, getLabel(context),
 						getValue(context));
+
+				if (!showSlicerMembersInline) {
+					callback.endCell(context);
+				}
+			}
+
+			if (showSlicerMembersInline) {
 				callback.endCell(context);
 			}
 
