@@ -34,8 +34,8 @@ public class PivotExportHandler {
 	@ManagedProperty(value = "#{pivotStateManager.model}")
 	private PivotModel model;
 
-	@ManagedProperty(value = "#{pivotGridHandler}")
-	private PivotGridHandler gridHandler;
+	@ManagedProperty(value = "#{viewHandler}")
+	private ViewHandler viewHandler;
 
 	private boolean showHeader = true;
 
@@ -77,18 +77,18 @@ public class PivotExportHandler {
 	};
 
 	/**
-	 * @return the gridHandler
+	 * @return the viewHandler
 	 */
-	public PivotGridHandler getGridHandler() {
-		return gridHandler;
+	public ViewHandler getViewHandler() {
+		return viewHandler;
 	}
 
 	/**
-	 * @param gridHandler
-	 *            the gridHandler to set
+	 * @param viewHandler
+	 *            the viewHandler to set
 	 */
-	public void setGridHandler(PivotGridHandler gridHandler) {
-		this.gridHandler = gridHandler;
+	public void setViewHandler(ViewHandler viewHandler) {
+		this.viewHandler = viewHandler;
 	}
 
 	/**
@@ -326,7 +326,7 @@ public class PivotExportHandler {
 		ExternalContext externalContext = context.getExternalContext();
 		externalContext.setResponseHeader("Content-Disposition", disposition);
 
-		TableRenderer renderer = gridHandler.getRenderer();
+		TableRenderer renderer = viewHandler.getRenderer();
 
 		boolean renderSlicer = renderer.getRenderSlicer();
 
@@ -348,7 +348,7 @@ public class PivotExportHandler {
 	}
 
 	public void exportPdf() throws IOException, IllegalAccessException {
-		TableRenderer renderer = gridHandler.getRenderer();
+		TableRenderer renderer = viewHandler.getRenderer();
 
 		FacesContext context = FacesContext.getCurrentInstance();
 

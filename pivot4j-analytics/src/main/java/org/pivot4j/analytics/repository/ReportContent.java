@@ -6,7 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -19,6 +21,7 @@ import org.pivot4j.PivotModel;
 import org.pivot4j.analytics.datasource.ConnectionInfo;
 import org.pivot4j.analytics.datasource.DataSourceManager;
 import org.pivot4j.analytics.state.ViewState;
+import org.pivot4j.analytics.ui.LayoutRegion;
 import org.pivot4j.impl.PivotModelImpl;
 import org.pivot4j.ui.table.TableRenderer;
 
@@ -59,6 +62,33 @@ public class ReportContent implements Serializable {
 
 			configuration.addProperty("render", "");
 			renderer.saveSettings(configuration.configurationAt("render"));
+		}
+
+		Map<LayoutRegion, Boolean> regions = state.getLayoutRegions();
+
+		configuration.addProperty("views", "");
+
+		HierarchicalConfiguration views = configuration.configurationAt(
+				"views", true);
+
+		int index = 0;
+
+		MessageFormat mf = new MessageFormat("view({0})[@{1}]");
+
+		for (LayoutRegion region : regions.keySet()) {
+			Boolean visibility = regions.get(region);
+
+			if (visibility == null) {
+				visibility = false;
+			}
+
+			views.addProperty(
+					mf.format(new String[] { Integer.toString(index), "name" }),
+					region.name());
+			views.addProperty(mf.format(new String[] { Integer.toString(index),
+					"visible" }), visibility.toString());
+
+			index++;
 		}
 	}
 
@@ -150,6 +180,20 @@ public class ReportContent implements Serializable {
 
 			state.setRendererState(renderer.saveState());
 		} catch (IllegalArgumentException e) {
+		}
+
+		state.getLayoutRegions().clear();
+
+		List<HierarchicalConfiguration> views = configuration
+				.configurationsAt("views.view");
+
+		for (HierarchicalConfiguration view : views) {
+			LayoutRegion region = LayoutRegion.valueOf(view
+					.getString("[@name]"));
+
+			boolean visibility = view.getBoolean("[@visible]", true);
+
+			state.setRegionVisible(region, visibility);
 		}
 
 		return state;

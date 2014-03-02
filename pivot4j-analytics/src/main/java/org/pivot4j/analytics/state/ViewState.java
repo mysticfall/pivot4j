@@ -2,6 +2,7 @@ package org.pivot4j.analytics.state;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.NullArgumentException;
@@ -9,6 +10,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.pivot4j.PivotModel;
 import org.pivot4j.analytics.datasource.ConnectionInfo;
 import org.pivot4j.analytics.repository.ReportFile;
+import org.pivot4j.analytics.ui.LayoutRegion;
 
 public class ViewState {
 
@@ -32,6 +34,8 @@ public class ViewState {
 
 	private Map<String, Object> parameters;
 
+	private Map<LayoutRegion, Boolean> layoutRegions;
+
 	/**
 	 * @param id
 	 * @param name
@@ -47,6 +51,7 @@ public class ViewState {
 
 		this.id = id;
 		this.name = name;
+		this.layoutRegions = new HashMap<LayoutRegion, Boolean>();
 	}
 
 	/**
@@ -71,6 +76,7 @@ public class ViewState {
 		this.connectionInfo = connectionInfo;
 		this.model = model;
 		this.file = file;
+		this.layoutRegions = new HashMap<LayoutRegion, Boolean>();
 	}
 
 	/**
@@ -194,6 +200,37 @@ public class ViewState {
 	 */
 	public void setParameters(Map<String, Object> parameters) {
 		this.parameters = parameters;
+	}
+
+	/**
+	 * @return the layoutRegions
+	 */
+	public Map<LayoutRegion, Boolean> getLayoutRegions() {
+		return layoutRegions;
+	}
+
+	/**
+	 * @param region
+	 * @return
+	 */
+	public boolean isRegionVisible(LayoutRegion region) {
+		if (region == null) {
+			throw new NullArgumentException("region");
+		}
+
+		return !Boolean.FALSE.equals(layoutRegions.get(region));
+	}
+
+	/**
+	 * @param region
+	 * @param visible
+	 */
+	public void setRegionVisible(LayoutRegion region, boolean visible) {
+		if (region == null) {
+			throw new NullArgumentException("region");
+		}
+
+		layoutRegions.put(region, visible);
 	}
 
 	/**

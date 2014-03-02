@@ -36,6 +36,7 @@ import org.pivot4j.PivotModel;
 import org.pivot4j.QueryEvent;
 import org.pivot4j.QueryListener;
 import org.pivot4j.analytics.datasource.ConnectionInfo;
+import org.pivot4j.analytics.state.ViewState;
 import org.pivot4j.impl.PivotModelImpl;
 import org.pivot4j.transform.NonEmpty;
 import org.pivot4j.transform.SwapAxes;
@@ -48,12 +49,15 @@ import org.pivot4j.ui.table.TableRenderer;
 import org.pivot4j.util.OlapUtils;
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.context.RequestContext;
+import org.primefaces.extensions.event.CloseEvent;
+import org.primefaces.extensions.event.OpenEvent;
+import org.primefaces.extensions.model.layout.LayoutOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ManagedBean(name = "pivotGridHandler")
+@ManagedBean(name = "viewHandler")
 @RequestScoped
-public class PivotGridHandler implements QueryListener, ModelChangeListener {
+public class ViewHandler implements QueryListener, ModelChangeListener {
 
 	@ManagedProperty(value = "#{pivotStateManager}")
 	private PivotStateManager stateManager;
@@ -63,6 +67,8 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 
 	@ManagedProperty(value = "#{drillThroughHandler}")
 	private DrillThroughHandler drillThroughHandler;
+
+	private LayoutOptions layoutOptions;
 
 	private PivotModel model;
 
@@ -350,12 +356,150 @@ public class PivotGridHandler implements QueryListener, ModelChangeListener {
 		}
 	}
 
+	/**
+	 * @return the layoutOptions
+	 */
+	public LayoutOptions getLayoutOptions() {
+		if (layoutOptions == null) {
+			ViewState view = stateManager.getState();
+
+			this.layoutOptions = new LayoutOptions();
+			layoutOptions.addOption("enableCursorHotkey", false);
+
+			LayoutOptions toolbarOptions = new LayoutOptions();
+			toolbarOptions.addOption("resizable", false);
+			toolbarOptions.addOption("closable", false);
+
+			layoutOptions.setNorthOptions(toolbarOptions);
+
+			LayoutOptions navigatorOptions = new LayoutOptions();
+			navigatorOptions.addOption("resizable", true);
+			navigatorOptions.addOption("closable", true);
+			navigatorOptions.addOption("slidable", true);
+			navigatorOptions.addOption("size", 280);
+
+			if (!view.isRegionVisible(LayoutRegion.Navigator)) {
+				navigatorOptions.addOption("initClosed", true);
+			}
+
+			layoutOptions.setWestOptions(navigatorOptions);
+
+			LayoutOptions childWestOptions = new LayoutOptions();
+			navigatorOptions.setChildOptions(childWestOptions);
+
+			LayoutOptions cubeListOptions = new LayoutOptions();
+			cubeListOptions.addOption("resizable", false);
+			cubeListOptions.addOption("closable", false);
+			cubeListOptions.addOption("slidable", false);
+			cubeListOptions.addOption("size", 38);
+
+			childWestOptions.setNorthOptions(cubeListOptions);
+
+			LayoutOptions targetTreeOptions = new LayoutOptions();
+			targetTreeOptions.addOption("resizable", true);
+			targetTreeOptions.addOption("closable", true);
+			targetTreeOptions.addOption("slidable", true);
+			targetTreeOptions.addOption("size", 300);
+
+			childWestOptions.setSouthOptions(targetTreeOptions);
+
+			LayoutOptions contentOptions = new LayoutOptions();
+			layoutOptions.setCenterOptions(contentOptions);
+
+			LayoutOptions childCenterOptions = new LayoutOptions();
+			childCenterOptions.addOption("onresize_end", "onViewResize");
+			contentOptions.setChildOptions(childCenterOptions);
+
+			LayoutOptions filterOptions = new LayoutOptions();
+			filterOptions.addOption("resizable", false);
+			filterOptions.addOption("closable", true);
+			filterOptions.addOption("slidable", true);
+			filterOptions.addOption("size", 38);
+
+			if (!view.isRegionVisible(LayoutRegion.Filter)) {
+				filterOptions.addOption("initClosed", true);
+			}
+
+			childCenterOptions.setNorthOptions(filterOptions);
+
+			LayoutOptions editorOptions = new LayoutOptions();
+			editorOptions.addOption("resizable", true);
+			editorOptions.addOption("closable", true);
+			editorOptions.addOption("slidable", true);
+			editorOptions.addOption("size", 180);
+
+			if (!view.isRegionVisible(LayoutRegion.Mdx)) {
+				editorOptions.addOption("initClosed", true);
+			}
+
+			childCenterOptions.setSouthOptions(editorOptions);
+
+			LayoutOptions editorToolBarOptions = new LayoutOptions();
+			editorToolBarOptions.addOption("resizable", false);
+			editorToolBarOptions.addOption("closable", false);
+			editorToolBarOptions.addOption("slidable", false);
+			editorToolBarOptions.addOption("size", 38);
+
+			editorOptions.setNorthOptions(editorToolBarOptions);
+
+			LayoutOptions editorContentOptions = new LayoutOptions();
+			editorContentOptions.addOption("resizable", false);
+			editorContentOptions.addOption("closable", false);
+			editorContentOptions.addOption("slidable", false);
+			editorContentOptions.addOption("spacing_open", 0);
+			editorContentOptions.addOption("spacing_closed", 0);
+
+			editorOptions.setChildOptions(editorContentOptions);
+		}
+
+		return layoutOptions;
+	}
+
 	public void onPreRenderView() {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		if (!context.isPostback()) {
 			render();
 		}
+	}
+
+	/**
+	 * @param event
+	 */
+	public void onPanelOpened(OpenEvent event) {
+		LayoutRegion region = getRegionFromId(event.getComponent().getId());
+		if (region != null) {
+			stateManager.getState().setRegionVisible(region, true);
+		}
+	}
+
+	/**
+	 * @param event
+	 */
+	public void onPanelClosed(CloseEvent event) {
+		LayoutRegion region = getRegionFromId(event.getComponent().getId());
+
+		if (region != null) {
+			stateManager.getState().setRegionVisible(region, false);
+		}
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	private LayoutRegion getRegionFromId(String id) {
+		LayoutRegion region = null;
+
+		if ("mdx-editor-pane".equals(id)) {
+			region = LayoutRegion.Mdx;
+		} else if ("navigator-pane".equals(id)) {
+			region = LayoutRegion.Navigator;
+		} else if ("grid-header-pane".equals(id)) {
+			region = LayoutRegion.Filter;
+		}
+
+		return region;
 	}
 
 	public boolean isValid() {

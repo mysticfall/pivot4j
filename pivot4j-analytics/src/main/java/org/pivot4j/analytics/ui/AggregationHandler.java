@@ -20,8 +20,8 @@ import org.primefaces.model.DualListModel;
 @RequestScoped
 public class AggregationHandler {
 
-	@ManagedProperty(value = "#{pivotGridHandler}")
-	private PivotGridHandler pivotGridHandler;
+	@ManagedProperty(value = "#{viewHandler}")
+	private ViewHandler viewHandler;
 
 	private DualListModel<SelectItem> columnAggregators;
 
@@ -73,7 +73,7 @@ public class AggregationHandler {
 	 */
 	protected DualListModel<SelectItem> createSelectionModel(Axis axis,
 			AggregatorPosition position) {
-		TableRenderer renderer = pivotGridHandler.getRenderer();
+		TableRenderer renderer = viewHandler.getRenderer();
 
 		List<String> selected = renderer.getAggregators(axis, position);
 		List<String> available = renderer.getAggregatorFactory()
@@ -115,7 +115,7 @@ public class AggregationHandler {
 			aggregators.add((String) item.getValue());
 		}
 
-		TableRenderer renderer = pivotGridHandler.getRenderer();
+		TableRenderer renderer = viewHandler.getRenderer();
 		renderer.setAggregators(axis, position, aggregators);
 	}
 
@@ -133,22 +133,22 @@ public class AggregationHandler {
 		applySelection(columnMemberAggregators, Axis.COLUMNS,
 				AggregatorPosition.Member);
 
-		pivotGridHandler.render();
+		viewHandler.render();
 	}
 
 	/**
-	 * @return the pivotGridHandler
+	 * @return the viewHandler
 	 */
-	public PivotGridHandler getPivotGridHandler() {
-		return pivotGridHandler;
+	public ViewHandler getViewHandler() {
+		return viewHandler;
 	}
 
 	/**
-	 * @param pivotGridHandler
-	 *            the pivotGridHandler to set
+	 * @param viewHandler
+	 *            the viewHandler to set
 	 */
-	public void setPivotGridHandler(PivotGridHandler pivotGridHandler) {
-		this.pivotGridHandler = pivotGridHandler;
+	public void setViewHandler(ViewHandler viewHandler) {
+		this.viewHandler = viewHandler;
 	}
 
 	/**

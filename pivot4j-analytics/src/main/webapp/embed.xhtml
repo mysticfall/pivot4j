@@ -25,7 +25,7 @@
 
 <f:metadata>
 	<f:event type="preRenderView"
-		listener="#{pivotGridHandler.onPreRenderView}" />
+		listener="#{viewHandler.onPreRenderView}" />
 	<f:event type="preRenderView"
 		listener="#{chartHandler.onPreRenderView}" />
 </f:metadata>
@@ -33,8 +33,8 @@
 <h:body id="body" styleClass="embeded report">
 	<h:form id="grid-form">
 		<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
-			binding="#{pivotGridHandler.component}"
-			rendered="#{pivotGridHandler.valid and empty chartHandler.chartName}" />
+			binding="#{viewHandler.component}"
+			rendered="#{viewHandler.valid and empty chartHandler.chartName}" />
 
 		<h:panelGroup id="chart-panel" styleClass="chart-panel"
 			binding="#{chartHandler.component}" layout="block"
@@ -42,14 +42,14 @@
 
 		<p:fieldset styleClass="filter-info" legend="#{msg['label.filter']}"
 			toggleable="true" toggleSpeed="500"
-			rendered="#{pivotGridHandler.valid and pivotGridHandler.renderer.renderSlicer}">
+			rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
 
 			<p:panelGrid id="filter-grid" styleClass="filter-grid"
-				binding="#{pivotGridHandler.filterComponent}" />
+				binding="#{viewHandler.filterComponent}" />
 		</p:fieldset>
 
 		<h:panelGroup styleClass="info-panel" layout="block"
-			rendered="#{!pivotGridHandler.valid}">
+			rendered="#{!viewHandler.valid}">
 			<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
 			<h:outputText value="#{msg['message.query.blank']}"
 				styleClass="message-warn" />

@@ -389,8 +389,8 @@ public class PivotComponentBuilder extends
 
 				MethodExpression expression = expressionFactory
 						.createMethodExpression(facesContext.getELContext(),
-								"#{pivotGridHandler.executeCommand}",
-								Void.class, new Class<?>[0]);
+								"#{viewHandler.executeCommand}", Void.class,
+								new Class<?>[0]);
 				button.setActionExpression(expression);
 				button.setUpdate(":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:source-tree-form,:target-tree-form");
 				button.setOncomplete("onViewChanged()");
@@ -472,7 +472,7 @@ public class PivotComponentBuilder extends
 
 			MethodExpression expression = expressionFactory
 					.createMethodExpression(facesContext.getELContext(),
-							"#{pivotGridHandler.updateCell}", Void.class,
+							"#{viewHandler.updateCell}", Void.class,
 							new Class<?>[0]);
 
 			AjaxBehavior behavior = new AjaxBehavior();

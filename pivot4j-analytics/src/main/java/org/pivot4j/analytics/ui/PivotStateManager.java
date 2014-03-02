@@ -91,7 +91,7 @@ public class PivotStateManager implements Serializable {
 		return viewId;
 	}
 
-	protected ViewState getState() {
+	public ViewState getState() {
 		return viewStateHolder.getState(viewId);
 	}
 

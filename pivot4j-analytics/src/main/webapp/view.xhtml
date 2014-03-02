@@ -47,8 +47,7 @@
 </h:head>
 
 <f:metadata>
-	<f:event type="preRenderView"
-		listener="#{pivotGridHandler.onPreRenderView}" />
+	<f:event type="preRenderView" listener="#{viewHandler.onPreRenderView}" />
 	<f:event type="preRenderView"
 		listener="#{filterHandler.onPreRenderView}" />
 	<f:event type="preRenderView"
@@ -57,62 +56,60 @@
 
 <h:body id="body" styleClass="report">
 	<pe:layout id="workbench" fullPage="true"
-		options="#{workbenchHandler.layoutOptions}" widgetVar="workbench">
+		options="#{viewHandler.layoutOptions}" widgetVar="workbench">
 		<pe:layoutPane id="toolbar-pane" position="north"
 			styleClassContent="toolbar-area">
 			<h:form id="toolbar-form">
 				<p:toolbar id="toolbar">
 					<p:toolbarGroup align="left">
-						<p:selectBooleanButton
-							value="#{pivotGridHandler.showParentMembers}"
+						<p:selectBooleanButton value="#{viewHandler.showParentMembers}"
 							title="#{msg['toolbar.parent.tooltip']}"
 							onLabel="#{msg['toolbar.parent.hide']}"
 							offLabel="#{msg['toolbar.parent.show']}"
 							onIcon="ui-icon-arrowthickstop-1-n"
 							offIcon="ui-icon-arrowthickstop-1-n"
-							disabled="#{!pivotGridHandler.valid}"
+							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
-						<p:selectBooleanButton value="#{pivotGridHandler.hideSpans}"
+						<p:selectBooleanButton value="#{viewHandler.hideSpans}"
 							title="#{msg['toolbar.spans.tooltip']}"
 							onLabel="#{msg['toolbar.spans.show']}"
 							offLabel="#{msg['toolbar.spans.hide']}"
 							onIcon="ui-icon-circlesmall-minus"
 							offIcon="ui-icon-circlesmall-minus"
-							disabled="#{!pivotGridHandler.valid}"
+							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
-						<p:selectBooleanButton value="#{pivotGridHandler.nonEmpty}"
+						<p:selectBooleanButton value="#{viewHandler.nonEmpty}"
 							title="#{msg['toolbar.nonEmpty.tooltip']}"
 							onLabel="#{msg['toolbar.nonEmpty']}"
 							offLabel="#{msg['toolbar.nonEmpty']}"
 							onIcon="ui-icon-circlesmall-close"
 							offIcon="ui-icon-circlesmall-close"
-							disabled="#{!pivotGridHandler.valid}"
+							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 								oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
-						<p:selectBooleanButton value="#{pivotGridHandler.swapAxes}"
+						<p:selectBooleanButton value="#{viewHandler.swapAxes}"
 							title="#{msg['toolbar.swap_axes.tooltip']}"
 							onLabel="#{msg['toolbar.swap_axes']}"
 							offLabel="#{msg['toolbar.swap_axes']}" onIcon="ui-icon-refresh"
-							offIcon="ui-icon-refresh" disabled="#{!pivotGridHandler.valid}"
+							offIcon="ui-icon-refresh" disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:target-tree-form"
 								oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
 						<p:separator rendered="#{!pivotStateManager.readOnly}" />
 						<p:selectOneButton id="drilldown-mode" style="display: inline"
-							value="#{pivotGridHandler.drillDownMode}"
-							label="#{msg['toolbar.drill']}"
-							disabled="#{!pivotGridHandler.valid}"
+							value="#{viewHandler.drillDownMode}"
+							label="#{msg['toolbar.drill']}" disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
 							<f:selectItem itemLabel="#{msg['toolbar.drill.position']}"
 								itemValue="position"
@@ -123,32 +120,32 @@
 							<f:selectItem itemLabel="#{msg['toolbar.drill.replace']}"
 								itemValue="replace"
 								itemDescription="#{msg['toolbar.drill.replace.tooltip']}" />
-							<p:ajax update=":grid-form" listener="#{pivotGridHandler.render}"
+							<p:ajax update=":grid-form" listener="#{viewHandler.render}"
 								process="@this" rendered="#{!pivotStateManager.readOnly}"
 								oncomplete="onViewChanged()" />
 						</p:selectOneButton>
-						<p:selectBooleanButton value="#{pivotGridHandler.drillThrough}"
+						<p:selectBooleanButton value="#{viewHandler.drillThrough}"
 							title="#{msg['toolbar.drill.through.tooltip']}"
 							onLabel="#{msg['toolbar.drill.through']}"
 							offLabel="#{msg['toolbar.drill.through']}"
-							disabled="#{!pivotGridHandler.valid or !pivotStateManager.model.cube.drillThroughEnabled}"
+							disabled="#{!viewHandler.valid or !pivotStateManager.model.cube.drillThroughEnabled}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
-						<p:selectBooleanButton value="#{pivotGridHandler.scenarioEnabled}"
+						<p:selectBooleanButton value="#{viewHandler.scenarioEnabled}"
 							title="#{msg['toolbar.scenario.tooltip']}"
 							onLabel="#{msg['toolbar.scenario']}"
 							offLabel="#{msg['toolbar.scenario']}"
-							disabled="#{!pivotGridHandler.valid or !pivotStateManager.model.scenarioSupported}"
+							disabled="#{!viewHandler.valid or !pivotStateManager.model.scenarioSupported}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax listener="#{pivotGridHandler.render}" process="@this"
+							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" />
 						</p:selectBooleanButton>
 						<p:separator rendered="#{!pivotStateManager.readOnly}" />
 						<p:commandButton value="#{msg['toolbar.properties']}"
 							title="#{msg['toolbar.properties.tooltip']}" type="button"
-							icon="ui-icon-gear" disabled="#{!pivotGridHandler.valid}"
+							icon="ui-icon-gear" disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}"
 							onclick="propertiesConfig.show(); return false;" />
 						<p:commandButton value="#{msg['toolbar.aggregation']}"
@@ -156,12 +153,12 @@
 							icon="ui-icon-calculator" update=":aggregation-form"
 							process=":aggregation-form"
 							oncomplete="aggregationConfig.show();"
-							disabled="#{!pivotGridHandler.valid}"
+							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}" />
 						<p:separator rendered="#{!pivotStateManager.readOnly}"
 							styleClass="ui-hide-display" />
 						<p:menuButton value="#{msg['toolbar.export']}"
-							disabled="#{!pivotGridHandler.valid}"
+							disabled="#{!viewHandler.valid}"
 							styleClass="export-menu hide-on-embed">
 							<p:menuitem id="mi-export-xls"
 								value="#{msg['toolbar.export.format.xls']}"
@@ -181,12 +178,12 @@
 						</p:menuButton>
 						<p:commandButton value="#{msg['toolbar.print']}"
 							title="#{msg['toolbar.print.tooltip']}" type="button"
-							icon="ui-icon-print" disabled="#{!pivotGridHandler.valid}"
+							icon="ui-icon-print" disabled="#{!viewHandler.valid}"
 							onclick="$('table.pivot-grid:first').jqprint();"
 							styleClass="hide-on-embed" />
 						<p:separator />
 						<p:selectOneMenu value="#{chartHandler.chartName}"
-							disabled="#{!pivotGridHandler.valid}">
+							disabled="#{!viewHandler.valid}">
 							<f:selectItems value="#{chartHandler.charts}" />
 
 							<p:ajax process="@this" listener="#{chartHandler.render}"
@@ -210,11 +207,11 @@
 				<h:form id="cube-list-form">
 					<p:outputLabel styleClass="cube-list-label"
 						value="#{msg['label.cube']}" for="cube-list" />
-					<p:selectOneMenu id="cube-list"
-						value="#{pivotGridHandler.cubeName}" widgetVar="cubeList">
-						<f:selectItems value="#{pivotGridHandler.cubes}" var="cube"
+					<p:selectOneMenu id="cube-list" value="#{viewHandler.cubeName}"
+						widgetVar="cubeList">
+						<f:selectItems value="#{viewHandler.cubes}" var="cube"
 							itemLabel="#{cube.itemLabel}" itemValue="#{cube.itemValue}" />
-						<p:ajax event="change" listener="#{pivotGridHandler.onCubeChange}"
+						<p:ajax event="change" listener="#{viewHandler.onCubeChange}"
 							update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:growl"
 							oncomplete="onViewChanged()" />
 					</p:selectOneMenu>
@@ -275,7 +272,7 @@
 					<p:tree id="target-navigator" styleClass="navigator"
 						value="#{navigatorHandler.targetNode}" dynamic="true" cache="true"
 						var="node" animate="true"
-						rendered="#{pivotGridHandler.lastError == null}">
+						rendered="#{viewHandler.lastError == null}">
 						<p:treeNode type="columns" icon="ui-icon-cols">
 							<h:outputText id="columns-node" value="#{msg['label.columns']}"
 								styleClass="node-axis" />
@@ -342,9 +339,7 @@
 						</p:treeNode>
 					</p:tree>
 
-					<h:outputScript>
-							initNavigatorDroppables();
-						</h:outputScript>
+					<h:outputScript>initNavigatorDroppables();</h:outputScript>
 				</h:form>
 			</pe:layoutPane>
 		</pe:layoutPane>
@@ -355,7 +350,7 @@
 					<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-document" />
 					<h:outputText value="#{msg['header.grid']}"
 						rendered="#{!pivotStateManager.readOnly}" />
-					<h:outputText value="#{pivotGridHandler.cubeName}"
+					<h:outputText value="#{viewHandler.cubeName}"
 						rendered="#{pivotStateManager.readOnly}" />
 				</h:panelGroup>
 			</f:facet>
@@ -430,8 +425,8 @@
 			<pe:layoutPane id="grid-content-pane" position="center">
 				<h:form id="grid-form" onkeypress="return event.keyCode != 13;">
 					<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
-						binding="#{pivotGridHandler.component}"
-						rendered="#{pivotGridHandler.valid and empty chartHandler.chartName}" />
+						binding="#{viewHandler.component}"
+						rendered="#{viewHandler.valid and empty chartHandler.chartName}" />
 
 					<h:panelGroup id="chart-panel" styleClass="chart-panel"
 						binding="#{chartHandler.component}" layout="block"
@@ -440,14 +435,14 @@
 					<p:fieldset styleClass="filter-info"
 						legend="#{msg['label.filter']}" toggleable="true"
 						toggleSpeed="500"
-						rendered="#{pivotGridHandler.valid and pivotGridHandler.renderer.renderSlicer}">
+						rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
 
 						<p:panelGrid id="filter-grid" styleClass="filter-grid"
-							binding="#{pivotGridHandler.filterComponent}" />
+							binding="#{viewHandler.filterComponent}" />
 					</p:fieldset>
 
 					<h:panelGroup styleClass="info-panel" layout="block"
-						rendered="#{!pivotGridHandler.valid and pivotGridHandler.lastError == null}">
+						rendered="#{!viewHandler.valid and viewHandler.lastError == null}">
 						<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
 						<h:outputText value="#{msg['message.query.blank']}"
 							styleClass="message-warn" />
@@ -473,7 +468,7 @@
 							<p:toolbarGroup align="left">
 								<p:commandButton value="#{msg['button.run']}"
 									title="#{msg['button.run.tooltip']}" icon="ui-icon-play"
-									action="#{pivotGridHandler.executeMdx}"
+									action="#{viewHandler.executeMdx}"
 									update=":cube-list-form,:source-tree-form,:target-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:filter-panel,:toolbar-form"
 									oncomplete="onViewChanged()" />
 								<p:commandButton value="#{msg['button.reset']}"
@@ -482,10 +477,10 @@
 									update=":editor-form:mdx-editor" />
 							</p:toolbarGroup>
 							<p:toolbarGroup align="right" styleClass="query-info"
-								rendered="#{pivotGridHandler.duration != null}">
+								rendered="#{viewHandler.duration != null}">
 								<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-clock" />
 								<h:outputText value="#{msg['message.query.elapsed']} : " />
-								<h:outputText value="#{pivotGridHandler.duration}">
+								<h:outputText value="#{viewHandler.duration}">
 									<f:convertNumber pattern="###,### msec" />
 								</h:outputText>
 							</p:toolbarGroup>
@@ -494,7 +489,7 @@
 
 					<pe:layoutPane id="mdx-editor-content" position="center">
 						<pe:codeMirror id="mdx-editor" mode="text/x-mdx"
-							value="#{pivotGridHandler.currentMdx}" lineNumbers="true"
+							value="#{viewHandler.currentMdx}" lineNumbers="true"
 							lineWrapping="true" matchBrackets="true"
 							theme="#{settings.editorTheme}" widgetVar="mdxEditor"
 							required="true" label="#{msg['label.mdx']}"
@@ -506,7 +501,10 @@
 			</pe:layoutPane>
 		</pe:layoutPane>
 
-		<p:ajax event="open" oncomplete="initLayout();" />
+		<p:ajax event="open" listener="#{viewHandler.onPanelOpened}"
+			oncomplete="initLayout(); onViewChanged();" process="@this" />
+		<p:ajax event="close" listener="#{viewHandler.onPanelClosed}"
+			oncomplete="onViewChanged();" process="@this" />
 	</pe:layout>
 
 	<ui:include src="hierarchy.xhtml" />

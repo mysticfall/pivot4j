@@ -40,8 +40,8 @@ public class PropertiesHandler {
 	@ManagedProperty(value = "#{propertyDescriptorFactory}")
 	private PropertyDescriptorFactory descriptorFactory;
 
-	@ManagedProperty(value = "#{pivotGridHandler}")
-	private PivotGridHandler pivotGridHandler;
+	@ManagedProperty(value = "#{viewHandler}")
+	private ViewHandler viewHandler;
 
 	private ResourceBundle bundle;
 
@@ -199,7 +199,7 @@ public class PropertiesHandler {
 	 * @return
 	 */
 	protected RenderPropertyList getProperties(PropertyCategory category) {
-		TableRenderer renderer = pivotGridHandler.getRenderer();
+		TableRenderer renderer = viewHandler.getRenderer();
 
 		RenderPropertyList properties = null;
 
@@ -248,7 +248,7 @@ public class PropertiesHandler {
 
 		setDirty(false);
 
-		pivotGridHandler.render();
+		viewHandler.render();
 	}
 
 	/**
@@ -491,18 +491,18 @@ public class PropertiesHandler {
 	}
 
 	/**
-	 * @return the pivotGridHandler
+	 * @return the viewHandler
 	 */
-	public PivotGridHandler getPivotGridHandler() {
-		return pivotGridHandler;
+	public ViewHandler getViewHandler() {
+		return viewHandler;
 	}
 
 	/**
-	 * @param pivotGridHandler
-	 *            the pivotGridHandler to set
+	 * @param viewHandler
+	 *            the viewHandler to set
 	 */
-	public void setPivotGridHandler(PivotGridHandler pivotGridHandler) {
-		this.pivotGridHandler = pivotGridHandler;
+	public void setViewHandler(ViewHandler viewHandler) {
+		this.viewHandler = viewHandler;
 	}
 
 	/**
