@@ -176,6 +176,12 @@ public class PivotComponentBuilder extends
 		this.commandIndex = 0;
 		this.scenarioEnabled = context.getModel().isScenarioSupported()
 				&& context.getModel().getScenario() != null;
+
+		component.getFacets().clear();
+		component.getChildren().clear();
+
+		filterComponent.getFacets().clear();
+		filterComponent.getChildren().clear();
 	}
 
 	/**
@@ -183,7 +189,6 @@ public class PivotComponentBuilder extends
 	 */
 	@Override
 	public void startTable(TableRenderContext context) {
-		getTargetComponent(context).getChildren().clear();
 	}
 
 	/**
