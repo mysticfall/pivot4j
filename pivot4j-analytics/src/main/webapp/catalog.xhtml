@@ -55,7 +55,7 @@
 					value="#{catalogChooser.catalogName}">
 					<f:selectItems value="#{catalogChooser.catalogs}" var="catalog"
 						itemLabel="#{catalog.itemLabel}" itemValue="#{catalog.itemValue}" />
-					<p:ajax event="change" update="catalog-chooser"
+					<p:ajax event="change" update="catalog-chooser,:growl"
 						listener="#{catalogChooser.onCatalogChanged}" />
 				</p:selectOneMenu>
 
@@ -63,7 +63,7 @@
 				<p:selectOneMenu id="cube-list" value="#{catalogChooser.cubeName}">
 					<f:selectItems value="#{catalogChooser.cubes}" var="cube"
 						itemLabel="#{cube.itemLabel}" itemValue="#{cube.itemValue}" />
-					<p:ajax event="change" update="btn-ok" />
+					<p:ajax event="change" update="btn-ok,:growl" />
 				</p:selectOneMenu>
 			</h:panelGrid>
 
@@ -74,7 +74,7 @@
 
 					<p:commandButton id="btn-ok" value="#{msg['button.ok']}"
 						icon="ui-icon-check" onstart="showWaitDialog();"
-						action="#{catalogChooser.proceed}"
+						action="#{catalogChooser.proceed}" update=":growl"
 						disabled="#{empty catalogChooser.cubeName}" />
 				</h:panelGroup>
 			</f:facet>

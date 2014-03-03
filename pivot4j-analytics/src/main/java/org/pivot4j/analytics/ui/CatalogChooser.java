@@ -181,7 +181,6 @@ public class CatalogChooser implements Serializable {
 		} else {
 			OlapDataSource dataSource = dataSourceManager
 					.getDataSource(connectionInfo);
-
 			state.setModel(new PivotModelImpl(dataSource));
 			state.setConnectionInfo(connectionInfo);
 		}

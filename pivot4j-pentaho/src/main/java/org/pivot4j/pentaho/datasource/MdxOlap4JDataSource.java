@@ -1,7 +1,10 @@
 package org.pivot4j.pentaho.datasource;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
+
+import mondrian.olap4j.MondrianOlap4jConnection;
 
 import org.olap4j.OlapConnection;
 import org.pentaho.commons.connection.IPentahoConnection;
@@ -16,11 +19,15 @@ public class MdxOlap4JDataSource extends AbstractOlapDataSource {
 
 	private Properties properties;
 
+	private List<String> roleNames;
+
 	/**
 	 * @param session
 	 * @param properties
+	 * @param roleNames
 	 */
-	public MdxOlap4JDataSource(IPentahoSession session, Properties properties) {
+	public MdxOlap4JDataSource(IPentahoSession session, Properties properties,
+			List<String> roleNames) {
 		if (session == null) {
 			throw new IllegalAccessError("Required argument 'session' is null.");
 		}
@@ -32,6 +39,7 @@ public class MdxOlap4JDataSource extends AbstractOlapDataSource {
 
 		this.session = session;
 		this.properties = properties;
+		this.roleNames = roleNames;
 	}
 
 	/**
@@ -49,6 +57,13 @@ public class MdxOlap4JDataSource extends AbstractOlapDataSource {
 	}
 
 	/**
+	 * @return the roleNames
+	 */
+	public List<String> getRoles() {
+		return roleNames;
+	}
+
+	/**
 	 * @see org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java
 	 *      .lang.String, java.lang.String)
 	 */
@@ -58,6 +73,14 @@ public class MdxOlap4JDataSource extends AbstractOlapDataSource {
 		MDXOlap4jConnection connection = (MDXOlap4jConnection) PentahoConnectionFactory
 				.getConnection(IPentahoConnection.MDX_OLAP4J_DATASOURCE,
 						properties, session, null);
-		return connection.getConnection();
+
+		OlapConnection olap4JCon = connection.getConnection();
+
+		if (roleNames != null && !roleNames.isEmpty()) {
+			MondrianOlap4jConnection monCon = (MondrianOlap4jConnection) olap4JCon;
+			monCon.setRoleNames(roleNames);
+		}
+
+		return olap4JCon;
 	}
 }

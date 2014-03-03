@@ -1,9 +1,14 @@
 package org.pivot4j.pentaho.datasource;
 
+import static org.pentaho.platform.plugin.services.connections.mondrian.MDXConnection.MDX_CONNECTION_MAPPER_KEY;
+
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+
+import javax.faces.FacesException;
 
 import mondrian.olap.Util;
 import mondrian.olap4j.MondrianOlap4jDriver;
@@ -12,7 +17,9 @@ import mondrian.util.Pair;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapDataSource;
+import org.pentaho.platform.api.engine.IConnectionUserRoleMapper;
 import org.pentaho.platform.api.engine.IPentahoSession;
+import org.pentaho.platform.api.engine.PentahoAccessControlException;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.plugin.action.mondrian.catalog.IMondrianCatalogService;
@@ -32,6 +39,8 @@ public class PentahoDataSourceManager extends
 
 	private IMondrianCatalogService catalogService;
 
+	private IConnectionUserRoleMapper roleMapper;
+
 	/**
 	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#initialize()
 	 */
@@ -40,6 +49,13 @@ public class PentahoDataSourceManager extends
 		this.session = PentahoSessionHolder.getSession();
 		this.catalogService = PentahoSystem.get(IMondrianCatalogService.class,
 				session);
+
+		if (PentahoSystem.getObjectFactory().objectDefined(
+				MDX_CONNECTION_MAPPER_KEY)) {
+			this.roleMapper = PentahoSystem.get(
+					IConnectionUserRoleMapper.class, MDX_CONNECTION_MAPPER_KEY,
+					null);
+		}
 
 		super.initialize();
 	}
@@ -65,6 +81,13 @@ public class PentahoDataSourceManager extends
 	 */
 	protected IMondrianCatalogService getCatalogService() {
 		return catalogService;
+	}
+
+	/**
+	 * @return the roleMapper
+	 */
+	protected IConnectionUserRoleMapper getRoleMapper() {
+		return roleMapper;
 	}
 
 	/**
@@ -219,9 +242,32 @@ public class PentahoDataSourceManager extends
 
 		Logger logger = getLogger();
 		if (logger.isInfoEnabled()) {
-			logger.info("Using connection URL : " + url);
+			logger.info("Using connection URL : {}", url);
 		}
 
-		return new MdxOlap4JDataSource(session, properties);
+		List<String> roleNames = null;
+
+		if (roleMapper != null) {
+			try {
+				String[] roles = roleMapper.mapConnectionRoles(session,
+						definition.getName());
+
+				if (roles != null) {
+					roleNames = new LinkedList<String>();
+
+					for (String role : roles) {
+						roleNames.add(role);
+					}
+				}
+			} catch (PentahoAccessControlException e) {
+				throw new FacesException(e);
+			}
+		}
+
+		if (roleNames == null) {
+			roleNames = Collections.emptyList();
+		}
+
+		return new MdxOlap4JDataSource(session, properties, roleNames);
 	}
 }
