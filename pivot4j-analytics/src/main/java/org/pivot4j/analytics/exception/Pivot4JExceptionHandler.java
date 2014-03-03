@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,9 +54,15 @@ public class Pivot4JExceptionHandler extends ExceptionHandlerWrapper {
 					.getResourceBundle(facesContext, "msg");
 
 			Throwable t = context.getException();
+			Throwable cause = ExceptionUtils.getRootCause(t);
+
+			if (cause == null) {
+				cause = t;
+			}
 
 			String title = bundle.getString("error.unhandled.title");
-			String message = bundle.getString("error.unhandled.message") + t;
+			String message = bundle.getString("error.unhandled.message")
+					+ cause;
 
 			if (logger.isErrorEnabled()) {
 				logger.error(title, t);
