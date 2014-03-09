@@ -13,3 +13,7 @@ span.hide-on-embed, button.hide-on-embed {
 .migration-dialog span.error {
 	color: red;
 }
+
+.ui-layout-resizer-south-closed {
+	height: 12px !important;
+}
