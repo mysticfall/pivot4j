@@ -128,7 +128,7 @@ FLOAT=({DIGIT}+\.{DIGIT}*{EXP}?|{DIGIT}*\.{DIGIT}+{EXP}?|{DIGIT}+{EXP})
 {BRACKETID} { return new Symbol(Symbols.QUOTED_ID, yytext()); }
 "$"{BRACKETSTR} { return new Symbol(Symbols.MEMBER_PARAM, yytext()); }
 "$"{BRACESTR} { return new Symbol(Symbols.VALUE_PARAM, yytext()); }
-"&"{BRACKETID} { return new Symbol(Symbols.AMP_QUOTED_ID, yytext()); }
+("&"{BRACKETID})* { return new Symbol(Symbols.AMP_QUOTED_ID, yytext()); }
 "\""{INSTRING}*"\"" { return new Symbol(Symbols.STRING, yytext()); }
 <YYINITIAL> "'"{INSTRING2}*"'" { return new Symbol(Symbols.STRING, yytext()); }
 {WHITESPACE} { /* ignore white space. */ }

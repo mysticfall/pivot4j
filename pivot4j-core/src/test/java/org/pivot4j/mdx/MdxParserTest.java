@@ -114,7 +114,7 @@ public class MdxParserTest {
 
 	@Test
 	public void testParseKeyIdentifier() throws Exception {
-		String mdx = "SELECT [AAA].&[BBB] ON COLUMNS, [CCC].&[DDD].[EEE] ON ROWS FROM DummyCube";
+		String mdx = "SELECT [AAA].&[BBB] ON COLUMNS, [CCC].&[DDD]&[EEE] ON ROWS FROM DummyCube";
 
 		MdxStatement query = parseQuery(mdx);
 
@@ -156,32 +156,28 @@ public class MdxParserTest {
 
 		CompoundId rowId = (CompoundId) rowExp;
 		assertThat("Wrong number of name parts on row axis member.", rowId
-				.getNames().size(), is(equalTo(3)));
+				.getNames().size(), is(equalTo(2)));
 
 		assertThat("First name part has wrong identifier.", rowId.getNames()
 				.get(0).getName(), is(equalTo("[CCC]")));
 		assertThat("Second name part has wrong identifier.", rowId.getNames()
-				.get(1).getName(), is(equalTo("[DDD]")));
-		assertThat("Third name part has wrong identifier.", rowId.getNames()
-				.get(2).getName(), is(equalTo("[EEE]")));
+				.get(1).getName(), is(equalTo("[DDD]&[EEE]")));
 		assertThat("First name part cannot be a key identifier.", rowId
 				.getNames().get(0).isKey(), is(false));
 		assertThat("Second name part is a key identifier.", rowId.getNames()
 				.get(1).isKey(), is(true));
-		assertThat("Third name part is not a key identifier.", rowId.getNames()
-				.get(2).isKey(), is(false));
 	}
 
 	@Test
 	public void testGenerateKeyIdentifier() throws Exception {
-		String mdx = "SELECT [AAA].&[BBB] ON COLUMNS, [CCC].&[DDD].[EEE] ON ROWS FROM DummyCube";
+		String mdx = "SELECT [AAA].&[BBB] ON COLUMNS, [CCC].&[DDD]&[EEE] ON ROWS FROM DummyCube";
 
 		MdxStatement query = new MdxStatement();
 
 		CompoundId columnId = new CompoundId().append("[AAA]").append("[BBB]",
 				true);
-		CompoundId rowId = new CompoundId().append("[CCC]")
-				.append("[DDD]", true).append("[EEE]");
+		CompoundId rowId = new CompoundId().append("[CCC]").append(
+				"[DDD]&[EEE]", true);
 
 		query.setAxis(new QueryAxis(Axis.COLUMNS, columnId));
 		query.setAxis(new QueryAxis(Axis.ROWS, rowId));
