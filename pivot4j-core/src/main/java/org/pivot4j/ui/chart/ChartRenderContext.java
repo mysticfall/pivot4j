@@ -11,6 +11,7 @@ package org.pivot4j.ui.chart;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotModel;
 import org.pivot4j.el.ExpressionContext;
@@ -30,7 +31,11 @@ public class ChartRenderContext extends CartesianRenderContext {
 
 	private List<Member> pagePath = Collections.emptyList();
 
+	private List<Member> chartPath = Collections.emptyList();
+
 	private List<Member> seriesPath = Collections.emptyList();
+
+	private List<Member> plotPath = Collections.emptyList();
 
 	/**
 	 * @param model
@@ -117,10 +122,29 @@ public class ChartRenderContext extends CartesianRenderContext {
 	 */
 	public void setPagePath(List<Member> pagePath) {
 		if (pagePath == null) {
-			this.pagePath = Collections.emptyList();
-		} else {
-			this.pagePath = pagePath;
+			throw new NullArgumentException("pagePath");
 		}
+
+		this.pagePath = pagePath;
+	}
+
+	/**
+	 * @return the chartPath
+	 */
+	public List<Member> getChartPath() {
+		return chartPath;
+	}
+
+	/**
+	 * @param chartPath
+	 *            the chartPath to set
+	 */
+	public void setChartPath(List<Member> chartPath) {
+		if (chartPath == null) {
+			throw new NullArgumentException("chartPath");
+		}
+
+		this.chartPath = chartPath;
 	}
 
 	/**
@@ -136,10 +160,29 @@ public class ChartRenderContext extends CartesianRenderContext {
 	 */
 	public void setSeriesPath(List<Member> seriesPath) {
 		if (seriesPath == null) {
-			this.seriesPath = Collections.emptyList();
-		} else {
-			this.seriesPath = seriesPath;
+			throw new NullArgumentException("seriesPath");
 		}
+
+		this.seriesPath = seriesPath;
+	}
+
+	/**
+	 * @return the plotPath
+	 */
+	public List<Member> getPlotPath() {
+		return plotPath;
+	}
+
+	/**
+	 * @param plotPath
+	 *            the plotPath to set
+	 */
+	public void setPlotPath(List<Member> plotPath) {
+		if (plotPath == null) {
+			throw new NullArgumentException("plotPath");
+		}
+
+		this.plotPath = plotPath;
 	}
 
 	/**
@@ -204,6 +247,15 @@ public class ChartRenderContext extends CartesianRenderContext {
 					@Override
 					public List<Member> getValue() {
 						return pagePath;
+					}
+				});
+
+		context.put("chartPath",
+				new ExpressionContext.ValueBinding<List<Member>>() {
+
+					@Override
+					public List<Member> getValue() {
+						return chartPath;
 					}
 				});
 

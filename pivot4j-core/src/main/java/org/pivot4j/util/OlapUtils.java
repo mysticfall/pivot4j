@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
+import org.olap4j.Axis;
 import org.olap4j.OlapDatabaseMetaData;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
@@ -100,16 +101,12 @@ public class OlapUtils {
 	 */
 	public static boolean equals(Position position, Position otherPosition,
 			int memberIndex) {
-		if (position == null) {
-			throw new NullArgumentException("position");
-		}
-
-		if (otherPosition == null) {
-			throw new NullArgumentException("lastPosition");
-		}
-
 		if (position == otherPosition) {
 			return true;
+		}
+
+		if (position == null || otherPosition == null) {
+			return false;
 		}
 
 		int size = position.getMembers().size();
@@ -132,6 +129,22 @@ public class OlapUtils {
 		}
 
 		return true;
+	}
+
+	/**
+	 * @param axis
+	 * @param otherAxis
+	 */
+	public static boolean equals(Axis axis, Axis otherAxis) {
+		if (axis == otherAxis) {
+			return true;
+		}
+
+		if (axis == null || otherAxis == null) {
+			return false;
+		}
+
+		return axis.axisOrdinal() == otherAxis.axisOrdinal();
 	}
 
 	/**

@@ -6,7 +6,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 
-import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 import org.pivot4j.ui.AbstractRenderCallback;
 import org.pivot4j.ui.chart.ChartRenderContext;
@@ -64,14 +63,6 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 	 */
 	protected HtmlPanelGrid getPageComponent() {
 		return pageComponent;
-	}
-
-	/**
-	 * @see org.pivot4j.ui.chart.ChartRenderCallback#renderSeries()
-	 */
-	@Override
-	public boolean renderSeries() {
-		return false;
 	}
 
 	/**
@@ -164,12 +155,14 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 	 * @param chart
 	 */
 	protected void configureChart(ChartRenderContext context, C chart) {
-		Position position = context.getColumnPosition();
+		List<Member> path = context.getChartPath();
 
-		String title = position.getMembers()
-				.get(position.getMembers().size() - 1).getCaption();
+		if (path != null && path.size() > 0) {
+			String title = path.get(path.size() - 1).getCaption();
 
-		chart.setTitle(title);
+			chart.setTitle(title);
+		}
+
 		chart.setShadow(true);
 		chart.setLegendPosition("w");
 

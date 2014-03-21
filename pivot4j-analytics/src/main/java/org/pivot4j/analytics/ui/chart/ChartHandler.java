@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.StringUtils;
+import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.pivot4j.ModelChangeEvent;
@@ -188,6 +189,11 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 			ChartBuilder builder = chartBuilderFactory.createChartBuilder(
 					chartName, context);
 			builder.setComponent(component);
+
+			renderer.setPageAxis(Axis.COLUMNS);
+			renderer.setChartAxis(Axis.COLUMNS);
+			renderer.setSeriesAxis(Axis.ROWS);
+			renderer.setPlotAxis(Axis.ROWS);
 
 			renderer.render(model, builder);
 		}

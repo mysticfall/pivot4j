@@ -40,7 +40,7 @@ public class BarChartBuilder extends AbstractSeriesChartBuilder<BarChart> {
 	protected void configureChart(ChartRenderContext context, BarChart chart) {
 		super.configureChart(context, chart);
 
-		chart.setLegendPosition("n");
+		chart.setLegendPosition("w");
 		chart.setZoom(true);
 	}
 }

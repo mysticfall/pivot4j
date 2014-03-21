@@ -11,8 +11,6 @@ package org.pivot4j.ui.chart;
 import org.pivot4j.ui.RenderCallback;
 
 public interface ChartRenderCallback extends RenderCallback<ChartRenderContext> {
-	
-	boolean renderSeries();
 
 	void startPage(ChartRenderContext context);
 
