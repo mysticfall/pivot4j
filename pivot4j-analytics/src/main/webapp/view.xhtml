@@ -107,23 +107,34 @@
 								oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
 						<p:separator rendered="#{!pivotStateManager.readOnly}" />
-						<p:selectOneButton id="drilldown-mode" style="display: inline"
-							value="#{viewHandler.drillDownMode}"
-							label="#{msg['toolbar.drill']}" disabled="#{!viewHandler.valid}"
+						<p:menuButton id="drill-mode" value="#{msg['toolbar.drill']}"
+							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
-							<f:selectItem itemLabel="#{msg['toolbar.drill.position']}"
-								itemValue="position"
-								itemDescription="#{msg['toolbar.drill.position.tooltip']}" />
-							<f:selectItem itemLabel="#{msg['toolbar.drill.member']}"
-								itemValue="member"
-								itemDescription="#{msg['toolbar.drill.member.tooltip']}" />
-							<f:selectItem itemLabel="#{msg['toolbar.drill.replace']}"
-								itemValue="replace"
-								itemDescription="#{msg['toolbar.drill.replace.tooltip']}" />
-							<p:ajax update=":grid-form" listener="#{viewHandler.render}"
-								process="@this" rendered="#{!pivotStateManager.readOnly}"
-								oncomplete="onViewChanged()" />
-						</p:selectOneButton>
+							<p:menuitem value="#{msg['toolbar.drill.position']}"
+								title="#{msg['toolbar.drill.position.tooltip']}"
+								icon="#{viewHandler.drillDownMode=='position'?'ui-icon-bullet':'ui-icon-radio-on'}"
+								update=":grid-form,drill-mode" action="#{viewHandler.render}"
+								process="@this" oncomplete="onViewChanged()">
+								<f:setPropertyActionListener
+									target="#{viewHandler.drillDownMode}" value="position" />
+							</p:menuitem>
+							<p:menuitem value="#{msg['toolbar.drill.member']}"
+								title="#{msg['toolbar.drill.member.tooltip']}"
+								icon="#{viewHandler.drillDownMode=='member'?'ui-icon-bullet':'ui-icon-radio-on'}"
+								update=":grid-form,drill-mode" action="#{viewHandler.render}"
+								process="@this" oncomplete="onViewChanged()">
+								<f:setPropertyActionListener
+									target="#{viewHandler.drillDownMode}" value="member" />
+							</p:menuitem>
+							<p:menuitem value="#{msg['toolbar.drill.replace']}"
+								title="#{msg['toolbar.drill.replace.tooltip']}"
+								icon="#{viewHandler.drillDownMode=='replace'?'ui-icon-bullet':'ui-icon-radio-on'}"
+								update=":grid-form,drill-mode" action="#{viewHandler.render}"
+								process="@this" oncomplete="onViewChanged()">
+								<f:setPropertyActionListener
+									target="#{viewHandler.drillDownMode}" value="replace" />
+							</p:menuitem>
+						</p:menuButton>
 						<p:selectBooleanButton value="#{viewHandler.drillThrough}"
 							title="#{msg['toolbar.drill.through.tooltip']}"
 							onLabel="#{msg['toolbar.drill.through']}"
