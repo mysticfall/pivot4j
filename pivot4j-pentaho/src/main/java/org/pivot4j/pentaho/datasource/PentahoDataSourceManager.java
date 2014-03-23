@@ -2,6 +2,7 @@ package org.pivot4j.pentaho.datasource;
 
 import static org.pentaho.platform.plugin.services.connections.mondrian.MDXConnection.MDX_CONNECTION_MAPPER_KEY;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,8 +16,12 @@ import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.util.Pair;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang.NullArgumentException;
+import org.apache.commons.lang.UnhandledException;
+import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
+import org.olap4j.metadata.Cube;
 import org.pentaho.platform.api.engine.IConnectionUserRoleMapper;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.PentahoAccessControlException;
@@ -24,7 +29,6 @@ import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.plugin.action.mondrian.catalog.IMondrianCatalogService;
 import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCatalog;
-import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCube;
 import org.pentaho.platform.util.messages.LocaleHelper;
 import org.pivot4j.analytics.datasource.AbstractDataSourceManager;
 import org.pivot4j.analytics.datasource.CatalogInfo;
@@ -135,10 +139,25 @@ public class PentahoDataSourceManager extends
 							+ catalogName);
 		}
 
-		List<MondrianCube> mondrianCubes = catalog.getSchema().getCubes();
+		OlapDataSource dataSource = createDataSource(new PentahoDataSourceDefinition(
+				catalog));
+		OlapConnection con = null;
 
-		for (MondrianCube cube : mondrianCubes) {
-			cubes.add(new CubeInfo(cube.getId(), cube.getName(), cube.getName()));
+		try {
+			con = dataSource.getConnection();
+
+			List<Cube> olapCubes = con.getOlapSchema().getCubes();
+
+			for (Cube cube : olapCubes) {
+				if (cube.isVisible()) {
+					cubes.add(new CubeInfo(cube.getName(), cube.getCaption(),
+							cube.getDescription()));
+				}
+			}
+		} catch (SQLException e) {
+			throw new UnhandledException(e);
+		} finally {
+			DbUtils.closeQuietly(con);
 		}
 
 		return cubes;

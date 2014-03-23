@@ -124,8 +124,10 @@ public class SimpleDataSourceManager extends
 			connection = dataSource.getConnection();
 
 			for (Cube cube : connection.getOlapSchema().getCubes()) {
-				cubes.add(new CubeInfo(cube.getName(), cube.getCaption(), cube
-						.getDescription()));
+				if (cube.isVisible()) {
+					cubes.add(new CubeInfo(cube.getName(), cube.getCaption(),
+							cube.getDescription()));
+				}
 			}
 		} catch (SQLException e) {
 			throw new PivotException(e);
