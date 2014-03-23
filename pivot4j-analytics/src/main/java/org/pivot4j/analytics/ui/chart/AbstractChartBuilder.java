@@ -141,11 +141,17 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 	 * @return
 	 */
 	protected HtmlPanelGrid createPageComponent(ChartRenderContext context) {
+		DefaultChartRenderer renderer = (DefaultChartRenderer) context
+				.getRenderer();
+
 		HtmlPanelGrid grid = new HtmlPanelGrid();
 
-		grid.setStyle("width: 100%");
+		if (renderer.getWidth() <= 0) {
+			grid.setStyle("width: 100%;");
+		}
+
 		grid.setStyleClass("chart-page");
-		grid.setColumns(context.getChartsPerPage());
+		grid.setColumns(context.getChartCount());
 
 		return grid;
 	}
@@ -164,10 +170,31 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 		}
 
 		chart.setShadow(true);
-		chart.setLegendPosition("w");
 
-		// TODO Make it configurable.
-		chart.setStyle("width:100%; height:300px;");
+		DefaultChartRenderer renderer = (DefaultChartRenderer) context
+				.getRenderer();
+
+		if (renderer.getLegendPosition() != null) {
+			chart.setLegendPosition(renderer.getLegendPosition().name());
+		}
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("width: ");
+
+		if (renderer.getWidth() <= 0) {
+			builder.append("100%; ");
+		} else {
+			builder.append(Integer.toString(renderer.getWidth()));
+			builder.append("px; ");
+		}
+
+		if (renderer.getHeight() > 0) {
+			builder.append("height: ");
+			builder.append(Integer.toString(renderer.getHeight()));
+			builder.append("px;");
+		}
+
+		chart.setStyle(builder.toString());
 	}
 
 	/**

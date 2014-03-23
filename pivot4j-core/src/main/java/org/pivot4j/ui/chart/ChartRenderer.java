@@ -200,13 +200,7 @@ public class ChartRenderer extends
 			maxRowLevel = Math.max(maxRowLevel, node.getLevel());
 		}
 
-		PageSizeCalculator calculator = new PageSizeCalculator();
-
-		columnRoot.walkChildrenAtLevel(calculator,
-				Math.max(0, maxColumnLevel - 1));
-
-		final ChartRenderContext context = new ChartRenderContext(model, this,
-				calculator.getMaxPageSize());
+		final ChartRenderContext context = new ChartRenderContext(model, this);
 
 		callback.startRender(context);
 
@@ -223,6 +217,9 @@ public class ChartRenderer extends
 		nodeContext.put(Axis.ROWS, rowRoot);
 		nodeContext.put(Axis.COLUMNS, columnRoot);
 
+		pagePart.render(context, nodeContext);
+
+		pagePart.setDryRun(false);
 		pagePart.render(context, nodeContext);
 
 		context.setAxis(null);
@@ -458,6 +455,12 @@ public class ChartRenderer extends
 
 		private PartRenderer childRenderer;
 
+		private boolean dryRun = true;
+
+		private int renderIndex = 0;
+
+		private int renderCount = 0;
+
 		/**
 		 * @param axis
 		 * @param callback
@@ -494,6 +497,44 @@ public class ChartRenderer extends
 		 */
 		public void setChildRenderer(PartRenderer childRenderer) {
 			this.childRenderer = childRenderer;
+		}
+
+		/**
+		 * @return the dryRun
+		 */
+		public boolean isDryRun() {
+			return dryRun;
+		}
+
+		/**
+		 * @param dryRun
+		 *            the dryRun to set
+		 */
+		public void setDryRun(boolean dryRun) {
+			this.dryRun = dryRun;
+
+			if (childRenderer != null) {
+				childRenderer.setDryRun(dryRun);
+			}
+		}
+
+		/**
+		 * @return the renderIndex
+		 */
+		public int getRenderIndex() {
+			return renderIndex;
+		}
+
+		/**
+		 * @return the renderCount
+		 */
+		public int getRenderCount() {
+			return renderCount;
+		}
+
+		public void reset() {
+			this.renderIndex = 0;
+			this.renderCount = 0;
 		}
 
 		/**
@@ -616,6 +657,7 @@ public class ChartRenderer extends
 		 * @param context
 		 */
 		protected void resetContext(ChartRenderContext context) {
+			this.renderIndex = 0;
 		}
 
 		/**
@@ -648,6 +690,8 @@ public class ChartRenderer extends
 		 */
 		protected void renderEnd(ChartRenderContext context,
 				Map<Axis, PlotNode> nodeContext) {
+			this.renderIndex++;
+			this.renderCount = Math.max(renderCount, renderIndex);
 		}
 	}
 
@@ -670,7 +714,9 @@ public class ChartRenderer extends
 				Map<Axis, PlotNode> nodeContext) {
 			super.renderStart(context, nodeContext);
 
-			getCallback().startPage(context);
+			if (!isDryRun()) {
+				getCallback().startPage(context);
+			}
 		}
 
 		/**
@@ -682,9 +728,9 @@ public class ChartRenderer extends
 				Map<Axis, PlotNode> nodeContext) {
 			super.renderEnd(context, nodeContext);
 
-			getCallback().endPage(context);
-
-			context.setPageIndex(context.getPageIndex() + 1);
+			if (!isDryRun()) {
+				getCallback().endPage(context);
+			}
 		}
 
 		/**
@@ -696,21 +742,18 @@ public class ChartRenderer extends
 				Map<Axis, PlotNode> nodeContext, PlotNode contextNode) {
 			super.updateContext(context, nodeContext, contextNode);
 
+			context.setPageIndex(getRenderIndex());
+
+			if (isDryRun()) {
+				context.setPageCount(getRenderCount());
+				return;
+			}
+
 			if (contextNode == null) {
 				context.setPagePath(Collections.<Member> emptyList());
 			} else {
 				context.setPagePath(contextNode.getPath());
 			}
-		}
-
-		/**
-		 * @see org.pivot4j.ui.chart.ChartRenderer.PartRenderer#resetContext(org.pivot4j.ui.chart.ChartRenderContext)
-		 */
-		@Override
-		protected void resetContext(ChartRenderContext context) {
-			super.resetContext(context);
-
-			context.setPageIndex(0);
 		}
 	}
 
@@ -733,7 +776,9 @@ public class ChartRenderer extends
 				Map<Axis, PlotNode> nodeContext) {
 			super.renderStart(context, nodeContext);
 
-			getCallback().startChart(context);
+			if (!isDryRun()) {
+				getCallback().startChart(context);
+			}
 		}
 
 		/**
@@ -745,9 +790,9 @@ public class ChartRenderer extends
 				Map<Axis, PlotNode> nodeContext) {
 			super.renderEnd(context, nodeContext);
 
-			getCallback().endChart(context);
-
-			context.setChartIndex(context.getChartIndex() + 1);
+			if (!isDryRun()) {
+				getCallback().endChart(context);
+			}
 		}
 
 		/**
@@ -758,6 +803,13 @@ public class ChartRenderer extends
 		protected void updateContext(ChartRenderContext context,
 				Map<Axis, PlotNode> nodeContext, PlotNode contextNode) {
 			super.updateContext(context, nodeContext, contextNode);
+
+			context.setChartIndex(getRenderIndex());
+
+			if (isDryRun()) {
+				context.setChartCount(getRenderCount());
+				return;
+			}
 
 			if (contextNode == null) {
 				context.setChartPath(Collections.<Member> emptyList());
@@ -771,16 +823,6 @@ public class ChartRenderer extends
 
 				context.setChartPath(path);
 			}
-		}
-
-		/**
-		 * @see org.pivot4j.ui.chart.ChartRenderer.PartRenderer#resetContext(org.pivot4j.ui.chart.ChartRenderContext)
-		 */
-		@Override
-		protected void resetContext(ChartRenderContext context) {
-			super.resetContext(context);
-
-			context.setChartIndex(0);
 		}
 	}
 
@@ -803,7 +845,9 @@ public class ChartRenderer extends
 				Map<Axis, PlotNode> nodeContext) {
 			super.renderStart(context, nodeContext);
 
-			getCallback().startSeries(context);
+			if (!isDryRun()) {
+				getCallback().startSeries(context);
+			}
 		}
 
 		/**
@@ -815,9 +859,9 @@ public class ChartRenderer extends
 				Map<Axis, PlotNode> nodeContext) {
 			super.renderEnd(context, nodeContext);
 
-			getCallback().endSeries(context);
-
-			context.setSeriesIndex(context.getSeriesIndex() + 1);
+			if (!isDryRun()) {
+				getCallback().endSeries(context);
+			}
 		}
 
 		/**
@@ -828,6 +872,13 @@ public class ChartRenderer extends
 		protected void updateContext(ChartRenderContext context,
 				Map<Axis, PlotNode> nodeContext, PlotNode contextNode) {
 			super.updateContext(context, nodeContext, contextNode);
+
+			context.setSeriesIndex(getRenderIndex());
+
+			if (isDryRun()) {
+				context.setSeriesCount(getRenderCount());
+				return;
+			}
 
 			if (contextNode == null) {
 				context.setSeriesPath(Collections.<Member> emptyList());
@@ -845,16 +896,6 @@ public class ChartRenderer extends
 
 				context.setSeriesPath(path);
 			}
-		}
-
-		/**
-		 * @see org.pivot4j.ui.chart.ChartRenderer.PartRenderer#resetContext(org.pivot4j.ui.chart.ChartRenderContext)
-		 */
-		@Override
-		protected void resetContext(ChartRenderContext context) {
-			super.resetContext(context);
-
-			context.setSeriesIndex(0);
 		}
 	}
 
@@ -877,14 +918,14 @@ public class ChartRenderer extends
 				Map<Axis, PlotNode> nodeContext) {
 			super.renderContent(context, nodeContext);
 
-			String label = getLabel(context.getPlotPath());
+			if (!isDryRun()) {
+				String label = getLabel(context.getPlotPath());
 
-			ChartRenderCallback callback = getCallback();
+				ChartRenderCallback callback = getCallback();
 
-			callback.renderCommands(context, getCommands(context));
-			callback.renderContent(context, label, getValue(context));
-
-			context.setPlotIndex(context.getPlotIndex() + 1);
+				callback.renderCommands(context, getCommands(context));
+				callback.renderContent(context, label, getValue(context));
+			}
 		}
 
 		/**
@@ -895,6 +936,13 @@ public class ChartRenderer extends
 		protected void updateContext(ChartRenderContext context,
 				Map<Axis, PlotNode> nodeContext, PlotNode contextNode) {
 			super.updateContext(context, nodeContext, contextNode);
+
+			context.setPlotIndex(getRenderIndex());
+
+			if (isDryRun()) {
+				context.setPlotCount(getRenderCount());
+				return;
+			}
 
 			if (contextNode == null) {
 				context.setHierarchy(null);
@@ -950,35 +998,6 @@ public class ChartRenderer extends
 
 				context.setPlotPath(path);
 			}
-		}
-
-		/**
-		 * @see org.pivot4j.ui.chart.ChartRenderer.PartRenderer#resetContext(org.pivot4j.ui.chart.ChartRenderContext)
-		 */
-		@Override
-		protected void resetContext(ChartRenderContext context) {
-			super.resetContext(context);
-
-			context.setPlotIndex(0);
-		}
-	}
-
-	static class PageSizeCalculator implements TreeNodeCallback<Member> {
-
-		private int maxPageSize = 0;
-
-		public int getMaxPageSize() {
-			return maxPageSize;
-		}
-
-		/**
-		 * @see org.pivot4j.util.TreeNodeCallback#handleTreeNode(org.pivot4j.util.TreeNode)
-		 */
-		@Override
-		public int handleTreeNode(TreeNode<Member> node) {
-			this.maxPageSize = Math.max(node.getChildCount(), maxPageSize);
-
-			return CONTINUE;
 		}
 	}
 }

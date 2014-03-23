@@ -88,6 +88,8 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 	private Exception lastError;
 
+	private boolean visible = true;
+
 	@PostConstruct
 	protected void initialize() {
 		this.model = stateManager.getModel();
@@ -723,6 +725,21 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	 */
 	public void setDrillDownMode(String drillDownMode) {
 		renderer.setDrillDownMode(drillDownMode);
+	}
+
+	/**
+	 * @return the visible
+	 */
+	public boolean isVisible() {
+		return visible;
+	}
+
+	/**
+	 * @param visible
+	 *            the visible to set
+	 */
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 	/**

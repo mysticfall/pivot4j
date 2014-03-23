@@ -112,7 +112,7 @@
 							rendered="#{!pivotStateManager.readOnly}">
 							<p:menuitem value="#{msg['toolbar.drill.position']}"
 								title="#{msg['toolbar.drill.position.tooltip']}"
-								icon="#{viewHandler.drillDownMode=='position'?'ui-icon-bullet':'ui-icon-radio-on'}"
+								icon="#{viewHandler.drillDownMode=='position'?'ui-icon-check':'ui-icon-none'}"
 								update=":grid-form,drill-mode" action="#{viewHandler.render}"
 								process="@this" oncomplete="onViewChanged()">
 								<f:setPropertyActionListener
@@ -120,7 +120,7 @@
 							</p:menuitem>
 							<p:menuitem value="#{msg['toolbar.drill.member']}"
 								title="#{msg['toolbar.drill.member.tooltip']}"
-								icon="#{viewHandler.drillDownMode=='member'?'ui-icon-bullet':'ui-icon-radio-on'}"
+								icon="#{viewHandler.drillDownMode=='member'?'ui-icon-check':'ui-icon-none'}"
 								update=":grid-form,drill-mode" action="#{viewHandler.render}"
 								process="@this" oncomplete="onViewChanged()">
 								<f:setPropertyActionListener
@@ -128,7 +128,7 @@
 							</p:menuitem>
 							<p:menuitem value="#{msg['toolbar.drill.replace']}"
 								title="#{msg['toolbar.drill.replace.tooltip']}"
-								icon="#{viewHandler.drillDownMode=='replace'?'ui-icon-bullet':'ui-icon-radio-on'}"
+								icon="#{viewHandler.drillDownMode=='replace'?'ui-icon-check':'ui-icon-none'}"
 								update=":grid-form,drill-mode" action="#{viewHandler.render}"
 								process="@this" oncomplete="onViewChanged()">
 								<f:setPropertyActionListener
@@ -193,13 +193,42 @@
 							onclick="$('table.pivot-grid:first').jqprint();"
 							styleClass="hide-on-embed" />
 						<p:separator />
-						<p:selectOneMenu value="#{chartHandler.chartName}"
-							disabled="#{!viewHandler.valid}">
-							<f:selectItems value="#{chartHandler.charts}" />
-
-							<p:ajax process="@this" listener="#{chartHandler.render}"
-								event="change" update=":toolbar-form,:grid-form,:growl" />
-						</p:selectOneMenu>
+						<p:selectBooleanButton value="#{viewHandler.visible}"
+							title="#{msg['toolbar.grid.tooltip']}"
+							onLabel="#{msg['toolbar.grid.hide']}"
+							offLabel="#{msg['toolbar.grid.show']}"
+							disabled="#{!viewHandler.valid}"
+							rendered="#{!pivotStateManager.readOnly}">
+							<p:ajax listener="#{viewHandler.render}" process="@this"
+								update=":grid-form" oncomplete="onViewChanged()" />
+						</p:selectBooleanButton>
+						<p:menuButton id="charts" value="#{msg['label.chart']}"
+							disabled="#{!viewHandler.valid}"
+							rendered="#{!pivotStateManager.readOnly}">
+							<p:menuitem value="(#{msg['label.none']})"
+								icon="#{empty chartHandler.chartName?'ui-icon-check':'ui-icon-none'}"
+								update=":toolbar-form,:grid-form,:growl"
+								action="#{chartHandler.render}" process="@this"
+								oncomplete="onViewChanged()">
+								<f:setPropertyActionListener target="#{chartHandler.chartName}"
+									value="" />
+							</p:menuitem>
+							<c:forEach items="#{chartHandler.charts}" var="item">
+								<p:menuitem value="#{item.label}" title="#{item.description}"
+									icon="#{chartHandler.chartName==item.value?'ui-icon-check':'ui-icon-none'}"
+									update=":toolbar-form,:grid-form,:growl"
+									action="#{chartHandler.render}" process="@this"
+									oncomplete="onViewChanged()">
+									<f:setPropertyActionListener target="#{chartHandler.chartName}"
+										value="#{item.value}" />
+								</p:menuitem>
+							</c:forEach>
+							<p:separator />
+							<p:menuitem value="#{msg['toolbar.chart.settings']}"
+								title="#{msg['toolbar.chart.settings.tooltip']}"
+								icon="ui-icon-gear" action="#{chartHandler.reset}"
+								oncomplete="chartConfig.show()" />
+						</p:menuButton>
 					</p:toolbarGroup>
 				</p:toolbar>
 			</h:form>
@@ -440,7 +469,7 @@
 				<h:form id="grid-form" onkeypress="return event.keyCode != 13;">
 					<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
 						binding="#{viewHandler.component}"
-						rendered="#{viewHandler.valid and empty chartHandler.chartName}" />
+						rendered="#{viewHandler.valid and viewHandler.visible}" />
 
 					<h:panelGroup id="chart-panel" styleClass="chart-panel"
 						binding="#{chartHandler.component}" layout="block"
@@ -461,7 +490,8 @@
 							styleClass="message-warn" />
 					</h:panelGroup>
 
-					<p:growl id="grid-growl" showDetail="true" sticky="true" />
+					<p:growl id="grid-growl" showDetail="true" sticky="true"
+						globalOnly="true" />
 				</h:form>
 			</pe:layoutPane>
 
@@ -525,6 +555,7 @@
 	<ui:include src="aggregation.xhtml" />
 	<ui:include src="export.xhtml" />
 	<ui:include src="drillthrough.xhtml" />
+	<ui:include src="chart.xhtml" />
 	<ui:include src="extension.xhtml" />
 
 	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"

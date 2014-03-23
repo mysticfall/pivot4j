@@ -24,8 +24,7 @@
 </h:head>
 
 <f:metadata>
-	<f:event type="preRenderView"
-		listener="#{viewHandler.onPreRenderView}" />
+	<f:event type="preRenderView" listener="#{viewHandler.onPreRenderView}" />
 	<f:event type="preRenderView"
 		listener="#{chartHandler.onPreRenderView}" />
 </f:metadata>
@@ -34,7 +33,7 @@
 	<h:form id="grid-form">
 		<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
 			binding="#{viewHandler.component}"
-			rendered="#{viewHandler.valid and empty chartHandler.chartName}" />
+			rendered="#{viewHandler.valid and viewHandler.visible}" />
 
 		<h:panelGroup id="chart-panel" styleClass="chart-panel"
 			binding="#{chartHandler.component}" layout="block"

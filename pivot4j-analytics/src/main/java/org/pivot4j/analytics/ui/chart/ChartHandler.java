@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -22,7 +23,9 @@ import org.pivot4j.ModelChangeEvent;
 import org.pivot4j.ModelChangeListener;
 import org.pivot4j.PivotModel;
 import org.pivot4j.analytics.ui.PivotStateManager;
+import org.pivot4j.analytics.ui.chart.DefaultChartRenderer.Position;
 import org.pivot4j.ui.chart.ChartRenderer;
+import org.pivot4j.util.OlapUtils;
 
 @ManagedBean(name = "chartHandler")
 @ViewScoped
@@ -38,13 +41,27 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 
 	private PivotModel model;
 
-	private ChartRenderer renderer;
+	private DefaultChartRenderer renderer;
 
 	private String chartName;
 
 	private HtmlPanelGroup component;
 
 	private List<SelectItem> charts;
+
+	private Axis pageAxis;
+
+	private Axis chartAxis;
+
+	private Axis seriesAxis;
+
+	private Axis plotAxis;
+
+	private int width;
+
+	private int height;
+
+	private Position legendPosition;
 
 	@PostConstruct
 	protected void initialize() {
@@ -54,8 +71,10 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 			model.addModelChangeListener(this);
 		}
 
-		this.renderer = new ChartRenderer();
+		this.renderer = new DefaultChartRenderer();
 		this.charts = new LinkedList<SelectItem>();
+
+		reset();
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
@@ -63,8 +82,6 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 				context, "msg");
 
 		String prefix = "label.chart.items.";
-
-		charts.add(new SelectItem("", resources.getString(prefix + "Grid")));
 
 		for (String builder : chartBuilderFactory.getBuilderNames()) {
 			charts.add(new SelectItem(builder, resources.getString(prefix
@@ -153,6 +170,111 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 		this.chartName = chartName;
 	}
 
+	/**
+	 * @return the pageAxis
+	 */
+	public Axis getPageAxis() {
+		return pageAxis;
+	}
+
+	/**
+	 * @param pageAxis
+	 *            the pageAxis to set
+	 */
+	public void setPageAxis(Axis pageAxis) {
+		this.pageAxis = pageAxis;
+	}
+
+	/**
+	 * @return the chartAxis
+	 */
+	public Axis getChartAxis() {
+		return chartAxis;
+	}
+
+	/**
+	 * @param chartAxis
+	 *            the chartAxis to set
+	 */
+	public void setChartAxis(Axis chartAxis) {
+		this.chartAxis = chartAxis;
+	}
+
+	/**
+	 * @return the seriesAxis
+	 */
+	public Axis getSeriesAxis() {
+		return seriesAxis;
+	}
+
+	/**
+	 * @param seriesAxis
+	 *            the seriesAxis to set
+	 */
+	public void setSeriesAxis(Axis seriesAxis) {
+		this.seriesAxis = seriesAxis;
+	}
+
+	/**
+	 * @return the plotAxis
+	 */
+	public Axis getPlotAxis() {
+		return plotAxis;
+	}
+
+	/**
+	 * @param plotAxis
+	 *            the plotAxis to set
+	 */
+	public void setPlotAxis(Axis plotAxis) {
+		this.plotAxis = plotAxis;
+	}
+
+	/**
+	 * @return the width
+	 */
+	public int getWidth() {
+		return width;
+	}
+
+	/**
+	 * @param width
+	 *            the width to set
+	 */
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	/**
+	 * @return the height
+	 */
+	public int getHeight() {
+		return height;
+	}
+
+	/**
+	 * @param height
+	 *            the height to set
+	 */
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	/**
+	 * @return the legendPosition
+	 */
+	public Position getLegendPosition() {
+		return legendPosition;
+	}
+
+	/**
+	 * @param legendPosition
+	 *            the legendPosition to set
+	 */
+	public void setLegendPosition(Position legendPosition) {
+		this.legendPosition = legendPosition;
+	}
+
 	public boolean isValid() {
 		if (model == null || !model.isInitialized()) {
 			return false;
@@ -181,6 +303,51 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 		}
 	}
 
+	public void reset() {
+		this.pageAxis = renderer.getPageAxis();
+		this.chartAxis = renderer.getChartAxis();
+		this.seriesAxis = renderer.getSeriesAxis();
+		this.plotAxis = renderer.getPlotAxis();
+
+		this.width = renderer.getWidth();
+		this.height = renderer.getHeight();
+		this.legendPosition = renderer.getLegendPosition();
+	}
+
+	public void apply() {
+		boolean valid = false;
+
+		valid |= pageAxis != null && !OlapUtils.equals(plotAxis, pageAxis);
+		valid |= chartAxis != null && !OlapUtils.equals(plotAxis, chartAxis);
+		valid |= seriesAxis != null && !OlapUtils.equals(plotAxis, seriesAxis);
+
+		if (valid) {
+			renderer.setPageAxis(pageAxis);
+			renderer.setChartAxis(chartAxis);
+			renderer.setSeriesAxis(seriesAxis);
+			renderer.setPlotAxis(plotAxis);
+
+			renderer.setWidth(width);
+			renderer.setHeight(height);
+
+			renderer.setLegendPosition(legendPosition);
+
+			render();
+		} else {
+			FacesContext context = FacesContext.getCurrentInstance();
+
+			ResourceBundle messages = context.getApplication()
+					.getResourceBundle(context, "msg");
+
+			String title = messages.getString("warn.chart.axis.unused.title");
+			String msg = messages.getString("warn.chart.axis.unused.message");
+
+			context.addMessage("axis-plot", new FacesMessage(
+					FacesMessage.SEVERITY_WARN, title, msg));
+
+		}
+	}
+
 	public void render() {
 		if (model != null && model.isInitialized()
 				&& StringUtils.isNotBlank(chartName)) {
@@ -189,11 +356,6 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 			ChartBuilder builder = chartBuilderFactory.createChartBuilder(
 					chartName, context);
 			builder.setComponent(component);
-
-			renderer.setPageAxis(Axis.COLUMNS);
-			renderer.setChartAxis(Axis.COLUMNS);
-			renderer.setSeriesAxis(Axis.ROWS);
-			renderer.setPlotAxis(Axis.ROWS);
 
 			renderer.render(model, builder);
 		}

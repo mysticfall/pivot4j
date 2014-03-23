@@ -198,6 +198,10 @@ body.report .pe-layout-pane-header {
 	background-position: 0 0;
 }
 
+.ui-icon-none {
+	background-image: none !important;
+}
+
 #source-tree-pane .ui-treenode .ui-state-highlight {
 	background: none !important;
 	text-shadow: none !important;
@@ -291,8 +295,8 @@ body.report .pe-layout-pane-header {
 	text-align: center;
 }
 
-.filter-grid {
-	margin-top: 10px;
+.pivot-grid {
+	margin-bottom: 10px;
 }
 
 .filter-grid .separator {

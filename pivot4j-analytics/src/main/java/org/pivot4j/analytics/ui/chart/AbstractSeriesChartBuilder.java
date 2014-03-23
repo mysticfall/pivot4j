@@ -48,9 +48,7 @@ public abstract class AbstractSeriesChartBuilder<C extends CartesianChart>
 
 		List<Member> path = new LinkedList<Member>(context.getSeriesPath());
 
-		if (path.isEmpty()) {
-			series.setLabel("");
-		} else {
+		if (!path.isEmpty() && context.getSeriesCount() > 1) {
 			String label;
 
 			int size = path.size();
@@ -84,6 +82,10 @@ public abstract class AbstractSeriesChartBuilder<C extends CartesianChart>
 	@Override
 	public void renderContent(ChartRenderContext context, String label,
 			Double value) {
+		if (series.getLabel() == null) {
+			series.setLabel(context.getMember().getHierarchy().getCaption());
+		}
+
 		series.set(label, value);
 	}
 

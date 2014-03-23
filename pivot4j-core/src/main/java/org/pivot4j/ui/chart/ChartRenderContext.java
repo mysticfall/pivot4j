@@ -19,7 +19,13 @@ import org.pivot4j.ui.CartesianRenderContext;
 
 public class ChartRenderContext extends CartesianRenderContext {
 
-	private int chartsPerPage;
+	private int pageCount;
+
+	private int chartCount;
+
+	private int seriesCount;
+
+	private int plotCount;
 
 	private int pageIndex = 0;
 
@@ -40,13 +46,9 @@ public class ChartRenderContext extends CartesianRenderContext {
 	/**
 	 * @param model
 	 * @param renderer
-	 * @param chartsPerPage
 	 */
-	public ChartRenderContext(PivotModel model, ChartRenderer renderer,
-			int chartsPerPage) {
+	public ChartRenderContext(PivotModel model, ChartRenderer renderer) {
 		super(model, renderer);
-
-		this.chartsPerPage = chartsPerPage;
 	}
 
 	/**
@@ -107,6 +109,66 @@ public class ChartRenderContext extends CartesianRenderContext {
 	 */
 	public void setPlotIndex(int plotIndex) {
 		this.plotIndex = plotIndex;
+	}
+
+	/**
+	 * @return the pageCount
+	 */
+	public int getPageCount() {
+		return pageCount;
+	}
+
+	/**
+	 * @param pageCount
+	 *            the pageCount to set
+	 */
+	public void setPageCount(int pageCount) {
+		this.pageCount = pageCount;
+	}
+
+	/**
+	 * @return the chartCount
+	 */
+	public int getChartCount() {
+		return chartCount;
+	}
+
+	/**
+	 * @param chartCount
+	 *            the chartCount to set
+	 */
+	public void setChartCount(int chartCount) {
+		this.chartCount = chartCount;
+	}
+
+	/**
+	 * @return the seriesCount
+	 */
+	public int getSeriesCount() {
+		return seriesCount;
+	}
+
+	/**
+	 * @param seriesCount
+	 *            the seriesCount to set
+	 */
+	public void setSeriesCount(int seriesCount) {
+		this.seriesCount = seriesCount;
+	}
+
+	/**
+	 * @return the plotCount
+	 */
+	public int getPlotCount() {
+		return plotCount;
+	}
+
+	/**
+	 * @param plotCount
+	 *            the plotCount to set
+	 */
+	public void setPlotCount(int plotCount) {
+		this.plotCount = plotCount;
 	}
 
 	/**
@@ -186,21 +248,6 @@ public class ChartRenderContext extends CartesianRenderContext {
 	}
 
 	/**
-	 * @return the chartstPerPage
-	 */
-	public int getChartsPerPage() {
-		return chartsPerPage;
-	}
-
-	/**
-	 * @param chartsPerPage
-	 *            the chartsPerPage to set
-	 */
-	public void setChartsPerPage(int chartsPerPage) {
-		this.chartsPerPage = chartsPerPage;
-	}
-
-	/**
 	 * @see org.pivot4j.ui.CartesianRenderContext#createExpressionContext(org.pivot4j.PivotModel)
 	 */
 	@Override
@@ -241,6 +288,40 @@ public class ChartRenderContext extends CartesianRenderContext {
 			}
 		});
 
+		context.put("pageCount", new ExpressionContext.ValueBinding<Integer>() {
+
+			@Override
+			public Integer getValue() {
+				return pageCount;
+			}
+		});
+
+		context.put("chartCount",
+				new ExpressionContext.ValueBinding<Integer>() {
+
+					@Override
+					public Integer getValue() {
+						return chartCount;
+					}
+				});
+
+		context.put("seriesCount",
+				new ExpressionContext.ValueBinding<Integer>() {
+
+					@Override
+					public Integer getValue() {
+						return seriesCount;
+					}
+				});
+
+		context.put("plotCount", new ExpressionContext.ValueBinding<Integer>() {
+
+			@Override
+			public Integer getValue() {
+				return plotCount;
+			}
+		});
+
 		context.put("pagePath",
 				new ExpressionContext.ValueBinding<List<Member>>() {
 
@@ -265,15 +346,6 @@ public class ChartRenderContext extends CartesianRenderContext {
 					@Override
 					public List<Member> getValue() {
 						return seriesPath;
-					}
-				});
-
-		context.put("chartsPerPage",
-				new ExpressionContext.ValueBinding<Integer>() {
-
-					@Override
-					public Integer getValue() {
-						return chartsPerPage;
 					}
 				});
 
