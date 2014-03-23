@@ -21,9 +21,10 @@ import org.pivot4j.PivotModel;
 import org.pivot4j.analytics.datasource.ConnectionInfo;
 import org.pivot4j.analytics.datasource.DataSourceManager;
 import org.pivot4j.analytics.state.ViewState;
+import org.pivot4j.analytics.ui.DefaultTableRenderer;
 import org.pivot4j.analytics.ui.LayoutRegion;
+import org.pivot4j.analytics.ui.chart.DefaultChartRenderer;
 import org.pivot4j.impl.PivotModelImpl;
-import org.pivot4j.ui.table.TableRenderer;
 
 public class ReportContent implements Serializable {
 
@@ -56,12 +57,21 @@ public class ReportContent implements Serializable {
 		}
 
 		if (state.getRendererState() != null) {
-			TableRenderer renderer = new TableRenderer();
+			DefaultTableRenderer renderer = new DefaultTableRenderer();
 
 			renderer.restoreState(state.getRendererState());
 
 			configuration.addProperty("render", "");
 			renderer.saveSettings(configuration.configurationAt("render"));
+		}
+
+		if (state.getChartState() != null) {
+			DefaultChartRenderer renderer = new DefaultChartRenderer();
+
+			renderer.restoreState(state.getChartState());
+
+			configuration.addProperty("chart", "");
+			renderer.saveSettings(configuration.configurationAt("chart"));
 		}
 
 		Map<LayoutRegion, Boolean> regions = state.getLayoutRegions();
@@ -175,10 +185,18 @@ public class ReportContent implements Serializable {
 		state.setModel(model);
 
 		try {
-			TableRenderer renderer = new TableRenderer();
+			DefaultTableRenderer renderer = new DefaultTableRenderer();
 			renderer.restoreSettings(configuration.configurationAt("render"));
 
 			state.setRendererState(renderer.saveState());
+		} catch (IllegalArgumentException e) {
+		}
+
+		try {
+			DefaultChartRenderer renderer = new DefaultChartRenderer();
+			renderer.restoreSettings(configuration.configurationAt("chart"));
+
+			state.setChartState(renderer.saveState());
 		} catch (IllegalArgumentException e) {
 		}
 

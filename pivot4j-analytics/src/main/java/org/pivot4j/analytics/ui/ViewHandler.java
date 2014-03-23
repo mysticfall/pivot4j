@@ -72,7 +72,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 	private PivotModel model;
 
-	private TableRenderer renderer;
+	private DefaultTableRenderer renderer;
 
 	private List<UISelectItem> cubeItems;
 
@@ -87,8 +87,6 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	private PanelGrid filterComponent;
 
 	private Exception lastError;
-
-	private boolean visible = true;
 
 	@PostConstruct
 	protected void initialize() {
@@ -114,11 +112,12 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			}
 		}
 
-		this.renderer = new TableRenderer();
+		this.renderer = new DefaultTableRenderer();
 
 		Serializable state = stateManager.getRendererState();
 
 		if (state == null) {
+			renderer.setVisible(true);
 			renderer.setShowDimensionTitle(true);
 			renderer.setShowParentMembers(false);
 			renderer.setHideSpans(false);
@@ -548,9 +547,9 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			callback.setFilterComponent(filterComponent);
 
 			renderer.render(model, callback);
-
-			stateManager.setRendererState(renderer.saveState());
 		}
+
+		stateManager.setRendererState(renderer.saveState());
 	}
 
 	public void executeCommand() {
@@ -731,7 +730,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	 * @return the visible
 	 */
 	public boolean isVisible() {
-		return visible;
+		return renderer.isVisible();
 	}
 
 	/**
@@ -739,7 +738,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	 *            the visible to set
 	 */
 	public void setVisible(boolean visible) {
-		this.visible = visible;
+		this.renderer.setVisible(visible);
 	}
 
 	/**

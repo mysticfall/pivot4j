@@ -32,6 +32,8 @@ public class ViewState {
 
 	private Serializable rendererState;
 
+	private Serializable chartState;
+
 	private Map<String, Object> parameters;
 
 	private Map<LayoutRegion, Boolean> layoutRegions;
@@ -185,6 +187,21 @@ public class ViewState {
 	 */
 	public void setRendererState(Serializable rendererState) {
 		this.rendererState = rendererState;
+	}
+
+	/**
+	 * @return the chartState
+	 */
+	public Serializable getChartState() {
+		return chartState;
+	}
+
+	/**
+	 * @param chartState
+	 *            the chartState to set
+	 */
+	public void setChartState(Serializable chartState) {
+		this.chartState = chartState;
 	}
 
 	/**

@@ -186,6 +186,31 @@ public class PivotStateManager implements Serializable {
 		state.setRendererState(rendererState);
 	}
 
+	/**
+	 * @return the chartState
+	 */
+	public Serializable getChartState() {
+		ViewState state = getState();
+		if (state == null) {
+			return null;
+		}
+
+		return state.getChartState();
+	}
+
+	/**
+	 * @param chartState
+	 *            the chartState to set
+	 */
+	public void setChartState(Serializable chartState) {
+		ViewState state = getState();
+		if (state == null) {
+			return;
+		}
+
+		state.setChartState(chartState);
+	}
+
 	public ConnectionInfo getConnectionInfo() {
 		ViewState state = getState();
 		if (state == null) {

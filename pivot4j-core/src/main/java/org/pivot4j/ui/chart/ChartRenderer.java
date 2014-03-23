@@ -8,12 +8,14 @@
  */
 package org.pivot4j.ui.chart;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
@@ -38,6 +40,8 @@ public class ChartRenderer extends
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	public static final String DEFAULT_MEMBER_SEPARATOR = " / ";
+
+	private static final String UNUSED_AXIS = "none";
 
 	private Axis pageAxis = Axis.COLUMNS;
 
@@ -301,6 +305,150 @@ public class ChartRenderer extends
 		}
 
 		return value;
+	}
+
+	/**
+	 * @see org.pivot4j.ui.AbstractPivotRenderer#saveState()
+	 */
+	@Override
+	public Serializable saveState() {
+		Serializable[] states = new Serializable[6];
+
+		int index = 0;
+
+		states[index++] = super.saveState();
+
+		if (pageAxis == null) {
+			states[index++] = -1;
+		} else {
+			states[index++] = pageAxis.axisOrdinal();
+		}
+
+		if (chartAxis == null) {
+			states[index++] = -1;
+		} else {
+			states[index++] = chartAxis.axisOrdinal();
+		}
+
+		if (seriesAxis == null) {
+			states[index++] = -1;
+		} else {
+			states[index++] = seriesAxis.axisOrdinal();
+		}
+
+		if (plotAxis == null) {
+			states[index++] = -1;
+		} else {
+			states[index++] = plotAxis.axisOrdinal();
+		}
+
+		states[index++] = memberSeparator;
+
+		return states;
+	}
+
+	/**
+	 * @see org.pivot4j.ui.AbstractPivotRenderer#restoreState(java.io.Serializable)
+	 */
+	@Override
+	public void restoreState(Serializable state) {
+		Serializable[] states = (Serializable[]) state;
+
+		int index = 0;
+
+		super.restoreState(states[index++]);
+
+		int ordinal = (Integer) states[index++];
+		if (ordinal > -1) {
+			this.pageAxis = Axis.Factory.forOrdinal(ordinal);
+		} else {
+			this.pageAxis = null;
+		}
+
+		ordinal = (Integer) states[index++];
+		if (ordinal > -1) {
+			this.chartAxis = Axis.Factory.forOrdinal(ordinal);
+		} else {
+			this.chartAxis = null;
+		}
+
+		ordinal = (Integer) states[index++];
+		if (ordinal > -1) {
+			this.seriesAxis = Axis.Factory.forOrdinal(ordinal);
+		} else {
+			this.seriesAxis = null;
+		}
+
+		ordinal = (Integer) states[index++];
+		if (ordinal > -1) {
+			this.plotAxis = Axis.Factory.forOrdinal(ordinal);
+		} else {
+			this.plotAxis = null;
+		}
+
+		this.memberSeparator = (String) states[index++];
+	}
+
+	/**
+	 * @see org.pivot4j.ui.AbstractPivotRenderer#saveSettings(org.apache.commons.
+	 *      configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public void saveSettings(HierarchicalConfiguration configuration) {
+		super.saveSettings(configuration);
+
+		configuration.addProperty("mappings.page[@axis]",
+				pageAxis == null ? UNUSED_AXIS : pageAxis.name());
+		configuration.addProperty("mappings.chart[@axis]",
+				chartAxis == null ? UNUSED_AXIS : chartAxis.name());
+		configuration.addProperty("mappings.series[@axis]",
+				seriesAxis == null ? UNUSED_AXIS : seriesAxis.name());
+		configuration.addProperty("mappings.plot[@axis]",
+				plotAxis == null ? UNUSED_AXIS : plotAxis.name());
+
+		if (!DEFAULT_MEMBER_SEPARATOR.equals(memberSeparator)) {
+			configuration.addProperty("member-separator", memberSeparator);
+		}
+	}
+
+	/**
+	 * @see org.pivot4j.ui.AbstractPivotRenderer#restoreSettings(org.apache.commons
+	 *      .configuration.HierarchicalConfiguration)
+	 */
+	@Override
+	public void restoreSettings(HierarchicalConfiguration configuration) {
+		super.restoreSettings(configuration);
+
+		this.pageAxis = readAxisMapping("page", configuration, Axis.COLUMNS);
+		this.chartAxis = readAxisMapping("chart", configuration, Axis.COLUMNS);
+		this.seriesAxis = readAxisMapping("series", configuration, Axis.ROWS);
+		this.plotAxis = readAxisMapping("plot", configuration, Axis.ROWS);
+
+		this.memberSeparator = configuration.getString("member-separator",
+				DEFAULT_MEMBER_SEPARATOR);
+	}
+
+	/**
+	 * @param name
+	 * @param configuration
+	 * @param defaultValue
+	 * @return
+	 */
+	private Axis readAxisMapping(String name,
+			HierarchicalConfiguration configuration, Axis defaultValue) {
+		Axis axis = defaultValue;
+
+		String axisName = configuration.getString("mappings." + name
+				+ "[@axis]");
+
+		if (UNUSED_AXIS.equals(axisName)) {
+			axis = null;
+		} else if (axisName != null) {
+			axis = Axis.Factory.forOrdinal(Axis.Standard.valueOf(axisName)
+					.axisOrdinal());
+		}
+
+		return axis;
 	}
 
 	static class PlotNode extends TreeNode<Member> {

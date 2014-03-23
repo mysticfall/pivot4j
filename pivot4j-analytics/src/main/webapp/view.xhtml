@@ -69,7 +69,7 @@
 							onIcon="ui-icon-arrowthickstop-1-n"
 							offIcon="ui-icon-arrowthickstop-1-n"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}">
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
@@ -80,7 +80,7 @@
 							onIcon="ui-icon-circlesmall-minus"
 							offIcon="ui-icon-circlesmall-minus"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}">
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
@@ -109,7 +109,7 @@
 						<p:separator rendered="#{!pivotStateManager.readOnly}" />
 						<p:menuButton id="drill-mode" value="#{msg['toolbar.drill']}"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}">
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
 							<p:menuitem value="#{msg['toolbar.drill.position']}"
 								title="#{msg['toolbar.drill.position.tooltip']}"
 								icon="#{viewHandler.drillDownMode=='position'?'ui-icon-check':'ui-icon-none'}"
@@ -140,7 +140,7 @@
 							onLabel="#{msg['toolbar.drill.through']}"
 							offLabel="#{msg['toolbar.drill.through']}"
 							disabled="#{!viewHandler.valid or !pivotStateManager.model.cube.drillThroughEnabled}"
-							rendered="#{!pivotStateManager.readOnly}">
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
@@ -149,15 +149,16 @@
 							onLabel="#{msg['toolbar.scenario']}"
 							offLabel="#{msg['toolbar.scenario']}"
 							disabled="#{!viewHandler.valid or !pivotStateManager.model.scenarioSupported}"
-							rendered="#{!pivotStateManager.readOnly}">
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" />
 						</p:selectBooleanButton>
-						<p:separator rendered="#{!pivotStateManager.readOnly}" />
+						<p:separator
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}" />
 						<p:commandButton value="#{msg['toolbar.properties']}"
 							title="#{msg['toolbar.properties.tooltip']}" type="button"
 							icon="ui-icon-gear" disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}"
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}"
 							onclick="propertiesConfig.show(); return false;" />
 						<p:commandButton value="#{msg['toolbar.aggregation']}"
 							title="#{msg['toolbar.aggregation.tooltip']}"
@@ -165,7 +166,7 @@
 							process=":aggregation-form"
 							oncomplete="aggregationConfig.show();"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}" />
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}" />
 						<p:separator rendered="#{!pivotStateManager.readOnly}"
 							styleClass="ui-hide-display" />
 						<p:menuButton value="#{msg['toolbar.export']}"
@@ -192,7 +193,7 @@
 							icon="ui-icon-print" disabled="#{!viewHandler.valid}"
 							onclick="$('table.pivot-grid:first').jqprint();"
 							styleClass="hide-on-embed" />
-						<p:separator />
+						<p:separator rendered="#{viewHandler.visible}" />
 						<p:selectBooleanButton value="#{viewHandler.visible}"
 							title="#{msg['toolbar.grid.tooltip']}"
 							onLabel="#{msg['toolbar.grid.hide']}"
@@ -200,7 +201,7 @@
 							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
-								update=":grid-form" oncomplete="onViewChanged()" />
+								update=":toolbar-form,:grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
 						<p:menuButton id="charts" value="#{msg['label.chart']}"
 							disabled="#{!viewHandler.valid}"

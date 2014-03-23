@@ -43,8 +43,6 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 
 	private DefaultChartRenderer renderer;
 
-	private String chartName;
-
 	private HtmlPanelGroup component;
 
 	private List<SelectItem> charts;
@@ -72,6 +70,13 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 		}
 
 		this.renderer = new DefaultChartRenderer();
+
+		Serializable state = stateManager.getChartState();
+
+		if (state != null) {
+			renderer.restoreState(state);
+		}
+
 		this.charts = new LinkedList<SelectItem>();
 
 		reset();
@@ -159,7 +164,7 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 	 * @return the chartName
 	 */
 	public String getChartName() {
-		return chartName;
+		return renderer.getChartName();
 	}
 
 	/**
@@ -167,7 +172,7 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 	 *            the chartName to set
 	 */
 	public void setChartName(String chartName) {
-		this.chartName = chartName;
+		renderer.setChartName(chartName);
 	}
 
 	/**
@@ -349,6 +354,8 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 	}
 
 	public void render() {
+		String chartName = getChartName();
+
 		if (model != null && model.isInitialized()
 				&& StringUtils.isNotBlank(chartName)) {
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -358,6 +365,8 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 			builder.setComponent(component);
 
 			renderer.render(model, builder);
+
+			stateManager.setChartState(renderer.saveState());
 		}
 	}
 
