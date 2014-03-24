@@ -171,6 +171,9 @@ public class LayoutIT extends AbstractIntegrationTestCase {
 		testButton("Properties", false, it.next());
 		testButton("Agg.", false, it.next());
 
+		it.next();
+		it.next();
+
 		testButton("Hide Grid", false, it.next());
 		testButton("Chart", false, it.next());
 	}
