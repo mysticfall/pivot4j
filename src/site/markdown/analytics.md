@@ -9,7 +9,7 @@ build their own pivot style OLAP application.
 Pivot4J Analytics is built with [Java Server Faces][jsf-site] 
 and [PrimeFaces][primefaces-site] technology.
 
-<iframe width="640" height="440" src="http://www.youtube.com/embed/vyH5PfmI8UY" frameborder="0" allowfullscreen="1"></iframe>
+<iframe width="640" height="440" src="http://www.youtube.com/embed/8ROdRg5BRE8" frameborder="0" allowfullscreen="1"></iframe>
 
 [jsf-site]: https://javaserverfaces.java.net
 [primefaces-site]: http://www.primefaces.org

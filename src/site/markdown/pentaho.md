@@ -6,7 +6,7 @@ which contains a web based BI application server with a plugin architecture.
 Pivot4J provides a plugin for the Pentaho BI server by extending the [sample application][analytics] 
 which can be used as a fully functional analytics application on its own.
 
-<iframe width="640" height="440" src="http://www.youtube.com/embed/DZg5_vQnIzI" frameborder="0" allowfullscreen="1"></iframe>
+<iframe width="640" height="440" src="http://www.youtube.com/embed/vDulRsnNJQU" frameborder="0" allowfullscreen="1"></iframe>
 
 [analytics]: ./analytics.html
 [pentaho-site]: http://community.pentaho.com
