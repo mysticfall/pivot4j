@@ -9,7 +9,8 @@
 		<p:dialog id="drillthrough-dialog" header="#{title.drillthrough}"
 			widgetVar="drillThroughDialog" modal="true" width="860" height="460"
 			closable="true" styleClass="drillthrough" dynamic="true"
-			visible="#{!empty drillThroughData.columns}" appendToBody="true">
+			visible="#{!empty drillThroughData.columns}" showEffect="fade"
+			hideEffect="fade">
 			<p:layout widgetVar="drillThroughLayout"
 				onClose="showDrillThroughSettingsButton.jq.removeClass('ui-force-hidden')">
 				<p:layoutUnit position="west" resizable="true" size="180"
