@@ -223,6 +223,11 @@ public class ChartRenderer extends
 
 		pagePart.render(context, nodeContext);
 
+		context.setPageCount(pagePart.getRenderCount());
+		context.setChartCount(chartPart.getRenderCount());
+		context.setSeriesCount(seriesPart.getRenderCount());
+		context.setPlotCount(plotPart.getRenderCount());
+
 		pagePart.setDryRun(false);
 		pagePart.render(context, nodeContext);
 
@@ -893,7 +898,6 @@ public class ChartRenderer extends
 			context.setPageIndex(getRenderIndex());
 
 			if (isDryRun()) {
-				context.setPageCount(getRenderCount());
 				return;
 			}
 
@@ -955,7 +959,6 @@ public class ChartRenderer extends
 			context.setChartIndex(getRenderIndex());
 
 			if (isDryRun()) {
-				context.setChartCount(getRenderCount());
 				return;
 			}
 
@@ -1024,7 +1027,6 @@ public class ChartRenderer extends
 			context.setSeriesIndex(getRenderIndex());
 
 			if (isDryRun()) {
-				context.setSeriesCount(getRenderCount());
 				return;
 			}
 
@@ -1088,7 +1090,6 @@ public class ChartRenderer extends
 			context.setPlotIndex(getRenderIndex());
 
 			if (isDryRun()) {
-				context.setPlotCount(getRenderCount());
 				return;
 			}
 
