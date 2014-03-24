@@ -8,7 +8,7 @@
 		<p:dialog id="export-config" header="#{msg['title.export.pdf']}"
 			widgetVar="exportConfig" modal="true" width="655" height="380"
 			closable="true" resizable="false" dynamic="true"
-			styleClass="export-config">
+			styleClass="export-config" appendToBody="true">
 			<p:fieldset legend="#{msg['header.pdfExport.contentSettings']}">
 				<h:panelGrid columns="2" columnClasses="field-name,field-input">
 					<p:outputLabel value="#{msg['label.pdfExport.header.show']}"
@@ -89,7 +89,8 @@
 			</p:fieldset>
 
 			<f:facet name="footer">
-				<h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane" layout="block">
+				<h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
+					layout="block">
 					<p:messages showDetail="true" closable="true" />
 
 					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"

@@ -8,7 +8,7 @@
 		<p:dialog id="properties-config" header="#{msg['title.properties']}"
 			widgetVar="propertiesConfig" modal="true" width="680" height="360"
 			closable="true" resizable="false" dynamic="true"
-			styleClass="properties-config">
+			styleClass="properties-config" appendToBody="true">
 			<p:layout id="layout" style="height: 100%;">
 				<p:layoutUnit position="west" resizable="true" size="180">
 					<p:panelMenu id="properties-menu"
@@ -66,19 +66,15 @@
 								<h:panelGroup laayout="block" styleClass="usage-info"
 									rendered="#{propertiesHandler.useExpression}">
 									<ul>
-										<li>
-											<h:outputText
-												value="#{msg['message.properties.expr.help.0']}" />
-										</li>
-										<li>
-											<h:outputFormat
+										<li><h:outputText
+												value="#{msg['message.properties.expr.help.0']}" /></li>
+										<li><h:outputFormat
 												value="#{msg['message.properties.expr.help.1']}"
 												escape="false">
 												<f:param
 													value="&lt;a href='http://freemarker.sourceforge.net/docs/dgui_template_exp.html' target='_blank'&gt;" />
 												<f:param value="&lt;/a&gt;" />
-											</h:outputFormat>
-										</li>
+											</h:outputFormat></li>
 									</ul>
 								</h:panelGroup>
 							</f:facet>

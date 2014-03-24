@@ -6,8 +6,9 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 	<h:form id="about-form">
 		<p:dialog id="about-dialog" header="#{msg['title.about']}"
-			widgetVar="about" modal="true" width="600" height="90"
-			closable="true" resizable="false" dynamic="true" styleClass="about">
+			widgetVar="about" modal="true" width="600" height="95"
+			closable="true" resizable="false" dynamic="true" styleClass="about"
+			appendToBody="true">
 			<h:graphicImage library="pivot4j" name="images/logo.png"
 				alt="Pivot4J Logo" styleClass="logo" />
 			<h:outputText value="#{msg['title.about.welcome']}"
