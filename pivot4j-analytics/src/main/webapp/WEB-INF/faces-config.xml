@@ -26,11 +26,15 @@
 
 	<factory>
 		<exception-handler-factory>
-			org.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory
-		</exception-handler-factory>
+			org.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
 	</factory>
 
 	<lifecycle>
 		<phase-listener>org.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
 	</lifecycle>
+
+	<component>
+		<component-type>org.primefaces.component.Tree</component-type>
+		<component-class>org.pivot4j.analytics.component.Tree</component-class>
+	</component>
 </faces-config>
