@@ -303,11 +303,13 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 				List<Cube> cubes = schema.getCubes();
 
 				for (Cube cube : cubes) {
-					UISelectItem item = new UISelectItem();
-					item.setItemLabel(cube.getCaption());
-					item.setItemValue(cube.getName());
+					if (cube.isVisible()) {
+						UISelectItem item = new UISelectItem();
+						item.setItemLabel(cube.getCaption());
+						item.setItemValue(cube.getName());
 
-					cubeItems.add(item);
+						cubeItems.add(item);
+					}
 				}
 			}
 		}
