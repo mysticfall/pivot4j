@@ -45,10 +45,6 @@ public class DrillThroughDataModel extends LazyDataModel<Map<String, Object>> {
 
 	private List<DataColumn> columns = Collections.emptyList();
 
-	/**
-	 * @param model
-	 * @param cell
-	 */
 	public DrillThroughDataModel() {
 		setPageSize(DEFAULT_PAGE_SIZE);
 	}

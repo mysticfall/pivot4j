@@ -36,7 +36,6 @@ public abstract class AbstractReportFile implements ReportFile {
 	}
 
 	/**
-	 * @throws IOException
 	 * @see org.pivot4j.analytics.repository.ReportFile#isRoot()
 	 */
 	@Override

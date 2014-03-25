@@ -30,7 +30,7 @@ public class LevelCondition extends AbstractMetadataCondition {
 	}
 
 	/**
-	 * @see org.kona.equation.AbstractCondition#getName()
+	 * @see org.pivot4j.ui.condition.Condition#getName()
 	 */
 	public String getName() {
 		return NAME;

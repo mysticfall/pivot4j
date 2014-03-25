@@ -28,7 +28,6 @@ public abstract class AbstractRenderProperty implements RenderProperty {
 	 * Default public constructor.
 	 * 
 	 * @param name
-	 * @param value
 	 */
 	public AbstractRenderProperty(String name) {
 		if (name == null) {

@@ -33,8 +33,9 @@ import org.pivot4j.transform.TransformFactory;
  * implementations should have a public constructor with a single argument of
  * type {@link QueryAdapter} in order to be looked up successfully.
  * 
- * Users can override the {@link #createTransform(Class, QueryAdapter)} method
- * to change this behavior.
+ * Users can override the
+ * {@link #createTransform(Class, QueryAdapter, OlapConnection)} method to
+ * change this behavior.
  */
 public class TransformFactoryImpl implements TransformFactory {
 

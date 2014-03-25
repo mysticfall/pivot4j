@@ -8,12 +8,7 @@
  */
 package org.pivot4j.el;
 
-
 public interface ExpressionEvaluatorFactory {
 
-	/**
-	 * @param context
-	 * @return
-	 */
 	ExpressionEvaluator createEvaluator();
 }

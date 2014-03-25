@@ -393,7 +393,7 @@ public class TableRenderer extends
 	}
 
 	/**
-	 * @see org.pivot4j.ui.AbstractPivotRenderer#render(org.pivot4j.ui.RenderContext,
+	 * @see org.pivot4j.ui.PivotRenderer#render(org.pivot4j.PivotModel,
 	 *      org.pivot4j.ui.RenderCallback)
 	 */
 	@Override

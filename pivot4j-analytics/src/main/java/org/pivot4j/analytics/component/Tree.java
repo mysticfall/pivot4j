@@ -7,8 +7,8 @@ import org.primefaces.model.TreeNode;
 /**
  * Temporary workaround for #144.
  * 
- * @see The related issue report <a
- *      href="https://github.com/mysticfall/pivot4j/issues/144">here</a>.
+ * See the related issue report <a
+ * href="https://github.com/mysticfall/pivot4j/issues/144">here</a>.
  */
 public class Tree extends org.primefaces.component.tree.Tree {
 

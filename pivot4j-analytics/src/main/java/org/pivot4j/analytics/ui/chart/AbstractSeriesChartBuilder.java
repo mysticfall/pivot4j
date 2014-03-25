@@ -76,7 +76,7 @@ public abstract class AbstractSeriesChartBuilder<C extends CartesianChart>
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.chart.AbstractChartBuilder#renderContent(org.pivot4j.ui.chart.ChartRenderContext,
+	 * @see org.pivot4j.ui.RenderCallback#renderContent(org.pivot4j.ui.RenderContext,
 	 *      java.lang.String, java.lang.Double)
 	 */
 	@Override

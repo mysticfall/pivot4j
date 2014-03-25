@@ -233,7 +233,6 @@ public class QueryAdapter implements Bookmarkable {
 
 	/**
 	 * @param evaluator
-	 * @param context
 	 */
 	public void evaluate(final ExpressionEvaluator evaluator) {
 		parsedQuery.accept(new AbstractExpVisitor() {

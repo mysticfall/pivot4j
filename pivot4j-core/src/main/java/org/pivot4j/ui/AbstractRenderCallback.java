@@ -49,16 +49,14 @@ public abstract class AbstractRenderCallback<T extends RenderContext>
 	}
 
 	/**
-	 * @see org.pivot4j.state.Configurable#saveSettings(org.apache.commons.
-	 *      configuration.HierarchicalConfiguration)
+	 * @see org.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
 	}
 
 	/**
-	 * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons
-	 *      .configuration.HierarchicalConfiguration)
+	 * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {

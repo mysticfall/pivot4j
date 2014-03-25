@@ -74,7 +74,6 @@ public class FreeMarkerExpressionEvaluator extends AbstractExpressionEvaluator {
 
 	/**
 	 * @param expression
-	 * @param configuration
 	 * @return
 	 * @throws IOException
 	 */

@@ -9,7 +9,7 @@ public interface DataSourceManager {
 	List<CatalogInfo> getCatalogs();
 
 	/**
-	 * @param definition
+	 * @param catalogName
 	 * @return
 	 */
 	List<CubeInfo> getCubes(String catalogName);

@@ -117,7 +117,7 @@ public class LocalFile extends AbstractReportFile {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.repository.ReportFile#getCretedDate()
+	 * @see org.pivot4j.analytics.repository.ReportFile#getLastModifiedDate()
 	 */
 	@Override
 	public Date getLastModifiedDate() {

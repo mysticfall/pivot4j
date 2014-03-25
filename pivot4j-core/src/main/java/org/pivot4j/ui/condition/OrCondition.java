@@ -31,7 +31,7 @@ public class OrCondition extends AbstractCondition {
 
 	/**
 	 * @param conditionFactory
-	 * @param subCondition
+	 * @param subConditions
 	 */
 	public OrCondition(ConditionFactory conditionFactory,
 			Condition... subConditions) {
@@ -54,7 +54,7 @@ public class OrCondition extends AbstractCondition {
 	}
 
 	/**
-	 * @see org.kona.equation.AbstractCondition#getName()
+	 * @see org.pivot4j.ui.condition.Condition#getName()
 	 */
 	public String getName() {
 		return NAME;

@@ -151,7 +151,7 @@ public class MigrationHandler {
 	}
 
 	/**
-	 * @param selectedFile
+	 * @param file
 	 * @param convert
 	 * @return
 	 * @throws IOException
@@ -246,8 +246,9 @@ public class MigrationHandler {
 	}
 
 	/**
-	 * @param selectedFile
+	 * @param file
 	 * @return
+	 * @throws InvalidConnectionInfoException
 	 * @throws ConfigurationException
 	 * @throws IOException
 	 */

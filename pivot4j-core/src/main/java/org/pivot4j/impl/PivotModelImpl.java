@@ -883,7 +883,7 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
-	 * @task support for natural sorting
+	 * TODO Support for natural sorting
 	 * @see org.pivot4j.PivotModel#setSorting(boolean)
 	 */
 	public void setSorting(boolean sorting) {
