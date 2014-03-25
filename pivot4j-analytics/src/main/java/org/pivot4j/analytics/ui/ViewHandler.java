@@ -549,7 +549,9 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			renderer.render(model, callback);
 		}
 
-		stateManager.setRendererState(renderer.saveState());
+		if (renderer != null) {
+			stateManager.setRendererState(renderer.saveState());
+		}
 	}
 
 	public void executeCommand() {
