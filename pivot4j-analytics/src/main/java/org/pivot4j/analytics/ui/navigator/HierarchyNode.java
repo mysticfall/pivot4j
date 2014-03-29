@@ -14,8 +14,6 @@ import org.primefaces.model.TreeNode;
 
 public class HierarchyNode extends MetadataNode<Hierarchy> {
 
-	private static final long serialVersionUID = 6955911089410961135L;
-
 	/**
 	 * @param hierarchy
 	 */

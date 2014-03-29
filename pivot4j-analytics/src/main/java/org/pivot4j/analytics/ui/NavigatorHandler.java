@@ -29,17 +29,17 @@ import org.olap4j.metadata.MetadataElement;
 import org.pivot4j.ModelChangeEvent;
 import org.pivot4j.ModelChangeListener;
 import org.pivot4j.PivotModel;
+import org.pivot4j.analytics.component.tree.DefaultTreeNode;
+import org.pivot4j.analytics.component.tree.NodeFilter;
 import org.pivot4j.analytics.ui.navigator.CubeNode;
 import org.pivot4j.analytics.ui.navigator.HierarchyNode;
 import org.pivot4j.analytics.ui.navigator.LevelNode;
 import org.pivot4j.analytics.ui.navigator.MeasureNode;
-import org.pivot4j.analytics.ui.navigator.NodeFilter;
 import org.pivot4j.transform.ChangeSlicer;
 import org.pivot4j.transform.PlaceHierarchiesOnAxes;
 import org.pivot4j.transform.PlaceLevelsOnAxes;
 import org.pivot4j.transform.PlaceMembersOnAxes;
 import org.primefaces.event.DragDropEvent;
-import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 @ManagedBean(name = "navigatorHandler")
@@ -224,13 +224,13 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 			if (targetNode == null) {
 				this.targetNode = new DefaultTreeNode();
 
-				DefaultTreeNode columns = new DefaultTreeNode("columns",
-						Axis.COLUMNS, targetNode);
+				TreeNode columns = new DefaultTreeNode("columns", Axis.COLUMNS,
+						targetNode);
 				columns.setExpanded(true);
 
 				configureAxis(columns, Axis.COLUMNS);
 
-				DefaultTreeNode rows = new DefaultTreeNode("rows", Axis.ROWS,
+				TreeNode rows = new DefaultTreeNode("rows", Axis.ROWS,
 						targetNode);
 				rows.setExpanded(true);
 
@@ -258,7 +258,7 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 	protected void configureAxis(TreeNode axisRoot, Axis axis) {
 		List<Hierarchy> hierarchyList = getHierarchies(axis);
 		for (Hierarchy hierarchy : hierarchyList) {
-			DefaultTreeNode hierarchyNode = new DefaultTreeNode("hierarchy",
+			TreeNode hierarchyNode = new DefaultTreeNode("hierarchy",
 					hierarchy, axisRoot);
 			hierarchyNode.setExpanded(true);
 
@@ -750,7 +750,7 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isSelected(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isSelected(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isSelected(T element) {
@@ -780,7 +780,7 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isSelectable(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isSelectable(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isSelectable(T element) {
@@ -788,7 +788,7 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isActive(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isActive(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isActive(T element) {
@@ -796,7 +796,7 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isVisible(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isVisible(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isVisible(T element) {
@@ -812,7 +812,7 @@ public class NavigatorHandler implements ModelChangeListener, NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isExpanded(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isExpanded(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isExpanded(T element) {

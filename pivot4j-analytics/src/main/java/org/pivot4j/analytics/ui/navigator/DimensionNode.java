@@ -9,8 +9,6 @@ import org.primefaces.model.TreeNode;
 
 public class DimensionNode extends MetadataNode<Dimension> {
 
-	private static final long serialVersionUID = -7864021397557127461L;
-
 	/**
 	 * @param dimension
 	 */

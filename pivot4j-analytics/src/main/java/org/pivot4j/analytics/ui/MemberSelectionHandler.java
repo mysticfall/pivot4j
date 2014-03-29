@@ -20,15 +20,15 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
 import org.pivot4j.PivotModel;
+import org.pivot4j.analytics.component.tree.DefaultTreeNode;
+import org.pivot4j.analytics.component.tree.NodeFilter;
 import org.pivot4j.analytics.ui.navigator.MemberNode;
-import org.pivot4j.analytics.ui.navigator.NodeFilter;
 import org.pivot4j.analytics.ui.navigator.SelectionNode;
 import org.pivot4j.transform.PlaceMembersOnAxes;
 import org.pivot4j.util.MemberSelection;
 import org.pivot4j.util.OlapUtils;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 @ManagedBean(name = "memberSelectionHandler")
@@ -669,7 +669,7 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isVisible(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isVisible(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isVisible(T element) {
@@ -683,7 +683,7 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isActive(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isActive(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isActive(T element) {
@@ -691,7 +691,7 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isExpanded(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isExpanded(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isExpanded(T element) {

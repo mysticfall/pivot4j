@@ -24,6 +24,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.configuration.ConfigurationException;
+import org.pivot4j.analytics.component.tree.DefaultTreeNode;
 import org.pivot4j.analytics.datasource.DataSourceManager;
 import org.pivot4j.analytics.repository.DataSourceNotFoundException;
 import org.pivot4j.analytics.repository.ReportContent;
@@ -36,7 +37,6 @@ import org.pivot4j.analytics.state.ViewStateHolder;
 import org.pivot4j.analytics.state.ViewStateListener;
 import org.pivot4j.analytics.ui.navigator.RepositoryNode;
 import org.primefaces.context.RequestContext;
-import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package org.pivot4j.analytics.ui.navigator;
+package org.pivot4j.analytics.component.tree;
 
 import java.io.Serializable;
 

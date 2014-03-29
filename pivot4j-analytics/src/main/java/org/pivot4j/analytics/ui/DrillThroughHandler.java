@@ -19,9 +19,9 @@ import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.MetadataElement;
 import org.pivot4j.PivotModel;
+import org.pivot4j.analytics.component.tree.NodeFilter;
 import org.pivot4j.analytics.ui.navigator.CubeNode;
 import org.pivot4j.analytics.ui.navigator.MetadataNode;
-import org.pivot4j.analytics.ui.navigator.NodeFilter;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.TreeNode;
 
@@ -146,7 +146,7 @@ public class DrillThroughHandler implements NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isSelected(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isSelected(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isSelected(T element) {
@@ -154,7 +154,7 @@ public class DrillThroughHandler implements NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isSelectable(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isSelectable(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isSelectable(T element) {
@@ -162,7 +162,7 @@ public class DrillThroughHandler implements NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isVisible(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isVisible(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isVisible(T element) {
@@ -180,7 +180,7 @@ public class DrillThroughHandler implements NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isExpanded(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isExpanded(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isExpanded(T element) {
@@ -208,7 +208,7 @@ public class DrillThroughHandler implements NodeFilter {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NodeFilter#isActive(org.olap4j.metadata.MetadataElement)
+	 * @see org.pivot4j.analytics.component.tree.NodeFilter#isActive(org.olap4j.metadata.MetadataElement)
 	 */
 	@Override
 	public <T extends MetadataElement> boolean isActive(T element) {

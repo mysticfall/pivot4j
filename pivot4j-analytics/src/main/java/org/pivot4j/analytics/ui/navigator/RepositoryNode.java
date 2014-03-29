@@ -16,15 +16,15 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.pivot4j.analytics.component.tree.LazyTreeNode;
+import org.pivot4j.analytics.component.tree.NodeData;
 import org.pivot4j.analytics.repository.ReportFile;
 import org.pivot4j.analytics.repository.ReportRepository;
 import org.pivot4j.analytics.repository.RepositoryFileFilter;
 import org.primefaces.model.TreeNode;
 
-public class RepositoryNode extends NavigatorNode<ReportFile> implements
+public class RepositoryNode extends LazyTreeNode<ReportFile> implements
 		StateHolder {
-
-	private static final long serialVersionUID = -323347713084004285L;
 
 	private ReportRepository repository;
 
@@ -126,7 +126,7 @@ public class RepositoryNode extends NavigatorNode<ReportFile> implements
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NavigatorNode#createData(java.lang.Object)
+	 * @see org.pivot4j.analytics.component.tree.LazyTreeNode#createData(java.lang.Object)
 	 */
 	@Override
 	protected NodeData createData(ReportFile object) {
@@ -134,7 +134,7 @@ public class RepositoryNode extends NavigatorNode<ReportFile> implements
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.ui.navigator.NavigatorNode#createChildren()
+	 * @see org.pivot4j.analytics.component.tree.LazyTreeNode#createChildren()
 	 */
 	@Override
 	protected List<TreeNode> createChildren() {

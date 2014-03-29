@@ -35,6 +35,6 @@
 
 	<component>
 		<component-type>org.primefaces.component.Tree</component-type>
-		<component-class>org.pivot4j.analytics.component.Tree</component-class>
+		<component-class>org.pivot4j.analytics.component.tree.Tree</component-class>
 	</component>
 </faces-config>

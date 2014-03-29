@@ -1,6 +1,7 @@
 package org.pivot4j.analytics.ui.navigator;
 
 import org.olap4j.metadata.Level;
+import org.pivot4j.analytics.component.tree.NodeData;
 
 public class LevelNodeData extends NodeData {
 

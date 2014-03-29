@@ -11,8 +11,6 @@ import org.primefaces.model.TreeNode;
 
 public class MemberNode extends MetadataNode<Member> {
 
-	private static final long serialVersionUID = -6049680709062616590L;
-
 	/**
 	 * @param member
 	 */

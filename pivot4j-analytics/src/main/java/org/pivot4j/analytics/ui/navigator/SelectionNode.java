@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.olap4j.metadata.Member;
+import org.pivot4j.analytics.component.tree.NodeData;
 import org.pivot4j.util.MemberSelection;
 import org.pivot4j.util.TreeNode;
 

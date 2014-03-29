@@ -4,11 +4,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.olap4j.metadata.Level;
+import org.pivot4j.analytics.component.tree.NodeData;
 import org.primefaces.model.TreeNode;
 
 public class LevelNode extends MetadataNode<Level> {
-
-	private static final long serialVersionUID = -2811746250658911054L;
 
 	/**
 	 * @param level
