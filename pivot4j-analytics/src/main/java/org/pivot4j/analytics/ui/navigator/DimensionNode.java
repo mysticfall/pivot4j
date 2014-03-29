@@ -41,6 +41,10 @@ public class DimensionNode extends MetadataNode<Dimension> {
 		List<TreeNode> children = new ArrayList<TreeNode>(hierarchies.size());
 
 		for (Hierarchy hierarchy : hierarchies) {
+			if (!hierarchy.isVisible()) {
+				continue;
+			}
+
 			HierarchyNode node = new HierarchyNode(hierarchy);
 
 			if (configureChildNode(hierarchy, node)) {

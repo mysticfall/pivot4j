@@ -66,6 +66,10 @@ public class HierarchyNode extends MetadataNode<Hierarchy> {
 				List<TreeNode> children = new ArrayList<TreeNode>(levels.size());
 
 				for (Level level : levels) {
+					if (!level.isVisible()) {
+						continue;
+					}
+
 					LevelNode node = new LevelNode(level);
 
 					if (configureChildNode(level, node)) {

@@ -390,7 +390,8 @@ public class PivotModelImpl implements PivotModel {
 				// TODO See Olap4J's issue #116
 				if (metadata.getDriverName().startsWith("Mondrian")) {
 					Dimension dimension = cube.getDimensions().get("Scenario");
-					this.scenarioSupported = dimension != null;
+					this.scenarioSupported = dimension != null
+							&& dimension.isVisible();
 				} else {
 					rs = metadata.getCubes(catalog.getName(), schema.getName(),
 							cube.getName());
@@ -884,6 +885,7 @@ public class PivotModelImpl implements PivotModel {
 
 	/**
 	 * TODO Support for natural sorting
+	 * 
 	 * @see org.pivot4j.PivotModel#setSorting(boolean)
 	 */
 	public void setSorting(boolean sorting) {

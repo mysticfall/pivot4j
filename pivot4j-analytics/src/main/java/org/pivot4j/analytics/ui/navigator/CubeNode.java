@@ -43,12 +43,19 @@ public class CubeNode extends MetadataNode<Cube> {
 		List<TreeNode> children = new ArrayList<TreeNode>(dimensions.size());
 
 		for (Dimension dimension : dimensions) {
+			if (!dimension.isVisible()) {
+				continue;
+			}
+
 			MetadataElement element;
 
 			MetadataNode<?> node;
 
-			if (dimension.getHierarchies().size() == 1) {
-				element = dimension.getDefaultHierarchy();
+			Hierarchy defaultHierarchy = dimension.getDefaultHierarchy();
+
+			if (dimension.getHierarchies().size() == 1
+					&& defaultHierarchy.isVisible()) {
+				element = defaultHierarchy;
 
 				node = new HierarchyNode((Hierarchy) element);
 			} else {
