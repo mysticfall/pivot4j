@@ -472,7 +472,9 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 
 					try {
 						for (Member child : member.getChildMembers()) {
-							addMember(child);
+							if (OlapUtils.isVisible(child)) {
+								addMember(child);
+							}
 						}
 					} catch (OlapException e) {
 						throw new PivotException(e);

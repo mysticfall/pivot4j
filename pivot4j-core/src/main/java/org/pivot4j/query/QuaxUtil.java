@@ -689,7 +689,17 @@ public class QuaxUtil {
 	 * @return a set for the top level members of an hierarchy
 	 */
 	public Exp topLevelMembers(Hierarchy hierarchy, boolean expandAllMember) {
+		List<Level> levels = hierarchy.getLevels();
+
+		if (levels.isEmpty()) {
+			return null;
+		}
+
 		Level topLevel = hierarchy.getLevels().get(0);
+
+		if (!topLevel.isVisible()) {
+			return null;
+		}
 
 		Member mAll;
 		try {
@@ -703,6 +713,10 @@ public class QuaxUtil {
 						break;
 					}
 				}
+			}
+
+			if (mAll != null && !OlapUtils.isVisible(mAll)) {
+				mAll = null;
 			}
 		} catch (OlapException e) {
 			throw new PivotException(e);
@@ -741,7 +755,9 @@ public class QuaxUtil {
 		List<Exp> topExp = new ArrayList<Exp>(topMembers.size());
 
 		for (Member member : topMembers) {
-			topExp.add(expForMember(member));
+			if (OlapUtils.isVisible(member)) {
+				topExp.add(expForMember(member));
+			}
 		}
 
 		if (topExp.size() == 1) {

@@ -7,6 +7,7 @@ import javax.faces.FacesException;
 
 import org.olap4j.OlapException;
 import org.olap4j.metadata.Member;
+import org.pivot4j.util.OlapUtils;
 import org.primefaces.model.TreeNode;
 
 public class MemberNode extends MetadataNode<Member> {
@@ -48,10 +49,12 @@ public class MemberNode extends MetadataNode<Member> {
 			List<TreeNode> children = new ArrayList<TreeNode>(members.size());
 
 			for (Member member : members) {
-				MemberNode node = new MemberNode(member);
+				if (OlapUtils.isVisible(member)) {
+					MemberNode node = new MemberNode(member);
 
-				if (configureChildNode(member, node)) {
-					children.add(node);
+					if (configureChildNode(member, node)) {
+						children.add(node);
+					}
 				}
 			}
 

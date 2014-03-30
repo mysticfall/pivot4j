@@ -21,6 +21,7 @@ import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 
 import org.olap4j.OlapException;
+import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
@@ -134,14 +135,20 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 				this.filterNode = new DefaultTreeNode();
 
 				List<Member> members;
+				boolean isMeasure;
 
 				try {
 					members = hierarchy.getRootMembers();
+					isMeasure = hierarchy.getDimension().getDimensionType() == Type.MEASURE;
 				} catch (OlapException e) {
 					throw new FacesException(e);
 				}
 
 				for (Member member : members) {
+					if (isMeasure && !member.isVisible()) {
+						continue;
+					}
+
 					MemberNode node = new MemberNode(member);
 
 					node.setNodeFilter(this);

@@ -18,6 +18,7 @@ import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.mdx.IdentifierNode;
 import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
 import org.pivot4j.PivotException;
@@ -64,6 +65,22 @@ public class OlapUtils {
 		} catch (OlapException e) {
 			throw new PivotException(e);
 		}
+	}
+
+	/**
+	 * @param member
+	 * @return
+	 */
+	public static boolean isVisible(Member member) {
+		try {
+			if (member.getDimension().getDimensionType() == Type.MEASURE) {
+				return member.isVisible();
+			}
+		} catch (OlapException e) {
+			throw new PivotException(e);
+		}
+
+		return true;
 	}
 
 	/**

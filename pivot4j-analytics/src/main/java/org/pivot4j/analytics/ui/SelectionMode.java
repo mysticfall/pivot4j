@@ -7,6 +7,7 @@ import javax.faces.FacesException;
 
 import org.olap4j.OlapException;
 import org.olap4j.metadata.Member;
+import org.pivot4j.util.OlapUtils;
 
 public enum SelectionMode {
 
@@ -41,7 +42,16 @@ public enum SelectionMode {
 					return Single.getTargetMembers(member);
 				}
 
-				return new ArrayList<Member>(parent.getChildMembers());
+				List<? extends Member> children = parent.getChildMembers();
+				List<Member> selection = new ArrayList<Member>(children.size());
+
+				for (Member child : children) {
+					if (OlapUtils.isVisible(child)) {
+						selection.add(child);
+					}
+				}
+
+				return selection;
 			} catch (OlapException e) {
 				throw new FacesException(e);
 			}
@@ -55,7 +65,13 @@ public enum SelectionMode {
 			selection.add(member);
 
 			try {
-				selection.addAll(member.getChildMembers());
+				List<? extends Member> children = member.getChildMembers();
+
+				for (Member child : children) {
+					if (OlapUtils.isVisible(child)) {
+						selection.add(child);
+					}
+				}
 			} catch (OlapException e) {
 				throw new FacesException(e);
 			}
@@ -70,7 +86,9 @@ public enum SelectionMode {
 			List<Member> selection = new ArrayList<Member>();
 
 			try {
-				collectDescendants(member, selection);
+				if (OlapUtils.isVisible(member)) {
+					collectDescendants(member, selection);
+				}
 			} catch (OlapException e) {
 				throw new FacesException(e);
 			}
@@ -88,7 +106,9 @@ public enum SelectionMode {
 		selection.add(parent);
 
 		for (Member member : parent.getChildMembers()) {
-			collectDescendants(member, selection);
+			if (OlapUtils.isVisible(member)) {
+				collectDescendants(member, selection);
+			}
 		}
 	}
 

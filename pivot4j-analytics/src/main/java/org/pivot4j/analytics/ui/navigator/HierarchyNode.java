@@ -51,6 +51,10 @@ public class HierarchyNode extends MetadataNode<Hierarchy> {
 						members.size());
 
 				for (Member member : members) {
+					if (!member.isVisible()) {
+						continue;
+					}
+
 					MeasureNode node = new MeasureNode(this, member);
 
 					if (configureChildNode(member, node)) {

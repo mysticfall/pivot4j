@@ -23,9 +23,11 @@ import org.pivot4j.mdx.FunCall;
 import org.pivot4j.mdx.Syntax;
 import org.pivot4j.mdx.metadata.MemberExp;
 import org.pivot4j.query.Quax;
+import org.pivot4j.query.QuaxUtil;
 import org.pivot4j.query.QueryAdapter;
 import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.PlaceHierarchiesOnAxes;
+import org.pivot4j.util.OlapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -218,6 +220,8 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	}
 
 	/**
+	 * TODO Merge with {@link QuaxUtil#topLevelMembers(Hierarchy, boolean)}
+	 * 
 	 * @param hierarchy
 	 * @param expandAllMember
 	 * @return
@@ -241,7 +245,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 					}
 				}
 
-				if (allMember != null) {
+				if (allMember != null && OlapUtils.isVisible(allMember)) {
 					if (!expandAllMember) {
 						return new MemberExp(allMember);
 					}
@@ -266,17 +270,23 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 			}
 
 			List<Member> topMembers = hierarchy.getRootMembers();
-			if (topMembers.size() == 1) {
-				// single member
-				return new MemberExp(topMembers.get(0));
-			} else if (topMembers.isEmpty()) {
-				// possible if access control active
+
+			int size = topMembers.size();
+
+			if (size == 0) {
 				return null;
+			}
+
+			Member firstMember = topMembers.get(0);
+
+			if (topMembers.size() == 1 && OlapUtils.isVisible(firstMember)) {
+				// single member
+				return new MemberExp(firstMember);
 			}
 
 			List<Exp> args = new ArrayList<Exp>(topMembers.size());
 			for (Member member : topMembers) {
-				if (!member.isHidden()) {
+				if (!member.isHidden() && OlapUtils.isVisible(member)) {
 					args.add(new MemberExp(member));
 				}
 			}

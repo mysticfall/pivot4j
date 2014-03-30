@@ -19,6 +19,7 @@ import org.olap4j.OlapException;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
+import org.olap4j.metadata.Dimension.Type;
 import org.pivot4j.PivotModel;
 import org.pivot4j.analytics.component.tree.DefaultTreeNode;
 import org.pivot4j.analytics.component.tree.NodeFilter;
@@ -99,9 +100,16 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 			Hierarchy hier = getHierarchy();
 			if (hier != null) {
 				try {
+					boolean isMeasure = hierarchy.getDimension()
+							.getDimensionType() == Type.MEASURE;
+
 					List<? extends Member> members = hier.getRootMembers();
 
 					for (Member member : members) {
+						if (isMeasure && !member.isVisible()) {
+							continue;
+						}
+
 						MemberNode node = new MemberNode(member);
 						node.setNodeFilter(this);
 
