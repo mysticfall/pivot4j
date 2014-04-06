@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
+	<cde-components>
+		<path>system/pivot4j/webapp/cde</path>
+		<path>pivot4j/webapp/cde</path>
+	</cde-components>
 </settings>
