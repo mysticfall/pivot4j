@@ -9,6 +9,7 @@ import static org.pivot4j.ui.table.TableCellTypes.TITLE;
 import java.io.StringWriter;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -19,6 +20,7 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlOutputLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
@@ -74,6 +76,8 @@ public class PivotComponentBuilder extends
 	private int commandIndex = 0;
 
 	private boolean scenarioEnabled = false;
+
+	private String updateTarget;
 
 	/**
 	 * @param facesContext
@@ -154,6 +158,13 @@ public class PivotComponentBuilder extends
 	}
 
 	/**
+	 * @return the updateTarget
+	 */
+	protected String getUpdateTarget() {
+		return updateTarget;
+	}
+
+	/**
 	 * @return the logger
 	 */
 	protected Logger getLogger() {
@@ -182,6 +193,27 @@ public class PivotComponentBuilder extends
 
 		filterComponent.getFacets().clear();
 		filterComponent.getChildren().clear();
+
+		List<String> targets = new LinkedList<String>();
+
+		targets.add(":grid-form");
+
+		UIViewRoot viewRoot = FacesContext.getCurrentInstance().getViewRoot();
+
+		if (viewRoot.findComponent("editor-form") != null) {
+			targets.add(":editor-form:mdx-editor");
+			targets.add(":editor-form:editor-toolbar");
+		}
+
+		if (viewRoot.findComponent("source-tree-form") != null) {
+			targets.add(":source-tree-form");
+		}
+
+		if (viewRoot.findComponent("target-tree-form") != null) {
+			targets.add(":target-tree-form");
+		}
+
+		this.updateTarget = StringUtils.join(targets, ",");
 	}
 
 	/**
@@ -421,7 +453,7 @@ public class PivotComponentBuilder extends
 								"#{viewHandler.executeCommand}", Void.class,
 								new Class<?>[0]);
 				button.setActionExpression(expression);
-				button.setUpdate(":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:source-tree-form,:target-tree-form");
+				button.setUpdate(updateTarget);
 				button.setOncomplete("onViewChanged()");
 				button.setProcess("@this");
 
