@@ -74,15 +74,15 @@ public class DrillThroughHandler implements NodeFilter {
 	 * @return the cubeNode
 	 */
 	public CubeNode getCubeNode() {
+		if (cubeNode != null) {
+			return cubeNode;
+		}
+
 		PivotModel model = stateManager.getModel();
 
-		if (model != null && model.isInitialized()) {
-			if (cubeNode == null) {
-				this.cubeNode = new CubeNode(model.getCube());
-				cubeNode.setNodeFilter(this);
-			}
-		} else {
-			this.cubeNode = null;
+		if (model != null && model.isInitialized() && data.getCell() != null) {
+			this.cubeNode = new CubeNode(model.getCube());
+			cubeNode.setNodeFilter(this);
 		}
 
 		return cubeNode;
