@@ -291,17 +291,6 @@ fullname
       <Level name="Yearly Income" column="yearly_income" uniqueMembers="true"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Scenario" foreignKey="time_id">
-    <Hierarchy primaryKey="time_id" hasAll="true">
-      <InlineTable alias="_dummy">
-        <ColumnDefs>
-          <ColumnDef name="foo" type="Numeric"/>
-        </ColumnDefs>
-        <Rows/>
-      </InlineTable>
-      <Level name="Scenario" column="foo"/>
-    </Hierarchy>
-  </Dimension>
 
   <Measure name="Unit Sales" column="unit_sales" aggregator="sum"
       formatString="Standard"/>
@@ -375,6 +364,7 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       caption="Gewinn-Wachstum">
     <CalculatedMemberProperty name="FORMAT_STRING" value="0.0%"/>
   </CalculatedMember>
+  <Measure name="Atomic" aggregator="count"/>
 </Cube>
 
 <Cube name="Warehouse">
@@ -700,6 +690,18 @@ fullname
       <Level name="Yearly Income" column="yearly_income" uniqueMembers="true"/>
     </Hierarchy>
   </Dimension>
+  <Dimension name="Scenario" foreignKey="time_id">
+    <Hierarchy primaryKey="time_id" hasAll="true">
+      <InlineTable alias="_dummy">
+        <ColumnDefs>
+          <ColumnDef name="foo" type="Numeric"/>
+        </ColumnDefs>
+        <Rows/>
+      </InlineTable>
+      <Level name="Scenario" column="foo"/>
+    </Hierarchy>
+  </Dimension>
+
   <Measure name="Unit Sales" column="unit_sales" aggregator="sum"
       formatString="Standard"/>
   <Measure name="Store Cost" column="store_cost" aggregator="sum"

@@ -43,8 +43,13 @@ public class BasicDrillThroughCommand extends AbstractUICommand<ResultSet>
 	 */
 	@Override
 	public boolean canExecute(RenderContext context) {
-		return getRenderer().getEnableDrillThrough()
-				&& context.getModel().getCube().isDrillThroughEnabled()
+		// See: http://jira.pentaho.com/browse/MONDRIAN-1036
+		PivotModel model = context.getModel();
+		boolean scenarioEnabled = model.isScenarioSupported()
+				&& model.getScenario() != null;
+
+		return !scenarioEnabled && getRenderer().getEnableDrillThrough()
+				&& model.getCube().isDrillThroughEnabled()
 				&& context.getCell() != null;
 	}
 
@@ -60,8 +65,8 @@ public class BasicDrillThroughCommand extends AbstractUICommand<ResultSet>
 	}
 
 	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel
-	 *      , org.pivot4j.ui.command.UICommandParameters)
+	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+	 *      org.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
 	public ResultSet execute(PivotModel model, UICommandParameters parameters) {
