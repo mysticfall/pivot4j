@@ -25,12 +25,12 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotException;
+import org.pivot4j.impl.Quax;
+import org.pivot4j.impl.QueryAdapter;
 import org.pivot4j.mdx.Exp;
 import org.pivot4j.mdx.FunCall;
 import org.pivot4j.mdx.Syntax;
 import org.pivot4j.mdx.metadata.MemberExp;
-import org.pivot4j.query.Quax;
-import org.pivot4j.query.QueryAdapter;
 import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.PlaceHierarchiesOnAxes;
 import org.pivot4j.transform.PlaceLevelsOnAxes;
@@ -96,6 +96,8 @@ public class PlaceLevelsOnAxesImpl extends AbstractTransform implements
 			}
 
 			OlapUtils utils = new OlapUtils(getModel().getCube());
+			utils.setMemberHierarchyCache(getQueryAdapter().getModel()
+					.getMemberHierarchyCache());
 
 			List<Exp> expressions = new ArrayList<Exp>(hierarchies.size());
 

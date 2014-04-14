@@ -6,7 +6,7 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package org.pivot4j.query;
+package org.pivot4j.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,7 +31,6 @@ import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotException;
-import org.pivot4j.PivotModel;
 import org.pivot4j.el.ExpressionEvaluator;
 import org.pivot4j.mdx.AbstractExpVisitor;
 import org.pivot4j.mdx.CompoundId;
@@ -59,7 +58,7 @@ public class QueryAdapter implements Bookmarkable {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private PivotModel model;
+	private PivotModelImpl model;
 
 	// Array of query axis state object
 	private Map<Axis, Quax> quaxes;
@@ -86,7 +85,7 @@ public class QueryAdapter implements Bookmarkable {
 	/**
 	 * @param model
 	 */
-	public QueryAdapter(PivotModel model) {
+	public QueryAdapter(PivotModelImpl model) {
 		if (model == null) {
 			throw new NullArgumentException("model");
 		}
@@ -149,7 +148,7 @@ public class QueryAdapter implements Bookmarkable {
 	/**
 	 * @return the model
 	 */
-	public PivotModel getModel() {
+	public PivotModelImpl getModel() {
 		return model;
 	}
 
@@ -548,6 +547,7 @@ public class QueryAdapter implements Bookmarkable {
 		}
 
 		OlapUtils utils = new OlapUtils(getModel().getCube());
+		utils.setMemberHierarchyCache(getModel().getMemberHierarchyCache());
 
 		if (sortPosMembers.size() > 1) {
 			List<Exp> memberExp = new ArrayList<Exp>(sortPosMembers.size());
@@ -594,6 +594,7 @@ public class QueryAdapter implements Bookmarkable {
 		}
 
 		OlapUtils utils = new OlapUtils(getModel().getCube());
+		utils.setMemberHierarchyCache(getModel().getMemberHierarchyCache());
 
 		// if we got more than 1 position member, generate a tuple
 		if (sortPosMembers.size() > 1) {
@@ -782,6 +783,7 @@ public class QueryAdapter implements Bookmarkable {
 		List<Exp> exps = new ArrayList<Exp>(members.size());
 
 		OlapUtils utils = new OlapUtils(getModel().getCube());
+		utils.setMemberHierarchyCache(getModel().getMemberHierarchyCache());
 
 		for (Member member : members) {
 			exps.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));

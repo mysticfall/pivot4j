@@ -9,7 +9,7 @@
 package org.pivot4j.transform;
 
 import org.olap4j.OlapConnection;
-import org.pivot4j.query.QueryAdapter;
+import org.pivot4j.impl.QueryAdapter;
 
 public interface TransformFactory {
 

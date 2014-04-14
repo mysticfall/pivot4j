@@ -27,6 +27,8 @@ public class OlapUtils {
 
 	private Cube cube;
 
+	private MemberHierarchyCache memberHierarchyCache;
+
 	/**
 	 * @param cube
 	 */
@@ -43,6 +45,22 @@ public class OlapUtils {
 	 */
 	public Cube getCube() {
 		return cube;
+	}
+
+	/**
+	 * @return the memberHierarchyCache
+	 */
+	public MemberHierarchyCache getMemberHierarchyCache() {
+		return memberHierarchyCache;
+	}
+
+	/**
+	 * @param memberHierarchyCache
+	 *            the memberHierarchyCache to set
+	 */
+	public void setMemberHierarchyCache(
+			MemberHierarchyCache memberHierarchyCache) {
+		this.memberHierarchyCache = memberHierarchyCache;
 	}
 
 	/**
@@ -168,12 +186,20 @@ public class OlapUtils {
 	 * @param member
 	 * @return
 	 */
-	public static boolean isRaggedMember(Member member) {
+	public boolean isRaggedMember(Member member) {
 		if (member == null) {
 			throw new NullArgumentException("member");
 		}
 
-		return member.getDepth() > 1 && member.getParentMember() == null;
+		Member parent;
+
+		if (memberHierarchyCache == null) {
+			parent = member.getParentMember();
+		} else {
+			parent = memberHierarchyCache.getParentMember(member);
+		}
+
+		return member.getDepth() > 1 && parent == null;
 	}
 
 	/**
@@ -181,21 +207,8 @@ public class OlapUtils {
 	 * @return
 	 */
 	public Member wrapRaggedIfNecessary(Member member) {
-		return wrapRaggedIfNecessary(member, cube);
-	}
-
-	/**
-	 * @param member
-	 * @param cube
-	 * @return
-	 */
-	public static Member wrapRaggedIfNecessary(Member member, Cube cube) {
 		if (member == null) {
 			throw new NullArgumentException("member");
-		}
-
-		if (cube == null) {
-			throw new NullArgumentException("cube");
 		}
 
 		if (isRaggedMember(member)) {

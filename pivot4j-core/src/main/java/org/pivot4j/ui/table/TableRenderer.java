@@ -43,11 +43,13 @@ import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
 import org.pivot4j.PivotException;
 import org.pivot4j.PivotModel;
+import org.pivot4j.impl.PivotModelImpl;
 import org.pivot4j.transform.ChangeSlicer;
 import org.pivot4j.ui.AbstractPivotRenderer;
 import org.pivot4j.ui.aggregator.Aggregator;
 import org.pivot4j.ui.aggregator.AggregatorFactory;
 import org.pivot4j.ui.aggregator.AggregatorPosition;
+import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.OlapUtils;
 import org.pivot4j.util.RaggedMemberWrapper;
 import org.pivot4j.util.TreeNode;
@@ -417,12 +419,20 @@ public class TableRenderer extends
 			return;
 		}
 
-		TableHeaderNode columnRoot = createAxisTree(model, Axis.COLUMNS);
+		MemberHierarchyCache cache;
+
+		if (model instanceof PivotModelImpl) {
+			cache = ((PivotModelImpl) model).getMemberHierarchyCache();
+		} else {
+			cache = new MemberHierarchyCache();
+		}
+
+		TableHeaderNode columnRoot = createAxisTree(model, Axis.COLUMNS, cache);
 		if (columnRoot == null) {
 			return;
 		}
 
-		TableHeaderNode rowRoot = createAxisTree(model, Axis.ROWS);
+		TableHeaderNode rowRoot = createAxisTree(model, Axis.ROWS, cache);
 		if (rowRoot == null) {
 			return;
 		}
@@ -465,16 +475,8 @@ public class TableRenderer extends
 		int columnCount = columnRoot.getWidth();
 		int rowCount = rowRoot.getWidth();
 
-		Map<String, Member> cachedParents = new HashMap<String, Member>();
-
-		cachedParents.putAll(columnRoot.getReference().getParentMembersCache());
-		cachedParents.putAll(rowRoot.getReference().getParentMembersCache());
-
 		TableRenderContext context = new TableRenderContext(model, this,
 				columnCount, rowCount, columnHeaderCount, rowHeaderCount);
-
-		context.setAttribute(TableRenderContext.ATTRIBUTE_CACHED_MEMBERS,
-				cachedParents);
 
 		return context;
 	}
@@ -740,6 +742,9 @@ public class TableRenderer extends
 			return;
 		}
 
+		MemberHierarchyCache cache = node.getReference()
+				.getMemberHierarchyCache();
+
 		List<Member> positionMembers = context.getPosition().getMembers();
 
 		int index = 0;
@@ -751,13 +756,13 @@ public class TableRenderer extends
 			Member positionMember = positionMembers.get(index);
 
 			if (positionMember.getDepth() > 1
-					&& context.getParentMember(positionMember) == null) {
+					&& cache.getParentMember(positionMember) == null) {
 				positionMember = new RaggedMemberWrapper(positionMember,
 						context.getModel().getCube());
 			}
 
 			if (!OlapUtils.equals(member, positionMember)
-					&& (member.getDepth() >= positionMember.getDepth() || !context
+					&& (member.getDepth() >= positionMember.getDepth() || !cache
 							.getAncestorMembers(positionMember)
 							.contains(member))) {
 				return;
@@ -986,9 +991,11 @@ public class TableRenderer extends
 	/**
 	 * @param model
 	 * @param axis
+	 * @param cache
 	 * @return
 	 */
-	protected TableHeaderNode createAxisTree(PivotModel model, Axis axis) {
+	protected TableHeaderNode createAxisTree(PivotModel model, Axis axis,
+			MemberHierarchyCache cache) {
 		List<CellSetAxis> axes = model.getCellSet().getAxes();
 
 		if (axes.size() < 2) {
@@ -1067,7 +1074,7 @@ public class TableRenderer extends
 		}
 
 		TableAxisContext nodeContext = new TableAxisContext(axis, hierarchies,
-				levelsMap, aggregatorMap, this);
+				levelsMap, aggregatorMap, cache, this);
 
 		TableHeaderNode axisRoot = new TableHeaderNode(nodeContext);
 
@@ -1099,7 +1106,7 @@ public class TableRenderer extends
 						grandTotalMeasures.add(measure);
 					}
 				} else if (member != null && member.getDepth() > 0
-						&& nodeContext.getParentMember(member) == null) {
+						&& cache.getParentMember(member) == null) {
 					member = new RaggedMemberWrapper(member, model.getCube());
 				}
 
@@ -1182,14 +1189,12 @@ public class TableRenderer extends
 						parentMember = ((RaggedMemberWrapper) member)
 								.getTopMember();
 					} else {
-						parentMember = axisRoot.getReference().getParentMember(
-								member);
+						parentMember = cache.getParentMember(member);
 					}
 
 					if (parentMember != null) {
 						if (lastSibling == null
-								|| axisRoot.getReference()
-										.getAncestorMembers(parentMember)
+								|| cache.getAncestorMembers(parentMember)
 										.contains(lastSibling.getParent())) {
 							memberParents.add(new AggregationTarget(
 									parentMember, member.getLevel()));
@@ -1529,6 +1534,8 @@ public class TableRenderer extends
 				return TreeNodeCallback.CONTINUE;
 			}
 		});
+
+		node.getReference().getRowSpanCache().clear();
 	}
 
 	static class AggregationTarget {

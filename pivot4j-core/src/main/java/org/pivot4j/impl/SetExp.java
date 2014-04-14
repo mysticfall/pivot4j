@@ -6,7 +6,7 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package org.pivot4j.query;
+package org.pivot4j.impl;
 
 import org.olap4j.metadata.Hierarchy;
 import org.pivot4j.mdx.AbstractExp;

@@ -24,15 +24,18 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotException;
+import org.pivot4j.PivotModel;
+import org.pivot4j.impl.PivotModelImpl;
+import org.pivot4j.impl.Quax;
+import org.pivot4j.impl.QuaxUtil;
+import org.pivot4j.impl.QueryAdapter;
 import org.pivot4j.mdx.Exp;
 import org.pivot4j.mdx.FunCall;
 import org.pivot4j.mdx.Syntax;
 import org.pivot4j.mdx.metadata.MemberExp;
-import org.pivot4j.query.Quax;
-import org.pivot4j.query.QuaxUtil;
-import org.pivot4j.query.QueryAdapter;
 import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.PlaceMembersOnAxes;
+import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.MemberSelection;
 import org.pivot4j.util.OlapUtils;
 import org.pivot4j.util.TreeNode;
@@ -126,6 +129,8 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		}
 
 		OlapUtils utils = new OlapUtils(getModel().getCube());
+		utils.setMemberHierarchyCache(getQueryAdapter().getModel()
+				.getMemberHierarchyCache());
 
 		List<Exp> expressions = new ArrayList<Exp>(hierarchies.size());
 
@@ -196,6 +201,12 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		MemberSelection selection = new MemberSelection(
 				transform.findVisibleMembers(hierarchy), getModel().getCube());
 		selection.addMembers(members);
+
+		if (getModel() instanceof PivotModelImpl) {
+			MemberHierarchyCache cache = ((PivotModelImpl) getModel())
+					.getMemberHierarchyCache();
+			selection.setMemberHierarchyCache(cache);
+		}
 
 		placeMembers(hierarchy, selection.getMembers());
 	}
@@ -425,7 +436,7 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 
 	class MemberCollector implements TreeNodeCallback<Exp> {
 
-		private QuaxUtil util = new QuaxUtil(getModel().getCube());
+		private QuaxUtil util;
 
 		private List<Member> members = new LinkedList<Member>();
 
@@ -436,6 +447,15 @@ public class PlaceMembersOnAxesImpl extends AbstractTransform implements
 		 */
 		MemberCollector(Hierarchy hierarchy) {
 			this.hierarchy = hierarchy;
+
+			PivotModel model = getModel();
+
+			if (model instanceof PivotModelImpl) {
+				this.util = new QuaxUtil(model.getCube(),
+						((PivotModelImpl) model).getMemberHierarchyCache());
+			} else {
+				this.util = new QuaxUtil(model.getCube());
+			}
 		}
 
 		/**

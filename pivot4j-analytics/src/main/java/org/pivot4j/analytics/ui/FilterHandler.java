@@ -34,7 +34,9 @@ import org.pivot4j.analytics.component.tree.NodeFilter;
 import org.pivot4j.analytics.ui.navigator.HierarchyNode;
 import org.pivot4j.analytics.ui.navigator.LevelNode;
 import org.pivot4j.analytics.ui.navigator.MemberNode;
+import org.pivot4j.impl.PivotModelImpl;
 import org.pivot4j.transform.ChangeSlicer;
+import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.MemberSelection;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.commandlink.CommandLink;
@@ -117,6 +119,12 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 
 				this.filterMembers = new MemberSelection(
 						transform.getSlicer(hierarchy), model.getCube());
+
+				if (model instanceof PivotModelImpl) {
+					MemberHierarchyCache cache = ((PivotModelImpl) model)
+							.getMemberHierarchyCache();
+					filterMembers.setMemberHierarchyCache(cache);
+				}
 			}
 
 		}

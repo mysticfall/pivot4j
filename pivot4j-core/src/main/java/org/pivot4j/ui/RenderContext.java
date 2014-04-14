@@ -8,7 +8,6 @@
  */
 package org.pivot4j.ui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +34,6 @@ import org.slf4j.LoggerFactory;
 public abstract class RenderContext {
 
 	public static final String RESOURCE_BUNDLE_NAME = "org.pivot4j.i18n.messages";
-
-	public static final String ATTRIBUTE_CACHED_MEMBERS = "pivot4j.cached.members";
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -488,54 +485,5 @@ public abstract class RenderContext {
 	 */
 	public Map<String, RenderPropertyList> getRenderProperties() {
 		return renderer.getRenderProperties();
-	}
-
-	/**
-	 * Temporary workaround for performance issue.
-	 * 
-	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
-	 * 
-	 * @param member
-	 * @return
-	 */
-	public Member getParentMember(Member member) {
-		Member parent = null;
-
-		@SuppressWarnings("unchecked")
-		Map<String, Member> cachedParents = (Map<String, Member>) getAttribute(ATTRIBUTE_CACHED_MEMBERS);
-
-		if (cachedParents == null) {
-			cachedParents = new HashMap<String, Member>();
-			setAttribute(ATTRIBUTE_CACHED_MEMBERS, cachedParents);
-		}
-
-		parent = cachedParents.get(member.getUniqueName());
-
-		if (parent == null) {
-			parent = member.getParentMember();
-			cachedParents.put(member.getUniqueName(), parent);
-		}
-
-		return parent;
-	}
-
-	/**
-	 * Temporary workaround for performance issue.
-	 * 
-	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
-	 * 
-	 * @param member
-	 * @return
-	 */
-	public List<Member> getAncestorMembers(Member member) {
-		List<Member> ancestors = new ArrayList<Member>();
-
-		Member parent = member;
-
-		while ((parent = getParentMember(parent)) != null) {
-			ancestors.add(parent);
-		}
-
-		return ancestors;
 	}
 }

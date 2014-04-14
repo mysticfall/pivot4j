@@ -6,7 +6,7 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package org.pivot4j.query;
+package org.pivot4j.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +26,7 @@ import org.pivot4j.mdx.Syntax;
 import org.pivot4j.mdx.metadata.DimensionExp;
 import org.pivot4j.mdx.metadata.LevelExp;
 import org.pivot4j.mdx.metadata.MemberExp;
+import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.OlapUtils;
 import org.pivot4j.util.RaggedMemberWrapper;
 
@@ -33,15 +34,31 @@ public class QuaxUtil {
 
 	private Cube cube;
 
+	private MemberHierarchyCache cache;
+
 	/**
 	 * @param cube
 	 */
 	public QuaxUtil(Cube cube) {
+		this(cube, null);
+	}
+
+	/**
+	 * @param cube
+	 * @param cache
+	 */
+	public QuaxUtil(Cube cube, MemberHierarchyCache cache) {
 		if (cube == null) {
 			throw new NullArgumentException("cube");
 		}
 
 		this.cube = cube;
+
+		if (cache == null) {
+			this.cache = new MemberHierarchyCache();
+		} else {
+			this.cache = cache;
+		}
 	}
 
 	/**
@@ -96,8 +113,9 @@ public class QuaxUtil {
 	 */
 	public boolean checkParent(Member pMember, Exp cMembObj) {
 		Member child = memberForExp(cMembObj);
+
 		return child != null
-				&& OlapUtils.equals(pMember, child.getParentMember());
+				&& OlapUtils.equals(pMember, cache.getParentMember(child));
 	}
 
 	/**
@@ -112,7 +130,7 @@ public class QuaxUtil {
 	public boolean checkChild(Member cMember, Exp pMembObj) {
 		Member parent = memberForExp(pMembObj);
 		return parent != null
-				&& OlapUtils.equals(parent, cMember.getParentMember());
+				&& OlapUtils.equals(parent, cache.getParentMember(cMember));
 	}
 
 	/**
@@ -196,7 +214,7 @@ public class QuaxUtil {
 					&& OlapUtils.equals(member.getLevel(), parentLevel)) {
 				int ancestorLevelNumber = ancestor.getLevel().getDepth();
 				while (ancestorLevelNumber < member.getLevel().getDepth()) {
-					member = member.getParentMember();
+					member = cache.getParentMember(member);
 				}
 
 				return OlapUtils.equals(member, ancestor);
@@ -231,7 +249,7 @@ public class QuaxUtil {
 				if (mm instanceof RaggedMemberWrapper) {
 					mmp = ((RaggedMemberWrapper) mm).getTopMember();
 				} else {
-					mmp = mm.getParentMember();
+					mmp = cache.getParentMember(mm);
 				}
 
 				if (mmp != null && OlapUtils.equals(mmp, member)) {
@@ -326,7 +344,7 @@ public class QuaxUtil {
 		int ancestorLevelNumber = ancestor.getDepth();
 		Member mm = descendant;
 		while (mm != null && ancestorLevelNumber < mm.getDepth()) {
-			mm = mm.getParentMember();
+			mm = cache.getParentMember(mm);
 		}
 
 		return OlapUtils.equals(mm, ancestor);
@@ -427,7 +445,7 @@ public class QuaxUtil {
 	 * @return
 	 */
 	public Member getParentMember(Exp oExp) {
-		return memberForExp(oExp).getParentMember();
+		return cache.getParentMember(memberForExp(oExp));
 	}
 
 	/**
@@ -562,7 +580,10 @@ public class QuaxUtil {
 	 * @return Expression Object
 	 */
 	public Exp expForMember(Member member) {
-		return new MemberExp(OlapUtils.wrapRaggedIfNecessary(member, cube));
+		OlapUtils utils = new OlapUtils(cube);
+		utils.setMemberHierarchyCache(cache);
+
+		return new MemberExp(utils.wrapRaggedIfNecessary(member));
 	}
 
 	/**
@@ -822,8 +843,8 @@ public class QuaxUtil {
 		}
 
 		if (parentLevel > 0) {
-			Member parent = member.getParentMember();
-			Member grandPa = parent.getParentMember();
+			Member parent = cache.getParentMember(member);
+			Member grandPa = cache.getParentMember(parent);
 
 			// do nothing if already on List
 			for (Exp exp : list) {
@@ -861,7 +882,7 @@ public class QuaxUtil {
 		}
 
 		if (level > 0) {
-			Member parent = member.getParentMember();
+			Member parent = cache.getParentMember(member);
 
 			// do nothing if already on List
 			for (Exp exp : list) {
@@ -1026,7 +1047,7 @@ public class QuaxUtil {
 		}
 
 		Member parent = memberForExp(f.getArgs().get(0));
-		return OlapUtils.equals(parent, member.getParentMember());
+		return OlapUtils.equals(parent, cache.getParentMember(member));
 	}
 
 	/**
@@ -1059,7 +1080,7 @@ public class QuaxUtil {
 
 		Member mm = member;
 		while (ancestorLevelNumber < mm.getLevel().getDepth()) {
-			mm = mm.getParentMember();
+			mm = cache.getParentMember(mm);
 		}
 
 		return OlapUtils.equals(mm, ancestor);

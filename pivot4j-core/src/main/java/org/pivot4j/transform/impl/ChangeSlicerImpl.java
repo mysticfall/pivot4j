@@ -27,11 +27,11 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotException;
+import org.pivot4j.impl.QueryAdapter;
 import org.pivot4j.mdx.Exp;
 import org.pivot4j.mdx.FunCall;
 import org.pivot4j.mdx.Syntax;
 import org.pivot4j.mdx.metadata.MemberExp;
-import org.pivot4j.query.QueryAdapter;
 import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.ChangeSlicer;
 import org.pivot4j.util.OlapUtils;
@@ -293,6 +293,8 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 		}
 
 		OlapUtils utils = new OlapUtils(getModel().getCube());
+		utils.setMemberHierarchyCache(getQueryAdapter().getModel()
+				.getMemberHierarchyCache());
 
 		if (members.size() == 1) {
 			return new MemberExp(utils.wrapRaggedIfNecessary(members.get(0)));

@@ -6,7 +6,7 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package org.pivot4j.query;
+package org.pivot4j.impl;
 
 import java.util.EventObject;
 

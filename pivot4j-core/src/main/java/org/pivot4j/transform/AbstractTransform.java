@@ -14,7 +14,7 @@ import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
 import org.pivot4j.PivotModel;
-import org.pivot4j.query.QueryAdapter;
+import org.pivot4j.impl.QueryAdapter;
 
 public abstract class AbstractTransform implements Transform {
 

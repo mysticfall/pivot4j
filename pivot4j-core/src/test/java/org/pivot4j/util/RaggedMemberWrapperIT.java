@@ -8,8 +8,8 @@
  */
 package org.pivot4j.util;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -19,8 +19,6 @@ import org.junit.Test;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 import org.pivot4j.AbstractIntegrationTestCase;
-import org.pivot4j.util.OlapUtils;
-import org.pivot4j.util.RaggedMemberWrapper;
 
 public class RaggedMemberWrapperIT extends AbstractIntegrationTestCase {
 
@@ -64,14 +62,6 @@ public class RaggedMemberWrapperIT extends AbstractIntegrationTestCase {
 	 */
 	protected Member getMember() {
 		return member;
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testInitializeWithNonRaggedMember() {
-		Member nonRaggedMember = OlapUtils.lookupMember(
-				"[Geography].[USA].[CA]", cube);
-
-		new RaggedMemberWrapper(nonRaggedMember, cube);
 	}
 
 	@Test

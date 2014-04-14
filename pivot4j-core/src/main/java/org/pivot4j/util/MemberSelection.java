@@ -24,6 +24,8 @@ public class MemberSelection extends TreeNode<Member> {
 
 	private Cube cube;
 
+	private MemberHierarchyCache memberHierarchyCache;
+
 	/**
 	 * @param cube
 	 */
@@ -70,7 +72,10 @@ public class MemberSelection extends TreeNode<Member> {
 
 		TreeNode<Member> parent = this;
 
-		Member wrappedMember = OlapUtils.wrapRaggedIfNecessary(member, cube);
+		OlapUtils utils = new OlapUtils(cube);
+		utils.setMemberHierarchyCache(memberHierarchyCache);
+
+		Member wrappedMember = utils.wrapRaggedIfNecessary(member);
 
 		if (wrappedMember instanceof RaggedMemberWrapper) {
 			RaggedMemberWrapper raggedMember = (RaggedMemberWrapper) wrappedMember;
@@ -138,7 +143,10 @@ public class MemberSelection extends TreeNode<Member> {
 			return false;
 		}
 
-		Member wrappedMember = OlapUtils.wrapRaggedIfNecessary(member, cube);
+		OlapUtils utils = new OlapUtils(cube);
+		utils.setMemberHierarchyCache(memberHierarchyCache);
+
+		Member wrappedMember = utils.wrapRaggedIfNecessary(member);
 		return selection.contains(wrappedMember);
 	}
 
@@ -242,6 +250,22 @@ public class MemberSelection extends TreeNode<Member> {
 
 		parentNode.addChild(index, targetNode);
 		parentNode.addChild(index + 1, node);
+	}
+
+	/**
+	 * @return the memberHierarchyCache
+	 */
+	public MemberHierarchyCache getMemberHierarchyCache() {
+		return memberHierarchyCache;
+	}
+
+	/**
+	 * @param memberHierarchyCache
+	 *            the memberHierarchyCache to set
+	 */
+	public void setMemberHierarchyCache(
+			MemberHierarchyCache memberHierarchyCache) {
+		this.memberHierarchyCache = memberHierarchyCache;
 	}
 
 	static class SelectionNode extends TreeNode<Member> {

@@ -14,7 +14,7 @@ import java.util.List;
 import org.olap4j.OlapConnection;
 import org.olap4j.Position;
 import org.olap4j.metadata.Member;
-import org.pivot4j.query.QueryAdapter;
+import org.pivot4j.impl.QueryAdapter;
 import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.DrillExpandPosition;
 

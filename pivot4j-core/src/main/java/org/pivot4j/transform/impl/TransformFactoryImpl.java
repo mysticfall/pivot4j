@@ -14,7 +14,7 @@ import java.util.Map;
 
 import org.olap4j.OlapConnection;
 import org.pivot4j.PivotException;
-import org.pivot4j.query.QueryAdapter;
+import org.pivot4j.impl.QueryAdapter;
 import org.pivot4j.transform.ChangeSlicer;
 import org.pivot4j.transform.DrillExpandMember;
 import org.pivot4j.transform.DrillExpandPosition;
@@ -68,7 +68,7 @@ public class TransformFactoryImpl implements TransformFactory {
 
 	/**
 	 * @see org.pivot4j.transform.TransformFactory#createTransform(java.lang.Class,
-	 *      org.pivot4j.query.QueryAdapter, org.olap4j.OlapConnection)
+	 *      org.pivot4j.impl.QueryAdapter, org.olap4j.OlapConnection)
 	 */
 	public <T extends Transform> T createTransform(Class<T> type,
 			QueryAdapter queryAdapter, OlapConnection connection) {

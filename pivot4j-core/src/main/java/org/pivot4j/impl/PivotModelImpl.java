@@ -49,14 +49,11 @@ import org.pivot4j.QueryListener;
 import org.pivot4j.el.ExpressionContext;
 import org.pivot4j.el.ExpressionEvaluatorFactory;
 import org.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory;
-import org.pivot4j.query.Quax;
-import org.pivot4j.query.QueryAdapter;
-import org.pivot4j.query.QueryChangeEvent;
-import org.pivot4j.query.QueryChangeListener;
 import org.pivot4j.sort.SortCriteria;
 import org.pivot4j.transform.Transform;
 import org.pivot4j.transform.TransformFactory;
 import org.pivot4j.transform.impl.TransformFactoryImpl;
+import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.OlapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +100,8 @@ public class PivotModelImpl implements PivotModel {
 	private CellSet cellSet;
 
 	private ExpressionContext expressionContext;
+
+	private MemberHierarchyCache memberHierarchyCache = new MemberHierarchyCache();
 
 	private QueryChangeListener queryChangeListener = new QueryChangeListener() {
 
@@ -283,6 +282,8 @@ public class PivotModelImpl implements PivotModel {
 		this.cellSet = null;
 		this.initialized = false;
 
+		memberHierarchyCache.clear();
+
 		fireModelDestroyed();
 	}
 
@@ -356,7 +357,10 @@ public class PivotModelImpl implements PivotModel {
 							return null;
 						}
 
-						return new OlapUtils(cube);
+						OlapUtils utils = new OlapUtils(cube);
+						utils.setMemberHierarchyCache(memberHierarchyCache);
+
+						return utils;
 					}
 				});
 
@@ -596,6 +600,13 @@ public class PivotModelImpl implements PivotModel {
 	@Override
 	public ExpressionContext getExpressionContext() {
 		return expressionContext;
+	}
+
+	/**
+	 * @return the memberHierarchyCache
+	 */
+	public MemberHierarchyCache getMemberHierarchyCache() {
+		return memberHierarchyCache;
 	}
 
 	/**

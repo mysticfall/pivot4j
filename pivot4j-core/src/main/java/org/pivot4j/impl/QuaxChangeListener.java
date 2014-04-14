@@ -6,9 +6,15 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package org.pivot4j.query;
+package org.pivot4j.impl;
 
-public enum CalcSetMode {
+import java.util.EventListener;
 
-	Simple, Generate, Sticky;
+public interface QuaxChangeListener extends EventListener {
+
+	/**
+	 * @param e
+	 *            the QuaxChangeEvent
+	 */
+	void quaxChanged(QuaxChangeEvent e);
 }

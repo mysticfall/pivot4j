@@ -9,7 +9,7 @@
 package org.pivot4j.transform.impl;
 
 import org.olap4j.OlapConnection;
-import org.pivot4j.query.QueryAdapter;
+import org.pivot4j.impl.QueryAdapter;
 import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.SwapAxes;
 

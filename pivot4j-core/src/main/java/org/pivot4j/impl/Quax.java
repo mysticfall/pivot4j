@@ -6,7 +6,7 @@
  * You must accept the terms of that agreement to use this software.
  * ====================================================================
  */
-package org.pivot4j.query;
+package org.pivot4j.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotException;
-import org.pivot4j.PivotModel;
 import org.pivot4j.mdx.Exp;
 import org.pivot4j.mdx.ExpNode;
 import org.pivot4j.mdx.FunCall;
@@ -44,7 +43,7 @@ public class Quax implements Bookmarkable {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private PivotModel model;
+	private PivotModelImpl model;
 
 	private QuaxUtil quaxUtil;
 
@@ -104,20 +103,21 @@ public class Quax implements Bookmarkable {
 	 * @param ordinal
 	 * @param model
 	 */
-	public Quax(int ordinal, PivotModel model) {
+	public Quax(int ordinal, PivotModelImpl model) {
 		if (model == null) {
 			throw new NullArgumentException("model");
 		}
 
 		this.ordinal = ordinal;
 		this.model = model;
-		this.quaxUtil = new QuaxUtil(getModel().getCube());
+		this.quaxUtil = new QuaxUtil(model.getCube(),
+				model.getMemberHierarchyCache());
 	}
 
 	/**
 	 * @return the model
 	 */
-	protected PivotModel getModel() {
+	protected PivotModelImpl getModel() {
 		return model;
 	}
 

@@ -8,7 +8,6 @@
  */
 package org.pivot4j.ui.table;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -18,11 +17,11 @@ import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.Axis;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
-import org.olap4j.metadata.Member;
 import org.olap4j.metadata.Property;
 import org.pivot4j.ui.aggregator.Aggregator;
 import org.pivot4j.ui.aggregator.AggregatorPosition;
 import org.pivot4j.ui.collector.PropertyCollector;
+import org.pivot4j.util.MemberHierarchyCache;
 
 class TableAxisContext implements Cloneable {
 
@@ -38,19 +37,22 @@ class TableAxisContext implements Cloneable {
 
 	private TableRenderer renderer;
 
-	private Map<String, Member> cachedParents = new HashMap<String, Member>();
+	private MemberHierarchyCache memberHierarchyCache;
+
+	private Map<String, Integer> rowSpanCache = new HashMap<String, Integer>();
 
 	/**
 	 * @param axis
 	 * @param hierarchies
 	 * @param levels
 	 * @param aggregators
+	 * @param cache
 	 * @param renderer
 	 */
 	TableAxisContext(Axis axis, List<Hierarchy> hierarchies,
 			Map<Hierarchy, List<Level>> levels,
 			Map<AggregatorPosition, List<Aggregator>> aggregators,
-			TableRenderer renderer) {
+			MemberHierarchyCache cache, TableRenderer renderer) {
 		if (axis == null) {
 			throw new NullArgumentException("axis");
 		}
@@ -75,6 +77,12 @@ class TableAxisContext implements Cloneable {
 			this.aggregators = new HashMap<AggregatorPosition, List<Aggregator>>();
 		} else {
 			this.aggregators = aggregators;
+		}
+
+		if (cache == null) {
+			this.memberHierarchyCache = new MemberHierarchyCache();
+		} else {
+			this.memberHierarchyCache = cache;
 		}
 
 		this.renderer = renderer;
@@ -148,45 +156,16 @@ class TableAxisContext implements Cloneable {
 	}
 
 	/**
-	 * Temporary workaround for performance issue.
-	 * 
-	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
-	 * 
-	 * @param member
-	 * @return
+	 * @return the memberHierarchyCache
 	 */
-	public Member getParentMember(Member member) {
-		Member parent = cachedParents.get(member.getUniqueName());
-
-		if (parent == null) {
-			parent = member.getParentMember();
-			cachedParents.put(member.getUniqueName(), parent);
-		}
-
-		return parent;
+	public MemberHierarchyCache getMemberHierarchyCache() {
+		return memberHierarchyCache;
 	}
 
 	/**
-	 * Temporary workaround for performance issue.
-	 * 
-	 * See http://jira.pentaho.com/browse/MONDRIAN-1292
-	 * 
-	 * @param member
-	 * @return
+	 * @return the rowSpanCache
 	 */
-	public List<Member> getAncestorMembers(Member member) {
-		List<Member> ancestors = new ArrayList<Member>();
-
-		Member parent = member;
-
-		while ((parent = getParentMember(parent)) != null) {
-			ancestors.add(parent);
-		}
-
-		return ancestors;
-	}
-
-	Map<String, Member> getParentMembersCache() {
-		return cachedParents;
+	public Map<String, Integer> getRowSpanCache() {
+		return rowSpanCache;
 	}
 }

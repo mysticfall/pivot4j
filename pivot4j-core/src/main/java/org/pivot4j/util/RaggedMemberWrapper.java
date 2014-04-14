@@ -64,11 +64,6 @@ public class RaggedMemberWrapper implements Member, Named {
 
 		int baseDepth = member.getDepth();
 
-		if (baseDepth <= 1 || member.getParentMember() != null) {
-			throw new IllegalArgumentException(
-					"The specified member does not need a ragged parent placeholder.");
-		}
-
 		this.baseMember = member;
 		this.nameSegments = Collections.unmodifiableList(IdentifierParser
 				.parseIdentifier(member.getUniqueName()));

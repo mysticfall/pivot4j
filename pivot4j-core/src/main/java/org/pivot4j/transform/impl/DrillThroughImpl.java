@@ -25,8 +25,8 @@ import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
 import org.pivot4j.PivotException;
 import org.pivot4j.PivotModel;
+import org.pivot4j.impl.QueryAdapter;
 import org.pivot4j.mdx.Exp;
-import org.pivot4j.query.QueryAdapter;
 import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.DrillThrough;
 import org.pivot4j.util.OlapUtils;
@@ -125,6 +125,10 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 		CellSet cellSet = cell.getCellSet();
 		List<CellSetAxis> axes = cellSet.getAxes();
 
+		OlapUtils utils = new OlapUtils(getModel().getCube());
+		utils.setMemberHierarchyCache(getQueryAdapter().getModel()
+				.getMemberHierarchyCache());
+
 		int axisOrdinal = 0;
 		for (int ordinal : coords) {
 			Position position = axes.get(axisOrdinal++).getPositions()
@@ -137,7 +141,7 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 					builder.append(", ");
 				}
 
-				builder.append(OlapUtils.wrapRaggedIfNecessary(member, cube)
+				builder.append(utils.wrapRaggedIfNecessary(member)
 						.getUniqueName());
 			}
 		}
@@ -165,7 +169,7 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 				}
 
 				if (elem instanceof Member) {
-					elem = OlapUtils.wrapRaggedIfNecessary((Member) elem, cube);
+					elem = utils.wrapRaggedIfNecessary((Member) elem);
 				}
 
 				builder.append(elem.getUniqueName());

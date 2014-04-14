@@ -16,16 +16,18 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.olap4j.OlapException;
+import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
-import org.olap4j.metadata.Dimension.Type;
 import org.pivot4j.PivotModel;
 import org.pivot4j.analytics.component.tree.DefaultTreeNode;
 import org.pivot4j.analytics.component.tree.NodeFilter;
 import org.pivot4j.analytics.ui.navigator.MemberNode;
 import org.pivot4j.analytics.ui.navigator.SelectionNode;
+import org.pivot4j.impl.PivotModelImpl;
 import org.pivot4j.transform.PlaceMembersOnAxes;
+import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.MemberSelection;
 import org.pivot4j.util.OlapUtils;
 import org.primefaces.component.commandbutton.CommandButton;
@@ -265,6 +267,12 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 			}
 
 			this.selection = new MemberSelection(members, model.getCube());
+
+			if (model instanceof PivotModelImpl) {
+				MemberHierarchyCache cache = ((PivotModelImpl) model)
+						.getMemberHierarchyCache();
+				selection.setMemberHierarchyCache(cache);
+			}
 		}
 
 		this.sourceNode = null;
@@ -313,6 +321,13 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 
 			List<Member> members = sel.getMembers();
 
+			OlapUtils utils = new OlapUtils(model.getCube());
+
+			if (model instanceof PivotModelImpl) {
+				utils.setMemberHierarchyCache(((PivotModelImpl) model)
+						.getMemberHierarchyCache());
+			}
+
 			for (TreeNode node : targetSelection) {
 				SelectionNode memberNode = (SelectionNode) node;
 
@@ -321,8 +336,7 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 				List<Member> targetMembers = mode.getTargetMembers(member);
 
 				for (Member target : targetMembers) {
-					Member wrappedMember = OlapUtils.wrapRaggedIfNecessary(
-							target, model.getCube());
+					Member wrappedMember = utils.wrapRaggedIfNecessary(target);
 
 					if (members.contains(wrappedMember)) {
 						members.remove(wrappedMember);
@@ -348,6 +362,12 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 			}
 
 			this.selection = new MemberSelection(members, model.getCube());
+
+			if (model instanceof PivotModelImpl) {
+				MemberHierarchyCache cache = ((PivotModelImpl) model)
+						.getMemberHierarchyCache();
+				selection.setMemberHierarchyCache(cache);
+			}
 		}
 
 		this.sourceNode = null;
@@ -413,6 +433,12 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 
 				List<Member> members = transform.findVisibleMembers(hier);
 				this.selection = new MemberSelection(members, model.getCube());
+
+				if (model instanceof PivotModelImpl) {
+					MemberHierarchyCache cache = ((PivotModelImpl) model)
+							.getMemberHierarchyCache();
+					selection.setMemberHierarchyCache(cache);
+				}
 			}
 		}
 
