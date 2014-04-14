@@ -212,6 +212,11 @@
 			<version>${version.commons.configuration}</version>
 		</dependency>
 		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>${version.commons.collections}</version>
+		</dependency>
+		<dependency>
 			<groupId>de.jflex</groupId>
 			<artifactId>jflex</artifactId>
 			<version>${version.jflex}</version>
