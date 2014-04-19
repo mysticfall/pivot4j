@@ -198,16 +198,22 @@ public class TableRenderer extends
 
 		Cell cell = context.getCell();
 
-		if (aggregator == null) {
-			if (cell != null && !cell.isEmpty()) {
-				try {
-					value = cell.getDoubleValue();
-				} catch (OlapException e) {
-					throw new PivotException(e);
+		try {
+			if (aggregator == null) {
+				if (cell != null && !cell.isEmpty()) {
+					try {
+						value = cell.getDoubleValue();
+					} catch (OlapException e) {
+						throw new PivotException(e);
+					}
 				}
+			} else {
+				value = aggregator.getValue(context);
 			}
-		} else {
-			value = aggregator.getValue(context);
+		} catch (NumberFormatException e) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("Non-numeric cell value : {}", cell.getValue());
+			}
 		}
 
 		return value;
