@@ -47,7 +47,7 @@
 				<version>${version.plugin.war}</version>
 				<configuration>
 					<warName>pivot4j</warName>
-					<archiveClasses>true</archiveClasses>
+					<archiveClasses>false</archiveClasses>
 					<attachClasses>true</attachClasses>
 					<webXml>${project.build.directory}/generated-resources/xml/xslt/web.xml</webXml>
 					<webResources>

@@ -86,6 +86,33 @@
 				</dependencies>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>${version.plugin.dependency}</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.pivot4j</groupId>
+									<artifactId>pivot4j-analytics</artifactId>
+									<version>${project.version}</version>
+									<classifier>classes</classifier>
+									<overWrite>true</overWrite>
+									<destFileName>pivot4j-analytics-${project.version}.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/plugin/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>xml-maven-plugin</artifactId>
 				<version>${version.plugin.xml}</version>

@@ -43,6 +43,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.plugin.changes>2.9</version.plugin.changes>
 		<version.plugin.compiler>3.1</version.plugin.compiler>
 		<version.plugin.cup>1.0.0</version.plugin.cup>
+		<version.plugin.dependency>2.8</version.plugin.dependency>
 		<version.plugin.derby>1.5</version.plugin.derby>
 		<version.plugin.surefire>2.16</version.plugin.surefire>
 		<version.plugin.failsafe>2.16</version.plugin.failsafe>
