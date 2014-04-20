@@ -365,7 +365,9 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 			builder.setComponent(component);
 
 			renderer.render(model, builder);
+		}
 
+		if (renderer != null) {
 			stateManager.setChartState(renderer.saveState());
 		}
 	}
