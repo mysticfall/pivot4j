@@ -13,6 +13,7 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.pivot4j.PivotModel;
 import org.pivot4j.sort.SortMode;
+import org.pivot4j.transform.SwapAxes;
 import org.pivot4j.ui.PivotRenderer;
 
 public class ToggleSortCommand extends AbstractSortCommand {
@@ -35,8 +36,8 @@ public class ToggleSortCommand extends AbstractSortCommand {
 	}
 
 	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel
-	 *      , org.pivot4j.ui.command.UICommandParameters)
+	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+	 *      org.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
 	public Void execute(PivotModel model, UICommandParameters parameters) {
@@ -45,6 +46,14 @@ public class ToggleSortCommand extends AbstractSortCommand {
 		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
 		CellSetAxis otherAxis = cellSet.getAxes().get(
 				Math.abs(parameters.getAxisOrdinal() - 1));
+
+		SwapAxes transform = model.getTransform(SwapAxes.class);
+
+		if (transform.isSwapAxes()) {
+			CellSetAxis temp = axis;
+			axis = otherAxis;
+			otherAxis = temp;
+		}
 
 		Position position = axis.getPositions().get(
 				parameters.getPositionOrdinal());
