@@ -11,6 +11,7 @@ package org.pivot4j.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 
 import freemarker.template.utility.NullArgumentException;
@@ -21,6 +22,28 @@ import freemarker.template.utility.NullArgumentException;
  * See http://jira.pentaho.com/browse/MONDRIAN-1292
  */
 public class MemberHierarchyCache extends Cache<String, Member> {
+
+	private Cube cube;
+
+	private OlapUtils util;
+
+	/**
+	 * @param cube
+	 */
+	public MemberHierarchyCache(Cube cube) {
+		if (cube == null) {
+			throw new NullArgumentException("cube");
+		}
+
+		this.cube = cube;
+		this.util = new OlapUtils(cube);
+
+		util.setMemberHierarchyCache(this);
+	}
+
+	public Cube getCube() {
+		return cube;
+	}
 
 	/**
 	 * @param member
@@ -35,6 +58,11 @@ public class MemberHierarchyCache extends Cache<String, Member> {
 
 		if (parent == null) {
 			parent = member.getParentMember();
+
+			if (parent != null) {
+				parent = util.wrapRaggedIfNecessary(parent);
+			}
+
 			put(member.getUniqueName(), parent);
 		}
 

@@ -45,9 +45,7 @@ import org.pivot4j.mdx.QueryAxis;
 import org.pivot4j.mdx.Syntax;
 import org.pivot4j.mdx.ValueParameter;
 import org.pivot4j.mdx.impl.MdxParserImpl;
-import org.pivot4j.mdx.metadata.MemberExp;
 import org.pivot4j.state.Bookmarkable;
-import org.pivot4j.util.OlapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -546,21 +544,19 @@ public class QueryAdapter implements Bookmarkable {
 			return;
 		}
 
-		OlapUtils utils = new OlapUtils(getModel().getCube());
-		utils.setMemberHierarchyCache(getModel().getMemberHierarchyCache());
+		QuaxUtil utils = new QuaxUtil(model.getCube(),
+				model.getMemberHierarchyCache());
 
 		if (sortPosMembers.size() > 1) {
 			List<Exp> memberExp = new ArrayList<Exp>(sortPosMembers.size());
 
 			for (Member member : sortPosMembers) {
-				memberExp
-						.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
+				memberExp.add(utils.expForMember(member));
 			}
 
 			sortExp = new FunCall("()", Syntax.Parentheses, memberExp);
 		} else {
-			sortExp = new MemberExp(utils.wrapRaggedIfNecessary(sortPosMembers
-					.get(0)));
+			sortExp = utils.expForMember(sortPosMembers.get(0));
 		}
 
 		args.add(sortExp);
@@ -593,22 +589,20 @@ public class QueryAdapter implements Bookmarkable {
 			return;
 		}
 
-		OlapUtils utils = new OlapUtils(getModel().getCube());
-		utils.setMemberHierarchyCache(getModel().getMemberHierarchyCache());
+		QuaxUtil utils = new QuaxUtil(model.getCube(),
+				model.getMemberHierarchyCache());
 
 		// if we got more than 1 position member, generate a tuple
 		if (sortPosMembers.size() > 1) {
 			List<Exp> memberExp = new ArrayList<Exp>(sortPosMembers.size());
 
 			for (Member member : sortPosMembers) {
-				memberExp
-						.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
+				memberExp.add(utils.expForMember(member));
 			}
 
 			sortExp = new FunCall("()", Syntax.Parentheses, memberExp);
 		} else {
-			sortExp = new MemberExp(utils.wrapRaggedIfNecessary(sortPosMembers
-					.get(0)));
+			sortExp = utils.expForMember(sortPosMembers.get(0));
 		}
 
 		List<Exp> args = new ArrayList<Exp>(3);
@@ -782,11 +776,11 @@ public class QueryAdapter implements Bookmarkable {
 	protected Object createMemberSet(List<Member> members) {
 		List<Exp> exps = new ArrayList<Exp>(members.size());
 
-		OlapUtils utils = new OlapUtils(getModel().getCube());
-		utils.setMemberHierarchyCache(getModel().getMemberHierarchyCache());
+		QuaxUtil utils = new QuaxUtil(model.getCube(),
+				model.getMemberHierarchyCache());
 
 		for (Member member : members) {
-			exps.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
+			exps.add(utils.expForMember(member));
 		}
 
 		return new FunCall("{}", Syntax.Braces, exps);

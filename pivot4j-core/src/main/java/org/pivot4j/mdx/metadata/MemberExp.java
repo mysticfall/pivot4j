@@ -14,6 +14,7 @@ import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotException;
 import org.pivot4j.mdx.ExpVisitor;
+import org.pivot4j.util.OlapUtils;
 
 public class MemberExp extends AbstractMetadataExp<Member> {
 
@@ -43,8 +44,9 @@ public class MemberExp extends AbstractMetadataExp<Member> {
 	@Override
 	protected Member lookupMetadata(Cube cube) {
 		try {
-			return cube.lookupMember(IdentifierNode.parseIdentifier(
+			Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
 					getUniqueName()).getSegmentList());
+			return new OlapUtils(cube).wrapRaggedIfNecessary(member);
 		} catch (OlapException e) {
 			throw new PivotException(e);
 		}

@@ -68,8 +68,6 @@ public class MemberSelection extends TreeNode<Member> {
 	 * @param member
 	 */
 	public void addMember(Member member) {
-		List<Member> ancestors;
-
 		TreeNode<Member> parent = this;
 
 		OlapUtils utils = new OlapUtils(cube);
@@ -77,21 +75,19 @@ public class MemberSelection extends TreeNode<Member> {
 
 		Member wrappedMember = utils.wrapRaggedIfNecessary(member);
 
-		if (wrappedMember instanceof RaggedMemberWrapper) {
-			RaggedMemberWrapper raggedMember = (RaggedMemberWrapper) wrappedMember;
-
-			Member topMember = raggedMember.getTopMember();
-
-			ancestors = new ArrayList<Member>(topMember.getAncestorMembers());
-			ancestors.add(0, topMember);
-		} else {
-			ancestors = new ArrayList<Member>(
-					wrappedMember.getAncestorMembers());
-		}
+		List<Member> ancestors = new ArrayList<Member>(
+				wrappedMember.getAncestorMembers());
 
 		Collections.reverse(ancestors);
 
 		for (Member ancestor : ancestors) {
+			ancestor = utils.wrapRaggedIfNecessary(ancestor);
+
+			if (utils.getBaseRaggedMember(ancestor).getDepth() != ancestor
+					.getDepth()) {
+				continue;
+			}
+
 			TreeNode<Member> node = findChild(ancestor);
 
 			if (node == null) {

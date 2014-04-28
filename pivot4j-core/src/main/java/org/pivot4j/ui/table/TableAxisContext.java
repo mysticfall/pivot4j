@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.Axis;
+import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Property;
@@ -42,6 +43,7 @@ class TableAxisContext implements Cloneable {
 	private Map<String, Integer> rowSpanCache = new HashMap<String, Integer>();
 
 	/**
+	 * @param cube
 	 * @param axis
 	 * @param hierarchies
 	 * @param levels
@@ -49,10 +51,14 @@ class TableAxisContext implements Cloneable {
 	 * @param cache
 	 * @param renderer
 	 */
-	TableAxisContext(Axis axis, List<Hierarchy> hierarchies,
+	TableAxisContext(Cube cube, Axis axis, List<Hierarchy> hierarchies,
 			Map<Hierarchy, List<Level>> levels,
 			Map<AggregatorPosition, List<Aggregator>> aggregators,
 			MemberHierarchyCache cache, TableRenderer renderer) {
+		if (cube == null) {
+			throw new NullArgumentException("cube");
+		}
+
 		if (axis == null) {
 			throw new NullArgumentException("axis");
 		}
@@ -80,7 +86,7 @@ class TableAxisContext implements Cloneable {
 		}
 
 		if (cache == null) {
-			this.memberHierarchyCache = new MemberHierarchyCache();
+			this.memberHierarchyCache = new MemberHierarchyCache(cube);
 		} else {
 			this.memberHierarchyCache = cache;
 		}

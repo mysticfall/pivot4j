@@ -51,7 +51,6 @@ import org.pivot4j.ui.aggregator.AggregatorFactory;
 import org.pivot4j.ui.aggregator.AggregatorPosition;
 import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.OlapUtils;
-import org.pivot4j.util.RaggedMemberWrapper;
 import org.pivot4j.util.TreeNode;
 import org.pivot4j.util.TreeNodeCallback;
 import org.slf4j.Logger;
@@ -430,7 +429,7 @@ public class TableRenderer extends
 		if (model instanceof PivotModelImpl) {
 			cache = ((PivotModelImpl) model).getMemberHierarchyCache();
 		} else {
-			cache = new MemberHierarchyCache();
+			cache = new MemberHierarchyCache(model.getCube());
 		}
 
 		TableHeaderNode columnRoot = createAxisTree(model, Axis.COLUMNS, cache);
@@ -753,19 +752,17 @@ public class TableRenderer extends
 
 		List<Member> positionMembers = context.getPosition().getMembers();
 
+		OlapUtils utils = new OlapUtils(context.getModel().getCube());
+		utils.setMemberHierarchyCache(cache);
+
 		int index = 0;
 		for (Member member : members) {
 			if (positionMembers.size() <= index) {
 				return;
 			}
 
-			Member positionMember = positionMembers.get(index);
-
-			if (positionMember.getDepth() > 1
-					&& cache.getParentMember(positionMember) == null) {
-				positionMember = new RaggedMemberWrapper(positionMember,
-						context.getModel().getCube());
-			}
+			Member positionMember = utils.wrapRaggedIfNecessary(positionMembers
+					.get(index));
 
 			if (!OlapUtils.equals(member, positionMember)
 					&& (member.getDepth() >= positionMember.getDepth() || !cache
@@ -1079,8 +1076,8 @@ public class TableRenderer extends
 			memberAggregatorNames = Collections.emptyList();
 		}
 
-		TableAxisContext nodeContext = new TableAxisContext(axis, hierarchies,
-				levelsMap, aggregatorMap, cache, this);
+		TableAxisContext nodeContext = new TableAxisContext(model.getCube(),
+				axis, hierarchies, levelsMap, aggregatorMap, cache, this);
 
 		TableHeaderNode axisRoot = new TableHeaderNode(nodeContext);
 
@@ -1090,6 +1087,9 @@ public class TableRenderer extends
 		Map<Hierarchy, List<AggregationTarget>> memberParentMap = new HashMap<Hierarchy, List<AggregationTarget>>();
 
 		Position lastPosition = null;
+
+		OlapUtils utils = new OlapUtils(model.getCube());
+		utils.setMemberHierarchyCache(cache);
 
 		for (Position position : positions) {
 			TableHeaderNode lastChild = null;
@@ -1111,9 +1111,8 @@ public class TableRenderer extends
 					if (!grandTotalMeasures.contains(measure)) {
 						grandTotalMeasures.add(measure);
 					}
-				} else if (member != null && member.getDepth() > 0
-						&& cache.getParentMember(member) == null) {
-					member = new RaggedMemberWrapper(member, model.getCube());
+				} else {
+					member = utils.wrapRaggedIfNecessary(member);
 				}
 
 				if (hierarchies.size() < memberCount) {
@@ -1189,14 +1188,7 @@ public class TableRenderer extends
 								.get(memberParents.size() - 1);
 					}
 
-					Member parentMember;
-
-					if (member instanceof RaggedMemberWrapper) {
-						parentMember = ((RaggedMemberWrapper) member)
-								.getTopMember();
-					} else {
-						parentMember = cache.getParentMember(member);
-					}
+					Member parentMember = utils.getTopLevelRaggedMember(member);
 
 					if (parentMember != null) {
 						if (lastSibling == null

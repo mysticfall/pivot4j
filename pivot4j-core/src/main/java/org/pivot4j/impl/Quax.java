@@ -110,8 +110,6 @@ public class Quax implements Bookmarkable {
 
 		this.ordinal = ordinal;
 		this.model = model;
-		this.quaxUtil = new QuaxUtil(model.getCube(),
-				model.getMemberHierarchyCache());
 	}
 
 	/**
@@ -177,6 +175,9 @@ public class Quax implements Bookmarkable {
 	 * @param positions
 	 */
 	public void initialize(List<Position> positions) {
+		this.quaxUtil = new QuaxUtil(model.getCube(),
+				model.getMemberHierarchyCache());
+
 		List<List<Member>> posMembers;
 
 		int dimCount = 0;
@@ -425,6 +426,12 @@ public class Quax implements Bookmarkable {
 	 * only allow expand/collapse left of a "sticky topcount"
 	 */
 	private boolean allowNavigate(Member member, boolean qubon) {
+		Member baseMember = quaxUtil.getOlapUtils().getBaseRaggedMember(member);
+
+		if (baseMember.getDepth() != member.getDepth()) {
+			return false;
+		}
+
 		int iDim = dimIdx(member.getDimension());
 		return allowNavigate(iDim, qubon);
 	}
@@ -671,7 +678,10 @@ public class Quax implements Bookmarkable {
 	 *            position path to be expanded
 	 */
 	public boolean canExpand(List<Member> memberPath) {
-		int dimIndex = memberPath.size() - 1;
+		List<Member> target = quaxUtil.getOlapUtils().wrapRaggedIfNecessary(
+				memberPath);
+
+		int dimIndex = target.size() - 1;
 
 		// we only allow expand / collapse for a dimension
 		// left of a "sticky topcount"
@@ -680,19 +690,49 @@ public class Quax implements Bookmarkable {
 		}
 
 		// first check the cache
-		if (canExpandPosMap.containsKey(memberPath)) {
-			Boolean bCanExpand = (Boolean) canExpandPosMap.get(memberPath);
+		if (canExpandPosMap.containsKey(target)) {
+			Boolean bCanExpand = (Boolean) canExpandPosMap.get(target);
 			return bCanExpand.booleanValue();
 		}
 
 		// loop over Position Tree
 		// reject expansion, if the axis already contains child-positions
-		boolean childFound = checkChildPosition(memberPath);
+		boolean childFound = checkChildPosition(target);
 
 		// cache the result
-		canExpandPosMap.put(memberPath, !childFound);
+		canExpandPosMap.put(target, !childFound);
 
 		return !childFound;
+	}
+
+	/**
+	 * Check, whether a member can be expanded
+	 * 
+	 * @param member
+	 *            member to be expanded
+	 */
+	public boolean canExpand(Member member) {
+		Member target = quaxUtil.getOlapUtils().wrapRaggedIfNecessary(member);
+
+		// we only allow expand / collapse for a dimension
+		// left of a "sticky topcount"
+		if (!allowNavigate(target, false)) {
+			return false;
+		}
+
+		// first check the cache
+		if (canExpandMemberMap.containsKey(target)) {
+			return canExpandMemberMap.get(target);
+		}
+
+		// loop over Position Tree
+		// reject expansion, if the axis already contains children of member
+		boolean found = !findMemberChild(target);
+
+		// cache the result
+		canExpandMemberMap.put(target, found);
+
+		return found;
 	}
 
 	/**
@@ -701,6 +741,9 @@ public class Quax implements Bookmarkable {
 	 * @param memberPath
 	 */
 	public void expand(List<Member> memberPath) {
+		List<Member> target = quaxUtil.getOlapUtils().wrapRaggedIfNecessary(
+				memberPath);
+
 		if (qubonMode) {
 			resolveUnions();
 
@@ -709,7 +752,7 @@ public class Quax implements Bookmarkable {
 			}
 		}
 
-		int dimIndex = memberPath.size() - 1;
+		int dimIndex = target.size() - 1;
 
 		// update the position member tree
 		// assume mPath = (Product.Drink,Time.2003,Customers.USA)
@@ -723,7 +766,7 @@ public class Quax implements Bookmarkable {
 		// we add a new branch
 		// (Product.Drink,Time.2003,Customers.USA.Children) to the tree.
 
-		TreeNode<Exp> bestNode = findBestNode(memberPath);
+		TreeNode<Exp> bestNode = findBestNode(target);
 		int bestNodeIndex = bestNode.getLevel() - 1;
 
 		// add branch at startNode
@@ -739,15 +782,15 @@ public class Quax implements Bookmarkable {
 		// (Product.AllProducts, MaritalStatus.M, Gender.AllGender, * )
 
 		List<TreeNode<Exp>> tailNodeList;
-		if (memberPath.size() < nDimension) {
-			tailNodeList = collectTailNodes(posTreeRoot, memberPath);
+		if (target.size() < nDimension) {
+			tailNodeList = collectTailNodes(posTreeRoot, target);
 		} else {
 			tailNodeList = Collections.emptyList();
 		}
 
 		TreeNode<Exp> newNode;
 
-		Exp oMember = quaxUtil.expForMember(memberPath.get(dimIndex));
+		Exp oMember = quaxUtil.expForMember(target.get(dimIndex));
 		FunCall fChildren = new FunCall("Children", Syntax.Property);
 		fChildren.getArgs().add(oMember);
 
@@ -760,8 +803,8 @@ public class Quax implements Bookmarkable {
 		if (bestNodeIndex == dimIndex) {
 			parent = bestNode.getParent();
 		} else {
-			for (int i = bestNodeIndex + 1; i < memberPath.size() - 1; i++) {
-				oMember = quaxUtil.expForMember(memberPath.get(i));
+			for (int i = bestNodeIndex + 1; i < target.size() - 1; i++) {
+				oMember = quaxUtil.expForMember(target.get(i));
 				newNode = new ExpNode(oMember);
 
 				parent.addChild(newNode);
@@ -779,7 +822,7 @@ public class Quax implements Bookmarkable {
 		newNode = new ExpNode(fChildren);
 		parent.addChild(newNode);
 
-		if (memberPath.size() < nDimension) {
+		if (target.size() < nDimension) {
 			for (TreeNode<Exp> tailNode : tailNodeList) {
 				newNode.addChild(tailNode.deepCopy());
 			}
@@ -796,39 +839,14 @@ public class Quax implements Bookmarkable {
 	}
 
 	/**
-	 * Check, whether a member can be expanded
-	 * 
-	 * @param member
-	 *            member to be expanded
-	 */
-	public boolean canExpand(Member member) {
-		// we only allow expand / collapse for a dimension
-		// left of a "sticky topcount"
-		if (!allowNavigate(member, false)) {
-			return false;
-		}
-
-		// first check the cache
-		if (canExpandMemberMap.containsKey(member)) {
-			return canExpandMemberMap.get(member);
-		}
-
-		// loop over Position Tree
-		// reject expansion, if the axis already contains children of member
-		boolean found = !findMemberChild(member);
-
-		// cache the result
-		canExpandMemberMap.put(member, found);
-
-		return found;
-	}
-
-	/**
 	 * Expand member all over position tree
 	 * 
 	 * @param member
 	 */
 	public void expand(final Member member) {
+		final Member target = quaxUtil.getOlapUtils().wrapRaggedIfNecessary(
+				member);
+
 		if (qubonMode) {
 			resolveUnions();
 
@@ -840,7 +858,7 @@ public class Quax implements Bookmarkable {
 		// old stuff, always hierarchize everything
 		this.nHierExclude = 0;
 
-		final int dimIndex = this.dimIdx(member.getDimension());
+		final int dimIndex = this.dimIdx(target.getDimension());
 		final List<ExpNode> nodesForMember = new ArrayList<ExpNode>();
 
 		// update the position member tree
@@ -862,12 +880,12 @@ public class Quax implements Bookmarkable {
 				// node Exp must contain children of member[iDim]
 				Exp oExp = node.getReference();
 				if (quaxUtil.isMember(oExp)) {
-					if (quaxUtil.equalMember(oExp, member)) {
+					if (quaxUtil.equalMember(oExp, target)) {
 						nodesForMember.add((ExpNode) node);
 					}
 				} else {
 					// must be FunCall
-					if (isMemberInFunCall(oExp, member, dimIndex)) {
+					if (isMemberInFunCall(oExp, target, dimIndex)) {
 						nodesForMember.add((ExpNode) node);
 					}
 				}
@@ -877,7 +895,7 @@ public class Quax implements Bookmarkable {
 		});
 
 		// add children of member to each node in list
-		Exp oMember = quaxUtil.expForMember(member);
+		Exp oMember = quaxUtil.expForMember(target);
 		FunCall fChildren = new FunCall("Children", Syntax.Property);
 		fChildren.getArgs().add(oMember);
 
@@ -909,7 +927,10 @@ public class Quax implements Bookmarkable {
 	 *            position path to be collapsed
 	 */
 	public boolean canCollapse(List<Member> memberPath) {
-		int dimIndex = memberPath.size() - 1;
+		List<Member> target = quaxUtil.getOlapUtils().wrapRaggedIfNecessary(
+				memberPath);
+
+		int dimIndex = target.size() - 1;
 
 		// we only allow expand / collapse for a dimension
 		// left of a "sticky topcount"
@@ -918,16 +939,16 @@ public class Quax implements Bookmarkable {
 		}
 
 		// first check the cache
-		if (canCollapsePosMap.containsKey(memberPath)) {
-			return canCollapsePosMap.get(memberPath);
+		if (canCollapsePosMap.containsKey(target)) {
+			return canCollapsePosMap.get(target);
 		}
 
 		// loop over Position Tree
 		// collapse is possible, if the axis already contains child-positions
-		boolean childFound = checkChildPosition(memberPath);
+		boolean childFound = checkChildPosition(target);
 
 		// cache the result
-		canCollapsePosMap.put(memberPath, childFound);
+		canCollapsePosMap.put(target, childFound);
 
 		return childFound;
 	}
@@ -938,7 +959,10 @@ public class Quax implements Bookmarkable {
 	 * @param memberPath
 	 *            member path to be collapsed
 	 */
-	public void collapse(final List<Member> memberPath) {
+	public void collapse(List<Member> memberPath) {
+		final List<Member> target = quaxUtil.getOlapUtils()
+				.wrapRaggedIfNecessary(memberPath);
+
 		if (qubonMode) {
 			resolveUnions();
 
@@ -947,9 +971,9 @@ public class Quax implements Bookmarkable {
 			}
 		}
 
-		final int dimIndex = memberPath.size() - 1;
+		final int dimIndex = target.size() - 1;
 
-		int pathSize = memberPath.size();
+		int pathSize = target.size();
 
 		// determine FunCall nodes to be split
 		final List<List<ExpNode>> splitLists = new ArrayList<List<ExpNode>>(
@@ -972,15 +996,14 @@ public class Quax implements Bookmarkable {
 				int nodeIndex = node.getLevel() - 1;
 				if (nodeIndex < dimIndex) {
 					if (quaxUtil.isMember(oExp)) {
-						if (quaxUtil.equalMember(oExp,
-								memberPath.get(nodeIndex))) {
+						if (quaxUtil.equalMember(oExp, target.get(nodeIndex))) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
 							return TreeNodeCallback.CONTINUE_SIBLING;
 						}
 					} else {
 						// Funcall
-						if (isMemberInFunCall(oExp, memberPath.get(nodeIndex),
+						if (isMemberInFunCall(oExp, target.get(nodeIndex),
 								nodeIndex)) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
@@ -993,13 +1016,13 @@ public class Quax implements Bookmarkable {
 				boolean found = false;
 				if (quaxUtil.isMember(oExp)) {
 					// Member
-					if (quaxUtil.isDescendant(memberPath.get(dimIndex), oExp)) {
+					if (quaxUtil.isDescendant(target.get(dimIndex), oExp)) {
 						found = true;
 					}
 				} else {
 					// FunCall
-					if (isChildOfMemberInFunCall(oExp,
-							memberPath.get(dimIndex), dimIndex)) {
+					if (isChildOfMemberInFunCall(oExp, target.get(dimIndex),
+							dimIndex)) {
 						found = true;
 					}
 				}
@@ -1030,7 +1053,7 @@ public class Quax implements Bookmarkable {
 		// start with higher levels to avoid dependency conflicts
 		for (int i = pathSize - 1; i >= 0; i--) {
 			List<ExpNode> list = splitLists.get(i);
-			Member member = memberPath.get(i);
+			Member member = target.get(i);
 			for (ExpNode node : list) {
 				splitFunCall(node, member, i);
 			}
@@ -1051,8 +1074,7 @@ public class Quax implements Bookmarkable {
 				int nodeIndex = node.getLevel() - 1;
 				if (nodeIndex < dimIndex) {
 					if (quaxUtil.isMember(oExp)) {
-						if (quaxUtil.equalMember(oExp,
-								memberPath.get(nodeIndex))) {
+						if (quaxUtil.equalMember(oExp, target.get(nodeIndex))) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
 							return TreeNodeCallback.CONTINUE_SIBLING;
@@ -1068,10 +1090,10 @@ public class Quax implements Bookmarkable {
 						// FunCall
 						if (quaxUtil.isFunCallTo(oExp, "Children")) {
 							Exp oMember = quaxUtil.funCallArg(oExp, 0);
-							if (quaxUtil.expForMember(memberPath.get(dimIndex))
+							if (quaxUtil.expForMember(target.get(dimIndex))
 									.equals(oMember)
 									|| quaxUtil.isDescendant(
-											memberPath.get(dimIndex), oMember)) {
+											target.get(dimIndex), oMember)) {
 								// add to delete list
 								removeList.add(node);
 							}
@@ -1086,8 +1108,8 @@ public class Quax implements Bookmarkable {
 							List<Exp> removeMembers = new ArrayList<Exp>();
 							for (int i = 0; i < argCount; i++) {
 								Exp oSetMember = quaxUtil.funCallArg(oExp, i);
-								if (quaxUtil.isDescendant(
-										memberPath.get(dimIndex), oSetMember)) {
+								if (quaxUtil.isDescendant(target.get(dimIndex),
+										oSetMember)) {
 									removeMembers.add(oSetMember);
 								}
 							}
@@ -1125,7 +1147,7 @@ public class Quax implements Bookmarkable {
 							// HHTASK Cleanup, always use
 							// removeDescendantsFromFunCall
 							Exp oRemain = removeDescendantsFromFunCall(oExp,
-									memberPath.get(dimIndex), dimIndex);
+									target.get(dimIndex), dimIndex);
 							if (oRemain == null) {
 								removeList.add(node);
 							} else {
@@ -1134,8 +1156,7 @@ public class Quax implements Bookmarkable {
 						}
 						return TreeNodeCallback.CONTINUE_SIBLING;
 					} else if (quaxUtil.isMember(oExp)
-							&& quaxUtil.isDescendant(memberPath.get(dimIndex),
-									oExp)) {
+							&& quaxUtil.isDescendant(target.get(dimIndex), oExp)) {
 						removeList.add(node);
 					}
 					return TreeNodeCallback.CONTINUE_SIBLING;
@@ -1143,8 +1164,7 @@ public class Quax implements Bookmarkable {
 				} else {
 					// should never get here
 					throw new PivotException("Unexpected tree node level "
-							+ nodeIndex + " "
-							+ quaxUtil.memberString(memberPath));
+							+ nodeIndex + " " + quaxUtil.memberString(target));
 				}
 			}
 		});
@@ -1176,23 +1196,26 @@ public class Quax implements Bookmarkable {
 	 *            position path to be collapsed
 	 */
 	public boolean canCollapse(Member member) {
+		final Member target = quaxUtil.getOlapUtils().wrapRaggedIfNecessary(
+				member);
+
 		// we only allow expand / collapse for a dimension
 		// left of a "sticky topcount"
-		if (!allowNavigate(member, false)) {
+		if (!allowNavigate(target, false)) {
 			return false;
 		}
 
 		// first check the cache
-		if (canCollapseMemberMap.containsKey(member)) {
-			return canCollapseMemberMap.get(member);
+		if (canCollapseMemberMap.containsKey(target)) {
+			return canCollapseMemberMap.get(target);
 		}
 
 		// loop over Position Tree
 		// can collapse, if we find a descendant of member
-		boolean found = findMemberChild(member);
+		boolean found = findMemberChild(target);
 
 		// cache the result
-		canCollapseMemberMap.put(member, found);
+		canCollapseMemberMap.put(target, found);
 
 		return found;
 	}
@@ -1204,6 +1227,9 @@ public class Quax implements Bookmarkable {
 	 *            member to be collapsed
 	 */
 	public void collapse(final Member member) {
+		final Member target = quaxUtil.getOlapUtils().wrapRaggedIfNecessary(
+				member);
+
 		if (qubonMode) {
 			resolveUnions();
 
@@ -1213,7 +1239,7 @@ public class Quax implements Bookmarkable {
 			}
 		}
 
-		final int dimIndex = this.dimIdx(member.getDimension());
+		final int dimIndex = this.dimIdx(target.getDimension());
 
 		final List<TreeNode<Exp>> nodesForMember = new ArrayList<TreeNode<Exp>>();
 
@@ -1236,12 +1262,12 @@ public class Quax implements Bookmarkable {
 				// node Exp must contain children of member[iDim]
 				Exp oExp = node.getReference();
 				if (quaxUtil.isMember(oExp)) {
-					if (quaxUtil.isDescendant(member, oExp)) {
+					if (quaxUtil.isDescendant(target, oExp)) {
 						nodesForMember.add(node);
 					}
 				} else {
 					// must be FunCall
-					if (isDescendantOfMemberInFunCall(oExp, member, nodeIndex)) {
+					if (isDescendantOfMemberInFunCall(oExp, target, nodeIndex)) {
 						nodesForMember.add(node);
 					}
 				}
@@ -1255,7 +1281,7 @@ public class Quax implements Bookmarkable {
 				removePathToNode(node);
 			} else {
 				// FunCall
-				Exp oComplement = removeDescendantsFromFunCall(oExp, member,
+				Exp oComplement = removeDescendantsFromFunCall(oExp, target,
 						dimIndex);
 				if (oComplement == null) {
 					removePathToNode(node);
@@ -1667,7 +1693,10 @@ public class Quax implements Bookmarkable {
 	/**
 	 * @return true if child position can be found
 	 */
-	private boolean checkChildPosition(final List<Member> memberPath) {
+	private boolean checkChildPosition(List<Member> path) {
+
+		final List<Member> memberPath = quaxUtil.getOlapUtils()
+				.wrapRaggedIfNecessary(path);
 
 		int result = posTreeRoot.walkChildren(new TreeNodeCallback<Exp>() {
 

@@ -101,7 +101,7 @@ public class PivotModelImpl implements PivotModel {
 
 	private ExpressionContext expressionContext;
 
-	private MemberHierarchyCache memberHierarchyCache = new MemberHierarchyCache();
+	private MemberHierarchyCache memberHierarchyCache;
 
 	private QueryChangeListener queryChangeListener = new QueryChangeListener() {
 
@@ -214,6 +214,8 @@ public class PivotModelImpl implements PivotModel {
 		queryAdapter.updateQuery();
 		queryAdapter.addChangeListener(queryChangeListener);
 
+		initializeCache();
+
 		fireModelInitialized();
 	}
 
@@ -228,6 +230,21 @@ public class PivotModelImpl implements PivotModel {
 		if (!isInitialized()) {
 			throw new NotInitializedException(
 					"Model has not been initialized yet.");
+		}
+	}
+
+	private void initializeCache() {
+		if (!isInitialized()) {
+			return;
+		}
+
+		Cube cube = getCube();
+
+		if (cube == null) {
+			this.memberHierarchyCache = null;
+		} else if (memberHierarchyCache == null
+				|| !OlapUtils.equals(memberHierarchyCache.getCube(), cube)) {
+			this.memberHierarchyCache = new MemberHierarchyCache(cube);
 		}
 	}
 
@@ -282,7 +299,7 @@ public class PivotModelImpl implements PivotModel {
 		this.cellSet = null;
 		this.initialized = false;
 
-		memberHierarchyCache.clear();
+		this.memberHierarchyCache = null;
 
 		fireModelDestroyed();
 	}
@@ -717,6 +734,8 @@ public class PivotModelImpl implements PivotModel {
 			queryAdapter.initialize();
 			queryAdapter.updateQuery();
 		}
+
+		initializeCache();
 
 		fireStructureChanged();
 	}

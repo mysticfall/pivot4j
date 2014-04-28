@@ -18,6 +18,7 @@ import org.olap4j.OlapException;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotException;
+import org.pivot4j.PivotModel;
 import org.pivot4j.impl.Quax;
 import org.pivot4j.impl.QuaxUtil;
 import org.pivot4j.impl.QueryAdapter;
@@ -246,8 +247,15 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 				}
 
 				if (allMember != null && OlapUtils.isVisible(allMember)) {
+					PivotModel model = getModel();
+
+					OlapUtils utils = new OlapUtils(model.getCube());
+					utils.setMemberHierarchyCache(getQueryAdapter().getModel()
+							.getMemberHierarchyCache());
+
 					if (!expandAllMember) {
-						return new MemberExp(allMember);
+						return new MemberExp(
+								utils.wrapRaggedIfNecessary(allMember));
 					}
 
 					// must expand

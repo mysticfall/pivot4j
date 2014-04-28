@@ -28,13 +28,14 @@ import org.pivot4j.mdx.metadata.LevelExp;
 import org.pivot4j.mdx.metadata.MemberExp;
 import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.OlapUtils;
-import org.pivot4j.util.RaggedMemberWrapper;
 
 public class QuaxUtil {
 
 	private Cube cube;
 
 	private MemberHierarchyCache cache;
+
+	private OlapUtils olapUtils;
 
 	/**
 	 * @param cube
@@ -55,10 +56,13 @@ public class QuaxUtil {
 		this.cube = cube;
 
 		if (cache == null) {
-			this.cache = new MemberHierarchyCache();
+			this.cache = new MemberHierarchyCache(cube);
 		} else {
 			this.cache = cache;
 		}
+
+		this.olapUtils = new OlapUtils(cube);
+		olapUtils.setMemberHierarchyCache(cache);
 	}
 
 	/**
@@ -66,6 +70,13 @@ public class QuaxUtil {
 	 */
 	protected Cube getCube() {
 		return cube;
+	}
+
+	/**
+	 * @return the olapUtils
+	 */
+	protected OlapUtils getOlapUtils() {
+		return olapUtils;
 	}
 
 	/**
@@ -191,17 +202,12 @@ public class QuaxUtil {
 			return false;
 		}
 
+		Member mem = olapUtils.wrapRaggedIfNecessary(member);
+
 		FunCall f = (FunCall) oExp;
 
 		if (f.isCallTo("Children")) {
-			if (member instanceof RaggedMemberWrapper) {
-				return OlapUtils.equals(
-						((RaggedMemberWrapper) member).getTopMember(),
-						memberForExp(f.getArgs().get(0)));
-			} else {
-				return OlapUtils.equals(member,
-						memberForExp(f.getArgs().get(0)));
-			}
+			return OlapUtils.equals(mem, memberForExp(f.getArgs().get(0)));
 		} else if (f.isCallTo("Descendants")) {
 			// true, if f = descendants(m2, level) contains any child of m
 			// so level must be parent-level of m
@@ -211,13 +217,13 @@ public class QuaxUtil {
 			Level parentLevel = getParentLevel(level);
 
 			if (parentLevel != null
-					&& OlapUtils.equals(member.getLevel(), parentLevel)) {
+					&& OlapUtils.equals(mem.getLevel(), parentLevel)) {
 				int ancestorLevelNumber = ancestor.getLevel().getDepth();
-				while (ancestorLevelNumber < member.getLevel().getDepth()) {
-					member = cache.getParentMember(member);
+				while (ancestorLevelNumber < mem.getLevel().getDepth()) {
+					mem = cache.getParentMember(mem);
 				}
 
-				return OlapUtils.equals(member, ancestor);
+				return OlapUtils.equals(mem, ancestor);
 			} else {
 				return false;
 			}
@@ -235,24 +241,19 @@ public class QuaxUtil {
 				}
 			}
 
-			return (parentLevel != null && OlapUtils.equals(member.getLevel(),
+			return (parentLevel != null && OlapUtils.equals(mem.getLevel(),
 					parentLevel));
 		} else if (f.isCallTo("Union")) {
-			return isChildOfMemberInFunCall(f.getArgs().get(0), member)
-					|| isChildOfMemberInFunCall(f.getArgs().get(1), member);
+			return isChildOfMemberInFunCall(f.getArgs().get(0), mem)
+					|| isChildOfMemberInFunCall(f.getArgs().get(1), mem);
 		} else if (f.isCallTo("{}")) {
 			for (Exp exp : f.getArgs()) {
 				Member mm = memberForExp(exp);
 
-				Member mmp;
-
-				if (mm instanceof RaggedMemberWrapper) {
-					mmp = ((RaggedMemberWrapper) mm).getTopMember();
-				} else {
-					mmp = cache.getParentMember(mm);
-				}
-
-				if (mmp != null && OlapUtils.equals(mmp, member)) {
+				Member mmp = olapUtils.getTopLevelRaggedMember(mm);
+				if (mmp != null
+						&& OlapUtils.equals(
+								olapUtils.wrapRaggedIfNecessary(mmp), mem)) {
 					return true;
 				}
 			}
@@ -580,10 +581,7 @@ public class QuaxUtil {
 	 * @return Expression Object
 	 */
 	public Exp expForMember(Member member) {
-		OlapUtils utils = new OlapUtils(cube);
-		utils.setMemberHierarchyCache(cache);
-
-		return new MemberExp(utils.wrapRaggedIfNecessary(member));
+		return new MemberExp(olapUtils.wrapRaggedIfNecessary(member));
 	}
 
 	/**
@@ -1047,7 +1045,8 @@ public class QuaxUtil {
 		}
 
 		Member parent = memberForExp(f.getArgs().get(0));
-		return OlapUtils.equals(parent, cache.getParentMember(member));
+		return OlapUtils.equals(parent,
+				olapUtils.getTopLevelRaggedMember(member));
 	}
 
 	/**
@@ -1080,7 +1079,7 @@ public class QuaxUtil {
 
 		Member mm = member;
 		while (ancestorLevelNumber < mm.getLevel().getDepth()) {
-			mm = cache.getParentMember(mm);
+			mm = olapUtils.getTopLevelRaggedMember(mm);
 		}
 
 		return OlapUtils.equals(mm, ancestor);
