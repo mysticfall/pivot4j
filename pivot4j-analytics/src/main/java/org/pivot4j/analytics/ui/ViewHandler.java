@@ -15,6 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
@@ -47,7 +48,6 @@ import org.pivot4j.ui.command.UICommand;
 import org.pivot4j.ui.command.UICommandParameters;
 import org.pivot4j.ui.table.TableRenderer;
 import org.pivot4j.util.OlapUtils;
-import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.context.RequestContext;
 import org.primefaces.extensions.event.CloseEvent;
 import org.primefaces.extensions.event.OpenEvent;
@@ -82,9 +82,9 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 	private Long duration;
 
-	private PanelGrid component;
+	private UIComponent component;
 
-	private PanelGrid filterComponent;
+	private UIComponent filterComponent;
 
 	private Exception lastError;
 
@@ -243,7 +243,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	/**
 	 * @return the component
 	 */
-	public PanelGrid getComponent() {
+	public UIComponent getComponent() {
 		return component;
 	}
 
@@ -251,14 +251,14 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	 * @param component
 	 *            the component to set
 	 */
-	public void setComponent(PanelGrid component) {
+	public void setComponent(UIComponent component) {
 		this.component = component;
 	}
 
 	/**
 	 * @return the filterComponent
 	 */
-	public PanelGrid getFilterComponent() {
+	public UIComponent getFilterComponent() {
 		return filterComponent;
 	}
 
@@ -266,7 +266,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	 * @param filterComponent
 	 *            the filterComponent to set
 	 */
-	public void setFilterComponent(PanelGrid filterComponent) {
+	public void setFilterComponent(UIComponent filterComponent) {
 		this.filterComponent = filterComponent;
 	}
 
@@ -545,8 +545,8 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			FacesContext context = FacesContext.getCurrentInstance();
 
 			PivotComponentBuilder callback = new PivotComponentBuilder(context);
-			callback.setComponent(component);
-			callback.setFilterComponent(filterComponent);
+			callback.setGridPanel(component);
+			callback.setFilterPanel(filterComponent);
 
 			renderer.render(model, callback);
 		}

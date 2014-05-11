@@ -59,13 +59,15 @@ public class PivotComponentBuilder extends
 
 	private Map<String, String> iconMap;
 
-	private PanelGrid component;
+	private UIComponent gridPanel;
 
-	private PanelGrid filterComponent;
+	private UIComponent filterPanel;
 
 	private FacesContext facesContext;
 
 	private ExpressionFactory expressionFactory;
+
+	private PanelGrid grid;
 
 	private HtmlPanelGroup header;
 
@@ -78,6 +80,21 @@ public class PivotComponentBuilder extends
 	private boolean scenarioEnabled = false;
 
 	private String updateTarget;
+
+	private static Map<String, StyleClassResolver> styleClassResolvers;
+
+	static {
+		styleClassResolvers = new HashMap<String, StyleClassResolver>();
+
+		styleClassResolvers.put(VALUE, new ValueStyleClassResolver());
+		styleClassResolvers.put(AGG_VALUE, new AggregationStyleClassResolver());
+
+		StyleClassResolver titleStlyeResolver = new TitleStyleClassResolver();
+
+		styleClassResolvers.put(LABEL, titleStlyeResolver);
+		styleClassResolvers.put(TITLE, titleStlyeResolver);
+		styleClassResolvers.put(FILL, titleStlyeResolver);
+	}
 
 	/**
 	 * @param facesContext
@@ -110,43 +127,31 @@ public class PivotComponentBuilder extends
 	}
 
 	/**
-	 * @return the parent JSF component
+	 * @return the parent JSF component for the data grid.
 	 */
-	public PanelGrid getComponent() {
-		return component;
+	public UIComponent getGridPanel() {
+		return gridPanel;
 	}
 
 	/**
-	 * @param component
+	 * @param gridPanel
 	 */
-	public void setComponent(PanelGrid component) {
-		this.component = component;
+	public void setGridPanel(UIComponent gridPanel) {
+		this.gridPanel = gridPanel;
 	}
 
 	/**
-	 * @return filterComponent
+	 * @return the parent JSF component for the filter grid.
 	 */
-	public PanelGrid getFilterComponent() {
-		return filterComponent;
+	public UIComponent getFilterPanel() {
+		return filterPanel;
 	}
 
 	/**
-	 * @param filterComponent
+	 * @param filterPanel
 	 */
-	public void setFilterComponent(PanelGrid filterComponent) {
-		this.filterComponent = filterComponent;
-	}
-
-	/**
-	 * @param context
-	 * @return
-	 */
-	protected UIComponent getTargetComponent(TableRenderContext context) {
-		if (context.getAxis() == Axis.FILTER) {
-			return filterComponent;
-		} else {
-			return component;
-		}
+	public void setFilterPanel(UIComponent filterPanel) {
+		this.filterPanel = filterPanel;
 	}
 
 	/**
@@ -188,11 +193,11 @@ public class PivotComponentBuilder extends
 		this.scenarioEnabled = context.getModel().isScenarioSupported()
 				&& context.getModel().getScenario() != null;
 
-		component.getFacets().clear();
-		component.getChildren().clear();
+		gridPanel.getFacets().clear();
+		gridPanel.getChildren().clear();
 
-		filterComponent.getFacets().clear();
-		filterComponent.getChildren().clear();
+		filterPanel.getFacets().clear();
+		filterPanel.getChildren().clear();
 
 		List<String> targets = new LinkedList<String>();
 
@@ -221,6 +226,13 @@ public class PivotComponentBuilder extends
 	 */
 	@Override
 	public void startTable(TableRenderContext context) {
+		this.grid = new PanelGrid();
+
+		if (context.getAxis() == Axis.FILTER) {
+			grid.setStyleClass("filter-grid");
+		} else {
+			grid.setStyleClass("pivot-grid");
+		}
 	}
 
 	/**
@@ -229,22 +241,6 @@ public class PivotComponentBuilder extends
 	@Override
 	public void startHeader(TableRenderContext context) {
 		this.header = new HtmlPanelGroup();
-
-		if (context.getAxis() == Axis.FILTER) {
-			ResourceBundle resources = context.getResourceBundle();
-
-			HtmlOutputText title = new HtmlOutputText();
-			title.setValue(resources.getString("label.filter"));
-
-			Column headerColumn = new Column();
-			headerColumn.setColspan(2);
-			headerColumn.getChildren().add(title);
-
-			Row headerRow = new Row();
-			headerRow.getChildren().add(headerColumn);
-
-			header.getChildren().add(headerRow);
-		}
 	}
 
 	/**
@@ -253,7 +249,7 @@ public class PivotComponentBuilder extends
 	@Override
 	public void endHeader(TableRenderContext context) {
 		if (header.getChildCount() > 0) {
-			getTargetComponent(context).getFacets().put("header", header);
+			grid.getFacets().put("header", header);
 		}
 
 		this.header = null;
@@ -297,7 +293,8 @@ public class PivotComponentBuilder extends
 		String type = context.getCellType();
 
 		if (type.equals(LABEL) && !context.getRenderer().getShowParentMembers()
-				&& context.getMember() != null) {
+				&& context.getMember() != null
+				&& context.getAxis() != Axis.FILTER) {
 			int padding = context.getMember().getDepth() * 10;
 			cssWriter.writeStyle("padding-left", padding + "px");
 		}
@@ -378,41 +375,16 @@ public class PivotComponentBuilder extends
 
 		String type = context.getCellType();
 
-		if (type.equals(LABEL) || type.equals(TITLE) || type.equals(FILL)) {
-			if (context.getAxis() == Axis.COLUMNS) {
-				styleClass = "col-hdr-cell";
-			} else {
-				if (type.equals(LABEL)) {
-					styleClass = "row-hdr-cell ui-widget-header";
-				} else {
-					styleClass = "ui-widget-header";
-				}
-			}
-		} else if (type.equals(AGG_VALUE)) {
-			if (context.getAxis() == Axis.ROWS) {
-				styleClass = "ui-widget-header ";
-			} else {
-				styleClass = "";
-			}
+		StyleClassResolver resolver;
 
-			styleClass += "agg-title";
-		} else if (type.equals(VALUE)) {
-			if (context.getAggregator() == null) {
-				// PrimeFaces' Row class doesn't have the styleClass property.
-				if (context.getRowIndex() % 2 == 0) {
-					styleClass = "value-cell cell-even";
-				} else {
-					styleClass = "value-cell cell-odd";
-				}
-			} else {
-				styleClass = "ui-widget-header agg-cell";
+		if (LABEL.equals(type) && context.getAxis() == Axis.FILTER) {
+			resolver = styleClassResolvers.get(VALUE);
+		} else {
+			resolver = styleClassResolvers.get(type);
+		}
 
-				if (context.getAxis() == Axis.COLUMNS) {
-					styleClass += " col-agg-cell";
-				} else if (context.getAxis() == Axis.ROWS) {
-					styleClass += " row-agg-cell";
-				}
-			}
+		if (resolver != null) {
+			styleClass = resolver.resolve(context);
 		}
 
 		return styleClass;
@@ -552,15 +524,6 @@ public class PivotComponentBuilder extends
 
 			column.getChildren().add(inplace);
 		} else {
-			if (context.getAxis() == Axis.FILTER
-					&& context.getColumnIndex() > 1) {
-				HtmlOutputText comma = new HtmlOutputText();
-				comma.setStyleClass("separator");
-				comma.setValue(",");
-
-				column.getChildren().add(comma);
-			}
-
 			HtmlOutputText text = new HtmlOutputText();
 			String id = "txt-" + text.hashCode();
 
@@ -601,9 +564,7 @@ public class PivotComponentBuilder extends
 	@Override
 	public void endRow(TableRenderContext context) {
 		if (header == null) {
-			UIComponent parent = context.getAxis() == Axis.FILTER ? filterComponent
-					: component;
-			parent.getChildren().add(row);
+			grid.getChildren().add(row);
 		} else {
 			header.getChildren().add(row);
 		}
@@ -623,6 +584,13 @@ public class PivotComponentBuilder extends
 	 */
 	@Override
 	public void endTable(TableRenderContext context) {
+		if (context.getAxis() == Axis.FILTER) {
+			filterPanel.getChildren().add(grid);
+		} else {
+			gridPanel.getChildren().add(grid);
+		}
+
+		this.grid = null;
 	}
 
 	/**
@@ -659,5 +627,76 @@ public class PivotComponentBuilder extends
 		this.scenarioEnabled = false;
 
 		super.endRender(context);
+	}
+
+	interface StyleClassResolver {
+
+		String resolve(TableRenderContext context);
+	}
+
+	static class TitleStyleClassResolver implements StyleClassResolver {
+
+		@Override
+		public String resolve(TableRenderContext context) {
+			String styleClass;
+
+			String type = context.getCellType();
+
+			if (context.getAxis() == Axis.COLUMNS) {
+				styleClass = "col-hdr-cell";
+			} else if (type.equals(LABEL)
+					|| (context.getAxis() == Axis.FILTER && context.getLevel() != null)) {
+				styleClass = "row-hdr-cell ui-widget-header";
+			} else {
+				styleClass = "ui-widget-header";
+			}
+
+			return styleClass;
+		}
+	}
+
+	static class ValueStyleClassResolver implements StyleClassResolver {
+
+		@Override
+		public String resolve(TableRenderContext context) {
+			String styleClass;
+
+			if (context.getAggregator() == null) {
+				// PrimeFaces' Row class doesn't have the styleClass property.
+				if (context.getRowIndex() % 2 == 0) {
+					styleClass = "value-cell cell-even";
+				} else {
+					styleClass = "value-cell cell-odd";
+				}
+			} else {
+				styleClass = "ui-widget-header agg-cell";
+
+				if (context.getAxis() == Axis.COLUMNS) {
+					styleClass += " col-agg-cell";
+				} else if (context.getAxis() == Axis.ROWS) {
+					styleClass += " row-agg-cell";
+				}
+			}
+
+			return styleClass;
+		}
+	}
+
+	static class AggregationStyleClassResolver implements StyleClassResolver {
+
+		@Override
+		public String resolve(TableRenderContext context) {
+			String styleClass;
+
+			if (context.getAxis() == Axis.ROWS) {
+				styleClass = "ui-widget-header ";
+			} else {
+				styleClass = "";
+			}
+
+			styleClass += "agg-title";
+
+			return styleClass;
+		}
 	}
 }

@@ -299,8 +299,10 @@ body.report .pe-layout-pane-header {
 	margin-bottom: 10px;
 }
 
-.filter-grid .separator {
-	margin-right: 0.3em;
+.filter-grid  {
+	margin-right: 0.5em;
+	margin-top: 0.5em;
+	float: left;
 }
 
 button.ui-button-icon-only {
@@ -316,8 +318,8 @@ span.ui-button-icon-only {
 	height: 16px;
 }
 
-.filter-info {
-	margin-top: 10px;
+.filter-info .title {
+	clear: both;
 }
 
 .filter-panel {

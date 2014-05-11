@@ -50,6 +50,7 @@ import org.pivot4j.ui.aggregator.Aggregator;
 import org.pivot4j.ui.aggregator.AggregatorFactory;
 import org.pivot4j.ui.aggregator.AggregatorPosition;
 import org.pivot4j.util.MemberHierarchyCache;
+import org.pivot4j.util.MemberSelection;
 import org.pivot4j.util.OlapUtils;
 import org.pivot4j.util.TreeNode;
 import org.pivot4j.util.TreeNodeCallback;
@@ -68,6 +69,16 @@ public class TableRenderer extends
 	private boolean showDimensionTitle = true;
 
 	private boolean showSlicerMembersInline = true;
+
+	private Comparator<Level> levelComparator = new Comparator<Level>() {
+
+		@Override
+		public int compare(Level l1, Level l2) {
+			Integer d1 = l1.getDepth();
+			Integer d2 = l2.getDepth();
+			return d1.compareTo(d2);
+		}
+	};
 
 	/**
 	 * @see org.pivot4j.ui.AbstractPivotRenderer#getRenderPropertyCategories()
@@ -250,9 +261,7 @@ public class TableRenderer extends
 	protected String getTitleLabel(TableRenderContext context) {
 		String label = null;
 
-		if (context.getAxis() == Axis.FILTER) {
-			label = context.getResourceBundle().getString("label.filter");
-		} else if (context.getProperty() != null) {
+		if (context.getProperty() != null) {
 			label = context.getProperty().getCaption();
 		} else if (context.getLevel() != null) {
 			label = context.getLevel().getCaption();
@@ -442,11 +451,27 @@ public class TableRenderer extends
 			return;
 		}
 
+		List<TableHeaderNode> filterRoots;
+
+		if (getRenderSlicer()) {
+			filterRoots = createFilterAxisTrees(model, cache);
+		} else {
+			filterRoots = Collections.emptyList();
+		}
+
 		configureAxisTree(model, Axis.COLUMNS, columnRoot);
 		configureAxisTree(model, Axis.ROWS, rowRoot);
 
+		for (TableHeaderNode node : filterRoots) {
+			configureAxisTree(model, Axis.FILTER, node);
+		}
+
 		invalidateAxisTree(model, Axis.COLUMNS, columnRoot);
 		invalidateAxisTree(model, Axis.ROWS, rowRoot);
+
+		for (TableHeaderNode node : filterRoots) {
+			invalidateAxisTree(model, Axis.FILTER, node);
+		}
 
 		TableRenderContext context = createRenderContext(model, columnRoot,
 				rowRoot);
@@ -459,8 +484,8 @@ public class TableRenderer extends
 
 		callback.endTable(context);
 
-		if (getRenderSlicer()) {
-			renderFilter(context, callback);
+		for (TableHeaderNode node : filterRoots) {
+			renderFilter(context, node, callback);
 		}
 
 		callback.endRender(context);
@@ -1025,16 +1050,6 @@ public class TableRenderer extends
 
 		Map<Hierarchy, List<Level>> levelsMap = new HashMap<Hierarchy, List<Level>>();
 
-		Comparator<Level> levelComparator = new Comparator<Level>() {
-
-			@Override
-			public int compare(Level l1, Level l2) {
-				Integer d1 = l1.getDepth();
-				Integer d2 = l2.getDepth();
-				return d1.compareTo(d2);
-			}
-		};
-
 		boolean containsMeasure = false;
 
 		List<Member> firstMembers = positions.get(0).getMembers();
@@ -1348,6 +1363,74 @@ public class TableRenderer extends
 	}
 
 	/**
+	 * @param model
+	 * @param cache
+	 * @return
+	 */
+	protected List<TableHeaderNode> createFilterAxisTrees(PivotModel model,
+			MemberHierarchyCache cache) {
+		ChangeSlicer transform = model.getTransform(ChangeSlicer.class);
+
+		List<Hierarchy> hierarchies = transform.getHierarchies();
+
+		List<TableHeaderNode> nodes = new ArrayList<TableHeaderNode>(
+				hierarchies.size());
+
+		for (Hierarchy hierarchy : hierarchies) {
+			nodes.add(createFilterAxisTree(model, hierarchy, cache));
+		}
+
+		return nodes;
+	}
+
+	/**
+	 * @param model
+	 * @param cache
+	 * @return
+	 */
+	protected TableHeaderNode createFilterAxisTree(PivotModel model,
+			Hierarchy hierarchy, MemberHierarchyCache cache) {
+		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(1);
+		hierarchies.add(hierarchy);
+
+		Map<Hierarchy, List<Level>> levelsMap = new HashMap<Hierarchy, List<Level>>(
+				1);
+
+		List<Level> levels = new ArrayList<Level>(hierarchy.getLevels().size());
+		levelsMap.put(hierarchy, levels);
+
+		TableAxisContext nodeContext = new TableAxisContext(model.getCube(),
+				Axis.FILTER, hierarchies, levelsMap, null, cache, this);
+
+		TableHeaderNode axisRoot = new TableHeaderNode(nodeContext);
+		axisRoot.setHierarchy(hierarchy);
+
+		ChangeSlicer transform = model.getTransform(ChangeSlicer.class);
+		List<Member> members = transform.getSlicer(hierarchy);
+
+		MemberSelection selection = new MemberSelection(model.getCube());
+		selection.setMemberHierarchyCache(cache);
+		selection.addMembers(members);
+
+		for (Member member : selection.getMembers()) {
+			TableHeaderNode childNode = new TableHeaderNode(nodeContext);
+
+			childNode.setMember(member);
+			childNode.setHierarchy(hierarchy);
+
+			axisRoot.addChild(childNode);
+
+			if (!levels.contains(member.getLevel())) {
+				levels.add(0, member.getLevel());
+			}
+		}
+
+		Collections.sort(levels, levelComparator);
+
+		return axisRoot;
+	}
+
+	/**
 	 * @param aggregatorName
 	 * @param context
 	 * @param aggregators
@@ -1483,15 +1566,15 @@ public class TableRenderer extends
 	 */
 	protected void configureAxisTree(PivotModel model, Axis axis,
 			TableHeaderNode node) {
-		if (getShowDimensionTitle() && axis.equals(Axis.COLUMNS)) {
+		if (getShowDimensionTitle() && axis == Axis.COLUMNS) {
 			node.addHierarhcyHeaders();
 		}
 
-		if (getShowParentMembers()) {
+		if (getShowParentMembers() || axis == Axis.FILTER) {
 			node.addParentMemberHeaders();
 		}
 
-		if (!getHideSpans()) {
+		if (!getHideSpans() || axis == Axis.FILTER) {
 			node.mergeChildren();
 		}
 
@@ -1621,118 +1704,108 @@ public class TableRenderer extends
 
 	/**
 	 * @param context
+	 * @param filterRoot
 	 * @param callback
 	 */
-	protected void renderFilter(TableRenderContext context,
-			TableRenderCallback callback) {
-		ChangeSlicer transform = context.getModel().getTransform(
-				ChangeSlicer.class);
-
-		List<Hierarchy> hierarchies = transform.getHierarchies();
-		if (hierarchies.isEmpty()) {
-			return;
-		}
+	protected void renderFilter(final TableRenderContext context,
+			TableHeaderNode filterRoot, final TableRenderCallback callback) {
+		Hierarchy hierarchy = filterRoot.getHierarchy();
 
 		context.setAxis(Axis.FILTER);
-		context.setHierarchy(null);
+		context.setHierarchy(hierarchy);
 		context.setLevel(null);
 		context.setMember(null);
 		context.setCell(null);
 		context.setAggregator(null);
 		context.setPosition(null);
+		context.setProperty(null);
 
 		callback.startTable(context);
 
-		callback.startHeader(context);
-		callback.endHeader(context);
+		final Map<Integer, Level> levels = new HashMap<Integer, Level>();
 
-		int rowIndex = 0;
+		filterRoot.walkChildren(new TreeNodeCallback<TableAxisContext>() {
+
+			@Override
+			public int handleTreeNode(TreeNode<TableAxisContext> node) {
+				TableHeaderNode headerNode = (TableHeaderNode) node;
+				levels.put(node.getLevel(), headerNode.getMember().getLevel());
+
+				return TreeNodeCallback.CONTINUE;
+			}
+		});
+
+		int rows = levels.size();
+		int columns = filterRoot.getWidth() + 1;
+
+		context.setColIndex(0);
+		context.setRowIndex(0);
+
+		context.setCellType(TITLE);
+		context.setRenderPropertyCategory(TITLE);
+
+		context.setColSpan(columns);
+		context.setRowSpan(1);
+
+		callback.startHeader(context);
+		callback.startRow(context);
+
+		callback.startCell(context);
+		callback.renderContent(context, getLabel(context), getValue(context));
+		callback.endCell(context);
+
+		callback.endRow(context);
+		callback.endHeader(context);
 
 		callback.startBody(context);
 
-		for (Hierarchy hierarchy : hierarchies) {
-			List<Member> members = transform.getSlicer(hierarchy);
-
-			context.setHierarchy(hierarchy);
-			context.setMember(null);
+		for (int rowIndex = 1; rowIndex <= rows; rowIndex++) {
+			context.setCellType(TITLE);
+			context.setRenderPropertyCategory(TITLE);
 
 			context.setRowIndex(rowIndex);
-			context.setColIndex(0);
+			context.setColIndex(1);
+
+			context.setColSpan(1);
+			context.setRowSpan(1);
 
 			callback.startRow(context);
 
-			context.setCellType(LABEL);
-
-			context.setColSpan(1);
-
-			if (showSlicerMembersInline) {
-				context.setRowSpan(1);
-			} else {
-				context.setRowSpan(Math.max(1, members.size()));
-			}
+			context.setLevel(levels.get(rowIndex));
 
 			callback.startCell(context);
-			callback.renderCommands(context, getCommands(context));
 			callback.renderContent(context, getLabel(context),
 					getValue(context));
 			callback.endCell(context);
 
-			if (showSlicerMembersInline) {
-				context.setColIndex(1);
+			context.setCellType(LABEL);
+			context.setRenderPropertyCategory(LABEL);
 
-				context.setMember(null);
-				context.setLevel(null);
+			filterRoot.walkChildrenAtRowIndex(
+					new TreeNodeCallback<TableAxisContext>() {
 
-				context.setCellType(VALUE);
+						@Override
+						public int handleTreeNode(
+								TreeNode<TableAxisContext> node) {
+							TableHeaderNode headerNode = (TableHeaderNode) node;
 
-				callback.startCell(context);
-			}
+							context.setColIndex(headerNode.getColIndex() + 1);
+							context.setColSpan(headerNode.getColSpan());
+							context.setRowSpan(headerNode.getRowSpan());
 
-			boolean first = true;
+							context.setLevel(headerNode.getMember().getLevel());
+							context.setMember(headerNode.getMember());
 
-			int colIndex = 0;
+							callback.startCell(context);
+							callback.renderContent(context, getLabel(context),
+									getValue(context));
+							callback.endCell(context);
 
-			for (Member member : members) {
-				if (first) {
-					first = false;
-				} else if (!showSlicerMembersInline) {
-					callback.endRow(context);
-
-					context.setRowIndex(++rowIndex);
-
-					callback.startRow(context);
-				}
-
-				context.setMember(member);
-				context.setLevel(member.getLevel());
-
-				if (showSlicerMembersInline) {
-					context.setColIndex(++colIndex);
-				} else {
-					context.setColIndex(1);
-					context.setRowSpan(1);
-
-					context.setCellType(VALUE);
-
-					callback.startCell(context);
-				}
-
-				callback.renderCommands(context, getCommands(context));
-				callback.renderContent(context, getLabel(context),
-						getValue(context));
-
-				if (!showSlicerMembersInline) {
-					callback.endCell(context);
-				}
-			}
-
-			if (showSlicerMembersInline) {
-				callback.endCell(context);
-			}
+							return TreeNodeCallback.CONTINUE;
+						}
+					}, rowIndex);
 
 			callback.endRow(context);
-
-			rowIndex++;
 		}
 
 		callback.endBody(context);

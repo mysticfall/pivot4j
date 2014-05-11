@@ -468,19 +468,20 @@
 
 			<pe:layoutPane id="grid-content-pane" position="center">
 				<h:form id="grid-form" onkeypress="return event.keyCode != 13;">
-					<p:panelGrid id="pivot-grid" styleClass="pivot-grid"
-						binding="#{viewHandler.component}"
+					<h:panelGroup id="pivot-grid" binding="#{viewHandler.component}"
+						layout="block"
 						rendered="#{viewHandler.valid and viewHandler.visible}" />
 
 					<h:panelGroup id="chart-panel" styleClass="chart-panel"
 						binding="#{chartHandler.component}" layout="block"
 						rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
 
-					<h:panelGroup styleClass="filter-info"
-						legend="#{msg['label.filter']}"
+					<h:panelGroup styleClass="filter-info" layout="block"
 						rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
 
-						<p:panelGrid id="filter-grid" styleClass="filter-grid"
+						<h:outputText class="title" value="#{msg['label.filter']}" />
+
+						<h:panelGroup id="filter-grid" layout="block"
 							binding="#{viewHandler.filterComponent}" />
 					</h:panelGroup>
 
