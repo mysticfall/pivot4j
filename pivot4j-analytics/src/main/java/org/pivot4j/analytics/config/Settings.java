@@ -52,6 +52,8 @@ public class Settings {
 	private String theme;
 
 	private String editorTheme;
+	
+	private String nonEmptyDefault;
 
 	private String resourcePrefix;
 
@@ -261,6 +263,15 @@ public class Settings {
 		}
 
 		return editorTheme;
+	}
+	/**
+	 * @return the config do toolbar
+	 */
+	public String getNonEmptyDefault() {
+		if (nonEmptyDefault == null) {
+			this.nonEmptyDefault = configuration.getString("toolbar.NonEmpty", "false");
+		}
+		return nonEmptyDefault;
 	}
 
 	/**

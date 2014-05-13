@@ -36,6 +36,7 @@ import org.pivot4j.ModelChangeListener;
 import org.pivot4j.PivotModel;
 import org.pivot4j.QueryEvent;
 import org.pivot4j.QueryListener;
+import org.pivot4j.analytics.config.Settings;
 import org.pivot4j.analytics.datasource.ConnectionInfo;
 import org.pivot4j.analytics.state.ViewState;
 import org.pivot4j.impl.PivotModelImpl;
@@ -67,6 +68,9 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 	@ManagedProperty(value = "#{drillThroughHandler}")
 	private DrillThroughHandler drillThroughHandler;
+
+	@ManagedProperty(value = "#{settings}")
+	private Settings settings;
 
 	private LayoutOptions layoutOptions;
 
@@ -111,11 +115,13 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 				}
 			}
 		}
-
+		
+		this.setNonEmpty(settings.getNonEmptyDefault().equalsIgnoreCase("true"));
+		
 		this.renderer = new DefaultTableRenderer();
 
 		Serializable state = stateManager.getRendererState();
-
+		
 		if (state == null) {
 			renderer.setVisible(true);
 			renderer.setShowDimensionTitle(true);
@@ -173,6 +179,19 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 		}
 	}
 
+	/**
+	 * @return the settings
+	 */
+	public Settings getSettings() {
+		return settings;
+	}
+	/**
+	 * @param settings
+	 */
+	public void setSettings(Settings settings) {
+		this.settings = settings;
+	}
+	
 	/**
 	 * @return the renderer
 	 */

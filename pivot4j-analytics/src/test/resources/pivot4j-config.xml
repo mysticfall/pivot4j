@@ -51,7 +51,9 @@
 
 		<editor-theme>eclipse</editor-theme>
 	</appearances>
-
+	<toolbar>
+		<NonEmpty>false</NonEmpty>
+	</toolbar>
 	<web>
 		<resource-prefix />
 		<locale-attribute>locale</locale-attribute>
