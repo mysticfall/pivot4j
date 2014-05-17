@@ -52,8 +52,8 @@ public class Settings {
 	private String theme;
 
 	private String editorTheme;
-	
-	private String nonEmptyDefault;
+
+	private Boolean defaultNonEmpty;
 
 	private String resourcePrefix;
 
@@ -264,14 +264,19 @@ public class Settings {
 
 		return editorTheme;
 	}
+
 	/**
-	 * @return the config do toolbar
+	 * TODO Need a generic way to handle default values for toolbar buttons.
+	 * 
+	 * @return
 	 */
-	public String getNonEmptyDefault() {
-		if (nonEmptyDefault == null) {
-			this.nonEmptyDefault = configuration.getString("toolbar.NonEmpty", "false");
+	public Boolean getDefaultNonEmpty() {
+		if (defaultNonEmpty == null) {
+			this.defaultNonEmpty = configuration.getBoolean(
+					"toolbar.non-empty[@default]", false);
 		}
-		return nonEmptyDefault;
+
+		return defaultNonEmpty;
 	}
 
 	/**

@@ -8,7 +8,6 @@
  */
 package org.pivot4j.transform;
 
-
 /**
  * Suppresses the display of empty rows/columns on an axis.
  */
@@ -23,4 +22,14 @@ public interface NonEmpty extends Transform {
 	 * Change the visability of non-empty rows
 	 */
 	void setNonEmpty(boolean nonEmpty);
+
+	/**
+	 * @return true if non-empty flag should be set on newly created axis 
+	 */
+	boolean getDefaultNonEmpty();
+
+	/**
+	 * Change the default state of non-empty flag.
+	 */
+	void setDefaultNonEmpty(boolean nonEmpty);
 }

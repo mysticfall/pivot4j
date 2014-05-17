@@ -115,13 +115,11 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 				}
 			}
 		}
-		
-		this.setNonEmpty(settings.getNonEmptyDefault().equalsIgnoreCase("true"));
-		
+
 		this.renderer = new DefaultTableRenderer();
 
 		Serializable state = stateManager.getRendererState();
-		
+
 		if (state == null) {
 			renderer.setVisible(true);
 			renderer.setShowDimensionTitle(true);
@@ -185,13 +183,14 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	public Settings getSettings() {
 		return settings;
 	}
+
 	/**
 	 * @param settings
 	 */
 	public void setSettings(Settings settings) {
 		this.settings = settings;
 	}
-	
+
 	/**
 	 * @return the renderer
 	 */
@@ -342,20 +341,13 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 				model.destroy();
 			}
 		} else {
-			String mdx;
-
-			if (OlapUtils.isEmptySetSupported(model.getMetadata())) {
-				mdx = String.format(
-						"select {} on columns, {} on rows from [%s]", cubeName);
-			} else {
-				mdx = String.format("select from [%s]", cubeName);
-			}
-
-			model.setMdx(mdx);
+			model.setMdx(getDefaultMdx());
 
 			if (!model.isInitialized()) {
 				try {
 					model.initialize();
+
+					applyDefaultModelState();
 				} catch (Exception e) {
 					FacesContext context = FacesContext.getCurrentInstance();
 					ResourceBundle bundle = context.getApplication()
@@ -372,10 +364,37 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 					context.addMessage(null, new FacesMessage(
 							FacesMessage.SEVERITY_ERROR, title, message));
-
 				}
 			}
 		}
+	}
+
+	private String getDefaultMdx() {
+		String mdx;
+
+		if (OlapUtils.isEmptySetSupported(model.getMetadata())) {
+			if (settings.getDefaultNonEmpty()) {
+				mdx = String
+						.format("select non empty {} on columns, non empty {} on rows from [%s]",
+								cubeName);
+			} else {
+				mdx = String.format(
+						"select {} on columns, {} on rows from [%s]", cubeName);
+			}
+		} else {
+			mdx = String.format("select from [%s]", cubeName);
+		}
+
+		return mdx;
+	}
+
+	private void applyDefaultModelState() {
+		NonEmpty transform = model.getTransform(NonEmpty.class);
+
+		boolean defaultValue = settings.getDefaultNonEmpty();
+		boolean currentValue = transform.isNonEmpty();
+
+		transform.setDefaultNonEmpty(defaultValue || currentValue);
 	}
 
 	/**
@@ -810,6 +829,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	public void setNonEmpty(boolean nonEmpty) {
 		NonEmpty transform = model.getTransform(NonEmpty.class);
 		transform.setNonEmpty(nonEmpty);
+		transform.setDefaultNonEmpty(settings.getDefaultNonEmpty() || nonEmpty);
 	}
 
 	/**

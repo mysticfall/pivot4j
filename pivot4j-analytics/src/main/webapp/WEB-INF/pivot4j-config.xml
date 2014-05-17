@@ -91,9 +91,11 @@
 		-->
 		<editor-theme>eclipse</editor-theme>
 	</appearances>
+
 	<toolbar>
-		<NonEmpty>false</NonEmpty>
+		<non-empty default="false"/>
 	</toolbar>
+
 	<!-- Miscellaneous settings used for integration with other systems. -->
 	<web>
 		<!-- URI prefix for web resources like images or stylesheets. -->
