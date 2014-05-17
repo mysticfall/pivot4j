@@ -39,4 +39,20 @@ public class NonEmptyImpl extends AbstractTransform implements NonEmpty {
 	public void setNonEmpty(boolean nonEmpty) {
 		getQueryAdapter().setNonEmpty(nonEmpty);
 	}
+
+	/**
+	 * @see org.pivot4j.transform.NonEmpty#getDefaultNonEmpty()
+	 */
+	@Override
+	public boolean getDefaultNonEmpty() {
+		return getQueryAdapter().getDefaultNonEmpty();
+	}
+
+	/**
+	 * @see org.pivot4j.transform.NonEmpty#setDefaultNonEmpty(boolean)
+	 */
+	@Override
+	public void setDefaultNonEmpty(boolean nonEmpty) {
+		getQueryAdapter().setDefaultNonEmpty(nonEmpty);
+	}
 }

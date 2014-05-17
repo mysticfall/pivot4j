@@ -53,6 +53,8 @@ public class Settings {
 
 	private String editorTheme;
 
+	private Boolean defaultNonEmpty;
+
 	private String resourcePrefix;
 
 	private String viewParameterName;
@@ -261,6 +263,20 @@ public class Settings {
 		}
 
 		return editorTheme;
+	}
+
+	/**
+	 * TODO Need a generic way to handle default values for toolbar buttons.
+	 * 
+	 * @return
+	 */
+	public Boolean getDefaultNonEmpty() {
+		if (defaultNonEmpty == null) {
+			this.defaultNonEmpty = configuration.getBoolean(
+					"toolbar.non-empty[@default]", false);
+		}
+
+		return defaultNonEmpty;
 	}
 
 	/**

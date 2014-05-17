@@ -36,6 +36,7 @@ import org.pivot4j.ModelChangeListener;
 import org.pivot4j.PivotModel;
 import org.pivot4j.QueryEvent;
 import org.pivot4j.QueryListener;
+import org.pivot4j.analytics.config.Settings;
 import org.pivot4j.analytics.datasource.ConnectionInfo;
 import org.pivot4j.analytics.state.ViewState;
 import org.pivot4j.impl.PivotModelImpl;
@@ -67,6 +68,9 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 	@ManagedProperty(value = "#{drillThroughHandler}")
 	private DrillThroughHandler drillThroughHandler;
+
+	@ManagedProperty(value = "#{settings}")
+	private Settings settings;
 
 	private LayoutOptions layoutOptions;
 
@@ -171,6 +175,20 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			model.removeQueryListener(this);
 			model.removeModelChangeListener(this);
 		}
+	}
+
+	/**
+	 * @return the settings
+	 */
+	public Settings getSettings() {
+		return settings;
+	}
+
+	/**
+	 * @param settings
+	 */
+	public void setSettings(Settings settings) {
+		this.settings = settings;
 	}
 
 	/**
@@ -323,20 +341,13 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 				model.destroy();
 			}
 		} else {
-			String mdx;
-
-			if (OlapUtils.isEmptySetSupported(model.getMetadata())) {
-				mdx = String.format(
-						"select {} on columns, {} on rows from [%s]", cubeName);
-			} else {
-				mdx = String.format("select from [%s]", cubeName);
-			}
-
-			model.setMdx(mdx);
+			model.setMdx(getDefaultMdx());
 
 			if (!model.isInitialized()) {
 				try {
 					model.initialize();
+
+					applyDefaultModelState();
 				} catch (Exception e) {
 					FacesContext context = FacesContext.getCurrentInstance();
 					ResourceBundle bundle = context.getApplication()
@@ -353,10 +364,37 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 					context.addMessage(null, new FacesMessage(
 							FacesMessage.SEVERITY_ERROR, title, message));
-
 				}
 			}
 		}
+	}
+
+	private String getDefaultMdx() {
+		String mdx;
+
+		if (OlapUtils.isEmptySetSupported(model.getMetadata())) {
+			if (settings.getDefaultNonEmpty()) {
+				mdx = String
+						.format("select non empty {} on columns, non empty {} on rows from [%s]",
+								cubeName);
+			} else {
+				mdx = String.format(
+						"select {} on columns, {} on rows from [%s]", cubeName);
+			}
+		} else {
+			mdx = String.format("select from [%s]", cubeName);
+		}
+
+		return mdx;
+	}
+
+	private void applyDefaultModelState() {
+		NonEmpty transform = model.getTransform(NonEmpty.class);
+
+		boolean defaultValue = settings.getDefaultNonEmpty();
+		boolean currentValue = transform.isNonEmpty();
+
+		transform.setDefaultNonEmpty(defaultValue || currentValue);
 	}
 
 	/**
@@ -791,6 +829,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	public void setNonEmpty(boolean nonEmpty) {
 		NonEmpty transform = model.getTransform(NonEmpty.class);
 		transform.setNonEmpty(nonEmpty);
+		transform.setDefaultNonEmpty(settings.getDefaultNonEmpty() || nonEmpty);
 	}
 
 	/**

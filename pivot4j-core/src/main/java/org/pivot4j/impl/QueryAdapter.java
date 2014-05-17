@@ -65,6 +65,8 @@ public class QueryAdapter implements Bookmarkable {
 
 	private boolean axesSwapped = false;
 
+	private boolean defaultNonEmpty = false;
+
 	private Quax quaxToSort;
 
 	private MdxStatement parsedQuery;
@@ -366,6 +368,21 @@ public class QueryAdapter implements Bookmarkable {
 	}
 
 	/**
+	 * @return the defaultNonEmpty
+	 */
+	public boolean getDefaultNonEmpty() {
+		return defaultNonEmpty;
+	}
+
+	/**
+	 * @param defaultNonEmpty
+	 *            the defaultNonEmpty to set
+	 */
+	public void setDefaultNonEmpty(boolean defaultNonEmpty) {
+		this.defaultNonEmpty = defaultNonEmpty;
+	}
+
+	/**
 	 * @return the quaxToSort
 	 */
 	public Quax getQuaxToSort() {
@@ -456,7 +473,8 @@ public class QueryAdapter implements Bookmarkable {
 
 				QueryAxis queryAxis = parsedQuery.getAxis(axis);
 				if (queryAxis == null) {
-					parsedQuery.setAxis(new QueryAxis(axis, eSet));
+					parsedQuery.setAxis(new QueryAxis(axis, eSet,
+							defaultNonEmpty));
 				} else {
 					queryAxis.setExp(eSet);
 				}
