@@ -25,6 +25,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.pivot4j.analytics.component.tree.DefaultTreeNode;
+import org.pivot4j.analytics.config.Settings;
 import org.pivot4j.analytics.datasource.DataSourceManager;
 import org.pivot4j.analytics.repository.DataSourceNotFoundException;
 import org.pivot4j.analytics.repository.ReportContent;
@@ -48,6 +49,9 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 	private static final long serialVersionUID = -860723075484210684L;
 
 	private Logger log = LoggerFactory.getLogger(getClass());
+
+	@ManagedProperty(value = "#{settings}")
+	private Settings settings;
 
 	@ManagedProperty(value = "#{dataSourceManager}")
 	private DataSourceManager dataSourceManager;
@@ -412,7 +416,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
 		try {
 			ReportContent content = repository.getReportContent(file);
-			content.read(state, dataSourceManager);
+			content.read(state, dataSourceManager, settings.getConfiguration());
 		} catch (ConfigurationException e) {
 			exception = e;
 			errorMessage = bundle.getString("error.open.report.format") + e;
@@ -923,6 +927,21 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 	 */
 	public void setFolderName(String folderName) {
 		this.folderName = folderName;
+	}
+
+	/**
+	 * @return the settings
+	 */
+	public Settings getSettings() {
+		return settings;
+	}
+
+	/**
+	 * @param settings
+	 *            the settings to set
+	 */
+	public void setSettings(Settings settings) {
+		this.settings = settings;
 	}
 
 	/**

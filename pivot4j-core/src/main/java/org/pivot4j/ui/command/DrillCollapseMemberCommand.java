@@ -61,7 +61,8 @@ public class DrillCollapseMemberCommand extends AbstractDrillDownCommand {
 
 		Member member = context.getMember();
 		if (member == null
-				|| context.getPosition().getMembers().indexOf(member) == -1) {
+				|| context.getPosition().getMembers().indexOf(member) == -1
+				|| context.getProperty() != null) {
 			return false;
 		}
 
@@ -83,8 +84,8 @@ public class DrillCollapseMemberCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel
-	 *      , org.pivot4j.ui.command.UICommandParameters)
+	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+	 *      org.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
 	public Void execute(PivotModel model, UICommandParameters parameters) {

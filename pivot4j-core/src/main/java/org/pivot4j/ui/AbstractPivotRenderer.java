@@ -25,6 +25,7 @@ import org.pivot4j.sort.SortMode;
 import org.pivot4j.ui.aggregator.AggregatorFactory;
 import org.pivot4j.ui.aggregator.AggregatorPosition;
 import org.pivot4j.ui.aggregator.DefaultAggregatorFactory;
+import org.pivot4j.ui.collector.NonInternalPropertyCollector;
 import org.pivot4j.ui.collector.PropertyCollector;
 import org.pivot4j.ui.command.BasicDrillThroughCommand;
 import org.pivot4j.ui.command.DrillCollapseMemberCommand;
@@ -439,7 +440,7 @@ public abstract class AbstractPivotRenderer<T1 extends RenderContext, T2 extends
 	 */
 	@Override
 	public Serializable saveState() {
-		Serializable[] states = new Serializable[8];
+		Serializable[] states = new Serializable[9];
 
 		int index = 0;
 
@@ -463,6 +464,12 @@ public abstract class AbstractPivotRenderer<T1 extends RenderContext, T2 extends
 		}
 
 		states[index++] = propertyState;
+
+		if (propertyCollector instanceof Serializable) {
+			states[index++] = (Serializable) propertyCollector;
+		} else {
+			states[index++] = null;
+		}
 
 		return states;
 	}
@@ -500,6 +507,14 @@ public abstract class AbstractPivotRenderer<T1 extends RenderContext, T2 extends
 			if (properties != null && propertyState != null) {
 				properties.restoreState(propertyState);
 			}
+		}
+
+		Serializable collectorState = states[index++];
+
+		if (collectorState instanceof PropertyCollector) {
+			this.propertyCollector = (PropertyCollector) collectorState;
+		} else {
+			this.propertyCollector = null;
 		}
 	}
 
@@ -650,6 +665,17 @@ public abstract class AbstractPivotRenderer<T1 extends RenderContext, T2 extends
 		}
 
 		this.renderSlicer = configuration.getBoolean("filter[@visible]", false);
+
+		String collectorType = configuration
+				.getString("propertyCollector[@type]");
+
+		// TODO At this time, we're not sure how to make property collector
+		// configurable. So, let's just treat it as a read-only property.
+		if ("non-internal".equalsIgnoreCase(collectorType)) {
+			this.propertyCollector = new NonInternalPropertyCollector();
+		} else {
+			this.propertyCollector = null;
+		}
 	}
 
 	static class AggregatorKey implements Serializable {

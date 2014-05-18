@@ -199,4 +199,12 @@ public interface PivotModel extends Configurable, Bookmarkable {
 	int getTopBottomCount();
 
 	void setTopBottomCount(int topBottomCount);
+
+	/**
+	 * Determines if the generated query (i.e. using a transform) should include
+	 * 'NON EMPTY' clause by default.
+	 */
+	boolean getDefaultNonEmpty();
+
+	void setDefaultNonEmpty(boolean defaultNonEmpty);
 }

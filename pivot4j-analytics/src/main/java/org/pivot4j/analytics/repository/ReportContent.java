@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.CombinedConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration.HierarchicalConfiguration;
@@ -128,6 +129,10 @@ public class ReportContent implements Serializable {
 	 * @throws ConfigurationException
 	 */
 	public void write(OutputStream out) throws ConfigurationException {
+		if (out == null) {
+			throw new NullArgumentException("out");
+		}
+
 		FileConfiguration config = (FileConfiguration) this.configuration;
 		config.save(out);
 	}
@@ -147,10 +152,22 @@ public class ReportContent implements Serializable {
 	/**
 	 * @param state
 	 * @param manager
+	 * @param defaultSettings
 	 * @return
+	 * @throws ConfigurationException
+	 * @throws DataSourceNotFoundException
 	 */
-	public ViewState read(ViewState state, DataSourceManager manager)
+	public ViewState read(ViewState state, DataSourceManager manager,
+			HierarchicalConfiguration defaultSettings)
 			throws ConfigurationException, DataSourceNotFoundException {
+		if (state == null) {
+			throw new NullArgumentException("state");
+		}
+
+		if (manager == null) {
+			throw new NullArgumentException("manager");
+		}
+
 		ConnectionInfo connectionInfo = new ConnectionInfo();
 
 		try {
@@ -167,10 +184,18 @@ public class ReportContent implements Serializable {
 			throw new DataSourceNotFoundException(connectionInfo);
 		}
 
+		CombinedConfiguration mergedSettings = new CombinedConfiguration();
+
+		if (defaultSettings != null) {
+			mergedSettings.addConfiguration(defaultSettings);
+		}
+
+		mergedSettings.addConfiguration(configuration);
+
 		PivotModel model = new PivotModelImpl(dataSource);
 
 		try {
-			model.restoreSettings(configuration.configurationAt("model"));
+			model.restoreSettings(mergedSettings.configurationAt("model"));
 		} catch (IllegalArgumentException e) {
 		}
 
@@ -186,7 +211,8 @@ public class ReportContent implements Serializable {
 
 		try {
 			DefaultTableRenderer renderer = new DefaultTableRenderer();
-			renderer.restoreSettings(configuration.configurationAt("render"));
+
+			renderer.restoreSettings(mergedSettings.configurationAt("render"));
 
 			state.setRendererState(renderer.saveState());
 		} catch (IllegalArgumentException e) {

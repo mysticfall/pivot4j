@@ -61,7 +61,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 		DrillReplace transform = model.getTransform(DrillReplace.class);
 
 		Hierarchy hierarchy = context.getHierarchy();
-		if (hierarchy == null) {
+		if (hierarchy == null || context.getProperty() != null) {
 			return false;
 		}
 
@@ -88,8 +88,8 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel
-	 *      , org.pivot4j.ui.command.UICommandParameters)
+	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+	 *      org.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
 	public Void execute(PivotModel model, UICommandParameters parameters) {

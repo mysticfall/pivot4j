@@ -8,6 +8,7 @@
  */
 package org.pivot4j.ui.collector;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,10 @@ import java.util.Set;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Property;
 
+public class NonInternalPropertyCollector implements PropertyCollector,
+		Serializable {
 
-public class NonInternalPropertyCollector implements PropertyCollector {
+	private static final long serialVersionUID = -4211909040876132617L;
 
 	private static Set<String> internalProperties;
 

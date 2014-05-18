@@ -24,9 +24,16 @@
 		<editor-theme>eclipse</editor-theme>
 	</appearances>
 
-	<toolbar>
-		<non-empty default="false"/>
-	</toolbar>
+	<model>
+		<nonEmpty default="false" />
+	</model>
+
+	<render>
+		<!-- Show all non-internal member properties -->
+		<!-- 
+		<propertyCollector type="non-internal" />
+		-->
+	</render>
 
 	<!-- Miscellaneous settings used for integration with other systems. -->
 	<web>

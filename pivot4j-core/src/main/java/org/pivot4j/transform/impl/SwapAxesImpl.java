@@ -44,6 +44,8 @@ public class SwapAxesImpl extends AbstractTransform implements SwapAxes {
 	 * @see org.pivot4j.transform.SwapAxes#setSwapAxes(boolean)
 	 */
 	public void setSwapAxes(boolean swap) {
-		getQueryAdapter().setAxesSwapped(swap);
+		if (getQueryAdapter().isAxesSwapped() != swap) {
+			getQueryAdapter().swapAxes();
+		}
 	}
 }

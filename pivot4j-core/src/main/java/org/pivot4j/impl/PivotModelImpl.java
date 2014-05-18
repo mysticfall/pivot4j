@@ -93,6 +93,8 @@ public class PivotModelImpl implements PivotModel {
 
 	private boolean sorting = false;
 
+	private boolean defaultNonEmpty = false;
+
 	private List<Member> sortPosMembers;
 
 	private String mdxQuery;
@@ -1089,11 +1091,27 @@ public class PivotModelImpl implements PivotModel {
 	}
 
 	/**
+	 * @see org.pivot4j.PivotModel#getDefaultNonEmpty()
+	 */
+	@Override
+	public boolean getDefaultNonEmpty() {
+		return defaultNonEmpty;
+	}
+
+	/**
+	 * @see org.pivot4j.PivotModel#setDefaultNonEmpty(boolean)
+	 */
+	@Override
+	public void setDefaultNonEmpty(boolean defaultNonEmpty) {
+		this.defaultNonEmpty = defaultNonEmpty;
+	}
+
+	/**
 	 * @see org.pivot4j.state.Bookmarkable#saveState()
 	 */
 	@Override
 	public synchronized Serializable saveState() {
-		Serializable[] state = new Serializable[3];
+		Serializable[] state = new Serializable[4];
 
 		if (isInitialized()) {
 			state[0] = getCurrentMdx(false);
@@ -1120,6 +1138,7 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		state[2] = getQueryAdapter().saveState();
+		state[3] = defaultNonEmpty;
 
 		return state;
 	}
@@ -1185,6 +1204,8 @@ public class PivotModelImpl implements PivotModel {
 		this.cellSet = null;
 
 		queryAdapter.restoreState(states[2]);
+
+		this.defaultNonEmpty = (Boolean) states[3];
 	}
 
 	/**
@@ -1230,6 +1251,20 @@ public class PivotModelImpl implements PivotModel {
 				}
 			}
 		}
+
+		if (queryAdapter.isAxesSwapped()) {
+			configuration.addProperty("axesSwapped", true);
+		}
+
+		// TODO This setting can potentially be present in the
+		// pivot4j-config.xml, in which case, it would be saved with the report
+		// thus making subsequent changing of the default value ineffective.
+		// We should wait till we find a way to handle such a scenario better
+		// later.
+		//
+		// if (defaultNonEmpty) {
+		// configuration.addProperty("nonEmpty[@default]", true);
+		// }
 	}
 
 	/**
@@ -1242,15 +1277,14 @@ public class PivotModelImpl implements PivotModel {
 			throw new NullArgumentException("configuration");
 		}
 
+		this.defaultNonEmpty = configuration.getBoolean("nonEmpty[@default]",
+				false);
+
 		String mdx = configuration.getString("mdx");
 
 		setMdx(mdx);
 
 		if (mdx == null) {
-			if (logger.isWarnEnabled()) {
-				logger.warn("The configuration does not contain valid MDX query.");
-			}
-
 			return;
 		}
 
@@ -1318,6 +1352,10 @@ public class PivotModelImpl implements PivotModel {
 		}
 
 		queryAdapter.setQuaxToSort(quaxToSort);
+
+		boolean axesSwapped = configuration.getBoolean("axesSwapped", false);
+
+		queryAdapter.setAxesSwapped(axesSwapped);
 
 		this.cellSet = null;
 	}

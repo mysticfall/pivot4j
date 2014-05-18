@@ -23,6 +23,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapDataSource;
 import org.pivot4j.PivotModel;
@@ -302,6 +303,14 @@ public class ViewStateHolder implements Serializable {
 					.getDataSource(connectionInfo);
 
 			model = new PivotModelImpl(dataSource);
+
+			HierarchicalConfiguration configuration = settings
+					.getConfiguration();
+
+			try {
+				model.restoreSettings(configuration.configurationAt("model"));
+			} catch (IllegalArgumentException e) {
+			}
 		}
 
 		return new ViewState(id, name, connectionInfo, model, null);

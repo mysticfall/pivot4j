@@ -121,6 +121,12 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 		Serializable state = stateManager.getRendererState();
 
 		if (state == null) {
+			try {
+				renderer.restoreSettings(settings.getConfiguration()
+						.configurationAt("render"));
+			} catch (IllegalArgumentException e) {
+			}
+
 			renderer.setVisible(true);
 			renderer.setShowDimensionTitle(true);
 			renderer.setShowParentMembers(false);
@@ -346,8 +352,6 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			if (!model.isInitialized()) {
 				try {
 					model.initialize();
-
-					applyDefaultModelState();
 				} catch (Exception e) {
 					FacesContext context = FacesContext.getCurrentInstance();
 					ResourceBundle bundle = context.getApplication()
@@ -373,7 +377,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 		String mdx;
 
 		if (OlapUtils.isEmptySetSupported(model.getMetadata())) {
-			if (settings.getDefaultNonEmpty()) {
+			if (model.getDefaultNonEmpty()) {
 				mdx = String
 						.format("select non empty {} on columns, non empty {} on rows from [%s]",
 								cubeName);
@@ -386,15 +390,6 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 		}
 
 		return mdx;
-	}
-
-	private void applyDefaultModelState() {
-		NonEmpty transform = model.getTransform(NonEmpty.class);
-
-		boolean defaultValue = settings.getDefaultNonEmpty();
-		boolean currentValue = transform.isNonEmpty();
-
-		transform.setDefaultNonEmpty(defaultValue || currentValue);
 	}
 
 	/**
@@ -829,7 +824,6 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	public void setNonEmpty(boolean nonEmpty) {
 		NonEmpty transform = model.getTransform(NonEmpty.class);
 		transform.setNonEmpty(nonEmpty);
-		transform.setDefaultNonEmpty(settings.getDefaultNonEmpty() || nonEmpty);
 	}
 
 	/**

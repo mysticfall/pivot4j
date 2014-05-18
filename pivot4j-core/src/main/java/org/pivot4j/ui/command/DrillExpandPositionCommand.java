@@ -62,7 +62,7 @@ public class DrillExpandPositionCommand extends AbstractDrillDownCommand {
 		Position position = context.getPosition();
 		Member member = context.getMember();
 
-		if (position == null || member == null) {
+		if (position == null || member == null || context.getProperty() != null) {
 			return false;
 		}
 
@@ -84,8 +84,8 @@ public class DrillExpandPositionCommand extends AbstractDrillDownCommand {
 	}
 
 	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel
-	 *      , org.pivot4j.ui.command.UICommandParameters)
+	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+	 *      org.pivot4j.ui.command.UICommandParameters)
 	 */
 	@Override
 	public Void execute(PivotModel model, UICommandParameters parameters) {

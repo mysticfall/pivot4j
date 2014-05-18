@@ -69,7 +69,7 @@ public class ReportOpener {
 		}
 
 		ReportContent content = reportRepository.getReportContent(file);
-		content.read(state, dataSourceManager);
+		content.read(state, dataSourceManager, settings.getConfiguration());
 
 		viewStateHolder.registerState(state);
 

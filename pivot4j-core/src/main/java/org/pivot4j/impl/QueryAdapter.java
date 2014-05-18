@@ -65,8 +65,6 @@ public class QueryAdapter implements Bookmarkable {
 
 	private boolean axesSwapped = false;
 
-	private boolean defaultNonEmpty = false;
-
 	private Quax quaxToSort;
 
 	private MdxStatement parsedQuery;
@@ -318,25 +316,27 @@ public class QueryAdapter implements Bookmarkable {
 	 * @param axesSwapped
 	 */
 	public void setAxesSwapped(boolean axesSwapped) {
-		if (axesSwapped != this.axesSwapped) {
-			QueryAxis columnAxis = parsedQuery.getAxis(Axis.COLUMNS);
-			QueryAxis rowAxis = parsedQuery.getAxis(Axis.ROWS);
+		this.axesSwapped = axesSwapped;
+	}
 
-			if (columnAxis != null && rowAxis != null) {
-				this.axesSwapped = axesSwapped;
+	public void swapAxes() {
+		QueryAxis columnAxis = parsedQuery.getAxis(Axis.COLUMNS);
+		QueryAxis rowAxis = parsedQuery.getAxis(Axis.ROWS);
 
-				Exp exp = columnAxis.getExp();
-				columnAxis.setExp(rowAxis.getExp());
-				rowAxis.setExp(exp);
+		if (columnAxis != null && rowAxis != null) {
+			Exp exp = columnAxis.getExp();
+			columnAxis.setExp(rowAxis.getExp());
+			rowAxis.setExp(exp);
 
-				Quax columnQuax = quaxes.get(Axis.COLUMNS);
-				Quax rowQuax = quaxes.get(Axis.ROWS);
+			Quax columnQuax = quaxes.get(Axis.COLUMNS);
+			Quax rowQuax = quaxes.get(Axis.ROWS);
 
-				quaxes.put(Axis.COLUMNS, rowQuax);
-				quaxes.put(Axis.ROWS, columnQuax);
+			quaxes.put(Axis.COLUMNS, rowQuax);
+			quaxes.put(Axis.ROWS, columnQuax);
 
-				fireQueryChanged();
-			}
+			setAxesSwapped(!axesSwapped);
+
+			fireQueryChanged();
 		}
 	}
 
@@ -365,21 +365,6 @@ public class QueryAdapter implements Bookmarkable {
 
 			fireQueryChanged(false);
 		}
-	}
-
-	/**
-	 * @return the defaultNonEmpty
-	 */
-	public boolean getDefaultNonEmpty() {
-		return defaultNonEmpty;
-	}
-
-	/**
-	 * @param defaultNonEmpty
-	 *            the defaultNonEmpty to set
-	 */
-	public void setDefaultNonEmpty(boolean defaultNonEmpty) {
-		this.defaultNonEmpty = defaultNonEmpty;
 	}
 
 	/**
@@ -473,8 +458,8 @@ public class QueryAdapter implements Bookmarkable {
 
 				QueryAxis queryAxis = parsedQuery.getAxis(axis);
 				if (queryAxis == null) {
-					parsedQuery.setAxis(new QueryAxis(axis, eSet,
-							defaultNonEmpty));
+					parsedQuery.setAxis(new QueryAxis(axis, eSet, model
+							.getDefaultNonEmpty()));
 				} else {
 					queryAxis.setExp(eSet);
 				}

@@ -8,6 +8,7 @@
  */
 package org.pivot4j.ui.collector;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,10 @@ import org.olap4j.metadata.Level;
 import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Property;
 
+public class ConfigurablePropertyCollector implements PropertyCollector,
+		Serializable {
 
-public class ConfigurablePropertyCollector implements PropertyCollector {
+	private static final long serialVersionUID = -2831138114754450877L;
 
 	private List<String> propertyNames;
 
