@@ -94,11 +94,11 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.primefaces.extensions>1.1.0</version.primefaces.extensions>
 		<version.primefaces.themes>1.0.10</version.primefaces.themes>
 
-		<version.arquillian.bom>1.1.2.Final</version.arquillian.bom>
-		<version.arquillian.drone>1.2.1.Final</version.arquillian.drone>
-		<version.arquillian.graphene>2.0.0.Final</version.arquillian.graphene>
-		<version.arquillian.jacoco>1.0.0.Alpha5</version.arquillian.jacoco>
-		<version.arquillian.tomcat6>1.0.0.CR5</version.arquillian.tomcat6>
+		<version.arquillian.bom>1.1.4.Final</version.arquillian.bom>
+		<version.arquillian.drone>2.0.0.Alpha1</version.arquillian.drone>
+		<version.arquillian.graphene>2.0.2.Final</version.arquillian.graphene>
+		<version.arquillian.jacoco>1.0.0.Alpha6</version.arquillian.jacoco>
+		<version.arquillian.tomcat6>1.0.0.CR6</version.arquillian.tomcat6>
 
 		<version.derby>10.10.1.1</version.derby>
 		<version.doxia.markdown>1.5</version.doxia.markdown>

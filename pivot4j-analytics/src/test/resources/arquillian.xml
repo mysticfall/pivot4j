@@ -11,7 +11,7 @@
 	</container>
 
 	<extension qualifier="webdriver">
-		<property name="browserCapabilities">firefox</property>
+		<property name="browser">firefox</property>
 	</extension>
 
 	<extension qualifier="jacoco">

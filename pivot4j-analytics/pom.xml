@@ -74,7 +74,7 @@
 						</goals>
 						<configuration>
 							<systemProperties>
-								<arq.extension.webdriver.browserCapabilities>${browser.capabilities}</arq.extension.webdriver.browserCapabilities>
+								<arq.extension.webdriver.browser>${browser.capabilities}</arq.extension.webdriver.browser>
 							</systemProperties>
 							<skipTests>${skip.test}</skipTests>
 						</configuration>
