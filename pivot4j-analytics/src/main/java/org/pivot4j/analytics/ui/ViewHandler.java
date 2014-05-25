@@ -582,9 +582,12 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			filterComponent.getChildren().clear();
 		}
 
-		boolean renderGrid = (component != null && component.isRendered());
-		boolean renderFilter = (filterComponent != null && filterComponent
-				.isRendered());
+		boolean valid = isValid();
+
+		boolean renderGrid = valid
+				&& (component != null && component.isRendered());
+		boolean renderFilter = valid
+				&& (filterComponent != null && filterComponent.isRendered());
 
 		if (renderGrid || renderFilter) {
 			FacesContext context = FacesContext.getCurrentInstance();
