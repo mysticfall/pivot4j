@@ -574,7 +574,19 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	}
 
 	public void render() {
-		if (component != null && component.isRendered()) {
+		if (component != null) {
+			component.getChildren().clear();
+		}
+
+		if (filterComponent != null) {
+			filterComponent.getChildren().clear();
+		}
+
+		boolean renderGrid = (component != null && component.isRendered());
+		boolean renderFilter = (filterComponent != null && filterComponent
+				.isRendered());
+
+		if (renderGrid || renderFilter) {
 			FacesContext context = FacesContext.getCurrentInstance();
 
 			PivotComponentBuilder callback = new PivotComponentBuilder(context);
