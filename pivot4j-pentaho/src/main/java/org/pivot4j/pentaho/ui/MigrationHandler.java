@@ -174,7 +174,7 @@ public class MigrationHandler {
 			state.setFile(file);
 
 			ReportContent content = repository.getReportContent(file);
-			content.read(state, dataSourceManager);
+			content.read(state, dataSourceManager, settings.getConfiguration());
 		}
 
 		state.getModel().initialize();
