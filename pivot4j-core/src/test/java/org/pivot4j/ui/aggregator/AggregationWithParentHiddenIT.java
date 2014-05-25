@@ -41,7 +41,7 @@ public class AggregationWithParentHiddenIT extends AbstractHtmlTableTestCase {
 	}
 
 	/**
-	 * @see org.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(org.pivot4j.ui.PivotRenderer)
+	 * @see org.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(org.pivot4j.ui.table.TableRenderer)
 	 */
 	@Override
 	protected void configureRenderer(TableRenderer renderer) {

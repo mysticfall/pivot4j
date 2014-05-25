@@ -431,13 +431,13 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 				<version>${version.plugin.javadoc}</version>
 				<configuration>
 					<links>
-						<link>http://docs.oracle.com/javase/7/docs/api/</link>
-						<link>http://tomcat.apache.org/tomcat-7.0-doc/servletapi/</link>
-						<link>http://www.olap4j.org/head/api/</link>
-						<link>http://commons.apache.org/pool/apidocs/</link>
-						<link>http://commons.apache.org/proper/commons-configuration/apidocs/</link>
-						<link>http://javaserverfaces.java.net/nonav/docs/2.2/javadocs/</link>
-						<link>http://www.primefaces.org/docs/api/4.0/</link>
+						<link>http://docs.oracle.com/javase/7/docs/api/*</link>
+						<link>http://tomcat.apache.org/tomcat-7.0-doc/servletapi/*</link>
+						<link>http://www.olap4j.org/head/api/*</link>
+						<link>http://commons.apache.org/pool/apidocs/*</link>
+						<link>http://commons.apache.org/proper/commons-configuration/apidocs/*</link>
+						<link>http://javaserverfaces.java.net/nonav/docs/2.2/javadocs/*</link>
+						<link>http://www.primefaces.org/docs/api/4.0/*</link>
 					</links>
 				</configuration>
 				<reportSets>
