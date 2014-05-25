@@ -4,9 +4,9 @@
 
 * Library Jar : [pivot4j-core-0.9.jar](http://oss.sonatype.org/content/repositories/releases/org/pivot4j/pivot4j-core/0.9/pivot4j-core-0.9.jar)
 
-* JavaDoc API : [pivot4j-core-0.9-javadoc.jar](http://oss.sonatype.org/content/repositories/releases/org/pivot4j/0.9/pivot4j-core-0.9-javadoc.jar)
+* JavaDoc API : [pivot4j-core-0.9-javadoc.jar](http://oss.sonatype.org/content/repositories/releases/org/pivot4j/pivot4j-core/0.9/pivot4j-core-0.9-javadoc.jar)
 
-* Source Archive : [pivot4j-core-0.9-sources.jar](http://oss.sonatype.org/content/repositories/releases/org/pivot4j/0.9/pivot4j-core-0.9-sources.jar)
+* Source Archive : [pivot4j-core-0.9-sources.jar](http://oss.sonatype.org/content/repositories/releases/org/pivot4j/pivot4j-core/0.9/pivot4j-core-0.9-sources.jar)
 
 #### Development Snapshot
 
@@ -44,9 +44,9 @@ End users might find it more convenient to install it via Pentaho Marketplace in
 
 #### Stable Release
 
-* Tar.gz Archive : [pivot4j-pentaho-0.9-plugin.tar.gz](http://oss.sonatype.org/content/repositories/releases/org/pivot4j/pivot4j-pentaho/target/pivot4j-pentaho-0.9-plugin.tar.gz)
+* Tar.gz Archive : [pivot4j-pentaho-0.9-plugin.tar.gz](https://oss.sonatype.org/content/repositories/releases/org/pivot4j/pivot4j-pentaho/0.9/pivot4j-pentaho-0.9-plugin.tar.gz)
 
-* Zip Archive : [pivot4j-pentaho-0.9-plugin.zip](http://oss.sonatype.org/content/repositories/releases/org/pivot4j/pivot4j-pentaho/target/pivot4j-pentaho-0.9-plugin.zip)
+* Zip Archive : [pivot4j-pentaho-0.9-plugin.zip](https://oss.sonatype.org/content/repositories/releases/org/pivot4j/pivot4j-pentaho/0.9/pivot4j-pentaho-0.9-plugin.zip)
 
 #### Development Snapshot
 
