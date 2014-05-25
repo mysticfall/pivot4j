@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.pivot4j</groupId>
 		<artifactId>pivot4j</artifactId>
-		<version>0.9-SNAPSHOT</version>
+		<version>0.9</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -32,8 +31,7 @@
 						<phase>prepare-package</phase>
 						<configuration>
 							<target unless="maven.test.skip">
-								<unzip src="${project.basedir}/../src/test/data/derby-foodmart.zip"
-									dest="${derby.home}" overwrite="false" />
+								<unzip src="${project.basedir}/../src/test/data/derby-foodmart.zip" dest="${derby.home}" overwrite="false" />
 							</target>
 						</configuration>
 						<goals>
