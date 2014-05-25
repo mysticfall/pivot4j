@@ -6,7 +6,7 @@
 		<author email="mysticfallband@gmail.com">Xavier Cho</author>
 	</properties>
 	<body>
-		<release version="0.8" date="2014-05-25" description="Pivot4J 0.9 release">
+		<release version="0.9" date="2014-05-25" description="Pivot4J 0.9 release">
 			<action dev="mysticfall" type="add" issue="141">
 				Integrate Pivot4J as a component to a CDE Dashboard in Pentaho.
 			</action>
