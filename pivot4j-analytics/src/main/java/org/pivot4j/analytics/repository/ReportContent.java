@@ -16,6 +16,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.FileConfiguration;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.tree.MergeCombiner;
 import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.OlapDataSource;
 import org.pivot4j.PivotModel;
@@ -185,6 +186,7 @@ public class ReportContent implements Serializable {
 		}
 
 		CombinedConfiguration mergedSettings = new CombinedConfiguration();
+		mergedSettings.setNodeCombiner(new MergeCombiner());
 
 		if (defaultSettings != null) {
 			mergedSettings.addConfiguration(defaultSettings);
@@ -197,6 +199,7 @@ public class ReportContent implements Serializable {
 		try {
 			model.restoreSettings(mergedSettings.configurationAt("model"));
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 		}
 
 		Map<String, Object> parameters = state.getParameters();
@@ -216,6 +219,7 @@ public class ReportContent implements Serializable {
 
 			state.setRendererState(renderer.saveState());
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 		}
 
 		try {
@@ -224,6 +228,7 @@ public class ReportContent implements Serializable {
 
 			state.setChartState(renderer.saveState());
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 		}
 
 		state.getLayoutRegions().clear();
