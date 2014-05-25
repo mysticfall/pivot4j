@@ -39,8 +39,8 @@ but now discontinued [JPivot][jpivot-site] project's	codebase to make it a gener
 OLAP API library which is independent of any particular GUI implementation.
 
 Pivot4J also provides a fully functional [OLAP analytics application][analytics] built 
-on top of its core library, along with a [plugin][pentaho-plugin] for [Pentaho BI platform][pentaho-site] 
-which can be installed directly from the marketplace.
+on top of its core library, along with a [plugin][pentaho-plugin] for 
+[Pentaho BI platform][pentaho-site] which can be installed directly from the marketplace.
 
 [Read more...][about]
 
@@ -58,37 +58,35 @@ which can be installed directly from the marketplace.
 
 * Powerful formatting support based on MDX independent expression language.
 
-### Pivot4J 0.8 is out!
+### Pivot4J 0.9 is released (May 25, 2014)
 
-After 4 months of development, *Pivot4J 0.8* is released on August 25, 2013 with many new features and 
+After 9 months of development, *Pivot4J 0.9* is released with many new features and 
 bug fixes. Some of the highlights of the new release include :
 
-* New report management UI.
-	
-* User configurable data sources and themes.
+* Charting support with customizable axis mapping feature (click [here][chart-demo] for a demo).
 
-* Conditional formatting support(experimental).
+* Dutch, French, German, Hindi, Italian, Russian, Spanish translations, thanks to the [Pentaho Community translation team][pentaho-langpack].
 
-* XMLA/SASS compatibility fixes.
+* Embeddable URL support and basic Pentaho CDE integration. 
 
-* Updated Brazilian Portuguese translation, thanks to [IT4Biz][it4biz-site] and Professor Coruja Team.
+* Many important bug fixes for enhanced security and stability.
 
-For a full list of changes, please see the changelog [here][changelog].
+For full list of changes, please see the changelog [here][changelog].
 	
 ### What's coming up next?
 
-As we're in the process of restructuring the project, there won't be many new features for now. 
-Some of the planned features for the next release (Pivot4J 0.9) include :
+As the next milestone would be our first stable release, we intend to take this opportunity 
+to spend sometime to make it more easy and robust to use for both end users and developers. 
+ 
+* Improved documentation, including code examples for major features.
 
-* Maven groupId and package change (*For developers*: Please read [this][0.9-changes] for details).
+* Core API enhancements and refactorings to make it more flexible and extendable.
 
-* New web site, based on [Maven Reflow skin][maven-skin-site].
+* Remove remaining JPivot's legacy codebase.
 
-* Basic charting support.
+* Parser implementation improve MDX support on par with Mondrian and Olap4J.
 
-* Update to JSF 2.2 and [PrimeFaces][primefaces-site] 4.0 (Pivot4J Analytics).
-
-* Code clean up and more integration test cases.
+* Code clean up for Pivot4J Analytics application to serve as a reference implementation for JSF. 
 
 ### Contact
 
@@ -103,7 +101,8 @@ And we also have an IRC channel at the Freenode network, **#pivot4j**.
 [analytics]: ./analytics.html
 [pentaho-plugin]: ./pentaho.html
 [changelog]: ./changes-report.html
-[0.9-changes]: https://t.co/s6Ct2mUXbL
+[chart-demo]: http://www.youtube.com/watch?v=eVN0GfXCJyI
+[pentaho-langpack]: https://github.com/webdetails/pentahoLanguagePacks
 
 [forum-site]: http://groups.google.com/d/forum/pivot4j-list
 [java-site]: http://www.java.com

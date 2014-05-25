@@ -38,6 +38,10 @@ More screenshots of the application below. Click each image to enlarge it.
 
 [![Conditional Properties](./img/screenshot-props-thumb.png)][screenshot-props]
 
+#### [Charting Support][screenshot-chart]
+
+[![Charting Support](./img/screenshot-chart-thumb.png)][screenshot-chart]
+
 #### [Drill Through Dialog][screenshot-drillthrough]
 
 [![Drill Through Dialog](./img/screenshot-drillthrough-thumb.png)][screenshot-drillthrough]
@@ -54,6 +58,7 @@ More screenshots of the application below. Click each image to enlarge it.
 [screenshot-members]: ./img/screenshot-members.png
 [screenshot-agg]: ./img/screenshot-agg.png
 [screenshot-props]: ./img/screenshot-props.png
+[screenshot-chart]: ./img/screenshot-chart.png
 [screenshot-drillthrough]: ./img/screenshot-drillthrough.png
 [screenshot-excel]: ./img/screenshot-excel.png
 [screenshot-pdf]: ./img/screenshot-pdf.png

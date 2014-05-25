@@ -29,13 +29,13 @@ If you're using [Maven][maven-site], update your pom.xml as below :
         <dependency>
             <groupId>org.pivot4j</groupId>
             <artifactId>pivot4j-core</artifactId>
-            <version>0.9-SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
 ```
 
-For the old stable build(*not recommended*), use below lines instead :
+For the stable build, use below lines instead :
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -46,17 +46,11 @@ For the old stable build(*not recommended*), use below lines instead :
     <packaging>jar</packaging>
     <name>My Project</name>
     <version>1.0.0</version>
-    <repositories>
-        <repository>
-            <id>eyeq</id>
-            <url>http://dev.eyeq.co.kr/artifactory/libs-release/</url>
-        </repository>
-    </repositories>
     <dependencies>
         <dependency>
-            <groupId>com.eyeq</groupId>
+            <groupId>org.pivot4j</groupId>
             <artifactId>pivot4j-core</artifactId>
-            <version>0.8</version>
+            <version>0.9</version>
         </dependency>
     </dependencies>
 </project>
