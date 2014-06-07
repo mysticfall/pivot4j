@@ -72,7 +72,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.mojarra>2.2.5</version.mojarra>
 
 		<version.slf4j>1.7.5</version.slf4j>
-		<version.log4j>2.0-beta9</version.log4j>
+		<version.log4j>2.0-rc1</version.log4j>
 
 		<version.mondrian>3.6.6</version.mondrian>
 		<version.olap4j>1.1.0</version.olap4j>

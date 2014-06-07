@@ -48,15 +48,15 @@
 	</context-param>
 
 	<listener>
-		<listener-class>org.pivot4j.analytics.logging.Log4jServletContextListenerFallback</listener-class>
+		<listener-class>org.apache.logging.log4j.core.web.Log4jServletContextListener</listener-class>
 	</listener>
 
 	<filter>
-		<filter-name>log4jServletFilterFallback</filter-name>
-		<filter-class>org.pivot4j.analytics.logging.Log4jServletFilterFallback</filter-class>
+		<filter-name>log4jServletFilter</filter-name>
+		<filter-class>org.apache.logging.log4j.core.web.Log4jServletFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>log4jServletFilterFallback</filter-name>
+		<filter-name>log4jServletFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
