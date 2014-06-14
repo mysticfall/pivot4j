@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import freemarker.template.utility.NullArgumentException;
 
@@ -22,6 +24,9 @@ import freemarker.template.utility.NullArgumentException;
  * See http://jira.pentaho.com/browse/MONDRIAN-1292
  */
 public class MemberHierarchyCache extends Cache<String, Member> {
+
+	private static Logger logger = LoggerFactory
+			.getLogger(MemberHierarchyCache.class);
 
 	private Cube cube;
 
@@ -54,16 +59,31 @@ public class MemberHierarchyCache extends Cache<String, Member> {
 			throw new NullArgumentException("member");
 		}
 
+		if (member.getDepth() == 0) {
+			return null;
+		}
+
+		logger.trace("Resolving parent member for : {}", member.getUniqueName());
+
 		Member parent = get(member.getUniqueName());
 
 		if (parent == null) {
 			parent = member.getParentMember();
 
-			if (parent != null) {
+			if (parent == null) {
+				logger.trace("Member doesn't seem to have a parent.");
+			} else {
+				logger.trace(
+						"No cache was found. Storing the parent member : {}",
+						parent.getUniqueName());
+
 				parent = util.wrapRaggedIfNecessary(parent);
 			}
 
 			put(member.getUniqueName(), parent);
+		} else {
+			logger.trace("Returning cached parent member : {}",
+					parent.getUniqueName());
 		}
 
 		return parent;
