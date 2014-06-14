@@ -6,8 +6,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.component.behavior.ajax.AjaxBehavior;
-import org.primefaces.component.behavior.ajax.AjaxBehaviorListenerImpl;
+import org.primefaces.behavior.ajax.AjaxBehavior;
+import org.primefaces.behavior.ajax.AjaxBehaviorListenerImpl;
 
 public abstract class AbstractPropertyInputEditor extends
 		AbstractPropertyEditor {

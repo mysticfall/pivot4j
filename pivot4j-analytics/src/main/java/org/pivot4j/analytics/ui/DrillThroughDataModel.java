@@ -169,7 +169,7 @@ public class DrillThroughDataModel extends LazyDataModel<Map<String, Object>> {
 	 *      org.primefaces.model.SortOrder, java.util.Map)
 	 */
 	public List<Map<String, Object>> load(int first, int pageSize,
-			String sortField, SortOrder sortOrder, Map<String, String> filters) {
+			String sortField, SortOrder sortOrder, Map<String, Object> filters) {
 		if (columns.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -195,7 +195,7 @@ public class DrillThroughDataModel extends LazyDataModel<Map<String, Object>> {
 			} else {
 				while (rowIndex < first) {
 					if (!result.next()) {
-						return Collections.emptyList();
+						return Collections.<Map<String, Object>> emptyList();
 					}
 
 					rowIndex++;

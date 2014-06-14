@@ -212,15 +212,15 @@
 					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
 						action="#{aggregationHandler.apply}"
 						update=":grid-form,:editor-form:mdx-editor"
-						onstart="aggregatorTab.select(0);"
-						onsuccess="onViewChanged(); aggregationConfig.hide();" />
+						onstart="PF('aggregatorTab').select(0);"
+						onsuccess="onViewChanged(); PF('aggregationConfig').hide();" />
 					<p:commandButton value="#{msg['button.apply']}"
 						icon="ui-icon-check" action="#{aggregationHandler.apply}"
 						update=":grid-form,:editor-form:mdx-editor"
 						oncomplete="onViewChanged()" />
 					<p:commandButton value="#{msg['button.close']}"
 						icon="ui-icon-close"
-						onclick="aggregatorTab.select(0); aggregationConfig.hide(); return false;" />
+						onclick="PF('aggregatorTab').select(0); PF('aggregationConfig').hide(); return false;" />
 				</h:panelGroup>
 			</f:facet>
 		</p:dialog>

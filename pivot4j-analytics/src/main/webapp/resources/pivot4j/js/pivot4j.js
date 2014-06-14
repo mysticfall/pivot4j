@@ -23,6 +23,7 @@ if (PrimeFaces.widget.BaseTree) {
 
 	jQuery(document).on("dblclick", "#repository-form .ui-treenode-content",
 			function(e) {
+				var openButton = PF("openButton");
 				if (openButton.jq.attr("disabled") != "disabled") {
 					openButton.jq.click();
 				}
@@ -228,7 +229,7 @@ function enableSave(enable) {
 }
 
 function onReportSaved(args) {
-	newReportDialog.hide();
+	PF("newReportDialog").hide();
 
 	var tab = getActiveTab();
 
@@ -255,7 +256,7 @@ function onTabClose(event) {
 	setViewToClose(id);
 
 	if (tab.data("dirty")) {
-		confirmCloseDialog.show();
+		PF('confirmCloseDialog').show();
 	} else {
 		closeReport(id);
 	}
@@ -297,7 +298,7 @@ function onThemeChanged() {
 	jQuery("#tab-panel .ui-tabs-panel iframe").each(function(index, elem) {
 		var pf = elem.contentWindow.PrimeFaces;
 		if (pf) {
-			pf.changeTheme(themeSwitcher.value);
+			pf.changeTheme(PF('themeSwitcher').value);
 		}
 	});
 }
@@ -321,7 +322,7 @@ function applyThemeToCMEditor(selector) {
 }
 
 function showWaitDialog() {
-	var waitDialog = PrimeFaces.widgets["waitDialog"];
+	var waitDialog = PF("waitDialog");
 
 	if (waitDialog) {
 		waitDialog.block();
@@ -329,7 +330,7 @@ function showWaitDialog() {
 }
 
 function hideWaitDialog() {
-	var waitDialog = PrimeFaces.widgets["waitDialog"];
+	var waitDialog = PF("waitDialog");
 
 	if (waitDialog) {
 		waitDialog.unblock();

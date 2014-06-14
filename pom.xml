@@ -39,13 +39,13 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.plugin.install>2.5.1</version.plugin.install>
 		<version.plugin.antrun>1.7</version.plugin.antrun>
 		<version.plugin.assembly>2.4</version.plugin.assembly>
-		<version.plugin.changes>2.9</version.plugin.changes>
+		<version.plugin.changes>2.10</version.plugin.changes>
 		<version.plugin.compiler>3.1</version.plugin.compiler>
 		<version.plugin.cup>1.0.0</version.plugin.cup>
 		<version.plugin.dependency>2.8</version.plugin.dependency>
-		<version.plugin.derby>1.5</version.plugin.derby>
-		<version.plugin.surefire>2.16</version.plugin.surefire>
-		<version.plugin.failsafe>2.16</version.plugin.failsafe>
+		<version.plugin.derby>1.9</version.plugin.derby>
+		<version.plugin.surefire>2.17</version.plugin.surefire>
+		<version.plugin.failsafe>2.17</version.plugin.failsafe>
 
 		<version.plugin.jar>2.4</version.plugin.jar>
 		<version.plugin.javadoc>2.9.1</version.plugin.javadoc>
@@ -68,14 +68,14 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.jsp>2.1</version.jsp>
 		<version.jstl>1.2</version.jstl>
 		<version.servlet>2.5</version.servlet>
-		<version.myfaces>2.2.0</version.myfaces>
+		<version.myfaces>2.2.3</version.myfaces>
 		<version.mojarra>2.2.5</version.mojarra>
 
-		<version.slf4j>1.7.5</version.slf4j>
+		<version.slf4j>1.7.7</version.slf4j>
 		<version.log4j>2.0-rc1</version.log4j>
 
-		<version.mondrian>3.6.6</version.mondrian>
-		<version.olap4j>1.1.0</version.olap4j>
+		<version.mondrian>3.6.7</version.mondrian>
+		<version.olap4j>1.2.0</version.olap4j>
 		<version.pentaho>5.0.2</version.pentaho>
 
 		<version.commons.configuration>1.10</version.commons.configuration>
@@ -85,30 +85,30 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.commons.pool>1.6</version.commons.pool>
 
 		<version.hamcrest>1.3</version.hamcrest>
-		<version.htmlunit>2.13</version.htmlunit>
-		<version.jacoco>0.7.0.201403182114</version.jacoco>
+		<version.htmlunit>2.15</version.htmlunit>
+		<version.jacoco>0.7.1.201405082137</version.jacoco>
 		<version.junit>4.11</version.junit>
 
-		<version.primefaces>4.0</version.primefaces>
-		<version.primefaces.extensions>1.1.0</version.primefaces.extensions>
+		<version.primefaces>5.0</version.primefaces>
+		<version.primefaces.extensions>2.0.0</version.primefaces.extensions>
 		<version.primefaces.themes>1.0.10</version.primefaces.themes>
 
 		<version.arquillian.bom>1.1.4.Final</version.arquillian.bom>
-		<version.arquillian.drone>2.0.0.Alpha1</version.arquillian.drone>
-		<version.arquillian.graphene>2.0.2.Final</version.arquillian.graphene>
+		<version.arquillian.drone>2.0.0.Alpha2</version.arquillian.drone>
+		<version.arquillian.graphene>2.0.3.Final</version.arquillian.graphene>
 		<version.arquillian.jacoco>1.0.0.Alpha6</version.arquillian.jacoco>
 		<version.arquillian.tomcat6>1.0.0.CR6</version.arquillian.tomcat6>
 
-		<version.derby>10.10.1.1</version.derby>
+		<version.derby>10.10.2.0</version.derby>
 		<version.doxia.markdown>1.5</version.doxia.markdown>
-		<version.eigenbase.xom>1.3.3</version.eigenbase.xom>
+		<version.eigenbase.xom>1.3.4</version.eigenbase.xom>
 		<version.fop>1.1</version.fop>
-		<version.avalon>4.2.0</version.avalon>
+		<version.avalon>4.3</version.avalon>
 		<version.freemarker>2.3.20</version.freemarker>
 		<version.jflex>1.4.3</version.jflex>
-		<version.poi>3.10-beta2</version.poi>
+		<version.poi>3.10-FINAL</version.poi>
 		<version.shrinkwrap>2.0.0</version.shrinkwrap>
-		<version.tomcat6>6.0.37</version.tomcat6>
+		<version.tomcat6>6.0.41</version.tomcat6>
 		<version.xerces>2.11.0</version.xerces>
 		<version.reflow.velocity>1.0.0</version.reflow.velocity>
 		<version.velocity>1.7</version.velocity>

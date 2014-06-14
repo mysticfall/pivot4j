@@ -89,7 +89,7 @@
 
 					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
 						action="#{propertiesHandler.apply}" update=":grid-form,:growl"
-						onsuccess="onViewChanged(); propertiesConfig.hide();"
+						onsuccess="onViewChanged(); PF('propertiesConfig').hide();"
 						disabled="#{!propertiesHandler.dirty}" />
 					<p:commandButton value="#{msg['button.apply']}"
 						icon="ui-icon-check" action="#{propertiesHandler.apply}"
@@ -100,7 +100,7 @@
 						update="content,button-bar" disabled="#{!propertiesHandler.set}" />
 					<p:commandButton value="#{msg['button.close']}"
 						icon="ui-icon-close"
-						onclick="propertiesConfig.hide(); return false;" />
+						onclick="PF('propertiesConfig').hide(); return false;" />
 				</h:panelGroup>
 			</f:facet>
 		</p:dialog>

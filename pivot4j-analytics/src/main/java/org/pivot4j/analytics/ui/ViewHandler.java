@@ -84,7 +84,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 	private String currentMdx;
 
-	private Long duration;
+	private long duration;
 
 	private UIComponent component;
 
@@ -297,7 +297,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	/**
 	 * @return the duration
 	 */
-	public Long getDuration() {
+	public long getDuration() {
 		return duration;
 	}
 
@@ -962,7 +962,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
 			RequestContext context = RequestContext.getCurrentInstance();
 			context.update("drillthrough-form");
-			context.execute("drillThroughDialog.show()");
+			context.execute("PF('drillThroughDialog').show()");
 
 			return null;
 		}

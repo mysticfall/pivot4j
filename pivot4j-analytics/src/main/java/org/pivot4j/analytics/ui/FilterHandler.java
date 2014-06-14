@@ -387,7 +387,7 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 
 			show(hierarchy.getName());
 
-			RequestContext.getCurrentInstance().execute("filterDialog.show();");
+			RequestContext.getCurrentInstance().execute("PF('filterDialog').show();");
 		}
 	}
 
@@ -433,7 +433,7 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 				context.getELContext(), "#{filterHandler.show}", Void.class,
 				new Class<?>[0]));
 		link.setUpdate(":filter-form");
-		link.setOncomplete("filterDialog.show();");
+		link.setOncomplete("PF('filterDialog').show();");
 
 		UIParameter parameter = new UIParameter();
 		parameter.setName("hierarchy");

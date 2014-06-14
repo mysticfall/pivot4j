@@ -193,7 +193,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 		this.folderName = null;
 
 		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.execute("newFolderDialog.hide()");
+		requestContext.execute("PF('newFolderDialog').hide()");
 	}
 
 	public void save() {
@@ -223,7 +223,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 			suggestNewName();
 
 			requestContext.update("new-form");
-			requestContext.execute("newReportDialog.show()");
+			requestContext.execute("PF('newReportDialog').show()");
 
 			return;
 		}

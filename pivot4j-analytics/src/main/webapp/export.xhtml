@@ -96,7 +96,7 @@
 					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
 						action="#{pivotExportHandler.exportPdf}" ajax="false" />
 					<p:commandButton value="#{msg['button.close']}"
-						icon="ui-icon-close" onclick="exportConfig.hide(); return false;" />
+						icon="ui-icon-close" onclick="PF('exportConfig').hide(); return false;" />
 				</h:panelGroup>
 			</f:facet>
 		</p:dialog>

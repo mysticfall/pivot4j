@@ -157,7 +157,7 @@
 					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
 						action="#{memberSelectionHandler.apply}"
 						update="hierarchy-config-grid,:source-tree-form,:target-tree-form,:grid-form,:editor-form:mdx-editor"
-						onsuccess="hierarchyConfig.hide();" oncomplete="onViewChanged()"
+						onsuccess="PF('hierarchyConfig').hide();" oncomplete="onViewChanged()"
 						binding="#{memberSelectionHandler.buttonOk}" />
 					<p:commandButton value="#{msg['button.apply']}"
 						icon="ui-icon-check" action="#{memberSelectionHandler.apply}"
@@ -166,7 +166,7 @@
 						oncomplete="onViewChanged()" />
 					<p:commandButton value="#{msg['button.close']}"
 						icon="ui-icon-close" action="#{memberSelectionHandler.reset}"
-						onstart="hierarchyConfig.hide();" />
+						onstart="PF('hierarchyConfig').hide();" />
 				</p:outputPanel>
 			</f:facet>
 		</p:dialog>

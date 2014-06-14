@@ -111,12 +111,12 @@
 					layout="block">
 					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
 						action="#{chartHandler.apply}" update=":grid-form,chart-panel"
-						onsuccess="onViewChanged(); chartConfig.hide();" />
+						onsuccess="onViewChanged(); PF('chartConfig').hide();" />
 					<p:commandButton value="#{msg['button.apply']}"
 						icon="ui-icon-check" action="#{chartHandler.apply}"
 						update=":grid-form,chart-panel" oncomplete="onViewChanged()" />
 					<p:commandButton value="#{msg['button.close']}"
-						icon="ui-icon-close" onclick="chartConfig.hide(); return false;" />
+						icon="ui-icon-close" onclick="PF('chartConfig').hide(); return false;" />
 				</h:panelGroup>
 			</f:facet>
 		</p:dialog>

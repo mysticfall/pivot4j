@@ -51,7 +51,7 @@
 			styleClassContent="toolbar-area">
 			<h:form id="toolbar-form">
 				<p:toolbar id="toolbar">
-					<p:toolbarGroup align="left">
+					<f:facet name="left">
 						<p:commandButton value="#{msg['toolbar.new']}"
 							action="#{repositoryHandler.create}"
 							oncomplete="addTab(args.report);"
@@ -71,11 +71,11 @@
 						<p:commandButton value="#{msg['toolbar.saveAs']}"
 							title="#{msg['toolbar.saveAs.tooltip']}" icon="ui-icon-disk"
 							action="#{repositoryHandler.suggestNewName}"
-							update=":new-form,:growl" oncomplete="newReportDialog.show()"
+							update=":new-form,:growl" oncomplete="PF('newReportDialog').show()"
 							disabled="#{!workbenchHandler.viewActive}" />
 						<p:commandButton value="#{msg['toolbar.delete']}"
 							title="#{msg['toolbar.delete.tooltip']}" icon="ui-icon-trash"
-							type="button" onclick="confirmDeleteReportDialog.show();"
+							type="button" onclick="PF('confirmDeleteReportDialog').show();"
 							disabled="#{!workbenchHandler.deleteEnabled}" />
 						<p:separator />
 						<p:commandButton value="#{msg['toolbar.refresh']}"
@@ -93,7 +93,7 @@
 								disabled="#{!workbenchHandler.viewValid}" />
 							<p:menuitem value="#{msg['toolbar.export.format.pdf']}"
 								icon="ui-icon-print"
-								onclick="getActiveWindow().exportConfig.show();"
+								onclick="getActiveWindow().PF('exportConfig').show();"
 								disabled="#{!workbenchHandler.viewValid}" />
 						</p:menuButton>
 						<p:commandButton value="#{msg['toolbar.print']}"
@@ -101,8 +101,8 @@
 							icon="ui-icon-print"
 							onclick="getActiveWindow().$('table.pivot-grid:first').jqprint();"
 							disabled="#{!workbenchHandler.viewValid}" />
-					</p:toolbarGroup>
-					<p:toolbarGroup align="right">
+					</f:facet>
+					<f:facet name="right">
 						<p:themeSwitcher id="theme-switcher"
 							value="#{workbenchHandler.theme}" widgetVar="themeSwitcher">
 							<f:selectItem itemLabel="#{msg['label.theme.default']}"
@@ -123,8 +123,8 @@
 						<p:separator />
 						<p:commandButton value="#{msg['toolbar.about']}"
 							title="#{msg['toolbar.about.tooltip']}" type="button"
-							icon="ui-icon-info" onclick="about.show(); return false;" />
-					</p:toolbarGroup>
+							icon="ui-icon-info" onclick="PF('about').show(); return false;" />
+					</f:facet>
 				</p:toolbar>
 			</h:form>
 		</pe:layoutPane>
@@ -181,17 +181,17 @@
 					<p:menuitem value="#{msg['menu.new.folder']}"
 						title="#{msg['menu.new.folder.tooltip']}"
 						icon="ui-icon-folder-collapsed" update=":new-folder-form:dialog"
-						oncomplete="newFolderDialog.show();"
+						oncomplete="PF('newFolderDialog').show();"
 						rendered="#{repositoryHandler.selection.object.directory}" />
 					<p:menuitem value="#{msg['menu.delete']}"
 						title="#{msg['menu.delete.folder.tooltip']}" icon="ui-icon-trash"
 						rendered="#{repositoryHandler.selection.object.directory}"
-						onclick="confirmDeleteFolderDialog.show(); return false;"
+						onclick="PF('confirmDeleteFolderDialog').show(); return false;"
 						disabled="#{!repositoryHandler.deleteEnabled}" />
 					<p:menuitem value="#{msg['menu.delete']}"
 						title="#{msg['menu.delete.report.tooltip']}" icon="ui-icon-trash"
 						rendered="#{!repositoryHandler.selection.object.directory}"
-						onclick="confirmDeleteFileDialog.show(); return false;"
+						onclick="PF('confirmDeleteFileDialog').show(); return false;"
 						disabled="#{!repositoryHandler.deleteEnabled}" />
 					<p:menuitem value="#{msg['menu.refresh']}"
 						title="#{msg['menu.refresh.tooltip']}" icon="ui-icon-refresh"
@@ -243,7 +243,7 @@
 				oncomplete="onReportSaved(args)"
 				update="name,label,focus,:repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
 			<p:commandButton value="#{msg['button.close']}"
-				onclick="newReportDialog.hide(); return false;" type="button" />
+				onclick="PF('newReportDialog').hide(); return false;" type="button" />
 
 			<p:focus id="focus" />
 		</p:confirmDialog>
@@ -262,7 +262,7 @@
 				action="#{repositoryHandler.createDirectory}"
 				update="name,label,focus,:repository-form:repository-panel,:growl" />
 			<p:commandButton value="#{msg['button.close']}"
-				onclick="newFolderDialog.hide(); return false;" type="button" />
+				onclick="PF('newFolderDialog').hide(); return false;" type="button" />
 
 			<p:focus id="focus" for="name" />
 		</p:confirmDialog>
@@ -276,16 +276,16 @@
 			<p:commandButton value="#{msg['button.yes']}"
 				action="#{repositoryHandler.save}"
 				onstart="attachClosingViewParam()"
-				onsuccess="confirmCloseDialog.hide()">
+				onsuccess="PF('confirmCloseDialog').hide()">
 				<f:param name="close" value="true" />
 			</p:commandButton>
 			<p:commandButton value="#{msg['button.no']}"
 				action="#{repositoryHandler.close}"
 				update=":repository-form:repository-panel,:toolbar-form:toolbar,close-form,:growl"
 				onstart="attachClosingViewParam()"
-				onsuccess="confirmCloseDialog.hide()" />
+				onsuccess="PF('confirmCloseDialog').hide()" />
 			<p:commandButton value="#{msg['button.cancel']}"
-				onclick="confirmCloseDialog.hide(); return false;" type="button" />
+				onclick="PF('confirmCloseDialog').hide(); return false;" type="button" />
 		</p:confirmDialog>
 	</h:form>
 
@@ -296,10 +296,10 @@
 			widgetVar="confirmDeleteReportDialog">
 			<p:commandButton value="#{msg['button.ok']}"
 				action="#{repositoryHandler.delete}"
-				onsuccess="confirmDeleteReportDialog.hide()" process="@this"
+				onsuccess="PF('confirmDeleteReportDialog').hide()" process="@this"
 				update=":repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
 			<p:commandButton value="#{msg['button.cancel']}"
-				onclick="confirmDeleteReportDialog.hide(); return false;"
+				onclick="PF('confirmDeleteReportDialog').hide(); return false;"
 				type="button" />
 		</p:confirmDialog>
 
@@ -309,10 +309,10 @@
 			widgetVar="confirmDeleteFileDialog">
 			<p:commandButton value="#{msg['button.ok']}"
 				action="#{repositoryHandler.deleteFile}"
-				onsuccess="confirmDeleteFileDialog.hide()" process="@this"
+				onsuccess="PF('confirmDeleteFileDialog').hide()" process="@this"
 				update=":repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
 			<p:commandButton value="#{msg['button.cancel']}"
-				onclick="confirmDeleteFileDialog.hide(); return false;"
+				onclick="PF('confirmDeleteFileDialog').hide(); return false;"
 				type="button" />
 		</p:confirmDialog>
 
@@ -322,10 +322,10 @@
 			widgetVar="confirmDeleteFolderDialog">
 			<p:commandButton value="#{msg['button.ok']}"
 				action="#{repositoryHandler.deleteDirectory}"
-				onsuccess="confirmDeleteFolderDialog.hide()" process="@this"
+				onsuccess="PF('confirmDeleteFolderDialog').hide()" process="@this"
 				update=":repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
 			<p:commandButton value="#{msg['button.cancel']}"
-				onclick="confirmDeleteFolderDialog.hide(); return false;"
+				onclick="PF('confirmDeleteFolderDialog').hide(); return false;"
 				type="button" />
 		</p:confirmDialog>
 	</h:form>

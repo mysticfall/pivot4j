@@ -28,16 +28,16 @@
 
 	<script type="text/javascript">
 		function initLayout() {
-			var workbench = PrimeFaces.widgets["workbench"];
+			var workbench = PF("workbench");
 
 			if (!workbench.layout) {
 				workbench._render();
 
-				var cubeList = PrimeFaces.widgets["cubeList"];
+				var cubeList = PF("cubeList");
 				cubeList.render();
 			}
 
-			var mdxEditor = PrimeFaces.widgets["mdxEditor"];
+			var mdxEditor = PF("mdxEditor");
 
 			if (!mdxEditor.getCodeMirrorInstance()) {
 				mdxEditor.render();
@@ -61,7 +61,7 @@
 			styleClassContent="toolbar-area">
 			<h:form id="toolbar-form">
 				<p:toolbar id="toolbar">
-					<p:toolbarGroup align="left">
+					<f:facet name="left">
 						<p:selectBooleanButton value="#{viewHandler.showParentMembers}"
 							title="#{msg['toolbar.parent.tooltip']}"
 							onLabel="#{msg['toolbar.parent.hide']}"
@@ -159,12 +159,12 @@
 							title="#{msg['toolbar.properties.tooltip']}" type="button"
 							icon="ui-icon-gear" disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}"
-							onclick="propertiesConfig.show(); return false;" />
+							onclick="PF('propertiesConfig').show(); return false;" />
 						<p:commandButton value="#{msg['toolbar.aggregation']}"
 							title="#{msg['toolbar.aggregation.tooltip']}"
 							icon="ui-icon-calculator" update=":aggregation-form"
 							process=":aggregation-form"
-							oncomplete="aggregationConfig.show();"
+							oncomplete="PF('aggregationConfig').show();"
 							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}" />
 						<p:separator rendered="#{!pivotStateManager.readOnly}"
@@ -186,7 +186,7 @@
 							</p:menuitem>
 							<p:menuitem id="mi-export-pdf"
 								value="#{msg['toolbar.export.format.pdf']}" icon="ui-icon-print"
-								onclick="exportConfig.show();" />
+								onclick="PF('exportConfig').show();" />
 						</p:menuButton>
 						<p:commandButton value="#{msg['toolbar.print']}"
 							title="#{msg['toolbar.print.tooltip']}" type="button"
@@ -228,9 +228,9 @@
 							<p:menuitem value="#{msg['toolbar.chart.settings']}"
 								title="#{msg['toolbar.chart.settings.tooltip']}"
 								icon="ui-icon-gear" action="#{chartHandler.reset}"
-								oncomplete="chartConfig.show()" />
+								oncomplete="PF('chartConfig').show()" />
 						</p:menuButton>
-					</p:toolbarGroup>
+					</f:facet>
 				</p:toolbar>
 			</h:form>
 		</pe:layoutPane>
@@ -342,7 +342,7 @@
 								styleClass="node-hierarchy" />
 							<p:commandButton icon="ui-button-icon-only ui-icon-search"
 								action="#{memberSelectionHandler.show}" update=":hierarchy-form"
-								oncomplete="hierarchyConfig.show();"
+								oncomplete="PF('hierarchyConfig').show();"
 								title="#{msg['button.hierarchyConfig.tooltip']}">
 								<f:param name="hierarchy" value="#{node.name}" />
 							</p:commandButton>
@@ -455,11 +455,11 @@
 									icon="ui-icon-check" binding="#{filterHandler.buttonApply}"
 									action="#{filterHandler.apply}"
 									update=":filter-items-form,:source-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
-									oncomplete="onViewChanged(); filterDialog.hide();" />
+									oncomplete="onViewChanged(); PF('filterDialog').hide();" />
 								<p:commandButton value="#{msg['button.close']}"
 									icon="ui-icon-close" action="#{filterHandler.onClose}"
 									process="@this" update=":filter-items-form"
-									oncomplete="filterDialog.hide();" />
+									oncomplete="PF('filterDialog').hide();" />
 							</h:panelGroup>
 						</h:form>
 					</p:overlayPanel>
@@ -510,7 +510,7 @@
 					<pe:layoutPane id="mdx-editor-toolbar" position="north"
 						rendered="#{!pivotStateManager.readOnly}">
 						<p:toolbar id="editor-toolbar">
-							<p:toolbarGroup align="left">
+							<f:facet name="left">
 								<p:commandButton value="#{msg['button.run']}"
 									title="#{msg['button.run.tooltip']}" icon="ui-icon-play"
 									action="#{viewHandler.executeMdx}"
@@ -520,15 +520,16 @@
 									title="#{msg['button.reset.tooltip']}"
 									icon="ui-icon-arrowreturnthick-1-w"
 									update=":editor-form:mdx-editor" />
-							</p:toolbarGroup>
-							<p:toolbarGroup align="right" styleClass="query-info"
-								rendered="#{viewHandler.duration != null}">
-								<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-clock" />
-								<h:outputText value="#{msg['message.query.elapsed']} : " />
-								<h:outputText value="#{viewHandler.duration}">
-									<f:convertNumber pattern="###,### msec" />
-								</h:outputText>
-							</p:toolbarGroup>
+							</f:facet>
+							<f:facet name="right" rendered="#{viewHandler.duration > null}">
+								<h:panelGroup layout="block" styleClass="query-info">
+									<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-clock" />
+									<h:outputText value="#{msg['message.query.elapsed']} : " />
+									<h:outputText value="#{viewHandler.duration}">
+										<f:convertNumber pattern="###,### msec" />
+									</h:outputText>
+								</h:panelGroup>
+							</f:facet>
 						</p:toolbar>
 					</pe:layoutPane>
 

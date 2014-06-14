@@ -12,7 +12,7 @@
 			visible="#{!empty drillThroughData.columns}" showEffect="fade"
 			hideEffect="fade">
 			<p:layout widgetVar="drillThroughLayout"
-				onClose="showDrillThroughSettingsButton.jq.removeClass('ui-force-hidden')">
+				onClose="PF('showDrillThroughSettingsButton').jq.removeClass('ui-force-hidden')">
 				<p:layoutUnit position="west" resizable="true" size="180"
 					closable="true" header="#{msg['header.drillThrough.selection']}">
 					<p:tree value="#{drillThroughHandler.cubeNode}" dynamic="true"
@@ -79,7 +79,7 @@
 						<p:commandButton widgetVar="showDrillThroughSettingsButton"
 							value="#{msg['button.show.settings']}" icon="ui-icon-gear"
 							type="button" styleClass="ui-force-hidden"
-							onclick="showDrillThroughSettingsButton.jq.addClass('ui-force-hidden'); drillThroughLayout.show('west')" />
+							onclick="PF('showDrillThroughSettingsButton').jq.addClass('ui-force-hidden'); PF('drillThroughLayout').show('west')" />
 
 						<p:commandButton value="#{msg['button.apply']}"
 							icon="ui-icon-check" action="#{drillThroughHandler.update}"
