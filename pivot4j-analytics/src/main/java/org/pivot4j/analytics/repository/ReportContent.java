@@ -219,7 +219,6 @@ public class ReportContent implements Serializable {
 
 			state.setRendererState(renderer.saveState());
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 		}
 
 		try {
@@ -228,7 +227,6 @@ public class ReportContent implements Serializable {
 
 			state.setChartState(renderer.saveState());
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 		}
 
 		state.getLayoutRegions().clear();
