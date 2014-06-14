@@ -30,6 +30,7 @@ import org.pivot4j.ModelChangeEvent;
 import org.pivot4j.ModelChangeListener;
 import org.pivot4j.PivotModel;
 import org.pivot4j.analytics.component.tree.DefaultTreeNode;
+import org.pivot4j.analytics.component.tree.NodeCollector;
 import org.pivot4j.analytics.component.tree.NodeFilter;
 import org.pivot4j.analytics.ui.navigator.HierarchyNode;
 import org.pivot4j.analytics.ui.navigator.LevelNode;
@@ -142,6 +143,8 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 			if (filterNode == null && hierarchy != null) {
 				this.filterNode = new DefaultTreeNode();
 
+				filterNode.setExpanded(true);
+
 				List<Member> members;
 				boolean isMeasure;
 
@@ -166,6 +169,23 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 
 					filterNode.getChildren().add(node);
 				}
+
+				List<TreeNode> initialSelection = ((DefaultTreeNode) filterNode)
+						.collectNodes(new NodeCollector() {
+
+							@Override
+							public boolean collectNode(TreeNode node) {
+								return node.isSelected();
+							}
+
+							@Override
+							public boolean searchNode(TreeNode node) {
+								return node.isExpanded();
+							}
+						});
+
+				this.selection = initialSelection
+						.toArray(new TreeNode[initialSelection.size()]);
 			}
 		} else {
 			this.filterNode = null;
@@ -497,8 +517,6 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 
 		ChangeSlicer transform = model.getTransform(ChangeSlicer.class);
 		transform.setSlicer(getHierarchy(), members);
-
-		configureFilter();
 	}
 
 	public void removeHierarchy() {

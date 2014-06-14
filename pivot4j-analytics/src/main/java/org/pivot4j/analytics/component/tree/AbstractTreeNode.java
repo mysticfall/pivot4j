@@ -1,6 +1,11 @@
 package org.pivot4j.analytics.component.tree;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.primefaces.model.TreeNode;
+
+import freemarker.template.utility.NullArgumentException;
 
 public abstract class AbstractTreeNode<T> implements TreeNode {
 
@@ -120,5 +125,30 @@ public abstract class AbstractTreeNode<T> implements TreeNode {
 	 */
 	public void setPartialSelected(boolean partialSelected) {
 		this.partialSelected = partialSelected;
+	}
+
+	public List<TreeNode> collectNodes(NodeCollector collector) {
+		if (collector == null) {
+			throw new NullArgumentException("collector");
+		}
+
+		List<TreeNode> nodes = new LinkedList<TreeNode>();
+
+		collectNodes(collector, this, nodes);
+
+		return nodes;
+	}
+
+	protected void collectNodes(NodeCollector collector, TreeNode node,
+			List<TreeNode> nodes) {
+		if (collector.collectNode(node)) {
+			nodes.add(node);
+		}
+
+		if (collector.searchNode(node) && !node.isLeaf()) {
+			for (TreeNode child : node.getChildren()) {
+				collectNodes(collector, child, nodes);
+			}
+		}
 	}
 }

@@ -21,12 +21,10 @@ import java.util.Set;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
-import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
-import org.pivot4j.PivotException;
 import org.pivot4j.impl.QueryAdapter;
 import org.pivot4j.mdx.Exp;
 import org.pivot4j.mdx.FunCall;
@@ -65,15 +63,9 @@ public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer 
 		Set<Hierarchy> hierarchies = new LinkedHashSet<Hierarchy>();
 		for (Position position : slicer.getPositions()) {
 			for (Member member : position.getMembers()) {
-				try {
-					if (!OlapUtils.equals(member, member.getHierarchy()
-							.getDefaultMember())
-							&& !(member instanceof Measure)
-							&& !hierarchies.contains(member.getHierarchy())) {
-						hierarchies.add(member.getHierarchy());
-					}
-				} catch (OlapException e) {
-					throw new PivotException(e);
+				if (!member.isAll() && !(member instanceof Measure)
+						&& !hierarchies.contains(member.getHierarchy())) {
+					hierarchies.add(member.getHierarchy());
 				}
 			}
 		}
