@@ -41,8 +41,4 @@
 			</map>
 		</property>
 	</bean>
-
-	<bean id="converterRegistryHelper"
-		class="org.pivot4j.pentaho.content.ConverterRegistrationHelper"
-		lazy-init="false" />
 </beans>
