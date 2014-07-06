@@ -536,8 +536,10 @@
 					<pe:layoutPane id="mdx-editor-content" position="center">
 						<pe:codeMirror id="mdx-editor" mode="text/x-mdx"
 							value="#{viewHandler.currentMdx}" lineNumbers="true"
-							lineWrapping="true" matchBrackets="true"
-							theme="#{settings.editorTheme}" widgetVar="mdxEditor"
+							lineWrapping="true" theme="#{settings.editorTheme}"
+							widgetVar="mdxEditor"
+							completeMethod="#{autoCompletionSupport.complete}"
+							extraKeys="{ 'Ctrl-Space': function(cm) { completeMdx(PF('mdxEditor')); }}"
 							required="true" label="#{msg['label.mdx']}"
 							readOnly="#{pivotStateManager.readOnly}" />
 					</pe:layoutPane>

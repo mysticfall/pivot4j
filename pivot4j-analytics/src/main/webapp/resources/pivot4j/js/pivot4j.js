@@ -336,3 +336,108 @@ function hideWaitDialog() {
 		waitDialog.unblock();
 	}
 }
+
+function completeMdx(editor) {
+	editor.suggestions = null;
+	editor.token = null;
+
+	var cursor = editor.instance.getCursor();
+	var token = editor.instance.getTokenAt(cursor);
+
+	var isIdentifier = function(string) {
+		return /^\[[\w$_ ]*\]$/.test(string);
+	};
+
+	var isPartialIdentifier = function(string) {
+		return /^\[[\w$_ ]*\]?$/.test(string);
+	};
+
+	var completeIdentifier = function(token) {
+		// If it is a property, find out what it is a property of.
+		while (true) {
+			tokenProperty = editor.instance.getTokenAt({
+				line : cursor.line,
+				ch : tokenProperty.start
+			});
+
+			if (tokenProperty.string != ".") {
+				break;
+			}
+
+			tokenProperty = editor.instance.getTokenAt({
+				line : cursor.line,
+				ch : tokenProperty.start
+			});
+
+			if (!isIdentifier(tokenProperty.string)) {
+				break;
+			}
+
+			if (!context) {
+				var context = [];
+			}
+
+			context.splice(0, 0, tokenProperty);
+		}
+
+		var contextString = null;
+		if (context) {
+			contextString = "";
+
+			for (var i = 0; i < context.length; i++) {
+				var currentContext = context[i];
+
+				if (i > 0) {
+					contextString = contextString + ".";
+				}
+
+				contextString = contextString + currentContext.string;
+			}
+		}
+
+		editor.token = token;
+		editor.search(token.string.substring(1), contextString, cursor.line,
+				cursor.ch);
+	};
+
+	var tokenProperty = token;
+	var keyword = token.string;
+
+	token.string = token.string.substring(0, (cursor.ch - token.start));
+
+	if (isPartialIdentifier(token.string)) {
+		if (!isIdentifier(keyword)) {
+			token.end = token.start + token.string.length;
+		}
+
+		completeIdentifier(token);
+	} else if (keyword == ".") {
+		var offset = cursor.ch;
+
+		cursor.ch--;
+
+		var context = [];
+
+		while (cursor.ch > 0) {
+			var previous = editor.instance.getTokenAt(cursor);
+
+			if (isIdentifier(previous.string)) {
+				context.splice(0, 0, previous.string);
+				cursor.ch = previous.start - 1;
+			} else {
+				break;
+			}
+		}
+
+		if (context.length > 0) {
+			token.start = offset;
+			token.end = offset;
+			token.string = "";
+
+			editor.token = token;
+			editor.search("", context.join("."), cursor.line, offset);
+		}
+	} else {
+		editor.complete();
+	}
+}
