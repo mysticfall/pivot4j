@@ -3,6 +3,7 @@ package org.pivot4j.analytics.ui;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,11 @@ public class AutocompletionSupport {
 	@ManagedProperty(value = "#{pivotStateManager.model}")
 	private PivotModel model;
 
+	public static List<String> FUNCTIONS = Arrays
+			.asList("Union", "Hierarchize");
+
+	public static List<String> MEMBER_FUNCTIONS = Arrays.asList("Children");
+
 	public List<String> complete(CompleteEvent event) throws OlapException {
 		List<String> suggestions = new ArrayList<String>();
 
@@ -41,7 +47,7 @@ public class AutocompletionSupport {
 			String token = decode(event.getToken());
 
 			if (context.isEmpty()) {
-				collectMatches(token, suggestions, cube.getHierarchies());
+				matchElements(token, suggestions, cube.getHierarchies());
 			} else if (context.size() == 1) {
 				String name = context.get(0).getName();
 				Hierarchy hierarchy = cube.getHierarchies().get(name);
@@ -49,41 +55,48 @@ public class AutocompletionSupport {
 				if (hierarchy != null) {
 					List<? extends Member> members = hierarchy.getRootMembers();
 
-					collectMatches(token, suggestions, members);
+					matchElements(token, suggestions, members);
 
 					for (Member member : members) {
 						if (member.isAll()) {
-							collectMatches(token, suggestions,
+							matchElements(token, suggestions,
 									member.getChildMembers());
 						}
 					}
 
-					suggestions.add(".Children");
+					matchKeywords(token, suggestions, MEMBER_FUNCTIONS);
 				}
 			} else {
 				Member parent = cube.lookupMember(context);
 
 				if (parent != null) {
-					collectMatches(token, suggestions, parent.getChildMembers());
-
-					suggestions.add("Children");
+					matchElements(token, suggestions, parent.getChildMembers());
+					matchKeywords(token, suggestions, MEMBER_FUNCTIONS);
 				}
 			}
 
 			if (context.isEmpty()) {
-				suggestions.add("Hierarchize");
-				suggestions.add("Union");
+				matchKeywords(token, suggestions, FUNCTIONS);
 			}
 		}
 
 		return suggestions;
 	}
 
-	private static void collectMatches(String keyword, List<String> result,
+	private static void matchElements(String keyword, List<String> result,
 			List<? extends MetadataElement> elements) {
 		for (MetadataElement element : elements) {
 			if (keyword == null || element.getName().startsWith(keyword)) {
 				result.add("[" + element.getName() + "]");
+			}
+		}
+	}
+
+	private static void matchKeywords(String keyword, List<String> result,
+			List<String> elements) {
+		for (String element : elements) {
+			if (keyword == null || element.startsWith(keyword)) {
+				result.add(element);
 			}
 		}
 	}

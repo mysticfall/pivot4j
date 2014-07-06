@@ -423,7 +423,7 @@ function completeMdx(editor) {
 
 			if (isIdentifier(previous.string)) {
 				context.splice(0, 0, previous.string);
-				cursor.ch = previous.start - 1;
+				cursor.ch = previous.start;
 			} else {
 				break;
 			}
