@@ -2,9 +2,11 @@ package org.pivot4j.analytics.repository;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -108,13 +110,14 @@ public class ReportContent implements Serializable {
 	 * @param in
 	 * @throws ConfigurationException
 	 */
-	public ReportContent(InputStream in) throws ConfigurationException {
+	public ReportContent(InputStream in) throws IOException,
+			ConfigurationException {
 		if (in == null) {
 			throw new NullArgumentException("in");
 		}
 
 		FileConfiguration config = (FileConfiguration) createConfiguration();
-		config.load(in);
+		config.load(new InputStreamReader(in, "UTF-8"));
 
 		this.configuration = (HierarchicalConfiguration) config;
 	}
@@ -129,13 +132,14 @@ public class ReportContent implements Serializable {
 	 * @param out
 	 * @throws ConfigurationException
 	 */
-	public void write(OutputStream out) throws ConfigurationException {
+	public void write(OutputStream out) throws IOException,
+			ConfigurationException {
 		if (out == null) {
 			throw new NullArgumentException("out");
 		}
 
 		FileConfiguration config = (FileConfiguration) this.configuration;
-		config.save(out);
+		config.save(new OutputStreamWriter(out, "UTF-8"));
 	}
 
 	/**
