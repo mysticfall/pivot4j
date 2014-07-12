@@ -1764,7 +1764,7 @@ public class TableRenderer extends
 			context.setRenderPropertyCategory(TITLE);
 
 			context.setRowIndex(rowIndex);
-			context.setColIndex(1);
+			context.setColIndex(0);
 
 			context.setColSpan(1);
 			context.setRowSpan(1);

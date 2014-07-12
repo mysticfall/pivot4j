@@ -8,6 +8,7 @@
  */
 package org.pivot4j.ui.fop;
 
+import static org.pivot4j.ui.CellTypes.LABEL;
 import static org.pivot4j.ui.CellTypes.VALUE;
 
 import java.io.OutputStream;
@@ -345,6 +346,21 @@ public class FopExporter extends
 	@Override
 	public void startTable(TableRenderContext context) {
 		try {
+			if (context.getAxis() == Axis.FILTER) {
+				this.documentHandler.startElement(FOElementMapping.URI,
+						"block", "block", createTitleTextAttributes(context));
+
+				String title = context.getResourceBundle().getString(
+						"label.filter")
+						+ " : " + context.getHierarchy().getCaption();
+
+				this.documentHandler.characters(title.toCharArray(), 0,
+						title.length());
+
+				this.documentHandler.endElement(FOElementMapping.URI, "block",
+						"block");
+			}
+
 			this.documentHandler.startElement(FOElementMapping.URI, "table",
 					"table", createTableAttributes(context));
 		} catch (SAXException e) {
@@ -372,31 +388,6 @@ public class FopExporter extends
 	@Override
 	public void endHeader(TableRenderContext context) {
 		try {
-			if (context.getAxis() == Axis.FILTER) {
-				this.documentHandler.startElement(FOElementMapping.URI,
-						"table-row", "table-row", new AttributesImpl());
-
-				this.documentHandler.startElement(FOElementMapping.URI,
-						"table-cell", "table-cell", new AttributesImpl());
-
-				this.documentHandler.startElement(FOElementMapping.URI,
-						"block", "block", createTitleTextAttributes(context));
-
-				String title = context.getResourceBundle().getString(
-						"label.filter");
-
-				this.documentHandler.characters(title.toCharArray(), 0,
-						title.length());
-
-				this.documentHandler.endElement(FOElementMapping.URI, "block",
-						"block");
-
-				this.documentHandler.endElement(FOElementMapping.URI,
-						"table-cell", "table-cell");
-				this.documentHandler.endElement(FOElementMapping.URI,
-						"table-row", "table-row");
-			}
-
 			this.documentHandler.endElement(FOElementMapping.URI,
 					"table-header", "table-header");
 		} catch (SAXException e) {
@@ -466,15 +457,11 @@ public class FopExporter extends
 			this.documentHandler.startElement(FOElementMapping.URI, "inline",
 					"inline", new AttributesImpl());
 
-			if (context.getAxis() == Axis.FILTER
-					&& context.getColumnIndex() > 1) {
-				this.documentHandler.characters(", ".toCharArray(), 0, 2);
-			}
-
 			if (label != null) {
 				this.documentHandler.characters(label.toCharArray(), 0,
 						label.length());
 			}
+
 			this.documentHandler.endElement(FOElementMapping.URI, "inline",
 					"inline");
 		} catch (SAXException e) {
@@ -872,6 +859,13 @@ public class FopExporter extends
 					titleFontFamily);
 		}
 
+		if (context.getAxis() == Axis.FILTER) {
+			attributes.addAttribute("", "margin-top", "margin-top", "CDATA",
+					"1.0em");
+			attributes.addAttribute("", "margin-bottom", "margin-bottom",
+					"CDATA", "1.0em");
+		}
+
 		return attributes;
 	}
 
@@ -1048,11 +1042,6 @@ public class FopExporter extends
 		attributes.addAttribute("", "table-layout", "table-layout", "CDATA",
 				"fixed");
 
-		if (context.getAxis() == Axis.FILTER) {
-			attributes.addAttribute("", "margin-top", "margin-top", "CDATA",
-					"1.0em");
-		}
-
 		return attributes;
 	}
 
@@ -1101,7 +1090,10 @@ public class FopExporter extends
 					Integer.toString(context.getRowSpan()));
 		}
 
-		if (context.getCell() == null && !VALUE.equals(context.getCellType())) {
+		if (context.getCell() == null
+				&& !VALUE.equals(context.getCellType())
+				&& !(context.getAxis() == Axis.FILTER && LABEL.equals(context
+						.getCellType()))) {
 			attributes.addAttribute("", "background-color", "background-color",
 					"CDATA", "#DEDEDE");
 			attributes.addAttribute("", "font-weight", "font-weight", "CDATA",

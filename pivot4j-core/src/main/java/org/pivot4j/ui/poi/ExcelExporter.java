@@ -9,6 +9,7 @@
 package org.pivot4j.ui.poi;
 
 import static org.pivot4j.ui.CellTypes.VALUE;
+import static org.pivot4j.ui.CellTypes.LABEL;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -331,7 +333,8 @@ public class ExcelExporter extends
 		String name;
 
 		if (context.getAxis() == Axis.FILTER) {
-			name = context.getResourceBundle().getString("label.filter");
+			name = context.getResourceBundle().getString("label.filter")
+					+ " - " + context.getHierarchy().getCaption();
 		} else {
 			name = context.getModel().getCube().getCaption();
 		}
@@ -520,6 +523,9 @@ public class ExcelExporter extends
 			} else {
 				return getAggregationCellStyle();
 			}
+		} else if (LABEL.equals(context.getCellType())
+				&& context.getAxis() == Axis.FILTER) {
+			return getValueCellStyle();
 		} else {
 			return getHeaderCellStyle();
 		}
@@ -551,6 +557,15 @@ public class ExcelExporter extends
 			List<CellRangeAddress> regions) {
 		for (CellRangeAddress region : regions) {
 			sheet.addMergedRegion(region);
+
+			RegionUtil.setBorderTop(CellStyle.BORDER_THIN, region, sheet,
+					workbook);
+			RegionUtil.setBorderLeft(CellStyle.BORDER_THIN, region, sheet,
+					workbook);
+			RegionUtil.setBorderBottom(CellStyle.BORDER_THIN, region, sheet,
+					workbook);
+			RegionUtil.setBorderRight(CellStyle.BORDER_THIN, region, sheet,
+					workbook);
 		}
 	}
 
