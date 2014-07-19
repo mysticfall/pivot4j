@@ -134,16 +134,16 @@
 								<f:setPropertyActionListener
 									target="#{viewHandler.drillDownMode}" value="replace" />
 							</p:menuitem>
+							<p:separator />
+							<p:menuitem value="#{msg['toolbar.drill.through']}" 
+								title="#{msg['toolbar.drill.through.tooltip']}"
+								icon="#{viewHandler.drillThrough?'ui-icon-check':'ui-icon-none'}"
+								disabled="#{!viewHandler.valid or !pivotStateManager.model.cube.drillThroughEnabled}"
+								update=":toolbar-form,:grid-form,:growl"
+								process="@this"
+								oncomplete="onViewChanged()" 
+								action="#{viewHandler.toggleDrillThrough}" />
 						</p:menuButton>
-						<p:selectBooleanButton value="#{viewHandler.drillThrough}"
-							title="#{msg['toolbar.drill.through.tooltip']}"
-							onLabel="#{msg['toolbar.drill.through']}"
-							offLabel="#{msg['toolbar.drill.through']}"
-							disabled="#{!viewHandler.valid or !pivotStateManager.model.cube.drillThroughEnabled}"
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
-							<p:ajax listener="#{viewHandler.render}" process="@this"
-								update=":grid-form" oncomplete="onViewChanged()" />
-						</p:selectBooleanButton>
 						<p:selectBooleanButton value="#{viewHandler.scenarioEnabled}"
 							title="#{msg['toolbar.scenario.tooltip']}"
 							onLabel="#{msg['toolbar.scenario']}"
@@ -167,42 +167,6 @@
 							oncomplete="PF('aggregationConfig').show();"
 							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}" />
-						<p:separator rendered="#{!pivotStateManager.readOnly}"
-							styleClass="ui-hide-display" />
-						<p:menuButton value="#{msg['toolbar.export']}"
-							disabled="#{!viewHandler.valid}"
-							styleClass="export-menu hide-on-embed">
-							<p:menuitem id="mi-export-xls"
-								value="#{msg['toolbar.export.format.xls']}"
-								action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
-								ajax="false">
-								<f:param name="format" value="HSSF" />
-							</p:menuitem>
-							<p:menuitem id="mi-export-xlsx"
-								value="#{msg['toolbar.export.format.xlsx']}"
-								action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
-								ajax="false">
-								<f:param name="format" value="SXSSF" />
-							</p:menuitem>
-							<p:menuitem id="mi-export-pdf"
-								value="#{msg['toolbar.export.format.pdf']}" icon="ui-icon-print"
-								onclick="PF('exportConfig').show();" />
-						</p:menuButton>
-						<p:commandButton value="#{msg['toolbar.print']}"
-							title="#{msg['toolbar.print.tooltip']}" type="button"
-							icon="ui-icon-print" disabled="#{!viewHandler.valid}"
-							onclick="$('table.pivot-grid:first').jqprint();"
-							styleClass="hide-on-embed" />
-						<p:separator rendered="#{viewHandler.visible}" />
-						<p:selectBooleanButton value="#{viewHandler.visible}"
-							title="#{msg['toolbar.grid.tooltip']}"
-							onLabel="#{msg['toolbar.grid.hide']}"
-							offLabel="#{msg['toolbar.grid.show']}"
-							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}">
-							<p:ajax listener="#{viewHandler.render}" process="@this"
-								update=":toolbar-form,:grid-form" oncomplete="onViewChanged()" />
-						</p:selectBooleanButton>
 						<p:menuButton id="charts" value="#{msg['label.chart']}"
 							disabled="#{!viewHandler.valid}"
 							rendered="#{!pivotStateManager.readOnly}">
@@ -225,10 +189,42 @@
 								</p:menuitem>
 							</c:forEach>
 							<p:separator />
+							<p:menuitem 
+								value="#{msg['toolbar.grid.show']}"
+								title="#{msg['toolbar.grid.tooltip']}"
+								icon="#{viewHandler.visible?'ui-icon-check':'ui-icon-none'}"
+								update=":toolbar-form,:grid-form,:growl"
+								action="#{viewHandler.toggleGrid}" process="@this"
+								oncomplete="onViewChanged()" />
+							<p:separator />
 							<p:menuitem value="#{msg['toolbar.chart.settings']}"
 								title="#{msg['toolbar.chart.settings.tooltip']}"
 								icon="ui-icon-gear" action="#{chartHandler.reset}"
 								oncomplete="PF('chartConfig').show()" />
+						</p:menuButton>
+						<p:separator rendered="#{!pivotStateManager.readOnly}" styleClass="hide-on-embed"/>
+						<p:menuButton value="#{msg['toolbar.export']}"
+							disabled="#{!viewHandler.valid}"
+							styleClass="export-menu hide-on-embed">
+							<p:menuitem id="mi-export-xls"
+								value="#{msg['toolbar.export.format.xls']}"
+								action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
+								ajax="false">
+								<f:param name="format" value="HSSF" />
+							</p:menuitem>
+							<p:menuitem id="mi-export-xlsx"
+								value="#{msg['toolbar.export.format.xlsx']}"
+								action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
+								ajax="false">
+								<f:param name="format" value="SXSSF" />
+							</p:menuitem>
+							<p:menuitem id="mi-export-pdf"
+								value="#{msg['toolbar.export.format.pdf']}" icon="ui-icon-print"
+								onclick="PF('exportConfig').show();" />
+							<p:separator />
+							<p:menuitem 
+								value="#{msg['toolbar.print']}" title="#{msg['toolbar.print.tooltip']}" 
+								icon="ui-icon-print" onclick="$('table.pivot-grid:first').jqprint();" />
 						</p:menuButton>
 					</f:facet>
 				</p:toolbar>

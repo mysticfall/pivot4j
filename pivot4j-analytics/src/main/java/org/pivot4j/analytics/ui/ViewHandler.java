@@ -763,6 +763,11 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 		renderer.setEnableDrillThrough(drillThrough);
 	}
 
+	public void toggleDrillThrough() {
+		setDrillThrough(!getDrillThrough());
+		render();
+	}
+
 	/**
 	 * @return the drillDownMode
 	 */
@@ -791,6 +796,11 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	 */
 	public void setVisible(boolean visible) {
 		this.renderer.setVisible(visible);
+	}
+
+	public void toggleGrid() {
+		setVisible(!isVisible());
+		render();
 	}
 
 	/**
