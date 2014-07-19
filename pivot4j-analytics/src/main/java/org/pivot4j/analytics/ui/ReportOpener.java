@@ -128,7 +128,8 @@ public class ReportOpener {
 
 		state.setFile(file);
 		state.setParameters(parameters);
-		state.setReadOnly(embeded);
+		state.setReadOnly(!file.canWrite());
+		state.setEditable(!state.isReadOnly() && !embeded);
 
 		return state;
 	}

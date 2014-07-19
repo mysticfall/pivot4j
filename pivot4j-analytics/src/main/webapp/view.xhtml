@@ -62,6 +62,19 @@
 			<h:form id="toolbar-form">
 				<p:toolbar id="toolbar">
 					<f:facet name="left">
+						<p:selectBooleanButton 
+							value="#{viewHandler.editable}"
+							title="#{msg['toolbar.edit.tooltip']}"
+							onLabel="#{msg['toolbar.edit']}"
+							offLabel="#{msg['toolbar.edit']}"
+							onIcon="ui-icon-pencil"
+							offIcon="ui-icon-pencil"
+							disabled="#{!viewHandler.valid}"
+							rendered="#{!pivotStateManager.readOnly}">
+							<p:ajax process="@this" oncomplete="document.location.reload();" />
+						</p:selectBooleanButton>
+						<p:separator
+							rendered="#{viewHandler.editable and viewHandler.visible}" />
 						<p:selectBooleanButton value="#{viewHandler.showParentMembers}"
 							title="#{msg['toolbar.parent.tooltip']}"
 							onLabel="#{msg['toolbar.parent.hide']}"
@@ -69,7 +82,7 @@
 							onIcon="ui-icon-arrowthickstop-1-n"
 							offIcon="ui-icon-arrowthickstop-1-n"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
+							rendered="#{viewHandler.editable and viewHandler.visible}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
@@ -80,7 +93,7 @@
 							onIcon="ui-icon-circlesmall-minus"
 							offIcon="ui-icon-circlesmall-minus"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
+							rendered="#{viewHandler.editable and viewHandler.visible}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
@@ -91,7 +104,7 @@
 							onIcon="ui-icon-circlesmall-close"
 							offIcon="ui-icon-circlesmall-close"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}">
+							rendered="#{viewHandler.editable}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar"
 								oncomplete="onViewChanged()" />
@@ -101,15 +114,15 @@
 							onLabel="#{msg['toolbar.swap_axes']}"
 							offLabel="#{msg['toolbar.swap_axes']}" onIcon="ui-icon-refresh"
 							offIcon="ui-icon-refresh" disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}">
+							rendered="#{viewHandler.editable}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:target-tree-form"
 								oncomplete="onViewChanged()" />
 						</p:selectBooleanButton>
-						<p:separator rendered="#{!pivotStateManager.readOnly}" />
+						<p:separator rendered="#{viewHandler.editable}" />
 						<p:menuButton id="drill-mode" value="#{msg['toolbar.drill']}"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
+							rendered="#{viewHandler.editable and viewHandler.visible}">
 							<p:menuitem value="#{msg['toolbar.drill.position']}"
 								title="#{msg['toolbar.drill.position.tooltip']}"
 								icon="#{viewHandler.drillDownMode=='position'?'ui-icon-check':'ui-icon-none'}"
@@ -148,16 +161,16 @@
 							title="#{msg['toolbar.scenario.tooltip']}"
 							onLabel="#{msg['toolbar.scenario']}"
 							offLabel="#{msg['toolbar.scenario']}"
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible and viewHandler.valid and pivotStateManager.model.scenarioSupported}">
+							rendered="#{viewHandler.editable and viewHandler.visible and viewHandler.valid and pivotStateManager.model.scenarioSupported}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" />
 						</p:selectBooleanButton>
 						<p:separator
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}" />
+							rendered="#{viewHandler.editable and viewHandler.visible}" />
 						<p:commandButton value="#{msg['toolbar.properties']}"
 							title="#{msg['toolbar.properties.tooltip']}" type="button"
 							icon="ui-icon-gear" disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}"
+							rendered="#{viewHandler.editable and viewHandler.visible}"
 							onclick="PF('propertiesConfig').show(); return false;" />
 						<p:commandButton value="#{msg['toolbar.aggregation']}"
 							title="#{msg['toolbar.aggregation.tooltip']}"
@@ -165,10 +178,10 @@
 							process=":aggregation-form"
 							oncomplete="PF('aggregationConfig').show();"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}" />
+							rendered="#{viewHandler.editable and viewHandler.visible}" />
 						<p:menuButton id="charts" value="#{msg['label.chart']}"
 							disabled="#{!viewHandler.valid}"
-							rendered="#{!pivotStateManager.readOnly}">
+							rendered="#{viewHandler.editable}">
 							<p:menuitem value="(#{msg['label.none']})"
 								icon="#{empty chartHandler.chartName?'ui-icon-check':'ui-icon-none'}"
 								update=":toolbar-form,:grid-form,:growl"
@@ -201,7 +214,7 @@
 								icon="ui-icon-gear" action="#{chartHandler.reset}"
 								oncomplete="PF('chartConfig').show()" />
 						</p:menuButton>
-						<p:separator rendered="#{!pivotStateManager.readOnly}" styleClass="hide-on-embed"/>
+						<p:separator rendered="#{viewHandler.editable}" styleClass="hide-on-embed"/>
 						<p:menuButton value="#{msg['toolbar.export']}"
 							disabled="#{!viewHandler.valid}"
 							styleClass="export-menu hide-on-embed">
@@ -231,7 +244,7 @@
 		</pe:layoutPane>
 
 		<pe:layoutPane id="navigator-pane" position="west"
-			rendered="#{!pivotStateManager.readOnly}">
+			rendered="#{viewHandler.editable}">
 			<f:facet name="header">
 				<h:panelGroup layout="block">
 					<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-search" />
@@ -385,14 +398,14 @@
 				<h:panelGroup layout="block">
 					<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-document" />
 					<h:outputText value="#{msg['header.grid']}"
-						rendered="#{!pivotStateManager.readOnly}" />
+						rendered="#{viewHandler.editable}" />
 					<h:outputText value="#{viewHandler.cubeName}"
-						rendered="#{pivotStateManager.readOnly}" />
+						rendered="#{!viewHandler.editable}" />
 				</h:panelGroup>
 			</f:facet>
 
 			<pe:layoutPane id="grid-header-pane" position="north"
-				rendered="#{!pivotStateManager.readOnly}">
+				rendered="#{viewHandler.editable}">
 				<h:form id="filter-items-form">
 					<h:panelGrid id="filter-panel" styleClass="filter-panel"
 						columns="3"
@@ -418,7 +431,7 @@
 				</h:form>
 
 				<h:panelGroup id="filter-dialog" layout="block"
-					rendered="#{!pivotStateManager.readOnly}">
+					rendered="#{viewHandler.editable}">
 					<p:overlayPanel widgetVar="filterDialog" hideEffect="fade"
 						for=":filter-items-form:filter-items" dynamic="true"
 						showEvent="none" appendToBody="true"
@@ -493,7 +506,7 @@
 			</pe:layoutPane>
 
 			<pe:layoutPane id="mdx-editor-pane" position="south"
-				rendered="#{!pivotStateManager.readOnly}">
+				rendered="#{viewHandler.editable}">
 				<f:facet name="header">
 					<h:panelGroup layout="block">
 						<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-script" />
@@ -503,7 +516,7 @@
 
 				<h:form id="editor-form">
 					<pe:layoutPane id="mdx-editor-toolbar" position="north"
-						rendered="#{!pivotStateManager.readOnly}">
+						rendered="#{viewHandler.editable}">
 						<p:toolbar id="editor-toolbar">
 							<f:facet name="left">
 								<p:commandButton value="#{msg['button.run']}"

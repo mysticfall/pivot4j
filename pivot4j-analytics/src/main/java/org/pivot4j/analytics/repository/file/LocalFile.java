@@ -131,4 +131,20 @@ public class LocalFile extends AbstractReportFile {
 	public long getSize() {
 		return file.length();
 	}
+
+	/**
+	 * @see org.pivot4j.analytics.repository.ReportFile#canRead()
+	 */
+	@Override
+	public boolean canRead() {
+		return file.canRead();
+	}
+
+	/**
+	 * @see org.pivot4j.analytics.repository.ReportFile#canWrite()
+	 */
+	@Override
+	public boolean canWrite() {
+		return file.canWrite();
+	}
 }

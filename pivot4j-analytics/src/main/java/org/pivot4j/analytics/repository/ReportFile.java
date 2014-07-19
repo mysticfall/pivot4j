@@ -28,4 +28,8 @@ public interface ReportFile {
 	Date getLastModifiedDate();
 	
 	long getSize();
+
+	boolean canRead();
+
+	boolean canWrite();
 }

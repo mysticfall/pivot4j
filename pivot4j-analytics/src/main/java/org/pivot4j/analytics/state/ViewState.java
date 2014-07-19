@@ -24,6 +24,8 @@ public class ViewState {
 
 	private boolean readOnly = false;
 
+	private boolean editable = true;
+
 	private Date lastActive = new Date();
 
 	private ConnectionInfo connectionInfo;
@@ -157,6 +159,21 @@ public class ViewState {
 	 */
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
+	}
+
+	/**
+	 * @return the editable
+	 */
+	public boolean isEditable() {
+		return editable;
+	}
+
+	/**
+	 * @param editable
+	 *            the editable to set
+	 */
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 
 	/**

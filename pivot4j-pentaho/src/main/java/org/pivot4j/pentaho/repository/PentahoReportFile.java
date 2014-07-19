@@ -17,17 +17,21 @@ public class PentahoReportFile extends AbstractReportFile {
 
 	private PentahoReportFile parent;
 
+	private boolean writeable;
+
 	/**
 	 * @param file
 	 * @param parent
+	 * @param writeable
 	 */
-	public PentahoReportFile(RepositoryFile file, PentahoReportFile parent) {
+	public PentahoReportFile(RepositoryFile file, PentahoReportFile parent, boolean writeable) {
 		if (file == null) {
 			throw new NullArgumentException("file");
 		}
 
 		this.file = file;
 		this.parent = parent;
+		this.writeable = writeable;
 	}
 
 	/**
@@ -96,5 +100,21 @@ public class PentahoReportFile extends AbstractReportFile {
 	@Override
 	public long getSize() {
 		return file.getFileSize();
+	}
+
+	/**
+	 * @see org.pivot4j.analytics.repository.ReportFile#canRead()
+	 */
+	@Override
+	public boolean canRead() {
+		return true;
+	}
+
+	/**
+	 * @see org.pivot4j.analytics.repository.ReportFile#canWrite()
+	 */
+	@Override
+	public boolean canWrite() {
+		return writeable;
 	}
 }

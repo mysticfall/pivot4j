@@ -88,4 +88,20 @@ public class TestFile extends AbstractReportFile {
 	public long getSize() {
 		return 0;
 	}
+
+	/**
+	 * @see org.pivot4j.analytics.repository.ReportFile#canRead()
+	 */
+	@Override
+	public boolean canRead() {
+		return true;
+	}
+
+	/**
+	 * @see org.pivot4j.analytics.repository.ReportFile#canWrite()
+	 */
+	@Override
+	public boolean canWrite() {
+		return true;
+	}
 }

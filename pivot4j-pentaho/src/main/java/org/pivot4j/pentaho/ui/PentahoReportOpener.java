@@ -55,8 +55,9 @@ public class PentahoReportOpener extends ReportOpener {
 		PentahoReportFile pentahoFile = (PentahoReportFile) file;
 
 		state.setName(pentahoFile.getTitle());
-		state.setReadOnly("false".equalsIgnoreCase(request
-				.getParameter("editable")));
+		state.setReadOnly(!file.canWrite());
+		state.setEditable(!state.isReadOnly()
+				&& !"false".equalsIgnoreCase(request.getParameter("editable")));
 
 		return state;
 	}

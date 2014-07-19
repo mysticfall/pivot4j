@@ -137,11 +137,6 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			renderer.restoreState(state);
 		}
 
-		boolean readOnly = stateManager.isReadOnly();
-
-		renderer.setEnableDrillDown(!readOnly);
-		renderer.setEnableSort(!readOnly);
-
 		renderer.addCommand(new DrillThroughCommandImpl(renderer));
 	}
 
@@ -596,6 +591,9 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 			callback.setGridPanel(component);
 			callback.setFilterPanel(filterComponent);
 
+			renderer.setEnableDrillDown(isEditable());
+			renderer.setEnableSort(isEditable());
+
 			renderer.render(model, callback);
 		}
 
@@ -801,6 +799,21 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 	public void toggleGrid() {
 		setVisible(!isVisible());
 		render();
+	}
+
+	/**
+	 * @return the editable
+	 */
+	public boolean isEditable() {
+		return stateManager.getState().isEditable();
+	}
+
+	/**
+	 * @param editable
+	 *            the editable to set
+	 */
+	public void setEditable(boolean editable) {
+		stateManager.getState().setEditable(editable);
 	}
 
 	/**
