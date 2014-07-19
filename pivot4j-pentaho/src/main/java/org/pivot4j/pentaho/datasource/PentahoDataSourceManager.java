@@ -105,8 +105,10 @@ public class PentahoDataSourceManager extends
 		List<CatalogInfo> result = new LinkedList<CatalogInfo>();
 
 		for (MondrianCatalog catalog : catalogs) {
-			result.add(new CatalogInfo(catalog.getName(), catalog.getName(),
-					catalog.getDefinition()));
+			if (!getCubes(catalog.getName()).isEmpty()) {
+				result.add(new CatalogInfo(catalog.getName(),
+						catalog.getName(), catalog.getDefinition()));
+			}
 		}
 
 		return result;
