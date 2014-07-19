@@ -148,8 +148,7 @@
 							title="#{msg['toolbar.scenario.tooltip']}"
 							onLabel="#{msg['toolbar.scenario']}"
 							offLabel="#{msg['toolbar.scenario']}"
-							disabled="#{!viewHandler.valid or !pivotStateManager.model.scenarioSupported}"
-							rendered="#{!pivotStateManager.readOnly and viewHandler.visible}">
+							rendered="#{!pivotStateManager.readOnly and viewHandler.visible and viewHandler.valid and pivotStateManager.model.scenarioSupported}">
 							<p:ajax listener="#{viewHandler.render}" process="@this"
 								update=":grid-form" />
 						</p:selectBooleanButton>
