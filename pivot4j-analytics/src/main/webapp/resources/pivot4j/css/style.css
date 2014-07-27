@@ -510,6 +510,10 @@ span.ui-button-icon-only {
 	margin-right: 10px;
 }
 
+.chart-config .ui-tabs .ui-tabs-panel {
+	height: 235px;
+}
+
 .properties-config .ui-dialog-content {
 	padding: 5px;
 }

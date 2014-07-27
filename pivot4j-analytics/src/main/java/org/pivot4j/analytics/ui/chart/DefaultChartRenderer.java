@@ -1,6 +1,7 @@
 package org.pivot4j.analytics.ui.chart;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.pivot4j.ui.chart.ChartRenderer;
@@ -14,6 +15,10 @@ public class DefaultChartRenderer extends ChartRenderer {
 	private int height = 300;
 
 	private Position legendPosition = Position.w;
+
+	private int xAxisAngle = 30;
+
+	private int yAxisAngle = 0;
 
 	/**
 	 * @return the chartName
@@ -76,11 +81,41 @@ public class DefaultChartRenderer extends ChartRenderer {
 	}
 
 	/**
+	 * @return the xAxisAngle
+	 */
+	public int getXAxisAngle() {
+		return xAxisAngle;
+	}
+
+	/**
+	 * @param xAxisAngle
+	 *            the xAxisAngle to set
+	 */
+	public void setXAxisAngle(int xAxisAngle) {
+		this.xAxisAngle = xAxisAngle;
+	}
+
+	/**
+	 * @return the yAxisAngle
+	 */
+	public int getYAxisAngle() {
+		return yAxisAngle;
+	}
+
+	/**
+	 * @param yAxisAngle
+	 *            the yAxisAngle to set
+	 */
+	public void setYAxisAngle(int yAxisAngle) {
+		this.yAxisAngle = yAxisAngle;
+	}
+
+	/**
 	 * @see org.pivot4j.ui.chart.ChartRenderer#saveState()
 	 */
 	@Override
 	public Serializable saveState() {
-		Serializable[] states = new Serializable[5];
+		Serializable[] states = new Serializable[7];
 
 		int index = 0;
 
@@ -88,6 +123,8 @@ public class DefaultChartRenderer extends ChartRenderer {
 		states[index++] = chartName;
 		states[index++] = width;
 		states[index++] = height;
+		states[index++] = xAxisAngle;
+		states[index++] = yAxisAngle;
 
 		String position = null;
 
@@ -114,6 +151,8 @@ public class DefaultChartRenderer extends ChartRenderer {
 		this.chartName = (String) states[index++];
 		this.width = (Integer) states[index++];
 		this.height = (Integer) states[index++];
+		this.xAxisAngle = (Integer) states[index++];
+		this.yAxisAngle = (Integer) states[index++];
 
 		String position = (String) states[index++];
 
@@ -135,6 +174,12 @@ public class DefaultChartRenderer extends ChartRenderer {
 		configuration.addProperty("dimension[@width]", width);
 		configuration.addProperty("dimension[@height]", height);
 
+		configuration.addProperty("axes.axis(0)[@name]", "x");
+		configuration.addProperty("axes.axis(0).label[@angle]", xAxisAngle);
+
+		configuration.addProperty("axes.axis(1)[@name]", "y");
+		configuration.addProperty("axes.axis(1).label[@angle]", yAxisAngle);
+
 		if (legendPosition != null) {
 			configuration.addProperty("legend.position", legendPosition.name());
 		}
@@ -150,6 +195,17 @@ public class DefaultChartRenderer extends ChartRenderer {
 		this.chartName = configuration.getString("[@type]");
 		this.width = configuration.getInt("dimension[@width]", 0);
 		this.height = configuration.getInt("dimension[@height]", 0);
+
+		List<HierarchicalConfiguration> axisConfigs = configuration
+				.configurationsAt("axes.axis");
+
+		for (HierarchicalConfiguration axisConfig : axisConfigs) {
+			if (axisConfig.getString("[@name]", "x").equals("x")) {
+				this.xAxisAngle = axisConfig.getInt("label[@angle]", 30);
+			} else {
+				this.yAxisAngle = axisConfig.getInt("label[@angle]", 0);
+			}
+		}
 
 		String position = configuration.getString("legend.position",
 				Position.w.name());

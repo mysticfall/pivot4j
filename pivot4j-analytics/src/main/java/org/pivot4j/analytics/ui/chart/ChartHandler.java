@@ -61,6 +61,10 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 
 	private Position legendPosition;
 
+	private int xAxisAngle;
+
+	private int yAxisAngle;
+
 	@PostConstruct
 	protected void initialize() {
 		this.model = stateManager.getModel();
@@ -280,6 +284,36 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 		this.legendPosition = legendPosition;
 	}
 
+	/**
+	 * @return the xAxisAngle
+	 */
+	public int getxAxisAngle() {
+		return xAxisAngle;
+	}
+
+	/**
+	 * @param xAxisAngle
+	 *            the xAxisAngle to set
+	 */
+	public void setxAxisAngle(int xAxisAngle) {
+		this.xAxisAngle = xAxisAngle;
+	}
+
+	/**
+	 * @return the yAxisAngle
+	 */
+	public int getyAxisAngle() {
+		return yAxisAngle;
+	}
+
+	/**
+	 * @param yAxisAngle
+	 *            the yAxisAngle to set
+	 */
+	public void setyAxisAngle(int yAxisAngle) {
+		this.yAxisAngle = yAxisAngle;
+	}
+
 	public boolean isValid() {
 		if (model == null || !model.isInitialized()) {
 			return false;
@@ -316,6 +350,8 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 
 		this.width = renderer.getWidth();
 		this.height = renderer.getHeight();
+		this.xAxisAngle = renderer.getXAxisAngle();
+		this.yAxisAngle = renderer.getYAxisAngle();
 		this.legendPosition = renderer.getLegendPosition();
 	}
 
@@ -334,6 +370,9 @@ public class ChartHandler implements ModelChangeListener, Serializable {
 
 			renderer.setWidth(width);
 			renderer.setHeight(height);
+
+			renderer.setXAxisAngle(xAxisAngle);
+			renderer.setYAxisAngle(yAxisAngle);
 
 			renderer.setLegendPosition(legendPosition);
 

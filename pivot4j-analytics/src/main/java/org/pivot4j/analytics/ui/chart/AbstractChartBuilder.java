@@ -178,6 +178,9 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 			chart.setLegendPosition(renderer.getLegendPosition().name());
 		}
 
+		chart.setXaxisAngle(renderer.getXAxisAngle());
+		chart.setYaxisAngle(renderer.getYAxisAngle());
+
 		StringBuilder builder = new StringBuilder();
 		builder.append("width: ");
 
