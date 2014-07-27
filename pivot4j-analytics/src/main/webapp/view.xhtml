@@ -574,7 +574,7 @@
 	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
 		oncomplete="hideWaitDialog();" />
 
-	<pe:blockUI widgetVar="waitDialog" targetSelector="body">
+	<pe:blockUI widgetVar="waitDialog">
 		<h:panelGrid columns="2">
 			<p:graphicImage library="pivot4j" name="images/loading.gif" />
 			<h:outputText value="#{msg['message.loading']}" />
