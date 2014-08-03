@@ -339,7 +339,7 @@ public class PivotExportHandler {
 		externalContext.setResponseContentType(exporter.getContentType());
 
 		try {
-			renderer.setRenderSlicer(true);
+			renderer.setRenderSlicer(viewHandler.getRenderSlicer());
 			renderer.setShowSlicerMembersInline(false);
 
 			renderer.render(model, exporter);
@@ -401,7 +401,7 @@ public class PivotExportHandler {
 		boolean renderSlicer = renderer.getRenderSlicer();
 
 		try {
-			renderer.setRenderSlicer(true);
+			renderer.setRenderSlicer(viewHandler.getRenderSlicer());
 
 			renderer.render(model, exporter);
 		} finally {
