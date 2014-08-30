@@ -12,6 +12,7 @@
 			<default-locale>en</default-locale>
 			<supported-locale>en</supported-locale>
 			<supported-locale>ko</supported-locale>
+			<supported-locale>pt</supported-locale>
 			<supported-locale>pt_BR</supported-locale>
 			<supported-locale>fr</supported-locale>
 			<supported-locale>de</supported-locale>
