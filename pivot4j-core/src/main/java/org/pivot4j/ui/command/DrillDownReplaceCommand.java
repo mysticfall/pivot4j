@@ -63,7 +63,8 @@ public class DrillDownReplaceCommand extends AbstractDrillDownCommand {
 			return false;
 		}
 
-		return transform.canDrillDown(member);
+		return transform.canDrillDown(member)
+				&& context.getPosition().getMembers().contains(member);
 	}
 
 	/**

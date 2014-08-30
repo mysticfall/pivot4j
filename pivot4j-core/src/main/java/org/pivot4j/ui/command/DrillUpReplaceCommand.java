@@ -61,7 +61,7 @@ public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 		DrillReplace transform = model.getTransform(DrillReplace.class);
 
 		Hierarchy hierarchy = context.getHierarchy();
-		if (hierarchy == null || context.getProperty() != null) {
+		if (hierarchy == null || context.getProperty() != null || context.getMember() !=null) {
 			return false;
 		}
 
