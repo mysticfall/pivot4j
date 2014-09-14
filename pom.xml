@@ -64,12 +64,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.extension.scm>1.9</version.extension.scm>
 		<version.extension.wagon>2.6</version.extension.wagon>
 
-		<version.el>3.0.0</version.el>
-		<version.jsp>2.1</version.jsp>
-		<version.jstl>1.2</version.jstl>
 		<version.servlet>2.5</version.servlet>
-		<version.myfaces>2.2.3</version.myfaces>
-		<version.mojarra>2.2.5</version.mojarra>
 
 		<version.slf4j>1.7.7</version.slf4j>
 		<version.log4j>2.0-rc1</version.log4j>
@@ -77,10 +72,12 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.mondrian>3.6.7</version.mondrian>
 		<version.olap4j>1.2.0</version.olap4j>
 		<version.pentaho>5.0.2</version.pentaho>
+		<version.spring>4.1.0.RELEASE</version.spring>
 
 		<version.commons.configuration>1.10</version.commons.configuration>
 		<version.commons.dbutils>1.5</version.commons.dbutils>
 		<version.commons.lang>2.6</version.commons.lang>
+		<version.commons.lang3>3.3.2</version.commons.lang3>
 		<version.commons.collections>3.2.1</version.commons.collections>
 		<version.commons.pool>1.6</version.commons.pool>
 
@@ -88,16 +85,6 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.htmlunit>2.15</version.htmlunit>
 		<version.jacoco>0.7.1.201405082137</version.jacoco>
 		<version.junit>4.11</version.junit>
-
-		<version.primefaces>5.0</version.primefaces>
-		<version.primefaces.extensions>2.0.0</version.primefaces.extensions>
-		<version.primefaces.themes>1.0.10</version.primefaces.themes>
-
-		<version.arquillian.bom>1.1.4.Final</version.arquillian.bom>
-		<version.arquillian.drone>2.0.0.Alpha2</version.arquillian.drone>
-		<version.arquillian.graphene>2.0.3.Final</version.arquillian.graphene>
-		<version.arquillian.jacoco>1.0.0.Alpha6</version.arquillian.jacoco>
-		<version.arquillian.tomcat6>1.0.0.CR6</version.arquillian.tomcat6>
 
 		<version.derby>10.10.2.0</version.derby>
 		<version.doxia.markdown>1.5</version.doxia.markdown>
@@ -107,11 +94,10 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.freemarker>2.3.20</version.freemarker>
 		<version.jflex>1.4.3</version.jflex>
 		<version.poi>3.10-FINAL</version.poi>
-		<version.shrinkwrap>2.0.0</version.shrinkwrap>
-		<version.tomcat6>6.0.41</version.tomcat6>
 		<version.xerces>2.11.0</version.xerces>
 		<version.reflow.velocity>1.0.0</version.reflow.velocity>
 		<version.velocity>1.7</version.velocity>
+		<version.jackson>2.4.2</version.jackson>
 	</properties>
 
 	<prerequisites>
@@ -120,8 +106,11 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 
 	<modules>
 		<module>pivot4j-core</module>
+		<module>pivot4j-service</module>
+		<!-- 
 		<module>pivot4j-analytics</module>
 		<module>pivot4j-pentaho</module>
+		 -->
 	</modules>
 
 	<developers>
@@ -501,6 +490,11 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>${version.commons.lang}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${version.commons.lang3}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

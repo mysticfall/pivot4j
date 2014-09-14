@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="pivot4j-analytics">
+    <wb-module deploy-name="pivot4j-service">
         <wb-resource deploy-path="/WEB-INF/web.xml" source-path="/target/generated-resources/xml/xslt/web.xml"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <wb-resource deploy-path="/WEB-INF/foodmart" source-path="/target/pivot4j-analytics-1.0-SNAPSHOT/WEB-INF/foodmart"/>
+        <wb-resource deploy-path="/WEB-INF/foodmart" source-path="/target/pivot4j-service-1.0-SNAPSHOT/WEB-INF/foodmart"/>
+        <dependent-module archiveName="pivot4j-core-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pivot4j-core/pivot4j-core">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="pivot4j"/>
-        <property name="java-output-path" value="/pivot4j-analytics/target/classes"/>
+        <property name="java-output-path" value="/pivot4j-service/target/classes"/>
     </wb-module>
 </project-modules>

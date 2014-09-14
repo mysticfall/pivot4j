@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Pivot4J Analytics configuration file for integration tests. -->
+<config>
+	<!-- Data source definitions. -->
+	<datasources>
+		<datasource>
+			<name>FoodMart Mondrian</name>
+			<description>FoodMart sample data source.</description>
+
+			<connection-info>
+				<url>jdbc:mondrian:</url>
+				<driverClass>mondrian.olap4j.MondrianOlap4jDriver</driverClass>
+				<properties>
+					<property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
+					<property name="Jdbc">jdbc:derby://localhost/foodmart</property>
+					<property name="JdbcDrivers">org.apache.derby.jdbc.ClientDriver</property>
+					<property name="JdbcUser">sa</property>
+				</properties>
+			</connection-info>
+		</datasource>
+
+		<!-- XMLA data source example -->
+		<!-- 
+		<datasource>
+			<name>FoodMart XMLA</name>
+			<description>FoodMart sample data source(XMLA).</description>
+
+			<connection-info>
+				<url>jdbc:xmla:</url>
+				<driverClass>org.olap4j.driver.xmla.XmlaOlap4jDriver</driverClass>
+				<user>somebody</user>
+				<password>secret</password>
+
+				<properties>
+					<property name="Server">http://localhost:8080/mondrian/xmla</property>
+					<property name="Catalog">FoodMart</property>
+				</properties>
+			</connection-info>
+		</datasource>
+		-->
+	</datasources>
+
+	<appearances>
+		<ui-theme>
+			<default>redmond</default>
+			<available-themes>
+				<theme name="aristo" description="Aristo" />
+			</available-themes>
+		</ui-theme>
+
+		<editor-theme>eclipse</editor-theme>
+	</appearances>
+	<toolbar>
+		<NonEmpty>false</NonEmpty>
+	</toolbar>
+	<web>
+		<resource-prefix />
+		<locale-attribute>locale</locale-attribute>
+		<view-parameter>viewId</view-parameter>
+		<file-parameter>fileId</file-parameter>
+		<path-parameter>path</path-parameter>
+	</web>
+</config>
