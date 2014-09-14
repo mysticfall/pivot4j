@@ -64,7 +64,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.extension.scm>1.9</version.extension.scm>
 		<version.extension.wagon>2.6</version.extension.wagon>
 
-		<version.servlet>2.5</version.servlet>
+		<version.servlet>3.0.1</version.servlet>
 
 		<version.slf4j>1.7.7</version.slf4j>
 		<version.log4j>2.0-rc1</version.log4j>
@@ -85,6 +85,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.htmlunit>2.15</version.htmlunit>
 		<version.jacoco>0.7.1.201405082137</version.jacoco>
 		<version.junit>4.11</version.junit>
+		<version.jsonassert>1.2.3</version.jsonassert>
 
 		<version.derby>10.10.2.0</version.derby>
 		<version.doxia.markdown>1.5</version.doxia.markdown>
