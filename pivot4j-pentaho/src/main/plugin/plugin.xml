@@ -32,7 +32,7 @@
 				</operation>
 				<operation>
 					<id>EDIT</id>
-            		<perspective>editor</perspective>
+					<perspective>editor</perspective>
 				</operation>
 			</operations>
 		</content-type>
