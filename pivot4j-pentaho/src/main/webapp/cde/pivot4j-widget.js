@@ -20,7 +20,7 @@ var Pivot4JComponent = BaseComponent.extend({
 
 		iframe.attr("frameBorder", "none").attr(
 				"src",
-				"../../../plugin/pivot4j/faces/open.xhtml?embeded=true&path="
+				webAppPath + "/plugin/pivot4j/faces/open.xhtml?embeded=true&path="
 						+ path);
 
 		widget.append(iframe);
