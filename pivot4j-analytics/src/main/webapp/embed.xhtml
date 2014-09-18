@@ -59,33 +59,6 @@
 
 		<p:growl id="grid-growl" showDetail="true" sticky="true"
 			globalOnly="true" />
-	</h:form>				<h:form id="grid-form" onkeypress="return event.keyCode != 13;">
-		<h:panelGroup id="pivot-grid" binding="#{viewHandler.component}"
-			layout="block"
-			rendered="#{viewHandler.valid and viewHandler.visible}" />
-
-		<h:panelGroup id="chart-panel" styleClass="chart-panel"
-			binding="#{chartHandler.component}" layout="block"
-			rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
-
-		<h:panelGroup styleClass="filter-info" layout="block"
-			rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
-
-			<h:outputText class="title" value="#{msg['label.filter']}" />
-
-			<h:panelGroup id="filter-grid" layout="block"
-				binding="#{viewHandler.filterComponent}" />
-		</h:panelGroup>
-
-		<h:panelGroup styleClass="info-panel" layout="block"
-			rendered="#{!viewHandler.valid and viewHandler.lastError == null}">
-			<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
-			<h:outputText value="#{msg['message.query.blank']}"
-				styleClass="message-warn" />
-		</h:panelGroup>
-
-		<p:growl id="grid-growl" showDetail="true" sticky="true"
-			globalOnly="true" />
 	</h:form>
 
 	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
