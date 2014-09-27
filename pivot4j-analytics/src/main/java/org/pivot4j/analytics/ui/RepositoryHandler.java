@@ -307,10 +307,16 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
 		ReportContent content = new ReportContent(state);
 
+		if (reportName.toLowerCase().endsWith(".pivot4j")) {
+			reportName = reportName.substring(0, reportName.length() - 8);
+		}
+
+		String fileName = reportName + ".pivot4j";
+
 		ReportFile file;
 
 		try {
-			file = repository.createFile(parent, reportName, content);
+			file = repository.createFile(parent, fileName, content);
 		} catch (ConfigurationException e) {
 			String title = bundle.getString("error.save.report.title");
 			String message = bundle.getString("error.save.report.format") + e;
@@ -408,7 +414,13 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
 		String viewId = UUID.randomUUID().toString();
 
-		ViewState state = new ViewState(viewId, file.getName());
+		String name = file.getName();
+
+		if (name.toLowerCase().endsWith(".pivot4j")) {
+			name = name.substring(0, name.length() - 8);
+		}
+
+		ViewState state = new ViewState(viewId, name);
 		state.setFile(file);
 
 		String errorMessage = null;
@@ -740,6 +752,10 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 			return;
 		}
 
+		if (name.toLowerCase().endsWith(".pivot4j")) {
+			name = name.substring(0, name.length() - 8);
+		}
+
 		ReportFile parent = getTargetDirectory();
 
 		Set<String> names;
@@ -750,7 +766,13 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 			names = new HashSet<String>(children.size());
 
 			for (ReportFile child : children) {
-				names.add(child.getName());
+				String childName = child.getName();
+
+				if (childName.toLowerCase().endsWith(".pivot4j")) {
+					childName = childName.substring(0, childName.length() - 8);
+				}
+
+				names.add(childName);
 			}
 		} catch (IOException e) {
 			throw new FacesException(e);

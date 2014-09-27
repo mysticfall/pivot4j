@@ -99,11 +99,17 @@ public class ReportOpener {
 
 		ViewState state;
 
+		String name = file.getName();
+
+		if (name.toLowerCase().endsWith(".pivot4j")) {
+			name = name.substring(0, name.length() - 8);
+		}
+
 		if (viewId == null) {
 			state = viewStateHolder.createNewState();
-			state.setName(file.getName());
+			state.setName(name);
 		} else {
-			state = new ViewState(viewId, file.getName());
+			state = new ViewState(viewId, name);
 		}
 
 		@SuppressWarnings("unchecked")
