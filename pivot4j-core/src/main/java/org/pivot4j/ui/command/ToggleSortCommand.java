@@ -47,6 +47,9 @@ public class ToggleSortCommand extends AbstractSortCommand {
 		CellSetAxis otherAxis = cellSet.getAxes().get(
 				Math.abs(parameters.getAxisOrdinal() - 1));
 
+		Position position = axis.getPositions().get(
+				parameters.getPositionOrdinal());
+
 		SwapAxes transform = model.getTransform(SwapAxes.class);
 
 		if (transform.isSwapAxes()) {
@@ -54,9 +57,6 @@ public class ToggleSortCommand extends AbstractSortCommand {
 			axis = otherAxis;
 			otherAxis = temp;
 		}
-
-		Position position = axis.getPositions().get(
-				parameters.getPositionOrdinal());
 
 		SortMode mode = getRenderer().getSortMode();
 
