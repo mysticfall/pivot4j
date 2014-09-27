@@ -47,7 +47,7 @@ public abstract class AbstractFileSystemRepository implements ReportRepository {
 	/**
 	 * @throws IOException
 	 * @throws ConfigurationException
-	 * @see org.pivot4j.analytics.repository.ReportRepository#getReportContent(org.pivot4j.service.repository.ReportFile)
+	 * @see org.pivot4j.service.repository.ReportRepository#getReportContent(org.pivot4j.service.repository.ReportFile)
 	 */
 	@Override
 	public ReportContent getReportContent(ReportFile file)
