@@ -157,8 +157,12 @@ public class PentahoReportRepository extends AbstractFileSystemRepository {
 				boolean writeable = repository.hasAccess(file.getPath(),
 						EnumSet.of(READ, WRITE));
 
-				files.add(new PentahoReportFile(file,
-						(PentahoReportFile) parent, writeable));
+				if ((!parent.isRoot() || !file.getPath().equals("/etc"))
+						&& (file.isFolder() || file.getName().endsWith(
+								".pivot4j"))) {
+					files.add(new PentahoReportFile(file,
+							(PentahoReportFile) parent, writeable));
+				}
 			}
 		}
 
@@ -201,9 +205,17 @@ public class PentahoReportRepository extends AbstractFileSystemRepository {
 
 		RepositoryUtils utils = new RepositoryUtils(repository);
 
-		RepositoryFile file = utils.saveFile(parent.getPath()
-				+ ReportFile.SEPARATOR + name, createReportData(content), true,
-				overwrite, false, false, null);
+		StringBuilder builder = new StringBuilder();
+		builder.append(parent.getPath());
+
+		if (!parent.getPath().endsWith(ReportFile.SEPARATOR)) {
+			builder.append(ReportFile.SEPARATOR);
+		}
+
+		builder.append(name);
+
+		RepositoryFile file = utils.saveFile(builder.toString(),
+				createReportData(content), true, overwrite, false, false, null);
 
 		return new PentahoReportFile(file, (PentahoReportFile) parent, true);
 	}

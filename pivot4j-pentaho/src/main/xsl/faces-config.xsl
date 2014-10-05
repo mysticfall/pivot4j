@@ -27,21 +27,18 @@
 		<xsl:copy-of select="." />&cr;&cr;&tab;
 		<managed-bean>&cr;&tab;&tab;
 			<managed-bean-name>dataSourceManager</managed-bean-name>&cr;&tab;&tab;
-			<managed-bean-class>org.pivot4j.pentaho.datasource.PentahoDataSourceManager
-			</managed-bean-class>&cr;&tab;&tab;
+			<managed-bean-class>org.pivot4j.pentaho.datasource.PentahoDataSourceManager</managed-bean-class>&cr;&tab;&tab;
 			<managed-bean-scope>session</managed-bean-scope>&cr;&tab;
 		</managed-bean>&cr;&tab;
 		<managed-bean>&cr;&tab;&tab;
 			<managed-bean-name>reportRepository</managed-bean-name>&cr;&tab;&tab;
-			<managed-bean-class>org.pivot4j.pentaho.repository.PentahoReportRepository
-			</managed-bean-class>&cr;&tab;&tab;
+			<managed-bean-class>org.pivot4j.pentaho.repository.PentahoReportRepository</managed-bean-class>&cr;&tab;&tab;
 			<managed-bean-scope>session</managed-bean-scope>&cr;&tab;
 		</managed-bean>&cr;&tab;
 		<managed-bean>&cr;&tab;&tab;
 			<managed-bean-name>reportOpener</managed-bean-name>&cr;&tab;&tab;
-			<managed-bean-class>org.pivot4j.pentaho.ui.PentahoReportOpener
-			</managed-bean-class>&cr;&tab;&tab;
-			<managed-bean-scope>session</managed-bean-scope>&cr;&tab;&tab;
+			<managed-bean-class>org.pivot4j.pentaho.ui.PentahoReportOpener</managed-bean-class>&cr;&tab;&tab;
+			<managed-bean-scope>request</managed-bean-scope>&cr;&tab;&tab;
 			<managed-property>&cr;&tab;&tab;&tab;
 				<property-name>settings</property-name>&cr;&tab;&tab;&tab;
 				<value>#{settings}</value>&cr;&tab;&tab;

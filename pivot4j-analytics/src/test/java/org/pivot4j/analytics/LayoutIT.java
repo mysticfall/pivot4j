@@ -154,9 +154,11 @@ public class LayoutIT extends AbstractIntegrationTestCase {
 				is(notNullValue()));
 
 		assertThat("Wrong number of toobar buttons.", buttons.size(),
-				is(equalTo(13)));
+				is(equalTo(10)));
 
 		Iterator<Button> it = buttons.iterator();
+
+		testButton("Edit", false, it.next());
 
 		testButton("Show Parent", false, it.next());
 		testButton("Hide Spans", false, it.next());
@@ -165,16 +167,8 @@ public class LayoutIT extends AbstractIntegrationTestCase {
 
 		testButton("Drill", false, it.next());
 
-		testButton("Through", false, it.next());
-		testButton("Scenario", false, it.next());
-
 		testButton("Properties", false, it.next());
 		testButton("Agg.", false, it.next());
-
-		it.next();
-		it.next();
-
-		testButton("Hide Grid", false, it.next());
 		testButton("Chart", false, it.next());
 	}
 }
