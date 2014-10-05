@@ -30,7 +30,7 @@
 					account the application server is running.
 
 					Finally, '${appHome}' referes to the application home directory, which 
-					is defined as '${userHome}.pivot4j' by default.
+					is defined as '${userHome}/.pivot4j' by default.
 
 					You can also use '${FS}' to denote the OS specific file separator character.
 				-->
@@ -63,61 +63,4 @@
 		</datasource>
 		-->
 	</datasources>
-
-	<!-- Appearance settings. -->
-	<appearances>
-		<!--
-			You can download more themes from the below site and install them 
-			under the application library directory (i.e. '/WEB-INF/lib') :
-
-			http://www.primefaces.org/themes.html
-		-->
-		<ui-theme>
-			<default>redmond</default>
-			<available-themes>
-				<theme name="aristo" description="Aristo" />
-				<theme name="bootstrap" description="Bootstrap" />
-				<theme name="black-tie" description="Black-Tie" />
-				<theme name="cruze" description="Cruze" />
-				<theme name="humanity" description="Humanity" />
-				<theme name="redmond" description="Redmond" />
-				<theme name="rocket" description="Rocket" />
-			</available-themes>
-		</ui-theme>
-
-		<!--
-			For a complete list of available editor themes, please visit : 
-			http://codemirror.net/demo/theme.html
-		-->
-		<editor-theme>eclipse</editor-theme>
-	</appearances>
-
-	<model>
-		<nonEmpty default="false" />
-	</model>
-
-	<render>
-		<!-- Show all non-internal member properties -->
-		<!-- 
-		<propertyCollector type="non-internal" />
-		-->
-	</render>
-
-	<!-- Miscellaneous settings used for integration with other systems. -->
-	<web>
-		<!-- URI prefix for web resources like images or stylesheets. -->
-		<resource-prefix />
-
-		<!-- Name of a session attribute variable for user locale. -->
-		<locale-attribute>locale</locale-attribute>
-
-		<!-- Name of a request parameter for view id. -->
-		<view-parameter>viewId</view-parameter>
-
-		<!-- Name of a request parameter for file id. -->
-		<file-parameter>fileId</file-parameter>
-
-		<!-- Name of a request parameter for file path. -->
-		<path-parameter>path</path-parameter>
-	</web>
 </config>

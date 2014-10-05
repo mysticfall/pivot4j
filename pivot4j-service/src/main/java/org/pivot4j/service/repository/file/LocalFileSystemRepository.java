@@ -38,13 +38,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("reportRepository")
 public class LocalFileSystemRepository extends AbstractFileSystemRepository {
+
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private Settings settings;
-
-	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private LocalFile root;
 

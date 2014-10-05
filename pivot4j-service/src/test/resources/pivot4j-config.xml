@@ -40,25 +40,4 @@
 		</datasource>
 		-->
 	</datasources>
-
-	<appearances>
-		<ui-theme>
-			<default>redmond</default>
-			<available-themes>
-				<theme name="aristo" description="Aristo" />
-			</available-themes>
-		</ui-theme>
-
-		<editor-theme>eclipse</editor-theme>
-	</appearances>
-	<toolbar>
-		<NonEmpty>false</NonEmpty>
-	</toolbar>
-	<web>
-		<resource-prefix />
-		<locale-attribute>locale</locale-attribute>
-		<view-parameter>viewId</view-parameter>
-		<file-parameter>fileId</file-parameter>
-		<path-parameter>path</path-parameter>
-	</web>
 </config>

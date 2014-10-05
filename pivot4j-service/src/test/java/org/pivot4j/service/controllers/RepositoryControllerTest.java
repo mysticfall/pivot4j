@@ -22,6 +22,10 @@ public class RepositoryControllerTest extends AbstractIntegrationTest {
 	@Autowired
 	private TestRepository repository;
 
+	/**
+	 * @see org.pivot4j.service.controllers.AbstractIntegrationTest#setup()
+	 */
+	@Override
 	public void setup() {
 		super.setup();
 		repository.initialize();

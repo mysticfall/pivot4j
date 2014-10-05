@@ -13,8 +13,15 @@
 	<context:component-scan base-package="org.pivot4j.service" />
 	<mvc:annotation-driven />
 
-	<bean class="org.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory" />
+	<bean id="expressionEvaluatorFactory"
+		class="org.pivot4j.el.freemarker.FreeMarkerExpressionEvaluatorFactory" />
 
-	<bean class="org.pivot4j.service.repository.test.TestRepository"
+	<bean id="reportRepository" class="org.pivot4j.service.repository.test.TestRepository"
 		primary="true" />
+
+	<bean id="settings" class="org.pivot4j.service.config.Settings">
+		<property name="configLocation">
+			<value>classpath:/pivot4j-config.xml</value>
+		</property>
+	</bean>
 </beans>
