@@ -35,8 +35,9 @@ public class DataSourceControllerTest extends AbstractIntegrationTest {
 		assertNotNull(catalogs);
 		assertFalse(catalogs.isEmpty());
 
-		getMvc().perform(
-				get("/api/datasource/catalogs").accept(APPLICATION_JSON_VALUE))
+		String url = "/api/datasource";
+
+		getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_VALUE))
 				.andExpect(content().json(asString(catalogs)));
@@ -51,7 +52,7 @@ public class DataSourceControllerTest extends AbstractIntegrationTest {
 		assertNotNull(cubes);
 		assertEquals(cubes.size(), 7);
 
-		String url = "/api/datasource/catalogs/" + catalog + "/cubes";
+		String url = "/api/datasource/" + catalog;
 
 		getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk())

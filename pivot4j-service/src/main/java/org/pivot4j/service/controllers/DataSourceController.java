@@ -25,12 +25,12 @@ public class DataSourceController implements ServiceController {
 	@Autowired
 	private DataSourceManager dataSourceManager;
 
-	@RequestMapping(value = "/catalogs", method = RequestMethod.GET, headers = HEADER_JSON)
+	@RequestMapping(method = RequestMethod.GET, headers = HEADER_JSON)
 	public List<CatalogInfo> getCatalogs() {
 		return dataSourceManager.getCatalogs();
 	}
 
-	@RequestMapping(value = "/catalogs/{catalog}/cubes", method = RequestMethod.GET, headers = HEADER_JSON)
+	@RequestMapping(value = "/{catalog}", method = RequestMethod.GET, headers = HEADER_JSON)
 	public List<CubeInfo> getCubes(@PathVariable String catalog) {
 		return dataSourceManager.getCubes(catalog);
 	}
