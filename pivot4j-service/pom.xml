@@ -313,12 +313,20 @@
 			<version>${version.mondrian}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>javacup</groupId>
 					<artifactId>javacup</artifactId>
+					<groupId>javacup</groupId>
 				</exclusion>
 				<exclusion>
 					<artifactId>log4j</artifactId>
 					<groupId>log4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jsp-api</artifactId>
+					<groupId>javax.servlet</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
