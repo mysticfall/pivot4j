@@ -17,7 +17,7 @@ import org.pivot4j.service.repository.ReportFile;
 import org.pivot4j.service.repository.test.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class RepositoryControllerTest extends AbstractIntegrationTest {
+public class RepositoryControllerIT extends AbstractIntegrationTest {
 
 	@Autowired
 	private TestRepository repository;

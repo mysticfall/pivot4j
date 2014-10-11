@@ -19,8 +19,8 @@ import org.apache.commons.lang.NullArgumentException;
 public abstract class AbstractFileSystemRepository implements ReportRepository {
 
 	/**
-	 * @see org.pivot4j.analytics.repository.ReportRepository#getFiles(org.pivot4j.service.repository.ReportFile,
-	 *      org.pivot4j.analytics.repository.RepositoryFileFilter)
+	 * @see org.pivot4j.service.repository.ReportRepository#getFiles(org.pivot4j.service.repository.ReportFile,
+	 *      org.pivot4j.service.repository.RepositoryFileFilter)
 	 */
 	@Override
 	public List<ReportFile> getFiles(ReportFile parent,
@@ -50,8 +50,8 @@ public abstract class AbstractFileSystemRepository implements ReportRepository {
 	 * @see org.pivot4j.service.repository.ReportRepository#getReportContent(org.pivot4j.service.repository.ReportFile)
 	 */
 	@Override
-	public ReportContent getReportContent(ReportFile file)
-			throws IOException, ConfigurationException {
+	public ReportContent getReportContent(ReportFile file) throws IOException,
+			ConfigurationException {
 		if (file == null) {
 			throw new NullArgumentException("file");
 		}

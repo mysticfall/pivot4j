@@ -31,7 +31,7 @@ public class SimpleDataSourceManager extends
 		AbstractDataSourceManager<SimpleDataSourceInfo> {
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#initialize()
+	 * @see org.pivot4j.service.datasource.AbstractDataSourceManager#initialize()
 	 */
 	@PostConstruct
 	protected void initialize() {
@@ -39,7 +39,7 @@ public class SimpleDataSourceManager extends
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#destroy()
+	 * @see org.pivot4j.service.datasource.AbstractDataSourceManager#destroy()
 	 */
 	@PreDestroy
 	protected void destroy() {
@@ -47,7 +47,7 @@ public class SimpleDataSourceManager extends
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSourceDefinition(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see org.pivot4j.service.datasource.AbstractDataSourceManager#createDataSourceDefinition(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	protected SimpleDataSourceInfo createDataSourceDefinition(
@@ -59,7 +59,7 @@ public class SimpleDataSourceManager extends
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSource(org.pivot4j.analytics.datasource.DataSourceInfo)
+	 * @see org.pivot4j.service.datasource.AbstractDataSourceManager#createDataSource(org.pivot4j.service.datasource.DataSourceInfo)
 	 */
 	@Override
 	protected OlapDataSource createDataSource(SimpleDataSourceInfo definition) {
@@ -87,7 +87,7 @@ public class SimpleDataSourceManager extends
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.DataSourceManager#getCatalogs()
+	 * @see org.pivot4j.service.datasource.DataSourceManager#getCatalogs()
 	 */
 	@Override
 	public List<CatalogInfo> getCatalogs() {
@@ -102,7 +102,7 @@ public class SimpleDataSourceManager extends
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.DataSourceManager#getCubes(java.lang.String)
+	 * @see org.pivot4j.service.datasource.DataSourceManager#getCubes(java.lang.String)
 	 */
 	@Override
 	public List<CubeInfo> getCubes(String catalogName) {

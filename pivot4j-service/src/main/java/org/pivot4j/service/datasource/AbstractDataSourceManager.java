@@ -225,7 +225,7 @@ public abstract class AbstractDataSourceManager<T extends DataSourceInfo>
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.DataSourceManager#getDataSource(org.pivot4j.analytics.datasource.ConnectionInfo)
+	 * @see org.pivot4j.service.datasource.DataSourceManager#getDataSource(org.pivot4j.service.datasource.ConnectionInfo)
 	 */
 	@Override
 	public OlapDataSource getDataSource(ConnectionInfo connectionInfo) {

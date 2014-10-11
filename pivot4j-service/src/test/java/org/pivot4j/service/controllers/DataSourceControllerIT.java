@@ -23,7 +23,7 @@ import org.pivot4j.service.datasource.CubeInfo;
 import org.pivot4j.service.datasource.DataSourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DataSourceControllerTest extends AbstractIntegrationTest {
+public class DataSourceControllerIT extends AbstractIntegrationTest {
 
 	@Autowired
 	private DataSourceManager dataSourceManager;

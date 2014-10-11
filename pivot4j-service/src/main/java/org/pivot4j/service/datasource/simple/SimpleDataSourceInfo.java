@@ -31,7 +31,7 @@ public class SimpleDataSourceInfo extends AbstractDataSourceInfo {
 	private Properties properties;
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceInfo#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see org.pivot4j.service.datasource.AbstractDataSourceInfo#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void saveSettings(HierarchicalConfiguration configuration) {
@@ -72,7 +72,7 @@ public class SimpleDataSourceInfo extends AbstractDataSourceInfo {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceInfo#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+	 * @see org.pivot4j.service.datasource.AbstractDataSourceInfo#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
 	 */
 	@Override
 	public void restoreSettings(HierarchicalConfiguration configuration) {
@@ -173,7 +173,7 @@ public class SimpleDataSourceInfo extends AbstractDataSourceInfo {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceInfo#hashCode()
+	 * @see org.pivot4j.service.datasource.AbstractDataSourceInfo#hashCode()
 	 */
 	@Override
 	public int hashCode() {
@@ -182,7 +182,7 @@ public class SimpleDataSourceInfo extends AbstractDataSourceInfo {
 	}
 
 	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceInfo#equals(java.lang.Object)
+	 * @see org.pivot4j.service.datasource.AbstractDataSourceInfo#equals(java.lang.Object)
 	 */
 	@Override
 	public boolean equals(Object obj) {
