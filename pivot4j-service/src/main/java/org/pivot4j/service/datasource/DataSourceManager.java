@@ -10,16 +10,18 @@ package org.pivot4j.service.datasource;
 import java.util.List;
 
 import org.olap4j.OlapDataSource;
+import org.pivot4j.service.model.CatalogModel;
+import org.pivot4j.service.model.CubeModel;
 
 public interface DataSourceManager {
 
-	List<CatalogInfo> getCatalogs();
+	List<CatalogModel> getCatalogs();
 
 	/**
 	 * @param catalogName
 	 * @return
 	 */
-	List<CubeInfo> getCubes(String catalogName);
+	List<CubeModel> getCubes(String catalogName);
 
 	/**
 	 * Create an OLAP datasource from the specified connection information. Note

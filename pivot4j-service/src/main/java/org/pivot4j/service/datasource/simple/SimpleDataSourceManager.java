@@ -22,8 +22,8 @@ import org.olap4j.metadata.Cube;
 import org.pivot4j.PivotException;
 import org.pivot4j.datasource.SimpleOlapDataSource;
 import org.pivot4j.service.datasource.AbstractDataSourceManager;
-import org.pivot4j.service.datasource.CatalogInfo;
-import org.pivot4j.service.datasource.CubeInfo;
+import org.pivot4j.service.model.CatalogModel;
+import org.pivot4j.service.model.CubeModel;
 import org.springframework.stereotype.Service;
 
 @Service("dataSourceManager")
@@ -90,12 +90,12 @@ public class SimpleDataSourceManager extends
 	 * @see org.pivot4j.service.datasource.DataSourceManager#getCatalogs()
 	 */
 	@Override
-	public List<CatalogInfo> getCatalogs() {
-		List<CatalogInfo> catalogs = new LinkedList<CatalogInfo>();
+	public List<CatalogModel> getCatalogs() {
+		List<CatalogModel> catalogs = new LinkedList<CatalogModel>();
 
 		for (SimpleDataSourceInfo definition : getDefinitions()) {
-			catalogs.add(new CatalogInfo(definition.getName(), definition
-					.getName(), definition.getDescription()));
+			catalogs.add(new CatalogModel(definition.getName(), definition
+					.getDescription()));
 		}
 
 		return catalogs;
@@ -105,7 +105,7 @@ public class SimpleDataSourceManager extends
 	 * @see org.pivot4j.service.datasource.DataSourceManager#getCubes(java.lang.String)
 	 */
 	@Override
-	public List<CubeInfo> getCubes(String catalogName) {
+	public List<CubeModel> getCubes(String catalogName) {
 		if (catalogName == null) {
 			throw new NullArgumentException("catalogName");
 		}
@@ -120,13 +120,12 @@ public class SimpleDataSourceManager extends
 
 		OlapDataSource dataSource = createDataSource(definition);
 
-		List<CubeInfo> cubes = new LinkedList<CubeInfo>();
+		List<CubeModel> cubes = new LinkedList<CubeModel>();
 
 		try (OlapConnection connection = dataSource.getConnection()) {
 			for (Cube cube : connection.getOlapSchema().getCubes()) {
 				if (cube.isVisible()) {
-					cubes.add(new CubeInfo(cube.getName(), cube.getCaption(),
-							cube.getDescription()));
+					cubes.add(new CubeModel(cube));
 				}
 			}
 		} catch (SQLException e) {
