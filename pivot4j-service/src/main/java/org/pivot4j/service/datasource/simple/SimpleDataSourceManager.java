@@ -122,11 +122,7 @@ public class SimpleDataSourceManager extends
 
 		List<CubeInfo> cubes = new LinkedList<CubeInfo>();
 
-		OlapConnection connection = null;
-
-		try {
-			connection = dataSource.getConnection();
-
+		try (OlapConnection connection = dataSource.getConnection()) {
 			for (Cube cube : connection.getOlapSchema().getCubes()) {
 				if (cube.isVisible()) {
 					cubes.add(new CubeInfo(cube.getName(), cube.getCaption(),
@@ -135,14 +131,6 @@ public class SimpleDataSourceManager extends
 			}
 		} catch (SQLException e) {
 			throw new PivotException(e);
-		} finally {
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					throw new PivotException(e);
-				}
-			}
 		}
 
 		return cubes;

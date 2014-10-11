@@ -31,8 +31,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
 
-		<java.compatibility.source>1.6</java.compatibility.source>
-		<java.compatibility.target>1.6</java.compatibility.target>
+		<java.compatibility.source>1.7</java.compatibility.source>
+		<java.compatibility.target>1.7</java.compatibility.target>
 
 		<version.plugin.clean>2.5</version.plugin.clean>
 		<version.plugin.deploy>2.8.1</version.plugin.deploy>
