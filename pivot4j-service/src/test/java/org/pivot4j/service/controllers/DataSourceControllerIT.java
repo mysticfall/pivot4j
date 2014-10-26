@@ -165,45 +165,6 @@ public class DataSourceControllerIT extends AbstractIntegrationTest {
 	}
 
 	@Test
-	public void thatDimensionsCanBeRead() throws Exception {
-		String catalogName = "FoodMart Mondrian";
-		String cubeName = "Sales";
-
-		OlapDataSource dataSource = dataSourceManager
-				.getDataSource(new ConnectionInfo(catalogName, cubeName));
-
-		try (OlapConnection connection = dataSource.getConnection()) {
-			Cube cube = connection.getOlapSchema().getCubes().get(cubeName);
-
-			List<DimensionModel> dimensions = new CubeDetail(cube)
-					.getDimensions();
-
-			assertEquals(13, dimensions.size());
-
-			DimensionModel dimension = dimensions.get(10);
-
-			assertEquals("Gender", dimension.getName());
-			assertEquals("[Gender]", dimension.getUniqueName());
-			assertEquals("Gender", dimension.getCaption());
-			assertEquals(null, dimension.getDescription());
-			assertEquals(1, dimension.getHierarchyCount());
-
-			String url = "/api/datasource/" + catalogName + "/" + cubeName
-					+ "/dimensions";
-
-			getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
-					.andExpect(status().isOk())
-					.andExpect(content().contentType(APPLICATION_JSON_VALUE))
-					.andExpect(content().json(asString(dimensions)));
-
-			getMvc().perform(get(url + "/").accept(APPLICATION_JSON_VALUE))
-					.andExpect(status().isOk())
-					.andExpect(content().contentType(APPLICATION_JSON_VALUE))
-					.andExpect(content().json(asString(dimensions)));
-		}
-	}
-
-	@Test
 	public void thatInvalidCubeNameThrowsNotFoundError() throws Exception {
 		getMvc().perform(
 				get("/api/datasource/FoodMart Mondrian/Dummy Cube").accept(
@@ -249,7 +210,7 @@ public class DataSourceControllerIT extends AbstractIntegrationTest {
 			assertEquals(1, hierarchies.size());
 
 			String url = "/api/datasource/" + catalogName + "/" + cubeName
-					+ "/dimensions/" + dimensionName;
+					+ "/" + dimensionName;
 
 			getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
 					.andExpect(status().isOk())

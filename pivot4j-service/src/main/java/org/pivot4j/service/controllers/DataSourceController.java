@@ -9,7 +9,6 @@ package org.pivot4j.service.controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +23,6 @@ import org.pivot4j.service.model.CatalogModel;
 import org.pivot4j.service.model.CubeDetail;
 import org.pivot4j.service.model.CubeModel;
 import org.pivot4j.service.model.DimensionDetail;
-import org.pivot4j.service.model.DimensionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,26 +70,7 @@ public class DataSourceController implements ServiceController {
 		return runWithCube(catalogName, cubeName, response, callback);
 	}
 
-	@RequestMapping(value = "/{catalogName}/{cubeName}/dimensions", method = RequestMethod.GET, headers = HEADER_JSON)
-	public List<DimensionModel> getDimensions(@PathVariable String catalogName,
-			@PathVariable String cubeName, HttpServletResponse response)
-			throws SQLException, IOException {
-		CubeCallback<List<DimensionModel>> callback = new CubeCallback<List<DimensionModel>>() {
-			public List<DimensionModel> run(Cube cube) {
-				List<DimensionModel> dimensions = new LinkedList<DimensionModel>();
-
-				for (Dimension dimension : cube.getDimensions()) {
-					dimensions.add(new DimensionModel(dimension));
-				}
-
-				return dimensions;
-			}
-		};
-
-		return runWithCube(catalogName, cubeName, response, callback);
-	}
-
-	@RequestMapping(value = "/{catalogName}/{cubeName}/dimensions/{dimensionName}", method = RequestMethod.GET, headers = HEADER_JSON)
+	@RequestMapping(value = "/{catalogName}/{cubeName}/{dimensionName}", method = RequestMethod.GET, headers = HEADER_JSON)
 	public DimensionDetail getDimension(@PathVariable String catalogName,
 			@PathVariable String cubeName, @PathVariable String dimensionName,
 			HttpServletResponse response) throws SQLException, IOException {
