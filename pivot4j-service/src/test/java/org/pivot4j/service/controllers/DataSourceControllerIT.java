@@ -22,6 +22,7 @@ import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Hierarchy;
 import org.pivot4j.service.datasource.ConnectionInfo;
 import org.pivot4j.service.datasource.DataSourceManager;
 import org.pivot4j.service.model.CatalogModel;
@@ -29,6 +30,7 @@ import org.pivot4j.service.model.CubeDetail;
 import org.pivot4j.service.model.CubeModel;
 import org.pivot4j.service.model.DimensionDetail;
 import org.pivot4j.service.model.DimensionModel;
+import org.pivot4j.service.model.HierarchyDetail;
 import org.pivot4j.service.model.HierarchyModel;
 import org.pivot4j.service.model.MeasureModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -211,6 +213,47 @@ public class DataSourceControllerIT extends AbstractIntegrationTest {
 
 			String url = "/api/datasource/" + catalogName + "/" + cubeName
 					+ "/" + dimensionName;
+
+			getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType(APPLICATION_JSON_VALUE))
+					.andExpect(content().json(asString(model)));
+
+			getMvc().perform(get(url + "/").accept(APPLICATION_JSON_VALUE))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType(APPLICATION_JSON_VALUE))
+					.andExpect(content().json(asString(model)));
+		}
+	}
+
+	@Test
+	public void thatHierarchyCanBeRead() throws Exception {
+		String catalogName = "FoodMart Mondrian";
+		String cubeName = "Sales";
+		String dimensionName = "Time";
+		String hierarchyName = "Time.Weekly";
+
+		OlapDataSource dataSource = dataSourceManager
+				.getDataSource(new ConnectionInfo(catalogName, cubeName));
+
+		try (OlapConnection connection = dataSource.getConnection()) {
+			Cube cube = connection.getOlapSchema().getCubes().get(cubeName);
+
+			Dimension dimension = cube.getDimensions().get(dimensionName);
+			Hierarchy hierarchy = dimension.getHierarchies().get(hierarchyName);
+
+			HierarchyDetail model = new HierarchyDetail(hierarchy);
+
+			assertEquals("Time.Weekly", model.getName());
+			assertEquals("[Time.Weekly]", model.getUniqueName());
+			assertEquals("Weekly", model.getCaption());
+			assertEquals(null, model.getDescription());
+
+			assertEquals(1, model.getRootMembers().size());
+			assertEquals("All Time.Weeklys", model.getDefaultMember().getName());
+
+			String url = "/api/datasource/" + catalogName + "/" + cubeName
+					+ "/" + dimensionName + "/" + hierarchyName;
 
 			getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
 					.andExpect(status().isOk())

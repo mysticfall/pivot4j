@@ -9,6 +9,7 @@
 package org.pivot4j.service.model;
 
 import org.apache.commons.lang.NullArgumentException;
+import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.MetadataElement;
 
 public class MetadataModel implements DataModel {
@@ -37,7 +38,9 @@ public class MetadataModel implements DataModel {
 		this.uniqueName = metadata.getUniqueName();
 		this.caption = metadata.getCaption();
 		this.description = metadata.getDescription();
-		this.visible = metadata.isVisible();
+
+		// TODO: http://jira.pentaho.com/browse/MONDRIAN-1967
+		this.visible = !(metadata instanceof Measure) || metadata.isVisible();
 	}
 
 	/**

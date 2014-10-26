@@ -17,12 +17,14 @@ import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Hierarchy;
 import org.pivot4j.service.datasource.ConnectionInfo;
 import org.pivot4j.service.datasource.DataSourceManager;
 import org.pivot4j.service.model.CatalogModel;
 import org.pivot4j.service.model.CubeDetail;
 import org.pivot4j.service.model.CubeModel;
 import org.pivot4j.service.model.DimensionDetail;
+import org.pivot4j.service.model.HierarchyDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +43,7 @@ public class DataSourceController implements ServiceController {
 		return dataSourceManager.getCatalogs();
 	}
 
-	@RequestMapping(value = "/{catalogName}", method = RequestMethod.GET, headers = HEADER_JSON)
+	@RequestMapping(value = "/{catalogName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
 	public List<CubeModel> getCubes(@PathVariable String catalogName,
 			HttpServletResponse response) throws IOException {
 		List<CubeModel> cubes = null;
@@ -57,7 +59,7 @@ public class DataSourceController implements ServiceController {
 		return cubes;
 	}
 
-	@RequestMapping(value = "/{catalogName}/{cubeName}", method = RequestMethod.GET, headers = HEADER_JSON)
+	@RequestMapping(value = "/{catalogName:.+}/{cubeName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
 	public CubeDetail getCube(@PathVariable String catalogName,
 			@PathVariable String cubeName, HttpServletResponse response)
 			throws SQLException, IOException {
@@ -70,7 +72,7 @@ public class DataSourceController implements ServiceController {
 		return runWithCube(catalogName, cubeName, response, callback);
 	}
 
-	@RequestMapping(value = "/{catalogName}/{cubeName}/{dimensionName}", method = RequestMethod.GET, headers = HEADER_JSON)
+	@RequestMapping(value = "/{catalogName:.+}/{cubeName:.+}/{dimensionName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
 	public DimensionDetail getDimension(@PathVariable String catalogName,
 			@PathVariable String cubeName, @PathVariable String dimensionName,
 			HttpServletResponse response) throws SQLException, IOException {
@@ -84,6 +86,21 @@ public class DataSourceController implements ServiceController {
 				callback);
 	}
 
+	@RequestMapping(value = "/{catalogName:.+}/{cubeName:.+}/{dimensionName:.+}/{hierarchyName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
+	public HierarchyDetail getHierarchy(@PathVariable String catalogName,
+			@PathVariable String cubeName, @PathVariable String dimensionName,
+			@PathVariable String hierarchyName, HttpServletResponse response)
+			throws SQLException, IOException {
+		HierarchyCallback<HierarchyDetail> callback = new HierarchyCallback<HierarchyDetail>() {
+			public HierarchyDetail run(Hierarchy hierarchy) {
+				return new HierarchyDetail(hierarchy);
+			}
+		};
+
+		return runWithHierarchy(catalogName, cubeName, dimensionName,
+				hierarchyName, response, callback);
+	}
+
 	protected interface DataCallback<T, R> {
 
 		R run(T data);
@@ -93,6 +110,9 @@ public class DataSourceController implements ServiceController {
 	}
 
 	protected interface DimensionCallback<T> extends DataCallback<Dimension, T> {
+	}
+
+	protected interface HierarchyCallback<T> extends DataCallback<Hierarchy, T> {
 	}
 
 	protected <T> T runWithCube(final String catalogName,
@@ -147,6 +167,34 @@ public class DataSourceController implements ServiceController {
 			}
 		} else {
 			result = callback.run(dimension);
+		}
+
+		return result;
+	}
+
+	protected <T> T runWithHierarchy(final String catalogName,
+			final String cubeName, final String dimensionName,
+			final String hierarchyName, HttpServletResponse response,
+			HierarchyCallback<T> callback) throws IOException, SQLException {
+		T result = null;
+
+		DimensionCallback<Hierarchy> dimensionCallback = new DimensionCallback<Hierarchy>() {
+			public Hierarchy run(Dimension dimension) {
+				return dimension.getHierarchies().get(hierarchyName);
+			}
+		};
+
+		Hierarchy hierarchy = runWithDimension(catalogName, cubeName,
+				dimensionName, response, dimensionCallback);
+
+		if (hierarchy == null) {
+			if (!response.isCommitted()) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND,
+						"Hierarchy with the specified name does not exist: "
+								+ hierarchyName);
+			}
+		} else {
+			result = callback.run(hierarchy);
 		}
 
 		return result;
