@@ -8,13 +8,17 @@
  */
 package org.pivot4j.service.model;
 
+import org.olap4j.OlapException;
 import org.olap4j.metadata.Hierarchy;
+import org.pivot4j.PivotException;
 
 public class HierarchyModel extends MetadataModel {
 
 	private static final long serialVersionUID = -493360561789587307L;
 
 	private int levelCount;
+
+	private int rootMemberCount;
 
 	/**
 	 * @param hierarchy
@@ -23,6 +27,12 @@ public class HierarchyModel extends MetadataModel {
 		super(hierarchy);
 
 		this.levelCount = hierarchy.getLevels().size();
+
+		try {
+			this.rootMemberCount = hierarchy.getRootMembers().size();
+		} catch (OlapException e) {
+			throw new PivotException(e);
+		}
 	}
 
 	/**
@@ -30,5 +40,12 @@ public class HierarchyModel extends MetadataModel {
 	 */
 	public int getLevelCount() {
 		return levelCount;
+	}
+
+	/**
+	 * @return the rootMemberCount
+	 */
+	public int getRootMemberCount() {
+		return rootMemberCount;
 	}
 }

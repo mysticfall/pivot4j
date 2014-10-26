@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.olap4j.OlapException;
 import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.pivot4j.PivotException;
 
@@ -23,6 +24,8 @@ public class HierarchyDetail extends HierarchyModel {
 
 	private List<MemberModel> rootMembers;
 
+	private List<LevelModel> levels;
+
 	private MemberModel defaultMember;
 
 	/**
@@ -31,14 +34,22 @@ public class HierarchyDetail extends HierarchyModel {
 	public HierarchyDetail(Hierarchy hierarchy) {
 		super(hierarchy);
 
-		List<MemberModel> rootMemberList = new LinkedList<MemberModel>();
-
 		try {
+			List<MemberModel> rootMemberList = new LinkedList<MemberModel>();
+
 			for (Member member : hierarchy.getRootMembers()) {
 				rootMemberList.add(new MemberModel(member));
 			}
 
 			this.rootMembers = Collections.unmodifiableList(rootMemberList);
+
+			List<LevelModel> levelList = new LinkedList<LevelModel>();
+
+			for (Level level : hierarchy.getLevels()) {
+				levelList.add(new LevelModel(level));
+			}
+
+			this.levels = Collections.unmodifiableList(levelList);
 
 			if (hierarchy.getDefaultMember() != null) {
 				this.defaultMember = new MemberModel(
@@ -54,6 +65,13 @@ public class HierarchyDetail extends HierarchyModel {
 	 */
 	public List<MemberModel> getRootMembers() {
 		return rootMembers;
+	}
+
+	/**
+	 * @return the levels
+	 */
+	public List<LevelModel> getLevels() {
+		return levels;
 	}
 
 	/**

@@ -212,7 +212,7 @@ public class DataSourceControllerIT extends AbstractIntegrationTest {
 			assertEquals(1, hierarchies.size());
 
 			String url = "/api/datasource/" + catalogName + "/" + cubeName
-					+ "/" + dimensionName;
+					+ "/dimensions/" + dimensionName;
 
 			getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
 					.andExpect(status().isOk())
@@ -250,10 +250,13 @@ public class DataSourceControllerIT extends AbstractIntegrationTest {
 			assertEquals(null, model.getDescription());
 
 			assertEquals(1, model.getRootMembers().size());
+			assertEquals(1, model.getRootMemberCount());
+			assertEquals(4, model.getLevels().size());
+			assertEquals(4, model.getLevelCount());
 			assertEquals("All Time.Weeklys", model.getDefaultMember().getName());
 
 			String url = "/api/datasource/" + catalogName + "/" + cubeName
-					+ "/" + dimensionName + "/" + hierarchyName;
+					+ "/dimensions/" + dimensionName + "/" + hierarchyName;
 
 			getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
 					.andExpect(status().isOk())

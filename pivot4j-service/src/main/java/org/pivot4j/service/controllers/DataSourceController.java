@@ -72,7 +72,7 @@ public class DataSourceController implements ServiceController {
 		return runWithCube(catalogName, cubeName, response, callback);
 	}
 
-	@RequestMapping(value = "/{catalogName:.+}/{cubeName:.+}/{dimensionName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
+	@RequestMapping(value = "/{catalogName:.+}/{cubeName:.+}/dimensions/{dimensionName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
 	public DimensionDetail getDimension(@PathVariable String catalogName,
 			@PathVariable String cubeName, @PathVariable String dimensionName,
 			HttpServletResponse response) throws SQLException, IOException {
@@ -86,7 +86,7 @@ public class DataSourceController implements ServiceController {
 				callback);
 	}
 
-	@RequestMapping(value = "/{catalogName:.+}/{cubeName:.+}/{dimensionName:.+}/{hierarchyName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
+	@RequestMapping(value = "/{catalogName:.+}/{cubeName:.+}/dimensions/{dimensionName:.+}/{hierarchyName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
 	public HierarchyDetail getHierarchy(@PathVariable String catalogName,
 			@PathVariable String cubeName, @PathVariable String dimensionName,
 			@PathVariable String hierarchyName, HttpServletResponse response)
