@@ -23,6 +23,7 @@ import org.olap4j.OlapDataSource;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Member;
 import org.pivot4j.service.datasource.ConnectionInfo;
 import org.pivot4j.service.datasource.DataSourceManager;
 import org.pivot4j.service.model.CatalogModel;
@@ -33,6 +34,8 @@ import org.pivot4j.service.model.DimensionModel;
 import org.pivot4j.service.model.HierarchyDetail;
 import org.pivot4j.service.model.HierarchyModel;
 import org.pivot4j.service.model.MeasureModel;
+import org.pivot4j.service.model.MemberDetail;
+import org.pivot4j.util.OlapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DataSourceControllerIT extends AbstractIntegrationTest {
@@ -257,6 +260,48 @@ public class DataSourceControllerIT extends AbstractIntegrationTest {
 
 			String url = "/api/datasource/" + catalogName + "/" + cubeName
 					+ "/dimensions/" + dimensionName + "/" + hierarchyName;
+
+			getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType(APPLICATION_JSON_VALUE))
+					.andExpect(content().json(asString(model)));
+
+			getMvc().perform(get(url + "/").accept(APPLICATION_JSON_VALUE))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType(APPLICATION_JSON_VALUE))
+					.andExpect(content().json(asString(model)));
+		}
+	}
+
+	@Test
+	public void thatMemberCanBeRead() throws Exception {
+		String catalogName = "FoodMart Mondrian";
+		String cubeName = "Sales";
+		String memberUniqueName = "[Product].[Drink]";
+
+		OlapDataSource dataSource = dataSourceManager
+				.getDataSource(new ConnectionInfo(catalogName, cubeName));
+
+		try (OlapConnection connection = dataSource.getConnection()) {
+			Cube cube = connection.getOlapSchema().getCubes().get(cubeName);
+
+			OlapUtils utils = new OlapUtils(cube);
+
+			Member member = utils.lookupMember(memberUniqueName);
+
+			MemberDetail model = new MemberDetail(member);
+
+			assertEquals("Drink", model.getName());
+			assertEquals(memberUniqueName, model.getUniqueName());
+			assertEquals("Drink", model.getCaption());
+			assertEquals(null, model.getDescription());
+
+			assertEquals(3, model.getChildMembers().size());
+			assertEquals(3, model.getChildMemberCount());
+			assertEquals(1, model.getDepth());
+
+			String url = "/api/datasource/" + catalogName + "/" + cubeName
+					+ "/members/" + memberUniqueName;
 
 			getMvc().perform(get(url).accept(APPLICATION_JSON_VALUE))
 					.andExpect(status().isOk())

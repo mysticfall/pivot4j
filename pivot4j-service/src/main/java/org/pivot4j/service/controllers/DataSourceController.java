@@ -18,6 +18,7 @@ import org.olap4j.OlapDataSource;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Member;
 import org.pivot4j.service.datasource.ConnectionInfo;
 import org.pivot4j.service.datasource.DataSourceManager;
 import org.pivot4j.service.model.CatalogModel;
@@ -25,6 +26,8 @@ import org.pivot4j.service.model.CubeDetail;
 import org.pivot4j.service.model.CubeModel;
 import org.pivot4j.service.model.DimensionDetail;
 import org.pivot4j.service.model.HierarchyDetail;
+import org.pivot4j.service.model.MemberDetail;
+import org.pivot4j.util.OlapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,6 +102,34 @@ public class DataSourceController implements ServiceController {
 
 		return runWithHierarchy(catalogName, cubeName, dimensionName,
 				hierarchyName, response, callback);
+	}
+
+	@RequestMapping(value = "/{catalogName:.+}/{cubeName:.+}/members/{memberUniqueName:.+}", method = RequestMethod.GET, headers = HEADER_JSON)
+	public MemberDetail lookupMember(@PathVariable String catalogName,
+			@PathVariable String cubeName,
+			@PathVariable final String memberUniqueName,
+			final HttpServletResponse response) throws SQLException,
+			IOException {
+
+		CubeCallback<Member> callback = new CubeCallback<Member>() {
+			public Member run(Cube cube) {
+				return OlapUtils.lookupMember(memberUniqueName, cube);
+			}
+		};
+
+		Member member = runWithCube(catalogName, cubeName, response, callback);
+
+		MemberDetail model = null;
+
+		if (member != null) {
+			model = new MemberDetail(member);
+		} else if (!response.isCommitted()) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND,
+					"Member with the specified name does not exist: "
+							+ memberUniqueName);
+		}
+
+		return model;
 	}
 
 	protected interface DataCallback<T, R> {
