@@ -48,7 +48,7 @@ public abstract class AbstractAggregator implements Aggregator {
 
 	private Map<Position, Integer> counts = new HashMap<Position, Integer>();
 
-	private Map<Measure, NumberFormat> formats = new HashMap<Measure, NumberFormat>();
+	private Map<String, NumberFormat> formats = new HashMap<String, NumberFormat>();
 
 	/**
 	 * @param axis
@@ -148,9 +148,13 @@ public abstract class AbstractAggregator implements Aggregator {
 
 		Measure targetMeasure = getMeasure(targetPosition);
 
-		if (targetMeasure != null && context.getCell() != null
-				&& !formats.containsKey(targetMeasure)) {
-			formats.put(targetMeasure, getNumberFormat(context.getCell()));
+		if (context.getCell() != null) {
+			String key = (targetMeasure == null) ? "" : targetMeasure
+					.getUniqueName();
+
+			if (!formats.containsKey(key)) {
+				formats.put(key, getNumberFormat(context.getCell()));
+			}
 		}
 
 		if (members.isEmpty() && logger.isTraceEnabled()) {
@@ -218,11 +222,11 @@ public abstract class AbstractAggregator implements Aggregator {
 	 */
 	protected NumberFormat getNumberFormat(Position position) {
 		Measure measureAtPosition = getMeasure(position);
-		if (measureAtPosition == null) {
-			return null;
-		}
 
-		return formats.get(measureAtPosition);
+		String key = (measureAtPosition == null) ? "" : measureAtPosition
+				.getUniqueName();
+
+		return formats.get(key);
 	}
 
 	/**
