@@ -157,9 +157,7 @@ public class PentahoReportRepository extends AbstractFileSystemRepository {
 				boolean writeable = repository.hasAccess(file.getPath(),
 						EnumSet.of(READ, WRITE));
 
-				if ((!parent.isRoot() || !file.getPath().equals("/etc"))
-						&& (file.isFolder() || file.getName().endsWith(
-								".pivot4j"))) {
+				if (!parent.isRoot() || !file.getPath().equals("/etc")) {
 					files.add(new PentahoReportFile(file,
 							(PentahoReportFile) parent, writeable));
 				}

@@ -32,6 +32,7 @@ import org.pivot4j.analytics.repository.ReportRepository;
 import org.pivot4j.analytics.repository.RepositoryFileFilter;
 import org.pivot4j.analytics.state.ViewState;
 import org.pivot4j.analytics.state.ViewStateHolder;
+import org.pivot4j.analytics.ui.DefaultTableRenderer;
 import org.pivot4j.analytics.ui.navigator.RepositoryNode;
 import org.pivot4j.impl.PivotModelImpl;
 import org.pivot4j.mdx.MdxParser;
@@ -345,7 +346,7 @@ public class MigrationHandler {
 		PivotModel model = new PivotModelImpl(dataSource);
 		model.setMdx(query);
 
-		TableRenderer renderer = new TableRenderer();
+		TableRenderer renderer = new DefaultTableRenderer();
 
 		// NOTE : Pentaho JPivot plugin does not preserve rendering states in
 		// saved reports, despite they contain related

@@ -1252,7 +1252,7 @@ public class PivotModelImpl implements PivotModel {
 			}
 		}
 
-		if (queryAdapter.isAxesSwapped()) {
+		if (queryAdapter != null && queryAdapter.isAxesSwapped()) {
 			configuration.addProperty("axesSwapped", true);
 		}
 
