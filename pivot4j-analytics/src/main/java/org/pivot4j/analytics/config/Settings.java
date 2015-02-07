@@ -63,6 +63,8 @@ public class Settings {
 
 	private String localeAttributeName;
 
+	private String extension;
+
 	private SortedMap<String, String> availableThemes;
 
 	@PostConstruct
@@ -281,6 +283,15 @@ public class Settings {
 		}
 
 		return availableThemes;
+	}
+
+	public String getExtension() {
+		if (extension == null) {
+			this.extension = configuration
+					.getString("repository.extension", "").trim();
+		}
+
+		return extension;
 	}
 
 	public String getResourcePrefix() {

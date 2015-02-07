@@ -96,6 +96,14 @@
 		<nonEmpty default="false" />
 	</model>
 
+	<!-- 
+		Default file extension. When blank, files will be saved without 
+		an extension.
+	-->
+	<repository>
+		<extension>pivot4j</extension>
+	</repository>
+
 	<render>
 		<!-- Show all non-internal member properties -->
 		<!-- 

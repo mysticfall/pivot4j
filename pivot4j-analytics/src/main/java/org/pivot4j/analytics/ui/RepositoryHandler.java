@@ -24,6 +24,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.lang.StringUtils;
 import org.pivot4j.analytics.component.tree.DefaultTreeNode;
 import org.pivot4j.analytics.config.Settings;
 import org.pivot4j.analytics.datasource.DataSourceManager;
@@ -32,6 +33,7 @@ import org.pivot4j.analytics.repository.ReportContent;
 import org.pivot4j.analytics.repository.ReportFile;
 import org.pivot4j.analytics.repository.ReportRepository;
 import org.pivot4j.analytics.repository.RepositoryFileComparator;
+import org.pivot4j.analytics.repository.RepositoryFileFilter;
 import org.pivot4j.analytics.state.ViewState;
 import org.pivot4j.analytics.state.ViewStateEvent;
 import org.pivot4j.analytics.state.ViewStateHolder;
@@ -849,6 +851,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 			}
 
 			node.setExpanded(true);
+			node.setFilter(new DefaultExtensionFilter(settings.getExtension()));
 
 			rootNode.getChildren().add(node);
 		}
@@ -1072,6 +1075,29 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 		 */
 		public boolean isInitialized() {
 			return initialized;
+		}
+	}
+
+	static class DefaultExtensionFilter implements RepositoryFileFilter {
+
+		private String extension;
+
+		DefaultExtensionFilter(String extension) {
+			this.extension = StringUtils.trimToNull(extension);
+		}
+
+		/**
+		 * @see org.pivot4j.analytics.repository.RepositoryFileFilter#accept(org.pivot4j.analytics.repository.ReportFile)
+		 */
+		@Override
+		public boolean accept(ReportFile file) {
+			if (file.isDirectory() || extension == null) {
+				return true;
+			} else {
+				String value = file.getExtension();
+
+				return value != null && value.endsWith(extension);
+			}
 		}
 	}
 }
