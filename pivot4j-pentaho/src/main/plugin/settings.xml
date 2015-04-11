@@ -4,4 +4,5 @@
 		<path>system/pivot4j/webapp/cde</path>
 		<path>pivot4j/webapp/cde</path>
 	</cde-components>
+    <new-toolbar-button>5,New Pivot4J View,Pivot4J View,plugin/pivot4j/faces/catalog.xhtml</new-toolbar-button>
 </settings>
