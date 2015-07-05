@@ -558,20 +558,29 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 										TreeNode<TableAxisContext> node) {
 									TableHeaderNode nodeChild = (TableHeaderNode) node;
 
-									Level level = null;
+									//TASK-60306
+									//In parent-child and ragged hierarchies level can contains members with different depth.
+									//For example: member 
+									//[DirectoryHierachy].[DirectoryLevel].[ParentDirectory] has children 
+									//	[DirectoryHierachy].[DirectoryLevel].[SubDirectory1] and 
+									//    [DirectoryHierachy].[DirectoryLevel].[SubDirectory2].
+									//All these members has same level.
+									//While calculating SubDirectory1 span, we should look for SubDirectory2, not for ParentDirectory.
+									//Because ParentDirectory will be different pivot header column (or row) when showParentsMembers == true.
+									//So, it is preferabble to compare member.getDepth instead of member.getLevel. 
+									//Level level = null;
+									boolean hasSameDepth = false;
 									Member nodeMember = nodeChild.getMember();
 
 									if (nodeChild == TableHeaderNode.this) {
 										return TreeNodeCallback.CONTINUE;
 									} else if (nodeMember != null) {
-										level = nodeMember.getLevel();
+										hasSameDepth = member.getDepth() == nodeMember.getDepth();
 									} else if (nodeChild.getAggregator() != null) {
-										level = nodeChild.getAggregator()
-												.getLevel();
+										hasSameDepth = OlapUtils.equals(member.getLevel(),nodeChild.getAggregator().getLevel());
 									}
 
-									if (OlapUtils.equals(member.getLevel(),
-											level)) {
+									if ( hasSameDepth ) {
 										if (nodeMember != null
 												&& (cache.getAncestorMembers(
 														nodeMember).contains(
