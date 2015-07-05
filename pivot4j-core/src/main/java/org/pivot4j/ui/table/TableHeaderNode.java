@@ -543,7 +543,8 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 							if (nodeChild == TableHeaderNode.this) {
 								return TreeNodeCallback.CONTINUE;
 							} else if (nodeMember != null) {
-								hasSameDepth = member.getDepth() == nodeMember.getDepth();
+								hasSameDepth = (member.getDepth() == nodeMember.getDepth())
+										&& OlapUtils.equals(member.getLevel(), nodeMember.getLevel());
 							} else if (nodeChild.getAggregator() != null) {
 								hasSameDepth = OlapUtils.equals(member.getLevel(),
 										nodeChild.getAggregator().getLevel());
