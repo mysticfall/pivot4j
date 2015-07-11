@@ -9,6 +9,7 @@
 package org.pivot4j.ui.table;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -254,34 +255,44 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 		if (getMember() != null) {
 			List<Level> levels = getReference().getLevels(getHierarchy());
 
+			boolean showParent = getReference().getRenderer().getShowParentMembers();
+
 			int index = levels.indexOf(getMember().getLevel());
-			int endIndex = getReference().getRenderer().getShowParentMembers() ? index + 1 : levels.size();
+			int endIndex = showParent ? index + 1 : levels.size();
 
-			List<Level> lowerLevels = levels.subList(index, endIndex);
+			if (index > -1) {
+				if (!showParent) {
+					index = 0;
+				}
 
-			for (Level level : lowerLevels) {
-				List<Property> properties = getReference().getProperties(level);
+				List<Level> lowerLevels = new LinkedList<Level>(levels.subList(index, endIndex));
 
-				if (!properties.isEmpty()) {
-					children = new ArrayList<TreeNode<TableAxisContext>>(getChildren());
-					clear();
+				Collections.reverse(lowerLevels);
 
-					TableHeaderNode parentNode = this;
+				for (Level level : lowerLevels) {
+					List<Property> properties = getReference().getProperties(level);
 
-					for (Property prop : properties) {
-						TableHeaderNode propertyNode = new TableHeaderNode(getReference());
-						propertyNode.setPosition(position);
-						propertyNode.setHierarchy(getHierarchy());
-						propertyNode.setMember(getMember());
-						propertyNode.setProperty(prop);
+					if (!properties.isEmpty() && property == null) {
+						children = new ArrayList<TreeNode<TableAxisContext>>(getChildren());
+						clear();
 
-						parentNode.addChild(propertyNode);
+						TableHeaderNode parentNode = this;
 
-						parentNode = propertyNode;
-					}
+						for (Property prop : properties) {
+							TableHeaderNode propertyNode = new TableHeaderNode(getReference());
+							propertyNode.setPosition(position);
+							propertyNode.setHierarchy(getHierarchy());
+							propertyNode.setMember(getMember());
+							propertyNode.setProperty(prop);
 
-					for (TreeNode<TableAxisContext> child : children) {
-						parentNode.addChild(child);
+							parentNode.addChild(propertyNode);
+
+							parentNode = propertyNode;
+						}
+
+						for (TreeNode<TableAxisContext> child : children) {
+							parentNode.addChild(child);
+						}
 					}
 				}
 			}
@@ -414,7 +425,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 	public int getRowSpan() {
 		if (rowSpan == null) {
-			if ((member == null || property != null) && aggregator == null) {
+			if (member == null && aggregator == null) {
 				this.rowSpan = 1;
 				return rowSpan;
 			}
@@ -544,7 +555,8 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 								return TreeNodeCallback.CONTINUE;
 							} else if (nodeMember != null) {
 								hasSameDepth = (member.getDepth() == nodeMember.getDepth())
-										&& OlapUtils.equals(member.getLevel(), nodeMember.getLevel());
+										&& OlapUtils.equals(member.getLevel(), nodeMember.getLevel())
+										&& OlapUtils.equals(property, nodeChild.getProperty());
 							} else if (nodeChild.getAggregator() != null) {
 								hasSameDepth = OlapUtils.equals(member.getLevel(),
 										nodeChild.getAggregator().getLevel());
