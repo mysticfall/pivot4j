@@ -283,7 +283,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 							propertyNode.setPosition(position);
 							propertyNode.setHierarchy(getHierarchy());
 							propertyNode.setMember(getMember());
-							propertyNode.setProperty(prop);
+							propertyNode.setProperty(OlapUtils.wrapProperty(prop, level));
 
 							parentNode.addChild(propertyNode);
 
