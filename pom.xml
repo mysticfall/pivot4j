@@ -115,6 +115,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.reflow.velocity>1.0.0</version.reflow.velocity>
 		<version.velocity>1.7</version.velocity>
 		<version.selenium>2.43.1</version.selenium>
+		<version.backport.concurrent>3.1</version.backport.concurrent>
 	</properties>
 
 	<prerequisites>
