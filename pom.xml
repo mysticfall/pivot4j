@@ -24,7 +24,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<github.global.server>github</github.global.server>
 
 		<arquillian.test>false</arquillian.test>
-		<deploy.site.url>scp://www.pivot4j.org/var/www/pivot4j</deploy.site.url>
+		<deploy.site.url>[override-to-deploy]</deploy.site.url>
 
 		<sonar.host.url>http://sonar.pivot4j.org</sonar.host.url>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -282,7 +282,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						</dependency>
 						<dependency>
 							<groupId>org.apache.maven.wagon</groupId>
-							<artifactId>wagon-ssh</artifactId>
+							<artifactId>wagon-ssh-external</artifactId>
 							<version>${version.extension.wagon}</version>
 						</dependency>
 					</dependencies>
