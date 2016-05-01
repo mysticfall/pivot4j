@@ -3,9 +3,12 @@ package org.pivot4j.analytics.ui.chart;
 import javax.faces.context.FacesContext;
 
 import org.pivot4j.ui.chart.ChartRenderContext;
-import org.primefaces.component.chart.bar.BarChart;
+import org.primefaces.component.chart.Chart;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.BarChartSeries;
+import org.primefaces.model.chart.ChartSeries;
 
-public class BarChartBuilder extends AbstractSeriesChartBuilder<BarChart> {
+public class BarChartBuilder extends AbstractSeriesChartBuilder<BarChartModel> {
 
 	public static String NAME = "Bar";
 
@@ -24,22 +27,24 @@ public class BarChartBuilder extends AbstractSeriesChartBuilder<BarChart> {
 		return NAME;
 	}
 
-	/**
-	 * @see org.pivot4j.analytics.ui.chart.AbstractChartBuilder#createChart(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
 	@Override
-	protected BarChart createChart(ChartRenderContext context) {
-		return new BarChart();
+	protected BarChartModel createModel(ChartRenderContext context) {
+		return new BarChartModel();
+	}
+
+	@Override
+	protected ChartSeries createSeries() {
+		return new BarChartSeries();
 	}
 
 	/**
 	 * @see org.pivot4j.analytics.ui.chart.AbstractChartBuilder#configureChart(org.pivot4j.ui.chart.ChartRenderContext,
-	 *      org.primefaces.component.chart.UIChart)
+	 *      org.primefaces.component.chart.Chart, org.primefaces.model.chart.ChartModel)
 	 */
 	@Override
-	protected void configureChart(ChartRenderContext context, BarChart chart) {
-		super.configureChart(context, chart);
+	protected void configureChart(ChartRenderContext context, Chart chart, BarChartModel model) {
+		super.configureChart(context, chart, model);
 
-		chart.setZoom(true);
+		model.setZoom(true);
 	}
 }

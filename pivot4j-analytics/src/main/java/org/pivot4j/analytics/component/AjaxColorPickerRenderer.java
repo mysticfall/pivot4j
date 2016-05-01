@@ -37,13 +37,12 @@ public class AjaxColorPickerRenderer extends ColorPickerRenderer {
 
 	/**
 	 * @see org.primefaces.component.colorpicker.ColorPickerRenderer#encodeScript(javax.faces.context.FacesContext,
-	 *      org.primefaces.component.colorpicker.ColorPicker)
+	 *      org.primefaces.component.colorpicker.ColorPicker, java.lang.String)
 	 */
 	@Override
-	protected void encodeScript(FacesContext context, ColorPicker colorPicker)
+	protected void encodeScript(FacesContext context, ColorPicker colorPicker, String value)
 			throws IOException {
 		String clientId = colorPicker.getClientId(context);
-		String value = (String) colorPicker.getValue();
 
 		WidgetBuilder wb = getWidgetBuilder(context);
 

@@ -11,11 +11,12 @@ import org.pivot4j.ui.AbstractRenderCallback;
 import org.pivot4j.ui.chart.ChartRenderContext;
 import org.pivot4j.ui.command.UICommand;
 import org.primefaces.component.breadcrumb.BreadCrumb;
-import org.primefaces.component.chart.UIChart;
+import org.primefaces.component.chart.Chart;
 import org.primefaces.component.menuitem.UIMenuItem;
+import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartModel;
 
-public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartModel>
+public abstract class AbstractChartBuilder<T extends ChartModel>
 		extends AbstractRenderCallback<ChartRenderContext> implements
 		ChartBuilder {
 
@@ -25,9 +26,9 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 
 	private HtmlPanelGrid pageComponent;
 
-	private C chart;
+	private Chart chart;
 
-	private M model;
+	private T model;
 
 	/**
 	 * @param context
@@ -68,14 +69,14 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 	/**
 	 * @return the chart
 	 */
-	protected C getChart() {
+	protected Chart getChart() {
 		return chart;
 	}
 
 	/**
 	 * @return the model
 	 */
-	protected M getModel() {
+	protected T getModel() {
 		return model;
 	}
 
@@ -103,12 +104,14 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 		this.chart = createChart(context);
 		this.model = createModel(context);
 
-		configureChart(context, chart);
+		configureChart(context, chart, model);
 	}
 
-	protected abstract C createChart(ChartRenderContext context);
+	protected Chart createChart(ChartRenderContext context) {
+		return new Chart();
+	}
 
-	protected abstract M createModel(ChartRenderContext context);
+	protected abstract T createModel(ChartRenderContext context);
 
 	/**
 	 * @param context
@@ -159,27 +162,25 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 	/**
 	 * @param context
 	 * @param chart
+	 * @param model
 	 */
-	protected void configureChart(ChartRenderContext context, C chart) {
+	protected void configureChart(ChartRenderContext context, Chart chart, T model) {
 		List<Member> path = context.getChartPath();
 
 		if (path != null && path.size() > 0) {
 			String title = path.get(path.size() - 1).getCaption();
 
-			chart.setTitle(title);
+			model.setTitle(title);
 		}
 
-		chart.setShadow(true);
+		model.setShadow(true);
 
 		DefaultChartRenderer renderer = (DefaultChartRenderer) context
 				.getRenderer();
 
 		if (renderer.getLegendPosition() != null) {
-			chart.setLegendPosition(renderer.getLegendPosition().name());
+			model.setLegendPosition(renderer.getLegendPosition().name());
 		}
-
-		chart.setXaxisAngle(renderer.getXAxisAngle());
-		chart.setYaxisAngle(renderer.getYAxisAngle());
 
 		StringBuilder builder = new StringBuilder();
 		builder.append("width: ");
@@ -198,6 +199,7 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 		}
 
 		chart.setStyle(builder.toString());
+		chart.setType(getName().toLowerCase());
 	}
 
 	/**
@@ -228,7 +230,7 @@ public abstract class AbstractChartBuilder<C extends UIChart, M extends ChartMod
 	 */
 	@Override
 	public void endChart(ChartRenderContext context) {
-		chart.setValue(model);
+		chart.setModel(model);
 
 		pageComponent.getChildren().add(chart);
 

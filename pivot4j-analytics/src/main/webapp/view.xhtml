@@ -22,6 +22,8 @@
 
 	<h:outputScript library="primefaces" name="printer/printer.js" />
 	<h:outputScript library="primefaces" name="colorpicker/colorpicker.js" />
+	<h:outputScript library="primefaces" name="charts/charts.js" />
+	<h:outputStylesheet library="primefaces" name="charts/charts.css" />
 	<h:outputScript library="pivot4j" name="js/colorpicker.js" />
 	<h:outputScript library="pivot4j" name="js/codemirror-mode.js" />
 	<h:outputScript library="pivot4j" name="js/pivot4j.js" />
@@ -285,14 +287,14 @@
 							<h:outputText id="hierarchy-node" value="#{node.name}"
 								styleClass="node-hierarchy" />
 							<p:draggable for="hierarchy-node"
-								helper="clone', appendTo: 'body" revert="true" />
+								helper="clone" revert="true" appendTo="body" />
 						</p:treeNode>
 
 						<p:treeNode type="level" icon="ui-icon-level#{node.depth}">
 							<h:outputText id="level-node" value="#{node.name}"
 								styleClass="node-level" />
 							<!-- workaround for PrimeFaces issue #4748 -->
-							<p:draggable for="level-node" helper="clone', appendTo: 'body"
+							<p:draggable for="level-node" helper="clone" appendTo="body"
 								revert="true" />
 						</p:treeNode>
 
@@ -300,8 +302,8 @@
 							<h:outputText id="member-node" value="#{node.name}"
 								styleClass="node-member" />
 							<!-- workaround for PrimeFaces issue #4748 -->
-							<p:draggable for="member-node" helper="clone', appendTo: 'body"
-								revert="true" />
+							<p:draggable for="member-node" helper="clone"
+								revert="true" appendTo="body" />
 						</p:treeNode>
 					</p:tree>
 					<p:droppable for="cube-navigator"

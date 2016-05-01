@@ -3,7 +3,10 @@ package org.pivot4j.analytics.ui.chart;
 import javax.faces.context.FacesContext;
 
 import org.pivot4j.ui.chart.ChartRenderContext;
-import org.primefaces.component.chart.line.LineChart;
+import org.primefaces.component.chart.Chart;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 
 public class StackedAreaChartBuilder extends LineChartBuilder {
 
@@ -24,16 +27,25 @@ public class StackedAreaChartBuilder extends LineChartBuilder {
 		return NAME;
 	}
 
+	@Override
+	protected ChartSeries createSeries() {
+		LineChartSeries series = (LineChartSeries) super.createSeries();
+		series.setFill(true);
+
+		return series;
+	}
+
 	/**
 	 * @see org.pivot4j.analytics.ui.chart.AbstractChartBuilder#configureChart(org.pivot4j.ui.chart.ChartRenderContext,
-	 *      org.primefaces.component.chart.UIChart)
+	 *      org.primefaces.component.chart.Chart, org.primefaces.model.chart.ChartModel)
 	 */
 	@Override
-	protected void configureChart(ChartRenderContext context, LineChart chart) {
-		super.configureChart(context, chart);
+	protected void configureChart(ChartRenderContext context, Chart chart, LineChartModel model) {
+		super.configureChart(context, chart, model);
 
-		chart.setFill(true);
-		chart.setStacked(true);
-		chart.setLegendPosition("n");
+		chart.setType("line");
+
+		model.setStacked(true);
+		model.setLegendPosition("n");
 	}
 }

@@ -37,6 +37,11 @@ public abstract class AbstractTreeNode<T> implements TreeNode {
 		this.parent = parent;
 	}
 
+	@Override
+	public void clearParent() {
+		this.parent = null;
+	}
+
 	/**
 	 * @see org.primefaces.model.TreeNode#isExpanded()
 	 */
