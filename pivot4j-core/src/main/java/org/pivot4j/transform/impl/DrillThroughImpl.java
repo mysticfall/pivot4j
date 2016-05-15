@@ -11,6 +11,8 @@ package org.pivot4j.transform.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.NullArgumentException;
@@ -156,21 +158,32 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 			builder.append(slicer.toMdx());
 		}
 
-		if (selection != null && !selection.isEmpty()) {
+		List<Member> members;
+		if (selection == null) {
+			members = Collections.emptyList();
+		} else {
+			members = new LinkedList<Member>();
+
+			for (MetadataElement elem : selection) {
+				if (elem instanceof Member) {
+					members.add((Member) elem);
+				}
+			}
+		}
+
+		if (!members.isEmpty()) {
 			builder.append(" RETURN ");
 
 			isFirst = true;
 
-			for (MetadataElement elem : selection) {
+			for (Member elem : members) {
 				if (isFirst) {
 					isFirst = false;
 				} else {
 					builder.append(", ");
 				}
 
-				if (elem instanceof Member) {
-					elem = utils.wrapRaggedIfNecessary((Member) elem);
-				}
+				elem = utils.wrapRaggedIfNecessary(elem);
 
 				builder.append(elem.getUniqueName());
 			}
