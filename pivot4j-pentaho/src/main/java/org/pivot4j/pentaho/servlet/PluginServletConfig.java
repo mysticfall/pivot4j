@@ -30,7 +30,7 @@ public class PluginServletConfig implements ServletConfig {
 	 * @see javax.servlet.ServletConfig#getInitParameterNames()
 	 */
 	@Override
-	public Enumeration<?> getInitParameterNames() {
+	public Enumeration<String> getInitParameterNames() {
 		return context.getInitParameterNames();
 	}
 

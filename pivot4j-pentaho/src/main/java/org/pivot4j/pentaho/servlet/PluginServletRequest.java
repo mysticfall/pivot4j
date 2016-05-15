@@ -31,7 +31,7 @@ public class PluginServletRequest extends HttpServletRequestWrapper {
 	/**
 	 * @return the servletContext
 	 */
-	protected PluginServletContext getServletContext() {
+	public PluginServletContext getServletContext() {
 		return servletContext;
 	}
 
