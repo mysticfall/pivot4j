@@ -61,7 +61,7 @@ public class PluginServletRequest extends HttpServletRequestWrapper {
 	public String getPathInfo() {
 		String pathInfo = super.getPathInfo();
 
-		if (pathInfo.startsWith(SERVLET_PATH)) {
+		if (pathInfo != null && pathInfo.startsWith(SERVLET_PATH)) {
 			pathInfo = pathInfo.substring(SERVLET_PATH.length());
 		}
 
