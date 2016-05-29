@@ -4,9 +4,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.view.facelets.FaceletException;
 
 import org.apache.commons.lang.NullArgumentException;
@@ -26,7 +27,7 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.model.TreeNode;
 
 @ManagedBean(name = "drillThroughHandler")
-@RequestScoped
+@ViewScoped
 public class DrillThroughHandler implements NodeFilter {
 
 	@ManagedProperty(value = "#{pivotStateManager}")
