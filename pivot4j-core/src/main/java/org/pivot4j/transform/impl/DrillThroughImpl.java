@@ -23,6 +23,7 @@ import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
 import org.pivot4j.PivotException;
@@ -75,11 +76,11 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 
 		ResultSet result;
 
-		if (selection != null && !selection.isEmpty() || maximumRows > 0) {
-			result = performDrillThroughMdx(cell, selection, maximumRows);
-		} else {
-			result = performDrillThrough(cell);
+		if (selection==null) {
+			selection = Collections.emptyList();
 		}
+
+		result = performDrillThroughMdx(cell, selection, maximumRows);
 
 		return result;
 	}
@@ -158,15 +159,17 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 			builder.append(slicer.toMdx());
 		}
 
-		List<Member> members;
+		List<MetadataElement> members;
 		if (selection == null) {
 			members = Collections.emptyList();
 		} else {
-			members = new LinkedList<Member>();
+			members = new LinkedList<MetadataElement>();
 
 			for (MetadataElement elem : selection) {
-				if (elem instanceof Member) {
-					members.add((Member) elem);
+				if (elem instanceof Member){
+					members.add(utils.wrapRaggedIfNecessary((Member) elem));
+				} else if (elem instanceof Level) {
+					members.add(elem);
 				}
 			}
 		}
@@ -176,14 +179,12 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 
 			isFirst = true;
 
-			for (Member elem : members) {
+			for (MetadataElement elem : members) {
 				if (isFirst) {
 					isFirst = false;
 				} else {
 					builder.append(", ");
 				}
-
-				elem = utils.wrapRaggedIfNecessary(elem);
 
 				builder.append(elem.getUniqueName());
 			}
