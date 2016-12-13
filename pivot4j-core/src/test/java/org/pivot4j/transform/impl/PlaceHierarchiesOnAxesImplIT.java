@@ -95,6 +95,31 @@ public class PlaceHierarchiesOnAxesImplIT extends
 	}
 
 	@Test
+	public void testExpandAllMembersExcludingAll() {
+		PlaceHierarchiesOnAxes transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Hierarchy promotionMedia = cube.getHierarchies().get("Promotion Media");
+		Hierarchy product = cube.getHierarchies().get("Product");
+
+		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(2);
+		hierarchies.add(promotionMedia);
+		hierarchies.add(product);
+
+		transform.placeHierarchies(Axis.ROWS, hierarchies, true, false);
+
+		assertThat(
+				"Unexpected MDX query after set hierarchies on axis",
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "CrossJoin([Promotion Media].[All Media].Children, "
+						+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]")));
+
+		getPivotModel().getCellSet();
+	}
+
+	@Test
 	public void testAddHierarchyAtIndexMinusOne() {
 		PlaceHierarchiesOnAxes transform = getTransform();
 
