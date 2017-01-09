@@ -8,10 +8,6 @@
  */
 package org.pivot4j.transform.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.olap4j.Axis;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
@@ -32,8 +28,11 @@ import org.pivot4j.util.OlapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
-		PlaceHierarchiesOnAxes {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements PlaceHierarchiesOnAxes {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -41,27 +40,25 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	 * @param queryAdapter
 	 * @param connection
 	 */
-	public PlaceHierarchiesOnAxesImpl(QueryAdapter queryAdapter,
-									  OlapConnection connection) {
+	public PlaceHierarchiesOnAxesImpl(QueryAdapter queryAdapter, OlapConnection connection) {
 		super(queryAdapter, connection);
 	}
 
-	public void placeHierarchies(Axis axis, List<Hierarchy> hierarchies,
-								 boolean expandAllMember) {
+	public void placeHierarchies(Axis axis, List<Hierarchy> hierarchies, boolean expandAllMember) {
 		placeHierarchies(axis, hierarchies, expandAllMember, true);
 	}
+
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#placeHierarchies(org.olap4j.Axis,
 	 *      java.util.List, boolean, boolean)
 	 */
-	public void placeHierarchies(Axis axis, List<Hierarchy> hierarchies,
-								 boolean expandAllMember, boolean includeAllMember) {
+	public void placeHierarchies(Axis axis, List<Hierarchy> hierarchies, boolean expandAllMember,
+			boolean includeAllMember) {
 		QueryAdapter adapter = getQueryAdapter();
 
 		List<Exp> memberExpressions = new ArrayList<Exp>();
 		for (Hierarchy hierarchy : hierarchies) {
-			memberExpressions.add(createMemberExpression(hierarchy,
-					expandAllMember, includeAllMember));
+			memberExpressions.add(createMemberExpression(hierarchy, expandAllMember, includeAllMember));
 		}
 
 		Quax quax = adapter.getQuax(axis);
@@ -92,8 +89,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		quax.regeneratePosTree(sets, true);
 
 		if (logger.isDebugEnabled()) {
-			logger.debug("setQueryAxis axis={}, nDimension={}",
-					quax.getOrdinal(), nDimension);
+			logger.debug("setQueryAxis axis={}, nDimension={}", quax.getOrdinal(), nDimension);
 			logger.debug("Expression for the axis : ", quax);
 		}
 	}
@@ -103,8 +99,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	 *      org.olap4j.metadata.Hierarchy, boolean, int)
 	 */
 	@Override
-	public void addHierarchy(Axis axis, Hierarchy hierarchy,
-							 boolean expandAllMember, int position) {
+	public void addHierarchy(Axis axis, Hierarchy hierarchy, boolean expandAllMember, int position) {
 		addHierarchy(axis, hierarchy, expandAllMember, true, position);
 	}
 
@@ -113,8 +108,8 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	 *      org.olap4j.metadata.Hierarchy, boolean, boolean, int)
 	 */
 	@Override
-	public void addHierarchy(Axis axis, Hierarchy hierarchy,
-							 boolean expandAllMember, boolean includeAllMember, int position) {
+	public void addHierarchy(Axis axis, Hierarchy hierarchy, boolean expandAllMember, boolean includeAllMember,
+			int position) {
 		List<Hierarchy> hierarchies = findVisibleHierarchies(axis);
 
 		if (hierarchies.contains(hierarchy)) {
@@ -212,8 +207,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	 * @param expandAllMember
 	 * @return
 	 */
-	protected Exp createMemberExpression(Hierarchy hierarchy,
-										 boolean expandAllMember, boolean includeAllMember) {
+	protected Exp createMemberExpression(Hierarchy hierarchy, boolean expandAllMember, boolean includeAllMember) {
 		// if the query does not contain the hierarchy,
 		// just return the highest level
 		QueryAdapter adapter = getQueryAdapter();
@@ -264,12 +258,10 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 					PivotModel model = getModel();
 
 					OlapUtils utils = new OlapUtils(model.getCube());
-					utils.setMemberHierarchyCache(getQueryAdapter().getModel()
-							.getMemberHierarchyCache());
+					utils.setMemberHierarchyCache(getQueryAdapter().getModel().getMemberHierarchyCache());
 
 					if (!expandAllMember) {
-						return new MemberExp(
-								utils.wrapRaggedIfNecessary(allMember));
+						return new MemberExp(utils.wrapRaggedIfNecessary(allMember));
 					}
 
 					// must expand
@@ -280,8 +272,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 						FunCall allSet = new FunCall("{}", Syntax.Braces);
 						allSet.getArgs().add(allExp);
 
-						FunCall mAllChildren = new FunCall("Children",
-								Syntax.Property);
+						FunCall mAllChildren = new FunCall("Children", Syntax.Property);
 						mAllChildren.getArgs().add(allExp);
 
 						FunCall union = new FunCall("Union", Syntax.Function);
@@ -292,8 +283,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 					} else {
 						Exp allExp = new MemberExp(allMember);
 
-						FunCall mAllChildren = new FunCall("Children",
-								Syntax.Property);
+						FunCall mAllChildren = new FunCall("Children", Syntax.Property);
 						mAllChildren.getArgs().add(allExp);
 						return mAllChildren;
 					}
