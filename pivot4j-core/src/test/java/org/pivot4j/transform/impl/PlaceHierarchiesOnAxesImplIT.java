@@ -8,19 +8,17 @@
  */
 package org.pivot4j.transform.impl;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 import org.olap4j.Axis;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 import org.pivot4j.transform.PlaceHierarchiesOnAxes;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 public class PlaceHierarchiesOnAxesImplIT extends
 		AbstractTransformTestCase<PlaceHierarchiesOnAxes> {
@@ -89,6 +87,31 @@ public class PlaceHierarchiesOnAxesImplIT extends
 				getPivotModel().getCurrentMdx(),
 				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
 						+ "CrossJoin(Union({[Promotion Media].[All Media]}, [Promotion Media].[All Media].Children), "
+						+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]")));
+
+		getPivotModel().getCellSet();
+	}
+
+	@Test
+	public void testExpandAllMembersExcludingAll() {
+		PlaceHierarchiesOnAxes transform = getTransform();
+
+		Cube cube = getPivotModel().getCube();
+
+		Hierarchy promotionMedia = cube.getHierarchies().get("Promotion Media");
+		Hierarchy product = cube.getHierarchies().get("Product");
+
+		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(2);
+		hierarchies.add(promotionMedia);
+		hierarchies.add(product);
+
+		transform.placeHierarchies(Axis.ROWS, hierarchies, true, false);
+
+		assertThat(
+				"Unexpected MDX query after set hierarchies on axis",
+				getPivotModel().getCurrentMdx(),
+				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+						+ "CrossJoin([Promotion Media].[All Media].Children, "
 						+ "{[Product].[All Products], [Product].[Drink], [Product].[Food], [Product].[Non-Consumable]}) ON ROWS FROM [Sales]")));
 
 		getPivotModel().getCellSet();

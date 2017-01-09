@@ -8,10 +8,6 @@
  */
 package org.pivot4j.transform.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.olap4j.Axis;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
@@ -32,6 +28,10 @@ import org.pivot4j.util.OlapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		PlaceHierarchiesOnAxes {
 
@@ -42,22 +42,26 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	 * @param connection
 	 */
 	public PlaceHierarchiesOnAxesImpl(QueryAdapter queryAdapter,
-			OlapConnection connection) {
+									  OlapConnection connection) {
 		super(queryAdapter, connection);
 	}
 
+	public void placeHierarchies(Axis axis, List<Hierarchy> hierarchies,
+								 boolean expandAllMember) {
+		placeHierarchies(axis, hierarchies, expandAllMember, true);
+	}
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#placeHierarchies(org.olap4j.Axis,
-	 *      java.util.List, boolean)
+	 * java.util.List, boolean, boolean)
 	 */
 	public void placeHierarchies(Axis axis, List<Hierarchy> hierarchies,
-			boolean expandAllMember) {
+								 boolean expandAllMember, boolean includeAllMember) {
 		QueryAdapter adapter = getQueryAdapter();
 
 		List<Exp> memberExpressions = new ArrayList<Exp>();
 		for (Hierarchy hierarchy : hierarchies) {
 			memberExpressions.add(createMemberExpression(hierarchy,
-					expandAllMember));
+					expandAllMember, includeAllMember));
 		}
 
 		Quax quax = adapter.getQuax(axis);
@@ -96,11 +100,21 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#addHierarchy(org.olap4j.Axis,
-	 *      org.olap4j.metadata.Hierarchy, boolean, int)
+	 * org.olap4j.metadata.Hierarchy, boolean, int)
 	 */
 	@Override
 	public void addHierarchy(Axis axis, Hierarchy hierarchy,
-			boolean expandAllMember, int position) {
+							 boolean expandAllMember, int position) {
+		addHierarchy(axis, hierarchy, expandAllMember, true, position);
+	}
+
+	/**
+	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#addHierarchy(org.olap4j.Axis,
+	 * org.olap4j.metadata.Hierarchy, boolean, boolean, int)
+	 */
+	@Override
+	public void addHierarchy(Axis axis, Hierarchy hierarchy,
+							 boolean expandAllMember, boolean includeAllMember, int position) {
 		List<Hierarchy> hierarchies = findVisibleHierarchies(axis);
 
 		if (hierarchies.contains(hierarchy)) {
@@ -116,12 +130,12 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 			hierarchies.add(position, hierarchy);
 		}
 
-		placeHierarchies(axis, hierarchies, expandAllMember);
+		placeHierarchies(axis, hierarchies, expandAllMember, includeAllMember);
 	}
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#moveHierarchy(org.olap4j
-	 *      .Axis, org.olap4j.metadata.Hierarchy, int)
+	 * .Axis, org.olap4j.metadata.Hierarchy, int)
 	 */
 	@Override
 	public void moveHierarchy(Axis axis, Hierarchy hierarchy, int position) {
@@ -156,7 +170,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#removeHierarchy(org
-	 *      .olap4j.Axis, org.olap4j.metadata.Hierarchy)
+	 * .olap4j.Axis, org.olap4j.metadata.Hierarchy)
 	 */
 	@Override
 	public void removeHierarchy(Axis axis, Hierarchy hierarchy) {
@@ -177,7 +191,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#findVisibleHierarchies
-	 *      (org.olap4j.Axis)
+	 * (org.olap4j.Axis)
 	 */
 	@Override
 	public List<Hierarchy> findVisibleHierarchies(Axis axis) {
@@ -199,7 +213,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	 * @return
 	 */
 	protected Exp createMemberExpression(Hierarchy hierarchy,
-			boolean expandAllMember) {
+										 boolean expandAllMember, boolean includeAllMember) {
 		// if the query does not contain the hierarchy,
 		// just return the highest level
 		QueryAdapter adapter = getQueryAdapter();
@@ -209,7 +223,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		if (quax == null) {
 			adapter.getCurrentMdx(true);
 			// the hierarchy was not found on any axis
-			return topLevelMembers(hierarchy, expandAllMember);
+			return topLevelMembers(hierarchy, expandAllMember, includeAllMember);
 			// return top level members of the hierarchy
 		}
 
@@ -222,12 +236,12 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * TODO Merge with {@link QuaxUtil#topLevelMembers(Hierarchy, boolean)}
-	 * 
+	 *
 	 * @param hierarchy
 	 * @param expandAllMember
 	 * @return
 	 */
-	protected Exp topLevelMembers(Hierarchy hierarchy, boolean expandAllMember) {
+	protected Exp topLevelMembers(Hierarchy hierarchy, boolean expandAllMember, boolean includeAllMember) {
 		try {
 			if (hierarchy.hasAll()) {
 				// an "All" member is present -get it
@@ -260,20 +274,29 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 					// must expand
 					// create Union({AllMember}, AllMember.children)
-					Exp allExp = new MemberExp(allMember);
+					if (includeAllMember) {
+						Exp allExp = new MemberExp(allMember);
 
-					FunCall allSet = new FunCall("{}", Syntax.Braces);
-					allSet.getArgs().add(allExp);
+						FunCall allSet = new FunCall("{}", Syntax.Braces);
+						allSet.getArgs().add(allExp);
 
-					FunCall mAllChildren = new FunCall("Children",
-							Syntax.Property);
-					mAllChildren.getArgs().add(allExp);
+						FunCall mAllChildren = new FunCall("Children",
+								Syntax.Property);
+						mAllChildren.getArgs().add(allExp);
 
-					FunCall union = new FunCall("Union", Syntax.Function);
-					union.getArgs().add(allSet);
-					union.getArgs().add(mAllChildren);
+						FunCall union = new FunCall("Union", Syntax.Function);
+						union.getArgs().add(allSet);
+						union.getArgs().add(mAllChildren);
 
-					return union;
+						return union;
+					} else {
+						Exp allExp = new MemberExp(allMember);
+
+						FunCall mAllChildren = new FunCall("Children",
+								Syntax.Property);
+						mAllChildren.getArgs().add(allExp);
+						return mAllChildren;
+					}
 				}
 			}
 
