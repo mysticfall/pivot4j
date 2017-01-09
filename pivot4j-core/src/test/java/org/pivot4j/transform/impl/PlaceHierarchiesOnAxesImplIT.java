@@ -8,19 +8,17 @@
  */
 package org.pivot4j.transform.impl;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 import org.olap4j.Axis;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 import org.pivot4j.transform.PlaceHierarchiesOnAxes;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 public class PlaceHierarchiesOnAxesImplIT extends
 		AbstractTransformTestCase<PlaceHierarchiesOnAxes> {

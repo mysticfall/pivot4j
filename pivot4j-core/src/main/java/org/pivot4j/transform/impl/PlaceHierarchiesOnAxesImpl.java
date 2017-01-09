@@ -8,10 +8,6 @@
  */
 package org.pivot4j.transform.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.olap4j.Axis;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
@@ -31,6 +27,10 @@ import org.pivot4j.transform.PlaceHierarchiesOnAxes;
 import org.pivot4j.util.OlapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 		PlaceHierarchiesOnAxes {
@@ -52,7 +52,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 	}
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#placeHierarchies(org.olap4j.Axis,
-	 *      java.util.List, boolean, boolean)
+	 * java.util.List, boolean, boolean)
 	 */
 	public void placeHierarchies(Axis axis, List<Hierarchy> hierarchies,
 								 boolean expandAllMember, boolean includeAllMember) {
@@ -100,7 +100,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#addHierarchy(org.olap4j.Axis,
-	 *      org.olap4j.metadata.Hierarchy, boolean, int)
+	 * org.olap4j.metadata.Hierarchy, boolean, int)
 	 */
 	@Override
 	public void addHierarchy(Axis axis, Hierarchy hierarchy,
@@ -110,7 +110,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#addHierarchy(org.olap4j.Axis,
-	 *      org.olap4j.metadata.Hierarchy, boolean, boolean, int)
+	 * org.olap4j.metadata.Hierarchy, boolean, boolean, int)
 	 */
 	@Override
 	public void addHierarchy(Axis axis, Hierarchy hierarchy,
@@ -135,7 +135,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#moveHierarchy(org.olap4j
-	 *      .Axis, org.olap4j.metadata.Hierarchy, int)
+	 * .Axis, org.olap4j.metadata.Hierarchy, int)
 	 */
 	@Override
 	public void moveHierarchy(Axis axis, Hierarchy hierarchy, int position) {
@@ -170,7 +170,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#removeHierarchy(org
-	 *      .olap4j.Axis, org.olap4j.metadata.Hierarchy)
+	 * .olap4j.Axis, org.olap4j.metadata.Hierarchy)
 	 */
 	@Override
 	public void removeHierarchy(Axis axis, Hierarchy hierarchy) {
@@ -191,7 +191,7 @@ public class PlaceHierarchiesOnAxesImpl extends AbstractTransform implements
 
 	/**
 	 * @see org.pivot4j.transform.PlaceHierarchiesOnAxes#findVisibleHierarchies
-	 *      (org.olap4j.Axis)
+	 * (org.olap4j.Axis)
 	 */
 	@Override
 	public List<Hierarchy> findVisibleHierarchies(Axis axis) {
