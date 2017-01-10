@@ -21,16 +21,12 @@ import java.util.List;
  * <li>The GUI will examine the result of the olap query to find out which
  * hierarchies are currently displayed on what axes. It will use
  * Axis.getHierarchies() for this.</li>
- * <p>
  * <li>Then it will find out what Hierarchies exist by calling
  * OlapModel.getDimensions() and Dimension.getHierarchies().</li>
- * <p>
  * <li>The Information will be presented to the user and he will be allowed to
  * change the mapping between axes and hierarchies.</li>
- * <p>
  * <li>For every Hierarchy that the user selected for display on an axis, the
  * GUI will call createMemberExpression().</li>
- * <p>
  * <li>For each axis the system will build the the array of memberExpressions
  * and call setAxis once.</li>
  * </ul>
