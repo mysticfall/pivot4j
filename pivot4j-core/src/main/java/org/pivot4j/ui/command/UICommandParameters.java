@@ -14,7 +14,7 @@ public class UICommandParameters implements Serializable {
 
 	private int hierarchyOrdinal;
 
-	private int cellOrdinal;
+	private int[] cellCoordinate;
 
 	/**
 	 * @return the axisOrdinal
@@ -77,17 +77,17 @@ public class UICommandParameters implements Serializable {
 	}
 
 	/**
-	 * @return the cellOrdinal
+	 * @return the cellCoordinate
 	 */
-	public int getCellOrdinal() {
-		return cellOrdinal;
+	public int[] getCellCoordinate() {
+		return cellCoordinate;
 	}
 
 	/**
-	 * @param cellOrdinal
-	 *            the cellOrdinal to set
+	 * @param cellCoordinate
+	 *            the cellCoordinate to set
 	 */
-	public void setCellOrdinal(int cellOrdinal) {
-		this.cellOrdinal = cellOrdinal;
+	public void setCellCoordinate(int[] cellCoordinate) {
+		this.cellCoordinate = cellCoordinate;
 	}
 }

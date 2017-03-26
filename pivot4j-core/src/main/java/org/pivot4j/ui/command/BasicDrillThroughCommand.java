@@ -9,7 +9,12 @@
 package org.pivot4j.ui.command;
 
 import java.sql.ResultSet;
+import java.util.Arrays;
+import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.olap4j.Cell;
 import org.olap4j.OlapException;
 import org.pivot4j.PivotException;
@@ -59,7 +64,11 @@ public class BasicDrillThroughCommand extends AbstractUICommand<ResultSet>
 	@Override
 	public UICommandParameters createParameters(RenderContext context) {
 		UICommandParameters parameters = new UICommandParameters();
-		parameters.setCellOrdinal(context.getCell().getOrdinal());
+
+		List<Integer> list = context.getCell().getCoordinateList();
+		int[] coords = ArrayUtils.toPrimitive(list.toArray(new Integer[list.size()]));
+
+		parameters.setCellCoordinate(coords);
 
 		return parameters;
 	}
@@ -70,7 +79,10 @@ public class BasicDrillThroughCommand extends AbstractUICommand<ResultSet>
 	 */
 	@Override
 	public ResultSet execute(PivotModel model, UICommandParameters parameters) {
-		Cell cell = model.getCellSet().getCell(parameters.getCellOrdinal());
+		int[] array = parameters.getCellCoordinate();
+		List<Integer> coords = Arrays.asList(ArrayUtils.toObject(array));
+
+		Cell cell = model.getCellSet().getCell(coords);
 
 		try {
 			return cell.drillThrough();
