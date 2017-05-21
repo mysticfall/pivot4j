@@ -71,6 +71,14 @@ public class DrillThroughHandler implements NodeFilter {
 		table.setFirst(0);
 	}
 
+	public void reset() {
+		data.reset();
+
+		this.cubeNode = null;
+		this.selection = null;
+		this.maximumRows = 0;
+	}
+
 	/**
 	 * @return the cubeNode
 	 */

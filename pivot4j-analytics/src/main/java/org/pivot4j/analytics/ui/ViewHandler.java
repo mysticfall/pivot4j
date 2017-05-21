@@ -358,6 +358,8 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
                 }
             }
         }
+
+        drillThroughHandler.reset();
     }
 
     private String getDefaultMdx() {
