@@ -58,6 +58,15 @@ on top of its core library, along with a [plugin][pentaho-plugin] for
 
 * Powerful formatting support based on MDX independent expression language.
 
+### Project in maintenance mode
+
+Currently, the project is in maintenance mode and in need of a new maintainer to 
+continue the development.
+
+You can read the official announcement [here](https://groups.google.com/forum/#!topic/pivot4j-list/ipDSfjcvo0M), 
+and please leave a message at [the support forum][forum-site], if you are interested in taking over the project 
+as the new maintainer.
+
 ### Pivot4J 0.9 is released (May 25, 2014)
 
 After 9 months of development, *Pivot4J 0.9* is released with many new features and 
@@ -73,26 +82,9 @@ bug fixes. Some of the highlights of the new release include :
 
 For full list of changes, please see the changelog [here][changelog].
 	
-### What's coming up next?
-
-As the next milestone would be our first stable release, we intend to take this opportunity 
-to spend sometime to make it more easy and robust to use for both end users and developers. 
- 
-* Improved documentation, including code examples for major features.
-
-* Core API enhancements and refactorings to make it more flexible and extendable.
-
-* Remove remaining JPivot's legacy codebase.
-
-* Parser implementation improve MDX support on par with Mondrian and Olap4J.
-
-* Code clean up for Pivot4J Analytics application to serve as a reference implementation for JSF. 
-
 ### Contact
 
 If you have any question or suggestion for the project, please leave your message at [the support forum][forum-site].
-
-And we also have an IRC channel at the Freenode network, **#pivot4j**.
 
 <iframe allowtransparency="true" frameborder="0" scrolling="no" 
 	src="http://platform.twitter.com/widgets/follow_button.html?screen_name=pivot4j" class="twitter-frame"></iframe>

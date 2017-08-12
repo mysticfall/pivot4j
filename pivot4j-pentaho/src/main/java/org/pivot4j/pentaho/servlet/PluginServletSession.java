@@ -140,7 +140,7 @@ public class PluginServletSession implements HttpSession {
 	 * @return
 	 * @see javax.servlet.http.HttpSession#getAttributeNames()
 	 */
-	public Enumeration<?> getAttributeNames() {
+	public Enumeration<String> getAttributeNames() {
 		return wrappedSession.getAttributeNames();
 	}
 

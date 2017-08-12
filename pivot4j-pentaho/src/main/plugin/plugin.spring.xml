@@ -33,7 +33,7 @@
 					</value>
 				</entry>
 				<entry key="primefaces.THEME">
-					<value>#{workbenchHandler.theme}</value>
+					<value>#{'#{workbenchHandler.theme}'}</value>
 				</entry>
 				<entry key="pivot4j.config">
 					<value>classpath:./pivot4j-config.xml</value>

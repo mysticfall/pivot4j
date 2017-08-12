@@ -24,7 +24,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<github.global.server>github</github.global.server>
 
 		<arquillian.test>false</arquillian.test>
-		<deploy.site.url>scp://www.pivot4j.org/var/www/pivot4j</deploy.site.url>
+		<deploy.site.url>[override-to-deploy]</deploy.site.url>
 
 		<sonar.host.url>http://sonar.pivot4j.org</sonar.host.url>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -74,9 +74,9 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.slf4j>1.7.7</version.slf4j>
 		<version.log4j>2.0.2</version.log4j>
 
-		<version.mondrian>3.6.7</version.mondrian>
+		<version.mondrian>3.12.0.2-208</version.mondrian>
 		<version.olap4j>1.2.0</version.olap4j>
-		<version.pentaho>5.0.2</version.pentaho>
+		<version.pentaho>6.1.0.2-208</version.pentaho>
 
 		<version.commons.configuration>1.10</version.commons.configuration>
 		<version.commons.dbutils>1.5</version.commons.dbutils>
@@ -91,8 +91,8 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.jacoco>0.7.1.201405082137</version.jacoco>
 		<version.junit>4.11</version.junit>
 
-		<version.primefaces>5.0</version.primefaces>
-		<version.primefaces.extensions>2.0.0</version.primefaces.extensions>
+		<version.primefaces>5.3</version.primefaces>
+		<version.primefaces.extensions>4.0.0</version.primefaces.extensions>
 		<version.primefaces.themes>1.0.10</version.primefaces.themes>
 
 		<version.arquillian.bom>1.1.5.Final</version.arquillian.bom>
@@ -112,9 +112,10 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<version.shrinkwrap>2.0.0</version.shrinkwrap>
 		<version.tomcat6>6.0.41</version.tomcat6>
 		<version.xerces>2.11.0</version.xerces>
-		<version.reflow.velocity>1.0.0</version.reflow.velocity>
+		<version.reflow.velocity>1.1.1</version.reflow.velocity>
 		<version.velocity>1.7</version.velocity>
 		<version.selenium>2.43.1</version.selenium>
+		<version.backport.concurrent>3.1</version.backport.concurrent>
 	</properties>
 
 	<prerequisites>
@@ -281,7 +282,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 						</dependency>
 						<dependency>
 							<groupId>org.apache.maven.wagon</groupId>
-							<artifactId>wagon-ssh</artifactId>
+							<artifactId>wagon-ssh-external</artifactId>
 							<version>${version.extension.wagon}</version>
 						</dependency>
 					</dependencies>
@@ -534,7 +535,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<repository>
 			<id>pentaho</id>
 			<name>Pentaho Repository</name>
-			<url>http://repo.pentaho.org/artifactory/repo/</url>
+			<url>http://repository.pentaho.org/artifactory/repo/</url>
 		</repository>
 	</repositories>
 

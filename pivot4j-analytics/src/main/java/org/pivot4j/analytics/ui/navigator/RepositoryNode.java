@@ -85,6 +85,10 @@ public class RepositoryNode extends LazyTreeNode<ReportFile> implements
 		return type;
 	}
 
+	@Override
+	public void setType(String type) {
+	}
+
 	/**
 	 * @see org.primefaces.model.TreeNode#isLeaf()
 	 */

@@ -11,6 +11,8 @@ package org.pivot4j.transform.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang.NullArgumentException;
@@ -21,6 +23,7 @@ import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
 import org.pivot4j.PivotException;
@@ -73,11 +76,11 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 
 		ResultSet result;
 
-		if (selection != null && !selection.isEmpty() || maximumRows > 0) {
-			result = performDrillThroughMdx(cell, selection, maximumRows);
-		} else {
-			result = performDrillThrough(cell);
+		if (selection==null) {
+			selection = Collections.emptyList();
 		}
+
+		result = performDrillThroughMdx(cell, selection, maximumRows);
 
 		return result;
 	}
@@ -156,20 +159,31 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
 			builder.append(slicer.toMdx());
 		}
 
-		if (selection != null && !selection.isEmpty()) {
+		List<MetadataElement> members;
+		if (selection == null) {
+			members = Collections.emptyList();
+		} else {
+			members = new LinkedList<MetadataElement>();
+
+			for (MetadataElement elem : selection) {
+				if (elem instanceof Member){
+					members.add(utils.wrapRaggedIfNecessary((Member) elem));
+				} else if (elem instanceof Level) {
+					members.add(elem);
+				}
+			}
+		}
+
+		if (!members.isEmpty()) {
 			builder.append(" RETURN ");
 
 			isFirst = true;
 
-			for (MetadataElement elem : selection) {
+			for (MetadataElement elem : members) {
 				if (isFirst) {
 					isFirst = false;
 				} else {
 					builder.append(", ");
-				}
-
-				if (elem instanceof Member) {
-					elem = utils.wrapRaggedIfNecessary((Member) elem);
 				}
 
 				builder.append(elem.getUniqueName());

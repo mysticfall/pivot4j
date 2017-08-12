@@ -4,19 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.faces.view.facelets.ResourceResolver;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletException;
+import javax.servlet.*;
+import javax.servlet.descriptor.JspConfigDescriptor;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.UnhandledException;
@@ -91,7 +83,7 @@ public class PluginServletContext implements ServletContext {
 	 * @return
 	 * @see javax.servlet.ServletContext#getAttributeNames()
 	 */
-	public Enumeration<?> getAttributeNames() {
+	public Enumeration<String> getAttributeNames() {
 		return wrappedContext.getAttributeNames();
 	}
 
@@ -128,8 +120,8 @@ public class PluginServletContext implements ServletContext {
 	 * @return
 	 * @see javax.servlet.ServletContext#getInitParameterNames()
 	 */
-	public Enumeration<?> getInitParameterNames() {
-		Enumeration<?> e = wrappedContext.getInitParameterNames();
+	public Enumeration<String> getInitParameterNames() {
+		Enumeration<String> e = wrappedContext.getInitParameterNames();
 
 		if (initParameters == null) {
 			return e;
@@ -148,6 +140,11 @@ public class PluginServletContext implements ServletContext {
 		return Collections.enumeration(names);
 	}
 
+	@Override
+	public boolean setInitParameter(String name, String value) {
+		return false;
+	}
+
 	/**
 	 * @return
 	 * @see javax.servlet.ServletContext#getMajorVersion()
@@ -162,6 +159,16 @@ public class PluginServletContext implements ServletContext {
 	 */
 	public int getMinorVersion() {
 		return wrappedContext.getMinorVersion();
+	}
+
+	@Override
+	public int getEffectiveMajorVersion() {
+		return 0;
+	}
+
+	@Override
+	public int getEffectiveMinorVersion() {
+		return 0;
 	}
 
 	/**
@@ -236,7 +243,7 @@ public class PluginServletContext implements ServletContext {
 	 * @return
 	 * @see javax.servlet.ServletContext#getResourcePaths(java.lang.String)
 	 */
-	public Set<?> getResourcePaths(String path) {
+	public Set<String> getResourcePaths(String path) {
 		return wrappedContext.getResourcePaths(path);
 	}
 
@@ -267,12 +274,123 @@ public class PluginServletContext implements ServletContext {
 		return wrappedContext.getServletContextName();
 	}
 
+	@Override
+	public ServletRegistration.Dynamic addServlet(String servletName, String className) {
+		return null;
+	}
+
+	@Override
+	public ServletRegistration.Dynamic addServlet(String servletName, Servlet servlet) {
+		return null;
+	}
+
+	@Override
+	public ServletRegistration.Dynamic addServlet(String servletName, Class<? extends Servlet> servletClass) {
+		return null;
+	}
+
+	@Override
+	public <T extends Servlet> T createServlet(Class<T> clazz) throws ServletException {
+		return null;
+	}
+
+	@Override
+	public ServletRegistration getServletRegistration(String servletName) {
+		return null;
+	}
+
+	@Override
+	public Map<String, ? extends ServletRegistration> getServletRegistrations() {
+		return null;
+	}
+
+	@Override
+	public FilterRegistration.Dynamic addFilter(String filterName, String className) {
+		return null;
+	}
+
+	@Override
+	public FilterRegistration.Dynamic addFilter(String filterName, Filter filter) {
+		return null;
+	}
+
+	@Override
+	public FilterRegistration.Dynamic addFilter(String filterName, Class<? extends Filter> filterClass) {
+		return null;
+	}
+
+	@Override
+	public <T extends Filter> T createFilter(Class<T> clazz) throws ServletException {
+		return null;
+	}
+
+	@Override
+	public FilterRegistration getFilterRegistration(String filterName) {
+		return null;
+	}
+
+	@Override
+	public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+		return null;
+	}
+
+	@Override
+	public SessionCookieConfig getSessionCookieConfig() {
+		return null;
+	}
+
+	@Override
+	public void setSessionTrackingModes(Set<SessionTrackingMode> sessionTrackingModes) {
+	}
+
+	@Override
+	public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+		return null;
+	}
+
+	@Override
+	public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+		return null;
+	}
+
+	@Override
+	public void addListener(String className) {
+	}
+
+	@Override
+	public <T extends EventListener> void addListener(T t) {
+	}
+
+	@Override
+	public void addListener(Class<? extends EventListener> listenerClass) {
+
+	}
+
+	@Override
+	public <T extends EventListener> T createListener(Class<T> clazz) throws ServletException {
+		return null;
+	}
+
+	@Override
+	public JspConfigDescriptor getJspConfigDescriptor() {
+		return null;
+	}
+
+	@Override
+	public ClassLoader getClassLoader() {
+		return null;
+	}
+
+	@Override
+	public void declareRoles(String... roleNames) {
+	}
+
 	/**
 	 * @return
 	 * @deprecated
 	 * @see javax.servlet.ServletContext#getServletNames()
 	 */
-	public Enumeration<?> getServletNames() {
+	public Enumeration<String> getServletNames() {
 		return wrappedContext.getServletNames();
 	}
 
@@ -281,7 +399,7 @@ public class PluginServletContext implements ServletContext {
 	 * @deprecated
 	 * @see javax.servlet.ServletContext#getServlets()
 	 */
-	public Enumeration<?> getServlets() {
+	public Enumeration<Servlet> getServlets() {
 		return wrappedContext.getServlets();
 	}
 

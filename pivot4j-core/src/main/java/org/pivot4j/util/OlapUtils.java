@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.commons.lang.ObjectUtils;
@@ -28,6 +29,7 @@ import org.olap4j.mdx.IdentifierNode;
 import org.olap4j.mdx.IdentifierSegment;
 import org.olap4j.mdx.ParseTreeNode;
 import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.Datatype;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Hierarchy;
@@ -320,6 +322,27 @@ public class OlapUtils {
 		}
 
 		return baseMember;
+	}
+
+	/**
+	 * @param property
+	 * @param level
+	 * @return
+	 */
+	public static Property wrapProperty(Property property, Level level) {
+		if (property == null) {
+			throw new NullArgumentException("property");
+		}
+
+		if (level == null) {
+			throw new NullArgumentException("level");
+		}
+
+		if (property instanceof PropertyWrapper) {
+			return property;
+		}
+
+		return new PropertyWrapper(property, level);
 	}
 
 	/**
@@ -782,6 +805,113 @@ public class OlapUtils {
 			if (isBaseMember() && OlapUtils.equals(baseMember, other)) {
 				return true;
 			}
+
+			return OlapUtils.equals(this, other);
+		}
+
+		/**
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return getUniqueName();
+		}
+	}
+
+	static class PropertyWrapper implements Property {
+
+		private Property property;
+
+		private String uniqueName;
+
+		PropertyWrapper(Property property, Level level) {
+			this.property = property;
+			this.uniqueName = level.getUniqueName() + "."
+					+ property.getUniqueName();
+		}
+
+		/**
+		 * @see org.olap4j.metadata.MetadataElement#getUniqueName()
+		 */
+		@Override
+		public String getUniqueName() {
+			return uniqueName;
+		}
+
+		/**
+		 * @see org.olap4j.metadata.MetadataElement#getName()
+		 */
+		@Override
+		public String getName() {
+			return property.getName();
+		}
+
+		/**
+		 * @see org.olap4j.metadata.MetadataElement#getCaption()
+		 */
+		@Override
+		public String getCaption() {
+			return property.getCaption();
+		}
+
+		/**
+		 * @see org.olap4j.metadata.MetadataElement#getDescription()
+		 */
+		@Override
+		public String getDescription() {
+			return property.getDescription();
+		}
+
+		/**
+		 * @see org.olap4j.metadata.MetadataElement#isVisible()
+		 */
+		@Override
+		public boolean isVisible() {
+			return property.isVisible();
+		}
+
+		/**
+		 * @see org.olap4j.metadata.Property#getContentType()
+		 */
+		@Override
+		public ContentType getContentType() {
+			return property.getContentType();
+		}
+
+		/**
+		 * @see org.olap4j.metadata.Property#getDatatype()
+		 */
+		@Override
+		public Datatype getDatatype() {
+			return property.getDatatype();
+		}
+
+		/**
+		 * @see org.olap4j.metadata.Property#getType()
+		 */
+		@Override
+		public Set<TypeFlag> getType() {
+			return property.getType();
+		}
+
+		/**
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			return new HashCodeBuilder().append(getUniqueName()).toHashCode();
+		}
+
+		/**
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof PropertyWrapper)) {
+				return false;
+			}
+
+			PropertyWrapper other = (PropertyWrapper) obj;
 
 			return OlapUtils.equals(this, other);
 		}

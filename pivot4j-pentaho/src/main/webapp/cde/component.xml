@@ -16,6 +16,7 @@
 			<Property>width</Property>
 			<Property>height</Property>
 			<Property>filePath</Property>
+			<Property name="parameters">xActionArrayParameter</Property>
 			<Property>listeners</Property>
 			<Property>preExecution</Property>
 			<Property>postExecution</Property>

@@ -8,12 +8,11 @@ import javax.faces.context.FacesContext;
 import org.olap4j.metadata.Member;
 import org.pivot4j.ui.chart.ChartRenderContext;
 import org.pivot4j.ui.chart.ChartRenderer;
-import org.primefaces.component.chart.CartesianChart;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
-public abstract class AbstractSeriesChartBuilder<C extends CartesianChart>
-		extends AbstractChartBuilder<C, CartesianChartModel> {
+public abstract class AbstractSeriesChartBuilder<T extends CartesianChartModel>
+		extends AbstractCartesianChartBuilder<T> {
 
 	private ChartSeries series;
 
@@ -31,12 +30,8 @@ public abstract class AbstractSeriesChartBuilder<C extends CartesianChart>
 		return series;
 	}
 
-	/**
-	 * @see org.pivot4j.analytics.ui.chart.AbstractChartBuilder#createModel(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	protected CartesianChartModel createModel(ChartRenderContext context) {
-		return new CartesianChartModel();
+	protected ChartSeries createSeries() {
+		return new ChartSeries();
 	}
 
 	/**
@@ -44,7 +39,7 @@ public abstract class AbstractSeriesChartBuilder<C extends CartesianChart>
 	 */
 	@Override
 	public void startSeries(ChartRenderContext context) {
-		this.series = new ChartSeries();
+		this.series = createSeries();
 
 		List<Member> path = new LinkedList<Member>(context.getSeriesPath());
 

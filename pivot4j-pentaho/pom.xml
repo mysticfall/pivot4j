@@ -63,7 +63,7 @@
 										<path>WEB-INF/lib</path>
 										<destination>lib</destination>
 										<include>*.jar</include>
-										<exclude>olap4j*,xercesImpl*,xml-apis*,xalan*,xmlParser*,xmlbeans*,eigenbase*,derby*,mondrian*,commons-logging*,log4j*,slf4j*,poi*</exclude>
+										<exclude>olap4j*,xercesImpl*,xml-apis*,xalan*,xmlParser*,xmlbeans*,eigenbase*,derby*,mondrian*,commons-logging*,log4j*,slf4j*,poi*,serializer*</exclude>
 									</resource>
 									<resource>
 										<path>resources</path>
@@ -90,7 +90,7 @@
 				<version>${version.plugin.dependency}</version>
 				<executions>
 					<execution>
-						<id>copy</id>
+						<id>copy-artifacts</id>
 						<phase>package</phase>
 						<goals>
 							<goal>copy</goal>
@@ -107,6 +107,18 @@
 								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/plugin/lib</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/plugin/lib</outputDirectory>
+							<excludeTransitive>true</excludeTransitive>
+							<includeGroupIds>backport-util-concurrent</includeGroupIds>
 						</configuration>
 					</execution>
 				</executions>
@@ -330,6 +342,11 @@
 			<artifactId>javax.el-api</artifactId>
 			<version>${version.el}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>backport-util-concurrent</groupId>
+			<artifactId>backport-util-concurrent</artifactId>
+			<version>${version.backport.concurrent}</version>
 		</dependency>
 	</dependencies>
 

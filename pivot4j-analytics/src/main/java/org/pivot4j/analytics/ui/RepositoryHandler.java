@@ -40,6 +40,7 @@ import org.pivot4j.analytics.state.ViewStateHolder;
 import org.pivot4j.analytics.state.ViewStateListener;
 import org.pivot4j.analytics.ui.navigator.RepositoryNode;
 import org.primefaces.context.RequestContext;
+import org.primefaces.json.JSONObject;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,7 +114,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 		List<ViewState> states = viewStateHolder.getStates();
 
 		for (ViewState state : states) {
-			context.addCallbackParam(state.getId(), new ViewInfo(state));
+			context.addCallbackParam(state.getId(), new JSONObject(new ViewInfo(state)));
 		}
 	}
 
@@ -128,7 +129,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 		}
 
 		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.addCallbackParam("report", new ViewInfo(state));
+		requestContext.addCallbackParam("report", new JSONObject(new ViewInfo(state)));
 	}
 
 	public void createDirectory() {
@@ -465,7 +466,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 		this.activeViewId = viewId;
 
 		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.addCallbackParam("report", new ViewInfo(state));
+		requestContext.addCallbackParam("report", new JSONObject(new ViewInfo(state)));
 	}
 
 	public void refresh() {

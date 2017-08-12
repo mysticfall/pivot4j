@@ -281,7 +281,7 @@ public class PentahoDataSourceManager extends
 					}
 				}
 			} catch (PentahoAccessControlException e) {
-				throw new FacesException(e);
+				logger.warn("Unable to read assigned roles for the current user.", e);
 			}
 		}
 

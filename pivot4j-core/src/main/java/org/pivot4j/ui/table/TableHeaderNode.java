@@ -9,6 +9,7 @@
 package org.pivot4j.ui.table;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -169,8 +170,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 				for (TreeNode<TableAxisContext> child : getChildren()) {
 					TableHeaderNode nodeChild = (TableHeaderNode) child;
-					maxRowIndex = Math.max(maxRowIndex,
-							nodeChild.getMaxRowIndex());
+					maxRowIndex = Math.max(maxRowIndex, nodeChild.getMaxRowIndex());
 				}
 			}
 		}
@@ -179,22 +179,19 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	void addHierarhcyHeaders() {
-		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(
-				getChildren());
+		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(getChildren());
 
 		for (TreeNode<TableAxisContext> child : children) {
 			TableHeaderNode nodeChild = (TableHeaderNode) child;
 
 			Hierarchy childHierarchy = nodeChild.getHierarchy();
 
-			if (childHierarchy != null
-					&& !OlapUtils.equals(hierarchy, childHierarchy)) {
+			if (childHierarchy != null && !OlapUtils.equals(hierarchy, childHierarchy)) {
 				int index = getChildren().indexOf(child);
 
 				removeChild(child);
 
-				TableHeaderNode hierarchyNode = new TableHeaderNode(
-						getReference());
+				TableHeaderNode hierarchyNode = new TableHeaderNode(getReference());
 				hierarchyNode.setHierarchy(childHierarchy);
 
 				addChild(index, hierarchyNode);
@@ -206,8 +203,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	void addParentMemberHeaders() {
-		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(
-				getChildren());
+		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(getChildren());
 
 		MemberHierarchyCache cache = getReference().getMemberHierarchyCache();
 
@@ -230,8 +226,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 					if (parent == null) {
 						break;
 					}
-					TableHeaderNode parentNode = new TableHeaderNode(
-							getReference());
+					TableHeaderNode parentNode = new TableHeaderNode(getReference());
 					parentNode.setPosition(nodeChild.getPosition());
 					parentNode.setHierarchy(parent.getHierarchy());
 					parentNode.setMember(parent);
@@ -260,37 +255,55 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 		if (getMember() != null) {
 			List<Level> levels = getReference().getLevels(getHierarchy());
 
+			boolean showParent = getReference().getRenderer().getShowParentMembers();
+
 			int index = levels.indexOf(getMember().getLevel());
-			int endIndex = getReference().getRenderer().getShowParentMembers() ? index + 1
-					: levels.size();
+			int endIndex = showParent ? index + 1 : levels.size();
 
-			List<Level> lowerLevels = levels.subList(index, endIndex);
+			if (index > -1) {
+				if (!showParent) {
+					index = 0;
+				}
 
-			for (Level level : lowerLevels) {
-				List<Property> properties = getReference().getProperties(level);
+				List<Level> lowerLevels = new LinkedList<Level>(levels.subList(index, endIndex));
 
-				if (!properties.isEmpty()) {
-					children = new ArrayList<TreeNode<TableAxisContext>>(
-							getChildren());
-					clear();
+				Collections.reverse(lowerLevels);
 
-					TableHeaderNode parentNode = this;
+				for (Level level : lowerLevels) {
+					List<Property> properties = getReference().getProperties(level);
 
-					for (Property prop : properties) {
-						TableHeaderNode propertyNode = new TableHeaderNode(
-								getReference());
-						propertyNode.setPosition(position);
-						propertyNode.setHierarchy(getHierarchy());
-						propertyNode.setMember(getMember());
-						propertyNode.setProperty(prop);
+					if (!properties.isEmpty() && property == null) {
+						children = new ArrayList<TreeNode<TableAxisContext>>(getChildren());
+						clear();
 
-						parentNode.addChild(propertyNode);
+						TableHeaderNode parentNode = this;
 
-						parentNode = propertyNode;
-					}
+						for (Property prop : properties) {
+							TableHeaderNode propertyNode = new TableHeaderNode(getReference());
+							propertyNode.setPosition(position);
+							propertyNode.setHierarchy(getHierarchy());
 
-					for (TreeNode<TableAxisContext> child : children) {
-						parentNode.addChild(child);
+							Member m = getMember();
+
+							while (m != null && level.getDepth() >= 0) {
+								if (level.getDepth() == m.getLevel().getDepth()) {
+									propertyNode.setMember(m);
+									break;
+								}
+
+								m = getReference().getMemberHierarchyCache().getParentMember(m);
+							}
+
+							propertyNode.setProperty(OlapUtils.wrapProperty(prop, level));
+
+							parentNode.addChild(propertyNode);
+
+							parentNode = propertyNode;
+						}
+
+						for (TreeNode<TableAxisContext> child : children) {
+							parentNode.addChild(child);
+						}
 					}
 				}
 			}
@@ -307,8 +320,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 	}
 
 	void mergeChildren() {
-		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(
-				getChildren());
+		List<TreeNode<TableAxisContext>> children = new ArrayList<TreeNode<TableAxisContext>>(getChildren());
 
 		TableHeaderNode lastChild = null;
 
@@ -408,8 +420,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 				return rowIndex;
 			} else {
 				TableHeaderNode headerParent = (TableHeaderNode) getParent();
-				this.rowIndex = headerParent.getRowIndex()
-						+ headerParent.getRowSpan();
+				this.rowIndex = headerParent.getRowIndex() + headerParent.getRowSpan();
 			}
 		}
 		return rowIndex;
@@ -425,7 +436,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 	public int getRowSpan() {
 		if (rowSpan == null) {
-			if ((member == null || property != null) && aggregator == null) {
+			if (member == null && aggregator == null) {
 				this.rowSpan = 1;
 				return rowSpan;
 			}
@@ -443,8 +454,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 						if (nodeChild.getMember() == null) {
 							return TreeNodeCallback.CONTINUE;
 						} else {
-							Integer maxSpan = maxSpans.get(nodeChild
-									.getHierarchy());
+							Integer maxSpan = maxSpans.get(nodeChild.getHierarchy());
 							if (maxSpan == null) {
 								maxSpan = 0;
 							}
@@ -455,8 +465,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 							while (parent != null) {
 								parent = (TableHeaderNode) parent.getParent();
 
-								if (OlapUtils.equals(nodeChild.getHierarchy(),
-										parent.getHierarchy())
+								if (OlapUtils.equals(nodeChild.getHierarchy(), parent.getHierarchy())
 										&& parent.getMember() == null) {
 									current++;
 								} else {
@@ -496,9 +505,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 					while (true) {
 						parent = (TableHeaderNode) parent.getParent();
 
-						if (parent == null
-								|| !OlapUtils.equals(hierarchy,
-										parent.getHierarchy())) {
+						if (parent == null || !OlapUtils.equals(hierarchy, parent.getHierarchy())) {
 							break;
 						} else {
 							this.rowSpan -= parent.getRowSpan();
@@ -519,28 +526,24 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 				final int[] childSpan = new int[] { 0 };
 				final int[] maxSpan = new int[] { 0 };
 
-				walkChildrenAtColIndex(
-						new TreeNodeCallback<TableAxisContext>() {
+				walkChildrenAtColIndex(new TreeNodeCallback<TableAxisContext>() {
 
-							@Override
-							public int handleTreeNode(
-									TreeNode<TableAxisContext> node) {
-								TableHeaderNode nodeChild = (TableHeaderNode) node;
+					@Override
+					public int handleTreeNode(TreeNode<TableAxisContext> node) {
+						TableHeaderNode nodeChild = (TableHeaderNode) node;
 
-								if (nodeChild == TableHeaderNode.this) {
-									return TreeNodeCallback.CONTINUE;
-								} else if (OlapUtils.equals(hierarchy,
-										nodeChild.getHierarchy())) {
-									childSpan[0] += nodeChild.getRowSpan();
-									return TreeNodeCallback.CONTINUE;
-								} else {
-									return TreeNodeCallback.BREAK;
-								}
-							}
-						}, getColIndex());
+						if (nodeChild == TableHeaderNode.this) {
+							return TreeNodeCallback.CONTINUE;
+						} else if (OlapUtils.equals(hierarchy, nodeChild.getHierarchy())) {
+							childSpan[0] += nodeChild.getRowSpan();
+							return TreeNodeCallback.CONTINUE;
+						} else {
+							return TreeNodeCallback.BREAK;
+						}
+					}
+				}, getColIndex());
 
-				final MemberHierarchyCache cache = getReference()
-						.getMemberHierarchyCache();
+				final MemberHierarchyCache cache = getReference().getMemberHierarchyCache();
 				final String cacheKey = getCacheKey();
 
 				Integer cachedSpan = null;
@@ -550,61 +553,49 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 				}
 
 				if (cachedSpan == null) {
-					getRoot().walkTree(
-							new TreeNodeCallback<TableAxisContext>() {
+					getRoot().walkTree(new TreeNodeCallback<TableAxisContext>() {
 
-								@Override
-								public int handleTreeNode(
-										TreeNode<TableAxisContext> node) {
-									TableHeaderNode nodeChild = (TableHeaderNode) node;
+						@Override
+						public int handleTreeNode(TreeNode<TableAxisContext> node) {
+							TableHeaderNode nodeChild = (TableHeaderNode) node;
 
-									Level level = null;
-									Member nodeMember = nodeChild.getMember();
+							boolean hasSameDepth = false;
+							Member nodeMember = nodeChild.getMember();
 
-									if (nodeChild == TableHeaderNode.this) {
-										return TreeNodeCallback.CONTINUE;
-									} else if (nodeMember != null) {
-										level = nodeMember.getLevel();
-									} else if (nodeChild.getAggregator() != null) {
-										level = nodeChild.getAggregator()
-												.getLevel();
-									}
+							if (nodeChild == TableHeaderNode.this) {
+								return TreeNodeCallback.CONTINUE;
+							} else if (nodeMember != null) {
+								hasSameDepth = (member.getDepth() == nodeMember.getDepth())
+										&& OlapUtils.equals(member.getLevel(), nodeMember.getLevel())
+										&& OlapUtils.equals(property, nodeChild.getProperty());
+							} else if (nodeChild.getAggregator() != null) {
+								hasSameDepth = OlapUtils.equals(member.getLevel(),
+										nodeChild.getAggregator().getLevel());
+							}
 
-									if (OlapUtils.equals(member.getLevel(),
-											level)) {
-										if (nodeMember != null
-												&& (cache.getAncestorMembers(
-														nodeMember).contains(
-														member) || cache
-														.getAncestorMembers(
-																member)
-														.contains(nodeMember))) {
-											return TreeNodeCallback.CONTINUE;
-										}
-
-										int span = nodeChild
-												.getHierarchyDescendents();
-
-										// Handling a corner case of #54
-										if (aggregator == null
-												&& nodeChild.getAggregator() != null
-												&& member instanceof Measure
-												&& getReference()
-														.getHierarchies()
-														.size() == 1) {
-											span++;
-										}
-
-										maxSpan[0] = Math.max(maxSpan[0], span);
-									}
-
+							if (hasSameDepth) {
+								if (nodeMember != null && (cache.getAncestorMembers(nodeMember).contains(member)
+										|| cache.getAncestorMembers(member).contains(nodeMember))) {
 									return TreeNodeCallback.CONTINUE;
 								}
-							});
+
+								int span = nodeChild.getHierarchyDescendents();
+
+								// Handling a corner case of #54
+								if (aggregator == null && nodeChild.getAggregator() != null && member instanceof Measure
+										&& getReference().getHierarchies().size() == 1) {
+									span++;
+								}
+
+								maxSpan[0] = Math.max(maxSpan[0], span);
+							}
+
+							return TreeNodeCallback.CONTINUE;
+						}
+					});
 
 					if (maxSpan[0] > 0) {
-						getReference().getRowSpanCache().put(cacheKey,
-								maxSpan[0]);
+						getReference().getRowSpanCache().put(cacheKey, maxSpan[0]);
 					}
 				} else {
 					maxSpan[0] = cachedSpan;
@@ -645,8 +636,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 			return null;
 		}
 
-		return member.getLevel().getUniqueName() + "_"
-				+ getHierarchyDescendents() + "_" + getLevelAncestors();
+		return member.getLevel().getUniqueName() + "_" + getHierarchyDescendents() + "_" + getLevelAncestors();
 	}
 
 	/**
@@ -684,8 +674,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 		while (true) {
 			TableHeaderNode node = (TableHeaderNode) parent.getParent();
 
-			if (node != null
-					&& OlapUtils.equals(hierarchy, node.getHierarchy())) {
+			if (node != null && OlapUtils.equals(hierarchy, node.getHierarchy())) {
 				parent = node;
 			} else {
 				break;
@@ -704,8 +693,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 			for (TreeNode<TableAxisContext> child : getChildren()) {
 				TableHeaderNode nodeChild = (TableHeaderNode) child;
 				if (OlapUtils.equals(hierarchy, nodeChild.getHierarchy())) {
-					height = Math.max(height,
-							1 + nodeChild.getHierarchyDescendents());
+					height = Math.max(height, 1 + nodeChild.getHierarchyDescendents());
 				}
 			}
 			this.hierarchyDescendants = height;
@@ -752,8 +740,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 	 * @param childPath
 	 * @return
 	 */
-	private static boolean isSubPath(List<Member> parentPath,
-			List<Member> childPath) {
+	private static boolean isSubPath(List<Member> parentPath, List<Member> childPath) {
 		Iterator<Member> it = childPath.iterator();
 		for (Member member : parentPath) {
 			if (!OlapUtils.equals(member, it.next())) {
@@ -770,8 +757,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 		}
 
 		if (memberChildren == null) {
-			final MemberHierarchyCache cache = getReference()
-					.getMemberHierarchyCache();
+			final MemberHierarchyCache cache = getReference().getMemberHierarchyCache();
 
 			final List<Member> path = getMemberPath();
 
@@ -792,8 +778,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 					if (OlapUtils.equals(hierarchy, nodeChild.getHierarchy())) {
 						List<Member> childPath = nodeChild.getMemberPath();
 
-						if (path.size() > childPath.size()
-								|| !isSubPath(path, childPath)) {
+						if (path.size() > childPath.size() || !isSubPath(path, childPath)) {
 							return TreeNodeCallback.CONTINUE;
 						}
 
@@ -802,8 +787,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 						if (childMember != null) {
 							int childDepth = childMember.getDepth();
 
-							if (cache.getAncestorMembers(childMember).contains(
-									member)) {
+							if (cache.getAncestorMembers(childMember).contains(member)) {
 								childCount[0]++;
 
 								return TreeNodeCallback.CONTINUE_SIBLING;
@@ -811,9 +795,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 								if (!OlapUtils.equals(childMember, member)) {
 									return TreeNodeCallback.CONTINUE_SIBLING;
 								}
-							} else if (depth < childDepth
-									|| !cache.getAncestorMembers(member)
-											.contains(childMember)) {
+							} else if (depth < childDepth || !cache.getAncestorMembers(member).contains(childMember)) {
 								return TreeNodeCallback.CONTINUE_SIBLING;
 							}
 						}
@@ -829,14 +811,10 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 							Member parentMember = parent.getMember();
 
-							if (OlapUtils.equals(parent.getHierarchy(),
-									nodeChild.getHierarchy())
+							if (OlapUtils.equals(parent.getHierarchy(), nodeChild.getHierarchy())
 									&& parentMember != null) {
-								if (OlapUtils.equals(parentMember,
-										nodeChild.getMember())
-										|| cache.getAncestorMembers(
-												parentMember).contains(
-												nodeChild.getMember())) {
+								if (OlapUtils.equals(parentMember, nodeChild.getMember())
+										|| cache.getAncestorMembers(parentMember).contains(nodeChild.getMember())) {
 									return TreeNodeCallback.CONTINUE;
 								} else {
 									return TreeNodeCallback.CONTINUE_SIBLING;
@@ -860,8 +838,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 	 * @param rowIndex
 	 * @return
 	 */
-	public int walkChildrenAtRowIndex(
-			TreeNodeCallback<TableAxisContext> callbackHandler, int rowIndex) {
+	public int walkChildrenAtRowIndex(TreeNodeCallback<TableAxisContext> callbackHandler, int rowIndex) {
 		int code = 0;
 		for (TreeNode<TableAxisContext> child : getChildren()) {
 			TableHeaderNode nodeChild = (TableHeaderNode) child;
@@ -907,8 +884,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 	 * @param callbackHandler
 	 * @param colIndex
 	 */
-	public int walkChildrenAtColIndex(
-			TreeNodeCallback<TableAxisContext> callbackHandler, int colIndex) {
+	public int walkChildrenAtColIndex(TreeNodeCallback<TableAxisContext> callbackHandler, int colIndex) {
 		int code = 0;
 
 		if (getColIndex() == colIndex) {
@@ -928,8 +904,7 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 			} else if (colIndex >= endIndex) {
 				code = TreeNodeCallback.CONTINUE_PARENT;
 			} else {
-				code = nodeChild.walkChildrenAtColIndex(callbackHandler,
-						colIndex);
+				code = nodeChild.walkChildrenAtColIndex(callbackHandler, colIndex);
 				break;
 			}
 		}

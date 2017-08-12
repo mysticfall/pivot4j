@@ -21,4 +21,8 @@ public abstract class MetadataNode<T extends MetadataElement> extends
 	protected NodeData createData(T object) {
 		return new NodeData(object.getUniqueName(), object.getCaption());
 	}
+
+	@Override
+	public void setType(String type) {
+	}
 }

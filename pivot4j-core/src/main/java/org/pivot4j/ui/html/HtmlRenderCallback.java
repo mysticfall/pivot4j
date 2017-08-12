@@ -34,9 +34,7 @@ import org.pivot4j.ui.table.TableRenderContext;
 import org.pivot4j.util.CssWriter;
 import org.pivot4j.util.RenderPropertyUtils;
 
-public class HtmlRenderCallback extends
-		AbstractMarkupRenderCallback<TableRenderContext> implements
-		TableRenderCallback {
+public class HtmlRenderCallback extends AbstractMarkupRenderCallback<TableRenderContext>implements TableRenderCallback {
 
 	private String tableId;
 
@@ -406,8 +404,7 @@ public class HtmlRenderCallback extends
 			index = context.getRowIndex();
 		}
 
-		if (rowStyleClass != null || evenRowStyleClass != null
-				|| oddRowStyleClass != null) {
+		if (rowStyleClass != null || evenRowStyleClass != null || oddRowStyleClass != null) {
 			boolean first = true;
 
 			StringBuilder builder = new StringBuilder();
@@ -449,8 +446,7 @@ public class HtmlRenderCallback extends
 	public void startCell(TableRenderContext context) {
 		String tagName;
 
-		if (VALUE.equals(context.getCellType())
-				|| AGG_VALUE.equals(context.getCellType())) {
+		if (VALUE.equals(context.getCellType()) || AGG_VALUE.equals(context.getCellType())) {
 			tagName = "td";
 		} else {
 			tagName = "th";
@@ -475,14 +471,12 @@ public class HtmlRenderCallback extends
 			} else {
 				styleClass = rowHeaderStyleClass;
 
-				if (rowHeaderLevelPadding > 0) {
-					int padding = rowHeaderLevelPadding
-							* (1 + context.getMember().getDepth());
+				if (rowHeaderLevelPadding > 0 && context.getMember() != null) {
+					int padding = rowHeaderLevelPadding * (1 + context.getMember().getDepth());
 					cssWriter.writeStyle("padding-left", padding + "px");
 				}
 			}
-		} else if (TITLE.equals(context.getCellType())
-				|| AGG_VALUE.equals(context.getCellType())) {
+		} else if (TITLE.equals(context.getCellType()) || AGG_VALUE.equals(context.getCellType())) {
 			if (context.getAxis() == Axis.COLUMNS) {
 				styleClass = columnTitleStyleClass;
 			} else if (context.getAxis() == Axis.ROWS) {
@@ -500,24 +494,19 @@ public class HtmlRenderCallback extends
 
 		RenderPropertyUtils propertyUtils = getRenderPropertyUtils();
 
-		cssWriter.writeStyle("color",
-				propertyUtils.getString("fgColor", propertyCategory, null));
+		cssWriter.writeStyle("color", propertyUtils.getString("fgColor", propertyCategory, null));
 
-		String bgColor = propertyUtils.getString("bgColor", propertyCategory,
-				null);
+		String bgColor = propertyUtils.getString("bgColor", propertyCategory, null);
 
 		if (bgColor != null) {
 			cssWriter.writeStyle("background-color", bgColor);
 			cssWriter.writeStyle("background-image", "none");
 		}
 
-		cssWriter.writeStyle("font-family",
-				propertyUtils.getString("fontFamily", propertyCategory, null));
-		cssWriter.writeStyle("font-size",
-				propertyUtils.getString("fontSize", propertyCategory, null));
+		cssWriter.writeStyle("font-family", propertyUtils.getString("fontFamily", propertyCategory, null));
+		cssWriter.writeStyle("font-size", propertyUtils.getString("fontSize", propertyCategory, null));
 
-		String fontStyle = propertyUtils.getString("fontStyle",
-				propertyCategory, null);
+		String fontStyle = propertyUtils.getString("fontStyle", propertyCategory, null);
 
 		if (fontStyle != null) {
 			if (fontStyle.contains("bold")) {
@@ -529,8 +518,8 @@ public class HtmlRenderCallback extends
 			}
 		}
 
-		String styleClassValue = getRenderPropertyUtils().getString(
-				"styleClass", context.getRenderPropertyCategory(), null);
+		String styleClassValue = getRenderPropertyUtils().getString("styleClass", context.getRenderPropertyCategory(),
+				null);
 
 		if (styleClassValue != null) {
 			if (styleClass == null) {
@@ -554,8 +543,7 @@ public class HtmlRenderCallback extends
 		}
 
 		if (context.getColumnSpan() > 1) {
-			attributes
-					.put("colspan", Integer.toString(context.getColumnSpan()));
+			attributes.put("colspan", Integer.toString(context.getColumnSpan()));
 		}
 
 		if (context.getRowSpan() > 1) {
@@ -570,8 +558,7 @@ public class HtmlRenderCallback extends
 	 *      java.util.List)
 	 */
 	@Override
-	public void renderCommands(TableRenderContext context,
-			List<UICommand<?>> commands) {
+	public void renderCommands(TableRenderContext context, List<UICommand<?>> commands) {
 	}
 
 	/**
@@ -579,8 +566,7 @@ public class HtmlRenderCallback extends
 	 *      java.lang.String, java.lang.Double)
 	 */
 	@Override
-	public void renderContent(TableRenderContext context, String label,
-			Double value) {
+	public void renderContent(TableRenderContext context, String label, Double value) {
 		ExpressionContext elContext = context.getExpressionContext();
 
 		elContext.put("label", label);
@@ -593,9 +579,7 @@ public class HtmlRenderCallback extends
 		String text;
 
 		try {
-			text = StringUtils.defaultIfEmpty(
-					propertyUtils.getString("label", propertyCategory, label),
-					"&nbsp;");
+			text = StringUtils.defaultIfEmpty(propertyUtils.getString("label", propertyCategory, label), "&nbsp;");
 		} finally {
 			elContext.remove("label");
 			elContext.remove("value");
@@ -622,8 +606,7 @@ public class HtmlRenderCallback extends
 	public void endCell(TableRenderContext context) {
 		String tagName;
 
-		if (VALUE.equals(context.getCellType())
-				|| AGG_VALUE.equals(context.getCellType())) {
+		if (VALUE.equals(context.getCellType()) || AGG_VALUE.equals(context.getCellType())) {
 			tagName = "td";
 		} else {
 			tagName = "th";
@@ -661,12 +644,10 @@ public class HtmlRenderCallback extends
 	 */
 	@Override
 	public Serializable saveState() {
-		return new Serializable[] { super.saveState(), tableId, border,
-				cellSpacing, cellPadding, tableStyleClass,
-				columnHeaderStyleClass, columnTitleStyleClass,
-				rowHeaderStyleClass, rowTitleStyleClass, cornerStyleClass,
-				rowStyleClass, evenRowStyleClass, oddRowStyleClass,
-				cellStyleClass, rowHeaderLevelPadding };
+		return new Serializable[] { super.saveState(), tableId, border, cellSpacing, cellPadding, tableStyleClass,
+				columnHeaderStyleClass, columnTitleStyleClass, rowHeaderStyleClass, rowTitleStyleClass,
+				cornerStyleClass, rowStyleClass, evenRowStyleClass, oddRowStyleClass, cellStyleClass,
+				rowHeaderLevelPadding };
 	}
 
 	/**
