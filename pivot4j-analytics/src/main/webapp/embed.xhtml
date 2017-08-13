@@ -32,71 +32,65 @@
 </f:metadata>
 
 <h:body id="body" styleClass="embeded report">
-	<p:layout id="workbench" fullPage="true"
-			options="#{viewHandler.layoutOptions}" widgetVar="workbench">
-		<p:layoutUnit id="toolbar-pane" position="north"
-			styleClassContent="toolbar-area">
-			<h:form id="toolbar-form">
-				<p:toolbar id="toolbar">
-					<f:facet name="left">
-						<p:menuButton value="#{msg['toolbar.export']}"
-							disabled="#{!viewHandler.valid}"
-							styleClass="export-menu">
-							<p:menuitem id="mi-export-xls"
-								value="#{msg['toolbar.export.format.xls']}"
-								action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
-								ajax="false">
-								<f:param name="format" value="HSSF" />
-							</p:menuitem>
-							<p:menuitem id="mi-export-xlsx"
-								value="#{msg['toolbar.export.format.xlsx']}"
-								action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
-								ajax="false">
-								<f:param name="format" value="SXSSF" />
-							</p:menuitem>
-							<p:menuitem id="mi-export-pdf"
-								value="#{msg['toolbar.export.format.pdf']}" icon="ui-icon-print"
-								onclick="PF('exportConfig').show();" />
-							<p:separator />
-							<p:menuitem 
-								value="#{msg['toolbar.print']}" title="#{msg['toolbar.print.tooltip']}" 
-								icon="ui-icon-print" onclick="$('table.pivot-grid:first').jqprint();" />
-						</p:menuButton>
-					</f:facet>
-				</p:toolbar>
-			</h:form>
-		</p:layoutUnit>
-		<p:layoutUnit id="grid-content-pane" position="center">
-			<h:form id="grid-form" onkeypress="return event.keyCode != 13;">
-				<h:panelGroup id="pivot-grid" binding="#{viewHandler.component}"
-					layout="block"
-					rendered="#{viewHandler.valid and viewHandler.visible}" />
+	<h:form id="toolbar-form">
+		<p:toolbar id="toolbar">
+			<f:facet name="left">
+				<p:menuButton value="#{msg['toolbar.export']}"
+					disabled="#{!viewHandler.valid}"
+					styleClass="export-menu">
+					<p:menuitem id="mi-export-xls"
+						value="#{msg['toolbar.export.format.xls']}"
+						action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
+						ajax="false">
+						<f:param name="format" value="HSSF" />
+					</p:menuitem>
+					<p:menuitem id="mi-export-xlsx"
+						value="#{msg['toolbar.export.format.xlsx']}"
+						action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
+						ajax="false">
+						<f:param name="format" value="SXSSF" />
+					</p:menuitem>
+					<p:menuitem id="mi-export-pdf"
+						value="#{msg['toolbar.export.format.pdf']}" icon="ui-icon-print"
+						onclick="PF('exportConfig').show();" />
+					<p:separator />
+					<p:menuitem
+						value="#{msg['toolbar.print']}" title="#{msg['toolbar.print.tooltip']}"
+						icon="ui-icon-print" onclick="$('table.pivot-grid:first').jqprint();" />
+				</p:menuButton>
+			</f:facet>
+		</p:toolbar>
+	</h:form>
 
-				<h:panelGroup id="chart-panel" styleClass="chart-panel"
-					binding="#{chartHandler.component}" layout="block"
-					rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
+	<h:form id="grid-form" onkeypress="return event.keyCode != 13;">
+		<h:panelGroup id="pivot-grid" binding="#{viewHandler.component}"
+			layout="block"
+			rendered="#{viewHandler.valid and viewHandler.visible}" />
 
-				<h:panelGroup styleClass="filter-info" layout="block"
-					rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
+		<h:panelGroup id="chart-panel" styleClass="chart-panel"
+			binding="#{chartHandler.component}" layout="block"
+			rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
 
-					<h:outputText class="title" value="#{msg['label.filter']}" />
+		<h:panelGroup styleClass="filter-info" layout="block"
+			rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
 
-					<h:panelGroup id="filter-grid" layout="block"
-						binding="#{viewHandler.filterComponent}" />
-				</h:panelGroup>
+			<h:outputText class="title" value="#{msg['label.filter']}" />
 
-				<h:panelGroup styleClass="info-panel" layout="block"
-					rendered="#{!viewHandler.valid and viewHandler.lastError == null}">
-					<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
-					<h:outputText value="#{msg['message.query.blank']}"
-						styleClass="message-warn" />
-				</h:panelGroup>
+			<h:panelGroup id="filter-grid" layout="block"
+				binding="#{viewHandler.filterComponent}" />
+		</h:panelGroup>
 
-				<p:growl id="grid-growl" showDetail="true" sticky="true"
-					globalOnly="true" />
-			</h:form>
-		</p:layoutUnit>
-	</p:layout>
+		<h:panelGroup styleClass="info-panel" layout="block"
+			rendered="#{!viewHandler.valid and viewHandler.lastError == null}">
+			<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
+			<h:outputText value="#{msg['message.query.blank']}"
+				styleClass="message-warn" />
+		</h:panelGroup>
+
+		<p:growl id="grid-growl" showDetail="true" sticky="true"
+			globalOnly="true" />
+	</h:form>
+
 	<ui:include src="export.xhtml" />
 	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
 		oncomplete="hideWaitDialog();" />
@@ -116,7 +110,4 @@
 			global="false" />
 	</h:form>
 </h:body>
-<script type="text/javascript">
-$('#toolbar-form').parent().css('height', '41px');
-</script>
 </html>
