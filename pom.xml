@@ -535,7 +535,7 @@ It aims to leverage mature but now discontinued JPivot project's codebase to mak
 		<repository>
 			<id>pentaho</id>
 			<name>Pentaho Repository</name>
-			<url>http://repository.pentaho.org/artifactory/repo/</url>
+			<url>http://nexus.pentaho.org/content/groups/omni/</url>
 		</repository>
 	</repositories>
 
