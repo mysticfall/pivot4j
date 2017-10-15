@@ -905,8 +905,6 @@ public class TableRenderer extends AbstractPivotRenderer<TableRenderContext, Tab
 				callback.renderContent(context, getLabel(context), getValue(context));
 				callback.endCell(context);
 
-				context.setColIndex(context.getColumnIndex() + span);
-
 				List<Property> properties = propertyMap.get(hierarchy);
 				if (properties != null) {
 					for (Property property : properties) {
@@ -919,7 +917,10 @@ public class TableRenderer extends AbstractPivotRenderer<TableRenderContext, Tab
 						callback.renderContent(context, getLabel(context), getValue(context));
 						callback.endCell(context);
 					}
+					context.setProperty(null);
 				}
+
+				context.setColIndex(context.getColumnIndex() + span);
 			}
 		} else if (renderLevelTitle) {
 			final Map<Integer, Level> levels = new HashMap<Integer, Level>();

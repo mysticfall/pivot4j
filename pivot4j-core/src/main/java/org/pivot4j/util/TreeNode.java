@@ -23,6 +23,11 @@ public class TreeNode<T> {
 	private TreeNode<T> parent;
 
 	private List<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
+	private List<TreeNode<T>> unmodifiableChildren = Collections.unmodifiableList(children);
+	
+	private static final int UNKNOWN = -1;
+	private int width = UNKNOWN;
+	private int maxDescendantLevel = UNKNOWN;
 
 	private T reference;
 
@@ -54,11 +59,13 @@ public class TreeNode<T> {
 	public void removeChild(TreeNode<T> child) {
 		if (children.contains(child)) {
 			children.remove(child);
+			invalidateChildrenDerivatives();
 		}
 	}
 
 	public void clear() {
 		children.clear();
+		invalidateChildrenDerivatives();
 	}
 
 	/**
@@ -71,6 +78,7 @@ public class TreeNode<T> {
 		if (!children.contains(child)) {
 			child.parent = this;
 			children.add(child);
+			invalidateChildrenDerivatives();
 		}
 	}
 
@@ -85,9 +93,18 @@ public class TreeNode<T> {
 		if (!children.contains(child)) {
 			child.parent = this;
 			children.add(index, child);
+			invalidateChildrenDerivatives();
 		}
 	}
 
+	private void invalidateChildrenDerivatives(){
+		width = UNKNOWN;
+		maxDescendantLevel = UNKNOWN;
+		if (parent != null){
+			parent.invalidateChildrenDerivatives();
+		}
+	}
+	
 	/**
 	 * deep copy (clone)
 	 * 
@@ -138,32 +155,34 @@ public class TreeNode<T> {
 	}
 
 	public int getMaxDescendantLevel() {
-		int level;
-
-		if (getChildCount() == 0) {
-			level = getLevel();
-		} else {
-			level = 0;
-			for (TreeNode<T> child : getChildren()) {
-				level = Math.max(level, child.getMaxDescendantLevel());
+		if (maxDescendantLevel == UNKNOWN){
+			if (getChildCount() == 0) {
+				maxDescendantLevel = getLevel();
+			} else {
+				maxDescendantLevel = 0;
+				for (TreeNode<T> child : getChildren()) {
+					maxDescendantLevel = Math.max(maxDescendantLevel, child.getMaxDescendantLevel());
+				}
 			}
 		}
 
-		return level;
+		return maxDescendantLevel;
 	}
 
 	public int getWidth() {
-		int width = 0;
-
-		if (getChildCount() > 0) {
-			for (TreeNode<T> child : getChildren()) {
-				width += child.getWidth();
+		if (width == UNKNOWN){
+			width = 0;
+			if (getChildCount() > 0) {
+				for (TreeNode<T> child : getChildren()) {
+					width += child.getWidth();
+				}
 			}
+	
+			width = Math.max(1, width);
 		}
-
-		return Math.max(1, width);
+		return width;
 	}
-
+	
 	/**
 	 * walk through subtree of this node
 	 * 
@@ -213,7 +232,7 @@ public class TreeNode<T> {
 	 * @return List of children
 	 */
 	public List<TreeNode<T>> getChildren() {
-		return Collections.unmodifiableList(children);
+		return unmodifiableChildren;
 	}
 
 	public int getChildCount() {
