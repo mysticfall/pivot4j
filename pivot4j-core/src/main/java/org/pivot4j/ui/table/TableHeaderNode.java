@@ -252,7 +252,9 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 
 		List<TreeNode<TableAxisContext>> children = null;
 
-		if (getMember() != null) {
+		// Should render level properties only once behind the latest
+		if (getMember() != null && isLastInLevel()) {
+
 			List<Level> levels = getReference().getLevels(getHierarchy());
 
 			boolean showParent = getReference().getRenderer().getShowParentMembers();
@@ -317,6 +319,18 @@ class TableHeaderNode extends TreeNode<TableAxisContext> {
 			TableHeaderNode nodeChild = (TableHeaderNode) child;
 			nodeChild.addMemberProperties();
 		}
+	}
+
+	private boolean isLastInLevel() {
+		if (getChildCount() == 0) {
+			return true;
+		}
+
+		TableHeaderNode childNode = (TableHeaderNode) getChildren().get(0);
+		if (getMember().getLevel().getDepth() == childNode.getMember().getLevel().getDepth()) {
+			return !OlapUtils.equals(getHierarchy(), childNode.getHierarchy());
+		}
+		return true;
 	}
 
 	void mergeChildren() {
