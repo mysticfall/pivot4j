@@ -346,8 +346,7 @@
 							</p:droppable>
 						</p:treeNode>
 
-						<p:treeNode type="hierarchy" icon="ui-icon-hier"
-							tolerance="pointer">
+						<p:treeNode type="hierarchy" icon="ui-icon-hier">
 							<h:outputText id="hierarchy-node" value="#{node.caption}"
 								styleClass="node-hierarchy" />
 							<p:commandButton icon="ui-button-icon-only ui-icon-search"
@@ -551,7 +550,7 @@
 							completeMethod="#{autoCompletionSupport.complete}"
 							extraKeys="{ 'Ctrl-Space': function(cm) { completeMdx(PF('mdxEditor')); }}"
 							required="true" label="#{msg['label.mdx']}"
-							readOnly="#{pivotStateManager.readOnly}" />
+							readonly="#{pivotStateManager.readOnly}" />
 					</pe:layoutPane>
 
 					<p:growl id="editor-growl" showDetail="true" sticky="true" />

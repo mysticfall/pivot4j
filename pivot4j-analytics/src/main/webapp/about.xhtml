@@ -1,28 +1,27 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
-	<h:form id="about-form">
-		<p:dialog id="about-dialog" header="#{msg['title.about']}"
-			widgetVar="about" modal="true" width="600" height="95"
-			closable="true" resizable="false" dynamic="true" styleClass="about"
-			showEffect="fade" hideEffect="fade">
-			<h:graphicImage library="pivot4j" name="images/logo.png"
-				alt="Pivot4J Logo" styleClass="logo" />
-			<h:outputText value="#{msg['title.about.welcome']}"
-				styleClass="about-title" />
-			<h:panelGroup styleClass="about-text" layout="block">
-				<h:outputText value="#{msg['message.about']}"
-					styleClass="about-text" />
-			</h:panelGroup>
-			<f:facet name="footer">
-				<h:panelGroup styleClass="ui-dialog-buttonpane" layout="block">
-					<p:commandButton type="button" value="#{msg['button.close']}"
-						icon="ui-icon-close" onclick="PF('about').hide();" />
-				</h:panelGroup>
-			</f:facet>
-		</p:dialog>
-	</h:form>
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <h:form id="about-form">
+        <p:dialog id="about-dialog" header="#{msg['title.about']}"
+                  widgetVar="about" modal="true" width="600" height="95"
+                  closable="true" resizable="false" dynamic="true" styleClass="about"
+                  showEffect="fade" hideEffect="fade">
+            <h:graphicImage library="pivot4j" name="images/logo.png"
+                            alt="Pivot4J Logo" styleClass="logo" />
+            <h:outputText value="#{msg['title.about.welcome']}"
+                          styleClass="about-title" />
+            <h:panelGroup styleClass="about-text" layout="block">
+                <h:outputText value="#{msg['message.about']}"
+                              styleClass="about-text" />
+            </h:panelGroup>
+            <f:facet name="footer">
+                <h:panelGroup styleClass="ui-dialog-buttonpane" layout="block">
+                    <p:commandButton type="button" value="#{msg['button.close']}"
+                                     icon="ui-icon-close" onclick="PF('about').hide();" />
+                </h:panelGroup>
+            </f:facet>
+        </p:dialog>
+    </h:form>
 </ui:composition>
