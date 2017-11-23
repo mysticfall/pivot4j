@@ -449,6 +449,20 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.44</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.adminfaces</groupId>
+            <artifactId>admin-theme</artifactId>
+            <version>1.0.0-RC9</version>
+            <!--<classifier>dev</classifier> uncompressed theme.css-->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.1.4</version>
+        </dependency>
+
+
     </dependencies>
 
     <dependencyManagement>

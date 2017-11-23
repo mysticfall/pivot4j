@@ -40,12 +40,19 @@
 					<property name="Jdbc">jdbc:derby:${webRoot}${FS}foodmart</property>
 					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
 					<property name="JdbcUser">sa</property>
-                                        -->
+                                        
                                         <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
-                                        <property name="Jdbc">jdbc:mysql://localhost:3306/foodmart?useSSL=false</property>
+                                        <property name="Jdbc">jdbc:mysql://localhost:3306/giex?useSSL=false</property>
                                         <property name="JdbcDrivers">com.mysql.jdbc.Driver</property>
                                         <property name="JdbcUser">root</property>
                                         <property name="JdbcPassword">root</property>
+              
+                                        -->
+                                        <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
+                                        <property name="Jdbc">jdbc:postgresql://10.0.0.21:5432/giexonline</property>
+                                        <property name="JdbcDrivers">org.postgresql.Driver</property>
+                                        <property name="JdbcUser">postgres</property>
+                                        <property name="JdbcPassword">postgres</property>
                                         
 				</properties>
 			</connection-info>
@@ -81,7 +88,7 @@
                 http://www.primefaces.org/themes.html
         -->
         <ui-theme>
-            <default>redmond</default>
+            <default>bootstrap</default>
             <available-themes>
                 <theme name="aristo" description="Aristo" />
                 <theme name="bootstrap" description="Bootstrap" />
@@ -90,6 +97,7 @@
                 <theme name="humanity" description="Humanity" />
                 <theme name="redmond" description="Redmond" />
                 <theme name="rocket" description="Rocket" />
+                <theme name="admin" description="Admin" />
             </available-themes>
         </ui-theme>
 
