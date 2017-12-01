@@ -1,30 +1,57 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<Schema name="FoodMart">
+<Schema name="Divida">
 
     <Cube name="Divida">
         <Table name="tb_analise_dividas_dim01"/>
-        <Dimension name="Exercicio">
-            <Hierarchy hasAll="true" allMemberName="Todos exercicios">
-                <Level name="Exercicio" column="exer_nr_lancamento" uniqueMembers="true" type="Integer"/>
-                <Level name="Tipo lançamento" column="latp_cd_lancamento" uniqueMembers="true" type="String"/>
-                <Level name="Número lançamento" column="lanc_nr_lancamento" uniqueMembers="false" type="Numeric"/>
+        <Dimension name="Exercício" foreignKey="exer_nr_lancamento">
+            <Hierarchy hasAll="true" primaryKeyTable="tb_exercicios" primaryKey="exer_nr_ano">
+                <Join leftKey="exer_nr_ano" rightKey="exer_nr_lancamento">
+                    <Table name="tb_exercicios"/>
+                    <Table name="tb_analise_dividas_dim01"/>
+                </Join>
+                <Level name="Exercício" table="tb_exercicios" column="exer_nr_ano" uniqueMembers="true" type="Integer"/>
             </Hierarchy>
         </Dimension>
-        <Dimension name="Situação">
-            <Hierarchy hasAll="true" allMemberName="Todas situações">
-                <Level name="Situação" column="situ_ds_situacao" uniqueMembers="true" type="String"/>
+
+<!--
+        <Dimension name="Store Type" foreignKey="employee_id">
+            <Hierarchy hasAll="true" primaryKeyTable="employee" primaryKey="employee_id">
+                <Join leftKey="store_id" rightKey="store_id">
+                    <Table name="employee"/>
+                    <Table name="store"/>
+                </Join>
+                <Level name="Store Type" table="store" column="store_type"
+                       uniqueMembers="true"/>
             </Hierarchy>
         </Dimension>
+  -->
+        <Dimension name="Situação" foreignKey="situ_id_situacao">
+            <Hierarchy hasAll="true" primaryKeyTable="tb_debito_situacoes" primaryKey="situ_id_situacao">
+                <Join leftKey="situ_id_situacao" rightKey="situ_id_situacao">
+                    <Table name="tb_debito_situacoes"/>
+                    <Table name="tb_analise_dividas_dim01"/>
+                </Join>
+                <Level name="Situação" table="tb_debito_situacoes" column="situ_nm_situacao" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+     
+        <Dimension name="Fase" foreignKey="fase_sg_fase">
+            <Hierarchy hasAll="true" primaryKeyTable="tb_debito_fases" primaryKey="fase_sg_fase">
+                <Join leftKey="fase_sg_fase" rightKey="fase_sg_fase">
+                    <Table name="tb_debito_fases"/>
+                    <Table name="tb_analise_dividas_dim01"/>
+                </Join>
+                <Level name="Fase" table="tb_debito_fases" column="fase_ds_fase" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+           
         <Dimension name="Bairro">
             <Hierarchy hasAll="true" allMemberName="Todos bairros">
                 <Level name="Bairro" column="cada_ds_bairro" uniqueMembers="true" type="String"/>
             </Hierarchy>
         </Dimension>
-        <Dimension name="Fase">
-            <Hierarchy hasAll="true" allMemberName="Todas fases">
-                <Level name="Fase" column="fase_ds_fase" uniqueMembers="true" type="String"/>
-            </Hierarchy>
-        </Dimension>
+
         <Measure name="Valor atualizado" column="lava_vl_atualizado" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
     </Cube>
     
