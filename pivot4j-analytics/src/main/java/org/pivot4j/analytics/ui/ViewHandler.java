@@ -811,6 +811,17 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
         stateManager.getState().setEditable(editable);
     }
 
+    public boolean isEnableMdx() {
+        return stateManager.getState().isEnableMdx();
+    }
+
+    /**
+     * @param enableMdx the editable to set
+     */
+    public void setEnableMdx(boolean enableMdx) {
+        stateManager.getState().setEnableMdx(enableMdx);
+    }
+    
     /**
      * @return the swapAxes
      */

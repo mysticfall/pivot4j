@@ -47,12 +47,18 @@
                                         <property name="JdbcUser">root</property>
                                         <property name="JdbcPassword">root</property>
               
-                                        -->
                                         <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
                                         <property name="Jdbc">jdbc:postgresql://10.0.0.21:5432/giexonline</property>
                                         <property name="JdbcDrivers">org.postgresql.Driver</property>
                                         <property name="JdbcUser">postgres</property>
                                         <property name="JdbcPassword">postgres</property>
+                                        
+                                        -->
+                                        <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
+                                        <property name="Jdbc">jdbc:postgresql://10.10.40.27:5432/giex?currentSchema=giexanalise</property>
+                                        <property name="JdbcDrivers">org.postgresql.Driver</property>
+                                        <property name="JdbcUser">giex</property>
+                                        <property name="JdbcPassword">NGw1J2G6</property>
                                         
 				</properties>
 			</connection-info>

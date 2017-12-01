@@ -26,201 +26,206 @@ import org.slf4j.LoggerFactory;
 @ViewScoped
 public class PivotStateManager implements Serializable {
 
-	private static final long serialVersionUID = -146698046524588064L;
+    private static final long serialVersionUID = -146698046524588064L;
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+    private Logger log = LoggerFactory.getLogger(getClass());
 
-	@ManagedProperty(value = "#{settings}")
-	private Settings settings;
+    @ManagedProperty(value = "#{settings}")
+    private Settings settings;
 
-	@ManagedProperty(value = "#{viewStateHolder}")
-	private ViewStateHolder viewStateHolder;
+    @ManagedProperty(value = "#{viewStateHolder}")
+    private ViewStateHolder viewStateHolder;
 
-	private String viewId;
+    private String viewId;
 
-	@PostConstruct
-	protected void initialize() {
-		FacesContext context = FacesContext.getCurrentInstance();
+    @PostConstruct
+    protected void initialize() {
+        FacesContext context = FacesContext.getCurrentInstance();
 
-		ExternalContext externalContext = context.getExternalContext();
-		Flash flash = externalContext.getFlash();
+        ExternalContext externalContext = context.getExternalContext();
+        Flash flash = externalContext.getFlash();
 
-		Map<String, String> parameters = externalContext
-				.getRequestParameterMap();
+        Map<String, String> parameters = externalContext
+                .getRequestParameterMap();
 
-		this.viewId = parameters.get(settings.getViewParameterName());
+        this.viewId = parameters.get(settings.getViewParameterName());
 
-		if (viewId == null) {
-			this.viewId = (String) flash.get("viewId");
-		}
+        if (viewId == null) {
+            this.viewId = (String) flash.get("viewId");
+        }
 
-		ViewState state = null;
+        ViewState state = null;
 
-		if (viewId != null) {
-			state = viewStateHolder.getState(viewId);
-		}
+        if (viewId != null) {
+            state = viewStateHolder.getState(viewId);
+        }
 
-		if (state == null) {
-			ProjectStage stage = context.getApplication().getProjectStage();
+        if (state == null) {
+            ProjectStage stage = context.getApplication().getProjectStage();
 
-			if (stage == ProjectStage.UnitTest) {
-				state = viewStateHolder.createNewState();
-				viewStateHolder.registerState(state);
+            if (stage == ProjectStage.UnitTest) {
+                state = viewStateHolder.createNewState();
+                viewStateHolder.registerState(state);
 
-				this.viewId = state.getId();
-			} else {
-				throw new FacesException("No view state data is available : "
-						+ viewId);
-			}
-		}
+                this.viewId = state.getId();
+            } else {
+                throw new FacesException("No view state data is available : "
+                        + viewId);
+            }
+        }
 
-		if (log.isInfoEnabled()) {
-			log.info("Using an existing view state : {}", viewId);
-		}
-	}
+        if (log.isInfoEnabled()) {
+            log.info("Using an existing view state : {}", viewId);
+        }
+    }
 
-	@PreDestroy
-	public void destroy() {
-		viewStateHolder.unregisterState(viewId);
-	}
+    @PreDestroy
+    public void destroy() {
+        viewStateHolder.unregisterState(viewId);
+    }
 
-	/**
-	 * @return the viewId
-	 */
-	public String getViewId() {
-		return viewId;
-	}
+    /**
+     * @return the viewId
+     */
+    public String getViewId() {
+        return viewId;
+    }
 
-	public ViewState getState() {
-		return viewStateHolder.getState(viewId);
-	}
+    public ViewState getState() {
+        return viewStateHolder.getState(viewId);
+    }
 
-	/**
-	 * @return the model
-	 */
-	public PivotModel getModel() {
-		ViewState state = getState();
-		if (state == null) {
-			return null;
-		}
+    /**
+     * @return the model
+     */
+    public PivotModel getModel() {
+        ViewState state = getState();
+        if (state == null) {
+            return null;
+        }
 
-		return state.getModel();
-	}
+        return state.getModel();
+    }
 
-	/**
-	 * @return the readOnly
-	 */
-	public boolean isReadOnly() {
-		ViewState state = getState();
-		if (state == null) {
-			return true;
-		}
+    /**
+     * @return the readOnly
+     */
+    public boolean isReadOnly() {
+        ViewState state = getState();
+        if (state == null) {
+            return true;
+        }
 
-		return state.isReadOnly();
-	}
+        return state.isReadOnly();
+    }
 
-	/**
-	 * @return the dirty
-	 */
-	public boolean isDirty() {
-		ViewState state = getState();
-		if (state == null) {
-			return false;
-		}
+    /**
+     * @return the dirty
+     */
+    public boolean isDirty() {
+        ViewState state = getState();
+        if (state == null) {
+            return false;
+        }
 
-		return state.isDirty();
-	}
+        return state.isDirty();
+    }
 
-	/**
-	 * @return the settings
-	 */
-	public Settings getSettings() {
-		return settings;
-	}
+    public boolean isEnableMdx() {
+        ViewState state = getState();
+        if (state == null) {
+            return false;
+        }
 
-	/**
-	 * @param settings
-	 *            the settings to set
-	 */
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
+        return state.isEnableMdx();
+    }
 
-	/**
-	 * @return the viewStateHolder
-	 */
-	public ViewStateHolder getViewStateHolder() {
-		return viewStateHolder;
-	}
+    /**
+     * @return the settings
+     */
+    public Settings getSettings() {
+        return settings;
+    }
 
-	/**
-	 * @param viewStateHolder
-	 *            the viewStateHolder to set
-	 */
-	public void setViewStateHolder(ViewStateHolder viewStateHolder) {
-		this.viewStateHolder = viewStateHolder;
-	}
+    /**
+     * @param settings the settings to set
+     */
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
 
-	/**
-	 * @return the rendererState
-	 */
-	public Serializable getRendererState() {
-		ViewState state = getState();
-		if (state == null) {
-			return null;
-		}
+    /**
+     * @return the viewStateHolder
+     */
+    public ViewStateHolder getViewStateHolder() {
+        return viewStateHolder;
+    }
 
-		return state.getRendererState();
-	}
+    /**
+     * @param viewStateHolder the viewStateHolder to set
+     */
+    public void setViewStateHolder(ViewStateHolder viewStateHolder) {
+        this.viewStateHolder = viewStateHolder;
+    }
 
-	/**
-	 * @param rendererState
-	 *            the rendererState to set
-	 */
-	public void setRendererState(Serializable rendererState) {
-		ViewState state = getState();
-		if (state == null) {
-			return;
-		}
+    /**
+     * @return the rendererState
+     */
+    public Serializable getRendererState() {
+        ViewState state = getState();
+        if (state == null) {
+            return null;
+        }
 
-		state.setRendererState(rendererState);
-	}
+        return state.getRendererState();
+    }
 
-	/**
-	 * @return the chartState
-	 */
-	public Serializable getChartState() {
-		ViewState state = getState();
-		if (state == null) {
-			return null;
-		}
+    /**
+     * @param rendererState the rendererState to set
+     */
+    public void setRendererState(Serializable rendererState) {
+        ViewState state = getState();
+        if (state == null) {
+            return;
+        }
 
-		return state.getChartState();
-	}
+        state.setRendererState(rendererState);
+    }
 
-	/**
-	 * @param chartState
-	 *            the chartState to set
-	 */
-	public void setChartState(Serializable chartState) {
-		ViewState state = getState();
-		if (state == null) {
-			return;
-		}
+    /**
+     * @return the chartState
+     */
+    public Serializable getChartState() {
+        ViewState state = getState();
+        if (state == null) {
+            return null;
+        }
 
-		state.setChartState(chartState);
-	}
+        return state.getChartState();
+    }
 
-	public ConnectionInfo getConnectionInfo() {
-		ViewState state = getState();
-		if (state == null) {
-			return null;
-		}
+    /**
+     * @param chartState the chartState to set
+     */
+    public void setChartState(Serializable chartState) {
+        ViewState state = getState();
+        if (state == null) {
+            return;
+        }
 
-		return state.getConnectionInfo();
-	}
+        state.setChartState(chartState);
+    }
 
-	public void keepAlive() {
-		viewStateHolder.keepAlive(viewId);
-	}
+    public ConnectionInfo getConnectionInfo() {
+        ViewState state = getState();
+        if (state == null) {
+            return null;
+        }
+
+        return state.getConnectionInfo();
+    }
+
+    public void keepAlive() {
+        viewStateHolder.keepAlive(viewId);
+    }
 }

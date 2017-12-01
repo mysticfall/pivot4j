@@ -102,7 +102,7 @@
                                              onclick="getActiveWindow().$('table.pivot-grid:first').jqprint();"
                                              disabled="#{!workbenchHandler.viewValid}" />
                         </f:facet>
-                        <f:facet name="right">
+                        <f:facet name="right" >
                             <p:themeSwitcher id="theme-switcher"
                                              value="#{workbenchHandler.theme}" widgetVar="themeSwitcher">
                                 <f:selectItem itemLabel="#{msg['label.theme.default']}"
@@ -111,7 +111,7 @@
                                 <p:ajax oncomplete="onThemeChanged()" />
                             </p:themeSwitcher>
                             <p:separator />
-                            <p:menuButton value="#{msg['toolbar.links']}">
+                            <p:menuButton value="#{msg['toolbar.links']}" rendered="false">
                                 <p:menuitem value="#{msg['toolbar.links.home']}"
                                             url="http://www.pivot4j.org" target="_blank" />
                                 <p:menuitem value="#{msg['toolbar.links.project']}"
@@ -120,10 +120,10 @@
                                             url="https://groups.google.com/forum/#!forum/pivot4j-list"
                                             target="_blank" />
                             </p:menuButton>
-                            <p:separator />
+                            <p:separator rendered="false"/>
                             <p:commandButton value="#{msg['toolbar.about']}"
                                              title="#{msg['toolbar.about.tooltip']}" type="button"
-                                             icon="ui-icon-info" onclick="PF('about').show(); return false;" />
+                                             icon="ui-icon-info" onclick="PF('about').show(); return false;" rendered="false"/>
                         </f:facet>
                     </p:toolbar>
                 </h:form>
@@ -192,7 +192,7 @@
                                     title="#{msg['menu.delete.report.tooltip']}" icon="ui-icon-trash"
                                     rendered="#{!repositoryHandler.selection.object.directory}"
                                     onclick="PF('confirmDeleteFileDialog').show();
-                                                        return false;"
+                                            return false;"
                                     disabled="#{!repositoryHandler.deleteEnabled}" />
                         <p:menuitem value="#{msg['menu.refresh']}"
                                     title="#{msg['menu.refresh.tooltip']}" icon="ui-icon-refresh"
@@ -245,7 +245,7 @@
                                  update="name,label,focus,:repository-form:repository-panel,:toolbar-form:toolbar,:growl" />
                 <p:commandButton value="#{msg['button.close']}"
                                  onclick="PF('newReportDialog').hide();
-                                        return false;" type="button" />
+                                         return false;" type="button" />
 
                 <p:focus id="focus" />
             </p:confirmDialog>
@@ -265,7 +265,7 @@
                                  update="name,label,focus,:repository-form:repository-panel,:growl" />
                 <p:commandButton value="#{msg['button.close']}"
                                  onclick="PF('newFolderDialog').hide();
-                                        return false;" type="button" />
+                                         return false;" type="button" />
 
                 <p:focus id="focus" for="name" />
             </p:confirmDialog>
@@ -289,7 +289,7 @@
                                  onsuccess="PF('confirmCloseDialog').hide()" />
                 <p:commandButton value="#{msg['button.cancel']}"
                                  onclick="PF('confirmCloseDialog').hide();
-                                        return false;" type="button" />
+                                         return false;" type="button" />
             </p:confirmDialog>
         </h:form>
 
