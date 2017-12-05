@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <Schema name="Divida">
 
     <Cube name="Divida">
         <Table name="tb_analise_dividas_dim01"/>
-        <Dimension name="Exercício" foreignKey="exer_nr_lancamento">
-            <Hierarchy hasAll="true" primaryKeyTable="tb_exercicios" primaryKey="exer_nr_ano" allMemberName="Todos exercícios">
+        <Dimension name="ExercÃ­cio" foreignKey="exer_nr_lancamento">
+            <Hierarchy hasAll="true" primaryKeyTable="tb_exercicios" primaryKey="exer_nr_ano" allMemberName="Todos exercÃ­cios">
                 <Join leftKey="exer_nr_ano" rightKey="exer_nr_lancamento">
                     <Table name="tb_exercicios"/>
                     <Table name="tb_analise_dividas_dim01"/>
                 </Join>
-                <Level name="Exercício" table="tb_exercicios" column="exer_nr_ano" uniqueMembers="true" type="Integer"/>
+                <Level name="ExercÃ­cio" table="tb_exercicios" column="exer_nr_ano" uniqueMembers="true" type="Integer"/>
             </Hierarchy>
         </Dimension>
 
-        <Dimension name="Situação" foreignKey="situ_id_situacao">
-            <Hierarchy hasAll="true" primaryKeyTable="tb_debito_situacoes" primaryKey="situ_id_situacao"  allMemberName="Todas situações">
+        <Dimension name="SituaÃ§Ã£o" foreignKey="situ_id_situacao">
+            <Hierarchy hasAll="true" primaryKeyTable="tb_debito_situacoes" primaryKey="situ_id_situacao"  allMemberName="Todas situaÃ§Ãµes">
                 <Join leftKey="situ_id_situacao" rightKey="situ_id_situacao">
                     <Table name="tb_debito_situacoes"/>
                     <Table name="tb_analise_dividas_dim01"/>
                 </Join>
-                <Level name="Situação" table="tb_debito_situacoes" column="situ_nm_situacao" uniqueMembers="true" type="String"/>
+                <Level name="SituaÃ§Ã£o" table="tb_debito_situacoes" column="situ_nm_situacao" uniqueMembers="true" type="String"/>
             </Hierarchy>
         </Dimension>
      

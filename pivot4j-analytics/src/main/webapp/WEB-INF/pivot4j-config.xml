@@ -12,8 +12,8 @@
 			http://www.olap4j.org/
 		-->
 		<datasource>
-			<name>FoodMart Mondrian</name>
-			<description>FoodMart sample data source.</description>
+			<name>Giex</name>
+			<description>Giex data source.</description>
 
 			<connection-info>
 				<url>jdbc:mondrian:</url>
@@ -123,7 +123,7 @@
             an extension.
     -->
     <repository>
-        <extension>pivot4j</extension>
+        <extension>giex</extension>
     </repository>
 
     <render>

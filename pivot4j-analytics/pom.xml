@@ -19,6 +19,7 @@
         <web.test.port>9090</web.test.port>
         <derby.home>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF</derby.home>
         <skip.test>true</skip.test>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <build>
         <plugins>

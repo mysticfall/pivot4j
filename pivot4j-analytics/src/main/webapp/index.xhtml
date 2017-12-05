@@ -102,9 +102,9 @@
                                              onclick="getActiveWindow().$('table.pivot-grid:first').jqprint();"
                                              disabled="#{!workbenchHandler.viewValid}" />
                         </f:facet>
-                        <f:facet name="right" >
+                        <f:facet name="right" rendered="false">
                             <p:themeSwitcher id="theme-switcher"
-                                             value="#{workbenchHandler.theme}" widgetVar="themeSwitcher">
+                                             value="#{workbenchHandler.theme}" widgetVar="themeSwitcher" rendered="false">
                                 <f:selectItem itemLabel="#{msg['label.theme.default']}"
                                               itemValue="" />
                                 <f:selectItems value="#{settings.availableThemes}" />
