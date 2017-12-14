@@ -59,6 +59,7 @@
                                         <property name="JdbcDrivers">org.postgresql.Driver</property>
                                         <property name="JdbcUser">giex</property>
                                         <property name="JdbcPassword">NGw1J2G6</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>
                                         
 				</properties>
 			</connection-info>
@@ -128,9 +129,7 @@
 
     <render>
         <!-- Show all non-internal member properties -->
-        <!-- 
         <propertyCollector type="non-internal" />
-        -->
     </render>
 
     <!-- Miscellaneous settings used for integration with other systems. -->
@@ -149,5 +148,7 @@
 
         <!-- Name of a request parameter for file path. -->
         <path-parameter>path</path-parameter>
+        
+        <credor-parameter>credor</credor-parameter>
     </web>
 </config>

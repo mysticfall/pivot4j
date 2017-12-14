@@ -26,7 +26,7 @@ public class ViewState {
 
     private boolean editable = true;
 
-    private boolean enableMdx = false;
+    private boolean enableMdx = true;
 
     private Date lastActive = new Date();
 

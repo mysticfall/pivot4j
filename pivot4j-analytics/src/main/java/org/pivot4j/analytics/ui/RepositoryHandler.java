@@ -21,6 +21,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -46,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "repositoryHandler")
-@SessionScoped
+@ViewScoped
 public class RepositoryHandler implements ViewStateListener, Serializable {
 
     private static final long serialVersionUID = -860723075484210684L;
@@ -77,6 +78,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
     @PostConstruct
     protected void initialize() {
+
         viewStateHolder.addViewStateListener(this);
 
         ViewState state = viewStateHolder.createNewState();

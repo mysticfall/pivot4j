@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.pivot4.analytics.util;
+package org.pivot4j.analytics.util;
 
 import java.io.IOException;
 import javax.servlet.Filter;

@@ -134,7 +134,7 @@ public class PivotStateManager implements Serializable {
     public boolean isEnableMdx() {
         ViewState state = getState();
         if (state == null) {
-            return false;
+            return true;
         }
 
         return state.isEnableMdx();

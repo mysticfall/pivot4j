@@ -4,13 +4,10 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 <f:view>
 	<f:metadata>
-		<f:viewParam name="#{settings.fileParameterName}"
-			value="#{reportOpener.fileId}" />
-		<f:viewParam name="#{settings.pathParameterName}"
-			value="#{reportOpener.path}" />
-		<f:viewParam name="embeded" value="#{reportOpener.embeded}" />
+            <f:viewParam name="#{settings.credor}"
+                         value="#{reportOpener.credor}" />
 
-		<f:viewAction action="#{reportOpener.load}" />
+		<f:viewAction action="#{reportOpener.loadCredor}" />
 	</f:metadata>
 </f:view>
 </html>
