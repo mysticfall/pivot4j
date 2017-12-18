@@ -1,6 +1,70 @@
 <?xml version="1.0"?>
 <Schema name="Divida">
 
+    <Cube name ="Processos">
+        <View alias="tb_gestao_processual">
+            <SQL dialect="generic">
+                <![CDATA[ select *from tb_gestao_processual where cred_id_credor = %CREDOR%]]> 
+            </SQL>
+        </View>
+    
+        <Dimension name="Tipo processo" foreignKey="pctp_sg_processo">
+            <Hierarchy hasAll="true" primaryKeyTable="tb_processo_tipos" primaryKey="pctp_sg_processo"  allMemberName="Todos tipos">
+                <Join leftKey="pctp_sg_processo" rightKey="pctp_sg_processo">
+                    <Table name="tb_processo_tipos"/>
+                    <View alias="tb_gestao_processual">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from tb_gestao_processual where cred_id_credor = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Tipo processo" table="tb_processo_tipos" column="pctp_nm_processo" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Dimension name="Situação" foreignKey="sipr_id_situacao">
+            <Hierarchy hasAll="true" primaryKeyTable="tb_situacoes_processo" primaryKey="sipr_id_situacao"  allMemberName="Todas Situações">
+                <Join leftKey="sipr_id_situacao" rightKey="sipr_id_situacao">
+                    <Table name="tb_situacoes_processo"/>
+                    <View alias="tb_gestao_processual">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from tb_gestao_processual where cred_id_credor = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Situação" table="tb_situacoes_processo" column="sipr_nm_situacao" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Dimension name="Responsável">
+            <Hierarchy hasAll="true" primaryKey="assi_id_assinatura" allMemberName="Todos responsáveis">
+                <View alias="tb_gestao_processual">
+                    <SQL dialect="generic">
+                <![CDATA[ select *from tb_gestao_processual where cred_id_credor = %CREDOR%]]> 
+                    </SQL>
+                </View>
+                <Level name="Responsável" column="assi_nm_responsavel" type="String" uniqueMembers="true"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Dimension name="Digital?" foreignKey="proc_st_digital">
+            <Hierarchy hasAll="true" primaryKeyTable="tb_sn" primaryKey="sn_id" allMemberName="Digitais?">
+                <Join leftKey="sn_id" rightKey="proc_st_digital">
+                    <Table name="tb_sn"/>
+                    <View alias="tb_gestao_processual">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from tb_gestao_processual where cred_id_credor = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Digital?" table="tb_sn" column="sn_nm" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Measure name="Valor atualizado" column="proc_vl_atualizado" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
+        <Measure name="Valor de causa" column="proc_vl_causa" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
+    </Cube>
+    
     <Cube name="Divida">
         <View alias="tb_analise_dividas_dim01">
             <SQL dialect="generic">
@@ -45,6 +109,7 @@
         <Dimension name="Bairro">
             <Hierarchy hasAll="true" allMemberName="Todos bairros">
                 <Level name="Bairro" column="cada_ds_bairro" uniqueMembers="true" type="String"/>
+                <Level name="Lançamento" column="lanc_nr_lancamento" uniqueMembers="true" type="Integer"/>
             </Hierarchy>
         </Dimension>
 
