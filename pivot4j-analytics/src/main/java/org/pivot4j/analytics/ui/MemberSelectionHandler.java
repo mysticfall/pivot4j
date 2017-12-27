@@ -418,14 +418,14 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 
 	public Hierarchy getHierarchy() {
 		if (hierarchy == null && hierarchyName != null && model.isInitialized()) {
-                        for (Hierarchy h : model.getCube().getHierarchies()) {
-                                if (h.getUniqueName().equals(hierarchyName)) {
-                                        this.hierarchy = h;
-                                }
-                        }
-                }
-
-                return hierarchy;
+			for (Hierarchy h : model.getCube().getHierarchies()) {
+				if (h.getUniqueName().equals(hierarchyName)) {
+					this.hierarchy = h;
+				}
+			}
+		}
+		
+		return hierarchy;
 	}
 
 	protected MemberSelection getSelection() {
