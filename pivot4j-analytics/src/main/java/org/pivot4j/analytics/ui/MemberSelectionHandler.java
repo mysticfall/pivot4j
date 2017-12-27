@@ -2,6 +2,7 @@ package org.pivot4j.analytics.ui;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -20,6 +21,7 @@ import org.olap4j.metadata.Dimension.Type;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.MetadataElement;
+import org.olap4j.metadata.NamedList;
 import org.pivot4j.PivotModel;
 import org.pivot4j.analytics.component.tree.DefaultTreeNode;
 import org.pivot4j.analytics.component.tree.NodeFilter;
@@ -416,11 +418,14 @@ public class MemberSelectionHandler implements NodeFilter, Serializable {
 
 	public Hierarchy getHierarchy() {
 		if (hierarchy == null && hierarchyName != null && model.isInitialized()) {
-			this.hierarchy = model.getCube().getHierarchies()
-					.get(hierarchyName);
-		}
+                        for (Hierarchy h : model.getCube().getHierarchies()) {
+                                if (h.getUniqueName().equals(hierarchyName)) {
+                                        this.hierarchy = h;
+                                }
+                        }
+                }
 
-		return hierarchy;
+                return hierarchy;
 	}
 
 	protected MemberSelection getSelection() {

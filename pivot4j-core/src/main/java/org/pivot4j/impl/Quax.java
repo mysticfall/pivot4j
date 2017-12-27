@@ -497,8 +497,8 @@ public class Quax implements Bookmarkable {
 		hierarchyMap.clear();
 
 		for (Hierarchy hierarchy : hierarchies) {
-			hiers.add(hierarchy.getName());
-			hierarchyMap.put(hierarchy.getName(), hierarchy);
+                        hiers.add(hierarchy.getUniqueName());
+                        hierarchyMap.put(hierarchy.getUniqueName(), hierarchy);
 		}
 	}
 
@@ -557,8 +557,8 @@ public class Quax implements Bookmarkable {
 			for (Exp set : sets) {
 				try {
 					Hierarchy hierarchy = quaxUtil.hierForExp(set);
-					hiers.add(hierarchy.getName());
-					hierarchyMap.put(hierarchy.getName(), hierarchy);
+                                        hiers.add(hierarchy.getUniqueName());
+                                        hierarchyMap.put(hierarchy.getUniqueName(), hierarchy);
 				} catch (UnknownExpressionException e) {
 					throw new PivotException("Unknown expression : "
 							+ e.getExpression());

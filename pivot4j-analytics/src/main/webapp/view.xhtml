@@ -354,7 +354,7 @@
 								action="#{memberSelectionHandler.show}" update=":hierarchy-form"
 								oncomplete="PF('hierarchyConfig').show();"
 								title="#{msg['button.hierarchyConfig.tooltip']}">
-								<f:param name="hierarchy" value="#{node.name}" />
+								<f:param name="hierarchy" value="#{node.uniqueName}" />
 							</p:commandButton>
 							<!-- workaround for PrimeFaces issue #4748 -->
 							<p:draggable for="hierarchy-node"
