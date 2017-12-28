@@ -1,5 +1,6 @@
-body,td,th,.ui-widget {
-    font-size: 9pt;
+
+body {
+    font-size: 9pt; 
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -725,4 +726,22 @@ body.ie-compat .ui-toolbar .ui-separator {
 
 .wrap {
     white-space: normal !important;
+}
+
+.ui-button {
+    padding: 4px 12px !important;
+}
+
+.ui-menubutton {
+    padding: 0;
+    position: relative !important;
+    display: inline-block;
+}
+
+div.ui-button {
+    overflow: initial !important;
+}
+
+button.ui-button{
+    vertical-align: initial !important;
 }

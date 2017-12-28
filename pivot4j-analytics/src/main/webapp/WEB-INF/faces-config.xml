@@ -32,7 +32,9 @@
     <lifecycle>
         <phase-listener>org.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
     </lifecycle>
-
+    <application>
+        <resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
+    </application>
     <component>
         <component-type>org.primefaces.component.Tree</component-type>
         <component-class>org.pivot4j.analytics.component.tree.Tree</component-class>
