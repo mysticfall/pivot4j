@@ -217,6 +217,7 @@ body.report .pe-layout-pane-header {
 #cube-list-pane {
     overflow: hidden;
     white-space: nowrap;
+    min-width: 100px !important;
 }
 
 #cube-list-pane label.cube-list-label {
@@ -742,6 +743,76 @@ div.ui-button {
     overflow: initial !important;
 }
 
-button.ui-button{
-    vertical-align: initial !important;
+.pe-layout-pane-content {
+    padding: 1px !important;
+    overflow: auto;
 }
+
+.ui-toolbar {
+    padding: .1em !important;
+}
+
+.ui-datatable .ui-datatable-header {
+    text-align: right !important;
+}
+
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td{
+    padding: 1px 10px!important;
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.ui-datatable table{
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: auto!important;
+}
+
+.ui-datatable tr.ui-datatable-even:hover, .ui-datatable tr.ui-datatable-odd:hover{
+    background: #78BCFF;
+}
+
+.ui-button-icon-only .ui-button-text {
+    padding: .0 !important;
+    text-indent: -9999999px;
+}
+
+div.ui-selectonemenu, div.ui-fluid div.ui-selectonemenu, div.ui-selectcheckboxmenu, div.ui-fluid div.ui-selectcheckboxmenu {
+    height: 29px;
+    display: inline-grid !important;
+    overflow: hidden;
+    border-color: #d2d6de;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -moz-border-radius-topleft: 3px;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    min-width: 210px !important;
+}
+
+.ui-selectonemenu {
+    display: inline-block;
+    position: relative;
+    width: auto;
+    zoom: 1;
+    cursor: pointer;
+    padding-right: 0em !important;
+}
+
+.ui-button-icon-only .ui-icon {
+    left: 50% !important;
+    margin-left: -8px !important;
+    margin-top: -6px !important;
+    position: relative !important;
+    top: -50% !important;
+}
+
+button.ui-button {
+    vertical-align: inherit !important;
+}
+
+/*button.ui-button{
+    vertical-align: initial !important;
+}*/
