@@ -505,7 +505,7 @@ span.ui-button-icon-only {
 
 .aggregation-config .ui-panel {
     float: left;
-    width: 320px;
+    width: 380px;
 }
 
 .aggregation-config .ui-tabs .ui-tabs-panel {
@@ -668,10 +668,10 @@ span.unit {
     margin-right: 1px;
 }
 
-#toolbar-form\3A charts_menu .ui-menuitem-text {
+/*#toolbar-form\3A charts_menu .ui-menuitem-text {
     display: block;
     width: 140px;
-}
+}*/
 
 @media print {
     .ui-button {
@@ -813,6 +813,31 @@ button.ui-button {
     vertical-align: inherit !important;
 }
 
+body .ui-picklist div.ui-picklist-buttons-cell button, body .ui-picklist.ui-picklist-responsive div.ui-picklist-buttons-cell button {
+    background-color: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+}
+
 /*button.ui-button{
     vertical-align: initial !important;
+}*/
+
+
+
+/*.ui-menu .ui-menuitem-text {
+    float: right !important;
+}*/
+
+/*li.ui-menuitem>a.ui-menuitem-link {
+    margin-left: 0px !important;
+}*/
+
+
+/*.ui-icon {
+    display: block !important;
+    text-indent: 0px !important;
+    overflow: hidden !important;
+    background-repeat: no-repeat !important;
 }*/
