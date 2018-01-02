@@ -468,6 +468,13 @@
             <artifactId>omnifaces</artifactId>
             <version>${version.omnifaces}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/oracle/ojdbc6 -->
+        <dependency>
+            <groupId>oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>${version.oracle}</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -495,15 +502,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <repositories>
-        <repository>
-            <id>prime-repo</id>
-            <name>PrimeFaces Maven Repository</name>
-            <url>http://repository.primefaces.org</url>
-            <layout>default</layout>
-        </repository>
-    </repositories>
 
     <profiles>
         <profile>
