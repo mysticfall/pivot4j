@@ -1,588 +1,590 @@
-body,td,th,.ui-widget {
-	font-size: 9pt;
-	font-family: Arial, Helvetica, sans-serif;
+
+body {
+    font-size: 9pt; 
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 form {
-	margin: 0 0 0 0;
-	padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
 }
 
 .hide-on-embed {
-	display: none !important;
+    display: none !important;
 }
 
 .pe-layout-pane-header {
-	padding-left: 3px;
+    padding-left: 3px;
 }
 
 .blockOverlay {
-	z-index: 2000 !important;
+    z-index: 2000 !important;
 }
 
 .blockMsg {
-	z-index: 2100 !important;
-	top: 50% !important;
-	left: 50% !important;
-	margin-top: -35px !important;
-	margin-left: -107px !important;
+    z-index: 2100 !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-top: -35px !important;
+    margin-left: -107px !important;
 }
 
 .pe-blockui-content span {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 .ui-force-hidden {
-	display: none !important;
+    display: none !important;
 }
 
 #main-content-pane {
-	padding: 0;
-	border: none;
-	overflow: hidden;
+    padding: 0;
+    border: none;
+    overflow: hidden;
 }
 
 #main-content-pane .ui-tabs-panel {
-	position: absolute;
-	top: 32px;
-	bottom: 0;
-	padding: 0;
-	left: 0;
-	right: 0;
+    position: absolute;
+    top: 32px;
+    bottom: 0;
+    padding: 0;
+    left: 0;
+    right: 0;
 }
 
 #tab-panel li.dirty a {
-	text-decoration: underline;
-	font-style: oblique;
+    text-decoration: underline;
+    font-style: oblique;
 }
 
 .node-active-file {
-	font-weight: bold;
-	font-style: oblique;
+    font-weight: bold;
+    font-style: oblique;
 }
 
 body.report .pe-layout-pane-header {
-	border-width: 1px;
+    border-width: 1px;
 }
 
 #navigator-pane .pe-layout-pane-content .pe-layout-pane-header {
-	border-width: 0;
+    border-width: 0;
 }
 
 #source-tree-pane .pe-layout-pane-header {
-	padding-left: 6px;
+    padding-left: 6px;
 }
 
 #target-tree-pane .pe-layout-pane-header {
-	padding-left: 6px;
+    padding-left: 6px;
 }
 
 #toolbar-pane {
-	border: none;
-	overflow: hidden;
+    border: none;
+    overflow: hidden;
 }
 
 .ui-toolbar-group-left,.ui-toolbar-group-right {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 #toolbar-pane.pe-layout-pane-content {
-	padding: 0;
-	overflow: hidden;
+    padding: 0;
+    overflow: hidden;
 }
 
 #toolbar-pane .ui-selectonemenu {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 #navigator-pane {
-	z-index: 10;
+    z-index: 10;
 }
 
 #navigator-pane .ui-tree {
-	border: none;
-	width: auto;
+    border: none;
+    width: auto;
 }
 
 #navigator-pane .ui-tree-container {
-	overflow: visible;
-	padding: 0;
+    overflow: visible;
+    padding: 0;
 }
 
 #navigator-pane .ui-layout-content {
-	padding-right: 0;
+    padding-right: 0;
 }
 
 .embeded #toolbar-form {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 #toolbar-form .ui-icon-info {
-	background-image: url('#{resource['pivot4j:images/logo16.png']}');
-	background-position: 0 center;
-	border-radius: 0 0 0 0;
+    background-image: url('#{resource['pivot4j:images/logo16.png']}');
+    background-position: 0 center;
+    border-radius: 0 0 0 0;
 }
 
 .navigator .ui-treenode-icon.ui-icon {
-	border-radius: 0;
+    border-radius: 0;
 }
 
 .ui-treenode-icon.ui-icon-dim {
-	background-image: url('#{resource['pivot4j:images/dimension.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/dimension.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-hier {
-	background-image: url('#{resource['pivot4j:images/hierarchy.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/hierarchy.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level0 {
-	background-image: url('#{resource['pivot4j:images/level_0.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_0.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level1 {
-	background-image: url('#{resource['pivot4j:images/level_1.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_1.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level2 {
-	background-image: url('#{resource['pivot4j:images/level_2.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_2.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level3 {
-	background-image: url('#{resource['pivot4j:images/level_3.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_3.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level4 {
-	background-image: url('#{resource['pivot4j:images/level_4.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_4.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level5 {
-	background-image: url('#{resource['pivot4j:images/level_5.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_5.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level6 {
-	background-image: url('#{resource['pivot4j:images/level_6.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_6.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level7 {
-	background-image: url('#{resource['pivot4j:images/level_7.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_7.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-level8 {
-	background-image: url('#{resource['pivot4j:images/level_8.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/level_8.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-member {
-	background-image: url('#{resource['pivot4j:images/member.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/member.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-measure {
-	background-image: url('#{resource['pivot4j:images/measure.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/measure.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-cols,.ui-widget-header .ui-icon-cols {
-	background-image: url('#{resource['pivot4j:images/columns.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/columns.gif']}');
+    background-position: 0 0;
 }
 
 .ui-treenode-icon.ui-icon-rows,.ui-widget-header .ui-icon-rows {
-	background-image: url('#{resource['pivot4j:images/rows.gif']}');
-	background-position: 0 0;
+    background-image: url('#{resource['pivot4j:images/rows.gif']}');
+    background-position: 0 0;
 }
 
 .ui-icon-none {
-	background-image: none !important;
+    background-image: none !important;
 }
 
 #source-tree-pane .ui-treenode .ui-state-highlight {
-	background: none !important;
-	text-shadow: none !important;
-	color: inherit !important;
-	text-decoration: underline;
+    background: none !important;
+    text-shadow: none !important;
+    color: inherit !important;
+    text-decoration: underline;
 }
 
 #cube-list-pane {
-	overflow: hidden;
-	white-space: nowrap;
+    overflow: hidden;
+    white-space: nowrap;
+    min-width: 100px !important;
 }
 
 #cube-list-pane label.cube-list-label {
-	margin-left: 5px;
-	margin-right: 5px;
-	float: left;
-	line-height: 22px;
-	vertical-align: middle;
+    margin-left: 5px;
+    margin-right: 5px;
+    float: left;
+    line-height: 22px;
+    vertical-align: middle;
 }
 
 .ui-draggable-dragging.node-hierarchy {
-	background-image: url('#{resource['pivot4j:images/hierarchy.gif']}');
-	background-repeat: no-repeat;
-	background-position: left;
-	padding-left: 18px;
+    background-image: url('#{resource['pivot4j:images/hierarchy.gif']}');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 18px;
 }
 
 .ui-draggable-dragging.node-level {
-	background-repeat: no-repeat;
-	background-position: left;
-	padding-left: 18px;
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 18px;
 }
 
 .ui-draggable-dragging.node-member {
-	background-image: url('#{resource['pivot4j:images/measure.gif']}');
-	background-repeat: no-repeat;
-	background-position: left;
-	padding-left: 18px;
+    background-image: url('#{resource['pivot4j:images/measure.gif']}');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 18px;
 }
 
 #grid-header-pane {
-	padding: 2px;
-	overflow: hidden;
+    padding: 2px;
+    overflow: hidden;
 }
 
 #content-pane .ui-layout-content {
-	padding: 6px 6px 0 0;
+    padding: 6px 6px 0 0;
 }
 
 #grid-content-pane {
-	padding: 0;
-	border: none;
+    padding: 0;
+    border: none;
 }
 
 .pivot-grid .value-cell, .pivot-grid .value-cell .ui-inputfield {
-	text-align: right;
+    text-align: right;
 }
 
 .pivot-grid .value-cell .ui-button {
-	float: right;
+    float: right;
 }
 
 .value-cell.cell-odd {
-	background-color: rgb(242, 245, 249);
-	color: rgb(48, 48, 48);
+    background-color: rgb(242, 245, 249);
+    color: rgb(48, 48, 48);
 }
 
 .pivot-grid .col-hdr-cell,.pivot-grid .agg-hdr {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 .pivot-grid .row-hdr-cell,.filter-grid .row-hdr-cell {
-	vertical-align: top;
-	white-space: nowrap;
-	background-image: none;
+    vertical-align: top;
+    white-space: nowrap;
+    background-image: none;
 }
 
 .pivot-grid .col-agg-cell,.pivot-grid .row-agg-cell {
-	background-image: none;
+    background-image: none;
 }
 
 .pivot-grid .agg-title {
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 .pivot-grid .agg-cell,.pivot-grid .agg-title {
-	text-align: right;
+    text-align: right;
 }
 
 .pivot-grid .ui-panelgrid-header .agg-title {
-	text-align: center;
+    text-align: center;
 }
 
 .pivot-grid {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .filter-grid  {
-	margin-right: 0.5em;
-	margin-top: 0.5em;
-	float: left;
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+    float: left;
 }
 
 button.ui-button-icon-only {
-	width: 16px;
-	height: 16px;
-	margin-left: 3px;
-	margin-right: 3px;
-	vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    margin-left: 3px;
+    margin-right: 3px;
+    vertical-align: middle;
 }
 
 span.ui-button-icon-only {
-	width: 16px;
-	height: 16px;
+    width: 16px;
+    height: 16px;
 }
 
 .filter-info .title {
-	clear: both;
+    clear: both;
 }
 
 .filter-panel {
-	width: 100%;
+    width: 100%;
 }
 
 .filter-panel td {
-	white-space: nowrap;
-	padding: 2px;
+    white-space: nowrap;
+    padding: 2px;
 }
 
 .filter-panel .ui-widget-header {
-	width: 80px;
-	padding: 0 5px 0 5px;
-	text-align: right;
+    width: 80px;
+    padding: 0 5px 0 5px;
+    text-align: right;
 }
 
 .filter-panel td.filter-items {
-	border: 1px dotted #a8a8a8;
-	width: 100%;
+    border: 1px dotted #a8a8a8;
+    width: 100%;
 }
 
 .filter-panel td.filter-items .ui-droppable {
-	height: 22px;
+    height: 22px;
 }
 
 .filter-panel td.filter-items .filter-items-hover {
-	border: 1px solid red;
+    border: 1px solid red;
 }
 
 .filter-panel .filter-item {
-	border-radius: 5px;
-	background-image: none;
-	margin-right: 2px;
-	padding: 0 5px 2px;
-	white-space: nowrap;
-	width: auto;
-	float: left;
+    border-radius: 5px;
+    background-image: none;
+    margin-right: 2px;
+    padding: 0 5px 2px;
+    white-space: nowrap;
+    width: auto;
+    float: left;
 }
 
 .filter-panel .filter-item a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .filter-panel .filter-item .ui-button {
-	width: 16px;
-	height: 16px;
-	vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
 }
 
 .filter-dialog .ui-tree {
-	margin-top: 0.4em;
+    margin-top: 0.4em;
 }
 
 .filter-dialog .ui-tree-container {
-	height: 240px !important;
+    height: 240px !important;
 }
 
 .filter-dialog .ui-dialog-buttonpane {
-	padding: 0.3em 0 0 0 !important;
+    padding: 0.3em 0 0 0 !important;
 }
 
 #mdx-editor-pane {
-	padding-bottom: 6px;
+    padding-bottom: 6px;
 }
 
 #mdx-editor-pane .pe-layout-pane-content {
-	padding: 0;
+    padding: 0;
 }
 
 #mdx-editor-pane .CodeMirror-scroll {
-	overflow-y: visible;
-	height: auto;
+    overflow-y: visible;
+    height: auto;
 }
 
 #mdx-editor-pane .query-info {
-	padding: 8px 5px 0px 5px;
+    padding: 8px 5px 0px 5px;
 }
 
 #mdx-editor-pane .ui-layout-north {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 #mdx-editor-pane .ui-toolbar {
-	border: none;
+    border: none;
 }
 
 .ui-icon-title {
-	float: left;
-	margin-right: 2px;
-	border-radius: 0;
+    float: left;
+    margin-right: 2px;
+    border-radius: 0;
 }
 
 #content-pane .info-panel {
-	padding: 10px;
-	font-weight: bold;
+    padding: 10px;
+    font-weight: bold;
 }
 
 .ui-draggable {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .ui-draggable-dragging {
-	z-index: 10;
+    z-index: 10;
 }
 
 .ui-hide-display {
-	display: none !important;
+    display: none !important;
 }
 
 .about .about-title {
-	font-weight: bold;
-	font-size: large;
+    font-weight: bold;
+    font-size: large;
 }
 
 .about img {
-	float: left;
-	margin: 5px 15px 5px 5px;
+    float: left;
+    margin: 5px 15px 5px 5px;
 }
 
 .about .about-text {
-	display: block;
-	padding: 10px;
+    display: block;
+    padding: 10px;
 }
 
 .hierarchy-config .ui-dialog-content {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 .hierarchy-config .member-panel .ui-panel-content {
-	padding: 5px 0 5px 0;
-	height: 340px;
+    padding: 5px 0 5px 0;
+    height: 340px;
 }
 
 .hierarchy-config .ui-tree-container {
-	padding: 0 0 0 0;
+    padding: 0 0 0 0;
 }
 
 .hierarchy-config .ui-tree {
-	height: 100%;
-	overflow: auto;
+    height: 100%;
+    overflow: auto;
 }
 
 .hierarchy-config .control-panel {
-	width: 102px;
+    width: 102px;
 }
 
 .hierarchy-config .ui-button {
-	width: 92px;
-	margin: 5px;
+    width: 92px;
+    margin: 5px;
 }
 
 .hierarchy-config .source-panel .node-member {
-	
+
 }
 
 .hierarchy-config .source-panel .node-member.selected {
-	color: #d0d0d0;
+    color: #d0d0d0;
 }
 
 .hierarchy-config .target-panel .node-member {
-	color: #d0d0d0;
+    color: #d0d0d0;
 }
 
 .hierarchy-config .target-panel .node-member.selected {
-	color: #000000;
+    color: #000000;
 }
 
 .hierarchy-contextmenu {
-	width: 180px;
+    width: 180px;
 }
 
 .aggregation-config .ui-picklist-list {
-	width: 120px !important;
-	height: 160px !important;
+    width: 120px !important;
+    height: 160px !important;
 }
 
 .aggregation-config .ui-panel {
-	float: left;
-	width: 320px;
+    float: left;
+    width: 380px;
 }
 
 .aggregation-config .ui-tabs .ui-tabs-panel {
-	height: 235px;
+    height: 235px;
 }
 
 .aggregation-config .rows-panel {
-	margin-right: 10px;
+    margin-right: 10px;
 }
 
 .chart-config .ui-tabs .ui-tabs-panel {
-	height: 235px;
+    height: 235px;
 }
 
 .properties-config .ui-dialog-content {
-	padding: 5px;
+    padding: 5px;
 }
 
 .properties-config .ui-layout-unit .ui-layout-unit-content {
-	padding: 0;
+    padding: 0;
 }
 
 .properties-config .ui-panelmenu .ui-panelmenu-content {
-	border: 0 none;
+    border: 0 none;
 }
 
 .properties-config .ui-breadcrumb ul li span {
-	float: left;
+    float: left;
 }
 
 .properties-config .info-panel {
-	margin-top: 5px;
-	margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .properties-config .ui-panelmenu .ui-panelmenu-header a {
-	padding-top: 5px;
-	padding-bottom: 5px;
-	font-size: 0.9em;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 0.9em;
 }
 
 .properties-config .editor-panel {
-	margin: 5px;	
+    margin: 5px;	
 }
 
 .properties-config .editor-panel .CodeMirror {
-	width: 340px;
-	height: 200px;
+    width: 340px;
+    height: 200px;
 }
 
 .drillthrough .ui-tree {
-	width: auto;
-	border: none;
+    width: auto;
+    border: none;
 }
 
 .drillthrough .ui-tree-container {
-	overflow: visible !important;
+    overflow: visible !important;
 }
 
 .drillthrough .field-set {
-	float: left;
-	margin: 0.5em;
+    float: left;
+    margin: 0.5em;
 }
 
 .ui-paginator .ui-paginator-rpp-options {
-	margin-left: 0.5em !important;
+    margin-left: 0.5em !important;
 }
 
 .ui-paginator .ui-paginator-jtp-select {
-	margin-left: 0.5em !important;
-	margin-right: 1.0em !important;
+    margin-left: 0.5em !important;
+    margin-right: 1.0em !important;
 }
 
 .CodeMirror-completions {
-	z-index: 2000 !important;
+    z-index: 2000 !important;
 }
 
 .CodeMirror-completions select {
-	color: #000000;
+    color: #000000;
 }
 
 .usage-info li {
@@ -590,139 +592,252 @@ span.ui-button-icon-only {
 }
 
 .ui-dialog .ui-dialog-footer {
-	padding: 0;
+    padding: 0;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
-	text-align: right !important;
-	margin: 0 !important;
+    text-align: right !important;
+    margin: 0 !important;
 }
 
 .ui-dialog .ui-dialog-buttonpane .ui-button {
-	margin: 5px 0 5px 5px !important;
+    margin: 5px 0 5px 5px !important;
 }
 
 .ui-dialog .info-panel {
-	text-align: left;
-	font-weight: normal;
-	padding: 5px;
+    text-align: left;
+    font-weight: normal;
+    padding: 5px;
 }
 
 .ui-dialog .ui-dialog-buttonpane .ui-messages {
-	text-align: left;
+    text-align: left;
 }
 
 .ui-dialog .ui-dialog-buttonpane .ui-messages div {
-	margin: 5px 0 5px 0 !important;
+    margin: 5px 0 5px 0 !important;
 }
 
 .ui-dialog .ui-dialog-content {
-	cursor: default;
+    cursor: default;
 }
 
 .ui-dialog-content .ui-layout-container {
-	width: 100% !important;
-	height: 100% !important;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .ui-confirm-dialog .ui-outputlabel {
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 .filter-dialog .ui-tree-container {
-	margin: 5px 0;
-	height: 280px;
+    margin: 5px 0;
+    height: 280px;
 }
 
 label.ui-icon-cols,label.ui-icon-rows {
-	display: block;
-	height: 16px;
-	padding-left: 20px;
-	background-repeat: no-repeat;
+    display: block;
+    height: 16px;
+    padding-left: 20px;
+    background-repeat: no-repeat;
 }
 
 label.ui-icon-cols {
-	background-image: url('#{resource['pivot4j:images/columns.gif']}');
+    background-image: url('#{resource['pivot4j:images/columns.gif']}');
 }
 
 label.ui-icon-rows {
-	background-image: url('#{resource['pivot4j:images/rows.gif']}');
+    background-image: url('#{resource['pivot4j:images/rows.gif']}');
 }
 
 td.field-name,th.field-name {
-	padding-right: 10px;
-	text-align: right;
+    padding-right: 10px;
+    text-align: right;
 }
 
 span.unit {
-	margin-left: 5px;
+    margin-left: 5px;
 }
 
 .ui-menu {
-	width: 180px !important;
+    width: 180px !important;
 }
 
 .export-menu {
-	margin-right: 1px;
+    margin-right: 1px;
 }
 
-#toolbar-form\3A charts_menu .ui-menuitem-text {
-	display: block;
-	width: 140px;
-}
+/*#toolbar-form\3A charts_menu .ui-menuitem-text {
+    display: block;
+    width: 140px;
+}*/
 
 @media print {
-	.ui-button {
-		display: none !important;
-	}
+    .ui-button {
+        display: none !important;
+    }
 }
 
 div.ui-tabs-panel iframe {
-	width: 100%;
-	height: 100%;
-	border: none;
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
 body.ie-compat div.ui-tabs-panel iframe {
-	height: expression(this.parentNode.offsetHeight);
+    height: expression(this.parentNode.offsetHeight);
 }
 
 body.ie-compat .ui-toolbar .ui-button {
-	float: left;
+    float: left;
 }
 
 body.ie-compat .ui-toolbar .ui-selectonebutton {
-	float: left;
+    float: left;
 }
 
 body.ie-compat .ui-toolbar .ui-separator {
-	float: left;
+    float: left;
 }
 
 .migration-dialog .ui-tree {
-	border: none;
-	padding: 0;
-	margin: 0;
-	width: auto;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: auto;
 }
 
 .migration-dialog .ui-layout-container {
-	width: 100%;
-	height: 300px !important;
+    width: 100%;
+    height: 300px !important;
 }
 
 .migration-dialog .ui-layout-resizer {
-	display: none !important;
+    display: none !important;
 }
 
 .migration-dialog .ui-layout-pane-center {
-	width: auto !important;
+    width: auto !important;
 }
 
 .migration-dialog .ui-layout-container .ui-layout-pane-north {
-	border: none;
+    border: none;
 }
 
 .wrap {
-	white-space: normal !important;
+    white-space: normal !important;
 }
+
+.ui-button {
+    padding: 4px 12px !important;
+}
+
+.ui-menubutton {
+    padding: 0;
+    position: relative !important;
+    display: inline-block;
+}
+
+div.ui-button {
+    overflow: initial !important;
+}
+
+.pe-layout-pane-content {
+    padding: 1px !important;
+    overflow: auto;
+}
+
+.ui-toolbar {
+    padding: .1em !important;
+}
+
+.ui-datatable .ui-datatable-header {
+    text-align: right !important;
+}
+
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td{
+    padding: 1px 10px!important;
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.ui-datatable table{
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: auto!important;
+}
+
+.ui-datatable tr.ui-datatable-even:hover, .ui-datatable tr.ui-datatable-odd:hover{
+    background: #78BCFF;
+}
+
+.ui-button-icon-only .ui-button-text {
+    padding: .0 !important;
+    text-indent: -9999999px;
+}
+
+div.ui-selectonemenu, div.ui-fluid div.ui-selectonemenu, div.ui-selectcheckboxmenu, div.ui-fluid div.ui-selectcheckboxmenu {
+    height: 29px;
+    display: inline-grid !important;
+    overflow: hidden;
+    border-color: #d2d6de;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -moz-border-radius-topleft: 3px;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    min-width: 210px !important;
+}
+
+.ui-selectonemenu {
+    display: inline-block;
+    position: relative;
+    width: auto;
+    zoom: 1;
+    cursor: pointer;
+    padding-right: 0em !important;
+}
+
+.ui-button-icon-only .ui-icon {
+    left: 50% !important;
+    margin-left: -8px !important;
+    margin-top: -6px !important;
+    position: relative !important;
+    top: -50% !important;
+}
+
+button.ui-button {
+    vertical-align: inherit !important;
+}
+
+body .ui-picklist div.ui-picklist-buttons-cell button, body .ui-picklist.ui-picklist-responsive div.ui-picklist-buttons-cell button {
+    background-color: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+}
+
+/*button.ui-button{
+    vertical-align: initial !important;
+}*/
+
+
+
+/*.ui-menu .ui-menuitem-text {
+    float: right !important;
+}*/
+
+/*li.ui-menuitem>a.ui-menuitem-link {
+    margin-left: 0px !important;
+}*/
+
+
+/*.ui-icon {
+    display: block !important;
+    text-indent: 0px !important;
+    overflow: hidden !important;
+    background-repeat: no-repeat !important;
+}*/

@@ -92,6 +92,7 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
     @PostConstruct
     protected void initialize() {
+
         this.model = stateManager.getModel();
 
         if (model != null) {
@@ -811,6 +812,17 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
         stateManager.getState().setEditable(editable);
     }
 
+    public boolean isEnableMdx() {
+        return stateManager.getState().isEnableMdx();
+    }
+
+    /**
+     * @param enableMdx the editable to set
+     */
+    public void setEnableMdx(boolean enableMdx) {
+        stateManager.getState().setEnableMdx(enableMdx);
+    }
+
     /**
      * @return the swapAxes
      */
@@ -925,28 +937,32 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
     }
 
     /**
-     * @see org.pivot4j.ModelChangeListener#modelInitialized(org.pivot4j.ModelChangeEvent)
+     * @see
+     * org.pivot4j.ModelChangeListener#modelInitialized(org.pivot4j.ModelChangeEvent)
      */
     @Override
     public void modelInitialized(ModelChangeEvent e) {
     }
 
     /**
-     * @see org.pivot4j.ModelChangeListener#modelDestroyed(org.pivot4j.ModelChangeEvent)
+     * @see
+     * org.pivot4j.ModelChangeListener#modelDestroyed(org.pivot4j.ModelChangeEvent)
      */
     @Override
     public void modelDestroyed(ModelChangeEvent e) {
     }
 
     /**
-     * @see org.pivot4j.ModelChangeListener#modelChanged(org.pivot4j.ModelChangeEvent)
+     * @see
+     * org.pivot4j.ModelChangeListener#modelChanged(org.pivot4j.ModelChangeEvent)
      */
     @Override
     public void modelChanged(ModelChangeEvent e) {
     }
 
     /**
-     * @see org.pivot4j.ModelChangeListener#structureChanged(org.pivot4j.ModelChangeEvent)
+     * @see
+     * org.pivot4j.ModelChangeListener#structureChanged(org.pivot4j.ModelChangeEvent)
      */
     @Override
     public void structureChanged(ModelChangeEvent e) {
@@ -963,12 +979,13 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
         }
 
         /**
-         * @see org.pivot4j.ui.command.BasicDrillThroughCommand#execute(org.pivot4j.PivotModel,
+         * @see
+         * org.pivot4j.ui.command.BasicDrillThroughCommand#execute(org.pivot4j.PivotModel,
          * org.pivot4j.ui.command.UICommandParameters)
          */
         @Override
         public ResultSet execute(PivotModel model,
-                                 UICommandParameters parameters) {
+                UICommandParameters parameters) {
             int[] array = parameters.getCellCoordinate();
             List<Integer> coords = Arrays.asList(ArrayUtils.toObject(array));
 

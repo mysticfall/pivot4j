@@ -12,8 +12,8 @@
 			http://www.olap4j.org/
 		-->
 		<datasource>
-			<name>FoodMart Mondrian</name>
-			<description>FoodMart sample data source.</description>
+			<name>Giex</name>
+			<description>Giex data source.</description>
 
 			<connection-info>
 				<url>jdbc:mondrian:</url>
@@ -35,10 +35,51 @@
 					You can also use '${FS}' to denote the OS specific file separator character.
 				-->
 				<properties>
+                                    <!--
 					<property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
 					<property name="Jdbc">jdbc:derby:${webRoot}${FS}foodmart</property>
 					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
 					<property name="JdbcUser">sa</property>
+                                        
+                                        <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
+                                        <property name="Jdbc">jdbc:mysql://localhost:3306/giex?useSSL=false</property>
+                                        <property name="JdbcDrivers">com.mysql.jdbc.Driver</property>
+                                        <property name="JdbcUser">root</property>
+                                        <property name="JdbcPassword">root</property>
+              
+                                        <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
+                                        <property name="Jdbc">jdbc:postgresql://10.0.0.21:5432/giexonline</property>
+                                        <property name="JdbcDrivers">org.postgresql.Driver</property>
+                                        <property name="JdbcUser">postgres</property>
+                                        <property name="JdbcPassword">postgres</property>
+
+                                        <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
+                                       
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubos.xml</property>
+                                        <property name="Jdbc">jdbc:postgresql://10.10.40.27:5432/giex?currentSchema=giexanalise</property>
+                                        <property name="JdbcDrivers">org.postgresql.Driver</property>
+                                        <property name="JdbcUser">giex</property>
+                                        <property name="JdbcPassword">NGw1J2G6</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>
+                      
+                                        <property name="Catalog">file:${webRoot}${FS}FoodMart_1.xml</property>
+					<property name="Jdbc">jdbc:derby:${webRoot}${FS}foodmart</property>
+					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
+					<property name="JdbcUser">sa</property>
+                                        
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubos.xml</property>
+                                        <property name="Jdbc">jdbc:oracle:thin:@giex-scan.intra.local:1521/TAFGIEXPROD</property>
+                                        <property name="JdbcDrivers">oracle.jdbc.OracleDriver</property>
+                                        <property name="JdbcUser">giex_reportserver</property>
+                                        <property name="JdbcPassword">?806y*report</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>                                         
+                                        -->
+
+                                        <property name="Catalog">file:${webRoot}${FS}FoodMart_1.xml</property>
+					<property name="Jdbc">jdbc:derby:${webRoot}${FS}foodmart</property>
+					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
+					<property name="JdbcUser">sa</property>
+                                        
 				</properties>
 			</connection-info>
 		</datasource>
@@ -70,62 +111,63 @@
 			You can download more themes from the below site and install them 
 			under the application library directory (i.e. '/WEB-INF/lib') :
 
-			http://www.primefaces.org/themes.html
-		-->
-		<ui-theme>
-			<default>redmond</default>
-			<available-themes>
-				<theme name="aristo" description="Aristo" />
-				<theme name="bootstrap" description="Bootstrap" />
-				<theme name="black-tie" description="Black-Tie" />
-				<theme name="cruze" description="Cruze" />
-				<theme name="humanity" description="Humanity" />
-				<theme name="redmond" description="Redmond" />
-				<theme name="rocket" description="Rocket" />
-			</available-themes>
-		</ui-theme>
+                http://www.primefaces.org/themes.html
+        -->
+        <ui-theme>
+            <default>admin</default>
+            <available-themes>
+                <theme name="aristo" description="Aristo" />
+                <theme name="bootstrap" description="Bootstrap" />
+                <theme name="black-tie" description="Black-Tie" />
+                <theme name="cruze" description="Cruze" />
+                <theme name="humanity" description="Humanity" />
+                <theme name="redmond" description="Redmond" />
+                <theme name="rocket" description="Rocket" />
+                <theme name="admin" description="Admin" />
+            </available-themes>
+        </ui-theme>
 
-		<!--
-			For a complete list of available editor themes, please visit : 
-			http://codemirror.net/demo/theme.html
-		-->
-		<editor-theme>eclipse</editor-theme>
-	</appearances>
+        <!--
+                For a complete list of available editor themes, please visit : 
+                http://codemirror.net/demo/theme.html
+        -->
+        <editor-theme>eclipse</editor-theme>
+    </appearances>
 
-	<model>
-		<nonEmpty default="false" />
-	</model>
+    <model>
+        <nonEmpty default="false" />
+    </model>
 
-	<!-- 
-		Default file extension. When blank, files will be saved without 
-		an extension.
-	-->
-	<repository>
-		<extension>pivot4j</extension>
-	</repository>
+    <!-- 
+            Default file extension. When blank, files will be saved without 
+            an extension.
+    -->
+    <repository>
+        <extension>giex</extension>
+    </repository>
 
-	<render>
-		<!-- Show all non-internal member properties -->
-		<!-- 
-		<propertyCollector type="non-internal" />
-		-->
-	</render>
+    <render>
+        <!-- Show all non-internal member properties -->
+        <propertyCollector type="non-internal" />
+    </render>
 
-	<!-- Miscellaneous settings used for integration with other systems. -->
-	<web>
-		<!-- URI prefix for web resources like images or stylesheets. -->
-		<resource-prefix />
+    <!-- Miscellaneous settings used for integration with other systems. -->
+    <web>
+        <!-- URI prefix for web resources like images or stylesheets. -->
+        <resource-prefix />
 
-		<!-- Name of a session attribute variable for user locale. -->
-		<locale-attribute>locale</locale-attribute>
+        <!-- Name of a session attribute variable for user locale. -->
+        <locale-attribute>locale</locale-attribute>
 
-		<!-- Name of a request parameter for view id. -->
-		<view-parameter>viewId</view-parameter>
+        <!-- Name of a request parameter for view id. -->
+        <view-parameter>viewId</view-parameter>
 
-		<!-- Name of a request parameter for file id. -->
-		<file-parameter>fileId</file-parameter>
+        <!-- Name of a request parameter for file id. -->
+        <file-parameter>fileId</file-parameter>
 
-		<!-- Name of a request parameter for file path. -->
-		<path-parameter>path</path-parameter>
-	</web>
+        <!-- Name of a request parameter for file path. -->
+        <path-parameter>path</path-parameter>
+        
+        <credor-parameter>credor</credor-parameter>
+    </web>
 </config>
