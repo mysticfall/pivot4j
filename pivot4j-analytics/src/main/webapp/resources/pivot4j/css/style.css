@@ -557,7 +557,7 @@ span.ui-button-icon-only {
 }
 
 .drillthrough .ui-tree {
-    width: auto;
+    width: auto !important;
     border: none;
 }
 
@@ -809,16 +809,17 @@ div.ui-selectonemenu, div.ui-fluid div.ui-selectonemenu, div.ui-selectcheckboxme
     top: -50% !important;
 }
 
-button.ui-button {
-    vertical-align: inherit !important;
-}
-
 body .ui-picklist div.ui-picklist-buttons-cell button, body .ui-picklist.ui-picklist-responsive div.ui-picklist-buttons-cell button {
     background-color: transparent;
     border: none;
     width: 32px;
     height: 32px;
 }
+/*div.ui-chkbox span.ui-chkbox-icon {
+    background-image: none !important;
+    background: #3c8dbc !important;
+    display: inline;
+}*/
 
 /*button.ui-button{
     vertical-align: initial !important;
