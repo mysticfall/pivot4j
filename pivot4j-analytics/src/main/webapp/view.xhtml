@@ -506,7 +506,7 @@
                                  globalOnly="true" />
                     </h:form>
                 </pe:layoutPane>
-                <!--<p:panel rendered="#{viewHandler.enableMdx}">-->
+                <p:panel rendered="#{viewHandler.enableMdx}">
                     <pe:layoutPane id="mdx-editor-pane" position="south"
                                    rendered="#{viewHandler.editable}">
                         <f:facet name="header">
@@ -557,7 +557,7 @@
                             <p:growl id="editor-growl" showDetail="true" sticky="true" />
                         </h:form>
                     </pe:layoutPane>
-                <!--</p:panel>-->
+                </p:panel>
             </pe:layoutPane>
 
             <p:ajax event="open" listener="#{viewHandler.onPanelOpened}"

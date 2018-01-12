@@ -102,16 +102,16 @@
                                              onclick="getActiveWindow().$('table.pivot-grid:first').jqprint();"
                                              disabled="#{!workbenchHandler.viewValid}" />
                         </f:facet>
-                        <f:facet name="right" rendered="true">
+                        <f:facet name="right" rendered="false">
                             <p:themeSwitcher id="theme-switcher"
-                                             value="#{workbenchHandler.theme}" widgetVar="themeSwitcher" rendered="true">
+                                             value="#{workbenchHandler.theme}" widgetVar="themeSwitcher" rendered="false">
                                 <f:selectItem itemLabel="#{msg['label.theme.default']}"
                                               itemValue="" />
                                 <f:selectItems value="#{settings.availableThemes}" />
                                 <p:ajax oncomplete="onThemeChanged()" />
                             </p:themeSwitcher>
                             <p:separator />
-                            <p:menuButton value="#{msg['toolbar.links']}" rendered="true">
+                            <p:menuButton value="#{msg['toolbar.links']}" rendered="false">
                                 <p:menuitem value="#{msg['toolbar.links.home']}"
                                             url="http://www.pivot4j.org" target="_blank" />
                                 <p:menuitem value="#{msg['toolbar.links.project']}"
@@ -120,10 +120,10 @@
                                             url="https://groups.google.com/forum/#!forum/pivot4j-list"
                                             target="_blank" />
                             </p:menuButton>
-                            <p:separator rendered="true"/>
+                            <p:separator rendered="false"/>
                             <p:commandButton value="#{msg['toolbar.about']}"
                                              title="#{msg['toolbar.about.tooltip']}" type="button"
-                                             icon="ui-icon-info" onclick="PF('about').show(); return false;" rendered="true"/>
+                                             icon="ui-icon-info" onclick="PF('about').show(); return false;" rendered="false"/>
                         </f:facet>
                     </p:toolbar>
                 </h:form>
