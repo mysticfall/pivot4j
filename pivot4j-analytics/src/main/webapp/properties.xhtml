@@ -1,108 +1,108 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
-	<h:form id="properties-form">
-		<p:dialog id="properties-config" header="#{msg['title.properties']}"
-			widgetVar="propertiesConfig" modal="true" width="680" height="360"
-			closable="true" resizable="false" dynamic="true"
-			styleClass="properties-config" showEffect="fade" hideEffect="fade">
-			<p:layout id="layout" style="height: 100%;">
-				<p:layoutUnit position="west" resizable="true" size="180">
-					<p:panelMenu id="properties-menu"
-						binding="#{propertiesHandler.menu}" />
-				</p:layoutUnit>
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:form id="properties-form">
+        <p:dialog id="properties-config" header="#{msg['title.properties']}"
+                  widgetVar="propertiesConfig" modal="true" width="680" height="360"
+                  closable="true" resizable="false" dynamic="true"
+                  styleClass="properties-config" showEffect="fade" hideEffect="fade">
+            <p:layout id="layout" style="height: 100%;">
+                <p:layoutUnit position="west" resizable="true" size="180">
+                    <p:panelMenu id="properties-menu"
+                                 binding="#{propertiesHandler.menu}" />
+                </p:layoutUnit>
 
-				<p:layoutUnit position="center">
-					<h:panelGroup id="content" layout="block">
-						<h:panelGroup styleClass="info-panel" layout="block">
-							<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
-							<h:outputText value="#{msg['message.properties.select']}"
-								styleClass="message-warn"
-								rendered="#{propertiesHandler.descriptor == null}" />
-							<h:outputText value="#{propertiesHandler.description}"
-								styleClass="message-warn"
-								rendered="#{propertiesHandler.descriptor != null}" />
-						</h:panelGroup>
+                <p:layoutUnit position="center">
+                    <h:panelGroup id="content" layout="block">
+                        <h:panelGroup styleClass="info-panel" layout="block">
+                            <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
+                            <h:outputText value="#{msg['message.properties.select']}"
+                                          styleClass="message-warn"
+                                          rendered="#{propertiesHandler.descriptor == null}" />
+                            <h:outputText value="#{propertiesHandler.description}"
+                                          styleClass="message-warn"
+                                          rendered="#{propertiesHandler.descriptor != null}" />
+                        </h:panelGroup>
 
-						<h:panelGrid id="editor-panel" styleClass="editor-panel"
-							columns="2" columnClasses="field-name,field-input"
-							rendered="#{propertiesHandler.descriptor != null}">
-							<p:outputLabel for="use-expression"
-								value="#{msg['label.properties.useExpression']}" />
-							<p:selectBooleanCheckbox id="use-expression"
-								value="#{propertiesHandler.useExpression}"
-								label="#{msg['label.properties.useExpression']}">
-								<p:ajax event="change"
-									listener="#{propertiesHandler.onEditorModeChange}"
-									update="editor-panel" process="editor-panel"
-									oncomplete="applyThemeToCMEditor('.properties-config .CodeMirror')" />
-							</p:selectBooleanCheckbox>
+                        <h:panelGrid id="editor-panel" styleClass="editor-panel"
+                                     columns="2" columnClasses="field-name,field-input"
+                                     rendered="#{propertiesHandler.descriptor != null}">
+                            <p:outputLabel for="use-expression"
+                                           value="#{msg['label.properties.useExpression']}" />
+                            <p:selectBooleanCheckbox id="use-expression"
+                                                     value="#{propertiesHandler.useExpression}"
+                                                     label="#{msg['label.properties.useExpression']}">
+                                <p:ajax event="change"
+                                        listener="#{propertiesHandler.onEditorModeChange}"
+                                        update="editor-panel" process="editor-panel"
+                                        oncomplete="applyThemeToCMEditor('.properties-config .CodeMirror')" />
+                            </p:selectBooleanCheckbox>
 
-							<p:outputLabel value="#{msg['label.properties.value']}"
-								styleClass="#{propertiesHandler.useExpression?'ui-force-hidden':''}" />
-							<h:panelGroup id="value-editor"
-								binding="#{propertiesHandler.editorPanel}"
-								styleClass="#{propertiesHandler.useExpression?'ui-force-hidden':''}" />
+                            <p:outputLabel value="#{msg['label.properties.value']}"
+                                           styleClass="#{propertiesHandler.useExpression?'ui-force-hidden':''}" />
+                            <h:panelGroup id="value-editor"
+                                          binding="#{propertiesHandler.editorPanel}"
+                                          styleClass="#{propertiesHandler.useExpression?'ui-force-hidden':''}" />
 
-							<p:outputLabel value="#{msg['label.properties.expression']}"
-								styleClass="#{propertiesHandler.useExpression?'':'ui-force-hidden'}" />
-							<p:outputPanel
-								styleClass="#{propertiesHandler.useExpression?'':'ui-force-hidden'}">
-								<pe:codeMirror id="expr-editor" mode="text/x-freemarker"
-									value="#{propertiesHandler.expression}" lineNumbers="true"
-									lineWrapping="true" matchBrackets="true"
-									theme="#{settings.editorTheme}"
-									extraKeys="{'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.pivot4jHint);}}">
-									<p:ajax event="blur"
-										listener="#{propertiesHandler.onPropertyChange}"
-										update="button-bar" />
-								</pe:codeMirror>
-							</p:outputPanel>
+                            <p:outputLabel value="#{msg['label.properties.expression']}"
+                                           styleClass="#{propertiesHandler.useExpression?'':'ui-force-hidden'}" />
+                            <p:outputPanel
+                                styleClass="#{propertiesHandler.useExpression?'':'ui-force-hidden'}">
+                                <pe:codeMirror id="expr-editor" mode="text/x-freemarker"
+                                               value="#{propertiesHandler.expression}" lineNumbers="true"
+                                               lineWrapping="true" matchBrackets="true"
+                                               theme="#{settings.editorTheme}"
+                                               extraKeys="{'Ctrl-Space': function(cm) {CodeMirror.simpleHint(cm, CodeMirror.pivot4jHint);}}">
+                                    <p:ajax event="blur"
+                                            listener="#{propertiesHandler.onPropertyChange}"
+                                            update="button-bar" />
+                                </pe:codeMirror>
+                            </p:outputPanel>
 
-							<f:facet name="footer">
-								<h:panelGroup laayout="block" styleClass="usage-info"
-									rendered="#{propertiesHandler.useExpression}">
-									<ul>
-										<li><h:outputText
-												value="#{msg['message.properties.expr.help.0']}" /></li>
-										<li><h:outputFormat
-												value="#{msg['message.properties.expr.help.1']}"
-												escape="false">
-												<f:param
-													value="&lt;a href='http://freemarker.sourceforge.net/docs/dgui_template_exp.html' target='_blank'&gt;" />
-												<f:param value="&lt;/a&gt;" />
-											</h:outputFormat></li>
-									</ul>
-								</h:panelGroup>
-							</f:facet>
-						</h:panelGrid>
-					</h:panelGroup>
-				</p:layoutUnit>
-			</p:layout>
-			<f:facet name="footer">
-				<h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
-					layout="block">
-					<p:messages showDetail="true" closable="true" />
+                            <f:facet name="footer">
+                                <h:panelGroup layout="block" styleClass="usage-info"
+                                              rendered="#{propertiesHandler.useExpression}">
+                                    <ul>
+                                        <li><h:outputText
+                                                value="#{msg['message.properties.expr.help.0']}" /></li>
+                                        <li><h:outputFormat
+                                                value="#{msg['message.properties.expr.help.1']}"
+                                                escape="false">
+                                                <f:param
+                                                    value="&lt;a href='http://freemarker.sourceforge.net/docs/dgui_template_exp.html' target='_blank'&gt;" />
+                                                <f:param value="&lt;/a&gt;" />
+                                            </h:outputFormat></li>
+                                    </ul>
+                                </h:panelGroup>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </p:layoutUnit>
+            </p:layout>
+            <f:facet name="footer">
+                <h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
+                              layout="block">
+                    <p:messages showDetail="true" closable="true" />
 
-					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
-						action="#{propertiesHandler.apply}" update=":grid-form,:growl"
-						onsuccess="onViewChanged(); PF('propertiesConfig').hide();"
-						disabled="#{!propertiesHandler.dirty}" />
-					<p:commandButton value="#{msg['button.apply']}"
-						icon="ui-icon-check" action="#{propertiesHandler.apply}"
-						update="button-bar,:grid-form" oncomplete="onViewChanged()"
-						disabled="#{!propertiesHandler.dirty}" />
-					<p:commandButton value="#{msg['button.reset']}"
-						icon="ui-icon-arrowreturn-1-w" action="#{propertiesHandler.reset}"
-						update="content,button-bar" disabled="#{!propertiesHandler.set}" />
-					<p:commandButton value="#{msg['button.close']}"
-						icon="ui-icon-close"
-						onclick="PF('propertiesConfig').hide(); return false;" />
-				</h:panelGroup>
-			</f:facet>
-		</p:dialog>
-	</h:form>
+                    <p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
+                                     action="#{propertiesHandler.apply}" update=":grid-form,:growl"
+                                     onsuccess="onViewChanged(); PF('propertiesConfig').hide();"
+                                     disabled="#{!propertiesHandler.dirty}" />
+                    <p:commandButton value="#{msg['button.apply']}"
+                                     icon="ui-icon-check" action="#{propertiesHandler.apply}"
+                                     update="button-bar,:grid-form" oncomplete="onViewChanged()"
+                                     disabled="#{!propertiesHandler.dirty}" />
+                    <p:commandButton value="#{msg['button.reset']}"
+                                     icon="ui-icon-arrowreturn-1-w" action="#{propertiesHandler.reset}"
+                                     update="content,button-bar" disabled="#{!propertiesHandler.set}" />
+                    <p:commandButton value="#{msg['button.close']}"
+                                     icon="ui-icon-close"
+                                     onclick="PF('propertiesConfig').hide(); return false;" />
+                </h:panelGroup>
+            </f:facet>
+        </p:dialog>
+    </h:form>
 </ui:composition>

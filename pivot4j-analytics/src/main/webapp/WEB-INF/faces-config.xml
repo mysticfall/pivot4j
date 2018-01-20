@@ -1,41 +1,44 @@
 <?xml version="1.0"?>
 <faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
-	<application>
-		<resource-bundle>
-			<base-name>org.pivot4j.analytics.i18n.messages</base-name>
-			<var>msg</var>
-		</resource-bundle>
-		<message-bundle>org.pivot4j.analytics.i18n.messages</message-bundle>
-		<locale-config>
-			<default-locale>en</default-locale>
-			<supported-locale>en</supported-locale>
-			<supported-locale>ko</supported-locale>
-			<supported-locale>pt</supported-locale>
-			<supported-locale>pt_BR</supported-locale>
-			<supported-locale>fr</supported-locale>
-			<supported-locale>de</supported-locale>
-			<supported-locale>es</supported-locale>
-			<supported-locale>es_MX</supported-locale>
-			<supported-locale>hi</supported-locale>
-			<supported-locale>nl</supported-locale>
-			<supported-locale>it</supported-locale>
-			<supported-locale>ru</supported-locale>
-		</locale-config>
-	</application>
+              xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    <application>
+        <resource-bundle>
+            <base-name>org.pivot4j.analytics.i18n.messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        <message-bundle>org.pivot4j.analytics.i18n.messages</message-bundle>
+        <locale-config>
+            <default-locale>pt_BR</default-locale>
+            <supported-locale>en</supported-locale>
+            <supported-locale>ko</supported-locale>
+            <supported-locale>pt</supported-locale>
+            <supported-locale>pt_BR</supported-locale>
+            <supported-locale>fr</supported-locale>
+            <supported-locale>de</supported-locale>
+            <supported-locale>es</supported-locale>
+            <supported-locale>es_MX</supported-locale>
+            <supported-locale>hi</supported-locale>
+            <supported-locale>nl</supported-locale>
+            <supported-locale>it</supported-locale>
+            <supported-locale>ru</supported-locale>
+        </locale-config>
+    </application>
 
-	<factory>
-		<exception-handler-factory>
-			org.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
-	</factory>
+    <factory>
+        <exception-handler-factory>org.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
+    </factory>
 
-	<lifecycle>
-		<phase-listener>org.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
-	</lifecycle>
-
-	<component>
-		<component-type>org.primefaces.component.Tree</component-type>
-		<component-class>org.pivot4j.analytics.component.tree.Tree</component-class>
-	</component>
+    <lifecycle>
+        <phase-listener>org.pivot4j.analytics.listener.LocaleInitializer</phase-listener>
+    </lifecycle>
+    
+    <application>
+        <resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
+    </application>
+    
+    <component>
+        <component-type>org.primefaces.component.Tree</component-type>
+        <component-class>org.pivot4j.analytics.component.tree.Tree</component-class>
+    </component>
 </faces-config>

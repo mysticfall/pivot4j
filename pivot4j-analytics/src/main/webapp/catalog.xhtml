@@ -1,96 +1,95 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
-<h:head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>#{msg['title']}</title>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>#{msg['title']}</title>
 
-	<c:set var="contextPath"
-		value="#{facesContext.externalContext.requestContextPath}" />
+        <c:set var="contextPath"
+               value="#{facesContext.externalContext.requestContextPath}" />
 
-	<link rel="shortcut icon"
-		href="#{resource['pivot4j:images/logo16.png']}" />
+        <link rel="shortcut icon"
+              href="#{resource['pivot4j:images/logo16.png']}" />
 
-	<h:outputStylesheet library="pivot4j" name="css/style.css" />
-	<h:outputScript library="pivot4j" name="js/pivot4j.js" />
+        <h:outputStylesheet library="pivot4j" name="css/style.css" />
+        <h:outputScript library="pivot4j" name="js/pivot4j.js" />
 
-	<script type="text/javascript">
-		function initLayout() {
-			var dialog = PF("catalogChooser");
-			dialog.initPosition();
-		}
-	</script>
-</h:head>
+        <script type="text/javascript">
+            function initLayout() {
+                var dialog = PF("catalogChooser");
+                dialog.initPosition();
+            }
+        </script>
+    </h:head>
 
-<f:metadata>
-	<f:viewParam name="#{settings.viewParameterName}"
-		value="#{catalogChooser.viewId}" />
-	<f:viewParam name="editable" value="#{catalogChooser.editable}" />
-	<!-- f:event type="preRenderView" listener="#{catalogChooser.checkState}" /-->
-</f:metadata>
+    <f:metadata>
+        <f:viewParam name="#{settings.viewParameterName}"
+                     value="#{catalogChooser.viewId}" />
+        <f:viewParam name="editable" value="#{catalogChooser.editable}" />
+        <!-- f:event type="preRenderView" listener="#{catalogChooser.checkState}" /-->
+    </f:metadata>
 
-<h:body id="body">
-	<h:form id="catalog-form">
-		<p:dialog id="catalog-chooser"
-			header="#{msg['title.catalog.chooser']}" modal="true" width="390"
-			height="120" visible="true" rendered="#{catalogChooser.newReport}"
-			closable="false" resizable="false" widgetVar="catalogChooser"
-			styleClass="catalog-chooser">
-			<h:panelGrid columns="2" headerClass="info-panel"
-				columnClasses="field-name,field-input">
-				<f:facet name="header">
-					<h:panelGroup layout="block">
-						<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
-						<h:outputText value="#{msg['message.catalog.chooser']}" />
-					</h:panelGroup>
-				</f:facet>
+    <h:body id="body">
+        <h:form id="catalog-form">
+            <p:dialog id="catalog-chooser"
+                      header="#{msg['title.catalog.chooser']}" modal="true" width="390"
+                      height="120" visible="true" rendered="#{catalogChooser.newReport}"
+                      closable="false" resizable="false" widgetVar="catalogChooser"
+                      styleClass="catalog-chooser">
+                <h:panelGrid columns="2" headerClass="info-panel"
+                             columnClasses="field-name,field-input">
+                    <f:facet name="header">
+                        <h:panelGroup layout="block">
+                            <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
+                            <h:outputText value="#{msg['message.catalog.chooser']}" />
+                        </h:panelGroup>
+                    </f:facet>
 
-				<h:outputLabel value="#{msg['label.catalog']}" for="catalog-list" />
-				<p:selectOneMenu id="catalog-list"
-					value="#{catalogChooser.catalogName}">
-					<f:selectItems value="#{catalogChooser.catalogs}" var="catalog"
-						itemLabel="#{catalog.itemLabel}" itemValue="#{catalog.itemValue}" />
-					<p:ajax event="change" update="catalog-chooser,:growl"
-						listener="#{catalogChooser.onCatalogChanged}" />
-				</p:selectOneMenu>
+                    <h:outputLabel value="#{msg['label.catalog']}" for="catalog-list" />
+                    <p:selectOneMenu id="catalog-list"
+                                     value="#{catalogChooser.catalogName}">
+                        <f:selectItems value="#{catalogChooser.catalogs}" var="catalog"
+                                       itemLabel="#{catalog.itemLabel}" itemValue="#{catalog.itemValue}" />
+                        <p:ajax event="change" update="catalog-chooser,:growl"
+                                listener="#{catalogChooser.onCatalogChanged}" />
+                    </p:selectOneMenu>
 
-				<h:outputLabel value="#{msg['label.cube']}" for="cube-list" />
-				<p:selectOneMenu id="cube-list" value="#{catalogChooser.cubeName}">
-					<f:selectItems value="#{catalogChooser.cubes}" var="cube"
-						itemLabel="#{cube.itemLabel}" itemValue="#{cube.itemValue}" />
-					<p:ajax event="change" update="btn-ok,:growl" />
-				</p:selectOneMenu>
-			</h:panelGrid>
+                    <h:outputLabel value="#{msg['label.cube']}" for="cube-list" />
+                    <p:selectOneMenu id="cube-list" value="#{catalogChooser.cubeName}">
+                        <f:selectItems value="#{catalogChooser.cubes}" var="cube"
+                                       itemLabel="#{cube.itemLabel}" itemValue="#{cube.itemValue}" />
+                        <p:ajax event="change" update="btn-ok,:growl" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
 
-			<f:facet name="footer">
-				<h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
-					layout="block">
-					<p:messages showDetail="true" autoUpdate="true" closable="true" />
+                <f:facet name="footer">
+                    <h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
+                                  layout="block">
+                        <p:messages showDetail="true" autoUpdate="true" closable="true" />
 
-					<p:commandButton id="btn-ok" value="#{msg['button.ok']}"
-						icon="ui-icon-check" onstart="showWaitDialog();"
-						action="#{catalogChooser.proceed}" update=":growl"
-						disabled="#{empty catalogChooser.cubeName}" />
-				</h:panelGroup>
-			</f:facet>
-		</p:dialog>
-	</h:form>
+                        <p:commandButton id="btn-ok" value="#{msg['button.ok']}"
+                                         icon="ui-icon-check" onstart="showWaitDialog();"
+                                         action="#{catalogChooser.proceed}" update=":growl"
+                                         disabled="#{empty catalogChooser.cubeName}" />
+                    </h:panelGroup>
+                </f:facet>
+            </p:dialog>
+        </h:form>
 
-	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
-		oncomplete="hideWaitDialog();" />
+        <p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
+                      oncomplete="hideWaitDialog();" />
 
-	<pe:blockUI widgetVar="waitDialog" targetSelector=".ui-dialog">
-		<h:panelGrid columns="2">
-			<p:graphicImage library="pivot4j" name="images/loading.gif" />
-			<h:outputText value="#{msg['message.loading']}" />
-		</h:panelGrid>
-	</pe:blockUI>
+        <pe:blockUI widgetVar="waitDialog">
+            <h:panelGrid columns="2">
+                <p:graphicImage library="pivot4j" name="images/loading.gif" />
+                <h:outputText value="#{msg['message.loading']}" />
+            </h:panelGrid>
+        </pe:blockUI>
 
-	<p:growl id="growl" showDetail="true" sticky="true" />
-</h:body>
+        <p:growl id="growl" showDetail="true" sticky="true" />
+    </h:body>
 </html>
