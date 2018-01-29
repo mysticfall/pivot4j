@@ -16,36 +16,36 @@ import org.apache.commons.lang.StringUtils;
 
 public class CssWriter {
 
-	private PrintWriter writer;
+    private PrintWriter writer;
 
-	/**
-	 * @param writer
-	 */
-	public CssWriter(Writer writer) {
-		if (writer == null) {
-			throw new NullArgumentException("writer");
-		}
+    /**
+     * @param writer
+     */
+    public CssWriter(Writer writer) {
+        if (writer == null) {
+            throw new NullArgumentException("writer");
+        }
 
-		this.writer = new PrintWriter(writer);
-	}
+        this.writer = new PrintWriter(writer);
+    }
 
-	/**
-	 * @return the writer
-	 */
-	public PrintWriter getWriter() {
-		return writer;
-	}
+    /**
+     * @return the writer
+     */
+    public PrintWriter getWriter() {
+        return writer;
+    }
 
-	/**
-	 * @param name
-	 * @param value
-	 */
-	public void writeStyle(String name, String value) {
-		if (StringUtils.isNotBlank(value)) {
-			writer.print(name);
-			writer.print(": ");
-			writer.print(value);
-			writer.print(";");
-		}
-	}
+    /**
+     * @param name
+     * @param value
+     */
+    public void writeStyle(String name, String value) {
+        if (StringUtils.isNotBlank(value)) {
+            writer.print(name);
+            writer.print(": ");
+            writer.print(value);
+            writer.print(";");
+        }
+    }
 }

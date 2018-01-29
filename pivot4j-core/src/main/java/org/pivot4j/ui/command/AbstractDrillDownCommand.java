@@ -15,26 +15,26 @@ import org.pivot4j.ui.PivotRenderer;
 import org.pivot4j.ui.RenderContext;
 
 public abstract class AbstractDrillDownCommand extends AbstractUICommand<Void>
-		implements DrillDownCommand {
+        implements DrillDownCommand {
 
-	/**
-	 * @param renderer
-	 */
-	public AbstractDrillDownCommand(PivotRenderer<?> renderer) {
-		super(renderer);
-	}
+    /**
+     * @param renderer
+     */
+    public AbstractDrillDownCommand(PivotRenderer<?> renderer) {
+        super(renderer);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#canExecute(org.pivot4j.ui
-	 *      .RenderContext)
-	 */
-	@Override
-	public boolean canExecute(RenderContext context) {
-		boolean enabled = getRenderer().getEnableDrillDown()
-				&& ObjectUtils.equals(getMode(context), getRenderer()
-						.getDrillDownMode()) && context.getAxis() != null
-				&& !AGG_VALUE.equals(context.getCellType());
+    /**
+     * @see org.pivot4j.ui.command.UICommand#canExecute(org.pivot4j.ui
+     * .RenderContext)
+     */
+    @Override
+    public boolean canExecute(RenderContext context) {
+        boolean enabled = getRenderer().getEnableDrillDown()
+                && ObjectUtils.equals(getMode(context), getRenderer()
+                        .getDrillDownMode()) && context.getAxis() != null
+                && !AGG_VALUE.equals(context.getCellType());
 
-		return enabled;
-	}
+        return enabled;
+    }
 }

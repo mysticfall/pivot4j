@@ -12,7 +12,7 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 
 public interface Configurable {
 
-	void saveSettings(HierarchicalConfiguration configuration);
+    void saveSettings(HierarchicalConfiguration configuration);
 
-	void restoreSettings(HierarchicalConfiguration configuration);
+    void restoreSettings(HierarchicalConfiguration configuration);
 }

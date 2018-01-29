@@ -19,87 +19,89 @@ import org.pivot4j.ui.RenderContext;
 
 public class DrillExpandMemberCommand extends AbstractDrillDownCommand {
 
-	public static final String NAME = "expandMember";
+    public static final String NAME = "expandMember";
 
-	/**
-	 * @param renderer
-	 */
-	public DrillExpandMemberCommand(PivotRenderer<?> renderer) {
-		super(renderer);
-	}
+    /**
+     * @param renderer
+     */
+    public DrillExpandMemberCommand(PivotRenderer<?> renderer) {
+        super(renderer);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#getName()
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.command.UICommand#getName()
+     */
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.AbstractUICommand#getMode(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public String getMode(RenderContext context) {
-		return MODE_MEMBER;
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.command.AbstractUICommand#getMode(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public String getMode(RenderContext context) {
+        return MODE_MEMBER;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#canExecute(org.pivot4j.ui
-	 *      .RenderContext)
-	 */
-	@Override
-	public boolean canExecute(RenderContext context) {
-		if (!super.canExecute(context)) {
-			return false;
-		}
+    /**
+     * @see org.pivot4j.ui.command.UICommand#canExecute(org.pivot4j.ui
+     * .RenderContext)
+     */
+    @Override
+    public boolean canExecute(RenderContext context) {
+        if (!super.canExecute(context)) {
+            return false;
+        }
 
-		PivotModel model = context.getModel();
+        PivotModel model = context.getModel();
 
-		DrillExpandMember transform = model
-				.getTransform(DrillExpandMember.class);
+        DrillExpandMember transform = model
+                .getTransform(DrillExpandMember.class);
 
-		Member member = context.getMember();
-		if (member == null || context.getProperty() != null) {
-			return false;
-		}
+        Member member = context.getMember();
+        if (member == null || context.getProperty() != null) {
+            return false;
+        }
 
-		return transform.canExpand(member);
-	}
+        return transform.canExpand(member);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#createParameters(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public UICommandParameters createParameters(RenderContext context) {
-		UICommandParameters parameters = new UICommandParameters();
-		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
-		parameters.setPositionOrdinal(context.getPosition().getOrdinal());
-		parameters.setMemberOrdinal(context.getPosition().getMembers()
-				.indexOf(context.getMember()));
+    /**
+     * @see
+     * org.pivot4j.ui.command.UICommand#createParameters(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public UICommandParameters createParameters(RenderContext context) {
+        UICommandParameters parameters = new UICommandParameters();
+        parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
+        parameters.setPositionOrdinal(context.getPosition().getOrdinal());
+        parameters.setMemberOrdinal(context.getPosition().getMembers()
+                .indexOf(context.getMember()));
 
-		return parameters;
-	}
+        return parameters;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
-	 *      org.pivot4j.ui.command.UICommandParameters)
-	 */
-	@Override
-	public Void execute(PivotModel model, UICommandParameters parameters) {
-		CellSet cellSet = model.getCellSet();
+    /**
+     * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+     * org.pivot4j.ui.command.UICommandParameters)
+     */
+    @Override
+    public Void execute(PivotModel model, UICommandParameters parameters) {
+        CellSet cellSet = model.getCellSet();
 
-		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
-		Position position = axis.getPositions().get(
-				parameters.getPositionOrdinal());
+        CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
+        Position position = axis.getPositions().get(
+                parameters.getPositionOrdinal());
 
-		Member member = position.getMembers()
-				.get(parameters.getMemberOrdinal());
+        Member member = position.getMembers()
+                .get(parameters.getMemberOrdinal());
 
-		DrillExpandMember transform = model
-				.getTransform(DrillExpandMember.class);
-		transform.expand(member);
+        DrillExpandMember transform = model
+                .getTransform(DrillExpandMember.class);
+        transform.expand(member);
 
-		return null;
-	}
+        return null;
+    }
 }

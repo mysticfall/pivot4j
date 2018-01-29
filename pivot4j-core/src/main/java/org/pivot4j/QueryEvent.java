@@ -18,94 +18,91 @@ import org.olap4j.CellSet;
  */
 public class QueryEvent extends EventObject {
 
-	private static final long serialVersionUID = -900118951700557408L;
+    private static final long serialVersionUID = -900118951700557408L;
 
-	private Date start;
+    private Date start;
 
-	private long duration;
+    private long duration;
 
-	private String mdx;
-	
-	private transient CellSet cellSet;
+    private String mdx;
 
-	/**
-	 * Constructor for QueryEvent.
-	 * 
-	 * @param source
-	 * @param start
-	 * @param duration
-	 * @param mdx
-	 * @param cellSet
-	 */
-	public QueryEvent(PivotModel source, Date start, long duration, String mdx, CellSet cellSet) {
-		super(source);
+    private transient CellSet cellSet;
 
-		this.start = start;
-		this.duration = duration;
-		this.mdx = mdx;
-		this.cellSet = cellSet;
-	}
+    /**
+     * Constructor for QueryEvent.
+     *
+     * @param source
+     * @param start
+     * @param duration
+     * @param mdx
+     * @param cellSet
+     */
+    public QueryEvent(PivotModel source, Date start, long duration, String mdx, CellSet cellSet) {
+        super(source);
 
-	public PivotModel getModel() {
-		return (PivotModel) getSource();
-	}
+        this.start = start;
+        this.duration = duration;
+        this.mdx = mdx;
+        this.cellSet = cellSet;
+    }
 
-	/**
-	 * @return the start
-	 */
-	public Date getStart() {
-		return start;
-	}
+    public PivotModel getModel() {
+        return (PivotModel) getSource();
+    }
 
-	/**
-	 * @param start
-	 *            the start to set
-	 */
-	public void setStart(Date start) {
-		this.start = start;
-	}
+    /**
+     * @return the start
+     */
+    public Date getStart() {
+        return start;
+    }
 
-	/**
-	 * @return the duration
-	 */
-	public long getDuration() {
-		return duration;
-	}
+    /**
+     * @param start the start to set
+     */
+    public void setStart(Date start) {
+        this.start = start;
+    }
 
-	/**
-	 * @param duration
-	 *            the duration to set
-	 */
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
+    /**
+     * @return the duration
+     */
+    public long getDuration() {
+        return duration;
+    }
 
-	/**
-	 * @return the mdx
-	 */
-	public String getMdx() {
-		return mdx;
-	}
+    /**
+     * @param duration the duration to set
+     */
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
 
-	/**
-	 * @param mdx
-	 *            the mdx to set
-	 */
-	public void setMdx(String mdx) {
-		this.mdx = mdx;
-	}
+    /**
+     * @return the mdx
+     */
+    public String getMdx() {
+        return mdx;
+    }
 
-	/**
-	 * @return the cellSet
-	 */
-	public CellSet getCellSet() {
-		return cellSet;
-	}
+    /**
+     * @param mdx the mdx to set
+     */
+    public void setMdx(String mdx) {
+        this.mdx = mdx;
+    }
 
-	/**
-	 * @param cellSet the cellSet to set
-	 */
-	public void setCellSet(CellSet cellSet) {
-		this.cellSet = cellSet;
-	}
+    /**
+     * @return the cellSet
+     */
+    public CellSet getCellSet() {
+        return cellSet;
+    }
+
+    /**
+     * @param cellSet the cellSet to set
+     */
+    public void setCellSet(CellSet cellSet) {
+        this.cellSet = cellSet;
+    }
 }

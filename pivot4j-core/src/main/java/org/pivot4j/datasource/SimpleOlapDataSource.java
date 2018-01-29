@@ -17,63 +17,61 @@ import org.olap4j.OlapConnection;
 
 public class SimpleOlapDataSource extends AbstractOlapDataSource {
 
-	private String connectionString;
+    private String connectionString;
 
-	private Properties connectionProperties;
+    private Properties connectionProperties;
 
-	/**
-	 * @return the connectionString
-	 */
-	public String getConnectionString() {
-		return connectionString;
-	}
+    /**
+     * @return the connectionString
+     */
+    public String getConnectionString() {
+        return connectionString;
+    }
 
-	/**
-	 * @param connectionString
-	 *            the connectionString to set
-	 */
-	public void setConnectionString(String connectionString) {
-		this.connectionString = connectionString;
-	}
+    /**
+     * @param connectionString the connectionString to set
+     */
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
+    }
 
-	/**
-	 * @return the connectionProperties
-	 */
-	public Properties getConnectionProperties() {
-		return connectionProperties;
-	}
+    /**
+     * @return the connectionProperties
+     */
+    public Properties getConnectionProperties() {
+        return connectionProperties;
+    }
 
-	/**
-	 * @param connectionProperties
-	 *            the connectionProperties to set
-	 */
-	public void setConnectionProperties(Properties connectionProperties) {
-		this.connectionProperties = connectionProperties;
-	}
+    /**
+     * @param connectionProperties the connectionProperties to set
+     */
+    public void setConnectionProperties(Properties connectionProperties) {
+        this.connectionProperties = connectionProperties;
+    }
 
-	/**
-	 * @throws SQLException
-	 * @see org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java
-	 *      .lang.String, java.lang.String)
-	 */
-	@Override
-	protected OlapConnection createConnection(String userName, String password)
-			throws SQLException {
-		Properties properties = getConnectionProperties();
-		if (properties == null) {
-			properties = new Properties();
-		}
+    /**
+     * @throws SQLException
+     * @see org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java
+     * .lang.String, java.lang.String)
+     */
+    @Override
+    protected OlapConnection createConnection(String userName, String password)
+            throws SQLException {
+        Properties properties = getConnectionProperties();
+        if (properties == null) {
+            properties = new Properties();
+        }
 
-		if (userName != null) {
-			properties.put("user", userName);
-		}
+        if (userName != null) {
+            properties.put("user", userName);
+        }
 
-		if (password != null) {
-			properties.put("password", password);
-		}
+        if (password != null) {
+            properties.put("password", password);
+        }
 
-		Connection connection = DriverManager.getConnection(
-				getConnectionString(), properties);
-		return connection.unwrap(OlapConnection.class);
-	}
+        Connection connection = DriverManager.getConnection(
+                getConnectionString(), properties);
+        return connection.unwrap(OlapConnection.class);
+    }
 }

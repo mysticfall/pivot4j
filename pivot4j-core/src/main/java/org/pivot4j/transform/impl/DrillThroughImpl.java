@@ -105,7 +105,7 @@ public class DrillThroughImpl extends AbstractTransform implements DrillThrough 
      * @return
      */
     private ServletRequest session;
-    
+
     protected ResultSet performDrillThroughMdx(Cell cell,
             List<MetadataElement> selection, int maximumRows) {
         PivotModel model = getModel();

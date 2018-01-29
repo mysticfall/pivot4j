@@ -24,50 +24,50 @@ import org.pivot4j.ui.table.TableRenderer;
 
 public class FopExporterIT extends AbstractIntegrationTestCase {
 
-	private String testQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-			+ "Hierarchize(Union(Union(CrossJoin({[Time].[1997]}, {[Promotion Media].[All Media]}), "
-			+ "CrossJoin({[Time].[1997]}, [Promotion Media].[All Media].Children)), "
-			+ "{CrossJoin({[Time].[1998]}, [Promotion Media].[All Media].Children)})) ON ROWS FROM [Sales]";
+    private String testQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+            + "Hierarchize(Union(Union(CrossJoin({[Time].[1997]}, {[Promotion Media].[All Media]}), "
+            + "CrossJoin({[Time].[1997]}, [Promotion Media].[All Media].Children)), "
+            + "{CrossJoin({[Time].[1998]}, [Promotion Media].[All Media].Children)})) ON ROWS FROM [Sales]";
 
-	private boolean deleteTestFile = true;
+    private boolean deleteTestFile = true;
 
-	/**
-	 * @see org.pivot4j.AbstractIntegrationTestCase#setUp()
-	 */
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
+    /**
+     * @see org.pivot4j.AbstractIntegrationTestCase#setUp()
+     */
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
 
-		PivotModel model = getPivotModel();
-		model.setMdx(testQuery);
-		model.initialize();
-	}
+        PivotModel model = getPivotModel();
+        model.setMdx(testQuery);
+        model.initialize();
+    }
 
-	@Test
-	public void testExportPdf() throws IOException {
-		OutputStream out = null;
+    @Test
+    public void testExportPdf() throws IOException {
+        OutputStream out = null;
 
-		File file = File.createTempFile("pivot4j-", ".pdf");
+        File file = File.createTempFile("pivot4j-", ".pdf");
 
-		if (deleteTestFile) {
-			file.deleteOnExit();
-		}
+        if (deleteTestFile) {
+            file.deleteOnExit();
+        }
 
-		try {
-			out = new FileOutputStream(file);
+        try {
+            out = new FileOutputStream(file);
 
-			TableRenderer renderer = new TableRenderer();
-			renderer.setShowParentMembers(true);
-			renderer.setShowDimensionTitle(true);
-			renderer.setHideSpans(false);
+            TableRenderer renderer = new TableRenderer();
+            renderer.setShowParentMembers(true);
+            renderer.setShowDimensionTitle(true);
+            renderer.setHideSpans(false);
 
-			FopExporter exporter = new FopExporter(out);
-			exporter.setOrientation(OrientationRequested.LANDSCAPE);
+            FopExporter exporter = new FopExporter(out);
+            exporter.setOrientation(OrientationRequested.LANDSCAPE);
 
-			renderer.render(getPivotModel(), exporter);
-		} finally {
-			out.flush();
-			IOUtils.closeQuietly(out);
-		}
-	}
+            renderer.render(getPivotModel(), exporter);
+        } finally {
+            out.flush();
+            IOUtils.closeQuietly(out);
+        }
+    }
 }

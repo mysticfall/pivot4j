@@ -10,16 +10,28 @@ package org.pivot4j.sort;
 
 public enum SortCriteria {
 
-	/** sort hierarchically ascending */
-	ASC,
-	/** sort hierarchically descending */
-	DESC,
-	/** sort ascending breaking hierarchy */
-	BASC,
-	/** sort descending breaking hierarchy */
-	BDESC,
-	/** perform topcount */
-	TOPCOUNT,
-	/** perform bottomcount */
-	BOTTOMCOUNT;
+    /**
+     * sort hierarchically ascending
+     */
+    ASC,
+    /**
+     * sort hierarchically descending
+     */
+    DESC,
+    /**
+     * sort ascending breaking hierarchy
+     */
+    BASC,
+    /**
+     * sort descending breaking hierarchy
+     */
+    BDESC,
+    /**
+     * perform topcount
+     */
+    TOPCOUNT,
+    /**
+     * perform bottomcount
+     */
+    BOTTOMCOUNT;
 }

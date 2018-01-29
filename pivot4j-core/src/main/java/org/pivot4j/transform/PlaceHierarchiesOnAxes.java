@@ -33,85 +33,65 @@ import java.util.List;
  */
 public interface PlaceHierarchiesOnAxes extends Transform {
 
-	/**
-	 * @param axis
-	 *            The target axis
-	 * @param hierarchies
-	 *            The hierarchies to put
-	 * @param expandAllMember
-	 *            If this flag is set and an "All" member is put onto an axis,
-	 *            the children of the All member will be added as well.
-	 * @param includeAllMember
-	 *            If this flag is set and an "All" member is put onto axis,
-	 *            include Union (All + Children). If it's false, only includes
-	 *            Children.
-	 */
-	void placeHierarchies(Axis axis, List<Hierarchy> hierarchies, boolean expandAllMember, boolean includeAllMember);
+    /**
+     * @param axis The target axis
+     * @param hierarchies The hierarchies to put
+     * @param expandAllMember If this flag is set and an "All" member is put
+     * onto an axis, the children of the All member will be added as well.
+     * @param includeAllMember If this flag is set and an "All" member is put
+     * onto axis, include Union (All + Children). If it's false, only includes
+     * Children.
+     */
+    void placeHierarchies(Axis axis, List<Hierarchy> hierarchies, boolean expandAllMember, boolean includeAllMember);
 
-	/**
-	 * @param axis
-	 *            The target axis
-	 * @param hierarchies
-	 *            The hierarchies to put
-	 * @param expandAllMember
-	 *            If this flag is set and an "All" member is put onto an axis,
-	 *            the children of the All member will be added as well.
-	 */
-	void placeHierarchies(Axis axis, List<Hierarchy> hierarchies, boolean expandAllMember);
+    /**
+     * @param axis The target axis
+     * @param hierarchies The hierarchies to put
+     * @param expandAllMember If this flag is set and an "All" member is put
+     * onto an axis, the children of the All member will be added as well.
+     */
+    void placeHierarchies(Axis axis, List<Hierarchy> hierarchies, boolean expandAllMember);
 
-	/**
-	 * @param axis
-	 *            The target axis
-	 * @param hierarchy
-	 *            The hierarchy to add
-	 * @param expandAllMember
-	 * @param position
-	 *            The position index where to add the hierarchy. Any value less
-	 *            than ZERO will put the hierarchy at the end of the axis.
-	 */
-	void addHierarchy(Axis axis, Hierarchy hierarchy, boolean expandAllMember, int position);
+    /**
+     * @param axis The target axis
+     * @param hierarchy The hierarchy to add
+     * @param expandAllMember
+     * @param position The position index where to add the hierarchy. Any value
+     * less than ZERO will put the hierarchy at the end of the axis.
+     */
+    void addHierarchy(Axis axis, Hierarchy hierarchy, boolean expandAllMember, int position);
 
-	/**
-	 * @param axis
-	 *            The target axis
-	 * @param hierarchy
-	 *            The hierarchy to add
-	 * @param expandAllMember
-	 * @param includeAllMember
-	 *            If this flag is set and an "All" member is put onto axis,
-	 *            include Union (All + Children). If it's false, only includes
-	 *            Children.
-	 * @param position
-	 *            The position index where to add the hierarchy. Any value less
-	 *            than ZERO will put the hierarchy at the end of the axis.
-	 */
-	void addHierarchy(Axis axis, Hierarchy hierarchy, boolean expandAllMember, boolean includeAllMember, int position);
+    /**
+     * @param axis The target axis
+     * @param hierarchy The hierarchy to add
+     * @param expandAllMember
+     * @param includeAllMember If this flag is set and an "All" member is put
+     * onto axis, include Union (All + Children). If it's false, only includes
+     * Children.
+     * @param position The position index where to add the hierarchy. Any value
+     * less than ZERO will put the hierarchy at the end of the axis.
+     */
+    void addHierarchy(Axis axis, Hierarchy hierarchy, boolean expandAllMember, boolean includeAllMember, int position);
 
-	/**
-	 * @param axis
-	 *            The target axis
-	 * @param hierarchy
-	 *            The hierarchy to remove
-	 */
-	void removeHierarchy(Axis axis, Hierarchy hierarchy);
+    /**
+     * @param axis The target axis
+     * @param hierarchy The hierarchy to remove
+     */
+    void removeHierarchy(Axis axis, Hierarchy hierarchy);
 
-	/**
-	 * @param axis
-	 *            The target axis
-	 * @param hierarchy
-	 *            The hierarchy to move
-	 * @param position
-	 *            New hierarchy position
-	 */
-	void moveHierarchy(Axis axis, Hierarchy hierarchy, int position);
+    /**
+     * @param axis The target axis
+     * @param hierarchy The hierarchy to move
+     * @param position New hierarchy position
+     */
+    void moveHierarchy(Axis axis, Hierarchy hierarchy, int position);
 
-	/**
-	 * Collects all hierarchies on a given axis in the result. If no hierarchies
-	 * are visible, it returns an empty list.
-	 *
-	 * @param axis
-	 *            the axis to use
-	 * @return A list of hierarchies
-	 */
-	List<Hierarchy> findVisibleHierarchies(Axis axis);
+    /**
+     * Collects all hierarchies on a given axis in the result. If no hierarchies
+     * are visible, it returns an empty list.
+     *
+     * @param axis the axis to use
+     * @return A list of hierarchies
+     */
+    List<Hierarchy> findVisibleHierarchies(Axis axis);
 }

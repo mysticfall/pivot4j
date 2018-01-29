@@ -34,131 +34,131 @@ import org.pivot4j.ui.table.TableRenderContext;
 
 public class ConditionalPropertyTest extends AbstractMockRenderTestCase {
 
-	private ConditionalRenderProperty property;
+    private ConditionalRenderProperty property;
 
-	@Before
-	public void setUp() throws Exception {
-		ConditionFactory factory = new DefaultConditionFactory();
+    @Before
+    public void setUp() throws Exception {
+        ConditionFactory factory = new DefaultConditionFactory();
 
-		this.property = new ConditionalRenderProperty("bgColor", factory);
+        this.property = new ConditionalRenderProperty("bgColor", factory);
 
-		ExpressionCondition expression1 = new ExpressionCondition(factory,
-				"<#if rowIndex = 3>true</#if>");
-		ExpressionCondition expression2 = new ExpressionCondition(factory,
-				"<#if rowIndex = 4>true</#if>");
+        ExpressionCondition expression1 = new ExpressionCondition(factory,
+                "<#if rowIndex = 3>true</#if>");
+        ExpressionCondition expression2 = new ExpressionCondition(factory,
+                "<#if rowIndex = 4>true</#if>");
 
-		OrCondition or = new OrCondition(factory, expression1, expression2);
+        OrCondition or = new OrCondition(factory, expression1, expression2);
 
-		List<ConditionalValue> values = new LinkedList<ConditionalValue>();
+        List<ConditionalValue> values = new LinkedList<ConditionalValue>();
 
-		values.add(new ConditionalValue(new ExpressionCondition(factory,
-				"<#if columnIndex = 1>true</#if>"), "red"));
-		values.add(new ConditionalValue(or, "blue"));
+        values.add(new ConditionalValue(new ExpressionCondition(factory,
+                "<#if columnIndex = 1>true</#if>"), "red"));
+        values.add(new ConditionalValue(or, "blue"));
 
-		property.setDefaultValue("black");
-		property.setValues(values);
-	}
+        property.setDefaultValue("black");
+        property.setValues(values);
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		this.property = null;
-	}
+    @After
+    public void tearDown() throws Exception {
+        this.property = null;
+    }
 
-	@Test
-	public void testNullValue() {
-		RenderContext context = createDummyRenderContext();
+    @Test
+    public void testNullValue() {
+        RenderContext context = createDummyRenderContext();
 
-		property.setValues(null);
+        property.setValues(null);
 
-		String result = property.getValue(context);
+        String result = property.getValue(context);
 
-		assertThat("Wrong property value.", result, is(nullValue()));
-	}
+        assertThat("Wrong property value.", result, is(nullValue()));
+    }
 
-	@Test
-	public void testDefaultValue() {
-		TableRenderContext context = createDummyRenderContext();
-		context.setColIndex(2);
-		context.setRowIndex(1);
+    @Test
+    public void testDefaultValue() {
+        TableRenderContext context = createDummyRenderContext();
+        context.setColIndex(2);
+        context.setRowIndex(1);
 
-		String result = property.getValue(context);
+        String result = property.getValue(context);
 
-		assertThat("Wrong property value.", result, is(equalTo("black")));
-	}
+        assertThat("Wrong property value.", result, is(equalTo("black")));
+    }
 
-	@Test
-	public void testSimpleValue() {
-		TableRenderContext context = createDummyRenderContext();
-		context.setColIndex(1);
-		context.setRowIndex(2);
+    @Test
+    public void testSimpleValue() {
+        TableRenderContext context = createDummyRenderContext();
+        context.setColIndex(1);
+        context.setRowIndex(2);
 
-		String result = property.getValue(context);
+        String result = property.getValue(context);
 
-		assertThat("Wrong property value.", result, is(equalTo("red")));
-	}
+        assertThat("Wrong property value.", result, is(equalTo("red")));
+    }
 
-	@Test
-	public void testConditionValue() {
-		TableRenderContext context = createDummyRenderContext();
-		context.setColIndex(2);
-		context.setRowIndex(4);
+    @Test
+    public void testConditionValue() {
+        TableRenderContext context = createDummyRenderContext();
+        context.setColIndex(2);
+        context.setRowIndex(4);
 
-		String result = property.getValue(context);
+        String result = property.getValue(context);
 
-		assertThat("Wrong property value.", result, is(equalTo("blue")));
-	}
+        assertThat("Wrong property value.", result, is(equalTo("blue")));
+    }
 
-	@Test
-	public void testStateManagement() {
-		Serializable state = property.saveState();
+    @Test
+    public void testStateManagement() {
+        Serializable state = property.saveState();
 
-		ConditionalRenderProperty property2 = new ConditionalRenderProperty(
-				new DefaultConditionFactory());
+        ConditionalRenderProperty property2 = new ConditionalRenderProperty(
+                new DefaultConditionFactory());
 
-		property2.restoreState(state);
+        property2.restoreState(state);
 
-		assertThat("RenderProperty name has been changed.",
-				property2.getName(), is(equalTo(property.getName())));
-		assertThat("Default value has been changed.",
-				property2.getDefaultValue(),
-				is(equalTo(property.getDefaultValue())));
+        assertThat("RenderProperty name has been changed.",
+                property2.getName(), is(equalTo(property.getName())));
+        assertThat("Default value has been changed.",
+                property2.getDefaultValue(),
+                is(equalTo(property.getDefaultValue())));
 
-		TableRenderContext context = createDummyRenderContext();
-		context.setColIndex(2);
-		context.setRowIndex(4);
+        TableRenderContext context = createDummyRenderContext();
+        context.setColIndex(2);
+        context.setRowIndex(4);
 
-		String result = property2.getValue(context);
+        String result = property2.getValue(context);
 
-		assertThat("Wrong property value.", result, is(equalTo("blue")));
-	}
+        assertThat("Wrong property value.", result, is(equalTo("blue")));
+    }
 
-	@Test
-	public void testSettingsManagement() throws ConfigurationException {
-		XMLConfiguration configuration = new XMLConfiguration();
-		configuration.setRootElementName("property");
+    @Test
+    public void testSettingsManagement() throws ConfigurationException {
+        XMLConfiguration configuration = new XMLConfiguration();
+        configuration.setRootElementName("property");
 
-		property.saveSettings(configuration);
-		System.out.println("Saved configuration : ");
-		configuration.save(System.out);
-		ConditionalRenderProperty property2 = new ConditionalRenderProperty(
-				new DefaultConditionFactory());
-		property2.restoreSettings(configuration);
+        property.saveSettings(configuration);
+        System.out.println("Saved configuration : ");
+        configuration.save(System.out);
+        ConditionalRenderProperty property2 = new ConditionalRenderProperty(
+                new DefaultConditionFactory());
+        property2.restoreSettings(configuration);
 
-		assertThat("RenderProperty name has been changed.",
-				property2.getName(), is(equalTo(property.getName())));
-		assertThat("Default value has been changed.",
-				property2.getDefaultValue(),
-				is(equalTo(property.getDefaultValue())));
+        assertThat("RenderProperty name has been changed.",
+                property2.getName(), is(equalTo(property.getName())));
+        assertThat("Default value has been changed.",
+                property2.getDefaultValue(),
+                is(equalTo(property.getDefaultValue())));
 
-		TableRenderContext context = createDummyRenderContext();
-		context.setColIndex(2);
-		context.setRowIndex(4);
+        TableRenderContext context = createDummyRenderContext();
+        context.setColIndex(2);
+        context.setRowIndex(4);
 
-		String result = property2.getValue(context);
+        String result = property2.getValue(context);
 
-		assertThat("Wrong property value.", result, is(equalTo("blue")));
+        assertThat("Wrong property value.", result, is(equalTo("blue")));
 
-		System.out.println("Saved configuration : ");
-		configuration.save(System.out);
-	}
+        System.out.println("Saved configuration : ");
+        configuration.save(System.out);
+    }
 }

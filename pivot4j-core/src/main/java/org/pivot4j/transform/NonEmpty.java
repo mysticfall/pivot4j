@@ -13,13 +13,13 @@ package org.pivot4j.transform;
  */
 public interface NonEmpty extends Transform {
 
-	/**
-	 * @return true if non-empty rows are currently suppressed
-	 */
-	boolean isNonEmpty();
+    /**
+     * @return true if non-empty rows are currently suppressed
+     */
+    boolean isNonEmpty();
 
-	/**
-	 * Change the visability of non-empty rows
-	 */
-	void setNonEmpty(boolean nonEmpty);
+    /**
+     * Change the visability of non-empty rows
+     */
+    void setNonEmpty(boolean nonEmpty);
 }

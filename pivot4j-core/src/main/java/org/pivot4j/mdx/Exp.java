@@ -15,12 +15,12 @@ import java.io.Serializable;
  */
 public interface Exp extends Serializable {
 
-	String toMdx();
+    String toMdx();
 
-	/**
-	 * Exp is visitable
-	 */
-	void accept(ExpVisitor visitor);
+    /**
+     * Exp is visitable
+     */
+    void accept(ExpVisitor visitor);
 
-	Exp copy();
+    Exp copy();
 }

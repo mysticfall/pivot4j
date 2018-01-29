@@ -22,44 +22,45 @@ import org.olap4j.OlapConnection;
  */
 public class WrappingOlapDataSource extends AbstractOlapDataSource {
 
-	private DataSource dataSource;
+    private DataSource dataSource;
 
-	public WrappingOlapDataSource(DataSource dataSource) {
-		if (dataSource == null) {
-			throw new NullArgumentException("dataSource");
-		}
+    public WrappingOlapDataSource(DataSource dataSource) {
+        if (dataSource == null) {
+            throw new NullArgumentException("dataSource");
+        }
 
-		this.dataSource = dataSource;
-	}
+        this.dataSource = dataSource;
+    }
 
-	/**
-	 * @see org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java
-	 *      .lang.String, java.lang.String)
-	 */
-	@Override
-	protected OlapConnection createConnection(String userName, String password)
-			throws SQLException {
-		return dataSource.getConnection(userName, password).unwrap(
-				OlapConnection.class);
-	}
+    /**
+     * @see org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java
+     * .lang.String, java.lang.String)
+     */
+    @Override
+    protected OlapConnection createConnection(String userName, String password)
+            throws SQLException {
+        return dataSource.getConnection(userName, password).unwrap(
+                OlapConnection.class);
+    }
 
-	/**
-	 * @return the dataSource
-	 */
-	protected DataSource getDataSource() {
-		return dataSource;
-	}
+    /**
+     * @return the dataSource
+     */
+    protected DataSource getDataSource() {
+        return dataSource;
+    }
 
-	/**
-	 * @see org.pivot4j.datasource.AbstractOlapDataSource#unwrap(java.lang.Class)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T unwrap(Class<T> iface) throws SQLException {
-		if (iface.equals(dataSource.getClass())) {
-			return (T) dataSource;
-		}
+    /**
+     * @see
+     * org.pivot4j.datasource.AbstractOlapDataSource#unwrap(java.lang.Class)
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        if (iface.equals(dataSource.getClass())) {
+            return (T) dataSource;
+        }
 
-		return super.unwrap(iface);
-	}
+        return super.unwrap(iface);
+    }
 }

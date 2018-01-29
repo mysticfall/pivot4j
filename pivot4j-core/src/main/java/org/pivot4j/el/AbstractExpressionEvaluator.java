@@ -12,52 +12,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractExpressionEvaluator implements
-		ExpressionEvaluator {
+        ExpressionEvaluator {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	/**
-	 * @see org.pivot4j.el.ExpressionEvaluator#evaluate(java.lang.String,
-	 *      org.pivot4j.el.ExpressionContext)
-	 */
-	@Override
-	public Object evaluate(String expression, ExpressionContext context) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Evaluating expression : ");
-			logger.debug("	- expression : {}", expression);
-		}
+    /**
+     * @see org.pivot4j.el.ExpressionEvaluator#evaluate(java.lang.String,
+     * org.pivot4j.el.ExpressionContext)
+     */
+    @Override
+    public Object evaluate(String expression, ExpressionContext context) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Evaluating expression : ");
+            logger.debug("	- expression : {}", expression);
+        }
 
-		Object result;
+        Object result;
 
-		try {
-			result = doEvaluate(expression, context);
-		} catch (EvaluationFailedException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new EvaluationFailedException(
-					"Failed to evaluate the expression : " + e, expression, e);
-		}
+        try {
+            result = doEvaluate(expression, context);
+        } catch (EvaluationFailedException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EvaluationFailedException(
+                    "Failed to evaluate the expression : " + e, expression, e);
+        }
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("	- result : {}", result);
-		}
+        if (logger.isDebugEnabled()) {
+            logger.debug("	- result : {}", result);
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * @return the logger
-	 */
-	protected Logger getLogger() {
-		return logger;
-	}
+    /**
+     * @return the logger
+     */
+    protected Logger getLogger() {
+        return logger;
+    }
 
-	/**
-	 * @param expression
-	 * @param context
-	 * @return
-	 * @throws EvaluationFailedException
-	 */
-	protected abstract Object doEvaluate(String expression,
-			ExpressionContext context) throws Exception;
+    /**
+     * @param expression
+     * @param context
+     * @return
+     * @throws EvaluationFailedException
+     */
+    protected abstract Object doEvaluate(String expression,
+            ExpressionContext context) throws Exception;
 }

@@ -15,9 +15,9 @@ import org.olap4j.metadata.Property;
 
 public interface PropertyCollector {
 
-	/**
-	 * @param level
-	 * @return
-	 */
-	List<Property> getProperties(Level level);
+    /**
+     * @param level
+     * @return
+     */
+    List<Property> getProperties(Level level);
 }

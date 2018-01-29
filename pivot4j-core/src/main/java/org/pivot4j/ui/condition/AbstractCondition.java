@@ -13,31 +13,32 @@ import org.apache.commons.lang.NullArgumentException;
 
 public abstract class AbstractCondition implements Condition {
 
-	private ConditionFactory conditionFactory;
+    private ConditionFactory conditionFactory;
 
-	/**
-	 * @param conditionFactory
-	 */
-	public AbstractCondition(ConditionFactory conditionFactory) {
-		if (conditionFactory == null) {
-			throw new NullArgumentException("conditionFactory");
-		}
+    /**
+     * @param conditionFactory
+     */
+    public AbstractCondition(ConditionFactory conditionFactory) {
+        if (conditionFactory == null) {
+            throw new NullArgumentException("conditionFactory");
+        }
 
-		this.conditionFactory = conditionFactory;
-	}
+        this.conditionFactory = conditionFactory;
+    }
 
-	/**
-	 * @return the conditionFactory
-	 */
-	public ConditionFactory getConditionFactory() {
-		return conditionFactory;
-	}
+    /**
+     * @return the conditionFactory
+     */
+    public ConditionFactory getConditionFactory() {
+        return conditionFactory;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void saveSettings(HierarchicalConfiguration configuration) {
-		configuration.addProperty("[@name]", getName());
-	}
+    /**
+     * @see
+     * org.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void saveSettings(HierarchicalConfiguration configuration) {
+        configuration.addProperty("[@name]", getName());
+    }
 }

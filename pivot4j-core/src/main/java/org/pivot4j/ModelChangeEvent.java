@@ -15,18 +15,18 @@ import java.util.EventObject;
  */
 public class ModelChangeEvent extends EventObject {
 
-	private static final long serialVersionUID = 8035651445908017817L;
+    private static final long serialVersionUID = 8035651445908017817L;
 
-	/**
-	 * Constructor for ModelChangeEvent.
-	 * 
-	 * @param source
-	 */
-	public ModelChangeEvent(PivotModel source) {
-		super(source);
-	}
+    /**
+     * Constructor for ModelChangeEvent.
+     *
+     * @param source
+     */
+    public ModelChangeEvent(PivotModel source) {
+        super(source);
+    }
 
-	public PivotModel getModel() {
-		return (PivotModel) getSource();
-	}
+    public PivotModel getModel() {
+        return (PivotModel) getSource();
+    }
 }

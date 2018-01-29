@@ -15,52 +15,52 @@ import org.pivot4j.transform.AbstractTransform;
 import org.pivot4j.transform.DrillExpandMember;
 
 public class DrillExpandMemberImpl extends AbstractTransform implements
-		DrillExpandMember {
+        DrillExpandMember {
 
-	/**
-	 * @param queryAdapter
-	 * @param connection
-	 */
-	public DrillExpandMemberImpl(QueryAdapter queryAdapter,
-			OlapConnection connection) {
-		super(queryAdapter, connection);
-	}
+    /**
+     * @param queryAdapter
+     * @param connection
+     */
+    public DrillExpandMemberImpl(QueryAdapter queryAdapter,
+            OlapConnection connection) {
+        super(queryAdapter, connection);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.DrillExpandMember#canExpand(org.olap4j.metadata.Member)
-	 * @param member
-	 *            the membber to be checked for potential expansion
-	 * @return true if the member can be expanded
-	 */
-	public boolean canExpand(Member member) {
-		return getQueryAdapter().canExpand(member);
-	}
+    /**
+     * @see
+     * org.pivot4j.transform.DrillExpandMember#canExpand(org.olap4j.metadata.Member)
+     * @param member the membber to be checked for potential expansion
+     * @return true if the member can be expanded
+     */
+    public boolean canExpand(Member member) {
+        return getQueryAdapter().canExpand(member);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.DrillExpandMember#canCollapse(org.olap4j.metadata.Member)
-	 * @param member
-	 *            member to be expanded
-	 * @return true if the member can be collapsed
-	 */
-	public boolean canCollapse(Member member) {
-		return getQueryAdapter().canCollapse(member);
-	}
+    /**
+     * @see
+     * org.pivot4j.transform.DrillExpandMember#canCollapse(org.olap4j.metadata.Member)
+     * @param member member to be expanded
+     * @return true if the member can be collapsed
+     */
+    public boolean canCollapse(Member member) {
+        return getQueryAdapter().canCollapse(member);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.DrillExpandMember#expand(org.olap4j.metadata.Member)
-	 * @param member
-	 *            member to be expanded
-	 */
-	public void expand(Member member) {
-		getQueryAdapter().expand(member);
-	}
+    /**
+     * @see
+     * org.pivot4j.transform.DrillExpandMember#expand(org.olap4j.metadata.Member)
+     * @param member member to be expanded
+     */
+    public void expand(Member member) {
+        getQueryAdapter().expand(member);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.DrillExpandMember#collapse(org.olap4j.metadata.Member)
-	 * @param member
-	 *            member to be collapsed
-	 */
-	public void collapse(Member member) {
-		getQueryAdapter().collapse(member);
-	}
+    /**
+     * @see
+     * org.pivot4j.transform.DrillExpandMember#collapse(org.olap4j.metadata.Member)
+     * @param member member to be collapsed
+     */
+    public void collapse(Member member) {
+        getQueryAdapter().collapse(member);
+    }
 }

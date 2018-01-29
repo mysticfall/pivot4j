@@ -18,25 +18,25 @@ import org.pivot4j.transform.NonEmpty;
  */
 public class NonEmptyImpl extends AbstractTransform implements NonEmpty {
 
-	/**
-	 * @param queryAdapter
-	 * @param connection
-	 */
-	public NonEmptyImpl(QueryAdapter queryAdapter, OlapConnection connection) {
-		super(queryAdapter, connection);
-	}
+    /**
+     * @param queryAdapter
+     * @param connection
+     */
+    public NonEmptyImpl(QueryAdapter queryAdapter, OlapConnection connection) {
+        super(queryAdapter, connection);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.NonEmpty#isNonEmpty()
-	 */
-	public boolean isNonEmpty() {
-		return getQueryAdapter().isNonEmpty();
-	}
+    /**
+     * @see org.pivot4j.transform.NonEmpty#isNonEmpty()
+     */
+    public boolean isNonEmpty() {
+        return getQueryAdapter().isNonEmpty();
+    }
 
-	/**
-	 * @see org.pivot4j.transform.NonEmpty#setNonEmpty(boolean)
-	 */
-	public void setNonEmpty(boolean nonEmpty) {
-		getQueryAdapter().setNonEmpty(nonEmpty);
-	}
+    /**
+     * @see org.pivot4j.transform.NonEmpty#setNonEmpty(boolean)
+     */
+    public void setNonEmpty(boolean nonEmpty) {
+        getQueryAdapter().setNonEmpty(nonEmpty);
+    }
 }

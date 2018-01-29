@@ -10,5 +10,5 @@ package org.pivot4j.ui.aggregator;
 
 public enum AggregatorPosition {
 
-	Member, Hierarchy, Grand
+    Member, Hierarchy, Grand
 }

@@ -13,22 +13,22 @@ import org.pivot4j.ui.RenderContext;
 
 public interface UICommand<T> {
 
-	String getName();
+    String getName();
 
-	String getDescription();
+    String getDescription();
 
-	/**
-	 * For commands that have a state that should be represented differently in
-	 * UI (i.e. different icons for each sort modes)
-	 * 
-	 * @param context
-	 * @return
-	 */
-	String getMode(RenderContext context);
+    /**
+     * For commands that have a state that should be represented differently in
+     * UI (i.e. different icons for each sort modes)
+     *
+     * @param context
+     * @return
+     */
+    String getMode(RenderContext context);
 
-	boolean canExecute(RenderContext context);
+    boolean canExecute(RenderContext context);
 
-	UICommandParameters createParameters(RenderContext context);
+    UICommandParameters createParameters(RenderContext context);
 
-	T execute(PivotModel model, UICommandParameters parameters);
+    T execute(PivotModel model, UICommandParameters parameters);
 }

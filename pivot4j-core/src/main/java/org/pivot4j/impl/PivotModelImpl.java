@@ -93,7 +93,7 @@ public class PivotModelImpl implements PivotModel {
 
     private boolean sorting = false;
 
-    private boolean defaultNonEmpty = false;
+    private boolean defaultNonEmpty = true;
 
     private List<Member> sortPosMembers;
 
@@ -187,10 +187,9 @@ public class PivotModelImpl implements PivotModel {
      * @see org.pivot4j.PivotModel#initialize()
      */
     public synchronized void initialize() {
-        
-        
+
         System.out.println("public synchronized void initialize");
-        
+
         if (isInitialized()) {
             destroy();
         }
@@ -234,6 +233,18 @@ public class PivotModelImpl implements PivotModel {
         if (!isInitialized()) {
             throw new NotInitializedException(
                     "Model has not been initialized yet.");
+        }
+    }
+
+    public synchronized void fireCache() {
+
+        Cube cube = getCube();
+
+        if (cube == null) {
+            this.memberHierarchyCache = null;
+        } else if (memberHierarchyCache == null
+                || !OlapUtils.equals(memberHierarchyCache.getCube(), cube)) {
+            this.memberHierarchyCache = new MemberHierarchyCache(cube);
         }
     }
 
@@ -637,7 +648,7 @@ public class PivotModelImpl implements PivotModel {
     protected CellSet executeMdx(OlapConnection connection, String mdx)
             throws OlapException {
         if (logger.isDebugEnabled()) {
-            logger.debug("Line 646 "+mdx);
+            logger.debug("Line 646 " + mdx);
         }
 
         Date start = new Date(System.currentTimeMillis());
