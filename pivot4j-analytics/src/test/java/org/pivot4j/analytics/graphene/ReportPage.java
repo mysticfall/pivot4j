@@ -4,13 +4,13 @@ import org.openqa.selenium.support.FindBy;
 
 public class ReportPage implements PageObject {
 
-	@FindBy(id = "toolbar-pane")
-	private Toolbar toolbar;
+    @FindBy(id = "toolbar-pane")
+    private Toolbar toolbar;
 
-	/**
-	 * @return the toolbar
-	 */
-	public Toolbar getToolbar() {
-		return toolbar;
-	}
+    /**
+     * @return the toolbar
+     */
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
 }

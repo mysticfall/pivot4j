@@ -10,46 +10,47 @@ import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.behavior.ajax.AjaxBehaviorListenerImpl;
 
 public abstract class AbstractPropertyInputEditor extends
-		AbstractPropertyEditor {
+        AbstractPropertyEditor {
 
-	/**
-	 * @see org.pivot4j.analytics.property.PropertyEditor#createComponent(org.pivot4j.analytics.property.PropertyDescriptor,
-	 *      javax.faces.component.UIComponent, javax.el.ValueExpression,
-	 *      javax.el.MethodExpression, java.lang.String)
-	 */
-	@Override
-	public void createComponent(PropertyDescriptor descriptor,
-			UIComponent parent, ValueExpression expression,
-			MethodExpression listener, String update) {
-		FacesContext context = FacesContext.getCurrentInstance();
+    /**
+     * @see
+     * org.pivot4j.analytics.property.PropertyEditor#createComponent(org.pivot4j.analytics.property.PropertyDescriptor,
+     * javax.faces.component.UIComponent, javax.el.ValueExpression,
+     * javax.el.MethodExpression, java.lang.String)
+     */
+    @Override
+    public void createComponent(PropertyDescriptor descriptor,
+            UIComponent parent, ValueExpression expression,
+            MethodExpression listener, String update) {
+        FacesContext context = FacesContext.getCurrentInstance();
 
-		UIInput input = createInput(descriptor, parent, context);
+        UIInput input = createInput(descriptor, parent, context);
 
-		input.setValueExpression("value", expression);
+        input.setValueExpression("value", expression);
 
-		String eventName = getEventName();
-		if (eventName != null) {
-			AjaxBehavior behavior = new AjaxBehavior();
-			behavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(
-					listener, listener));
-			behavior.setUpdate(update);
+        String eventName = getEventName();
+        if (eventName != null) {
+            AjaxBehavior behavior = new AjaxBehavior();
+            behavior.addAjaxBehaviorListener(new AjaxBehaviorListenerImpl(
+                    listener, listener));
+            behavior.setUpdate(update);
 
-			input.addClientBehavior("change", behavior);
-		}
+            input.addClientBehavior("change", behavior);
+        }
 
-		parent.getChildren().add(input);
-	}
+        parent.getChildren().add(input);
+    }
 
-	protected String getEventName() {
-		return "change";
-	}
+    protected String getEventName() {
+        return "change";
+    }
 
-	/**
-	 * @param descriptor
-	 * @param parent
-	 * @param context
-	 * @return
-	 */
-	protected abstract UIInput createInput(PropertyDescriptor descriptor,
-			UIComponent parent, FacesContext context);
+    /**
+     * @param descriptor
+     * @param parent
+     * @param context
+     * @return
+     */
+    protected abstract UIInput createInput(PropertyDescriptor descriptor,
+            UIComponent parent, FacesContext context);
 }

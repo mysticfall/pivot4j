@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Schema name="Divida">
 
-    <Cube name ="Processos">
+    <Cube name ="Processos" cache="false">
         <View alias="TB_GESTAO_PROCESSUAL">
             <SQL dialect="generic">
                 <![CDATA[ select *from GIEXADMIN.TB_GESTAO_PROCESSUAL where CRED_ID_CREDOR = %CREDOR%]]> 
@@ -65,7 +65,7 @@
         <Measure name="Valor de causa" column="PROC_VL_CAUSA" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
     </Cube>
     
-    <Cube name="Divida">
+    <Cube name="Divida" cache="false">
         <View alias="TB_ANALISE_DIVIDAS_DIM01">
             <SQL dialect="generic">
                 <![CDATA[ select *from TB_ANALISE_DIVIDAS_DIM01 where CRED_ID_CREDOR = %CREDOR%]]> 
@@ -141,9 +141,9 @@
             </Hierarchy>
         </Dimension>
 
-        <Dimension name="Pessoa algum outro pago" foreignKey="PESS_POSSUI_LANCS_PAGOS">
+        <Dimension name="Pessoa algum outro pago" foreignKey="PESSOA_POSSUI_LANCS_PAGOS">
             <Hierarchy hasAll="true" primaryKeyTable="TB_SN" primaryKey="SN_ID" allMemberName="Todos">
-                <Join leftKey="SN_ID" rightKey="PESS_POSSUI_LANCS_PAGOS">
+                <Join leftKey="SN_ID" rightKey="PESSOA_POSSUI_LANCS_PAGOS">
                     <Table name="TB_SN"/>
                     <View alias="TB_ANALISE_DIVIDAS_DIM01">
                         <SQL dialect="generic">

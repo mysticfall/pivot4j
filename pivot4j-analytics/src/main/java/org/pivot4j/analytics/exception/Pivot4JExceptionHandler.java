@@ -17,63 +17,63 @@ import org.slf4j.LoggerFactory;
 
 public class Pivot4JExceptionHandler extends ExceptionHandlerWrapper {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private ExceptionHandler handler;
+    private ExceptionHandler handler;
 
-	/**
-	 * @param handler
-	 */
-	public Pivot4JExceptionHandler(ExceptionHandler handler) {
-		this.handler = handler;
-	}
+    /**
+     * @param handler
+     */
+    public Pivot4JExceptionHandler(ExceptionHandler handler) {
+        this.handler = handler;
+    }
 
-	/**
-	 * @see javax.faces.context.ExceptionHandlerWrapper#getWrapped()
-	 */
-	@Override
-	public ExceptionHandler getWrapped() {
-		return handler;
-	}
+    /**
+     * @see javax.faces.context.ExceptionHandlerWrapper#getWrapped()
+     */
+    @Override
+    public ExceptionHandler getWrapped() {
+        return handler;
+    }
 
-	/**
-	 * @see javax.faces.context.ExceptionHandlerWrapper#handle()
-	 */
-	@Override
-	public void handle() throws FacesException {
-		Iterator<ExceptionQueuedEvent> it = getUnhandledExceptionQueuedEvents()
-				.iterator();
-		while (it.hasNext()) {
-			ExceptionQueuedEvent event = it.next();
-			ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event
-					.getSource();
+    /**
+     * @see javax.faces.context.ExceptionHandlerWrapper#handle()
+     */
+    @Override
+    public void handle() throws FacesException {
+        Iterator<ExceptionQueuedEvent> it = getUnhandledExceptionQueuedEvents()
+                .iterator();
+        while (it.hasNext()) {
+            ExceptionQueuedEvent event = it.next();
+            ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event
+                    .getSource();
 
-			FacesContext facesContext = FacesContext.getCurrentInstance();
+            FacesContext facesContext = FacesContext.getCurrentInstance();
 
-			ResourceBundle bundle = facesContext.getApplication()
-					.getResourceBundle(facesContext, "msg");
+            ResourceBundle bundle = facesContext.getApplication()
+                    .getResourceBundle(facesContext, "msg");
 
-			Throwable t = context.getException();
-			Throwable cause = ExceptionUtils.getRootCause(t);
+            Throwable t = context.getException();
+            Throwable cause = ExceptionUtils.getRootCause(t);
 
-			if (cause == null) {
-				cause = t;
-			}
+            if (cause == null) {
+                cause = t;
+            }
 
-			String title = bundle.getString("error.unhandled.title");
-			String message = bundle.getString("error.unhandled.message")
-					+ cause;
+            String title = bundle.getString("error.unhandled.title");
+            String message = bundle.getString("error.unhandled.message")
+                    + cause;
 
-			if (logger.isErrorEnabled()) {
-				logger.error(title, t);
-			}
+            if (logger.isErrorEnabled()) {
+                logger.error(title, t);
+            }
 
-			facesContext.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, message));
+            facesContext.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, title, message));
 
-			it.remove();
-		}
+            it.remove();
+        }
 
-		getWrapped().handle();
-	}
+        getWrapped().handle();
+    }
 }

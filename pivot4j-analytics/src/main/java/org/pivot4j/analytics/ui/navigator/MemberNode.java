@@ -12,55 +12,55 @@ import org.primefaces.model.TreeNode;
 
 public class MemberNode extends MetadataNode<Member> {
 
-	/**
-	 * @param member
-	 */
-	public MemberNode(Member member) {
-		super(member);
-	}
+    /**
+     * @param member
+     */
+    public MemberNode(Member member) {
+        super(member);
+    }
 
-	/**
-	 * @see org.primefaces.model.TreeNode#getType()
-	 */
-	@Override
-	public String getType() {
-		return "member";
-	}
+    /**
+     * @see org.primefaces.model.TreeNode#getType()
+     */
+    @Override
+    public String getType() {
+        return "member";
+    }
 
-	/**
-	 * @see org.primefaces.model.TreeNode#isLeaf()
-	 */
-	@Override
-	public boolean isLeaf() {
-		try {
-			return getObject().getChildMemberCount() == 0;
-		} catch (OlapException e) {
-			throw new FacesException(e);
-		}
-	}
+    /**
+     * @see org.primefaces.model.TreeNode#isLeaf()
+     */
+    @Override
+    public boolean isLeaf() {
+        try {
+            return getObject().getChildMemberCount() == 0;
+        } catch (OlapException e) {
+            throw new FacesException(e);
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.ui.navigator.MetadataNode#createChildren()
-	 */
-	@Override
-	protected List<TreeNode> createChildren() {
-		try {
-			List<? extends Member> members = getObject().getChildMembers();
-			List<TreeNode> children = new ArrayList<TreeNode>(members.size());
+    /**
+     * @see org.pivot4j.analytics.ui.navigator.MetadataNode#createChildren()
+     */
+    @Override
+    protected List<TreeNode> createChildren() {
+        try {
+            List<? extends Member> members = getObject().getChildMembers();
+            List<TreeNode> children = new ArrayList<TreeNode>(members.size());
 
-			for (Member member : members) {
-				if (OlapUtils.isVisible(member)) {
-					MemberNode node = new MemberNode(member);
+            for (Member member : members) {
+                if (OlapUtils.isVisible(member)) {
+                    MemberNode node = new MemberNode(member);
 
-					if (configureChildNode(member, node)) {
-						children.add(node);
-					}
-				}
-			}
+                    if (configureChildNode(member, node)) {
+                        children.add(node);
+                    }
+                }
+            }
 
-			return children;
-		} catch (OlapException e) {
-			throw new FacesException(e);
-		}
-	}
+            return children;
+        } catch (OlapException e) {
+            throw new FacesException(e);
+        }
+    }
 }

@@ -21,61 +21,61 @@ import org.pivot4j.analytics.config.Settings;
 
 public class LocaleInitializer implements PhaseListener {
 
-	private static final long serialVersionUID = -2477093113131236331L;
+    private static final long serialVersionUID = -2477093113131236331L;
 
-	/**
-	 * @return
-	 */
-	@Override
-	public PhaseId getPhaseId() {
-		return PhaseId.RESTORE_VIEW;
-	}
+    /**
+     * @return
+     */
+    @Override
+    public PhaseId getPhaseId() {
+        return PhaseId.RESTORE_VIEW;
+    }
 
-	/**
-	 * @param event
-	 */
-	@Override
-	public void beforePhase(PhaseEvent event) {
-	}
+    /**
+     * @param event
+     */
+    @Override
+    public void beforePhase(PhaseEvent event) {
+    }
 
-	/**
-	 * @param event
-	 */
-	@Override
-	public void afterPhase(PhaseEvent event) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		ExternalContext externalContext = context.getExternalContext();
+    /**
+     * @param event
+     */
+    @Override
+    public void afterPhase(PhaseEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
 
-		Settings settings = (Settings) externalContext.getApplicationMap().get(
-				"settings");
+        Settings settings = (Settings) externalContext.getApplicationMap().get(
+                "settings");
 
-		Locale locale = null;
+        Locale locale = null;
 
-		HttpSession session = (HttpSession) externalContext.getSession(false);
+        HttpSession session = (HttpSession) externalContext.getSession(false);
 
-		if (session != null) {
-			String key = settings.getLocaleAttributeName();
+        if (session != null) {
+            String key = settings.getLocaleAttributeName();
 
-			if (key != null) {
-				Object value = session.getAttribute(key);
-				if (value instanceof Locale) {
-					locale = (Locale) value;
-				} else if (value != null) {
-					String[] args = value.toString().split("_");
+            if (key != null) {
+                Object value = session.getAttribute(key);
+                if (value instanceof Locale) {
+                    locale = (Locale) value;
+                } else if (value != null) {
+                    String[] args = value.toString().split("_");
 
-					if (args.length == 1) {
-						locale = new Locale(args[0]);
-					} else if (args.length == 2) {
-						locale = new Locale(args[0], args[1]);
-					} else if (args.length == 3) {
-						locale = new Locale(args[0], args[1], args[2]);
-					}
-				}
-			}
-		}
+                    if (args.length == 1) {
+                        locale = new Locale(args[0]);
+                    } else if (args.length == 2) {
+                        locale = new Locale(args[0], args[1]);
+                    } else if (args.length == 3) {
+                        locale = new Locale(args[0], args[1], args[2]);
+                    }
+                }
+            }
+        }
 
-		if (locale != null && context.getViewRoot() != null) {
-			context.getViewRoot().setLocale(locale);
-		}
-	}
+        if (locale != null && context.getViewRoot() != null) {
+            context.getViewRoot().setLocale(locale);
+        }
+    }
 }

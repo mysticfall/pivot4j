@@ -6,7 +6,7 @@ import org.pivot4j.state.Configurable;
 
 public interface DataSourceInfo extends Serializable, Configurable {
 
-	String getName();
+    String getName();
 
-	String getDescription();
+    String getDescription();
 }

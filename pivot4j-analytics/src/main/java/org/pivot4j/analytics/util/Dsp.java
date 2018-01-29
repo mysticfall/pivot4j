@@ -11,16 +11,12 @@ import java.util.regex.Pattern;
 import mondrian.i18n.LocalizingDynamicSchemaProcessor;
 import mondrian.olap.Util;
 import mondrian.spi.DynamicSchemaProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author jjunior
  */
 public class Dsp extends LocalizingDynamicSchemaProcessor implements DynamicSchemaProcessor {
-    
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public String filter(String schemaUrl, Util.PropertyList connectInfo, InputStream stream) throws Exception {

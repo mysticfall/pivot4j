@@ -13,10 +13,10 @@ import javax.servlet.http.HttpSession;
  *
  * @author jjunior
  */
-public class DspCredor implements Serializable{
+public class DspCredor implements Serializable {
 
     HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-    
+
     private String credor;
 
     public DspCredor() {
@@ -27,14 +27,14 @@ public class DspCredor implements Serializable{
     }
 
     public String getCredor() {
-        
+
         try {
             credor = (String) session.getAttribute("idCredor");
         } catch (Exception e) {
             e.printStackTrace();
             credor = "0";
         }
-        
+
         return credor;
     }
 
