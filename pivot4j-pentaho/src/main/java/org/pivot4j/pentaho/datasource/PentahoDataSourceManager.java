@@ -37,258 +37,264 @@ import org.pivot4j.analytics.datasource.CubeInfo;
 import org.slf4j.Logger;
 
 public class PentahoDataSourceManager extends
-		AbstractDataSourceManager<PentahoDataSourceDefinition> {
+        AbstractDataSourceManager<PentahoDataSourceDefinition> {
 
-	private IPentahoSession session;
+    private IPentahoSession session;
 
-	private IMondrianCatalogService catalogService;
+    private IMondrianCatalogService catalogService;
 
-	private IConnectionUserRoleMapper roleMapper;
+    private IConnectionUserRoleMapper roleMapper;
 
-	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#initialize()
-	 */
-	@Override
-	protected void initialize() {
-		this.session = PentahoSessionHolder.getSession();
-		this.catalogService = PentahoSystem.get(IMondrianCatalogService.class,
-				session);
+    /**
+     * @see
+     * org.pivot4j.analytics.datasource.AbstractDataSourceManager#initialize()
+     */
+    @Override
+    protected void initialize() {
+        this.session = PentahoSessionHolder.getSession();
+        this.catalogService = PentahoSystem.get(IMondrianCatalogService.class,
+                session);
 
-		if (PentahoSystem.getObjectFactory().objectDefined(
-				MDX_CONNECTION_MAPPER_KEY)) {
-			this.roleMapper = PentahoSystem.get(
-					IConnectionUserRoleMapper.class, MDX_CONNECTION_MAPPER_KEY,
-					null);
-		}
+        if (PentahoSystem.getObjectFactory().objectDefined(
+                MDX_CONNECTION_MAPPER_KEY)) {
+            this.roleMapper = PentahoSystem.get(
+                    IConnectionUserRoleMapper.class, MDX_CONNECTION_MAPPER_KEY,
+                    null);
+        }
 
-		super.initialize();
-	}
+        super.initialize();
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#destroy()
-	 */
-	@Override
-	protected void destroy() {
-		this.session = null;
-		this.catalogService = null;
-	}
+    /**
+     * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#destroy()
+     */
+    @Override
+    protected void destroy() {
+        this.session = null;
+        this.catalogService = null;
+    }
 
-	/**
-	 * @return the session
-	 */
-	protected IPentahoSession getSession() {
-		return session;
-	}
+    /**
+     * @return the session
+     */
+    protected IPentahoSession getSession() {
+        return session;
+    }
 
-	/**
-	 * @return the catalogService
-	 */
-	protected IMondrianCatalogService getCatalogService() {
-		return catalogService;
-	}
+    /**
+     * @return the catalogService
+     */
+    protected IMondrianCatalogService getCatalogService() {
+        return catalogService;
+    }
 
-	/**
-	 * @return the roleMapper
-	 */
-	protected IConnectionUserRoleMapper getRoleMapper() {
-		return roleMapper;
-	}
+    /**
+     * @return the roleMapper
+     */
+    protected IConnectionUserRoleMapper getRoleMapper() {
+        return roleMapper;
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.datasource.DataSourceManager#getCatalogs()
-	 */
-	@Override
-	public List<CatalogInfo> getCatalogs() {
-		List<MondrianCatalog> catalogs = catalogService.listCatalogs(session,
-				false);
+    /**
+     * @see org.pivot4j.analytics.datasource.DataSourceManager#getCatalogs()
+     */
+    @Override
+    public List<CatalogInfo> getCatalogs() {
+        List<MondrianCatalog> catalogs = catalogService.listCatalogs(session,
+                false);
 
-		List<CatalogInfo> result = new LinkedList<CatalogInfo>();
+        List<CatalogInfo> result = new LinkedList<CatalogInfo>();
 
-		for (MondrianCatalog catalog : catalogs) {
-			if (!getCubes(catalog.getName()).isEmpty()) {
-				result.add(new CatalogInfo(catalog.getName(),
-						catalog.getName(), catalog.getDefinition()));
-			}
-		}
+        for (MondrianCatalog catalog : catalogs) {
+            if (!getCubes(catalog.getName()).isEmpty()) {
+                result.add(new CatalogInfo(catalog.getName(),
+                        catalog.getName(), catalog.getDefinition()));
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * @param name
-	 * @return
-	 */
-	public MondrianCatalog getCatalog(String name) {
-		return catalogService.getCatalog(name, session);
-	}
+    /**
+     * @param name
+     * @return
+     */
+    public MondrianCatalog getCatalog(String name) {
+        return catalogService.getCatalog(name, session);
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.datasource.DataSourceManager#getCubes(java.lang.String)
-	 */
-	@Override
-	public List<CubeInfo> getCubes(String catalogName) {
-		if (catalogName == null) {
-			throw new NullArgumentException("catalogName");
-		}
+    /**
+     * @see
+     * org.pivot4j.analytics.datasource.DataSourceManager#getCubes(java.lang.String)
+     */
+    @Override
+    public List<CubeInfo> getCubes(String catalogName) {
+        if (catalogName == null) {
+            throw new NullArgumentException("catalogName");
+        }
 
-		List<CubeInfo> cubes = new LinkedList<CubeInfo>();
+        List<CubeInfo> cubes = new LinkedList<CubeInfo>();
 
-		MondrianCatalog catalog = getCatalog(catalogName);
+        MondrianCatalog catalog = getCatalog(catalogName);
 
-		if (catalog == null) {
-			throw new IllegalArgumentException(
-					"The catalog with the given name does not exist : "
-							+ catalogName);
-		}
+        if (catalog == null) {
+            throw new IllegalArgumentException(
+                    "The catalog with the given name does not exist : "
+                    + catalogName);
+        }
 
-		OlapDataSource dataSource = createDataSource(new PentahoDataSourceDefinition(
-				catalog));
-		OlapConnection con = null;
+        OlapDataSource dataSource = createDataSource(new PentahoDataSourceDefinition(
+                catalog));
+        OlapConnection con = null;
 
-		try {
-			con = dataSource.getConnection();
+        try {
+            con = dataSource.getConnection();
 
-			List<Cube> olapCubes = con.getOlapSchema().getCubes();
+            List<Cube> olapCubes = con.getOlapSchema().getCubes();
 
-			for (Cube cube : olapCubes) {
-				if (cube.isVisible()) {
-					cubes.add(new CubeInfo(cube.getName(), cube.getCaption(),
-							cube.getDescription()));
-				}
-			}
-		} catch (SQLException e) {
-			throw new UnhandledException(e);
-		} finally {
-			DbUtils.closeQuietly(con);
-		}
+            for (Cube cube : olapCubes) {
+                if (cube.isVisible()) {
+                    cubes.add(new CubeInfo(cube.getName(), cube.getCaption(),
+                            cube.getDescription()));
+                }
+            }
+        } catch (SQLException e) {
+            throw new UnhandledException(e);
+        } finally {
+            DbUtils.closeQuietly(con);
+        }
 
-		return cubes;
-	}
+        return cubes;
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#registerDefinitions()
-	 */
-	@Override
-	protected void registerDefinitions() {
-		List<MondrianCatalog> catalogs = catalogService.listCatalogs(session,
-				false);
+    /**
+     * @see
+     * org.pivot4j.analytics.datasource.AbstractDataSourceManager#registerDefinitions()
+     */
+    @Override
+    protected void registerDefinitions() {
+        List<MondrianCatalog> catalogs = catalogService.listCatalogs(session,
+                false);
 
-		for (MondrianCatalog catalog : catalogs) {
-			registerDefinition(new PentahoDataSourceDefinition(catalog));
-		}
-	}
+        for (MondrianCatalog catalog : catalogs) {
+            registerDefinition(new PentahoDataSourceDefinition(catalog));
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#getDefinition(org.pivot4j.analytics.datasource.ConnectionInfo)
-	 */
-	@Override
-	protected synchronized PentahoDataSourceDefinition getDefinition(
-			ConnectionInfo connectionInfo) {
-		PentahoDataSourceDefinition definition = super
-				.getDefinition(connectionInfo);
+    /**
+     * @see
+     * org.pivot4j.analytics.datasource.AbstractDataSourceManager#getDefinition(org.pivot4j.analytics.datasource.ConnectionInfo)
+     */
+    @Override
+    protected synchronized PentahoDataSourceDefinition getDefinition(
+            ConnectionInfo connectionInfo) {
+        PentahoDataSourceDefinition definition = super
+                .getDefinition(connectionInfo);
 
-		if (definition == null) {
-			MondrianCatalog catalog = catalogService.getCatalog(
-					connectionInfo.getCatalogName(), session);
+        if (definition == null) {
+            MondrianCatalog catalog = catalogService.getCatalog(
+                    connectionInfo.getCatalogName(), session);
 
-			if (catalog != null) {
-				definition = new PentahoDataSourceDefinition(catalog);
-				registerDefinition(definition);
-			}
-		}
+            if (catalog != null) {
+                definition = new PentahoDataSourceDefinition(catalog);
+                registerDefinition(definition);
+            }
+        }
 
-		return definition;
-	}
+        return definition;
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSourceDefinition(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	protected PentahoDataSourceDefinition createDataSourceDefinition(
-			HierarchicalConfiguration configuration) {
-		return null;
-	}
+    /**
+     * @see
+     * org.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSourceDefinition(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    protected PentahoDataSourceDefinition createDataSourceDefinition(
+            HierarchicalConfiguration configuration) {
+        return null;
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSource(org.pivot4j.analytics.datasource.DataSourceInfo)
-	 */
-	@Override
-	protected OlapDataSource createDataSource(
-			PentahoDataSourceDefinition definition) {
-		if (definition == null) {
-			return null;
-		}
+    /**
+     * @see
+     * org.pivot4j.analytics.datasource.AbstractDataSourceManager#createDataSource(org.pivot4j.analytics.datasource.DataSourceInfo)
+     */
+    @Override
+    protected OlapDataSource createDataSource(
+            PentahoDataSourceDefinition definition) {
+        if (definition == null) {
+            return null;
+        }
 
-		MondrianCatalog catalog = getCatalog(definition.getName());
+        MondrianCatalog catalog = getCatalog(definition.getName());
 
-		if (catalog == null) {
-			Logger logger = getLogger();
-			if (logger.isWarnEnabled()) {
-				logger.warn("Unable to find catalog with name : "
-						+ definition.getName());
-			}
+        if (catalog == null) {
+            Logger logger = getLogger();
+            if (logger.isWarnEnabled()) {
+                logger.warn("Unable to find catalog with name : "
+                        + definition.getName());
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		Util.PropertyList parsedProperties = Util.parseConnectString(catalog
-				.getDataSourceInfo());
+        Util.PropertyList parsedProperties = Util.parseConnectString(catalog
+                .getDataSourceInfo());
 
-		StringBuilder builder = new StringBuilder();
-		builder.append("jdbc:mondrian:");
-		builder.append("Catalog=");
-		builder.append(catalog.getDefinition());
-		builder.append("; ");
+        StringBuilder builder = new StringBuilder();
+        builder.append("jdbc:mondrian:");
+        builder.append("Catalog=");
+        builder.append(catalog.getDefinition());
+        builder.append("; ");
 
-		Iterator<Pair<String, String>> it = parsedProperties.iterator();
+        Iterator<Pair<String, String>> it = parsedProperties.iterator();
 
-		while (it.hasNext()) {
-			Pair<String, String> pair = it.next();
-			builder.append(pair.getKey());
-			builder.append("=");
-			builder.append(pair.getValue());
-			builder.append("; ");
-		}
+        while (it.hasNext()) {
+            Pair<String, String> pair = it.next();
+            builder.append(pair.getKey());
+            builder.append("=");
+            builder.append(pair.getValue());
+            builder.append("; ");
+        }
 
-		builder.append("PoolNeeded=false; ");
-		builder.append("Locale=");
-		builder.append(LocaleHelper.getLocale().toString());
-		builder.append(";");
+        builder.append("PoolNeeded=false; ");
+        builder.append("Locale=");
+        builder.append(LocaleHelper.getLocale().toString());
+        builder.append(";");
 
-		String url = builder.toString();
+        String url = builder.toString();
 
-		Properties properties = new Properties();
-		properties.put("url", url);
-		properties.put("driver", MondrianOlap4jDriver.class.getName());
+        Properties properties = new Properties();
+        properties.put("url", url);
+        properties.put("driver", MondrianOlap4jDriver.class.getName());
 
-		Logger logger = getLogger();
-		if (logger.isInfoEnabled()) {
-			logger.info("Using connection URL : {}", url);
-		}
+        Logger logger = getLogger();
+        if (logger.isInfoEnabled()) {
+            logger.info("Using connection URL : {}", url);
+        }
 
-		List<String> roleNames = null;
+        List<String> roleNames = null;
 
-		if (roleMapper != null) {
-			try {
-				String[] roles = roleMapper.mapConnectionRoles(session,
-						definition.getName());
+        if (roleMapper != null) {
+            try {
+                String[] roles = roleMapper.mapConnectionRoles(session,
+                        definition.getName());
 
-				if (roles != null) {
-					roleNames = new LinkedList<String>();
+                if (roles != null) {
+                    roleNames = new LinkedList<String>();
 
-					for (String role : roles) {
-						roleNames.add(role);
-					}
-				}
-			} catch (PentahoAccessControlException e) {
-				logger.warn("Unable to read assigned roles for the current user.", e);
-			}
-		}
+                    for (String role : roles) {
+                        roleNames.add(role);
+                    }
+                }
+            } catch (PentahoAccessControlException e) {
+                logger.warn("Unable to read assigned roles for the current user.", e);
+            }
+        }
 
-		if (roleNames == null) {
-			roleNames = Collections.emptyList();
-		}
+        if (roleNames == null) {
+            roleNames = Collections.emptyList();
+        }
 
-		return new MdxOlap4JDataSource(session, properties, roleNames);
-	}
+        return new MdxOlap4JDataSource(session, properties, roleNames);
+    }
 }

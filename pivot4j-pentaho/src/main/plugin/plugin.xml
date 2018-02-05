@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin name="pivot4j" title="pivot4j" loader="OVERRIDING">
-	<static-paths>
-		<static-path url="/pivot4j" localFolder="webapp" />
-	</static-paths>
+    <static-paths>
+        <static-path url="/pivot4j" localFolder="webapp" />
+    </static-paths>
 
-	<overlays>
-		<overlay id="launch" resourcebundle="api/repos/pivot4j/webapp/resources/pivot4j/i18n/messages.properties">
-			<button id="launch_new_pivot4j_analytics" image="api/repos/pivot4j/webapp/resources/pivot4j/images/new-report.png"
-				command="Home.openFile('Pivot4J View','Pivot4J View', 'plugin/pivot4j/faces/catalog.xhtml');$('#btnCreateNew').popover('hide')"
-				label="Pivot4J View" />
-		</overlay>
+    <overlays>
+        <overlay id="launch" resourcebundle="api/repos/pivot4j/webapp/resources/pivot4j/i18n/messages.properties">
+            <button id="launch_new_pivot4j_analytics" image="api/repos/pivot4j/webapp/resources/pivot4j/images/new-report.png"
+                    command="Home.openFile('Pivot4J View','Pivot4J View', 'plugin/pivot4j/faces/catalog.xhtml');$('#btnCreateNew').popover('hide')"
+                    label="Pivot4J View" />
+        </overlay>
 
-		<overlay id="startup.pivot4j" resourcebundle="api/repos/pivot4j/webapp/resources/pivot4j/i18n/messages.properties">
-			<menubar id="newmenu">
-				<menuitem id="mi-pivot4j-new" label="${plugin.menu.new}"
-					command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/catalog.xhtml')" />
-				<menuitem id="mi-pivot4j-migrate" label="${plugin.menu.migrate}"
-					command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/migrate.xhtml')" />
-			</menubar>
-		</overlay>
-	</overlays>
+        <overlay id="startup.pivot4j" resourcebundle="api/repos/pivot4j/webapp/resources/pivot4j/i18n/messages.properties">
+            <menubar id="newmenu">
+                <menuitem id="mi-pivot4j-new" label="${plugin.menu.new}"
+                          command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/catalog.xhtml')" />
+                <menuitem id="mi-pivot4j-migrate" label="${plugin.menu.migrate}"
+                          command="mantleXulHandler.openUrl('${plugin.title}','${plugin.title}','plugin/pivot4j/faces/migrate.xhtml')" />
+            </menubar>
+        </overlay>
+    </overlays>
 
-	<content-types>
-		<content-type type="pivot4j" mime-type="text/html">
-			<title>Pivot4J Analytics</title>
-			<description>Pivot4J analytics report</description>
-			<icon-url>api/repos/pivot4j/webapp/resources/pivot4j/images/logo16.png</icon-url>
-			<operations>
-				<operation>
-					<id>RUN</id>
-				</operation>
-				<operation>
-					<id>EDIT</id>
-					<perspective>editor</perspective>
-				</operation>
-			</operations>
-		</content-type>
-	</content-types>
+    <content-types>
+        <content-type type="pivot4j" mime-type="text/html">
+            <title>Pivot4J Analytics</title>
+            <description>Pivot4J analytics report</description>
+            <icon-url>api/repos/pivot4j/webapp/resources/pivot4j/images/logo16.png</icon-url>
+            <operations>
+                <operation>
+                    <id>RUN</id>
+                </operation>
+                <operation>
+                    <id>EDIT</id>
+                    <perspective>editor</perspective>
+                </operation>
+            </operations>
+        </content-type>
+    </content-types>
 
-	<content-generator id="pivot4j" type="pivot4j" title="Pivot4J Analytics Content Generator" 
-		class="org.pivot4j.pentaho.content.ReportContentGenerator"/>
+    <content-generator id="pivot4j" type="pivot4j" title="Pivot4J Analytics Content Generator" 
+                       class="org.pivot4j.pentaho.content.ReportContentGenerator"/>
 
-	<bean id="pivot4j.generator" class="org.pivot4j.pentaho.content.ReportContentGenerator" />
-	<bean id="pivot4j.editor" class="org.pivot4j.pentaho.content.ReportContentEditor" />
+    <bean id="pivot4j.generator" class="org.pivot4j.pentaho.content.ReportContentGenerator" />
+    <bean id="pivot4j.editor" class="org.pivot4j.pentaho.content.ReportContentEditor" />
 </plugin>
