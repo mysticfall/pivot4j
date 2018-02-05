@@ -52,9 +52,14 @@
                                         <property name="JdbcDrivers">org.postgresql.Driver</property>
                                         <property name="JdbcUser">postgres</property>
                                         <property name="JdbcPassword">postgres</property>
+<<<<<<< HEAD
 
                                         <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
                                        
+=======
+                                        
+                                        -->
+>>>>>>> master
                                         <property name="Catalog">file:${webRoot}${FS}GiexCubos.xml</property>
                                         <property name="Jdbc">jdbc:postgresql://10.10.40.27:5432/giex?currentSchema=giexanalise</property>
                                         <property name="JdbcDrivers">org.postgresql.Driver</property>
