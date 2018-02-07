@@ -106,8 +106,9 @@ body.report .pe-layout-pane-header {
 }
 
 #navigator-pane .ui-tree-container {
-    overflow: visible;
+    overflow: hidden !important;
     padding: 0;
+    
 }
 
 #navigator-pane .ui-layout-content {
@@ -378,6 +379,7 @@ span.ui-button-icon-only {
 
 .filter-dialog .ui-tree {
     margin-top: 0.4em;
+    overflow: auto !important;
 }
 
 .filter-dialog .ui-tree-container {
