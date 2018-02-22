@@ -100,9 +100,46 @@
             </Hierarchy>
         </Dimension>
 
+
+        <Dimension name="Inscrito" foreignKey="LANCAMENTO_INSCRITO">
+            <Hierarchy hasAll="true" primaryKeyTable="TB_SN" primaryKey="SN_ID" allMemberName="Inscritos">
+                <Join leftKey="SN_ID" rightKey="LANCAMENTO_INSCRITO">
+                    <Table name="TB_SN"/>
+                    <View alias="TB_ANALISE_DIVIDAS_DIM01">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from TB_ANALISE_DIVIDAS_DIM01 where CRED_ID_CREDOR = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Inscrito" table="TB_SN" column="SN_NM" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Dimension name="Ajuizado" foreignKey="LANCAMENTO_AJUIZADO">
+            <Hierarchy hasAll="true" primaryKeyTable="TB_SN" primaryKey="SN_ID" allMemberName="Ajuizados">
+                <Join leftKey="SN_ID" rightKey="LANCAMENTO_AJUIZADO">
+                    <Table name="TB_SN"/>
+                    <View alias="TB_ANALISE_DIVIDAS_DIM01">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from TB_ANALISE_DIVIDAS_DIM01 where CRED_ID_CREDOR = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Ajuizado" table="TB_SN" column="SN_NM" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
         <Dimension name="Origem">
             <Hierarchy hasAll="true" allMemberName="Todas origens">
                 <Level name="Origem" column="CAOR_SG_ORIGEM" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Dimension name="Tipo pessoa">
+            <Hierarchy hasAll="true" allMemberName="Todos tipos">
+                <Level name="Tipo" column="PESSOA_TIPO" uniqueMembers="true" type="String"/>
+                <Level name="Possui CPF ou CNPJ?" column="PESSOA_POSSUI_CPFCNPJ" uniqueMembers="true" type="String"/>
+                <Level name="Possui RG?" column="PESSOA_POSSUI_RG" uniqueMembers="true" type="String"/>
             </Hierarchy>
         </Dimension>
         
@@ -168,6 +205,26 @@
                 <Level name="Prescrito" table="TB_SN" column="SN_NM" uniqueMembers="true" type="String"/>
             </Hierarchy>
         </Dimension>
+                
+        <Dimension name="Período prescrição">
+            <Hierarchy hasAll="true" allMemberName="Período prescrição">
+                <Level name="Ano" column="LAID_DT_PRESCRICAO" uniqueMembers="true" type="String" levelType="TimeYears">
+                    <KeyExpression>
+                        <SQL dialect="generic">
+                            <![CDATA[COALESCE(TO_CHAR(EXTRACT(YEAR FROM LAID_DT_PRESCRICAO)),'Sem data')]]>
+                        </SQL>
+                    </KeyExpression>
+                </Level>
+                
+                <Level name="Mês" column="LAID_DT_PRESCRICAO" uniqueMembers="false" type="Numeric" levelType="TimeMonths">
+                    <KeyExpression>
+                        <SQL dialect="generic">
+                            <![CDATA[EXTRACT(MONTH FROM LAID_DT_PRESCRICAO)]]>
+                        </SQL>
+                    </KeyExpression>
+                </Level>
+            </Hierarchy>
+        </Dimension>
         
         <Dimension name="Pessoas mais de um IMO" foreignKey="PESSOA_MAIS_1_CADASTROS_IMO">
             <Hierarchy hasAll="true" primaryKeyTable="TB_SN" primaryKey="SN_ID" allMemberName="Mais de um IMO">
@@ -211,6 +268,66 @@
             </Hierarchy>
         </Dimension>
         
+        <Dimension name="Pessoa com dívida neste ano?" foreignKey="PESSOA_DIVIDA_ANO_ATUAL">
+            <Hierarchy hasAll="true" primaryKeyTable="TB_SN" primaryKey="SN_ID" allMemberName="Dívida no ano">
+                <Join leftKey="SN_ID" rightKey="PESSOA_DIVIDA_ANO_ATUAL">
+                    <Table name="TB_SN"/>
+                    <View alias="TB_ANALISE_DIVIDAS_DIM01">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from TB_ANALISE_DIVIDAS_DIM01 where CRED_ID_CREDOR = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Dívida no ano?" table="TB_SN" column="SN_NM" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Dimension name="Possui CEP válido?" foreignKey="CEP_PESSOA_VALIDO">
+            <Hierarchy hasAll="true" primaryKeyTable="TB_SN" primaryKey="SN_ID" allMemberName="Todos">
+                <Join leftKey="SN_ID" rightKey="CEP_PESSOA_VALIDO">
+                    <Table name="TB_SN"/>
+                    <View alias="TB_ANALISE_DIVIDAS_DIM01">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from TB_ANALISE_DIVIDAS_DIM01 where CRED_ID_CREDOR = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Possui CEP válido?" table="TB_SN" column="SN_NM" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Dimension name="Possui celular?" foreignKey="PESSOA_POSSUI_CELULAR">
+            <Hierarchy hasAll="true" primaryKeyTable="TB_SN" primaryKey="SN_ID" allMemberName="Todos">
+                <Join leftKey="SN_ID" rightKey="PESSOA_POSSUI_CELULAR">
+                    <Table name="TB_SN"/>
+                    <View alias="TB_ANALISE_DIVIDAS_DIM01">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from TB_ANALISE_DIVIDAS_DIM01 where CRED_ID_CREDOR = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Possui celular?" table="TB_SN" column="SN_NM" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Dimension name="Possui e-mail?" foreignKey="PESSOA_POSSUI_EMAIL">
+            <Hierarchy hasAll="true" primaryKeyTable="TB_SN" primaryKey="SN_ID" allMemberName="Todos">
+                <Join leftKey="SN_ID" rightKey="PESSOA_POSSUI_EMAIL">
+                    <Table name="TB_SN"/>
+                    <View alias="TB_ANALISE_DIVIDAS_DIM01">
+                        <SQL dialect="generic">
+                <![CDATA[ select *from TB_ANALISE_DIVIDAS_DIM01 where CRED_ID_CREDOR = %CREDOR%]]> 
+                        </SQL>
+                    </View>
+                </Join>
+                <Level name="Possui e-mail?" table="TB_SN" column="SN_NM" uniqueMembers="true" type="String"/>
+            </Hierarchy>
+        </Dimension>
+        
+        <Measure name="Valor principal" column="LAVA_VL_PRINCIPAL" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
+        <Measure name="Correção" column="LAVA_VL_CORRECAO" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
+        <Measure name="Juros" column="LAVA_VL_JUROS" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
+        <Measure name="Multa" column="LAVA_VL_MULTA" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
         <Measure name="Valor atualizado" column="LAVA_VL_ATUALIZADO" aggregator="sum" formatString="R$ ###,###,###,##0.00"/>
     </Cube>
     
