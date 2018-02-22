@@ -53,7 +53,6 @@
                                         <property name="JdbcUser">postgres</property>
                                         <property name="JdbcPassword">postgres</property>
                                         
-                                        -->
                                         <property name="Catalog">file:${webRoot}${FS}GiexCubos.xml</property>
                                         <property name="Jdbc">jdbc:postgresql://10.10.40.27:5432/giex?currentSchema=giexanalise</property>
                                         <property name="JdbcDrivers">org.postgresql.Driver</property>
@@ -73,11 +72,12 @@
                                         <property name="JdbcPassword">?806y*report</property>
                                         <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>                                         
                                         -->
-
-                                        <property name="Catalog">file:${webRoot}${FS}FoodMart_1.xml</property>
-					<property name="Jdbc">jdbc:derby:${webRoot}${FS}foodmart</property>
-					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
-					<property name="JdbcUser">sa</property>
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubos.xml</property>
+                                        <property name="Jdbc">jdbc:oracle:thin:@giex-scan.intra.local:1521/TAFGIEXPROD</property>
+                                        <property name="JdbcDrivers">oracle.jdbc.OracleDriver</property>
+                                        <property name="JdbcUser">giex_reportserver</property>
+                                        <property name="JdbcPassword">?806y*report</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>    
                                         
 				</properties>
 			</connection-info>
@@ -134,7 +134,7 @@
     </appearances>
 
     <model>
-        <nonEmpty default="false" />
+        <nonEmpty default="true" />
     </model>
 
     <!-- 

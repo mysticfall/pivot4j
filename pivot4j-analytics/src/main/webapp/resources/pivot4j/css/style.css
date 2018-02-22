@@ -1,3 +1,7 @@
+* {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari */
+    color-adjust: exact !important;                 /*Firefox*/
+}
 
 body {
     font-size: 9pt; 
