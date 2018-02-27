@@ -15,29 +15,29 @@ import java.util.EventObject;
  */
 public class QuaxChangeEvent extends EventObject {
 
-	private static final long serialVersionUID = -2509598338622928944L;
+    private static final long serialVersionUID = -2509598338622928944L;
 
-	private boolean changedByNavigator;
+    private boolean changedByNavigator;
 
-	/**
-	 * Constructor for QuaxChangeEvent.
-	 * 
-	 * @param source
-	 * @param changedByNavigator
-	 */
-	public QuaxChangeEvent(Quax source, boolean changedByNavigator) {
-		super(source);
-		this.changedByNavigator = changedByNavigator;
-	}
+    /**
+     * Constructor for QuaxChangeEvent.
+     *
+     * @param source
+     * @param changedByNavigator
+     */
+    public QuaxChangeEvent(Quax source, boolean changedByNavigator) {
+        super(source);
+        this.changedByNavigator = changedByNavigator;
+    }
 
-	public Quax getQuax() {
-		return (Quax) getSource();
-	}
+    public Quax getQuax() {
+        return (Quax) getSource();
+    }
 
-	/**
-	 * @return the changedByNavigator
-	 */
-	public boolean isChangedByNavigator() {
-		return changedByNavigator;
-	}
+    /**
+     * @return the changedByNavigator
+     */
+    public boolean isChangedByNavigator() {
+        return changedByNavigator;
+    }
 }

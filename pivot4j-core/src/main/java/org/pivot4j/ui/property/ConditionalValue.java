@@ -15,44 +15,43 @@ import org.pivot4j.ui.condition.Condition;
 
 public class ConditionalValue implements Serializable {
 
-	private static final long serialVersionUID = 1329852127269673680L;
+    private static final long serialVersionUID = 1329852127269673680L;
 
-	private Condition condition;
+    private Condition condition;
 
-	private String value;
+    private String value;
 
-	/**
-	 * @param condition
-	 * @param value
-	 */
-	public ConditionalValue(Condition condition, String value) {
-		if (condition == null) {
-			throw new NullArgumentException("condition");
-		}
+    /**
+     * @param condition
+     * @param value
+     */
+    public ConditionalValue(Condition condition, String value) {
+        if (condition == null) {
+            throw new NullArgumentException("condition");
+        }
 
-		this.condition = condition;
-		this.value = value;
-	}
+        this.condition = condition;
+        this.value = value;
+    }
 
-	/**
-	 * @return the condition
-	 */
-	public Condition getCondition() {
-		return condition;
-	}
+    /**
+     * @return the condition
+     */
+    public Condition getCondition() {
+        return condition;
+    }
 
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
 
-	/**
-	 * @param value
-	 *            the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

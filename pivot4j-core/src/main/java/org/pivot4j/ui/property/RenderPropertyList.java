@@ -15,25 +15,25 @@ import org.pivot4j.state.Configurable;
 
 public interface RenderPropertyList extends Configurable, Bookmarkable {
 
-	List<RenderProperty> getRenderProperties();
+    List<RenderProperty> getRenderProperties();
 
-	/**
-	 * @param property
-	 */
-	void setRenderProperty(RenderProperty property);
+    /**
+     * @param property
+     */
+    void setRenderProperty(RenderProperty property);
 
-	/**
-	 * @param name
-	 */
-	RenderProperty getRenderProperty(String name);
+    /**
+     * @param name
+     */
+    RenderProperty getRenderProperty(String name);
 
-	/**
-	 * @param name
-	 */
-	void removeRenderProperty(String name);
+    /**
+     * @param name
+     */
+    void removeRenderProperty(String name);
 
-	/**
-	 * @param name
-	 */
-	boolean hasRenderProperty(String name);
+    /**
+     * @param name
+     */
+    boolean hasRenderProperty(String name);
 }

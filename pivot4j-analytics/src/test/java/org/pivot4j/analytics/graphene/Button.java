@@ -6,21 +6,21 @@ import org.openqa.selenium.support.FindBy;
 
 public class Button implements PageFragment {
 
-	@Root
-	private WebElement button;
+    @Root
+    private WebElement button;
 
-	@FindBy(className = "ui-button-text")
-	private WebElement label;
+    @FindBy(className = "ui-button-text")
+    private WebElement label;
 
-	public String getLabel() {
-		return label.getText();
-	}
+    public String getLabel() {
+        return label.getText();
+    }
 
-	public boolean isEnabled() {
-		return !button.getAttribute("class").contains("ui-state-disabled");
-	}
+    public boolean isEnabled() {
+        return !button.getAttribute("class").contains("ui-state-disabled");
+    }
 
-	public void click() {
-		button.click();
-	}
+    public void click() {
+        button.click();
+    }
 }

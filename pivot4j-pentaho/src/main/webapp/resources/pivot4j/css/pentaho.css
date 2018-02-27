@@ -1,19 +1,19 @@
 #catalog-form .ui-selectonemenu {
-	width: 260px !important;
+    width: 260px !important;
 }
 
 span.hide-on-embed, button.hide-on-embed {
-	display: inline !important;
+    display: inline !important;
 }
 
 .migration-dialog td.column-status {
-	text-align: center;
+    text-align: center;
 }
 
 .migration-dialog span.error {
-	color: red;
+    color: red;
 }
 
 .ui-layout-resizer-south-closed {
-	height: 12px !important;
+    height: 12px !important;
 }

@@ -20,7 +20,7 @@ import org.olap4j.metadata.Member;
  * <p>
  * If multiple Hierarchies are shown on a single axis, only ONE position is
  * expanded. For example
- * 
+ *
  * <pre>
  * -----+-------
  * 2001 | Europe
@@ -30,9 +30,9 @@ import org.olap4j.metadata.Member;
  * 2003 | Europe
  * -----+-------
  * </pre>
- * 
+ *
  * clicking on Europe in 2002 will give
- * 
+ *
  * <pre>
  * -----+-------
  * 2001 | Europe
@@ -45,26 +45,25 @@ import org.olap4j.metadata.Member;
  * -----+-------
  * </pre>
  */
-
 public interface DrillExpandPosition extends Transform {
 
-	/**
-	 * true if member has children and Position is not currently expanded
-	 */
-	boolean canExpand(Position position, Member member);
+    /**
+     * true if member has children and Position is not currently expanded
+     */
+    boolean canExpand(Position position, Member member);
 
-	/**
-	 * true if the Position is currently expanded by specific member.
-	 */
-	boolean canCollapse(Position position, Member member);
+    /**
+     * true if the Position is currently expanded by specific member.
+     */
+    boolean canCollapse(Position position, Member member);
 
-	/**
-	 * expands Position by specific member
-	 */
-	void expand(Position position, Member member);
+    /**
+     * expands Position by specific member
+     */
+    void expand(Position position, Member member);
 
-	/**
-	 * collapses Position by specific member.
-	 */
-	void collapse(Position position, Member member);
+    /**
+     * collapses Position by specific member.
+     */
+    void collapse(Position position, Member member);
 }

@@ -62,7 +62,7 @@ public class ReportOpener {
 
         NavigationHandler navigationHandler = context.getApplication()
                 .getNavigationHandler();
-        
+
         session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("idCredor", credor);
 

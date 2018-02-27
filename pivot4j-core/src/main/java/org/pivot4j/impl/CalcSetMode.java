@@ -10,5 +10,5 @@ package org.pivot4j.impl;
 
 public enum CalcSetMode {
 
-	Simple, Generate, Sticky;
+    Simple, Generate, Sticky;
 }

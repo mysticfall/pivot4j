@@ -24,77 +24,78 @@ import org.pivot4j.transform.DrillReplace;
 
 public class DrillReplaceImplIT extends AbstractTransformTestCase<DrillReplace> {
 
-	private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
+    private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+            + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
 
-	/**
-	 * @return the initialQuery
-	 * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
-	 */
-	protected String getInitialQuery() {
-		return initialQuery;
-	}
+    /**
+     * @return the initialQuery
+     * @see
+     * org.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
+     */
+    protected String getInitialQuery() {
+        return initialQuery;
+    }
 
-	/**
-	 * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getType()
-	 */
-	@Override
-	protected Class<DrillReplace> getType() {
-		return DrillReplace.class;
-	}
+    /**
+     * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getType()
+     */
+    @Override
+    protected Class<DrillReplace> getType() {
+        return DrillReplace.class;
+    }
 
-	@Test
-	public void testTransform() {
-		DrillReplace transform = getTransform();
+    @Test
+    public void testTransform() {
+        DrillReplace transform = getTransform();
 
-		CellSet cellSet = getPivotModel().getCellSet();
-		CellSetAxis axis = cellSet.getAxes().get(1);
+        CellSet cellSet = getPivotModel().getCellSet();
+        CellSetAxis axis = cellSet.getAxes().get(1);
 
-		Position position = axis.getPositions().get(0);
-		List<Member> members = position.getMembers();
+        Position position = axis.getPositions().get(0);
+        List<Member> members = position.getMembers();
 
-		Member allMedia = members.get(0);
-		Hierarchy hierarchy = allMedia.getHierarchy();
+        Member allMedia = members.get(0);
+        Hierarchy hierarchy = allMedia.getHierarchy();
 
-		assertThat(
-				"Should be able to drill down on [Promotion Media].[All Media]",
-				transform.canDrillDown(allMedia), is(true));
-		assertThat(
-				"Drill up on [Promotion Media] hierarchy should not be possible",
-				transform.canDrillUp(hierarchy), is(false));
+        assertThat(
+                "Should be able to drill down on [Promotion Media].[All Media]",
+                transform.canDrillDown(allMedia), is(true));
+        assertThat(
+                "Drill up on [Promotion Media] hierarchy should not be possible",
+                transform.canDrillUp(hierarchy), is(false));
 
-		transform.drillDown(allMedia);
+        transform.drillDown(allMedia);
 
-		assertThat(
-				"Unexpected MDX query after drill down on "
-						+ allMedia.getUniqueName(),
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "CrossJoin([Promotion Media].[All Media].Children, {[Product].[All Products]}) ON ROWS "
-						+ "FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query after drill down on "
+                + allMedia.getUniqueName(),
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                        + "CrossJoin([Promotion Media].[All Media].Children, {[Product].[All Products]}) ON ROWS "
+                        + "FROM [Sales]")));
 
-		cellSet = getPivotModel().getCellSet();
+        cellSet = getPivotModel().getCellSet();
 
-		axis = cellSet.getAxes().get(1);
+        axis = cellSet.getAxes().get(1);
 
-		position = axis.getPositions().get(0);
-		members = position.getMembers();
+        position = axis.getPositions().get(0);
+        members = position.getMembers();
 
-		Member bulkMail = members.get(0);
+        Member bulkMail = members.get(0);
 
-		assertThat(
-				"Drill down on [Promotion Media].[Bulk Mail] member should not be possible",
-				transform.canDrillDown(bulkMail), is(false));
-		assertThat("Should be able to drill up on [Promotion Media] hierarchy",
-				transform.canDrillUp(hierarchy), is(true));
+        assertThat(
+                "Drill down on [Promotion Media].[Bulk Mail] member should not be possible",
+                transform.canDrillDown(bulkMail), is(false));
+        assertThat("Should be able to drill up on [Promotion Media] hierarchy",
+                transform.canDrillUp(hierarchy), is(true));
 
-		transform.drillUp(hierarchy);
+        transform.drillUp(hierarchy);
 
-		assertThat(
-				"Unexpected MDX query after drill down up "
-						+ hierarchy.getUniqueName(), getPivotModel()
-						.getCurrentMdx(), is(equalTo(getInitialQuery())));
+        assertThat(
+                "Unexpected MDX query after drill down up "
+                + hierarchy.getUniqueName(), getPivotModel()
+                .getCurrentMdx(), is(equalTo(getInitialQuery())));
 
-		cellSet = getPivotModel().getCellSet();
-	}
+        cellSet = getPivotModel().getCellSet();
+    }
 }

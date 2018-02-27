@@ -31,180 +31,180 @@ import org.pivot4j.transform.Transform;
  */
 public interface PivotModel extends Configurable, Bookmarkable {
 
-	void initialize();
+    void initialize();
 
-	boolean isInitialized();
+    void fireCache();
 
-	/**
-	 * Called once when the not used any longer. E.g. close DB connection
-	 * 
-	 * @throws NotInitializedException
-	 */
-	void destroy();
+    boolean isInitialized();
 
-	/**
-	 * Returns the database metadata for the active connection.
-	 */
-	OlapDatabaseMetaData getMetadata();
+    /**
+     * Called once when the not used any longer. E.g. close DB connection
+     *
+     * @throws NotInitializedException
+     */
+    void destroy();
 
-	/**
-	 * Returns the cube for the query.
-	 * 
-	 * @throws NotInitializedException
-	 */
-	Cube getCube();
+    /**
+     * Returns the database metadata for the active connection.
+     */
+    OlapDatabaseMetaData getMetadata();
 
-	/**
-	 * Runs the query and returns the result.
-	 * 
-	 * @throws NotInitializedException
-	 */
-	CellSet getCellSet();
+    /**
+     * Returns the cube for the query.
+     *
+     * @throws NotInitializedException
+     */
+    Cube getCube();
 
-	/**
-	 * Returns if the current cube supports scenario (cell writeback feature).
-	 * 
-	 * @throws NotInitializedException
-	 */
-	boolean isScenarioSupported();
+    /**
+     * Runs the query and returns the result.
+     *
+     * @throws NotInitializedException
+     */
+    CellSet getCellSet();
 
-	/**
-	 * Create a new scenario.
-	 * 
-	 * @throws NotInitializedException
-	 */
-	Scenario createScenario();
+    /**
+     * Returns if the current cube supports scenario (cell writeback feature).
+     *
+     * @throws NotInitializedException
+     */
+    boolean isScenarioSupported();
 
-	/**
-	 * Returns a scenario for the active connection.
-	 * 
-	 * @throws NotInitializedException
-	 */
-	Scenario getScenario();
+    /**
+     * Create a new scenario.
+     *
+     * @throws NotInitializedException
+     */
+    Scenario createScenario();
 
-	/**
-	 * Sets the specified scenario for the active connection.
-	 * 
-	 * @throws NotInitializedException
-	 */
-	void setScenario(Scenario scenario);
+    /**
+     * Returns a scenario for the active connection.
+     *
+     * @throws NotInitializedException
+     */
+    Scenario getScenario();
 
-	/**
-	 * Flushes the last query result.
-	 * 
-	 * @throws NotInitializedException
-	 */
-	void refresh();
+    /**
+     * Sets the specified scenario for the active connection.
+     *
+     * @throws NotInitializedException
+     */
+    void setScenario(Scenario scenario);
 
-	/**
-	 * The initial MDX query. This is never changed except when the user enters
-	 * a new MDX query.
-	 */
-	String getMdx();
+    /**
+     * Flushes the last query result.
+     *
+     * @throws NotInitializedException
+     */
+    void refresh();
 
-	void setMdx(String mdxQuery);
+    /**
+     * The initial MDX query. This is never changed except when the user enters
+     * a new MDX query.
+     */
+    String getMdx();
 
-	/**
-	 * Returns the current MDX query which this model instance is based on or
-	 * null if the model is not initialized.
-	 */
-	String getCurrentMdx();
+    void setMdx(String mdxQuery);
 
-	/**
-	 * Returns the current MDX query after all parameter expressions are
-	 * resolved. The result would be identical with {@link #getCurrentMdx()} if
-	 * no parameter expressions are present.
-	 */
-	String getEvaluatedMdx();
+    /**
+     * Returns the current MDX query which this model instance is based on or
+     * null if the model is not initialized.
+     */
+    String getCurrentMdx();
 
-	Locale getLocale();
+    /**
+     * Returns the current MDX query after all parameter expressions are
+     * resolved. The result would be identical with {@link #getCurrentMdx()} if
+     * no parameter expressions are present.
+     */
+    String getEvaluatedMdx();
 
-	/**
-	 * Sets the locale for messages, data display etc
-	 */
-	void setLocale(Locale locale);
+    Locale getLocale();
 
-	String getRoleName();
+    /**
+     * Sets the locale for messages, data display etc
+     */
+    void setLocale(Locale locale);
 
-	void setRoleName(String roleName);
+    String getRoleName();
 
-	ExpressionContext getExpressionContext();
+    void setRoleName(String roleName);
 
-	/**
-	 * Adds a model change listener
-	 */
-	void addModelChangeListener(ModelChangeListener listener);
+    ExpressionContext getExpressionContext();
 
-	/**
-	 * Removes a model change listener
-	 */
-	void removeModelChangeListener(ModelChangeListener listener);
+    /**
+     * Adds a model change listener
+     */
+    void addModelChangeListener(ModelChangeListener listener);
 
-	/**
-	 * Adds a query listener
-	 */
-	void addQueryListener(QueryListener listener);
+    /**
+     * Removes a model change listener
+     */
+    void removeModelChangeListener(ModelChangeListener listener);
 
-	/**
-	 * Removes a query listener
-	 */
-	void removeQueryListener(QueryListener listener);
+    /**
+     * Adds a query listener
+     */
+    void addQueryListener(QueryListener listener);
 
-	/**
-	 * Returns the registered transform instance for the given type.
-	 */
-	<T extends Transform> T getTransform(Class<T> type);
+    /**
+     * Removes a query listener
+     */
+    void removeQueryListener(QueryListener listener);
 
-	ExpressionEvaluatorFactory getExpressionEvaluatorFactory();
+    /**
+     * Returns the registered transform instance for the given type.
+     */
+    <T extends Transform> T getTransform(Class<T> type);
 
-	/**
-	 * Changes current sorting. If <code>mode</code> is <code>TOPCOUNT</code> or
-	 * <code>BOTTOMCOUNT</code> the current value of <code>topBottomCount</code>
-	 * will be used.
-	 * 
-	 * @param axisToSort
-	 *            the axis to sort. Its ONE of the "other" axes, that do not
-	 *            contain position
-	 * @param position
-	 *            the sort criteria
-	 * @throws NotInitializedException
-	 */
-	void sort(CellSetAxis axisToSort, Position position);
+    ExpressionEvaluatorFactory getExpressionEvaluatorFactory();
 
-	boolean isSorting();
+    /**
+     * Changes current sorting. If <code>mode</code> is <code>TOPCOUNT</code> or
+     * <code>BOTTOMCOUNT</code> the current value of <code>topBottomCount</code>
+     * will be used.
+     *
+     * @param axisToSort the axis to sort. Its ONE of the "other" axes, that do
+     * not contain position
+     * @param position the sort criteria
+     * @throws NotInitializedException
+     */
+    void sort(CellSetAxis axisToSort, Position position);
 
-	/**
-	 * Return true if the result is sorted by the members of the position
-	 */
-	boolean isSorting(Position position);
+    boolean isSorting();
 
-	void setSorting(boolean enabled);
+    /**
+     * Return true if the result is sorted by the members of the position
+     */
+    boolean isSorting(Position position);
 
-	/**
-	 * Returns true if user may sort by the members. This will be the case when
-	 * ONE of the members is a measure. The GUI will paint a "sort button" for
-	 * ONE of the members
-	 */
-	boolean isSortable(Position position);
+    void setSorting(boolean enabled);
 
-	SortCriteria getSortCriteria();
+    /**
+     * Returns true if user may sort by the members. This will be the case when
+     * ONE of the members is a measure. The GUI will paint a "sort button" for
+     * ONE of the members
+     */
+    boolean isSortable(Position position);
 
-	void setSortCriteria(SortCriteria criteria);
+    SortCriteria getSortCriteria();
 
-	List<Member> getSortPosMembers();
+    void setSortCriteria(SortCriteria criteria);
 
-	/**
-	 * Number of members for topcount and bottomcount
-	 */
-	int getTopBottomCount();
+    List<Member> getSortPosMembers();
 
-	void setTopBottomCount(int topBottomCount);
+    /**
+     * Number of members for topcount and bottomcount
+     */
+    int getTopBottomCount();
 
-	/**
-	 * Determines if the generated query (i.e. using a transform) should include
-	 * 'NON EMPTY' clause by default.
-	 */
-	boolean getDefaultNonEmpty();
+    void setTopBottomCount(int topBottomCount);
 
-	void setDefaultNonEmpty(boolean defaultNonEmpty);
+    /**
+     * Determines if the generated query (i.e. using a transform) should include
+     * 'NON EMPTY' clause by default.
+     */
+    boolean getDefaultNonEmpty();
+
+    void setDefaultNonEmpty(boolean defaultNonEmpty);
 }

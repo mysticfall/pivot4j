@@ -36,267 +36,267 @@ import org.pivot4j.util.OlapUtils;
 
 public class ChangeSlicerImpl extends AbstractTransform implements ChangeSlicer {
 
-	/**
-	 * @param queryAdapter
-	 * @param connection
-	 */
-	public ChangeSlicerImpl(QueryAdapter queryAdapter, OlapConnection connection) {
-		super(queryAdapter, connection);
-	}
+    /**
+     * @param queryAdapter
+     * @param connection
+     */
+    public ChangeSlicerImpl(QueryAdapter queryAdapter, OlapConnection connection) {
+        super(queryAdapter, connection);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.ChangeSlicer#getHierarchies()
-	 */
-	@Override
-	public List<Hierarchy> getHierarchies() {
-		if (!getModel().isInitialized()) {
-			return Collections.emptyList();
-		}
+    /**
+     * @see org.pivot4j.transform.ChangeSlicer#getHierarchies()
+     */
+    @Override
+    public List<Hierarchy> getHierarchies() {
+        if (!getModel().isInitialized()) {
+            return Collections.emptyList();
+        }
 
-		CellSet cellSet = getModel().getCellSet();
-		if (cellSet == null) {
-			return Collections.emptyList();
-		}
+        CellSet cellSet = getModel().getCellSet();
+        if (cellSet == null) {
+            return Collections.emptyList();
+        }
 
-		CellSetAxis slicer = cellSet.getFilterAxis();
+        CellSetAxis slicer = cellSet.getFilterAxis();
 
-		Set<Hierarchy> hierarchies = new LinkedHashSet<Hierarchy>();
-		for (Position position : slicer.getPositions()) {
-			for (Member member : position.getMembers()) {
-				if (!member.isAll() && !(member instanceof Measure)
-						&& !hierarchies.contains(member.getHierarchy())) {
-					hierarchies.add(member.getHierarchy());
-				}
-			}
-		}
+        Set<Hierarchy> hierarchies = new LinkedHashSet<Hierarchy>();
+        for (Position position : slicer.getPositions()) {
+            for (Member member : position.getMembers()) {
+                if (!member.isAll() && !(member instanceof Measure)
+                        && !hierarchies.contains(member.getHierarchy())) {
+                    hierarchies.add(member.getHierarchy());
+                }
+            }
+        }
 
-		return new LinkedList<Hierarchy>(hierarchies);
-	}
+        return new LinkedList<Hierarchy>(hierarchies);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.ChangeSlicer#getSlicer()
-	 */
-	public List<Member> getSlicer() {
-		if (!getModel().isInitialized()) {
-			return Collections.emptyList();
-		}
+    /**
+     * @see org.pivot4j.transform.ChangeSlicer#getSlicer()
+     */
+    public List<Member> getSlicer() {
+        if (!getModel().isInitialized()) {
+            return Collections.emptyList();
+        }
 
-		// Use result rather than query
-		CellSet cellSet = getModel().getCellSet();
-		CellSetAxis slicer = cellSet.getFilterAxis();
+        // Use result rather than query
+        CellSet cellSet = getModel().getCellSet();
+        CellSetAxis slicer = cellSet.getFilterAxis();
 
-		List<Position> positions = slicer.getPositions();
-		List<Member> members = new ArrayList<Member>();
+        List<Position> positions = slicer.getPositions();
+        List<Member> members = new ArrayList<Member>();
 
-		for (Position position : positions) {
-			List<Member> posMembers = position.getMembers();
-			for (Member posMember : posMembers) {
-				if (!members.contains(posMember)) {
-					members.add(posMember);
-				}
-			}
-		}
+        for (Position position : positions) {
+            List<Member> posMembers = position.getMembers();
+            for (Member posMember : posMembers) {
+                if (!members.contains(posMember)) {
+                    members.add(posMember);
+                }
+            }
+        }
 
-		return members;
-	}
+        return members;
+    }
 
-	/**
-	 * @see org.pivot4j.transform.ChangeSlicer#getSlicer(org.olap4j.metadata
-	 *      .Hierarchy)
-	 */
-	@Override
-	public List<Member> getSlicer(Hierarchy hierarchy) {
-		if (hierarchy == null) {
-			return getSlicer();
-		}
+    /**
+     * @see org.pivot4j.transform.ChangeSlicer#getSlicer(org.olap4j.metadata
+     * .Hierarchy)
+     */
+    @Override
+    public List<Member> getSlicer(Hierarchy hierarchy) {
+        if (hierarchy == null) {
+            return getSlicer();
+        }
 
-		CellSet cellSet = getModel().getCellSet();
-		CellSetAxis slicer = cellSet.getFilterAxis();
+        CellSet cellSet = getModel().getCellSet();
+        CellSetAxis slicer = cellSet.getFilterAxis();
 
-		List<Position> positions = slicer.getPositions();
-		List<Member> members = new ArrayList<Member>();
+        List<Position> positions = slicer.getPositions();
+        List<Member> members = new ArrayList<Member>();
 
-		for (Position position : positions) {
-			List<Member> posMembers = position.getMembers();
-			for (Member posMember : posMembers) {
-				if (OlapUtils.equals(posMember.getHierarchy(), hierarchy)
-						&& !members.contains(posMember)) {
-					members.add(posMember);
-				}
-			}
-		}
+        for (Position position : positions) {
+            List<Member> posMembers = position.getMembers();
+            for (Member posMember : posMembers) {
+                if (OlapUtils.equals(posMember.getHierarchy(), hierarchy)
+                        && !members.contains(posMember)) {
+                    members.add(posMember);
+                }
+            }
+        }
 
-		return members;
-	}
+        return members;
+    }
 
-	/**
-	 * @see org.pivot4j.transform.ChangeSlicer#setSlicer(java.util.List)
-	 */
-	public void setSlicer(List<Member> members) {
-		Exp exp = null;
+    /**
+     * @see org.pivot4j.transform.ChangeSlicer#setSlicer(java.util.List)
+     */
+    public void setSlicer(List<Member> members) {
+        Exp exp = null;
 
-		if (members != null && !members.isEmpty()) {
-			List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(
-					members.size());
+        if (members != null && !members.isEmpty()) {
+            List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(
+                    members.size());
 
-			Map<Hierarchy, List<Member>> memberMap = new HashMap<Hierarchy, List<Member>>();
-			for (Member member : members) {
-				Hierarchy hierarchy = member.getHierarchy();
+            Map<Hierarchy, List<Member>> memberMap = new HashMap<Hierarchy, List<Member>>();
+            for (Member member : members) {
+                Hierarchy hierarchy = member.getHierarchy();
 
-				if (!hierarchies.contains(hierarchy)) {
-					hierarchies.add(hierarchy);
-				}
+                if (!hierarchies.contains(hierarchy)) {
+                    hierarchies.add(hierarchy);
+                }
 
-				List<Member> hierarchyMembers = memberMap.get(hierarchy);
-				if (hierarchyMembers == null) {
-					hierarchyMembers = new ArrayList<Member>(members.size());
-					memberMap.put(hierarchy, hierarchyMembers);
-				}
+                List<Member> hierarchyMembers = memberMap.get(hierarchy);
+                if (hierarchyMembers == null) {
+                    hierarchyMembers = new ArrayList<Member>(members.size());
+                    memberMap.put(hierarchy, hierarchyMembers);
+                }
 
-				hierarchyMembers.add(member);
-			}
+                hierarchyMembers.add(member);
+            }
 
-			if (hierarchies.size() == 1) {
-				Hierarchy hierarchy = hierarchies.get(0);
-				exp = createMemberSetExpression(hierarchy,
-						memberMap.get(hierarchy));
-			} else {
-				int index = 0;
+            if (hierarchies.size() == 1) {
+                Hierarchy hierarchy = hierarchies.get(0);
+                exp = createMemberSetExpression(hierarchy,
+                        memberMap.get(hierarchy));
+            } else {
+                int index = 0;
 
-				Exp[] sets = new Exp[2];
+                Exp[] sets = new Exp[2];
 
-				for (Hierarchy hierarchy : hierarchies) {
-					Exp set = createMemberSetExpression(hierarchy,
-							memberMap.get(hierarchy));
-					if (set == null) {
-						continue;
-					}
+                for (Hierarchy hierarchy : hierarchies) {
+                    Exp set = createMemberSetExpression(hierarchy,
+                            memberMap.get(hierarchy));
+                    if (set == null) {
+                        continue;
+                    }
 
-					if (index < 2) {
-						sets[index] = set;
-					} else {
-						sets[0] = new FunCall("CrossJoin", Syntax.Function,
-								Arrays.asList(sets));
-						sets[1] = set;
-					}
+                    if (index < 2) {
+                        sets[index] = set;
+                    } else {
+                        sets[0] = new FunCall("CrossJoin", Syntax.Function,
+                                Arrays.asList(sets));
+                        sets[1] = set;
+                    }
 
-					index++;
-				}
+                    index++;
+                }
 
-				exp = new FunCall("CrossJoin", Syntax.Function,
-						Arrays.asList(sets));
-			}
-		}
+                exp = new FunCall("CrossJoin", Syntax.Function,
+                        Arrays.asList(sets));
+            }
+        }
 
-		getQueryAdapter().changeSlicer(exp);
-	}
+        getQueryAdapter().changeSlicer(exp);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.ChangeSlicer#setSlicer(org.olap4j.metadata
-	 *      .Hierarchy, java.util.List)
-	 */
-	@Override
-	public void setSlicer(Hierarchy hierarchy, List<Member> members) {
-		if (hierarchy == null) {
-			setSlicer(members);
-			return;
-		}
+    /**
+     * @see org.pivot4j.transform.ChangeSlicer#setSlicer(org.olap4j.metadata
+     * .Hierarchy, java.util.List)
+     */
+    @Override
+    public void setSlicer(Hierarchy hierarchy, List<Member> members) {
+        if (hierarchy == null) {
+            setSlicer(members);
+            return;
+        }
 
-		Exp exp = null;
+        Exp exp = null;
 
-		List<Hierarchy> hierarchies = new ArrayList<Hierarchy>();
+        List<Hierarchy> hierarchies = new ArrayList<Hierarchy>();
 
-		Map<Hierarchy, List<Member>> memberMap = new HashMap<Hierarchy, List<Member>>();
+        Map<Hierarchy, List<Member>> memberMap = new HashMap<Hierarchy, List<Member>>();
 
-		List<Member> membersOnSlicer = getSlicer();
+        List<Member> membersOnSlicer = getSlicer();
 
-		if (membersOnSlicer != null && !membersOnSlicer.isEmpty()) {
-			for (Member member : membersOnSlicer) {
-				Hierarchy memberHierarchy = member.getHierarchy();
+        if (membersOnSlicer != null && !membersOnSlicer.isEmpty()) {
+            for (Member member : membersOnSlicer) {
+                Hierarchy memberHierarchy = member.getHierarchy();
 
-				if (!hierarchies.contains(memberHierarchy)) {
-					hierarchies.add(memberHierarchy);
-				}
+                if (!hierarchies.contains(memberHierarchy)) {
+                    hierarchies.add(memberHierarchy);
+                }
 
-				if (!OlapUtils.equals(memberHierarchy, hierarchy)) {
-					List<Member> hierarchyMembers = memberMap
-							.get(memberHierarchy);
-					if (hierarchyMembers == null) {
-						hierarchyMembers = new ArrayList<Member>();
-						memberMap.put(memberHierarchy, hierarchyMembers);
-					}
+                if (!OlapUtils.equals(memberHierarchy, hierarchy)) {
+                    List<Member> hierarchyMembers = memberMap
+                            .get(memberHierarchy);
+                    if (hierarchyMembers == null) {
+                        hierarchyMembers = new ArrayList<Member>();
+                        memberMap.put(memberHierarchy, hierarchyMembers);
+                    }
 
-					hierarchyMembers.add(member);
-				}
-			}
-		}
+                    hierarchyMembers.add(member);
+                }
+            }
+        }
 
-		if (members == null || members.isEmpty()) {
-			hierarchies.remove(hierarchy);
-		} else {
-			if (!hierarchies.contains(hierarchy)) {
-				hierarchies.add(hierarchy);
-			}
+        if (members == null || members.isEmpty()) {
+            hierarchies.remove(hierarchy);
+        } else {
+            if (!hierarchies.contains(hierarchy)) {
+                hierarchies.add(hierarchy);
+            }
 
-			memberMap.put(hierarchy, members);
-		}
+            memberMap.put(hierarchy, members);
+        }
 
-		int size = hierarchies.size();
-		if (size == 1) {
-			Hierarchy hier = hierarchies.get(0);
-			exp = createMemberSetExpression(hier, memberMap.get(hier));
-		} else if (size > 1) {
-			int index = 0;
+        int size = hierarchies.size();
+        if (size == 1) {
+            Hierarchy hier = hierarchies.get(0);
+            exp = createMemberSetExpression(hier, memberMap.get(hier));
+        } else if (size > 1) {
+            int index = 0;
 
-			Exp[] sets = new Exp[2];
+            Exp[] sets = new Exp[2];
 
-			for (Hierarchy hier : hierarchies) {
-				Exp set = createMemberSetExpression(hier, memberMap.get(hier));
-				if (set == null) {
-					continue;
-				}
+            for (Hierarchy hier : hierarchies) {
+                Exp set = createMemberSetExpression(hier, memberMap.get(hier));
+                if (set == null) {
+                    continue;
+                }
 
-				if (index < 2) {
-					sets[index] = set;
-				} else {
-					sets[0] = new FunCall("CrossJoin", Syntax.Function,
-							Arrays.asList(sets));
-					sets[1] = set;
-				}
+                if (index < 2) {
+                    sets[index] = set;
+                } else {
+                    sets[0] = new FunCall("CrossJoin", Syntax.Function,
+                            Arrays.asList(sets));
+                    sets[1] = set;
+                }
 
-				index++;
-			}
+                index++;
+            }
 
-			exp = new FunCall("CrossJoin", Syntax.Function, Arrays.asList(sets));
-		}
+            exp = new FunCall("CrossJoin", Syntax.Function, Arrays.asList(sets));
+        }
 
-		getQueryAdapter().changeSlicer(exp);
-	}
+        getQueryAdapter().changeSlicer(exp);
+    }
 
-	/**
-	 * @param hierachy
-	 * @param members
-	 * @return
-	 */
-	protected Exp createMemberSetExpression(Hierarchy hierachy,
-			List<Member> members) {
-		if (members == null || members.isEmpty()) {
-			return null;
-		}
+    /**
+     * @param hierachy
+     * @param members
+     * @return
+     */
+    protected Exp createMemberSetExpression(Hierarchy hierachy,
+            List<Member> members) {
+        if (members == null || members.isEmpty()) {
+            return null;
+        }
 
-		OlapUtils utils = new OlapUtils(getModel().getCube());
-		utils.setMemberHierarchyCache(getQueryAdapter().getModel()
-				.getMemberHierarchyCache());
+        OlapUtils utils = new OlapUtils(getModel().getCube());
+        utils.setMemberHierarchyCache(getQueryAdapter().getModel()
+                .getMemberHierarchyCache());
 
-		if (members.size() == 1) {
-			return new MemberExp(utils.wrapRaggedIfNecessary(members.get(0)));
-		}
+        if (members.size() == 1) {
+            return new MemberExp(utils.wrapRaggedIfNecessary(members.get(0)));
+        }
 
-		List<Exp> expressions = new ArrayList<Exp>(members.size());
-		for (Member member : members) {
-			expressions.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
-		}
+        List<Exp> expressions = new ArrayList<Exp>(members.size());
+        for (Member member : members) {
+            expressions.add(new MemberExp(utils.wrapRaggedIfNecessary(member)));
+        }
 
-		return new FunCall("{}", Syntax.Braces, expressions);
-	}
+        return new FunCall("{}", Syntax.Braces, expressions);
+    }
 }

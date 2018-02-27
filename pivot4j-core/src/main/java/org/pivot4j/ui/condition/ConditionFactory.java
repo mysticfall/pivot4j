@@ -12,11 +12,11 @@ import java.util.List;
 
 public interface ConditionFactory {
 
-	List<String> getAvailableConditions();
+    List<String> getAvailableConditions();
 
-	/**
-	 * @param name
-	 * @return
-	 */
-	Condition createCondition(String name);
+    /**
+     * @param name
+     * @return
+     */
+    Condition createCondition(String name);
 }

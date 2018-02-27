@@ -12,5 +12,5 @@ import org.pivot4j.PivotModel;
 
 public interface Transform {
 
-	PivotModel getModel();
+    PivotModel getModel();
 }

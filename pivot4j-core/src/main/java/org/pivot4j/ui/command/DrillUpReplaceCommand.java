@@ -21,93 +21,95 @@ import org.pivot4j.ui.RenderContext;
 
 public class DrillUpReplaceCommand extends AbstractDrillDownCommand {
 
-	public static final String NAME = "drillUp";
+    public static final String NAME = "drillUp";
 
-	/**
-	 * @param renderer
-	 */
-	public DrillUpReplaceCommand(PivotRenderer<?> renderer) {
-		super(renderer);
-	}
+    /**
+     * @param renderer
+     */
+    public DrillUpReplaceCommand(PivotRenderer<?> renderer) {
+        super(renderer);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#getName()
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.command.UICommand#getName()
+     */
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.AbstractUICommand#getMode(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public String getMode(RenderContext context) {
-		return MODE_REPLACE;
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.command.AbstractUICommand#getMode(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public String getMode(RenderContext context) {
+        return MODE_REPLACE;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#canExecute(org.pivot4j.ui
-	 *      .RenderContext)
-	 */
-	@Override
-	public boolean canExecute(RenderContext context) {
-		if (!super.canExecute(context)) {
-			return false;
-		}
+    /**
+     * @see org.pivot4j.ui.command.UICommand#canExecute(org.pivot4j.ui
+     * .RenderContext)
+     */
+    @Override
+    public boolean canExecute(RenderContext context) {
+        if (!super.canExecute(context)) {
+            return false;
+        }
 
-		PivotModel model = context.getModel();
+        PivotModel model = context.getModel();
 
-		DrillReplace transform = model.getTransform(DrillReplace.class);
+        DrillReplace transform = model.getTransform(DrillReplace.class);
 
-		Hierarchy hierarchy = context.getHierarchy();
-		if (hierarchy == null || context.getProperty() != null || context.getMember() !=null) {
-			return false;
-		}
+        Hierarchy hierarchy = context.getHierarchy();
+        if (hierarchy == null || context.getProperty() != null || context.getMember() != null) {
+            return false;
+        }
 
-		return transform.canDrillUp(hierarchy);
-	}
+        return transform.canDrillUp(hierarchy);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#createParameters(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public UICommandParameters createParameters(RenderContext context) {
-		PlaceHierarchiesOnAxes transform = context.getModel().getTransform(
-				PlaceHierarchiesOnAxes.class);
+    /**
+     * @see
+     * org.pivot4j.ui.command.UICommand#createParameters(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public UICommandParameters createParameters(RenderContext context) {
+        PlaceHierarchiesOnAxes transform = context.getModel().getTransform(
+                PlaceHierarchiesOnAxes.class);
 
-		List<Hierarchy> hierarchies = transform.findVisibleHierarchies(context
-				.getAxis());
+        List<Hierarchy> hierarchies = transform.findVisibleHierarchies(context
+                .getAxis());
 
-		UICommandParameters parameters = new UICommandParameters();
-		parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
-		parameters.setHierarchyOrdinal(hierarchies.indexOf(context
-				.getHierarchy()));
+        UICommandParameters parameters = new UICommandParameters();
+        parameters.setAxisOrdinal(context.getAxis().axisOrdinal());
+        parameters.setHierarchyOrdinal(hierarchies.indexOf(context
+                .getHierarchy()));
 
-		return parameters;
-	}
+        return parameters;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
-	 *      org.pivot4j.ui.command.UICommandParameters)
-	 */
-	@Override
-	public Void execute(PivotModel model, UICommandParameters parameters) {
-		CellSet cellSet = model.getCellSet();
+    /**
+     * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+     * org.pivot4j.ui.command.UICommandParameters)
+     */
+    @Override
+    public Void execute(PivotModel model, UICommandParameters parameters) {
+        CellSet cellSet = model.getCellSet();
 
-		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
+        CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
 
-		PlaceHierarchiesOnAxes transform = model
-				.getTransform(PlaceHierarchiesOnAxes.class);
+        PlaceHierarchiesOnAxes transform = model
+                .getTransform(PlaceHierarchiesOnAxes.class);
 
-		List<Hierarchy> hierarchies = transform.findVisibleHierarchies(axis
-				.getAxisOrdinal());
+        List<Hierarchy> hierarchies = transform.findVisibleHierarchies(axis
+                .getAxisOrdinal());
 
-		Hierarchy hierarchy = hierarchies.get(parameters.getHierarchyOrdinal());
+        Hierarchy hierarchy = hierarchies.get(parameters.getHierarchyOrdinal());
 
-		DrillReplace drillTransform = model.getTransform(DrillReplace.class);
-		drillTransform.drillUp(hierarchy);
+        DrillReplace drillTransform = model.getTransform(DrillReplace.class);
+        drillTransform.drillUp(hierarchy);
 
-		return null;
-	}
+        return null;
+    }
 }

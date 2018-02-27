@@ -18,34 +18,34 @@ import org.pivot4j.transform.SwapAxes;
  */
 public class SwapAxesImpl extends AbstractTransform implements SwapAxes {
 
-	/**
-	 * @param queryAdapter
-	 * @param connection
-	 */
-	public SwapAxesImpl(QueryAdapter queryAdapter, OlapConnection connection) {
-		super(queryAdapter, connection);
-	}
+    /**
+     * @param queryAdapter
+     * @param connection
+     */
+    public SwapAxesImpl(QueryAdapter queryAdapter, OlapConnection connection) {
+        super(queryAdapter, connection);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.SwapAxes#canSwapAxes()
-	 */
-	public boolean canSwapAxes() {
-		return getQueryAdapter().getAxes().size() > 1;
-	}
+    /**
+     * @see org.pivot4j.transform.SwapAxes#canSwapAxes()
+     */
+    public boolean canSwapAxes() {
+        return getQueryAdapter().getAxes().size() > 1;
+    }
 
-	/**
-	 * @see org.pivot4j.transform.SwapAxes#isSwapAxes()
-	 */
-	public boolean isSwapAxes() {
-		return getQueryAdapter().isAxesSwapped();
-	}
+    /**
+     * @see org.pivot4j.transform.SwapAxes#isSwapAxes()
+     */
+    public boolean isSwapAxes() {
+        return getQueryAdapter().isAxesSwapped();
+    }
 
-	/**
-	 * @see org.pivot4j.transform.SwapAxes#setSwapAxes(boolean)
-	 */
-	public void setSwapAxes(boolean swap) {
-		if (getQueryAdapter().isAxesSwapped() != swap) {
-			getQueryAdapter().swapAxes();
-		}
-	}
+    /**
+     * @see org.pivot4j.transform.SwapAxes#setSwapAxes(boolean)
+     */
+    public void setSwapAxes(boolean swap) {
+        if (getQueryAdapter().isAxesSwapped() != swap) {
+            getQueryAdapter().swapAxes();
+        }
+    }
 }

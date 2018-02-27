@@ -10,9 +10,9 @@ package org.pivot4j.ui;
 
 public interface CellTypes {
 
-	String VALUE = "value";
+    String VALUE = "value";
 
-	String AGG_VALUE = "aggValue";
+    String AGG_VALUE = "aggValue";
 
-	String LABEL = "label";
+    String LABEL = "label";
 }

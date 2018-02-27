@@ -16,24 +16,24 @@ import org.olap4j.metadata.MetadataElement;
 
 public interface DrillThrough extends Transform {
 
-	/**
-	 * Note that it is caller's responsibility to close the returned ResultSet
-	 * object and also the Statement instance which is associated with it.
-	 * 
-	 * @param cell
-	 * @return
-	 */
-	ResultSet drillThrough(Cell cell);
+    /**
+     * Note that it is caller's responsibility to close the returned ResultSet
+     * object and also the Statement instance which is associated with it.
+     *
+     * @param cell
+     * @return
+     */
+    ResultSet drillThrough(Cell cell);
 
-	/**
-	 * Note that it is caller's responsibility to close the returned ResultSet
-	 * object and also the Statement instance which is associated with it.
-	 * 
-	 * @param cell
-	 * @param selection
-	 * @param maximumRows
-	 * @return
-	 */
-	ResultSet drillThrough(Cell cell, List<MetadataElement> selection,
-			int maximumRows);
+    /**
+     * Note that it is caller's responsibility to close the returned ResultSet
+     * object and also the Statement instance which is associated with it.
+     *
+     * @param cell
+     * @param selection
+     * @param maximumRows
+     * @return
+     */
+    ResultSet drillThrough(Cell cell, List<MetadataElement> selection,
+            int maximumRows);
 }

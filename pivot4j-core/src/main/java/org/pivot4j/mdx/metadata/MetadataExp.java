@@ -14,11 +14,11 @@ import org.pivot4j.mdx.Exp;
 
 public interface MetadataExp<T extends MetadataElement> extends Exp {
 
-	String getName();
+    String getName();
 
-	String getUniqueName();
+    String getUniqueName();
 
-	T getMetadata(Cube cube);
+    T getMetadata(Cube cube);
 
-	void setMetadata(T element);
+    void setMetadata(T element);
 }

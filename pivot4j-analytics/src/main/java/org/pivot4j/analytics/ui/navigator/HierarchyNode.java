@@ -14,79 +14,79 @@ import org.primefaces.model.TreeNode;
 
 public class HierarchyNode extends MetadataNode<Hierarchy> {
 
-	/**
-	 * @param hierarchy
-	 */
-	public HierarchyNode(Hierarchy hierarchy) {
-		super(hierarchy);
-	}
+    /**
+     * @param hierarchy
+     */
+    public HierarchyNode(Hierarchy hierarchy) {
+        super(hierarchy);
+    }
 
-	/**
-	 * @see org.primefaces.model.TreeNode#getType()
-	 */
-	@Override
-	public String getType() {
-		return "hierarchy";
-	}
+    /**
+     * @see org.primefaces.model.TreeNode#getType()
+     */
+    @Override
+    public String getType() {
+        return "hierarchy";
+    }
 
-	/**
-	 * @see org.primefaces.model.TreeNode#isLeaf()
-	 */
-	@Override
-	public boolean isLeaf() {
-		return false;
-	}
+    /**
+     * @see org.primefaces.model.TreeNode#isLeaf()
+     */
+    @Override
+    public boolean isLeaf() {
+        return false;
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.ui.navigator.MetadataNode#createChildren()
-	 */
-	@Override
-	protected List<TreeNode> createChildren() {
-		Hierarchy hierarchy = getObject();
+    /**
+     * @see org.pivot4j.analytics.ui.navigator.MetadataNode#createChildren()
+     */
+    @Override
+    protected List<TreeNode> createChildren() {
+        Hierarchy hierarchy = getObject();
 
-		try {
-			if (hierarchy.getDimension().getDimensionType() == Type.MEASURE) {
-				List<? extends Member> members = hierarchy.getRootMembers();
-				List<TreeNode> children = new ArrayList<TreeNode>(
-						members.size());
+        try {
+            if (hierarchy.getDimension().getDimensionType() == Type.MEASURE) {
+                List<? extends Member> members = hierarchy.getRootMembers();
+                List<TreeNode> children = new ArrayList<TreeNode>(
+                        members.size());
 
-				for (Member member : members) {
-					if (!member.isVisible()) {
-						continue;
-					}
+                for (Member member : members) {
+                    if (!member.isVisible()) {
+                        continue;
+                    }
 
-					MeasureNode node = new MeasureNode(this, member);
+                    MeasureNode node = new MeasureNode(this, member);
 
-					if (configureChildNode(member, node)) {
-						node.setParent(this);
+                    if (configureChildNode(member, node)) {
+                        node.setParent(this);
 
-						children.add(node);
-					}
-				}
+                        children.add(node);
+                    }
+                }
 
-				return children;
-			} else {
-				List<Level> levels = hierarchy.getLevels();
-				List<TreeNode> children = new ArrayList<TreeNode>(levels.size());
+                return children;
+            } else {
+                List<Level> levels = hierarchy.getLevels();
+                List<TreeNode> children = new ArrayList<TreeNode>(levels.size());
 
-				for (Level level : levels) {
-					if (!level.isVisible()) {
-						continue;
-					}
+                for (Level level : levels) {
+                    if (!level.isVisible()) {
+                        continue;
+                    }
 
-					LevelNode node = new LevelNode(level);
+                    LevelNode node = new LevelNode(level);
 
-					if (configureChildNode(level, node)) {
-						node.setParent(this);
+                    if (configureChildNode(level, node)) {
+                        node.setParent(this);
 
-						children.add(node);
-					}
-				}
+                        children.add(node);
+                    }
+                }
 
-				return children;
-			}
-		} catch (OlapException e) {
-			throw new FacesException(e);
-		}
-	}
+                return children;
+            }
+        } catch (OlapException e) {
+            throw new FacesException(e);
+        }
+    }
 }

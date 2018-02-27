@@ -10,22 +10,22 @@ package org.pivot4j.ui.poi;
 
 public enum Format {
 
-	HSSF("xls"), XSSF("xlsx"), SXSSF("xlsx");
+    HSSF("xls"), XSSF("xlsx"), SXSSF("xlsx");
 
-	private String extension;
+    private String extension;
 
-	/**
-	 * @param extension
-	 */
-	private Format(String extension) {
-		this.extension = extension;
-	}
+    /**
+     * @param extension
+     */
+    private Format(String extension) {
+        this.extension = extension;
+    }
 
-	/**
-	 * @return the extension
-	 */
-	public String getExtension() {
-		return extension;
-	}
+    /**
+     * @return the extension
+     */
+    public String getExtension() {
+        return extension;
+    }
 
 }

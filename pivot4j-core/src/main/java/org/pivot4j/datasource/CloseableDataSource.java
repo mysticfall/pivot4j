@@ -14,5 +14,5 @@ import org.olap4j.OlapDataSource;
 
 public interface CloseableDataSource extends OlapDataSource {
 
-	void close() throws SQLException;
+    void close() throws SQLException;
 }

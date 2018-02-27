@@ -30,73 +30,74 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
 
 public class SimpleAggregationIT extends AbstractHtmlTableTestCase {
 
-	/**
-	 * @see org.pivot4j.ui.AbstractHtmlTableTestCase#getQueryName()
-	 */
-	@Override
-	protected String getQueryName() {
-		return "simple";
-	}
+    /**
+     * @see org.pivot4j.ui.AbstractHtmlTableTestCase#getQueryName()
+     */
+    @Override
+    protected String getQueryName() {
+        return "simple";
+    }
 
-	/**
-	 * @param renderer
-	 * @see org.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(org.pivot4j.ui.table.TableRenderer)
-	 */
-	@Override
-	protected void configureRenderer(TableRenderer renderer) {
-		super.configureRenderer(renderer);
+    /**
+     * @param renderer
+     * @see
+     * org.pivot4j.ui.AbstractHtmlTableTestCase#configureRenderer(org.pivot4j.ui.table.TableRenderer)
+     */
+    @Override
+    protected void configureRenderer(TableRenderer renderer) {
+        super.configureRenderer(renderer);
 
-		renderer.setShowParentMembers(false);
+        renderer.setShowParentMembers(false);
 
-		renderer.addAggregator(Axis.ROWS, AggregatorPosition.Grand,
-				TotalAggregator.NAME);
-		renderer.addAggregator(Axis.COLUMNS, AggregatorPosition.Grand,
-				TotalAggregator.NAME);
-	}
+        renderer.addAggregator(Axis.ROWS, AggregatorPosition.Grand,
+                TotalAggregator.NAME);
+        renderer.addAggregator(Axis.COLUMNS, AggregatorPosition.Grand,
+                TotalAggregator.NAME);
+    }
 
-	@Test
-	public void testAggregation() throws IOException {
-		HtmlTable table = getTable();
+    @Test
+    public void testAggregation() throws IOException {
+        HtmlTable table = getTable();
 
-		HtmlTableHeader header = table.getHeader();
+        HtmlTableHeader header = table.getHeader();
 
-		List<HtmlTableRow> rows = header.getRows();
+        List<HtmlTableRow> rows = header.getRows();
 
-		assertThat("Table header is missing.", rows, is(notNullValue()));
-		assertThat("Not enough column header rows.", rows.size(),
-				is(equalTo(3)));
+        assertThat("Table header is missing.", rows, is(notNullValue()));
+        assertThat("Not enough column header rows.", rows.size(),
+                is(equalTo(3)));
 
-		assertCell(rows, 0, 0, 2, 1, null);
-		assertCell(rows, 0, 1, 1, 4, "Measures");
+        assertCell(rows, 0, 0, 2, 1, null);
+        assertCell(rows, 0, 1, 1, 4, "Measures");
 
-		assertCell(rows, 1, 0, 2, 1, "Store Cost");
-		assertCell(rows, 1, 1, 2, 1, "Unit Sales");
-		assertCell(rows, 1, 2, 1, 2, "Total");
+        assertCell(rows, 1, 0, 2, 1, "Store Cost");
+        assertCell(rows, 1, 1, 2, 1, "Unit Sales");
+        assertCell(rows, 1, 2, 1, 2, "Total");
 
-		assertCell(rows, 2, 0, 1, 1, "Product");
-		assertCell(rows, 2, 1, 1, 1, "Store Cost");
-		assertCell(rows, 2, 2, 1, 1, "Unit Sales");
+        assertCell(rows, 2, 0, 1, 1, "Product");
+        assertCell(rows, 2, 1, 1, 1, "Store Cost");
+        assertCell(rows, 2, 2, 1, 1, "Unit Sales");
 
-		List<HtmlTableBody> bodies = table.getBodies();
+        List<HtmlTableBody> bodies = table.getBodies();
 
-		assertThat("Table body is missing.", bodies, is(notNullValue()));
-		assertThat("Table body is missing.", bodies.size(), is(equalTo(1)));
+        assertThat("Table body is missing.", bodies, is(notNullValue()));
+        assertThat("Table body is missing.", bodies.size(), is(equalTo(1)));
 
-		rows = bodies.get(0).getRows();
+        rows = bodies.get(0).getRows();
 
-		assertThat("Table content is missing.", rows, is(notNullValue()));
-		assertThat("Not enough content rows.", rows.size(), is(equalTo(2)));
+        assertThat("Table content is missing.", rows, is(notNullValue()));
+        assertThat("Not enough content rows.", rows.size(), is(equalTo(2)));
 
-		assertCell(rows, 0, 0, 1, 1, "All Products");
-		assertCell(rows, 0, 1, 1, 1, "225,627.23");
-		assertCell(rows, 0, 2, 1, 1, "266,773");
-		assertCell(rows, 0, 3, 1, 1, "225,627.23");
-		assertCell(rows, 0, 4, 1, 1, "266,773");
+        assertCell(rows, 0, 0, 1, 1, "All Products");
+        assertCell(rows, 0, 1, 1, 1, "225,627.23");
+        assertCell(rows, 0, 2, 1, 1, "266,773");
+        assertCell(rows, 0, 3, 1, 1, "225,627.23");
+        assertCell(rows, 0, 4, 1, 1, "266,773");
 
-		assertCell(rows, 1, 0, 1, 1, "Total");
-		assertCell(rows, 1, 1, 1, 1, "225,627.23");
-		assertCell(rows, 1, 2, 1, 1, "266,773");
-		assertCell(rows, 1, 3, 1, 1, "225,627.23");
-		assertCell(rows, 1, 4, 1, 1, "266,773");
-	}
+        assertCell(rows, 1, 0, 1, 1, "Total");
+        assertCell(rows, 1, 1, 1, 1, "225,627.23");
+        assertCell(rows, 1, 2, 1, 1, "266,773");
+        assertCell(rows, 1, 3, 1, 1, "225,627.23");
+        assertCell(rows, 1, 4, 1, 1, "266,773");
+    }
 }

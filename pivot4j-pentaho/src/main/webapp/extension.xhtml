@@ -1,52 +1,51 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
-	<h:form id="extension-form">
-		<p:remoteCommand name="savePentahoReport"
-			actionListener="#{reportOpener.save}" update="growl"
-			rendered="#{!pivotStateManager.readOnly}" 
-			onsuccess="onPentahoReportSave()" />
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:form id="extension-form">
+        <p:remoteCommand name="savePentahoReport"
+                         actionListener="#{reportOpener.save}" update="growl"
+                         rendered="#{!pivotStateManager.readOnly}" 
+                         onsuccess="onPentahoReportSave()" />
 
-		<p:growl id="growl" showDetail="true" life="5000" />
-	</h:form>
+        <p:growl id="growl" showDetail="true" life="5000" />
+    </h:form>
 
-	<script type="text/javascript">
-		function handle_puc_save(path, fileName, overwrite) {
-			savePentahoReport([ {
-				name : "viewId",
-				value : "#{pivotStateManager.viewId}"
-			}, {
-				name : "path",
-				value : path
-			}, {
-				name : "fileName",
-				value : fileName
-			}, {
-				name : "overwrite",
-				value : overwrite
-			} ]);
+    <script type="text/javascript">
+        function handle_puc_save(path, fileName, overwrite) {
+        savePentahoReport([ {
+        name : "viewId",
+                value : "#{pivotStateManager.viewId}"
+        }, {
+        name : "path",
+                value : path
+        }, {
+        name : "fileName",
+                value : fileName
+        }, {
+        name : "overwrite",
+                value : overwrite
+        } ]);
+        return path;
+        }
 
-			return path;
-		}
+        function onPentahoReportSave() {
+        if (parent & amp; & amp; typeof parent.enableSave == "function") {
+        parent.enableSave(false);
+        parent.mantle_refreshRepository();
+        }
+        }
 
-		function onPentahoReportSave() {
-			if (parent &amp;&amp; typeof parent.enableSave == "function") {
-				parent.enableSave(false);
-				parent.mantle_refreshRepository();
-			}
-		}
+        function getPossibleFileExtensions() {
+        return [".pivot4j"];
+        }
 
-		function getPossibleFileExtensions() {
-			return [".pivot4j"];
-		}
+        if (parent & amp; & amp; parent.enableSave){
+        parent.enableSave(#{pivotStateManager.dirty});
+        }
+    </script>
 
-		if (parent &amp;&amp; parent.enableSave) {
-			parent.enableSave(#{pivotStateManager.dirty});
-		}
-	</script>
-
-	<h:outputStylesheet library="pivot4j" name="css/pentaho.css" />
+    <h:outputStylesheet library="pivot4j" name="css/pentaho.css" />
 </ui:composition>

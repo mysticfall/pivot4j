@@ -23,85 +23,85 @@ import org.pivot4j.ui.condition.AndCondition;
 
 public class AndConditionTest extends AbstractConditionTest {
 
-	@Test(expected = IllegalStateException.class)
-	public void testEmptyCondition() {
-		RenderContext context = createDummyRenderContext();
+    @Test(expected = IllegalStateException.class)
+    public void testEmptyCondition() {
+        RenderContext context = createDummyRenderContext();
 
-		AndCondition and = new AndCondition(conditionFactory);
-		and.matches(context);
-	}
+        AndCondition and = new AndCondition(conditionFactory);
+        and.matches(context);
+    }
 
-	@Test
-	public void testCondition() {
-		RenderContext context = createDummyRenderContext();
+    @Test
+    public void testCondition() {
+        RenderContext context = createDummyRenderContext();
 
-		AndCondition and = new AndCondition(conditionFactory);
+        AndCondition and = new AndCondition(conditionFactory);
 
-		and.setSubConditions(Arrays.asList(TestCondition.TRUE,
-				TestCondition.TRUE));
-		assertThat("'true && true' should be true.", and.matches(context),
-				is(true));
+        and.setSubConditions(Arrays.asList(TestCondition.TRUE,
+                TestCondition.TRUE));
+        assertThat("'true && true' should be true.", and.matches(context),
+                is(true));
 
-		and.setSubConditions(Arrays.asList(TestCondition.TRUE,
-				TestCondition.FALSE));
-		assertThat("'true && false' should be false.", and.matches(context),
-				is(false));
+        and.setSubConditions(Arrays.asList(TestCondition.TRUE,
+                TestCondition.FALSE));
+        assertThat("'true && false' should be false.", and.matches(context),
+                is(false));
 
-		and.setSubConditions(Arrays.asList(TestCondition.TRUE));
-		assertThat("'true' should be true.", and.matches(context), is(true));
+        and.setSubConditions(Arrays.asList(TestCondition.TRUE));
+        assertThat("'true' should be true.", and.matches(context), is(true));
 
-		and.setSubConditions(Arrays.asList(TestCondition.FALSE,
-				TestCondition.FALSE, TestCondition.FALSE));
-		assertThat("'false && false && false' should be false.",
-				and.matches(context), is(false));
-	}
+        and.setSubConditions(Arrays.asList(TestCondition.FALSE,
+                TestCondition.FALSE, TestCondition.FALSE));
+        assertThat("'false && false && false' should be false.",
+                and.matches(context), is(false));
+    }
 
-	@Test
-	public void testStateManagement() {
-		RenderContext context = createDummyRenderContext();
+    @Test
+    public void testStateManagement() {
+        RenderContext context = createDummyRenderContext();
 
-		AndCondition and = new AndCondition(conditionFactory);
-		and.setSubConditions(Arrays.asList(TestCondition.TRUE,
-				TestCondition.TRUE));
+        AndCondition and = new AndCondition(conditionFactory);
+        and.setSubConditions(Arrays.asList(TestCondition.TRUE,
+                TestCondition.TRUE));
 
-		Serializable state = and.saveState();
+        Serializable state = and.saveState();
 
-		and = new AndCondition(conditionFactory);
-		and.restoreState(state);
+        and = new AndCondition(conditionFactory);
+        and.restoreState(state);
 
-		assertThat("Sub conditions should not be null.",
-				and.getSubConditions(), is(notNullValue()));
-		assertThat("Sub condition count should be 2.", and.getSubConditions()
-				.size(), is(2));
-		assertThat("'true && true' should be true.", and.matches(context),
-				is(true));
-	}
+        assertThat("Sub conditions should not be null.",
+                and.getSubConditions(), is(notNullValue()));
+        assertThat("Sub condition count should be 2.", and.getSubConditions()
+                .size(), is(2));
+        assertThat("'true && true' should be true.", and.matches(context),
+                is(true));
+    }
 
-	@Test
-	public void testSettingsManagement() throws ConfigurationException {
-		RenderContext context = createDummyRenderContext();
+    @Test
+    public void testSettingsManagement() throws ConfigurationException {
+        RenderContext context = createDummyRenderContext();
 
-		AndCondition and = new AndCondition(conditionFactory);
-		and.setSubConditions(Arrays.asList(TestCondition.TRUE,
-				TestCondition.TRUE));
+        AndCondition and = new AndCondition(conditionFactory);
+        and.setSubConditions(Arrays.asList(TestCondition.TRUE,
+                TestCondition.TRUE));
 
-		XMLConfiguration configuration = new XMLConfiguration();
-		configuration.setRootElementName("condition");
+        XMLConfiguration configuration = new XMLConfiguration();
+        configuration.setRootElementName("condition");
 
-		and.saveSettings(configuration);
+        and.saveSettings(configuration);
 
-		and = new AndCondition(conditionFactory);
-		and.restoreSettings(configuration);
+        and = new AndCondition(conditionFactory);
+        and.restoreSettings(configuration);
 
-		assertThat("Sub conditions should not be null.",
-				and.getSubConditions(), is(notNullValue()));
-		assertThat("Sub condition count should be 2.", and.getSubConditions()
-				.size(), is(2));
-		assertThat("'true && true' should be true.", and.matches(context),
-				is(true));
+        assertThat("Sub conditions should not be null.",
+                and.getSubConditions(), is(notNullValue()));
+        assertThat("Sub condition count should be 2.", and.getSubConditions()
+                .size(), is(2));
+        assertThat("'true && true' should be true.", and.matches(context),
+                is(true));
 
-		System.out.println("Saved configuration : ");
+        System.out.println("Saved configuration : ");
 
-		configuration.save(System.out);
-	}
+        configuration.save(System.out);
+    }
 }

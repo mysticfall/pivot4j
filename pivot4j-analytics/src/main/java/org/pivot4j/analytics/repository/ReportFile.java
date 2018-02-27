@@ -7,29 +7,29 @@ import java.util.List;
 
 public interface ReportFile {
 
-	String SEPARATOR = "/";
+    String SEPARATOR = "/";
 
-	Serializable getId();
+    Serializable getId();
 
-	String getName();
+    String getName();
 
-	String getPath();
+    String getPath();
 
-	String getExtension();
+    String getExtension();
 
-	ReportFile getParent() throws IOException;
+    ReportFile getParent() throws IOException;
 
-	List<ReportFile> getAncestors() throws IOException;
+    List<ReportFile> getAncestors() throws IOException;
 
-	boolean isDirectory();
+    boolean isDirectory();
 
-	boolean isRoot();
-	
-	Date getLastModifiedDate();
-	
-	long getSize();
+    boolean isRoot();
 
-	boolean canRead();
+    Date getLastModifiedDate();
 
-	boolean canWrite();
+    long getSize();
+
+    boolean canRead();
+
+    boolean canWrite();
 }

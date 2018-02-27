@@ -13,25 +13,25 @@ package org.pivot4j.mdx;
  */
 public interface ExpVisitor {
 
-	void visitCompoundId(CompoundId exp);
+    void visitCompoundId(CompoundId exp);
 
-	void visitLiteral(Literal exp);
+    void visitLiteral(Literal exp);
 
-	void visitFunCall(FunCall exp);
+    void visitFunCall(FunCall exp);
 
-	void visitStatement(MdxStatement exp);
+    void visitStatement(MdxStatement exp);
 
-	void visitQueryAxis(QueryAxis exp);
+    void visitQueryAxis(QueryAxis exp);
 
-	void visitFormula(Formula exp);
+    void visitFormula(Formula exp);
 
-	void visitFormulaProperty(Formula.Property exp);
+    void visitFormulaProperty(Formula.Property exp);
 
-	void visitSapVariable(SapVariable exp);
+    void visitSapVariable(SapVariable exp);
 
-	void visitSapVariableValue(SapVariable.Value exp);
+    void visitSapVariableValue(SapVariable.Value exp);
 
-	void visitMemberParameter(MemberParameter exp);
+    void visitMemberParameter(MemberParameter exp);
 
-	void visitValueParameter(ValueParameter exp);
+    void visitValueParameter(ValueParameter exp);
 }

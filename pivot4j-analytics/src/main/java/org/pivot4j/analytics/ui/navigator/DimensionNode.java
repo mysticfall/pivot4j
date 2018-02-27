@@ -9,51 +9,51 @@ import org.primefaces.model.TreeNode;
 
 public class DimensionNode extends MetadataNode<Dimension> {
 
-	/**
-	 * @param dimension
-	 */
-	public DimensionNode(Dimension dimension) {
-		super(dimension);
-	}
+    /**
+     * @param dimension
+     */
+    public DimensionNode(Dimension dimension) {
+        super(dimension);
+    }
 
-	/**
-	 * @see org.primefaces.model.TreeNode#getType()
-	 */
-	@Override
-	public String getType() {
-		return "dimension";
-	}
+    /**
+     * @see org.primefaces.model.TreeNode#getType()
+     */
+    @Override
+    public String getType() {
+        return "dimension";
+    }
 
-	/**
-	 * @see org.primefaces.model.TreeNode#isLeaf()
-	 */
-	@Override
-	public boolean isLeaf() {
-		return false;
-	}
+    /**
+     * @see org.primefaces.model.TreeNode#isLeaf()
+     */
+    @Override
+    public boolean isLeaf() {
+        return false;
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.ui.navigator.MetadataNode#createChildren()
-	 */
-	@Override
-	protected List<TreeNode> createChildren() {
-		List<Hierarchy> hierarchies = getObject().getHierarchies();
-		List<TreeNode> children = new ArrayList<TreeNode>(hierarchies.size());
+    /**
+     * @see org.pivot4j.analytics.ui.navigator.MetadataNode#createChildren()
+     */
+    @Override
+    protected List<TreeNode> createChildren() {
+        List<Hierarchy> hierarchies = getObject().getHierarchies();
+        List<TreeNode> children = new ArrayList<TreeNode>(hierarchies.size());
 
-		for (Hierarchy hierarchy : hierarchies) {
-			if (!hierarchy.isVisible()) {
-				continue;
-			}
+        for (Hierarchy hierarchy : hierarchies) {
+            if (!hierarchy.isVisible()) {
+                continue;
+            }
 
-			HierarchyNode node = new HierarchyNode(hierarchy);
+            HierarchyNode node = new HierarchyNode(hierarchy);
 
-			if (configureChildNode(hierarchy, node)) {
-				node.setParent(this);
+            if (configureChildNode(hierarchy, node)) {
+                node.setParent(this);
 
-				children.add(node);
-			}
-		}
+                children.add(node);
+            }
+        }
 
-		return children;
-	}
+        return children;
+    }
 }

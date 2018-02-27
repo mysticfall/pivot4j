@@ -34,295 +34,298 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractAggregator implements Aggregator {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Axis axis;
+    private Axis axis;
 
-	private Level level;
+    private Level level;
 
-	private Measure measure;
+    private Measure measure;
 
-	private List<Member> members;
+    private List<Member> members;
 
-	private Map<Position, Double> values = new HashMap<Position, Double>();
+    private Map<Position, Double> values = new HashMap<Position, Double>();
 
-	private Map<Position, Integer> counts = new HashMap<Position, Integer>();
+    private Map<Position, Integer> counts = new HashMap<Position, Integer>();
 
-	private Map<String, NumberFormat> formats = new HashMap<String, NumberFormat>();
+    private Map<String, NumberFormat> formats = new HashMap<String, NumberFormat>();
 
-	/**
-	 * @param axis
-	 * @param members
-	 * @param level
-	 * @param measure
-	 */
-	public AbstractAggregator(Axis axis, List<Member> members, Level level,
-			Measure measure) {
-		if (axis == null) {
-			throw new NullArgumentException("axis");
-		}
+    /**
+     * @param axis
+     * @param members
+     * @param level
+     * @param measure
+     */
+    public AbstractAggregator(Axis axis, List<Member> members, Level level,
+            Measure measure) {
+        if (axis == null) {
+            throw new NullArgumentException("axis");
+        }
 
-		this.axis = axis;
+        this.axis = axis;
 
-		if (members == null) {
-			this.members = Collections.emptyList();
-		} else {
-			this.members = Collections.unmodifiableList(members);
-		}
+        if (members == null) {
+            this.members = Collections.emptyList();
+        } else {
+            this.members = Collections.unmodifiableList(members);
+        }
 
-		this.level = level;
-		this.measure = measure;
-	}
+        this.level = level;
+        this.measure = measure;
+    }
 
-	/**
-	 * @return the logger
-	 */
-	protected Logger getLogger() {
-		return logger;
-	}
+    /**
+     * @return the logger
+     */
+    protected Logger getLogger() {
+        return logger;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getAxis()
-	 */
-	@Override
-	public Axis getAxis() {
-		return axis;
-	}
+    /**
+     * @see org.pivot4j.ui.aggregator.Aggregator#getAxis()
+     */
+    @Override
+    public Axis getAxis() {
+        return axis;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getMembers()
-	 */
-	@Override
-	public List<Member> getMembers() {
-		return members;
-	}
+    /**
+     * @see org.pivot4j.ui.aggregator.Aggregator#getMembers()
+     */
+    @Override
+    public List<Member> getMembers() {
+        return members;
+    }
 
-	/**
-	 * @return the level
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getLevel()
-	 */
-	public Level getLevel() {
-		return level;
-	}
+    /**
+     * @return the level
+     * @see org.pivot4j.ui.aggregator.Aggregator#getLevel()
+     */
+    public Level getLevel() {
+        return level;
+    }
 
-	/**
-	 * @return the measure
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getMeasure()
-	 */
-	public Measure getMeasure() {
-		return measure;
-	}
+    /**
+     * @return the measure
+     * @see org.pivot4j.ui.aggregator.Aggregator#getMeasure()
+     */
+    public Measure getMeasure() {
+        return measure;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#aggregate(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public void aggregate(RenderContext context) {
-		Position targetPosition = context.getAggregationTarget(getAxis());
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.Aggregator#aggregate(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public void aggregate(RenderContext context) {
+        Position targetPosition = context.getAggregationTarget(getAxis());
 
-		Double cellValue = null;
+        Double cellValue = null;
 
-		if (context.getCell() == null) {
-			cellValue = context.getAggregator().getValue(context);
-		} else if (context.getCell().isEmpty()) {
-			cellValue = null;
-		} else {
-			try {
-				cellValue = context.getCell().getDoubleValue();
-			} catch (OlapException e) {
-				throw new PivotException(e);
-			}
-		}
+        if (context.getCell() == null) {
+            cellValue = context.getAggregator().getValue(context);
+        } else if (context.getCell().isEmpty()) {
+            cellValue = null;
+        } else {
+            try {
+                cellValue = context.getCell().getDoubleValue();
+            } catch (OlapException e) {
+                throw new PivotException(e);
+            }
+        }
 
-		if (cellValue == null) {
-			return;
-		}
+        if (cellValue == null) {
+            return;
+        }
 
-		Double value = values.get(targetPosition);
-		Double newValue = calculate(cellValue, value, targetPosition, context);
+        Double value = values.get(targetPosition);
+        Double newValue = calculate(cellValue, value, targetPosition, context);
 
-		values.put(targetPosition, newValue);
+        values.put(targetPosition, newValue);
 
-		int count = getCount(targetPosition);
-		counts.put(targetPosition, ++count);
+        int count = getCount(targetPosition);
+        counts.put(targetPosition, ++count);
 
-		Measure targetMeasure = getMeasure(targetPosition);
+        Measure targetMeasure = getMeasure(targetPosition);
 
-		if (context.getCell() != null) {
-			String key = (targetMeasure == null) ? "" : targetMeasure
-					.getUniqueName();
+        if (context.getCell() != null) {
+            String key = (targetMeasure == null) ? "" : targetMeasure
+                    .getUniqueName();
 
-			if (!formats.containsKey(key)) {
-				formats.put(key, getNumberFormat(context.getCell()));
-			}
-		}
+            if (!formats.containsKey(key)) {
+                formats.put(key, getNumberFormat(context.getCell()));
+            }
+        }
 
-		if (members.isEmpty() && logger.isTraceEnabled()) {
-			logger.trace("Calculation result : ");
-			logger.trace("	- count : {}", count);
-			logger.trace("	- value : {}", cellValue);
-			logger.trace("	- old value : {}", value);
-			logger.trace("	- new value : {}", newValue);
-		}
-	}
+        if (members.isEmpty() && logger.isTraceEnabled()) {
+            logger.trace("Calculation result : ");
+            logger.trace("	- count : {}", count);
+            logger.trace("	- value : {}", cellValue);
+            logger.trace("	- old value : {}", value);
+            logger.trace("	- new value : {}", newValue);
+        }
+    }
 
-	/**
-	 * @param position
-	 * @return
-	 */
-	protected Measure getMeasure(Position position) {
-		if (this.measure != null) {
-			return this.measure;
-		}
+    /**
+     * @param position
+     * @return
+     */
+    protected Measure getMeasure(Position position) {
+        if (this.measure != null) {
+            return this.measure;
+        }
 
-		Measure targetMeasure = null;
+        Measure targetMeasure = null;
 
-		int size = position.getMembers().size();
-		for (int i = size - 1; i > -1; i--) {
-			Member member = position.getMembers().get(i);
+        int size = position.getMembers().size();
+        for (int i = size - 1; i > -1; i--) {
+            Member member = position.getMembers().get(i);
 
-			if (member instanceof Measure) {
-				targetMeasure = (Measure) member;
-				break;
-			}
-		}
+            if (member instanceof Measure) {
+                targetMeasure = (Measure) member;
+                break;
+            }
+        }
 
-		return targetMeasure;
-	}
+        return targetMeasure;
+    }
 
-	/**
-	 * @param cell
-	 * @return
-	 */
-	protected NumberFormat getNumberFormat(Cell cell) {
-		NumberFormat format = null;
+    /**
+     * @param cell
+     * @return
+     */
+    protected NumberFormat getNumberFormat(Cell cell) {
+        NumberFormat format = null;
 
-		String pattern = ObjectUtils.toString(cell
-				.getPropertyValue(StandardCellProperty.FORMAT_STRING));
-		if (pattern != null && !"Standard".equals(pattern)) {
-			try {
-				format = new DecimalFormat(pattern);
-			} catch (IllegalArgumentException e) {
-				if (logger.isWarnEnabled()) {
-					logger.warn("Illegal number format : {}", pattern);
-				}
-			}
-		}
+        String pattern = ObjectUtils.toString(cell
+                .getPropertyValue(StandardCellProperty.FORMAT_STRING));
+        if (pattern != null && !"Standard".equals(pattern)) {
+            try {
+                format = new DecimalFormat(pattern);
+            } catch (IllegalArgumentException e) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn("Illegal number format : {}", pattern);
+                }
+            }
+        }
 
-		if (format == null) {
-			format = DecimalFormat.getNumberInstance();
-		}
+        if (format == null) {
+            format = DecimalFormat.getNumberInstance();
+        }
 
-		return format;
-	}
+        return format;
+    }
 
-	/**
-	 * @param position
-	 * @return
-	 */
-	protected NumberFormat getNumberFormat(Position position) {
-		Measure measureAtPosition = getMeasure(position);
+    /**
+     * @param position
+     * @return
+     */
+    protected NumberFormat getNumberFormat(Position position) {
+        Measure measureAtPosition = getMeasure(position);
 
-		String key = (measureAtPosition == null) ? "" : measureAtPosition
-				.getUniqueName();
+        String key = (measureAtPosition == null) ? "" : measureAtPosition
+                .getUniqueName();
 
-		return formats.get(key);
-	}
+        return formats.get(key);
+    }
 
-	/**
-	 * @param position
-	 * @return
-	 */
-	protected int getCount(Position position) {
-		Integer count = counts.get(position);
+    /**
+     * @param position
+     * @return
+     */
+    protected int getCount(Position position) {
+        Integer count = counts.get(position);
 
-		if (count == null) {
-			count = 0;
-		}
+        if (count == null) {
+            count = 0;
+        }
 
-		return count;
-	}
+        return count;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getValue(org.pivot4j.ui
-	 *      .RenderContext)
-	 */
-	@Override
-	public Double getValue(RenderContext context) {
-		Position targetPosition = context.getAggregationTarget(getAxis());
-		return getValue(targetPosition);
-	}
+    /**
+     * @see org.pivot4j.ui.aggregator.Aggregator#getValue(org.pivot4j.ui
+     * .RenderContext)
+     */
+    @Override
+    public Double getValue(RenderContext context) {
+        Position targetPosition = context.getAggregationTarget(getAxis());
+        return getValue(targetPosition);
+    }
 
-	/**
-	 * @param position
-	 * @return
-	 */
-	protected Double getValue(Position position) {
-		return values.get(position);
-	}
+    /**
+     * @param position
+     * @return
+     */
+    protected Double getValue(Position position) {
+        return values.get(position);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getFormattedValue(org.pivot4j.ui.RenderContext)
-	 */
-	public String getFormattedValue(RenderContext context) {
-		Position position = context.getAggregationTarget(getAxis());
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.Aggregator#getFormattedValue(org.pivot4j.ui.RenderContext)
+     */
+    public String getFormattedValue(RenderContext context) {
+        Position position = context.getAggregationTarget(getAxis());
 
-		Double value = getValue(position);
+        Double value = getValue(position);
 
-		NumberFormat format = getNumberFormat(position);
+        NumberFormat format = getNumberFormat(position);
 
-		if (value == null) {
-			return null;
-		} else if (format == null) {
-			return Double.toString(value);
-		} else {
-			return format.format(value);
-		}
-	}
+        if (value == null) {
+            return null;
+        } else if (format == null) {
+            return Double.toString(value);
+        } else {
+            return format.format(value);
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getLabel(org.pivot4j.ui.RenderContext)
-	 */
-	public String getLabel(RenderContext context) {
-		if (measure != null && OlapUtils.equals(measure, context.getMember())) {
-			return measure.getCaption();
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.Aggregator#getLabel(org.pivot4j.ui.RenderContext)
+     */
+    public String getLabel(RenderContext context) {
+        if (measure != null && OlapUtils.equals(measure, context.getMember())) {
+            return measure.getCaption();
+        }
 
-		return getAggregationLabel(context);
-	}
+        return getAggregationLabel(context);
+    }
 
-	/**
-	 * @param context
-	 * @return
-	 */
-	protected String getAggregationLabel(RenderContext context) {
-		ResourceBundle resources = context.getResourceBundle();
+    /**
+     * @param context
+     * @return
+     */
+    protected String getAggregationLabel(RenderContext context) {
+        ResourceBundle resources = context.getResourceBundle();
 
-		String label = null;
+        String label = null;
 
-		if (resources != null) {
-			label = resources.getString("label.aggregation.type." + getName());
-		}
+        if (resources != null) {
+            label = resources.getString("label.aggregation.type." + getName());
+        }
 
-		return label;
-	}
+        return label;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#reset()
-	 */
-	@Override
-	public void reset() {
-		values.clear();
-		counts.clear();
-	}
+    /**
+     * @see org.pivot4j.ui.aggregator.Aggregator#reset()
+     */
+    @Override
+    public void reset() {
+        values.clear();
+        counts.clear();
+    }
 
-	/**
-	 * @param value
-	 * @param aggregation
-	 * @param position
-	 * @param context
-	 * @return
-	 */
-	protected abstract Double calculate(Double value, Double aggregation,
-			Position position, RenderContext context);
+    /**
+     * @param value
+     * @param aggregation
+     * @param position
+     * @param context
+     * @return
+     */
+    protected abstract Double calculate(Double value, Double aggregation,
+            Position position, RenderContext context);
 }

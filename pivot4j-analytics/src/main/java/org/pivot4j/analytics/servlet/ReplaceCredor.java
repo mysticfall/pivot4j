@@ -26,7 +26,7 @@ public class ReplaceCredor extends HttpServlet {
 
         HttpSession session = request.getSession();
         session.setAttribute("idCredor", "23");
-        
+
         response.sendRedirect("index.xhtml");
 
     }

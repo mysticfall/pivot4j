@@ -12,35 +12,36 @@ import org.olap4j.metadata.Member;
 
 public class MemberCondition extends AbstractMetadataCondition {
 
-	public static final String NAME = "member";
+    public static final String NAME = "member";
 
-	/**
-	 * @param conditionFactory
-	 */
-	public MemberCondition(ConditionFactory conditionFactory) {
-		super(conditionFactory);
-	}
+    /**
+     * @param conditionFactory
+     */
+    public MemberCondition(ConditionFactory conditionFactory) {
+        super(conditionFactory);
+    }
 
-	/**
-	 * @param conditionFactory
-	 * @param uniqueName
-	 */
-	public MemberCondition(ConditionFactory conditionFactory, String uniqueName) {
-		super(conditionFactory, uniqueName);
-	}
+    /**
+     * @param conditionFactory
+     * @param uniqueName
+     */
+    public MemberCondition(ConditionFactory conditionFactory, String uniqueName) {
+        super(conditionFactory, uniqueName);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.Condition#getName()
-	 */
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.condition.Condition#getName()
+     */
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.AbstractMetadataCondition#matches(org.olap4j.metadata.Member)
-	 */
-	@Override
-	protected boolean matches(Member member) {
-		return member != null && member.getUniqueName().equals(getUniqueName());
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.condition.AbstractMetadataCondition#matches(org.olap4j.metadata.Member)
+     */
+    @Override
+    protected boolean matches(Member member) {
+        return member != null && member.getUniqueName().equals(getUniqueName());
+    }
 }

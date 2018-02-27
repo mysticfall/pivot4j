@@ -18,38 +18,38 @@ import org.pivot4j.ui.RenderContext;
 
 public interface Aggregator {
 
-	String getName();
+    String getName();
 
-	Axis getAxis();
+    Axis getAxis();
 
-	List<Member> getMembers();
+    List<Member> getMembers();
 
-	Level getLevel();
+    Level getLevel();
 
-	Measure getMeasure();
+    Measure getMeasure();
 
-	/**
-	 * @param context
-	 */
-	void aggregate(RenderContext context);
+    /**
+     * @param context
+     */
+    void aggregate(RenderContext context);
 
-	/**
-	 * @param context
-	 * @return
-	 */
-	String getLabel(RenderContext context);
+    /**
+     * @param context
+     * @return
+     */
+    String getLabel(RenderContext context);
 
-	/**
-	 * @param context
-	 * @return
-	 */
-	Double getValue(RenderContext context);
+    /**
+     * @param context
+     * @return
+     */
+    Double getValue(RenderContext context);
 
-	/**
-	 * @param context
-	 * @return
-	 */
-	String getFormattedValue(RenderContext context);
+    /**
+     * @param context
+     * @return
+     */
+    String getFormattedValue(RenderContext context);
 
-	void reset();
+    void reset();
 }

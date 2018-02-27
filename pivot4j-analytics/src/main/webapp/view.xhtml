@@ -49,6 +49,10 @@
     </h:head>
 
     <f:metadata>
+
+        <f:viewAction action="#{viewHandler.onPreRenderViewCache}" immediate="true"/>
+
+        <f:event type="postAddToView" listener="#{viewHandler.onPreRenderViewCache}" />
         <f:event type="preRenderView" listener="#{viewHandler.onPreRenderView}" />
         <f:event type="preRenderView"
                  listener="#{filterHandler.onPreRenderView}" />
@@ -239,7 +243,7 @@
                                 <p:separator />
                                 <p:menuitem 
                                     value="#{msg['toolbar.print']}" title="#{msg['toolbar.print.tooltip']}" 
-                                    icon="ui-icon-print" onclick="$('table.pivot-grid:first').jqprint();" />
+                                    icon="ui-icon-print" onclick="$('#grid-content-pane').jqprint();" />
                             </p:menuButton>
                         </f:facet>
                     </p:toolbar>
@@ -262,7 +266,7 @@
                         <p:selectOneMenu id="cube-list" value="#{viewHandler.cubeName}"
                                          widgetVar="cubeList">
                             <f:selectItems value="#{viewHandler.cubes}" var="cube"
-                                           itemLabel="#{cube.itemLabel}" itemValue="#{cube.itemValue}" />
+                                           itemLabel="#{cube.itemLabel}" itemValue="#{cube.itemValue}"/>
                             <p:ajax event="change" listener="#{viewHandler.onCubeChange}"
                                     update=":source-tree-form,:target-tree-form,:toolbar-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:growl"
                                     oncomplete="onViewChanged()" />

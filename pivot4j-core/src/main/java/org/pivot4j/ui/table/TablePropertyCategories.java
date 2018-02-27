@@ -12,7 +12,7 @@ import org.pivot4j.ui.RenderPropertyCategories;
 
 public interface TablePropertyCategories extends RenderPropertyCategories {
 
-	String CELL = "cell";
+    String CELL = "cell";
 
-	String HEADER = "header";
+    String HEADER = "header";
 }

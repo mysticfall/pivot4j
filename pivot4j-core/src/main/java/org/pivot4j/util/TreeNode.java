@@ -20,312 +20,305 @@ import org.olap4j.metadata.MetadataElement;
  */
 public class TreeNode<T> {
 
-	private TreeNode<T> parent;
+    private TreeNode<T> parent;
 
-	private List<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
-	private List<TreeNode<T>> unmodifiableChildren = Collections.unmodifiableList(children);
-	
-	private static final int UNKNOWN = -1;
-	private int width = UNKNOWN;
-	private int maxDescendantLevel = UNKNOWN;
+    private List<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
+    private List<TreeNode<T>> unmodifiableChildren = Collections.unmodifiableList(children);
 
-	private T reference;
+    private static final int UNKNOWN = -1;
+    private int width = UNKNOWN;
+    private int maxDescendantLevel = UNKNOWN;
 
-	public TreeNode() {
-	}
+    private T reference;
 
-	/**
-	 * @param obj
-	 *            referenced object
-	 */
-	public TreeNode(T obj) {
-		this.reference = obj;
-	}
+    public TreeNode() {
+    }
 
-	/**
-	 * remove node from tree
-	 */
-	public void remove() {
-		if (parent != null) {
-			parent.removeChild(this);
-		}
-	}
+    /**
+     * @param obj referenced object
+     */
+    public TreeNode(T obj) {
+        this.reference = obj;
+    }
 
-	/**
-	 * remove child node
-	 * 
-	 * @param child
-	 */
-	public void removeChild(TreeNode<T> child) {
-		if (children.contains(child)) {
-			children.remove(child);
-			invalidateChildrenDerivatives();
-		}
-	}
+    /**
+     * remove node from tree
+     */
+    public void remove() {
+        if (parent != null) {
+            parent.removeChild(this);
+        }
+    }
 
-	public void clear() {
-		children.clear();
-		invalidateChildrenDerivatives();
-	}
+    /**
+     * remove child node
+     *
+     * @param child
+     */
+    public void removeChild(TreeNode<T> child) {
+        if (children.contains(child)) {
+            children.remove(child);
+            invalidateChildrenDerivatives();
+        }
+    }
 
-	/**
-	 * add child node
-	 * 
-	 * @param child
-	 *            node to be added
-	 */
-	public void addChild(TreeNode<T> child) {
-		if (!children.contains(child)) {
-			child.parent = this;
-			children.add(child);
-			invalidateChildrenDerivatives();
-		}
-	}
+    public void clear() {
+        children.clear();
+        invalidateChildrenDerivatives();
+    }
 
-	/**
-	 * add child node
-	 * 
-	 * @param index
-	 * @param child
-	 *            node to be added
-	 */
-	public void addChild(int index, TreeNode<T> child) {
-		if (!children.contains(child)) {
-			child.parent = this;
-			children.add(index, child);
-			invalidateChildrenDerivatives();
-		}
-	}
+    /**
+     * add child node
+     *
+     * @param child node to be added
+     */
+    public void addChild(TreeNode<T> child) {
+        if (!children.contains(child)) {
+            child.parent = this;
+            children.add(child);
+            invalidateChildrenDerivatives();
+        }
+    }
 
-	private void invalidateChildrenDerivatives(){
-		width = UNKNOWN;
-		maxDescendantLevel = UNKNOWN;
-		if (parent != null){
-			parent.invalidateChildrenDerivatives();
-		}
-	}
-	
-	/**
-	 * deep copy (clone)
-	 * 
-	 * @return copy of TreeNode
-	 */
-	public TreeNode<T> deepCopy() {
-		TreeNode<T> newNode = new TreeNode<T>(reference);
-		for (TreeNode<T> child : children) {
-			newNode.addChild(child.deepCopy());
-		}
-		return newNode;
-	}
+    /**
+     * add child node
+     *
+     * @param index
+     * @param child node to be added
+     */
+    public void addChild(int index, TreeNode<T> child) {
+        if (!children.contains(child)) {
+            child.parent = this;
+            children.add(index, child);
+            invalidateChildrenDerivatives();
+        }
+    }
 
-	/**
-	 * deep copy (clone) and prune
-	 * 
-	 * @param depth
-	 *            - number of child levels to be copied
-	 * @return copy of TreeNode
-	 */
-	public TreeNode<T> deepCopyPrune(int depth) {
-		if (depth < 0) {
-			throw new IllegalArgumentException("Depth is negative");
-		}
+    private void invalidateChildrenDerivatives() {
+        width = UNKNOWN;
+        maxDescendantLevel = UNKNOWN;
+        if (parent != null) {
+            parent.invalidateChildrenDerivatives();
+        }
+    }
 
-		TreeNode<T> newNode = new TreeNode<T>(reference);
-		if (depth == 0) {
-			return newNode;
-		}
+    /**
+     * deep copy (clone)
+     *
+     * @return copy of TreeNode
+     */
+    public TreeNode<T> deepCopy() {
+        TreeNode<T> newNode = new TreeNode<T>(reference);
+        for (TreeNode<T> child : children) {
+            newNode.addChild(child.deepCopy());
+        }
+        return newNode;
+    }
 
-		for (TreeNode<T> child : children) {
-			newNode.addChild(child.deepCopyPrune(depth - 1));
-		}
-		return newNode;
-	}
+    /**
+     * deep copy (clone) and prune
+     *
+     * @param depth - number of child levels to be copied
+     * @return copy of TreeNode
+     */
+    public TreeNode<T> deepCopyPrune(int depth) {
+        if (depth < 0) {
+            throw new IllegalArgumentException("Depth is negative");
+        }
 
-	/**
-	 * @return level = distance from root
-	 */
-	public int getLevel() {
-		int level = 0;
-		TreeNode<T> p = parent;
-		while (p != null) {
-			++level;
-			p = p.parent;
-		}
-		return level;
-	}
+        TreeNode<T> newNode = new TreeNode<T>(reference);
+        if (depth == 0) {
+            return newNode;
+        }
 
-	public int getMaxDescendantLevel() {
-		if (maxDescendantLevel == UNKNOWN){
-			if (getChildCount() == 0) {
-				maxDescendantLevel = getLevel();
-			} else {
-				maxDescendantLevel = 0;
-				for (TreeNode<T> child : getChildren()) {
-					maxDescendantLevel = Math.max(maxDescendantLevel, child.getMaxDescendantLevel());
-				}
-			}
-		}
+        for (TreeNode<T> child : children) {
+            newNode.addChild(child.deepCopyPrune(depth - 1));
+        }
+        return newNode;
+    }
 
-		return maxDescendantLevel;
-	}
+    /**
+     * @return level = distance from root
+     */
+    public int getLevel() {
+        int level = 0;
+        TreeNode<T> p = parent;
+        while (p != null) {
+            ++level;
+            p = p.parent;
+        }
+        return level;
+    }
 
-	public int getWidth() {
-		if (width == UNKNOWN){
-			width = 0;
-			if (getChildCount() > 0) {
-				for (TreeNode<T> child : getChildren()) {
-					width += child.getWidth();
-				}
-			}
-	
-			width = Math.max(1, width);
-		}
-		return width;
-	}
-	
-	/**
-	 * walk through subtree of this node
-	 * 
-	 * @param callbackHandler
-	 *            function called on iteration
-	 */
-	public int walkTree(TreeNodeCallback<T> callbackHandler) {
-		int code = 0;
-		code = callbackHandler.handleTreeNode(this);
-		if (code != TreeNodeCallback.CONTINUE) {
-			return code;
-		}
+    public int getMaxDescendantLevel() {
+        if (maxDescendantLevel == UNKNOWN) {
+            if (getChildCount() == 0) {
+                maxDescendantLevel = getLevel();
+            } else {
+                maxDescendantLevel = 0;
+                for (TreeNode<T> child : getChildren()) {
+                    maxDescendantLevel = Math.max(maxDescendantLevel, child.getMaxDescendantLevel());
+                }
+            }
+        }
 
-		for (TreeNode<T> child : children) {
-			code = child.walkTree(callbackHandler);
-			if (code >= TreeNodeCallback.CONTINUE_PARENT) {
-				return code;
-			}
-		}
-		return code;
-	}
+        return maxDescendantLevel;
+    }
 
-	/**
-	 * walk through children subtrees of this node
-	 * 
-	 * @param callbackHandler
-	 *            function called on iteration
-	 */
-	public int walkChildren(TreeNodeCallback<T> callbackHandler) {
-		int code = 0;
-		for (TreeNode<T> child : children) {
-			code = callbackHandler.handleTreeNode(child);
-			if (code >= TreeNodeCallback.CONTINUE_PARENT) {
-				return code;
-			}
-			if (code == TreeNodeCallback.CONTINUE) {
-				code = child.walkChildren(callbackHandler);
-				if (code > TreeNodeCallback.CONTINUE_PARENT) {
-					return code;
-				}
-			}
-		}
-		return code;
-	}
+    public int getWidth() {
+        if (width == UNKNOWN) {
+            width = 0;
+            if (getChildCount() > 0) {
+                for (TreeNode<T> child : getChildren()) {
+                    width += child.getWidth();
+                }
+            }
 
-	/**
-	 * @return List of children
-	 */
-	public List<TreeNode<T>> getChildren() {
-		return unmodifiableChildren;
-	}
+            width = Math.max(1, width);
+        }
+        return width;
+    }
 
-	public int getChildCount() {
-		if (children == null) {
-			return 0;
-		}
-		return children.size();
-	}
+    /**
+     * walk through subtree of this node
+     *
+     * @param callbackHandler function called on iteration
+     */
+    public int walkTree(TreeNodeCallback<T> callbackHandler) {
+        int code = 0;
+        code = callbackHandler.handleTreeNode(this);
+        if (code != TreeNodeCallback.CONTINUE) {
+            return code;
+        }
 
-	/**
-	 * @return parent node
-	 */
-	public TreeNode<T> getParent() {
-		return parent;
-	}
+        for (TreeNode<T> child : children) {
+            code = child.walkTree(callbackHandler);
+            if (code >= TreeNodeCallback.CONTINUE_PARENT) {
+                return code;
+            }
+        }
+        return code;
+    }
 
-	public TreeNode<T> getRoot() {
-		if (parent == null) {
-			return this;
-		} else {
-			return parent.getRoot();
-		}
-	}
+    /**
+     * walk through children subtrees of this node
+     *
+     * @param callbackHandler function called on iteration
+     */
+    public int walkChildren(TreeNodeCallback<T> callbackHandler) {
+        int code = 0;
+        for (TreeNode<T> child : children) {
+            code = callbackHandler.handleTreeNode(child);
+            if (code >= TreeNodeCallback.CONTINUE_PARENT) {
+                return code;
+            }
+            if (code == TreeNodeCallback.CONTINUE) {
+                code = child.walkChildren(callbackHandler);
+                if (code > TreeNodeCallback.CONTINUE_PARENT) {
+                    return code;
+                }
+            }
+        }
+        return code;
+    }
 
-	/**
-	 * @return reference object
-	 */
-	public T getReference() {
-		return reference;
-	}
+    /**
+     * @return List of children
+     */
+    public List<TreeNode<T>> getChildren() {
+        return unmodifiableChildren;
+    }
 
-	/**
-	 * set reference object
-	 * 
-	 * @param object
-	 *            reference
-	 */
-	public void setReference(T object) {
-		reference = object;
-	}
+    public int getChildCount() {
+        if (children == null) {
+            return 0;
+        }
+        return children.size();
+    }
 
-	/**
-	 * @param reference
-	 * @return
-	 */
-	public TreeNode<T> findNode(T reference) {
-		TreeNode<T> node = null;
+    /**
+     * @return parent node
+     */
+    public TreeNode<T> getParent() {
+        return parent;
+    }
 
-		if (isEquals(getReference(), reference)) {
-			node = this;
-		} else {
-			for (TreeNode<T> child : getChildren()) {
-				node = child.findNode(reference);
+    public TreeNode<T> getRoot() {
+        if (parent == null) {
+            return this;
+        } else {
+            return parent.getRoot();
+        }
+    }
 
-				if (node != null) {
-					break;
-				}
-			}
-		}
+    /**
+     * @return reference object
+     */
+    public T getReference() {
+        return reference;
+    }
 
-		return node;
-	}
+    /**
+     * set reference object
+     *
+     * @param object reference
+     */
+    public void setReference(T object) {
+        reference = object;
+    }
 
-	/**
-	 * @param reference
-	 * @param otherReference
-	 * @return
-	 */
-	private boolean isEquals(T reference, T otherReference) {
-		if (reference instanceof MetadataElement
-				&& otherReference instanceof MetadataElement) {
-			return OlapUtils.equals((MetadataElement) reference,
-					(MetadataElement) otherReference);
-		} else {
-			return ObjectUtils.equals(reference, otherReference);
-		}
-	}
+    /**
+     * @param reference
+     * @return
+     */
+    public TreeNode<T> findNode(T reference) {
+        TreeNode<T> node = null;
 
-	/**
-	 * @param reference
-	 * @return
-	 */
-	public TreeNode<T> findChild(T reference) {
-		TreeNode<T> node = null;
+        if (isEquals(getReference(), reference)) {
+            node = this;
+        } else {
+            for (TreeNode<T> child : getChildren()) {
+                node = child.findNode(reference);
 
-		for (TreeNode<T> child : getChildren()) {
-			node = child.findNode(reference);
+                if (node != null) {
+                    break;
+                }
+            }
+        }
 
-			if (node != null) {
-				break;
-			}
-		}
+        return node;
+    }
 
-		return node;
-	}
+    /**
+     * @param reference
+     * @param otherReference
+     * @return
+     */
+    private boolean isEquals(T reference, T otherReference) {
+        if (reference instanceof MetadataElement
+                && otherReference instanceof MetadataElement) {
+            return OlapUtils.equals((MetadataElement) reference,
+                    (MetadataElement) otherReference);
+        } else {
+            return ObjectUtils.equals(reference, otherReference);
+        }
+    }
+
+    /**
+     * @param reference
+     * @return
+     */
+    public TreeNode<T> findChild(T reference) {
+        TreeNode<T> node = null;
+
+        for (TreeNode<T> child : getChildren()) {
+            node = child.findNode(reference);
+
+            if (node != null) {
+                break;
+            }
+        }
+
+        return node;
+    }
 }

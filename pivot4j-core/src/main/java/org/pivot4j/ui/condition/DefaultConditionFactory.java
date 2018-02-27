@@ -21,71 +21,72 @@ import org.slf4j.LoggerFactory;
 
 public class DefaultConditionFactory implements ConditionFactory {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private Map<String, Class<? extends Condition>> types = new TreeMap<String, Class<? extends Condition>>();
+    private Map<String, Class<? extends Condition>> types = new TreeMap<String, Class<? extends Condition>>();
 
-	public DefaultConditionFactory() {
-		types.put(AndCondition.NAME, AndCondition.class);
-		types.put(OrCondition.NAME, OrCondition.class);
-		types.put(NotCondition.NAME, NotCondition.class);
-		types.put(ExpressionCondition.NAME, ExpressionCondition.class);
+    public DefaultConditionFactory() {
+        types.put(AndCondition.NAME, AndCondition.class);
+        types.put(OrCondition.NAME, OrCondition.class);
+        types.put(NotCondition.NAME, NotCondition.class);
+        types.put(ExpressionCondition.NAME, ExpressionCondition.class);
 
-		types.put(AxisCondition.NAME, AxisCondition.class);
-		types.put(HierarchyCondition.NAME, HierarchyCondition.class);
-		types.put(LevelCondition.NAME, LevelCondition.class);
-		types.put(MemberCondition.NAME, MemberCondition.class);
+        types.put(AxisCondition.NAME, AxisCondition.class);
+        types.put(HierarchyCondition.NAME, HierarchyCondition.class);
+        types.put(LevelCondition.NAME, LevelCondition.class);
+        types.put(MemberCondition.NAME, MemberCondition.class);
 
-		types.put(CellTypeCondition.NAME, CellTypeCondition.class);
-		types.put(CellValueCondition.NAME, CellValueCondition.class);
-	}
+        types.put(CellTypeCondition.NAME, CellTypeCondition.class);
+        types.put(CellValueCondition.NAME, CellValueCondition.class);
+    }
 
-	/**
-	 * @return the logger
-	 */
-	protected Logger getLogger() {
-		return logger;
-	}
+    /**
+     * @return the logger
+     */
+    protected Logger getLogger() {
+        return logger;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.ConditionFactory#getAvailableConditions()
-	 */
-	@Override
-	public List<String> getAvailableConditions() {
-		return new LinkedList<String>(types.keySet());
-	}
+    /**
+     * @see org.pivot4j.ui.condition.ConditionFactory#getAvailableConditions()
+     */
+    @Override
+    public List<String> getAvailableConditions() {
+        return new LinkedList<String>(types.keySet());
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.ConditionFactory#createCondition(java.lang.String)
-	 */
-	@Override
-	public Condition createCondition(String name) {
-		if (name == null) {
-			throw new NullArgumentException("name");
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.condition.ConditionFactory#createCondition(java.lang.String)
+     */
+    @Override
+    public Condition createCondition(String name) {
+        if (name == null) {
+            throw new NullArgumentException("name");
+        }
 
-		Condition condition = null;
+        Condition condition = null;
 
-		Class<? extends Condition> type = types.get(name);
+        Class<? extends Condition> type = types.get(name);
 
-		if (type != null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Instantiating a new condition : {}", type);
-			}
+        if (type != null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Instantiating a new condition : {}", type);
+            }
 
-			try {
-				Constructor<? extends Condition> constructor = type
-						.getConstructor(ConditionFactory.class);
-				condition = constructor.newInstance(this);
-			} catch (Exception e) {
-				throw new PivotException(e);
-			}
-		}
+            try {
+                Constructor<? extends Condition> constructor = type
+                        .getConstructor(ConditionFactory.class);
+                condition = constructor.newInstance(this);
+            } catch (Exception e) {
+                throw new PivotException(e);
+            }
+        }
 
-		if (condition == null && logger.isWarnEnabled()) {
-			logger.warn("Unknown condition name : {}", name);
-		}
+        if (condition == null && logger.isWarnEnabled()) {
+            logger.warn("Unknown condition name : {}", name);
+        }
 
-		return condition;
-	}
+        return condition;
+    }
 }

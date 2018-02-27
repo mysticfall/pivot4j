@@ -12,222 +12,212 @@ import java.util.List;
 
 public enum Syntax {
 
-	Function(0) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			StringBuilder sb = new StringBuilder();
+    Function(0) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            StringBuilder sb = new StringBuilder();
 
-			sb.append(function);
-			sb.append("(");
+            sb.append(function);
+            sb.append("(");
 
-			boolean isFollow = false;
-			for (Exp arg : args) {
-				if (isFollow) {
-					sb.append(", ");
-				} else {
-					isFollow = true;
-				}
+            boolean isFollow = false;
+            for (Exp arg : args) {
+                if (isFollow) {
+                    sb.append(", ");
+                } else {
+                    isFollow = true;
+                }
 
-				sb.append(arg.toMdx());
-			}
+                sb.append(arg.toMdx());
+            }
 
-			sb.append(")");
+            sb.append(")");
 
-			return sb.toString();
-		}
-	},
+            return sb.toString();
+        }
+    },
+    Property(1) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            StringBuilder sb = new StringBuilder();
 
-	Property(1) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			StringBuilder sb = new StringBuilder();
+            if (!args.isEmpty()) {
+                sb.append(args.get(0).toMdx());
+            }
 
-			if (!args.isEmpty()) {
-				sb.append(args.get(0).toMdx());
-			}
+            sb.append(".");
+            sb.append(function);
 
-			sb.append(".");
-			sb.append(function);
+            return sb.toString();
+        }
+    },
+    Method(2) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            StringBuilder sb = new StringBuilder();
 
-			return sb.toString();
-		}
-	},
+            if (!args.isEmpty()) {
+                sb.append(args.get(0).toMdx());
+            }
 
-	Method(2) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			StringBuilder sb = new StringBuilder();
+            sb.append(".");
+            sb.append(function);
+            sb.append("(");
 
-			if (!args.isEmpty()) {
-				sb.append(args.get(0).toMdx());
-			}
+            if (args.size() > 1) {
+                sb.append(args.get(1).toMdx());
+            }
 
-			sb.append(".");
-			sb.append(function);
-			sb.append("(");
+            sb.append(")");
 
-			if (args.size() > 1) {
-				sb.append(args.get(1).toMdx());
-			}
+            return sb.toString();
+        }
+    },
+    Infix(3) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            StringBuilder sb = new StringBuilder();
 
-			sb.append(")");
+            if (!args.isEmpty()) {
+                sb.append(args.get(0).toMdx());
+                sb.append(" ");
+            }
 
-			return sb.toString();
-		}
-	},
+            sb.append(function);
 
-	Infix(3) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			StringBuilder sb = new StringBuilder();
+            if (args.size() > 1) {
+                sb.append(" ");
+                sb.append(args.get(1).toMdx());
+            }
 
-			if (!args.isEmpty()) {
-				sb.append(args.get(0).toMdx());
-				sb.append(" ");
-			}
+            return sb.toString();
+        }
+    },
+    Prefix(4) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            StringBuilder sb = new StringBuilder();
 
-			sb.append(function);
+            sb.append(function);
 
-			if (args.size() > 1) {
-				sb.append(" ");
-				sb.append(args.get(1).toMdx());
-			}
+            if (!args.isEmpty()) {
+                sb.append(" ");
+                sb.append(args.get(0).toMdx());
+            }
 
-			return sb.toString();
-		}
-	},
+            return sb.toString();
+        }
+    },
+    Braces(5) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            StringBuilder sb = new StringBuilder();
 
-	Prefix(4) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			StringBuilder sb = new StringBuilder();
+            sb.append("{");
 
-			sb.append(function);
+            boolean isFollow = false;
+            for (Exp arg : args) {
+                if (isFollow) {
+                    sb.append(", ");
+                } else {
+                    isFollow = true;
+                }
 
-			if (!args.isEmpty()) {
-				sb.append(" ");
-				sb.append(args.get(0).toMdx());
-			}
+                sb.append(arg.toMdx());
+            }
 
-			return sb.toString();
-		}
-	},
+            sb.append("}");
 
-	Braces(5) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			StringBuilder sb = new StringBuilder();
+            return sb.toString();
+        }
+    },
+    Parentheses(6) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            StringBuilder sb = new StringBuilder();
 
-			sb.append("{");
+            sb.append("(");
 
-			boolean isFollow = false;
-			for (Exp arg : args) {
-				if (isFollow) {
-					sb.append(", ");
-				} else {
-					isFollow = true;
-				}
+            boolean isFollow = false;
+            for (Exp arg : args) {
+                if (isFollow) {
+                    sb.append(", ");
+                } else {
+                    isFollow = true;
+                }
 
-				sb.append(arg.toMdx());
-			}
+                sb.append(arg.toMdx());
+            }
 
-			sb.append("}");
+            sb.append(")");
 
-			return sb.toString();
-		}
-	},
+            return sb.toString();
+        }
+    },
+    Case(7) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            throw new UnsupportedOperationException(
+                    "Unsupported operation for this syntatic type : " + name());
+        }
+    },
+    Mask(0xFF) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            throw new UnsupportedOperationException(
+                    "Unsupported operation for this syntatic type : " + name());
+        }
+    },
+    PropertyQuoted(Property.getCode() | 0x100) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            if (args.isEmpty()) {
+                return "";
+            }
 
-	Parentheses(6) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-			sb.append("(");
+            sb.append(args.get(0).toMdx());
+            sb.append(".");
+            sb.append(function);
 
-			boolean isFollow = false;
-			for (Exp arg : args) {
-				if (isFollow) {
-					sb.append(", ");
-				} else {
-					isFollow = true;
-				}
+            return sb.toString();
+        }
+    },
+    PropertyAmpQuoted(Property.getCode() | 0x200) {
+        @Override
+        public String toMdx(String function, List<Exp> args) {
+            if (args.isEmpty()) {
+                return "";
+            }
 
-				sb.append(arg.toMdx());
-			}
+            StringBuilder sb = new StringBuilder();
 
-			sb.append(")");
+            sb.append(args.get(0).toMdx());
+            sb.append(".");
+            sb.append(function);
 
-			return sb.toString();
-		}
-	},
+            return sb.toString();
+        }
+    };
 
-	Case(7) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			throw new UnsupportedOperationException(
-					"Unsupported operation for this syntatic type : " + name());
-		}
-	},
+    private int code;
 
-	Mask(0xFF) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			throw new UnsupportedOperationException(
-					"Unsupported operation for this syntatic type : " + name());
-		}
-	},
+    /**
+     * @param code
+     */
+    Syntax(int code) {
+        this.code = code;
+    }
 
-	PropertyQuoted(Property.getCode() | 0x100) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			if (args.isEmpty()) {
-				return "";
-			}
+    public int getCode() {
+        return code;
+    }
 
-			StringBuilder sb = new StringBuilder();
-
-			sb.append(args.get(0).toMdx());
-			sb.append(".");
-			sb.append(function);
-
-			return sb.toString();
-		}
-	},
-
-	PropertyAmpQuoted(Property.getCode() | 0x200) {
-		@Override
-		public String toMdx(String function, List<Exp> args) {
-			if (args.isEmpty()) {
-				return "";
-			}
-
-			StringBuilder sb = new StringBuilder();
-
-			sb.append(args.get(0).toMdx());
-			sb.append(".");
-			sb.append(function);
-
-			return sb.toString();
-		}
-	};
-
-	private int code;
-
-	/**
-	 * @param code
-	 */
-	Syntax(int code) {
-		this.code = code;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	/**
-	 * @param function
-	 * @param args
-	 * @return
-	 */
-	public abstract String toMdx(String function, List<Exp> args);
+    /**
+     * @param function
+     * @param args
+     * @return
+     */
+    public abstract String toMdx(String function, List<Exp> args);
 }

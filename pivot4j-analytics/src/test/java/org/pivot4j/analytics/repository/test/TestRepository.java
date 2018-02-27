@@ -4,5 +4,5 @@ import org.pivot4j.analytics.repository.ReportRepository;
 
 public interface TestRepository extends ReportRepository {
 
-	void initialize();
+    void initialize();
 }
