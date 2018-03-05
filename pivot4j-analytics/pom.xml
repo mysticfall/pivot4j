@@ -305,7 +305,7 @@
         <dependency>
             <groupId>org.primefaces.extensions</groupId>
             <artifactId>resources-codemirror</artifactId>
-            <version>${version.primefaces.extensions}</version>
+            <version>${version.primefaces.resources-codemirror}</version>
         </dependency>
         <dependency>
             <groupId>org.primefaces.themes</groupId>

@@ -91,11 +91,12 @@
         <version.jacoco>0.7.1.201405082137</version.jacoco>
         <version.junit>4.11</version.junit>
 
-        <version.primefaces>6.1</version.primefaces>
-        <version.primefaces.extensions>6.1.1</version.primefaces.extensions>
+        <version.primefaces>6.2</version.primefaces>
+        <version.primefaces.extensions>6.2</version.primefaces.extensions>
+        <version.primefaces.resources-codemirror>6.1.1</version.primefaces.resources-codemirror>
         <version.primefaces.themes>1.0.10</version.primefaces.themes>
                 
-        <version.admin-theme>1.0.0-RC11</version.admin-theme>
+        <version.admin-theme>1.0.0-RC12</version.admin-theme>
                 
         <version.omnifaces>2.1</version.omnifaces>
 
@@ -238,6 +239,14 @@
             <email>kouki.sergey@gmail.com</email>
             <roles>
                 <role>Russian Translation</role>
+            </roles>
+        </contributor>
+        <contributor>
+            <name>Judilson Costa</name>
+            <email>judilsonjunior@gmail.com</email>
+            <url>https://github.com/Judilson</url>
+            <roles>
+                <role>Primefaces 6.x</role>
             </roles>
         </contributor>
     </contributors>

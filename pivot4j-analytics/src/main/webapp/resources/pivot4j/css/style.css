@@ -112,7 +112,7 @@ body.report .pe-layout-pane-header {
 #navigator-pane .ui-tree-container {
     overflow: hidden !important;
     padding: 0;
-    
+
 }
 
 #navigator-pane .ui-layout-content {
@@ -819,6 +819,10 @@ div.ui-selectonemenu, div.ui-fluid div.ui-selectonemenu, div.ui-selectcheckboxme
     zoom: 1;
     cursor: pointer;
     padding-right: 0em !important;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {
+    position: initial !important;
 }
 
 .ui-button-icon-only .ui-icon {

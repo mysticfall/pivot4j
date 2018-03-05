@@ -17,7 +17,7 @@ CodeMirror
                     function tokenBase(stream, state) {
                         var ch = stream.next();
                         // start of string?
-                        if (ch == '"' || ch == "'")
+                        if (ch === '"' || ch === "'")
                             return chain(stream, state, tokenString(ch));
                         // is it one of the special signs {}().,;? Seperator?
                         else if (/[{}\(\),;\.]/.test(ch))
@@ -28,7 +28,7 @@ CodeMirror
                             return ret("number", "number");
                         }
                         // multi line comment or simple operator?
-                        else if (ch == "/") {
+                        else if (ch === "/") {
                             if (stream.eat("*")) {
                                 return chain(stream, state, tokenComment);
                             } else {
@@ -37,7 +37,7 @@ CodeMirror
                             }
                         }
                         // single line comment or simple operator?
-                        else if (ch == "-") {
+                        else if (ch === "-") {
                             if (stream.eat("-")) {
                                 stream.skipToEnd();
                                 return ret("comment", "comment");
@@ -47,7 +47,7 @@ CodeMirror
                             }
                         }
                         // is it an identifier?
-                        else if (ch == "[") {
+                        else if (ch === "[") {
                             return chain(stream, state, tokenString("]"));
                         }
                         // is it a operator?
@@ -80,12 +80,12 @@ CodeMirror
                     function tokenString(quote) {
                         return function (stream, state) {
                             var escaped = false, next, end = false;
-                            while ((next = stream.next()) != null) {
-                                if (next == quote && !escaped) {
+                            while ((next = stream.next()) !== null) {
+                                if (next === quote && !escaped) {
                                     end = true;
                                     break;
                                 }
-                                escaped = !escaped && next == "\\";
+                                escaped = !escaped && next === "\\";
                             }
                             if (end || !(escaped || multiLineStrings))
                                 state.tokenize = tokenBase;
@@ -96,11 +96,11 @@ CodeMirror
                     function tokenComment(stream, state) {
                         var maybeEnd = false, ch;
                         while (ch = stream.next()) {
-                            if (ch == "/" && maybeEnd) {
+                            if (ch === "/" && maybeEnd) {
                                 state.tokenize = tokenBase;
                                 break;
                             }
-                            maybeEnd = (ch == "*");
+                            maybeEnd = (ch === "*");
                         }
                         return ret("comment", "comment");
                     }
@@ -167,7 +167,7 @@ CodeMirror
                     function tokenBase(stream, state) {
                         var ch = stream.next();
                         // start of string?
-                        if (ch == '"' || ch == "'")
+                        if (ch === '"' || ch === "'")
                             return chain(stream, state, tokenString(ch));
                         // is it one of the special signs {}().,;? Seperator?
                         else if (/[<>\[\]{}\(\),;\.]/.test(ch))
@@ -207,12 +207,12 @@ CodeMirror
                     function tokenString(quote) {
                         return function (stream, state) {
                             var escaped = false, next, end = false;
-                            while ((next = stream.next()) != null) {
-                                if (next == quote && !escaped) {
+                            while ((next = stream.next()) !== null) {
+                                if (next === quote && !escaped) {
                                     end = true;
                                     break;
                                 }
-                                escaped = !escaped && next == "\\";
+                                escaped = !escaped && next === "\\";
                             }
                             if (end || !(escaped || multiLineStrings))
                                 state.tokenize = tokenBase;
@@ -294,7 +294,7 @@ CodeMirror
             }
             return false;
         }
-        return arr.indexOf(item) != -1;
+        return arr.indexOf(item) !== -1;
     }
 
     function scriptHint(editor, keywords, getToken, options) {
@@ -308,11 +308,11 @@ CodeMirror
 
         var ch = token.string.charAt(0);
 
-        if (ch == "<" || ch == "/") {
-            if (ch == "<") {
+        if (ch === "<" || ch === "/") {
+            if (ch === "<") {
                 result = ["<#if ", "<#list ", "<#assign ", "<#else>"];
             } else if (getToken(editor, Pos(cur.line, token.start)).string
-                    .charAt(0) == "<") {
+                    .charAt(0) === "<") {
                 result = ["/#if>", "/#list>", "/#assign>"];
             }
         } else {
@@ -325,7 +325,7 @@ CodeMirror
                     end: cur.ch,
                     string: "",
                     state: token.state,
-                    type: token.string == "." ? "property" : null
+                    type: token.string === "." ? "property" : null
                 };
             }
 
@@ -334,7 +334,7 @@ CodeMirror
             while (tprop) {
                 tprop = getToken(editor, Pos(cur.line, tprop.start));
 
-                if (tprop.string != ".") {
+                if (tprop.string !== ".") {
                     break;
                 }
 
@@ -572,7 +572,7 @@ CodeMirror
         var found = [], start = token.string;
 
         function maybeAdd(str) {
-            if (str.indexOf(start) == 0 && !arrayContains(found, str)) {
+            if (str.indexOf(start) === 0 && !arrayContains(found, str)) {
                 found.push(str);
             }
         }
@@ -586,7 +586,7 @@ CodeMirror
         if (context) {
             var base = ELContext;
 
-            while (base != null && context.length) {
+            while (base !== null && context.length) {
                 base = base[context.pop().string];
             }
 
