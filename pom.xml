@@ -241,6 +241,14 @@
                 <role>Russian Translation</role>
             </roles>
         </contributor>
+        <contributor>
+            <name>Judilson Costa</name>
+            <email>judilsonjunior@gmail.com</email>
+            <url>https://github.com/Judilson</url>
+            <roles>
+                <role>Primefaces 6.x</role>
+            </roles>
+        </contributor>
     </contributors>
     <licenses>
         <license>
