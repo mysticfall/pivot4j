@@ -108,9 +108,9 @@ function getActiveTab() {
     var tabView = jQuery("#tab-panel");
     var activeTab = tabView.find("li.ui-tabs-active:first");
 
-//    if (activeTab.size() === 0) {
-//        activeTab = undefined;
-//    }
+    if (activeTab.length === 0) {
+        activeTab = undefined;
+    }
 
     return activeTab;
 }
@@ -120,7 +120,7 @@ function getActiveWindow() {
     var selector = tabView.find("li.ui-tabs-active:first a").attr("href");
 
     var query = jQuery(selector).find("iframe");
-    if (query.size() === 0) {
+    if (query.length === 0) {
         return;
     }
 
@@ -132,7 +132,7 @@ function addTab(tab) {
 
     var tabView = jQuery("#tab-panel").tabs("refresh");
 
-    var index = Math.max(0, tabView.find("li").size() - 1);
+    var index = Math.max(0, tabView.find("li").length - 1);
 
     tabView.tabs("option", "active", index);
 
@@ -268,9 +268,9 @@ function onTabClose(event) {
 function onTabSelected(event, ui) {
     var iframe = jQuery(ui.newPanel).find("iframe");
 
-//    if (iframe.size() === 0) {
-//        return;
-//    }
+    if (iframe.length === 0) {
+        return;
+    }
 
     var contentWin = iframe.get(0).contentWindow;
 
