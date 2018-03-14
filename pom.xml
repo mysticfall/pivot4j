@@ -68,8 +68,8 @@
         <version.jsp>2.1</version.jsp>
         <version.jstl>1.2</version.jstl>
         <version.servlet>2.5</version.servlet>
-        <version.myfaces>2.2.3</version.myfaces>
-        <version.mojarra>2.2.5</version.mojarra>
+        <version.myfaces>2.2.12</version.myfaces>
+        <version.mojarra>2.3.2</version.mojarra>
 
         <version.slf4j>1.7.7</version.slf4j>
         <version.log4j>2.0.2</version.log4j>
