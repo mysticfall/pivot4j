@@ -504,9 +504,6 @@
                     <includes>
                         <include>**/messages*.properties</include>
                     </includes>
-                    <excludes>
-                        <exclude>**/mondrian.properties</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
