@@ -13,8 +13,8 @@
     <packaging>war</packaging>
 
     <properties>
-        <jsf.project.stage>Development</jsf.project.stage>
-        <logger.level>debug</logger.level>
+        <jsf.project.stage>Production</jsf.project.stage>
+        <logger.level>error</logger.level>
         <root.logger.level>info</root.logger.level>
         <web.test.port>9090</web.test.port>
         <derby.home>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF</derby.home>
@@ -210,7 +210,6 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <excludes>
                     <exclude>log4j-test.xml</exclude>
-                    <exclude>mondrian.properties</exclude>
                 </excludes>
                 <filtering>false</filtering>
             </resource>
