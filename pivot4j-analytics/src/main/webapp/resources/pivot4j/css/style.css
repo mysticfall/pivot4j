@@ -747,7 +747,7 @@ body.ie-compat .ui-toolbar .ui-separator {
 .ui-menubutton {
     padding: 0;
     position: relative !important;
-    display: inline-block;
+    display: inline !important;
 }
 
 div.ui-chkbox span.ui-icon-check {
@@ -859,12 +859,6 @@ li.header {
 
 button.ui-button{
     vertical-align: top !important;
-}
-
-.ui-menubutton {
-    /* padding: 0; */
-    /* position: relative !important; */
-    display: initial !important;
 }
 
 div.ui-selectbooleanbutton {
