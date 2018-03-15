@@ -830,7 +830,7 @@ div.ui-selectonemenu, div.ui-fluid div.ui-selectonemenu, div.ui-selectcheckboxme
     margin-left: -8px !important;
     margin-top: -6px !important;
     position: relative !important;
-    top: -50% !important;
+    top: auto !important;
 }
 
 button.ui-button {
