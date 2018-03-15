@@ -626,6 +626,7 @@ span.ui-button-icon-only {
 
 .ui-dialog .ui-dialog-content {
     cursor: default;
+    padding: 0 !important;
 }
 
 .ui-dialog-content .ui-layout-container {
@@ -1119,4 +1120,8 @@ pre .line-highlight {
 
 body li.ui-menuitem span.ui-menuitem-text {
     padding-left: 1px !important;
+}
+
+.ui-tree .ui-tree-container {
+    overflow: hidden !important;
 }
