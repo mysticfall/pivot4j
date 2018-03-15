@@ -1116,3 +1116,7 @@ pre .line-highlight {
     white-space: nowrap;
     overflow: auto !important;
 }
+
+body li.ui-menuitem span.ui-menuitem-text {
+    padding-left: 1px !important;
+}
