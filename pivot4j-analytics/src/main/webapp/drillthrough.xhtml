@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:form id="drillthrough-form">
         <p:dialog id="drillthrough-dialog" header="#{title.drillthrough}"
@@ -87,7 +88,7 @@
                         <p:commandButton value="#{msg['button.export']}"
                                          icon="ui-icon-disk" ajax="false"
                                          onclick="PrimeFaces.monitorDownload(showWaitDialog, hideWaitDialog);">
-                            <p:dataExporter type="xls" target="drillthrough-grid"
+                            <pe:exporter type="xlsx" target="drillthrough-grid"
                                             fileName="#{pivotStateManager.model.cube.caption}" />
                         </p:commandButton>
 
