@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.util.IOUtils;
 import org.olap4j.Axis;
 import org.pivot4j.el.ExpressionContext;
 import org.pivot4j.ui.AbstractMarkupRenderCallback;
