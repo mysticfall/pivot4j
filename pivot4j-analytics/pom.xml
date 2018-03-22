@@ -473,7 +473,17 @@
             <artifactId>ojdbc6</artifactId>
             <version>${version.oracle}</version>
         </dependency>
-
+        
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${version.poi}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${version.poi}</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
