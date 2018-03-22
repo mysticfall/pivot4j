@@ -16,10 +16,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
-import mondrian.olap.CacheControl;
-import mondrian.olap.Connection;
-import mondrian.rolap.RolapConnection;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -27,7 +23,6 @@ import org.olap4j.AllocationPolicy;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
-import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
 import org.olap4j.OlapException;
 import org.olap4j.Scenario;
@@ -94,23 +89,8 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
     private Exception lastError;
 
-    public void updateCache() {
-
-        try {
-
-            OlapConnection olapConnection = model.getCube().getSchema().getCatalog().getDatabase().getOlapConnection();
-            Connection privateConnection = null;
-            privateConnection = olapConnection.unwrap(RolapConnection.class);
-            CacheControl cacheControl = privateConnection.getCacheControl(null);
-            cacheControl.flushSchemaCache();
-            model.initialize();
-        } catch (Exception ex) {
-        }
-    }
-
     @PostConstruct
     protected void initialize() {
-
         this.model = stateManager.getModel();
 
         if (model != null) {
@@ -497,10 +477,6 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
         }
 
         return layoutOptions;
-    }
-
-    public void onPreRenderViewCache() {
-        updateCache();
     }
 
     public void onPreRenderView() {
