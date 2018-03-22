@@ -92,7 +92,7 @@
         <version.junit>4.11</version.junit>
 
         <version.primefaces>6.2</version.primefaces>
-        <version.primefaces.extensions>6.2</version.primefaces.extensions>
+        <version.primefaces.extensions>6.2.1</version.primefaces.extensions>
         <version.primefaces.resources-codemirror>6.1.1</version.primefaces.resources-codemirror>
         <version.primefaces.themes>1.0.10</version.primefaces.themes>
                 
@@ -117,7 +117,7 @@
         <version.avalon>4.3</version.avalon>
         <version.freemarker>2.3.20</version.freemarker>
         <version.jflex>1.4.3</version.jflex>
-        <version.poi>3.10-FINAL</version.poi>
+        <version.poi>3.16</version.poi>
         <version.shrinkwrap>2.0.0</version.shrinkwrap>
         <version.tomcat6>6.0.41</version.tomcat6>
         <version.xerces>2.11.0</version.xerces>
