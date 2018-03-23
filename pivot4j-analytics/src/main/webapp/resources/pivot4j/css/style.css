@@ -1114,19 +1114,11 @@ pre .line-highlight {
     margin: 0;
     padding: 3px;
     white-space: nowrap;
-    overflow: auto !important;
+    overflow: visible !important;
 }
 
 body li.ui-menuitem span.ui-menuitem-text {
     padding-left: 1px !important;
-}
-
-.ui-tree .ui-tree-container {
-    overflow: hidden !important;
-}
-
-.ui-tree .ui-tree-container {
-    overflow: auto !important;
 }
 
 body .ui-picklist div.ui-picklist-buttons-cell button, body .ui-picklist.ui-picklist-responsive div.ui-picklist-buttons-cell button {
