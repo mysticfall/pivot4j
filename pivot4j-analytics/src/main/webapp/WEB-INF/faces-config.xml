@@ -3,17 +3,12 @@
               xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
     <application>
-        <resource-bundle>
-            <base-name>org.pivot4j.analytics.i18n.messages</base-name>
-            <var>msg</var>
-        </resource-bundle>
-        <message-bundle>org.pivot4j.analytics.i18n.messages</message-bundle>
         <locale-config>
             <default-locale>pt_BR</default-locale>
             <supported-locale>en</supported-locale>
             <supported-locale>ko</supported-locale>
-            <supported-locale>pt</supported-locale>
             <supported-locale>pt_BR</supported-locale>
+            <supported-locale>pt</supported-locale>
             <supported-locale>fr</supported-locale>
             <supported-locale>de</supported-locale>
             <supported-locale>es</supported-locale>
@@ -25,6 +20,21 @@
         </locale-config>
     </application>
 
+    <application>
+        <resource-bundle>
+            <base-name>org.pivot4j.analytics.i18n.messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+    </application>
+
+    <application>
+        <message-bundle>org.pivot4j.analytics.primefaces.util.messages</message-bundle>
+    </application>
+    
+    <application>
+        <message-bundle>org.pivot4j.analytics.i18n.messages</message-bundle>
+    </application>
+    
     <factory>
         <exception-handler-factory>org.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
     </factory>
