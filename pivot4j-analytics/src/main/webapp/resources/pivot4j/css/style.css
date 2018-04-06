@@ -870,24 +870,6 @@ button.ui-button-text-icon-left .ui-button-text, .ui-button-text-icon-right .ui-
     padding: .3em 1em .3em 2.1em !important;
 }
 
-/*.ui-menu .ui-menuitem-text {
-    float: right !important;
-}*/
-
-/*li.ui-menuitem>a.ui-menuitem-link {
-    margin-left: 0px !important;
-}*/
-
-
-/*.ui-icon {
-    display: block !important;
-    text-indent: 0px !important;
-    overflow: hidden !important;
-    background-repeat: no-repeat !important;
-}*/
-
-
-
 code[class*="language-"],
 pre[class*="language-"] {
     color: black;
@@ -1123,4 +1105,12 @@ body li.ui-menuitem span.ui-menuitem-text {
 
 body .ui-picklist div.ui-picklist-buttons-cell button, body .ui-picklist.ui-picklist-responsive div.ui-picklist-buttons-cell button {
     background-color: #666 !important;
+}
+
+li.ui-menuitem>a.ui-menuitem-link {
+    margin-left: 1px !important;
+}
+
+.ui-menu .ui-menuitem-link {
+    width: 100% !important;
 }
