@@ -17,16 +17,16 @@ import org.olap4j.metadata.Member;
 
 public interface AggregatorFactory {
 
-	List<String> getAvailableAggregations();
+    List<String> getAvailableAggregations();
 
-	/**
-	 * @param name
-	 * @param axis
-	 * @param members
-	 * @param level
-	 * @param measure
-	 * @return
-	 */
-	Aggregator createAggregator(String name, Axis axis, List<Member> members,
-			Level level, Measure measure);
+    /**
+     * @param name
+     * @param axis
+     * @param members
+     * @param level
+     * @param measure
+     * @return
+     */
+    Aggregator createAggregator(String name, Axis axis, List<Member> members,
+            Level level, Measure measure);
 }

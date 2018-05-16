@@ -12,85 +12,88 @@ import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
 public abstract class AbstractSeriesChartBuilder<T extends CartesianChartModel>
-		extends AbstractCartesianChartBuilder<T> {
+        extends AbstractCartesianChartBuilder<T> {
 
-	private ChartSeries series;
+    private ChartSeries series;
 
-	/**
-	 * @param context
-	 */
-	public AbstractSeriesChartBuilder(FacesContext context) {
-		super(context);
-	}
+    /**
+     * @param context
+     */
+    public AbstractSeriesChartBuilder(FacesContext context) {
+        super(context);
+    }
 
-	/**
-	 * @return series
-	 */
-	protected ChartSeries getSeries() {
-		return series;
-	}
+    /**
+     * @return series
+     */
+    protected ChartSeries getSeries() {
+        return series;
+    }
 
-	protected ChartSeries createSeries() {
-		return new ChartSeries();
-	}
+    protected ChartSeries createSeries() {
+        return new ChartSeries();
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.ui.chart.AbstractChartBuilder#startSeries(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	public void startSeries(ChartRenderContext context) {
-		this.series = createSeries();
+    /**
+     * @see
+     * org.pivot4j.analytics.ui.chart.AbstractChartBuilder#startSeries(org.pivot4j.ui.chart.ChartRenderContext)
+     */
+    @Override
+    public void startSeries(ChartRenderContext context) {
+        this.series = createSeries();
 
-		List<Member> path = new LinkedList<Member>(context.getSeriesPath());
+        List<Member> path = new LinkedList<Member>(context.getSeriesPath());
 
-		if (!path.isEmpty() && context.getSeriesCount() > 1) {
-			String label;
+        if (!path.isEmpty() && context.getSeriesCount() > 1) {
+            String label;
 
-			int size = path.size();
-			if (size == 1) {
-				label = path.get(0).getCaption();
-			} else {
-				StringBuilder builder = new StringBuilder();
+            int size = path.size();
+            if (size == 1) {
+                label = path.get(0).getCaption();
+            } else {
+                StringBuilder builder = new StringBuilder();
 
-				boolean first = true;
-				for (Member member : path) {
-					if (first) {
-						first = false;
-					} else {
-						builder.append(ChartRenderer.DEFAULT_MEMBER_SEPARATOR);
-					}
+                boolean first = true;
+                for (Member member : path) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        builder.append(ChartRenderer.DEFAULT_MEMBER_SEPARATOR);
+                    }
 
-					builder.append(member.getCaption());
-				}
+                    builder.append(member.getCaption());
+                }
 
-				label = builder.toString();
-			}
+                label = builder.toString();
+            }
 
-			series.setLabel(label);
-		}
-	}
+            series.setLabel(label);
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.ui.RenderCallback#renderContent(org.pivot4j.ui.RenderContext,
-	 *      java.lang.String, java.lang.Double)
-	 */
-	@Override
-	public void renderContent(ChartRenderContext context, String label,
-			Double value) {
-		if (series.getLabel() == null) {
-			series.setLabel(context.getMember().getHierarchy().getCaption());
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.RenderCallback#renderContent(org.pivot4j.ui.RenderContext,
+     * java.lang.String, java.lang.Double)
+     */
+    @Override
+    public void renderContent(ChartRenderContext context, String label,
+            Double value) {
+        if (series.getLabel() == null) {
+            series.setLabel(context.getMember().getHierarchy().getCaption());
+        }
 
-		series.set(label, value);
-	}
+        series.set(label, value);
+    }
 
-	/**
-	 * @see org.pivot4j.analytics.ui.chart.AbstractChartBuilder#endSeries(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	public void endSeries(ChartRenderContext context) {
-		getModel().addSeries(series);
+    /**
+     * @see
+     * org.pivot4j.analytics.ui.chart.AbstractChartBuilder#endSeries(org.pivot4j.ui.chart.ChartRenderContext)
+     */
+    @Override
+    public void endSeries(ChartRenderContext context) {
+        getModel().addSeries(series);
 
-		this.series = null;
-	}
+        this.series = null;
+    }
 }

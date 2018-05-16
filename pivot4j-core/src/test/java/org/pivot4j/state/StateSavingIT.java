@@ -32,130 +32,129 @@ import org.slf4j.LoggerFactory;
 
 public class StateSavingIT extends AbstractIntegrationTestCase {
 
-	private String testQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] WHERE [Time].[1997]";
+    private String testQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+            + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales] WHERE [Time].[1997]";
 
-	/**
-	 * @return the testQuery
-	 */
-	public String getTestQuery() {
-		return testQuery;
-	}
+    /**
+     * @return the testQuery
+     */
+    public String getTestQuery() {
+        return testQuery;
+    }
 
-	/**
-	 * @param testQuery
-	 *            the testQuery to set
-	 */
-	public void setTestQuery(String testQuery) {
-		this.testQuery = testQuery;
-	}
+    /**
+     * @param testQuery the testQuery to set
+     */
+    public void setTestQuery(String testQuery) {
+        this.testQuery = testQuery;
+    }
 
-	@Test
-	public void testBookmarkModelState() {
-		PivotModel model = getPivotModel();
-		model.setMdx(getTestQuery());
-		model.initialize();
+    @Test
+    public void testBookmarkModelState() {
+        PivotModel model = getPivotModel();
+        model.setMdx(getTestQuery());
+        model.initialize();
 
-		model.setSorting(true);
-		model.setTopBottomCount(3);
-		model.setSortCriteria(SortCriteria.BOTTOMCOUNT);
+        model.setSorting(true);
+        model.setTopBottomCount(3);
+        model.setSortCriteria(SortCriteria.BOTTOMCOUNT);
 
-		CellSet cellSet = model.getCellSet();
-		CellSetAxis axis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
+        CellSet cellSet = model.getCellSet();
+        CellSetAxis axis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 
-		model.sort(axis, axis.getPositions().get(0));
+        model.sort(axis, axis.getPositions().get(0));
 
-		String mdx = model.getCurrentMdx();
+        String mdx = model.getCurrentMdx();
 
-		Serializable bookmark = model.saveState();
+        Serializable bookmark = model.saveState();
 
-		assertThat("Bookmarked state should not be null", bookmark,
-				is(notNullValue()));
+        assertThat("Bookmarked state should not be null", bookmark,
+                is(notNullValue()));
 
-		PivotModel newModel = new PivotModelImpl(getDataSource());
-		newModel.restoreState(bookmark);
+        PivotModel newModel = new PivotModelImpl(getDataSource());
+        newModel.restoreState(bookmark);
 
-		newModel.getCellSet();
+        newModel.getCellSet();
 
-		String newMdx = newModel.getCurrentMdx();
-		if (newMdx != null) {
-			// Currently the parser treats every number as double value.
-			// It's inevitable now and does not impact the result.
-			newMdx = newMdx.replaceAll("3\\.0", "3");
-		}
+        String newMdx = newModel.getCurrentMdx();
+        if (newMdx != null) {
+            // Currently the parser treats every number as double value.
+            // It's inevitable now and does not impact the result.
+            newMdx = newMdx.replaceAll("3\\.0", "3");
+        }
 
-		assertThat("MDX has been changed after the state restoration", newMdx,
-				is(equalTo(mdx)));
-		assertThat(
-				"RenderProperty 'sorting' has been changed after the state restoration",
-				newModel.isSorting(), is(true));
-		assertThat(
-				"RenderProperty 'topBottomCount' has been changed after the state restoration",
-				newModel.getTopBottomCount(), is(equalTo(3)));
-		assertThat(
-				"RenderProperty 'sortMode' has been changed after the state restoration",
-				newModel.getSortCriteria(),
-				is(equalTo(SortCriteria.BOTTOMCOUNT)));
-	}
+        assertThat("MDX has been changed after the state restoration", newMdx,
+                is(equalTo(mdx)));
+        assertThat(
+                "RenderProperty 'sorting' has been changed after the state restoration",
+                newModel.isSorting(), is(true));
+        assertThat(
+                "RenderProperty 'topBottomCount' has been changed after the state restoration",
+                newModel.getTopBottomCount(), is(equalTo(3)));
+        assertThat(
+                "RenderProperty 'sortMode' has been changed after the state restoration",
+                newModel.getSortCriteria(),
+                is(equalTo(SortCriteria.BOTTOMCOUNT)));
+    }
 
-	@Test
-	public void testSaveModelSettings() throws ConfigurationException,
-			IOException {
-		PivotModel model = getPivotModel();
-		model.setMdx(getTestQuery());
-		model.initialize();
+    @Test
+    public void testSaveModelSettings() throws ConfigurationException,
+            IOException {
+        PivotModel model = getPivotModel();
+        model.setMdx(getTestQuery());
+        model.initialize();
 
-		model.setSorting(true);
-		model.setTopBottomCount(3);
-		model.setSortCriteria(SortCriteria.BOTTOMCOUNT);
+        model.setSorting(true);
+        model.setTopBottomCount(3);
+        model.setSortCriteria(SortCriteria.BOTTOMCOUNT);
 
-		CellSet cellSet = model.getCellSet();
-		CellSetAxis axis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
+        CellSet cellSet = model.getCellSet();
+        CellSetAxis axis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 
-		model.sort(axis, axis.getPositions().get(0));
+        model.sort(axis, axis.getPositions().get(0));
 
-		String mdx = model.getCurrentMdx();
+        String mdx = model.getCurrentMdx();
 
-		XMLConfiguration configuration = new XMLConfiguration();
-		configuration.setDelimiterParsingDisabled(true);
+        XMLConfiguration configuration = new XMLConfiguration();
+        configuration.setDelimiterParsingDisabled(true);
 
-		model.saveSettings(configuration);
+        model.saveSettings(configuration);
 
-		Logger logger = LoggerFactory.getLogger(getClass());
-		if (logger.isDebugEnabled()) {
-			StringWriter writer = new StringWriter();
-			configuration.save(writer);
-			writer.flush();
-			writer.close();
+        Logger logger = LoggerFactory.getLogger(getClass());
+        if (logger.isDebugEnabled()) {
+            StringWriter writer = new StringWriter();
+            configuration.save(writer);
+            writer.flush();
+            writer.close();
 
-			logger.debug("Loading report content :"
-					+ System.getProperty("line.separator"));
-			logger.debug(writer.getBuffer().toString());
-		}
+            logger.debug("Loading report content :"
+                    + System.getProperty("line.separator"));
+            logger.debug(writer.getBuffer().toString());
+        }
 
-		PivotModel newModel = new PivotModelImpl(getDataSource());
-		newModel.restoreSettings(configuration);
+        PivotModel newModel = new PivotModelImpl(getDataSource());
+        newModel.restoreSettings(configuration);
 
-		newModel.getCellSet();
+        newModel.getCellSet();
 
-		String newMdx = newModel.getCurrentMdx();
-		if (newMdx != null) {
-			// Currently the parser treats every number as double value.
-			// It's inevitable now and does not impact the result.
-			newMdx = newMdx.replaceAll("3\\.0", "3");
-		}
+        String newMdx = newModel.getCurrentMdx();
+        if (newMdx != null) {
+            // Currently the parser treats every number as double value.
+            // It's inevitable now and does not impact the result.
+            newMdx = newMdx.replaceAll("3\\.0", "3");
+        }
 
-		assertThat("MDX has been changed after the state restoration", newMdx,
-				is(equalTo(mdx)));
-		assertThat(
-				"RenderProperty 'sorting' has been changed after the state restoration",
-				newModel.isSorting(), is(true));
-		assertThat(
-				"RenderProperty 'topBottomCount' has been changed after the state restoration",
-				newModel.getTopBottomCount(), is(equalTo(3)));
-		assertThat(
-				"RenderProperty 'sortMode' has been changed after the state restoration",
-				newModel.getSortCriteria(),
-				is(equalTo(SortCriteria.BOTTOMCOUNT)));
-	}
+        assertThat("MDX has been changed after the state restoration", newMdx,
+                is(equalTo(mdx)));
+        assertThat(
+                "RenderProperty 'sorting' has been changed after the state restoration",
+                newModel.isSorting(), is(true));
+        assertThat(
+                "RenderProperty 'topBottomCount' has been changed after the state restoration",
+                newModel.getTopBottomCount(), is(equalTo(3)));
+        assertThat(
+                "RenderProperty 'sortMode' has been changed after the state restoration",
+                newModel.getSortCriteria(),
+                is(equalTo(SortCriteria.BOTTOMCOUNT)));
+    }
 }

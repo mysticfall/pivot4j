@@ -1,104 +1,104 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
-	<h:form id="export-form">
-		<p:dialog id="export-config" header="#{msg['title.export.pdf']}"
-			widgetVar="exportConfig" modal="true" width="655" height="380"
-			closable="true" resizable="false" dynamic="true"
-			styleClass="export-config" showEffect="fade" hideEffect="fade">
-			<p:fieldset legend="#{msg['header.pdfExport.contentSettings']}">
-				<h:panelGrid columns="2" columnClasses="field-name,field-input">
-					<p:outputLabel value="#{msg['label.pdfExport.header.show']}"
-						for="input-show-header" />
-					<p:selectBooleanCheckbox id="input-show-header"
-						value="#{pivotExportHandler.showHeader}">
-						<p:ajax event="change"
-							update="input-header-text,input-header-fsize" />
-					</p:selectBooleanCheckbox>
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:form id="export-form">
+        <p:dialog id="export-config" header="#{msg['title.export.pdf']}"
+                  widgetVar="exportConfig" modal="true" width="655" height="380"
+                  closable="true" resizable="false" dynamic="true"
+                  styleClass="export-config" showEffect="fade" hideEffect="fade">
+            <p:fieldset legend="#{msg['header.pdfExport.contentSettings']}">
+                <h:panelGrid columns="2" columnClasses="field-name,field-input">
+                    <p:outputLabel value="#{msg['label.pdfExport.header.show']}"
+                                   for="input-show-header" />
+                    <p:selectBooleanCheckbox id="input-show-header"
+                                             value="#{pivotExportHandler.showHeader}">
+                        <p:ajax event="change"
+                                update="input-header-text,input-header-fsize" />
+                    </p:selectBooleanCheckbox>
 
-					<p:outputLabel value="#{msg['label.pdfExport.header.text']}"
-						for="input-header-text" />
-					<p:inputText id="input-header-text"
-						value="#{pivotExportHandler.headerText}" size="60" maxlength="100"
-						disabled="#{!pivotExportHandler.showHeader}" />
+                    <p:outputLabel value="#{msg['label.pdfExport.header.text']}"
+                                   for="input-header-text" />
+                    <p:inputText id="input-header-text"
+                                 value="#{pivotExportHandler.headerText}" size="60" maxlength="100"
+                                 disabled="#{!pivotExportHandler.showHeader}" />
 
-					<p:outputLabel value="#{msg['label.pdfExport.header.font.size']}"
-						for="input-header-fsize" />
-					<h:panelGroup>
-						<p:spinner id="input-header-fsize"
-							value="#{pivotExportHandler.headerFontSize}" min="1" max="100"
-							disabled="#{!pivotExportHandler.showHeader}" />
-						<h:outputText value="pt" styleClass="unit" />
-					</h:panelGroup>
+                    <p:outputLabel value="#{msg['label.pdfExport.header.font.size']}"
+                                   for="input-header-fsize" />
+                    <h:panelGroup>
+                        <p:spinner id="input-header-fsize"
+                                   value="#{pivotExportHandler.headerFontSize}" min="1" max="100"
+                                   disabled="#{!pivotExportHandler.showHeader}" />
+                        <h:outputText value="pt" styleClass="unit" />
+                    </h:panelGroup>
 
-					<p:outputLabel value="#{msg['label.pdfExport.footer.show']}"
-						for="input-show-footer" />
-					<p:selectBooleanCheckbox id="input-show-footer"
-						value="#{pivotExportHandler.showFooter}">
-						<p:ajax event="change"
-							update="input-footer-text,input-footer-fsize" />
-					</p:selectBooleanCheckbox>
+                    <p:outputLabel value="#{msg['label.pdfExport.footer.show']}"
+                                   for="input-show-footer" />
+                    <p:selectBooleanCheckbox id="input-show-footer"
+                                             value="#{pivotExportHandler.showFooter}">
+                        <p:ajax event="change"
+                                update="input-footer-text,input-footer-fsize" />
+                    </p:selectBooleanCheckbox>
 
-					<p:outputLabel value="#{msg['label.pdfExport.footer.text']}"
-						for="input-footer-text" />
-					<p:inputText id="input-footer-text"
-						value="#{pivotExportHandler.footerText}" size="60" maxlength="100"
-						disabled="#{!pivotExportHandler.showFooter}" />
+                    <p:outputLabel value="#{msg['label.pdfExport.footer.text']}"
+                                   for="input-footer-text" />
+                    <p:inputText id="input-footer-text"
+                                 value="#{pivotExportHandler.footerText}" size="60" maxlength="100"
+                                 disabled="#{!pivotExportHandler.showFooter}" />
 
-					<p:outputLabel value="#{msg['label.pdfExport.footer.font.size']}"
-						for="input-footer-fsize" />
-					<h:panelGroup>
-						<p:spinner id="input-footer-fsize"
-							value="#{pivotExportHandler.footerFontSize}" min="1" max="100"
-							disabled="#{!pivotExportHandler.showFooter}" />
-						<h:outputText value="pt" styleClass="unit" />
-					</h:panelGroup>
+                    <p:outputLabel value="#{msg['label.pdfExport.footer.font.size']}"
+                                   for="input-footer-fsize" />
+                    <h:panelGroup>
+                        <p:spinner id="input-footer-fsize"
+                                   value="#{pivotExportHandler.footerFontSize}" min="1" max="100"
+                                   disabled="#{!pivotExportHandler.showFooter}" />
+                        <h:outputText value="pt" styleClass="unit" />
+                    </h:panelGroup>
 
-					<p:outputLabel value="#{msg['label.pdfExport.content.font.size']}"
-						for="input-fsize" />
-					<h:panelGroup>
-						<p:spinner id="input-fsize" value="#{pivotExportHandler.fontSize}"
-							min="1" max="100" />
-						<h:outputText value="pt" styleClass="unit" />
-					</h:panelGroup>
+                    <p:outputLabel value="#{msg['label.pdfExport.content.font.size']}"
+                                   for="input-fsize" />
+                    <h:panelGroup>
+                        <p:spinner id="input-fsize" value="#{pivotExportHandler.fontSize}"
+                                   min="1" max="100" />
+                        <h:outputText value="pt" styleClass="unit" />
+                    </h:panelGroup>
 
-				</h:panelGrid>
-			</p:fieldset>
+                </h:panelGrid>
+            </p:fieldset>
 
-			<p:spacer height="2" />
+            <p:spacer height="2" />
 
-			<p:fieldset legend="#{msg['header.pdfExport.pageSettings']}">
-				<h:panelGrid columns="2" columnClasses="field-name,field-input">
-					<p:outputLabel value="#{msg['label.pdfExport.page.orientation']}"
-						for="input-orientation" />
-					<p:selectOneRadio id="input-orientation"
-						value="#{pivotExportHandler.orientation}">
-						<f:selectItems value="#{pivotExportHandler.orientations}" />
-					</p:selectOneRadio>
+            <p:fieldset legend="#{msg['header.pdfExport.pageSettings']}">
+                <h:panelGrid columns="2" columnClasses="field-name,field-input">
+                    <p:outputLabel value="#{msg['label.pdfExport.page.orientation']}"
+                                   for="input-orientation" />
+                    <p:selectOneRadio id="input-orientation"
+                                      value="#{pivotExportHandler.orientation}">
+                        <f:selectItems value="#{pivotExportHandler.orientations}" />
+                    </p:selectOneRadio>
 
-					<p:outputLabel value="#{msg['label.pdfExport.page.size']}"
-						for="input-paper-size" />
-					<p:selectOneMenu id="input-paper-size"
-						value="#{pivotExportHandler.paperSize}">
-						<f:selectItems value="#{pivotExportHandler.paperSizes}" />
-					</p:selectOneMenu>
-				</h:panelGrid>
-			</p:fieldset>
+                    <p:outputLabel value="#{msg['label.pdfExport.page.size']}"
+                                   for="input-paper-size" />
+                    <p:selectOneMenu id="input-paper-size"
+                                     value="#{pivotExportHandler.paperSize}">
+                        <f:selectItems value="#{pivotExportHandler.paperSizes}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </p:fieldset>
 
-			<f:facet name="footer">
-				<h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
-					layout="block">
-					<p:messages showDetail="true" closable="true" />
+            <f:facet name="footer">
+                <h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
+                              layout="block">
+                    <p:messages showDetail="true" closable="true" />
 
-					<p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
-						action="#{pivotExportHandler.exportPdf}" ajax="false" />
-					<p:commandButton value="#{msg['button.close']}"
-						icon="ui-icon-close" onclick="PF('exportConfig').hide(); return false;" />
-				</h:panelGroup>
-			</f:facet>
-		</p:dialog>
-	</h:form>
+                    <p:commandButton value="#{msg['button.ok']}" icon="ui-icon-check"
+                                     action="#{pivotExportHandler.exportPdf}" ajax="false" />
+                    <p:commandButton value="#{msg['button.close']}"
+                                     icon="ui-icon-close" onclick="PF('exportConfig').hide(); return false;" />
+                </h:panelGroup>
+            </f:facet>
+        </p:dialog>
+    </h:form>
 </ui:composition>

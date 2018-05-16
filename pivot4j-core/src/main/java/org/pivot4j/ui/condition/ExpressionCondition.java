@@ -16,127 +16,129 @@ import org.pivot4j.ui.RenderContext;
 
 public class ExpressionCondition extends AbstractCondition {
 
-	public static final String NAME = "expression";
+    public static final String NAME = "expression";
 
-	private String expression;
+    private String expression;
 
-	/**
-	 * @param conditionFactory
-	 */
-	public ExpressionCondition(ConditionFactory conditionFactory) {
-		super(conditionFactory);
-	}
+    /**
+     * @param conditionFactory
+     */
+    public ExpressionCondition(ConditionFactory conditionFactory) {
+        super(conditionFactory);
+    }
 
-	/**
-	 * @param conditionFactory
-	 * @param expression
-	 */
-	public ExpressionCondition(ConditionFactory conditionFactory,
-			String expression) {
-		super(conditionFactory);
+    /**
+     * @param conditionFactory
+     * @param expression
+     */
+    public ExpressionCondition(ConditionFactory conditionFactory,
+            String expression) {
+        super(conditionFactory);
 
-		this.expression = expression;
-	}
+        this.expression = expression;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.Condition#getName()
-	 */
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.condition.Condition#getName()
+     */
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @return the expression
-	 */
-	public String getExpression() {
-		return expression;
-	}
+    /**
+     * @return the expression
+     */
+    public String getExpression() {
+        return expression;
+    }
 
-	/**
-	 * @param expression
-	 *            the expression to set
-	 */
-	public void setExpression(String expression) {
-		this.expression = expression;
-	}
+    /**
+     * @param expression the expression to set
+     */
+    public void setExpression(String expression) {
+        this.expression = expression;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.Condition#matches(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public boolean matches(RenderContext context) {
-		if (expression == null) {
-			throw new IllegalStateException("Missing expression statement.");
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.condition.Condition#matches(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public boolean matches(RenderContext context) {
+        if (expression == null) {
+            throw new IllegalStateException("Missing expression statement.");
+        }
 
-		ExpressionEvaluator evaluator = context.getExpressionEvaluator();
+        ExpressionEvaluator evaluator = context.getExpressionEvaluator();
 
-		Object result = evaluator.evaluate(expression,
-				context.getExpressionContext());
+        Object result = evaluator.evaluate(expression,
+                context.getExpressionContext());
 
-		if (result != null) {
-			return "true".equalsIgnoreCase(result.toString().trim());
-		} else {
-			return false;
-		}
-	}
+        if (result != null) {
+            return "true".equalsIgnoreCase(result.toString().trim());
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#saveState()
-	 */
-	@Override
-	public Serializable saveState() {
-		return expression;
-	}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#saveState()
+     */
+    @Override
+    public Serializable saveState() {
+        return expression;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
-	 */
-	@Override
-	public void restoreState(Serializable state) {
-		if (state == null) {
-			this.expression = null;
-		} else {
-			this.expression = (String) state;
-		}
-	}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
+     */
+    @Override
+    public void restoreState(Serializable state) {
+        if (state == null) {
+            this.expression = null;
+        } else {
+            this.expression = (String) state;
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void saveSettings(HierarchicalConfiguration configuration) {
-		super.saveSettings(configuration);
+    /**
+     * @see
+     * org.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void saveSettings(HierarchicalConfiguration configuration) {
+        super.saveSettings(configuration);
 
-		if (expression == null) {
-			return;
-		}
+        if (expression == null) {
+            return;
+        }
 
-		configuration.addProperty("expression", expression);
-	}
+        configuration.addProperty("expression", expression);
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void restoreSettings(HierarchicalConfiguration configuration) {
-		this.expression = configuration.getString("expression");
-	}
+    /**
+     * @see
+     * org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void restoreSettings(HierarchicalConfiguration configuration) {
+        this.expression = configuration.getString("expression");
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.AbstractCondition#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("eval(");
+    /**
+     * @see org.pivot4j.ui.condition.AbstractCondition#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("eval(");
 
-		if (expression != null) {
-			builder.append(expression);
-		}
+        if (expression != null) {
+            builder.append(expression);
+        }
 
-		builder.append(")");
+        builder.append(")");
 
-		return builder.toString();
-	}
+        return builder.toString();
+    }
 }

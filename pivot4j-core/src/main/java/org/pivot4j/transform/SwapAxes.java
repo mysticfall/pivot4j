@@ -10,15 +10,15 @@ package org.pivot4j.transform;
 
 public interface SwapAxes extends Transform {
 
-	/**
-	 * @return true if axes can be swapped, i.e. if the result is 2 dimensional
-	 */
-	boolean canSwapAxes();
+    /**
+     * @return true if axes can be swapped, i.e. if the result is 2 dimensional
+     */
+    boolean canSwapAxes();
 
-	/**
-	 * Swaps the axes
-	 */
-	void setSwapAxes(boolean swap);
+    /**
+     * Swaps the axes
+     */
+    void setSwapAxes(boolean swap);
 
-	boolean isSwapAxes();
+    boolean isSwapAxes();
 }

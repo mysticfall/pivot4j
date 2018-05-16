@@ -20,92 +20,92 @@ import freemarker.template.utility.NullArgumentException;
 
 /**
  * Temporary workaround for performance issue.
- * 
+ *
  * See http://jira.pentaho.com/browse/MONDRIAN-1292
  */
 public class MemberHierarchyCache extends Cache<String, Member> {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(MemberHierarchyCache.class);
+    private static Logger logger = LoggerFactory
+            .getLogger(MemberHierarchyCache.class);
 
-	private Cube cube;
+    private Cube cube;
 
-	private OlapUtils util;
+    private OlapUtils util;
 
-	/**
-	 * @param cube
-	 */
-	public MemberHierarchyCache(Cube cube) {
-		if (cube == null) {
-			throw new NullArgumentException("cube");
-		}
+    /**
+     * @param cube
+     */
+    public MemberHierarchyCache(Cube cube) {
+        if (cube == null) {
+            throw new NullArgumentException("cube");
+        }
 
-		this.cube = cube;
-		this.util = new OlapUtils(cube);
+        this.cube = cube;
+        this.util = new OlapUtils(cube);
 
-		util.setMemberHierarchyCache(this);
-	}
+        util.setMemberHierarchyCache(this);
+    }
 
-	public Cube getCube() {
-		return cube;
-	}
+    public Cube getCube() {
+        return cube;
+    }
 
-	/**
-	 * @param member
-	 * @return
-	 */
-	public Member getParentMember(Member member) {
-		if (member == null) {
-			throw new NullArgumentException("member");
-		}
+    /**
+     * @param member
+     * @return
+     */
+    public Member getParentMember(Member member) {
+        if (member == null) {
+            throw new NullArgumentException("member");
+        }
 
-		if (member.getDepth() == 0) {
-			return null;
-		}
+        if (member.getDepth() == 0) {
+            return null;
+        }
 
-		logger.trace("Resolving parent member for : {}", member.getUniqueName());
+        logger.trace("Resolving parent member for : {}", member.getUniqueName());
 
-		Member parent = get(member.getUniqueName());
+        Member parent = get(member.getUniqueName());
 
-		if (parent == null) {
-			parent = member.getParentMember();
+        if (parent == null) {
+            parent = member.getParentMember();
 
-			if (parent == null) {
-				logger.trace("Member doesn't seem to have a parent.");
-			} else {
-				logger.trace(
-						"No cache was found. Storing the parent member : {}",
-						parent.getUniqueName());
+            if (parent == null) {
+                logger.trace("Member doesn't seem to have a parent.");
+            } else {
+                logger.trace(
+                        "No cache was found. Storing the parent member : {}",
+                        parent.getUniqueName());
 
-				parent = util.wrapRaggedIfNecessary(parent);
-			}
+                parent = util.wrapRaggedIfNecessary(parent);
+            }
 
-			put(member.getUniqueName(), parent);
-		} else {
-			logger.trace("Returning cached parent member : {}",
-					parent.getUniqueName());
-		}
+            put(member.getUniqueName(), parent);
+        } else {
+            logger.trace("Returning cached parent member : {}",
+                    parent.getUniqueName());
+        }
 
-		return parent;
-	}
+        return parent;
+    }
 
-	/**
-	 * @param member
-	 * @return
-	 */
-	public List<Member> getAncestorMembers(Member member) {
-		if (member == null) {
-			throw new NullArgumentException("member");
-		}
+    /**
+     * @param member
+     * @return
+     */
+    public List<Member> getAncestorMembers(Member member) {
+        if (member == null) {
+            throw new NullArgumentException("member");
+        }
 
-		List<Member> ancestors = new ArrayList<Member>();
+        List<Member> ancestors = new ArrayList<Member>();
 
-		Member parent = member;
+        Member parent = member;
 
-		while ((parent = getParentMember(parent)) != null) {
-			ancestors.add(parent);
-		}
+        while ((parent = getParentMember(parent)) != null) {
+            ancestors.add(parent);
+        }
 
-		return ancestors;
-	}
+        return ancestors;
+    }
 }

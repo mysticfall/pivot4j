@@ -11,56 +11,58 @@ import org.apache.commons.lang.NullArgumentException;
 
 public abstract class AbstractFileSystemRepository implements ReportRepository {
 
-	/**
-	 * @see org.pivot4j.analytics.repository.ReportRepository#getFiles(org.pivot4j.analytics.repository.ReportFile,
-	 *      org.pivot4j.analytics.repository.RepositoryFileFilter)
-	 */
-	@Override
-	public List<ReportFile> getFiles(ReportFile parent,
-			RepositoryFileFilter filter) throws IOException {
-		List<ReportFile> files = getFiles(parent);
+    /**
+     * @see
+     * org.pivot4j.analytics.repository.ReportRepository#getFiles(org.pivot4j.analytics.repository.ReportFile,
+     * org.pivot4j.analytics.repository.RepositoryFileFilter)
+     */
+    @Override
+    public List<ReportFile> getFiles(ReportFile parent,
+            RepositoryFileFilter filter) throws IOException {
+        List<ReportFile> files = getFiles(parent);
 
-		List<ReportFile> result;
+        List<ReportFile> result;
 
-		if (filter == null) {
-			result = files;
-		} else {
-			result = new LinkedList<ReportFile>();
+        if (filter == null) {
+            result = files;
+        } else {
+            result = new LinkedList<ReportFile>();
 
-			for (ReportFile file : files) {
-				if (filter.accept(file)) {
-					result.add(file);
-				}
-			}
-		}
+            for (ReportFile file : files) {
+                if (filter.accept(file)) {
+                    result.add(file);
+                }
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * @throws IOException
-	 * @throws ConfigurationException
-	 * @see org.pivot4j.analytics.repository.ReportRepository#getReportContent(org.pivot4j.analytics.repository.ReportFile)
-	 */
-	@Override
-	public ReportContent getReportContent(ReportFile file)
-			throws IOException, ConfigurationException {
-		if (file == null) {
-			throw new NullArgumentException("file");
-		}
+    /**
+     * @throws IOException
+     * @throws ConfigurationException
+     * @see
+     * org.pivot4j.analytics.repository.ReportRepository#getReportContent(org.pivot4j.analytics.repository.ReportFile)
+     */
+    @Override
+    public ReportContent getReportContent(ReportFile file)
+            throws IOException, ConfigurationException {
+        if (file == null) {
+            throw new NullArgumentException("file");
+        }
 
-		ReportContent content = null;
+        ReportContent content = null;
 
-		InputStream in = null;
+        InputStream in = null;
 
-		try {
-			in = readContent(file);
+        try {
+            in = readContent(file);
 
-			content = new ReportContent(in);
-		} catch (IOException e) {
-			IOUtils.closeQuietly(in);
-		}
+            content = new ReportContent(in);
+        } catch (IOException e) {
+            IOUtils.closeQuietly(in);
+        }
 
-		return content;
-	}
+        return content;
+    }
 }

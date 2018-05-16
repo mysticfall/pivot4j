@@ -32,131 +32,131 @@ import org.pivot4j.impl.PivotModelImpl;
 
 public abstract class AbstractIntegrationTestCase {
 
-	private OlapDataSource dataSource;
+    private OlapDataSource dataSource;
 
-	private PivotModel model;
+    private PivotModel model;
 
-	@Before
-	public void setUp() throws Exception {
-		Class.forName("org.apache.derby.jdbc.ClientDriver");
+    @Before
+    public void setUp() throws Exception {
+        Class.forName("org.apache.derby.jdbc.ClientDriver");
 
-		Locale.setDefault(Locale.US);
+        Locale.setDefault(Locale.US);
 
-		this.dataSource = createMondrianDataSource();
-		this.model = createPivotModel(dataSource);
-	}
+        this.dataSource = createMondrianDataSource();
+        this.model = createPivotModel(dataSource);
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		if (model != null && model.isInitialized()) {
-			model.destroy();
+    @After
+    public void tearDown() throws Exception {
+        if (model != null && model.isInitialized()) {
+            model.destroy();
 
-			this.model = null;
-		}
+            this.model = null;
+        }
 
-		this.dataSource = null;
-	}
+        this.dataSource = null;
+    }
 
-	protected OlapDataSource createMondrianDataSource()
-			throws ClassNotFoundException {
-		Class.forName("mondrian.olap4j.MondrianOlap4jDriver");
+    protected OlapDataSource createMondrianDataSource()
+            throws ClassNotFoundException {
+        Class.forName("mondrian.olap4j.MondrianOlap4jDriver");
 
-		StringBuilder builder = new StringBuilder();
-		builder.append("jdbc:mondrian:");
-		builder.append(RolapConnectionProperties.Jdbc.name());
-		builder.append("=jdbc:derby://localhost/foodmart;");
-		builder.append(";");
-		builder.append(RolapConnectionProperties.JdbcDrivers.name());
-		builder.append("=");
-		builder.append(ClientDriver.class.getName());
-		builder.append(";");
-		builder.append(RolapConnectionProperties.JdbcUser.name());
-		builder.append("=sa;");
+        StringBuilder builder = new StringBuilder();
+        builder.append("jdbc:mondrian:");
+        builder.append(RolapConnectionProperties.Jdbc.name());
+        builder.append("=jdbc:derby://localhost/foodmart;");
+        builder.append(";");
+        builder.append(RolapConnectionProperties.JdbcDrivers.name());
+        builder.append("=");
+        builder.append(ClientDriver.class.getName());
+        builder.append(";");
+        builder.append(RolapConnectionProperties.JdbcUser.name());
+        builder.append("=sa;");
 
-		builder.append(RolapConnectionProperties.Catalog.name());
-		builder.append("=file:");
+        builder.append(RolapConnectionProperties.Catalog.name());
+        builder.append("=file:");
 
-		String basedir = System.getProperty("basedir");
-		if (basedir == null) {
-			basedir = System.getProperty("user.dir");
-		}
+        String basedir = System.getProperty("basedir");
+        if (basedir == null) {
+            basedir = System.getProperty("user.dir");
+        }
 
-		builder.append(basedir);
-		builder.append(File.separator);
-		builder.append("src");
-		builder.append(File.separator);
-		builder.append("test");
-		builder.append(File.separator);
-		builder.append("config");
-		builder.append(File.separator);
-		builder.append("FoodMart.xml");
+        builder.append(basedir);
+        builder.append(File.separator);
+        builder.append("src");
+        builder.append(File.separator);
+        builder.append("test");
+        builder.append(File.separator);
+        builder.append("config");
+        builder.append(File.separator);
+        builder.append("FoodMart.xml");
 
-		builder.append(";");
+        builder.append(";");
 
-		String url = builder.toString();
+        String url = builder.toString();
 
-		SimpleOlapDataSource dataSource = new SimpleOlapDataSource();
-		dataSource.setConnectionString(url);
+        SimpleOlapDataSource dataSource = new SimpleOlapDataSource();
+        dataSource.setConnectionString(url);
 
-		return dataSource;
-	}
+        return dataSource;
+    }
 
-	protected PivotModel createPivotModel(OlapDataSource dataSource) {
-		PivotModel model = new PivotModelImpl(dataSource);
-		model.setLocale(Locale.US);
+    protected PivotModel createPivotModel(OlapDataSource dataSource) {
+        PivotModel model = new PivotModelImpl(dataSource);
+        model.setLocale(Locale.US);
 
-		return model;
-	}
+        return model;
+    }
 
-	/**
-	 * @return the dataSource
-	 */
-	protected OlapDataSource getDataSource() {
-		return dataSource;
-	}
+    /**
+     * @return the dataSource
+     */
+    protected OlapDataSource getDataSource() {
+        return dataSource;
+    }
 
-	/**
-	 * @return the model
-	 */
-	protected PivotModel getPivotModel() {
-		return model;
-	}
+    /**
+     * @return the model
+     */
+    protected PivotModel getPivotModel() {
+        return model;
+    }
 
-	/**
-	 * @param name
-	 * @return
-	 * @throws IOException
-	 */
-	protected String readTestResource(String name) throws IOException {
-		StringBuilder builder = new StringBuilder();
-		builder.append('/');
-		builder.append(getClass().getPackage().getName().replace('.', '/'));
-		builder.append('/');
-		builder.append(name);
+    /**
+     * @param name
+     * @return
+     * @throws IOException
+     */
+    protected String readTestResource(String name) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        builder.append('/');
+        builder.append(getClass().getPackage().getName().replace('.', '/'));
+        builder.append('/');
+        builder.append(name);
 
-		String path = builder.toString();
+        String path = builder.toString();
 
-		InputStream in = getClass().getResourceAsStream(path);
+        InputStream in = getClass().getResourceAsStream(path);
 
-		if (in == null) {
-			assertThat("No resource was found with given name : " + path, in,
-					is(notNullValue()));
-		}
+        if (in == null) {
+            assertThat("No resource was found with given name : " + path, in,
+                    is(notNullValue()));
+        }
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-		StringWriter writer = new StringWriter();
+        StringWriter writer = new StringWriter();
 
-		String line = null;
-		while ((line = reader.readLine()) != null) {
-			writer.append(line);
-			writer.append('\n');
-		}
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            writer.append(line);
+            writer.append('\n');
+        }
 
-		reader.close();
-		writer.flush();
-		writer.close();
+        reader.close();
+        writer.flush();
+        writer.close();
 
-		return writer.toString().trim();
-	}
+        return writer.toString().trim();
+    }
 }

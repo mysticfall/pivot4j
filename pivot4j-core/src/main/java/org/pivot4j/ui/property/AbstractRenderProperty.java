@@ -16,86 +16,86 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public abstract class AbstractRenderProperty implements RenderProperty {
 
-	private String name;
+    private String name;
 
-	/**
-	 * Constructor used for internal state restoration.
-	 */
-	AbstractRenderProperty() {
-	}
+    /**
+     * Constructor used for internal state restoration.
+     */
+    AbstractRenderProperty() {
+    }
 
-	/**
-	 * Default public constructor.
-	 * 
-	 * @param name
-	 */
-	public AbstractRenderProperty(String name) {
-		if (name == null) {
-			throw new NullArgumentException("name");
-		}
+    /**
+     * Default public constructor.
+     *
+     * @param name
+     */
+    public AbstractRenderProperty(String name) {
+        if (name == null) {
+            throw new NullArgumentException("name");
+        }
 
-		this.name = name;
-	}
+        this.name = name;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.property.RenderProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
+    /**
+     * @see org.pivot4j.ui.property.RenderProperty#getName()
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#saveState()
-	 */
-	@Override
-	public Serializable saveState() {
-		return name;
-	}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#saveState()
+     */
+    @Override
+    public Serializable saveState() {
+        return name;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
-	 */
-	@Override
-	public void restoreState(Serializable state) {
-		this.name = (String) state;
-	}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
+     */
+    @Override
+    public void restoreState(Serializable state) {
+        this.name = (String) state;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#saveSettings(org.apache.commons.
-	 *      configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void saveSettings(HierarchicalConfiguration configuration) {
-		configuration.setProperty("[@name]", name);
-	}
+    /**
+     * @see org.pivot4j.state.Configurable#saveSettings(org.apache.commons.
+     * configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void saveSettings(HierarchicalConfiguration configuration) {
+        configuration.setProperty("[@name]", name);
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons
-	 *      .configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void restoreSettings(HierarchicalConfiguration configuration) {
-		this.name = configuration.getString("[@name]");
-	}
+    /**
+     * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons
+     * .configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void restoreSettings(HierarchicalConfiguration configuration) {
+        this.name = configuration.getString("[@name]");
+    }
 
-	/**
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(RenderProperty property) {
-		if (property == null) {
-			return -1;
-		}
+    /**
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(RenderProperty property) {
+        if (property == null) {
+            return -1;
+        }
 
-		return name.compareTo(property.getName());
-	}
+        return name.compareTo(property.getName());
+    }
 
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).append("name", name).toString();
-	}
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("name", name).toString();
+    }
 }

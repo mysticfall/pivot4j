@@ -14,66 +14,70 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.pivot4j.util.RenderPropertyUtils;
 
 public abstract class AbstractRenderCallback<T extends RenderContext>
-		implements RenderCallback<T> {
+        implements RenderCallback<T> {
 
-	private RenderPropertyUtils renderPropertyUtils;
+    private RenderPropertyUtils renderPropertyUtils;
 
-	/**
-	 * @see org.pivot4j.ui.RenderCallback#getContentType()
-	 */
-	@Override
-	public String getContentType() {
-		return null;
-	}
+    /**
+     * @see org.pivot4j.ui.RenderCallback#getContentType()
+     */
+    @Override
+    public String getContentType() {
+        return null;
+    }
 
-	/**
-	 * @return the renderPropertyUtils
-	 */
-	protected RenderPropertyUtils getRenderPropertyUtils() {
-		return renderPropertyUtils;
-	}
+    /**
+     * @return the renderPropertyUtils
+     */
+    protected RenderPropertyUtils getRenderPropertyUtils() {
+        return renderPropertyUtils;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.RenderCallback#startRender(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public void startRender(T context) {
-		this.renderPropertyUtils = new RenderPropertyUtils(context);
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.RenderCallback#startRender(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public void startRender(T context) {
+        this.renderPropertyUtils = new RenderPropertyUtils(context);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.RenderCallback#endRender(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public void endRender(T context) {
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.RenderCallback#endRender(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public void endRender(T context) {
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void saveSettings(HierarchicalConfiguration configuration) {
-	}
+    /**
+     * @see
+     * org.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void saveSettings(HierarchicalConfiguration configuration) {
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void restoreSettings(HierarchicalConfiguration configuration) {
-	}
+    /**
+     * @see
+     * org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void restoreSettings(HierarchicalConfiguration configuration) {
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#saveState()
-	 */
-	@Override
-	public Serializable saveState() {
-		return null;
-	}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#saveState()
+     */
+    @Override
+    public Serializable saveState() {
+        return null;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
-	 */
-	@Override
-	public void restoreState(Serializable state) {
-	}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
+     */
+    @Override
+    public void restoreState(Serializable state) {
+    }
 }

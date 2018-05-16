@@ -12,30 +12,30 @@ import org.pivot4j.PivotException;
 
 public class ParseException extends PivotException {
 
-	private static final long serialVersionUID = -2185820671708051064L;
+    private static final long serialVersionUID = -2185820671708051064L;
 
-	public ParseException() {
-	}
+    public ParseException() {
+    }
 
-	/**
-	 * @param msg
-	 * @param cause
-	 */
-	public ParseException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+    /**
+     * @param msg
+     * @param cause
+     */
+    public ParseException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
-	/**
-	 * @param msg
-	 */
-	public ParseException(String msg) {
-		super(msg);
-	}
+    /**
+     * @param msg
+     */
+    public ParseException(String msg) {
+        super(msg);
+    }
 
-	/**
-	 * @param cause
-	 */
-	public ParseException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * @param cause
+     */
+    public ParseException(Throwable cause) {
+        super(cause);
+    }
 }

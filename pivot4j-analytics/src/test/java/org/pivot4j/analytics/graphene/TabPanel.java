@@ -14,39 +14,39 @@ import org.openqa.selenium.support.FindBy;
 
 public abstract class TabPanel<T extends PageObject> implements PageFragment {
 
-	@Root
-	private WebElement panel;
+    @Root
+    private WebElement panel;
 
-	@FindBy(css = ".ui-tabs-nav a")
-	private List<WebElement> headers;
+    @FindBy(css = ".ui-tabs-nav a")
+    private List<WebElement> headers;
 
-	@FindBy(tagName = "iframe")
-	private List<WebElement> panels;
+    @FindBy(tagName = "iframe")
+    private List<WebElement> panels;
 
-	@Drone
-	private WebDriver driver;
+    @Drone
+    private WebDriver driver;
 
-	public Dimension getSize() {
-		return panel.getSize();
-	}
+    public Dimension getSize() {
+        return panel.getSize();
+    }
 
-	public List<Tab<T>> getTabs() {
-		if (headers == null || panels == null) {
-			return Collections.emptyList();
-		}
+    public List<Tab<T>> getTabs() {
+        if (headers == null || panels == null) {
+            return Collections.emptyList();
+        }
 
-		Iterator<WebElement> headerIt = headers.iterator();
-		Iterator<WebElement> panelIt = panels.iterator();
+        Iterator<WebElement> headerIt = headers.iterator();
+        Iterator<WebElement> panelIt = panels.iterator();
 
-		List<Tab<T>> tabs = new LinkedList<Tab<T>>();
+        List<Tab<T>> tabs = new LinkedList<Tab<T>>();
 
-		while (headerIt.hasNext() && panelIt.hasNext()) {
-			tabs.add(new Tab<T>(headerIt.next(), panelIt.next(), getPageType(),
-					driver));
-		}
+        while (headerIt.hasNext() && panelIt.hasNext()) {
+            tabs.add(new Tab<T>(headerIt.next(), panelIt.next(), getPageType(),
+                    driver));
+        }
 
-		return tabs;
-	}
+        return tabs;
+    }
 
-	protected abstract Class<T> getPageType();
+    protected abstract Class<T> getPageType();
 }

@@ -20,7 +20,7 @@ import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -46,1059 +46,1065 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "repositoryHandler")
-@SessionScoped
+@ViewScoped
 public class RepositoryHandler implements ViewStateListener, Serializable {
 
-	private static final long serialVersionUID = -860723075484210684L;
+    private static final long serialVersionUID = -860723075484210684L;
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+    private Logger log = LoggerFactory.getLogger(getClass());
 
-	@ManagedProperty(value = "#{settings}")
-	private Settings settings;
+    @ManagedProperty(value = "#{settings}")
+    private Settings settings;
 
-	@ManagedProperty(value = "#{dataSourceManager}")
-	private DataSourceManager dataSourceManager;
+    @ManagedProperty(value = "#{dataSourceManager}")
+    private DataSourceManager dataSourceManager;
 
-	@ManagedProperty(value = "#{reportRepository}")
-	private ReportRepository repository;
+    @ManagedProperty(value = "#{reportRepository}")
+    private ReportRepository repository;
 
-	@ManagedProperty(value = "#{viewStateHolder}")
-	private ViewStateHolder viewStateHolder;
+    @ManagedProperty(value = "#{viewStateHolder}")
+    private ViewStateHolder viewStateHolder;
 
-	private TreeNode rootNode;
+    private TreeNode rootNode;
 
-	private TreeNode selection;
+    private TreeNode selection;
 
-	private String activeViewId;
+    private String activeViewId;
 
-	private String reportName;
+    private String reportName;
 
-	private String folderName;
+    private String folderName;
 
-	@PostConstruct
-	protected void initialize() {
-		viewStateHolder.addViewStateListener(this);
+    @PostConstruct
+    protected void initialize() {
 
-		ViewState state = viewStateHolder.createNewState();
+        viewStateHolder.addViewStateListener(this);
 
-		if (state != null) {
-			viewStateHolder.registerState(state);
+        ViewState state = viewStateHolder.createNewState();
 
-			this.activeViewId = state.getId();
-		}
-	}
+        if (state != null) {
+            viewStateHolder.registerState(state);
 
-	@PreDestroy
-	protected void destroy() {
-		viewStateHolder.removeViewStateListener(this);
-	}
+            this.activeViewId = state.getId();
+        }
+    }
 
-	/**
-	 * @return the repository
-	 */
-	public ReportRepository getRepository() {
-		return repository;
-	}
+    @PreDestroy
+    protected void destroy() {
+        viewStateHolder.removeViewStateListener(this);
+    }
 
-	/**
-	 * @param repository
-	 *            the repository to set
-	 */
-	public void setRepository(ReportRepository repository) {
-		this.repository = repository;
-	}
+    /**
+     * @return the repository
+     */
+    public ReportRepository getRepository() {
+        return repository;
+    }
 
-	public void loadReports() {
-		RequestContext context = RequestContext.getCurrentInstance();
+    /**
+     * @param repository the repository to set
+     */
+    public void setRepository(ReportRepository repository) {
+        this.repository = repository;
+    }
 
-		List<ViewState> states = viewStateHolder.getStates();
+    public void loadReports() {
+        RequestContext context = RequestContext.getCurrentInstance();
 
-		for (ViewState state : states) {
-			context.addCallbackParam(state.getId(), new JSONObject(new ViewInfo(state)));
-		}
-	}
+        List<ViewState> states = viewStateHolder.getStates();
 
-	public void create() {
-		ViewState state = viewStateHolder.createNewState();
-		viewStateHolder.registerState(state);
+        for (ViewState state : states) {
+            context.addCallbackParam(state.getId(), new JSONObject(new ViewInfo(state)));
+        }
+    }
 
-		this.activeViewId = state.getId();
+    public void create() {
+        ViewState state = viewStateHolder.createNewState();
+        viewStateHolder.registerState(state);
 
-		if (log.isInfoEnabled()) {
-			log.info("Created a new view state : {}", state.getId());
-		}
+        this.activeViewId = state.getId();
 
-		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.addCallbackParam("report", new JSONObject(new ViewInfo(state)));
-	}
+        if (log.isInfoEnabled()) {
+            log.info("Created a new view state : {}", state.getId());
+        }
 
-	public void createDirectory() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = context.getApplication().getResourceBundle(
-				context, "msg");
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.addCallbackParam("report", new JSONObject(new ViewInfo(state)));
+    }
 
-		ReportFile parent = getTargetDirectory();
+    public void createDirectory() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(
+                context, "msg");
 
-		ReportFile newFile;
+        ReportFile parent = getTargetDirectory();
 
-		StringBuilder builder = new StringBuilder();
-		builder.append(parent.getPath());
+        ReportFile newFile;
 
-		if (!parent.getPath().endsWith(ReportFile.SEPARATOR)) {
-			builder.append(ReportFile.SEPARATOR);
-		}
+        StringBuilder builder = new StringBuilder();
+        builder.append(parent.getPath());
 
-		builder.append(folderName);
+        if (!parent.getPath().endsWith(ReportFile.SEPARATOR)) {
+            builder.append(ReportFile.SEPARATOR);
+        }
 
-		String path = builder.toString();
+        builder.append(folderName);
 
-		if (log.isInfoEnabled()) {
-			log.info("Creating a new folder : {}", path);
-		}
+        String path = builder.toString();
 
-		try {
-			if (repository.exists(path)) {
-				this.folderName = null;
+        if (log.isInfoEnabled()) {
+            log.info("Creating a new folder : {}", path);
+        }
 
-				String title = bundle.getString("error.create.folder.title");
-				String message = bundle.getString("warn.folder.exists");
+        try {
+            if (repository.exists(path)) {
+                this.folderName = null;
 
-				context.addMessage("new-folder-form:name", new FacesMessage(
-						FacesMessage.SEVERITY_ERROR, title, message));
+                String title = bundle.getString("error.create.folder.title");
+                String message = bundle.getString("warn.folder.exists");
 
-				return;
-			}
+                context.addMessage("new-folder-form:name", new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR, title, message));
 
-			newFile = repository.createDirectory(parent, folderName);
-		} catch (IOException e) {
-			String title = bundle.getString("error.create.folder.title");
-			String message = bundle.getString("error.create.folder.io") + e;
+                return;
+            }
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, message));
+            newFile = repository.createDirectory(parent, folderName);
+        } catch (IOException e) {
+            String title = bundle.getString("error.create.folder.title");
+            String message = bundle.getString("error.create.folder.io") + e;
 
-			if (log.isErrorEnabled()) {
-				log.error(title, e);
-			}
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, title, message));
 
-			return;
-		}
+            if (log.isErrorEnabled()) {
+                log.error(title, e);
+            }
 
-		RepositoryNode parentNode = getRepositoryRootNode().findNode(parent);
-		parentNode.setExpanded(true);
-		parentNode.setSelected(false);
-		parentNode.refresh();
+            return;
+        }
 
-		RepositoryNode newFileNode = getRepositoryRootNode().findNode(newFile);
-		newFileNode.setSelected(true);
+        RepositoryNode parentNode = getRepositoryRootNode().findNode(parent);
+        parentNode.setExpanded(true);
+        parentNode.setSelected(false);
+        parentNode.refresh();
 
-		this.selection = newFileNode;
-		this.folderName = null;
+        RepositoryNode newFileNode = getRepositoryRootNode().findNode(newFile);
+        newFileNode.setSelected(true);
 
-		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.execute("PF('newFolderDialog').hide()");
-	}
+        this.selection = newFileNode;
+        this.folderName = null;
 
-	public void save() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		RequestContext requestContext = RequestContext.getCurrentInstance();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.execute("PF('newFolderDialog').hide()");
+    }
 
-		ResourceBundle bundle = context.getApplication().getResourceBundle(
-				context, "msg");
+    public void save() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        RequestContext requestContext = RequestContext.getCurrentInstance();
 
-		Map<String, String> parameters = context.getExternalContext()
-				.getRequestParameterMap();
-		String param = parameters.get("close");
+        ResourceBundle bundle = context.getApplication().getResourceBundle(
+                context, "msg");
 
-		String viewId = parameters.get("viewId");
+        Map<String, String> parameters = context.getExternalContext()
+                .getRequestParameterMap();
+        String param = parameters.get("close");
 
-		if (viewId == null) {
-			viewId = activeViewId;
-		}
+        String viewId = parameters.get("viewId");
 
-		boolean saveAndClose = "true".equals(param);
+        if (viewId == null) {
+            viewId = activeViewId;
+        }
 
-		ViewState state = viewStateHolder.getState(viewId);
+        boolean saveAndClose = "true".equals(param);
 
-		ReportFile file = state.getFile();
+        ViewState state = viewStateHolder.getState(viewId);
 
-		if (file == null) {
-			suggestNewName();
+        ReportFile file = state.getFile();
 
-			requestContext.update("new-form");
-			requestContext.execute("PF('newReportDialog').show()");
+        if (file == null) {
+            suggestNewName();
 
-			return;
-		}
+            requestContext.update("new-form");
+            requestContext.execute("PF('newReportDialog').show()");
 
-		requestContext.update(Arrays.asList(new String[] {
-				"toolbar-form:toolbar", "repository-form:repository-panel",
-				"growl" }));
+            return;
+        }
 
-		try {
-			repository.setReportContent(file, new ReportContent(state));
-		} catch (ConfigurationException e) {
-			String title = bundle.getString("error.save.report.title");
-			String message = bundle.getString("error.save.report.format") + e;
+        requestContext.update(Arrays.asList(new String[]{
+            "toolbar-form:toolbar", "repository-form:repository-panel",
+            "growl"}));
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, message));
+        try {
+            repository.setReportContent(file, new ReportContent(state));
+        } catch (ConfigurationException e) {
+            String title = bundle.getString("error.save.report.title");
+            String message = bundle.getString("error.save.report.format") + e;
 
-			if (log.isErrorEnabled()) {
-				log.error(title, e);
-			}
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, title, message));
 
-			return;
-		} catch (IOException e) {
-			String title = bundle.getString("error.save.report.title");
-			String message = bundle.getString("error.save.report.io") + e;
+            if (log.isErrorEnabled()) {
+                log.error(title, e);
+            }
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, message));
+            return;
+        } catch (IOException e) {
+            String title = bundle.getString("error.save.report.title");
+            String message = bundle.getString("error.save.report.io") + e;
 
-			if (log.isErrorEnabled()) {
-				log.error(title, e);
-			}
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, title, message));
 
-			return;
-		}
+            if (log.isErrorEnabled()) {
+                log.error(title, e);
+            }
 
-		if (saveAndClose) {
-			requestContext.update("close-form");
+            return;
+        }
 
-			close(viewId);
-		} else {
-			if (this.selection != null) {
-				this.selection.setSelected(false);
-			}
+        if (saveAndClose) {
+            requestContext.update("close-form");
 
-			RepositoryNode node = getRepositoryRootNode().selectNode(file);
-			node.setViewId(state.getId());
-			node.setSelected(true);
+            close(viewId);
+        } else {
+            if (this.selection != null) {
+                this.selection.setSelected(false);
+            }
 
-			this.selection = node;
-		}
+            RepositoryNode node = getRepositoryRootNode().selectNode(file);
+            node.setViewId(state.getId());
+            node.setSelected(true);
 
-		state.setDirty(false);
+            this.selection = node;
+        }
 
-		String title = bundle.getString("message.save.report.title");
-		String message = bundle.getString("message.save.report.message");
+        state.setDirty(false);
 
-		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-				title, message));
+        String title = bundle.getString("message.save.report.title");
+        String message = bundle.getString("message.save.report.message");
 
-		requestContext.execute("enableSave(false);");
-	}
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                title, message));
 
-	public void saveAs() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = context.getApplication().getResourceBundle(
-				context, "msg");
+        requestContext.execute("enableSave(false);");
+    }
 
-		ReportFile parent = getTargetDirectory();
+    public void saveAs() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(
+                context, "msg");
 
-		RepositoryNode root = getRepositoryRootNode();
+        ReportFile parent = getTargetDirectory();
 
-		ViewState state = viewStateHolder.getState(activeViewId);
+        RepositoryNode root = getRepositoryRootNode();
 
-		if (state.getFile() != null) {
-			RepositoryNode node = root.findNode(state.getFile());
-			if (node != null) {
-				node.setViewId(null);
-			}
-		}
+        ViewState state = viewStateHolder.getState(activeViewId);
 
-		ReportContent content = new ReportContent(state);
+        if (state.getFile() != null) {
+            RepositoryNode node = root.findNode(state.getFile());
+            if (node != null) {
+                node.setViewId(null);
+            }
+        }
 
-		if (reportName.toLowerCase().endsWith(".pivot4j")) {
-			reportName = reportName.substring(0, reportName.length() - 8);
-		}
+        ReportContent content = new ReportContent(state);
 
-		String fileName = reportName + ".pivot4j";
+        String extension = bundle.getString("report.title.extension");
 
-		ReportFile file;
+        if (reportName.toLowerCase().endsWith(extension)) {
+            reportName = reportName.substring(0, reportName.length() - 8);
+        }
 
-		try {
-			file = repository.createFile(parent, fileName, content);
-		} catch (ConfigurationException e) {
-			String title = bundle.getString("error.save.report.title");
-			String message = bundle.getString("error.save.report.format") + e;
+        String fileName = reportName + extension;
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, message));
+        ReportFile file;
 
-			if (log.isErrorEnabled()) {
-				log.error(title, e);
-			}
+        try {
+            file = repository.createFile(parent, fileName, content);
+        } catch (ConfigurationException e) {
+            String title = bundle.getString("error.save.report.title");
+            String message = bundle.getString("error.save.report.format") + e;
 
-			return;
-		} catch (IOException e) {
-			String title = bundle.getString("error.save.report.title");
-			String message = bundle.getString("error.save.report.io") + e;
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, title, message));
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, message));
+            if (log.isErrorEnabled()) {
+                log.error(title, e);
+            }
 
-			if (log.isErrorEnabled()) {
-				log.error(title, e);
-			}
+            return;
+        } catch (IOException e) {
+            String title = bundle.getString("error.save.report.title");
+            String message = bundle.getString("error.save.report.io") + e;
 
-			return;
-		}
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, title, message));
 
-		state.setName(reportName);
-		state.setFile(file);
-		state.setDirty(false);
+            if (log.isErrorEnabled()) {
+                log.error(title, e);
+            }
 
-		RepositoryNode parentNode = root.findNode(parent);
-		parentNode.setSelected(false);
-		parentNode.setExpanded(true);
+            return;
+        }
 
-		if (this.selection != null) {
-			this.selection.setSelected(false);
-		}
+        state.setName(reportName);
+        state.setFile(file);
+        state.setDirty(false);
 
-		RepositoryNode node = parentNode.selectNode(file);
-		if (node == null) {
-			node = new RepositoryNode(file, repository);
-			node.setParent(parentNode);
+        RepositoryNode parentNode = root.findNode(parent);
+        parentNode.setSelected(false);
+        parentNode.setExpanded(true);
 
-			parentNode.getChildren().add(node);
+        if (this.selection != null) {
+            this.selection.setSelected(false);
+        }
 
-			final RepositoryFileComparator comparator = new RepositoryFileComparator();
+        RepositoryNode node = parentNode.selectNode(file);
+        if (node == null) {
+            node = new RepositoryNode(file, repository);
+            node.setParent(parentNode);
 
-			Collections.sort(parentNode.getChildren(),
-					new Comparator<TreeNode>() {
+            parentNode.getChildren().add(node);
 
-						@Override
-						public int compare(TreeNode t1, TreeNode t2) {
-							RepositoryNode r1 = (RepositoryNode) t1;
-							RepositoryNode r2 = (RepositoryNode) t2;
+            final RepositoryFileComparator comparator = new RepositoryFileComparator();
 
-							return comparator.compare(r1.getObject(),
-									r2.getObject());
-						}
-					});
-		}
+            Collections.sort(parentNode.getChildren(),
+                    new Comparator<TreeNode>() {
 
-		node.setViewId(activeViewId);
-		node.setSelected(true);
+                @Override
+                public int compare(TreeNode t1, TreeNode t2) {
+                    RepositoryNode r1 = (RepositoryNode) t1;
+                    RepositoryNode r2 = (RepositoryNode) t2;
 
-		this.selection = node;
-		this.reportName = null;
+                    return comparator.compare(r1.getObject(),
+                            r2.getObject());
+                }
+            });
+        }
 
-		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.addCallbackParam("name", state.getName());
-		requestContext.addCallbackParam("path", file.getPath());
+        node.setViewId(activeViewId);
+        node.setSelected(true);
 
-		String title = bundle.getString("message.save.report.title");
-		String message = bundle.getString("message.saveAs.report.message")
-				+ file.getPath();
+        this.selection = node;
+        this.reportName = null;
 
-		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-				title, message));
-	}
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.addCallbackParam("name", state.getName());
+        requestContext.addCallbackParam("path", file.getPath());
 
-	public void open() {
-		if (selection == null) {
-			if (log.isWarnEnabled()) {
-				log.warn("Unable to load report from empty or multiple selection.");
-			}
+        String title = bundle.getString("message.save.report.title");
+        String message = bundle.getString("message.saveAs.report.message")
+                + file.getPath();
 
-			return;
-		}
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                title, message));
+    }
 
-		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = context.getApplication().getResourceBundle(
-				context, "msg");
+    public void open() {
+        if (selection == null) {
+            if (log.isWarnEnabled()) {
+                log.warn("Unable to load report from empty or multiple selection.");
+            }
 
-		RepositoryNode node = (RepositoryNode) selection;
-		ReportFile file = node.getObject();
+            return;
+        }
 
-		String viewId = UUID.randomUUID().toString();
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(
+                context, "msg");
 
-		String name = file.getName();
+        RepositoryNode node = (RepositoryNode) selection;
+        ReportFile file = node.getObject();
 
-		if (name.toLowerCase().endsWith(".pivot4j")) {
-			name = name.substring(0, name.length() - 8);
-		}
+        String viewId = UUID.randomUUID().toString();
 
-		ViewState state = new ViewState(viewId, name);
-		state.setFile(file);
+        String name = file.getName();
 
-		String errorMessage = null;
-		Exception exception = null;
+        String extension = bundle.getString("report.title.extension");
 
-		try {
-			ReportContent content = repository.getReportContent(file);
-			content.read(state, dataSourceManager, settings.getConfiguration());
-		} catch (ConfigurationException e) {
-			exception = e;
-			errorMessage = bundle.getString("error.open.report.format") + e;
-		} catch (DataSourceNotFoundException e) {
-			exception = e;
-			errorMessage = bundle.getString("error.open.report.dataSource")
-					+ e.getConnectionInfo().getCatalogName();
-		} catch (IOException e) {
-			exception = e;
-			errorMessage = bundle.getString("error.open.report.io") + e;
-		}
+        if (name.toLowerCase().endsWith(extension)) {
+            name = name.substring(0, name.length() - 8);
+        }
 
-		if (exception != null) {
-			String title = bundle.getString("error.open.report.title");
+        ViewState state = new ViewState(viewId, name);
+        state.setFile(file);
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, errorMessage));
+        String errorMessage = null;
+        Exception exception = null;
 
-			if (log.isErrorEnabled()) {
-				log.error(title, exception);
-			}
+        try {
+            ReportContent content = repository.getReportContent(file);
+            content.read(state, dataSourceManager, settings.getConfiguration());
+        } catch (ConfigurationException e) {
+            exception = e;
+            errorMessage = bundle.getString("error.open.report.format") + e;
+        } catch (DataSourceNotFoundException e) {
+            exception = e;
+            errorMessage = bundle.getString("error.open.report.dataSource")
+                    + e.getConnectionInfo().getCatalogName();
+        } catch (IOException e) {
+            exception = e;
+            errorMessage = bundle.getString("error.open.report.io") + e;
+        }
 
-			return;
-		}
+        if (exception != null) {
+            String title = bundle.getString("error.open.report.title");
 
-		viewStateHolder.registerState(state);
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, title, errorMessage));
 
-		if (log.isInfoEnabled()) {
-			log.info("Created a new view state : {}", viewId);
-		}
+            if (log.isErrorEnabled()) {
+                log.error(title, exception);
+            }
 
-		this.activeViewId = viewId;
+            return;
+        }
 
-		RequestContext requestContext = RequestContext.getCurrentInstance();
-		requestContext.addCallbackParam("report", new JSONObject(new ViewInfo(state)));
-	}
+        viewStateHolder.registerState(state);
 
-	public void refresh() {
-		RepositoryNode node = (RepositoryNode) selection;
-		node.refresh();
-	}
+        if (log.isInfoEnabled()) {
+            log.info("Created a new view state : {}", viewId);
+        }
 
-	public void delete() {
-		ViewState state = getActiveView();
-		ReportFile file = state.getFile();
+        this.activeViewId = viewId;
 
-		delete(state);
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.addCallbackParam("report", new JSONObject(new ViewInfo(state)));
+    }
 
-		if (file != null) {
-			delete(file);
-		}
+    public void refresh() {
+        RepositoryNode node = (RepositoryNode) selection;
+        node.refresh();
+    }
 
-		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = context.getApplication().getResourceBundle(
-				context, "msg");
+    public void delete() {
+        ViewState state = getActiveView();
+        ReportFile file = state.getFile();
 
-		String title = bundle.getString("message.delete.report.title");
-		String message = bundle.getString("message.delete.report.message");
+        delete(state);
 
-		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-				title, message));
-	}
+        if (file != null) {
+            delete(file);
+        }
 
-	public void deleteFile() {
-		RepositoryNode node = (RepositoryNode) selection;
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(
+                context, "msg");
 
-		if (node.getViewId() != null) {
-			delete(viewStateHolder.getState(node.getViewId()));
-		}
+        String title = bundle.getString("message.delete.report.title");
+        String message = bundle.getString("message.delete.report.message");
 
-		delete(node.getObject());
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                title, message));
+    }
 
-		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = context.getApplication().getResourceBundle(
-				context, "msg");
+    public void deleteFile() {
+        RepositoryNode node = (RepositoryNode) selection;
 
-		String title = bundle.getString("message.delete.report.title");
-		String message = bundle.getString("message.delete.report.message");
+        if (node.getViewId() != null) {
+            delete(viewStateHolder.getState(node.getViewId()));
+        }
 
-		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-				title, message));
-	}
+        delete(node.getObject());
 
-	public void deleteDirectory() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		ResourceBundle bundle = context.getApplication().getResourceBundle(
-				context, "msg");
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(
+                context, "msg");
 
-		RepositoryNode node = (RepositoryNode) selection;
-		ReportFile directory = node.getObject();
+        String title = bundle.getString("message.delete.report.title");
+        String message = bundle.getString("message.delete.report.message");
 
-		try {
-			List<ViewState> states = viewStateHolder.getStates();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                title, message));
+    }
 
-			for (ViewState state : states) {
-				if (state.getFile() == null) {
-					continue;
-				}
+    public void deleteDirectory() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(
+                context, "msg");
 
-				ReportFile file = state.getFile();
+        RepositoryNode node = (RepositoryNode) selection;
+        ReportFile directory = node.getObject();
 
-				List<ReportFile> ancestors = file.getAncestors();
+        try {
+            List<ViewState> states = viewStateHolder.getStates();
 
-				if (ancestors.contains(directory)) {
-					String title = bundle.getString("warn.folder.delete.title");
-					String message = bundle
-							.getString("warn.folder.delete.openReport.message");
+            for (ViewState state : states) {
+                if (state.getFile() == null) {
+                    continue;
+                }
 
-					context.addMessage(null, new FacesMessage(
-							FacesMessage.SEVERITY_WARN, title, message));
+                ReportFile file = state.getFile();
 
-					return;
-				}
-			}
+                List<ReportFile> ancestors = file.getAncestors();
 
-			repository.deleteFile(directory);
+                if (ancestors.contains(directory)) {
+                    String title = bundle.getString("warn.folder.delete.title");
+                    String message = bundle
+                            .getString("warn.folder.delete.openReport.message");
 
-			selection.getParent().getChildren().remove(selection);
+                    context.addMessage(null, new FacesMessage(
+                            FacesMessage.SEVERITY_WARN, title, message));
 
-			this.selection = null;
+                    return;
+                }
+            }
 
-			String title = bundle.getString("message.delete.folder.title");
-			String message = bundle.getString("message.delete.folder.message");
+            repository.deleteFile(directory);
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, title, message));
-		} catch (IOException e) {
-			String title = bundle.getString("error.delete.folder.title");
-			String message = bundle.getString("error.delete.folder.message")
-					+ e;
+            selection.getParent().getChildren().remove(selection);
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, message));
+            this.selection = null;
 
-			if (log.isErrorEnabled()) {
-				log.error(title, e);
-			}
-		}
-	}
+            String title = bundle.getString("message.delete.folder.title");
+            String message = bundle.getString("message.delete.folder.message");
 
-	/**
-	 * @param state
-	 */
-	protected void delete(ViewState state) {
-		String viewId = state.getId();
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, title, message));
+        } catch (IOException e) {
+            String title = bundle.getString("error.delete.folder.title");
+            String message = bundle.getString("error.delete.folder.message")
+                    + e;
 
-		viewStateHolder.unregisterState(viewId);
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, title, message));
 
-		if (viewId.equals(activeViewId)) {
-			this.activeViewId = null;
+            if (log.isErrorEnabled()) {
+                log.error(title, e);
+            }
+        }
+    }
 
-			synchronized (viewStateHolder) {
-				List<ViewState> states = viewStateHolder.getStates();
+    /**
+     * @param state
+     */
+    protected void delete(ViewState state) {
+        String viewId = state.getId();
 
-				int index = states.indexOf(state);
-				if (index >= states.size() - 1) {
-					index--;
-				} else {
-					index++;
-				}
+        viewStateHolder.unregisterState(viewId);
 
-				if (index > -1 && index < states.size()) {
-					this.activeViewId = states.get(index).getId();
-				}
-			}
-		}
+        if (viewId.equals(activeViewId)) {
+            this.activeViewId = null;
 
-		RequestContext.getCurrentInstance().execute(
-				String.format("closeTab(getTabIndex('%s'))", viewId));
-	}
+            synchronized (viewStateHolder) {
+                List<ViewState> states = viewStateHolder.getStates();
 
-	/**
-	 * @param file
-	 */
-	protected void delete(ReportFile file) {
-		try {
-			repository.deleteFile(file);
-		} catch (IOException e) {
-			FacesContext context = FacesContext.getCurrentInstance();
-			ResourceBundle bundle = context.getApplication().getResourceBundle(
-					context, "msg");
+                int index = states.indexOf(state);
+                if (index >= states.size() - 1) {
+                    index--;
+                } else {
+                    index++;
+                }
 
-			String title = bundle.getString("error.delete.report.title");
-			String message = bundle.getString("error.delete.report.message")
-					+ e;
+                if (index > -1 && index < states.size()) {
+                    this.activeViewId = states.get(index).getId();
+                }
+            }
+        }
 
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, message));
+        RequestContext.getCurrentInstance().execute(
+                String.format("closeTab(getTabIndex('%s'))", viewId));
+    }
 
-			if (log.isErrorEnabled()) {
-				log.error(title, e);
-			}
+    /**
+     * @param file
+     */
+    protected void delete(ReportFile file) {
+        try {
+            repository.deleteFile(file);
+        } catch (IOException e) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ResourceBundle bundle = context.getApplication().getResourceBundle(
+                    context, "msg");
 
-			return;
-		}
+            String title = bundle.getString("error.delete.report.title");
+            String message = bundle.getString("error.delete.report.message")
+                    + e;
 
-		if (selection instanceof RepositoryNode) {
-			RepositoryNode node = (RepositoryNode) selection;
-			if (node.getObject().equals(file)) {
-				selection.getParent().getChildren().remove(selection);
+            context.addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, title, message));
 
-				this.selection = null;
-			}
-		}
-	}
+            if (log.isErrorEnabled()) {
+                log.error(title, e);
+            }
 
-	public void close() {
-		FacesContext context = FacesContext.getCurrentInstance();
+            return;
+        }
 
-		Map<String, String> parameters = context.getExternalContext()
-				.getRequestParameterMap();
-		String viewId = parameters.get("viewId");
+        if (selection instanceof RepositoryNode) {
+            RepositoryNode node = (RepositoryNode) selection;
+            if (node.getObject().equals(file)) {
+                selection.getParent().getChildren().remove(selection);
 
-		close(viewId);
-	}
+                this.selection = null;
+            }
+        }
+    }
 
-	/**
-	 * @param viewId
-	 */
-	public void close(String viewId) {
-		String viewToClose;
+    public void close() {
+        FacesContext context = FacesContext.getCurrentInstance();
 
-		if (viewId == null) {
-			viewToClose = this.activeViewId;
-			this.activeViewId = null;
-		} else {
-			viewToClose = viewId;
-		}
+        Map<String, String> parameters = context.getExternalContext()
+                .getRequestParameterMap();
+        String viewId = parameters.get("viewId");
 
-		ViewState view = viewStateHolder.getState(viewToClose);
-		int index = viewStateHolder.getStates().indexOf(view);
+        close(viewId);
+    }
 
-		viewStateHolder.unregisterState(viewToClose);
+    /**
+     * @param viewId
+     */
+    public void close(String viewId) {
+        String viewToClose;
 
-		RequestContext.getCurrentInstance().execute(
-				String.format("closeTab(%s)", index));
-	}
+        if (viewId == null) {
+            viewToClose = this.activeViewId;
+            this.activeViewId = null;
+        } else {
+            viewToClose = viewId;
+        }
 
-	public boolean isOpenEnabled() {
-		if (selection != null) {
-			RepositoryNode node = (RepositoryNode) selection;
-			ReportFile file = node.getObject();
+        ViewState view = viewStateHolder.getState(viewToClose);
+        int index = viewStateHolder.getStates().indexOf(view);
 
-			if (!file.isDirectory()) {
-				List<ViewState> states = viewStateHolder.getStates();
-				for (ViewState state : states) {
-					if (file.equals(state.getFile())) {
-						return false;
-					}
-				}
+        viewStateHolder.unregisterState(viewToClose);
 
-				return true;
-			}
-		}
+        RequestContext.getCurrentInstance().execute(
+                String.format("closeTab(%s)", index));
+    }
 
-		return false;
-	}
+    public boolean isOpenEnabled() {
+        if (selection != null) {
+            RepositoryNode node = (RepositoryNode) selection;
+            ReportFile file = node.getObject();
 
-	public boolean isDeleteEnabled() {
-		if (selection != null) {
-			RepositoryNode node = (RepositoryNode) selection;
-			ReportFile file = node.getObject();
+            if (!file.isDirectory()) {
+                List<ViewState> states = viewStateHolder.getStates();
+                for (ViewState state : states) {
+                    if (file.equals(state.getFile())) {
+                        return false;
+                    }
+                }
 
-			return !file.isRoot();
-		}
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public void onTabChange() {
-		FacesContext context = FacesContext.getCurrentInstance();
+    public boolean isDeleteEnabled() {
+        if (selection != null) {
+            RepositoryNode node = (RepositoryNode) selection;
+            ReportFile file = node.getObject();
 
-		Map<String, String> parameters = context.getExternalContext()
-				.getRequestParameterMap();
+            return !file.isRoot();
+        }
 
-		select(parameters.get("viewId"));
-	}
+        return false;
+    }
 
-	public void onSelectionChange() {
-		RepositoryNode root = getRepositoryRootNode();
-		root.clearSelection();
+    public void onTabChange() {
+        FacesContext context = FacesContext.getCurrentInstance();
 
-		if (selection != null) {
-			selection.setSelected(true);
-		}
-	}
+        Map<String, String> parameters = context.getExternalContext()
+                .getRequestParameterMap();
 
-	/**
-	 * @param viewId
-	 */
-	protected void select(String viewId) {
-		this.activeViewId = viewId;
+        select(parameters.get("viewId"));
+    }
 
-		ViewState state = viewStateHolder.getState(activeViewId);
+    public void onSelectionChange() {
+        RepositoryNode root = getRepositoryRootNode();
+        root.clearSelection();
 
-		RepositoryNode root = getRepositoryRootNode();
-		root.clearSelection();
+        if (selection != null) {
+            selection.setSelected(true);
+        }
+    }
 
-		if (state != null && state.getFile() != null) {
-			this.selection = root.selectNode(state.getFile());
-		}
-	}
+    /**
+     * @param viewId
+     */
+    protected void select(String viewId) {
+        this.activeViewId = viewId;
 
-	public void onChange() {
-		ViewState state = getActiveView();
-		if (state != null) {
-			state.setDirty(true);
-		}
-	}
+        ViewState state = viewStateHolder.getState(activeViewId);
 
-	public void suggestNewName() {
-		String name = null;
+        RepositoryNode root = getRepositoryRootNode();
+        root.clearSelection();
 
-		ViewState state = getActiveView();
-		if (state != null) {
-			name = state.getName();
-		}
+        if (state != null && state.getFile() != null) {
+            this.selection = root.selectNode(state.getFile());
+        }
+    }
 
-		if (name == null) {
-			this.reportName = null;
-			return;
-		}
+    public void onChange() {
+        ViewState state = getActiveView();
+        if (state != null) {
+            state.setDirty(true);
+        }
+    }
 
-		if (name.toLowerCase().endsWith(".pivot4j")) {
-			name = name.substring(0, name.length() - 8);
-		}
+    public void suggestNewName() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(
+                context, "msg");
 
-		ReportFile parent = getTargetDirectory();
+        String name = null;
 
-		Set<String> names;
+        ViewState state = getActiveView();
+        if (state != null) {
+            name = state.getName();
+        }
 
-		try {
-			List<ReportFile> children = repository.getFiles(parent);
+        if (name == null) {
+            this.reportName = null;
+            return;
+        }
 
-			names = new HashSet<String>(children.size());
+        String extension = bundle.getString("report.title.extension");
 
-			for (ReportFile child : children) {
-				String childName = child.getName();
+        if (name.toLowerCase().endsWith(extension)) {
+            name = name.substring(0, name.length() - 8);
+        }
 
-				if (childName.toLowerCase().endsWith(".pivot4j")) {
-					childName = childName.substring(0, childName.length() - 8);
-				}
+        ReportFile parent = getTargetDirectory();
 
-				names.add(childName);
-			}
-		} catch (IOException e) {
-			throw new FacesException(e);
-		}
+        Set<String> names;
 
-		Pattern pattern = Pattern.compile("([^\\(]+)\\(([0-9]+)\\)");
+        try {
+            List<ReportFile> children = repository.getFiles(parent);
 
-		while (names.contains(name)) {
-			Matcher matcher = pattern.matcher(name);
+            names = new HashSet<String>(children.size());
 
-			if (matcher.matches()) {
-				String prefix = matcher.group(1);
-				int suffix = Integer.parseInt(matcher.group(2)) + 1;
+            for (ReportFile child : children) {
+                String childName = child.getName();
 
-				StringBuilder builder = new StringBuilder();
-				builder.append(prefix);
-				builder.append("(");
-				builder.append(Integer.toString(suffix));
-				builder.append(")");
+                if (childName.toLowerCase().endsWith(extension)) {
+                    childName = childName.substring(0, childName.length() - 8);
+                }
 
-				name = builder.toString();
-			} else {
-				name += "(2)";
-			}
-		}
+                names.add(childName);
+            }
+        } catch (IOException e) {
+            throw new FacesException(e);
+        }
 
-		this.reportName = name;
-	}
+        Pattern pattern = Pattern.compile("([^\\(]+)\\(([0-9]+)\\)");
 
-	protected ReportFile getTargetDirectory() {
-		ReportFile parent = null;
+        while (names.contains(name)) {
+            Matcher matcher = pattern.matcher(name);
 
-		if (selection != null) {
-			RepositoryNode node = (RepositoryNode) selection;
+            if (matcher.matches()) {
+                String prefix = matcher.group(1);
+                int suffix = Integer.parseInt(matcher.group(2)) + 1;
 
-			ReportFile selectedFile = node.getObject();
-			if (selectedFile.isDirectory()) {
-				parent = selectedFile;
-			} else {
-				try {
-					parent = selectedFile.getParent();
-				} catch (IOException e) {
-					throw new FacesException(e);
-				}
-			}
-		}
+                StringBuilder builder = new StringBuilder();
+                builder.append(prefix);
+                builder.append("(");
+                builder.append(Integer.toString(suffix));
+                builder.append(")");
 
-		if (parent == null) {
-			try {
-				parent = repository.getRoot();
-			} catch (IOException e) {
-				throw new FacesException(e);
-			}
-		}
+                name = builder.toString();
+            } else {
+                name += "(2)";
+            }
+        }
 
-		return parent;
-	}
+        this.reportName = name;
+    }
 
-	/**
-	 * @return the rootNode
-	 */
-	public TreeNode getRootNode() {
-		if (rootNode == null) {
-			this.rootNode = new DefaultTreeNode();
+    protected ReportFile getTargetDirectory() {
+        ReportFile parent = null;
 
-			rootNode.setExpanded(true);
+        if (selection != null) {
+            RepositoryNode node = (RepositoryNode) selection;
 
-			RepositoryNode node;
+            ReportFile selectedFile = node.getObject();
+            if (selectedFile.isDirectory()) {
+                parent = selectedFile;
+            } else {
+                try {
+                    parent = selectedFile.getParent();
+                } catch (IOException e) {
+                    throw new FacesException(e);
+                }
+            }
+        }
 
-			try {
-				node = new RepositoryNode(repository.getRoot(), repository);
-			} catch (IOException e) {
-				throw new FacesException(e);
-			}
+        if (parent == null) {
+            try {
+                parent = repository.getRoot();
+            } catch (IOException e) {
+                throw new FacesException(e);
+            }
+        }
 
-			node.setExpanded(true);
-			node.setFilter(new DefaultExtensionFilter(settings.getExtension()));
+        return parent;
+    }
 
-			rootNode.getChildren().add(node);
-		}
+    /**
+     * @return the rootNode
+     */
+    public TreeNode getRootNode() {
+        if (rootNode == null) {
+            this.rootNode = new DefaultTreeNode();
 
-		return rootNode;
-	}
+            rootNode.setExpanded(true);
 
-	protected RepositoryNode getRepositoryRootNode() {
-		return (RepositoryNode) getRootNode().getChildren().get(0);
-	}
+            RepositoryNode node;
 
-	/**
-	 * @see org.pivot4j.analytics.state.ViewStateListener#viewRegistered(org.pivot4j.analytics.state.ViewStateEvent)
-	 */
-	@Override
-	public void viewRegistered(ViewStateEvent e) {
-		final String viewId = e.getState().getId();
-		final ReportFile file = e.getState().getFile();
-
-		if (file == null) {
-			return;
-		}
-
-		RepositoryNode root = getRepositoryRootNode();
-		RepositoryNode node = root.findNode(file);
-
-		if (node != null) {
-			node.setViewId(viewId);
-		}
-	}
-
-	/**
-	 * @see org.pivot4j.analytics.state.ViewStateListener#viewUnregistered(org.pivot4j.analytics.state.ViewStateEvent)
-	 */
-	@Override
-	public void viewUnregistered(ViewStateEvent e) {
-		String viewId = e.getState().getId();
-
-		RepositoryNode root = getRepositoryRootNode();
-		RepositoryNode node = root.findNode(viewId);
-
-		if (node != null) {
-			node.setViewId(null);
-		}
-	}
-
-	/**
-	 * @return the activeViewId
-	 */
-	public ViewState getActiveView() {
-		if (activeViewId == null) {
-			return null;
-		}
-
-		return viewStateHolder.getState(activeViewId);
-	}
-
-	/**
-	 * @return the activeViewId
-	 */
-	public String getActiveViewId() {
-		return activeViewId;
-	}
-
-	/**
-	 * @param activeViewId
-	 *            the activeViewId to set
-	 */
-	public void setActiveViewId(String activeViewId) {
-		this.activeViewId = activeViewId;
-	}
-
-	/**
-	 * @return the reportName
-	 */
-	public String getReportName() {
-		return reportName;
-	}
-
-	/**
-	 * @param reportName
-	 *            the reportName to set
-	 */
-	public void setReportName(String reportName) {
-		this.reportName = reportName;
-	}
-
-	/**
-	 * @return the folderName
-	 */
-	public String getFolderName() {
-		return folderName;
-	}
-
-	/**
-	 * @param folderName
-	 *            the folderName to set
-	 */
-	public void setFolderName(String folderName) {
-		this.folderName = folderName;
-	}
-
-	/**
-	 * @return the settings
-	 */
-	public Settings getSettings() {
-		return settings;
-	}
-
-	/**
-	 * @param settings
-	 *            the settings to set
-	 */
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
-
-	/**
-	 * @return the dataSourceManager
-	 */
-	public DataSourceManager getDataSourceManager() {
-		return dataSourceManager;
-	}
-
-	/**
-	 * @param dataSourceManager
-	 *            the dataSourceManager to set
-	 */
-	public void setDataSourceManager(DataSourceManager dataSourceManager) {
-		this.dataSourceManager = dataSourceManager;
-	}
-
-	/**
-	 * @return the viewStateHolder
-	 */
-	public ViewStateHolder getViewStateHolder() {
-		return viewStateHolder;
-	}
-
-	/**
-	 * @param viewStateHolder
-	 *            the viewStateHolder to set
-	 */
-	public void setViewStateHolder(ViewStateHolder viewStateHolder) {
-		this.viewStateHolder = viewStateHolder;
-	}
-
-	/**
-	 * @return the selection
-	 */
-	public TreeNode getSelection() {
-		return selection;
-	}
-
-	/**
-	 * @param selection
-	 *            the selection to set
-	 */
-	public void setSelection(TreeNode selection) {
-		this.selection = selection;
-	}
-
-	public static class ViewInfo implements Serializable {
-
-		private static final long serialVersionUID = 862747643432896517L;
-
-		private String id;
-
-		private String name;
-
-		private String path;
-
-		private boolean dirty;
-
-		private boolean initialized;
-
-		/**
-		 * @param state
-		 */
-		ViewInfo(ViewState state) {
-			this.id = state.getId();
-			this.name = state.getName();
-			this.dirty = state.isDirty();
-			this.initialized = state.getConnectionInfo() != null;
-
-			if (state.getFile() != null) {
-				this.path = state.getFile().getPath();
-			}
-		}
-
-		/**
-		 * @return the id
-		 */
-		public String getId() {
-			return id;
-		}
-
-		/**
-		 * @return the name
-		 */
-		public String getName() {
-			return name;
-		}
-
-		/**
-		 * @return the path
-		 */
-		public String getPath() {
-			return path;
-		}
-
-		/**
-		 * @return the dirty
-		 */
-		public boolean isDirty() {
-			return dirty;
-		}
-
-		/**
-		 * @return the initialized
-		 */
-		public boolean isInitialized() {
-			return initialized;
-		}
-	}
-
-	static class DefaultExtensionFilter implements RepositoryFileFilter {
-
-		private String extension;
-
-		DefaultExtensionFilter(String extension) {
-			this.extension = StringUtils.trimToNull(extension);
-		}
-
-		/**
-		 * @see org.pivot4j.analytics.repository.RepositoryFileFilter#accept(org.pivot4j.analytics.repository.ReportFile)
-		 */
-		@Override
-		public boolean accept(ReportFile file) {
-			if (file.isDirectory() || extension == null) {
-				return true;
-			} else {
-				String value = file.getExtension();
-
-				return value != null && value.endsWith(extension);
-			}
-		}
-	}
+            try {
+                node = new RepositoryNode(repository.getRoot(), repository);
+            } catch (IOException e) {
+                throw new FacesException(e);
+            }
+
+            node.setExpanded(true);
+            node.setFilter(new DefaultExtensionFilter(settings.getExtension()));
+
+            rootNode.getChildren().add(node);
+        }
+
+        return rootNode;
+    }
+
+    protected RepositoryNode getRepositoryRootNode() {
+        return (RepositoryNode) getRootNode().getChildren().get(0);
+    }
+
+    /**
+     * @see
+     * org.pivot4j.analytics.state.ViewStateListener#viewRegistered(org.pivot4j.analytics.state.ViewStateEvent)
+     */
+    @Override
+    public void viewRegistered(ViewStateEvent e) {
+        final String viewId = e.getState().getId();
+        final ReportFile file = e.getState().getFile();
+
+        if (file == null) {
+            return;
+        }
+
+        RepositoryNode root = getRepositoryRootNode();
+        RepositoryNode node = root.findNode(file);
+
+        if (node != null) {
+            node.setViewId(viewId);
+        }
+    }
+
+    /**
+     * @see
+     * org.pivot4j.analytics.state.ViewStateListener#viewUnregistered(org.pivot4j.analytics.state.ViewStateEvent)
+     */
+    @Override
+    public void viewUnregistered(ViewStateEvent e) {
+        String viewId = e.getState().getId();
+
+        RepositoryNode root = getRepositoryRootNode();
+        RepositoryNode node = root.findNode(viewId);
+
+        if (node != null) {
+            node.setViewId(null);
+        }
+    }
+
+    /**
+     * @return the activeViewId
+     */
+    public ViewState getActiveView() {
+        if (activeViewId == null) {
+            return null;
+        }
+
+        return viewStateHolder.getState(activeViewId);
+    }
+
+    /**
+     * @return the activeViewId
+     */
+    public String getActiveViewId() {
+        return activeViewId;
+    }
+
+    /**
+     * @param activeViewId the activeViewId to set
+     */
+    public void setActiveViewId(String activeViewId) {
+        this.activeViewId = activeViewId;
+    }
+
+    /**
+     * @return the reportName
+     */
+    public String getReportName() {
+        return reportName;
+    }
+
+    /**
+     * @param reportName the reportName to set
+     */
+    public void setReportName(String reportName) {
+        this.reportName = reportName;
+    }
+
+    /**
+     * @return the folderName
+     */
+    public String getFolderName() {
+        return folderName;
+    }
+
+    /**
+     * @param folderName the folderName to set
+     */
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
+    }
+
+    /**
+     * @return the settings
+     */
+    public Settings getSettings() {
+        return settings;
+    }
+
+    /**
+     * @param settings the settings to set
+     */
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
+
+    /**
+     * @return the dataSourceManager
+     */
+    public DataSourceManager getDataSourceManager() {
+        return dataSourceManager;
+    }
+
+    /**
+     * @param dataSourceManager the dataSourceManager to set
+     */
+    public void setDataSourceManager(DataSourceManager dataSourceManager) {
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    /**
+     * @return the viewStateHolder
+     */
+    public ViewStateHolder getViewStateHolder() {
+        return viewStateHolder;
+    }
+
+    /**
+     * @param viewStateHolder the viewStateHolder to set
+     */
+    public void setViewStateHolder(ViewStateHolder viewStateHolder) {
+        this.viewStateHolder = viewStateHolder;
+    }
+
+    /**
+     * @return the selection
+     */
+    public TreeNode getSelection() {
+        return selection;
+    }
+
+    /**
+     * @param selection the selection to set
+     */
+    public void setSelection(TreeNode selection) {
+        this.selection = selection;
+    }
+
+    public static class ViewInfo implements Serializable {
+
+        private static final long serialVersionUID = 862747643432896517L;
+
+        private String id;
+
+        private String name;
+
+        private String path;
+
+        private boolean dirty;
+
+        private boolean initialized;
+
+        /**
+         * @param state
+         */
+        ViewInfo(ViewState state) {
+            this.id = state.getId();
+            this.name = state.getName();
+            this.dirty = state.isDirty();
+            this.initialized = state.getConnectionInfo() != null;
+
+            if (state.getFile() != null) {
+                this.path = state.getFile().getPath();
+            }
+        }
+
+        /**
+         * @return the id
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         * @return the name
+         */
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * @return the path
+         */
+        public String getPath() {
+            return path;
+        }
+
+        /**
+         * @return the dirty
+         */
+        public boolean isDirty() {
+            return dirty;
+        }
+
+        /**
+         * @return the initialized
+         */
+        public boolean isInitialized() {
+            return initialized;
+        }
+    }
+
+    static class DefaultExtensionFilter implements RepositoryFileFilter {
+
+        private String extension;
+
+        DefaultExtensionFilter(String extension) {
+            this.extension = StringUtils.trimToNull(extension);
+        }
+
+        /**
+         * @see
+         * org.pivot4j.analytics.repository.RepositoryFileFilter#accept(org.pivot4j.analytics.repository.ReportFile)
+         */
+        @Override
+        public boolean accept(ReportFile file) {
+            if (file.isDirectory() || extension == null) {
+                return true;
+            } else {
+                String value = file.getExtension();
+
+                return value != null && value.endsWith(extension);
+            }
+        }
+    }
 }

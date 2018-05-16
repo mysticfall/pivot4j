@@ -14,40 +14,41 @@ import org.pivot4j.ui.RenderContext;
 
 public abstract class AbstractUICommand<T> implements UICommand<T> {
 
-	private PivotRenderer<?> renderer;
+    private PivotRenderer<?> renderer;
 
-	/**
-	 * @param renderer
-	 */
-	public AbstractUICommand(PivotRenderer<?> renderer) {
-		if (renderer == null) {
-			throw new NullArgumentException("renderer");
-		}
+    /**
+     * @param renderer
+     */
+    public AbstractUICommand(PivotRenderer<?> renderer) {
+        if (renderer == null) {
+            throw new NullArgumentException("renderer");
+        }
 
-		this.renderer = renderer;
-	}
+        this.renderer = renderer;
+    }
 
-	/**
-	 * @return the renderer
-	 */
-	protected PivotRenderer<?> getRenderer() {
-		return renderer;
-	}
+    /**
+     * @return the renderer
+     */
+    protected PivotRenderer<?> getRenderer() {
+        return renderer;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#getDescription()
-	 */
-	@Override
-	public String getDescription() {
-		// TODO Do i18n here
-		return null;
-	}
+    /**
+     * @see org.pivot4j.ui.command.UICommand#getDescription()
+     */
+    @Override
+    public String getDescription() {
+        // TODO Do i18n here
+        return null;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#getMode(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public String getMode(RenderContext context) {
-		return null;
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.command.UICommand#getMode(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public String getMode(RenderContext context) {
+        return null;
+    }
 }

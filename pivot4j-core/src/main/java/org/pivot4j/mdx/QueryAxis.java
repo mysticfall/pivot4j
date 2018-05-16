@@ -18,174 +18,171 @@ import org.olap4j.Axis;
  */
 public class QueryAxis extends AbstractExp {
 
-	private static final long serialVersionUID = 9064412375948950770L;
+    private static final long serialVersionUID = 9064412375948950770L;
 
-	private Axis axis;
+    private Axis axis;
 
-	private Exp exp;
+    private Exp exp;
 
-	private boolean nonEmpty;
+    private boolean nonEmpty;
 
-	private List<CompoundId> dimensionProperties = new ArrayList<CompoundId>();
+    private List<CompoundId> dimensionProperties = new ArrayList<CompoundId>();
 
-	public QueryAxis() {
-	}
+    public QueryAxis() {
+    }
 
-	/**
-	 * @param axis
-	 * @param exp
-	 */
-	public QueryAxis(Axis axis, Exp exp) {
-		this(axis, exp, false);
-	}
+    /**
+     * @param axis
+     * @param exp
+     */
+    public QueryAxis(Axis axis, Exp exp) {
+        this(axis, exp, false);
+    }
 
-	/**
-	 * @param axis
-	 * @param exp
-	 * @param nonEmpty
-	 */
-	public QueryAxis(Axis axis, Exp exp, boolean nonEmpty) {
-		this.axis = axis;
-		this.exp = exp;
-		this.nonEmpty = nonEmpty;
-	}
+    /**
+     * @param axis
+     * @param exp
+     * @param nonEmpty
+     */
+    public QueryAxis(Axis axis, Exp exp, boolean nonEmpty) {
+        this.axis = axis;
+        this.exp = exp;
+        this.nonEmpty = nonEmpty;
+    }
 
-	/**
-	 * Returns the exp.
-	 * 
-	 * @return Exp
-	 */
-	public Exp getExp() {
-		return exp;
-	}
+    /**
+     * Returns the exp.
+     *
+     * @return Exp
+     */
+    public Exp getExp() {
+        return exp;
+    }
 
-	/**
-	 * Returns the axis.
-	 * 
-	 * @return Axis
-	 */
-	public Axis getAxis() {
-		return axis;
-	}
+    /**
+     * Returns the axis.
+     *
+     * @return Axis
+     */
+    public Axis getAxis() {
+        return axis;
+    }
 
-	/**
-	 * Returns the nonEmpty.
-	 * 
-	 * @return boolean
-	 */
-	public boolean isNonEmpty() {
-		return nonEmpty;
-	}
+    /**
+     * Returns the nonEmpty.
+     *
+     * @return boolean
+     */
+    public boolean isNonEmpty() {
+        return nonEmpty;
+    }
 
-	/**
-	 * Sets the exp.
-	 * 
-	 * @param exp
-	 *            The exp to set
-	 */
-	public void setExp(Exp exp) {
-		this.exp = exp;
-	}
+    /**
+     * Sets the exp.
+     *
+     * @param exp The exp to set
+     */
+    public void setExp(Exp exp) {
+        this.exp = exp;
+    }
 
-	/**
-	 * Sets the axis.
-	 * 
-	 * @param axis
-	 *            The axis to set
-	 */
-	public void setAxis(Axis axis) {
-		this.axis = axis;
-	}
+    /**
+     * Sets the axis.
+     *
+     * @param axis The axis to set
+     */
+    public void setAxis(Axis axis) {
+        this.axis = axis;
+    }
 
-	/**
-	 * Sets the nonEmpty.
-	 * 
-	 * @param nonEmpty
-	 *            The nonEmpty to set
-	 */
-	public void setNonEmpty(boolean nonEmpty) {
-		this.nonEmpty = nonEmpty;
-	}
+    /**
+     * Sets the nonEmpty.
+     *
+     * @param nonEmpty The nonEmpty to set
+     */
+    public void setNonEmpty(boolean nonEmpty) {
+        this.nonEmpty = nonEmpty;
+    }
 
-	/**
-	 * @return
-	 */
-	public List<CompoundId> getDimensionProperties() {
-		return dimensionProperties;
-	}
+    /**
+     * @return
+     */
+    public List<CompoundId> getDimensionProperties() {
+        return dimensionProperties;
+    }
 
-	/**
-	 * format to MDX
-	 */
-	public String toMdx() {
-		StringBuilder sb = new StringBuilder();
+    /**
+     * format to MDX
+     */
+    public String toMdx() {
+        StringBuilder sb = new StringBuilder();
 
-		if (exp != null) {
-			if (nonEmpty) {
-				sb.append("NON EMPTY ");
-			}
+        if (exp != null) {
+            if (nonEmpty) {
+                sb.append("NON EMPTY ");
+            }
 
-			if (exp != null) {
-				sb.append(exp.toMdx());
-			}
+            if (exp != null) {
+                sb.append(exp.toMdx());
+            }
 
-			if (!dimensionProperties.isEmpty()) {
-				sb.append(" DIMENSION PROPERTIES ");
+            if (!dimensionProperties.isEmpty()) {
+                sb.append(" DIMENSION PROPERTIES ");
 
-				boolean isFollow = false;
+                boolean isFollow = false;
 
-				for (CompoundId property : dimensionProperties) {
-					if (isFollow) {
-						sb.append(',');
-					} else {
-						isFollow = true;
-					}
+                for (CompoundId property : dimensionProperties) {
+                    if (isFollow) {
+                        sb.append(',');
+                    } else {
+                        isFollow = true;
+                    }
 
-					sb.append(property.toMdx());
-				}
-			}
+                    sb.append(property.toMdx());
+                }
+            }
 
-			sb.append(" ON ");
+            sb.append(" ON ");
 
-			if (axis != null) {
-				sb.append(axis.name());
-			}
-		}
+            if (axis != null) {
+                sb.append(axis.name());
+            }
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	/**
-	 * @see org.pivot4j.mdx.Exp#copy()
-	 */
-	public QueryAxis copy() {
-		QueryAxis clone = new QueryAxis();
-		clone.axis = axis;
-		clone.nonEmpty = nonEmpty;
+    /**
+     * @see org.pivot4j.mdx.Exp#copy()
+     */
+    public QueryAxis copy() {
+        QueryAxis clone = new QueryAxis();
+        clone.axis = axis;
+        clone.nonEmpty = nonEmpty;
 
-		if (exp != null) {
-			clone.exp = exp.copy();
-		}
+        if (exp != null) {
+            clone.exp = exp.copy();
+        }
 
-		for (CompoundId property : dimensionProperties) {
-			clone.dimensionProperties.add(property.copy());
-		}
+        for (CompoundId property : dimensionProperties) {
+            clone.dimensionProperties.add(property.copy());
+        }
 
-		return clone;
-	}
+        return clone;
+    }
 
-	/**
-	 * @see org.pivot4j.mdx.Exp#accept(org.pivot4j.mdx.ExpVisitor)
-	 */
-	public void accept(ExpVisitor visitor) {
-		visitor.visitQueryAxis(this);
+    /**
+     * @see org.pivot4j.mdx.Exp#accept(org.pivot4j.mdx.ExpVisitor)
+     */
+    public void accept(ExpVisitor visitor) {
+        visitor.visitQueryAxis(this);
 
-		if (exp != null) {
-			exp.accept(visitor);
-		}
+        if (exp != null) {
+            exp.accept(visitor);
+        }
 
-		for (CompoundId property : dimensionProperties) {
-			property.accept(visitor);
-		}
-	}
+        for (CompoundId property : dimensionProperties) {
+            property.accept(visitor);
+        }
+    }
 }

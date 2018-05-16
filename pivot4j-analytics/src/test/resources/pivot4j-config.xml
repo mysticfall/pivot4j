@@ -32,33 +32,33 @@
 				<user>somebody</user>
 				<password>secret</password>
 
-				<properties>
-					<property name="Server">http://localhost:8080/mondrian/xmla</property>
-					<property name="Catalog">FoodMart</property>
-				</properties>
-			</connection-info>
-		</datasource>
-		-->
-	</datasources>
+                        <properties>
+                                <property name="Server">http://localhost:8080/mondrian/xmla</property>
+                                <property name="Catalog">FoodMart</property>
+                        </properties>
+                </connection-info>
+        </datasource>
+        -->
+    </datasources>
 
-	<appearances>
-		<ui-theme>
-			<default>redmond</default>
-			<available-themes>
-				<theme name="aristo" description="Aristo" />
-			</available-themes>
-		</ui-theme>
+    <appearances>
+        <ui-theme>
+            <default>redmond</default>
+            <available-themes>
+                <theme name="aristo" description="Aristo" />
+            </available-themes>
+        </ui-theme>
 
-		<editor-theme>eclipse</editor-theme>
-	</appearances>
-	<toolbar>
-		<NonEmpty>false</NonEmpty>
-	</toolbar>
-	<web>
-		<resource-prefix />
-		<locale-attribute>locale</locale-attribute>
-		<view-parameter>viewId</view-parameter>
-		<file-parameter>fileId</file-parameter>
-		<path-parameter>path</path-parameter>
-	</web>
+        <editor-theme>eclipse</editor-theme>
+    </appearances>
+    <toolbar>
+        <NonEmpty>false</NonEmpty>
+    </toolbar>
+    <web>
+        <resource-prefix />
+        <locale-attribute>locale</locale-attribute>
+        <view-parameter>viewId</view-parameter>
+        <file-parameter>fileId</file-parameter>
+        <path-parameter>path</path-parameter>
+    </web>
 </config>

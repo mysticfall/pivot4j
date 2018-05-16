@@ -19,43 +19,43 @@ import org.pivot4j.ui.RenderContext;
 
 public class MaximumAggregator extends AbstractAggregator {
 
-	public static final String NAME = "MAX";
+    public static final String NAME = "MAX";
 
-	/**
-	 * @param axis
-	 * @param members
-	 * @param level
-	 * @param measure
-	 */
-	public MaximumAggregator(Axis axis, List<Member> members, Level level,
-			Measure measure) {
-		super(axis, members, level, measure);
-	}
+    /**
+     * @param axis
+     * @param members
+     * @param level
+     * @param measure
+     */
+    public MaximumAggregator(Axis axis, List<Member> members, Level level,
+            Measure measure) {
+        super(axis, members, level, measure);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getName()
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.aggregator.Aggregator#getName()
+     */
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.AbstractAggregator#calculate(java.lang.Double,
-	 *      java.lang.Double, org.olap4j.Position,
-	 *      org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	protected Double calculate(Double value, Double aggregation,
-			Position position, RenderContext context) {
-		if (value == null) {
-			return aggregation;
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.AbstractAggregator#calculate(java.lang.Double,
+     * java.lang.Double, org.olap4j.Position, org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    protected Double calculate(Double value, Double aggregation,
+            Position position, RenderContext context) {
+        if (value == null) {
+            return aggregation;
+        }
 
-		if (aggregation == null) {
-			return value;
-		}
+        if (aggregation == null) {
+            return value;
+        }
 
-		return Math.max(value, aggregation);
-	}
+        return Math.max(value, aggregation);
+    }
 }

@@ -22,36 +22,38 @@ import org.primefaces.util.WidgetBuilder;
 @FacesRenderer(componentFamily = "org.pivot4j.component", rendererType = "org.pivot4j.component.ColorPickerRenderer")
 public class AjaxColorPickerRenderer extends ColorPickerRenderer {
 
-	public static final String RENDERER_TYPE = "org.pivot4j.component.ColorPickerRenderer";
+    public static final String RENDERER_TYPE = "org.pivot4j.component.ColorPickerRenderer";
 
-	/**
-	 * @see org.primefaces.component.colorpicker.ColorPickerRenderer#decode(javax.faces.context.FacesContext,
-	 *      javax.faces.component.UIComponent)
-	 */
-	@Override
-	public void decode(FacesContext context, UIComponent component) {
-		decodeBehaviors(context, component);
+    /**
+     * @see
+     * org.primefaces.component.colorpicker.ColorPickerRenderer#decode(javax.faces.context.FacesContext,
+     * javax.faces.component.UIComponent)
+     */
+    @Override
+    public void decode(FacesContext context, UIComponent component) {
+        decodeBehaviors(context, component);
 
-		super.decode(context, component);
-	}
+        super.decode(context, component);
+    }
 
-	/**
-	 * @see org.primefaces.component.colorpicker.ColorPickerRenderer#encodeScript(javax.faces.context.FacesContext,
-	 *      org.primefaces.component.colorpicker.ColorPicker, java.lang.String)
-	 */
-	@Override
-	protected void encodeScript(FacesContext context, ColorPicker colorPicker, String value)
-			throws IOException {
-		String clientId = colorPicker.getClientId(context);
+    /**
+     * @see
+     * org.primefaces.component.colorpicker.ColorPickerRenderer#encodeScript(javax.faces.context.FacesContext,
+     * org.primefaces.component.colorpicker.ColorPicker, java.lang.String)
+     */
+    @Override
+    protected void encodeScript(FacesContext context, ColorPicker colorPicker, String value)
+            throws IOException {
+        String clientId = colorPicker.getClientId(context);
 
-		WidgetBuilder wb = getWidgetBuilder(context);
+        WidgetBuilder wb = getWidgetBuilder(context);
 
-		wb.init("AjaxColorPicker", colorPicker.resolveWidgetVar(), clientId,
-				"colorpicker").attr("mode", colorPicker.getMode())
-				.attr("color", value, null);
+        wb.initWithComponentLoad("AjaxColorPicker", colorPicker.resolveWidgetVar(), clientId,
+                "colorpicker").attr("mode", colorPicker.getMode())
+                .attr("color", value, null);
 
-		encodeClientBehaviors(context, (ClientBehaviorHolder) colorPicker);
+        encodeClientBehaviors(context, (ClientBehaviorHolder) colorPicker);
 
-		wb.finish();
-	}
+        wb.finish();
+    }
 }

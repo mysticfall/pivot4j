@@ -24,79 +24,83 @@ import org.pivot4j.ui.RenderContext;
 
 public class CountAggregator extends AbstractAggregator {
 
-	public static final String NAME = "CNT";
+    public static final String NAME = "CNT";
 
-	// TODO Make it locale-aware and configurable.
-	private NumberFormat numberFormat = new DecimalFormat("###,###");
+    // TODO Make it locale-aware and configurable.
+    private NumberFormat numberFormat = new DecimalFormat("###,###");
 
-	/**
-	 * @param axis
-	 * @param members
-	 * @param level
-	 * @param measure
-	 */
-	public CountAggregator(Axis axis, List<Member> members, Level level,
-			Measure measure) {
-		super(axis, members, level, measure);
-	}
+    /**
+     * @param axis
+     * @param members
+     * @param level
+     * @param measure
+     */
+    public CountAggregator(Axis axis, List<Member> members, Level level,
+            Measure measure) {
+        super(axis, members, level, measure);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getName()
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.aggregator.Aggregator#getName()
+     */
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.AbstractAggregator#getNumberFormat(org.olap4j.Cell)
-	 */
-	@Override
-	protected NumberFormat getNumberFormat(Cell cell) {
-		return numberFormat;
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.AbstractAggregator#getNumberFormat(org.olap4j.Cell)
+     */
+    @Override
+    protected NumberFormat getNumberFormat(Cell cell) {
+        return numberFormat;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.AbstractAggregator#getNumberFormat(org.olap4j.Position)
-	 */
-	@Override
-	protected NumberFormat getNumberFormat(Position position) {
-		return numberFormat;
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.AbstractAggregator#getNumberFormat(org.olap4j.Position)
+     */
+    @Override
+    protected NumberFormat getNumberFormat(Position position) {
+        return numberFormat;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.AbstractAggregator#aggregate(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public void aggregate(RenderContext context) {
-		if (context.getAggregator() != null
-				|| AGG_VALUE.equals(context.getCellType())) {
-			return;
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.AbstractAggregator#aggregate(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public void aggregate(RenderContext context) {
+        if (context.getAggregator() != null
+                || AGG_VALUE.equals(context.getCellType())) {
+            return;
+        }
 
-		super.aggregate(context);
-	}
+        super.aggregate(context);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.AbstractAggregator#calculate(java.lang.Double,
-	 *      java.lang.Double, org.olap4j.Position,
-	 *      org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	protected Double calculate(Double value, Double aggregation,
-			Position position, RenderContext context) {
-		return null;
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.AbstractAggregator#calculate(java.lang.Double,
+     * java.lang.Double, org.olap4j.Position, org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    protected Double calculate(Double value, Double aggregation,
+            Position position, RenderContext context) {
+        return null;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.AbstractAggregator#getValue(org.olap4j.Position)
-	 */
-	@Override
-	protected Double getValue(Position position) {
-		if (position.getMembers().isEmpty()) {
-			return null;
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.AbstractAggregator#getValue(org.olap4j.Position)
+     */
+    @Override
+    protected Double getValue(Position position) {
+        if (position.getMembers().isEmpty()) {
+            return null;
+        }
 
-		return (double) getCount(position);
-	}
+        return (double) getCount(position);
+    }
 }

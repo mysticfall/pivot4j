@@ -12,7 +12,7 @@ import org.pivot4j.ui.CellTypes;
 
 public interface TableCellTypes extends CellTypes {
 
-	String TITLE = "title";
+    String TITLE = "title";
 
-	String FILL = "fill";
+    String FILL = "fill";
 }

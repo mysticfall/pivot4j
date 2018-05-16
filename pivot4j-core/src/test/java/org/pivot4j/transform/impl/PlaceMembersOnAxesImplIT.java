@@ -26,223 +26,224 @@ import org.olap4j.metadata.Member;
 import org.pivot4j.transform.PlaceMembersOnAxes;
 
 public class PlaceMembersOnAxesImplIT extends
-		AbstractTransformTestCase<PlaceMembersOnAxes> {
+        AbstractTransformTestCase<PlaceMembersOnAxes> {
 
-	private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
+    private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+            + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
 
-	/**
-	 * @return the initialQuery
-	 * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
-	 */
-	protected String getInitialQuery() {
-		return initialQuery;
-	}
+    /**
+     * @return the initialQuery
+     * @see
+     * org.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
+     */
+    protected String getInitialQuery() {
+        return initialQuery;
+    }
 
-	/**
-	 * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getType()
-	 */
-	@Override
-	protected Class<PlaceMembersOnAxes> getType() {
-		return PlaceMembersOnAxes.class;
-	}
+    /**
+     * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getType()
+     */
+    @Override
+    protected Class<PlaceMembersOnAxes> getType() {
+        return PlaceMembersOnAxes.class;
+    }
 
-	@Test
-	public void testFindVisibleMembers() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testFindVisibleMembers() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		Hierarchy promotionMedia = cube.getHierarchies().get("Promotion Media");
+        Hierarchy promotionMedia = cube.getHierarchies().get("Promotion Media");
 
-		List<Member> mediaMembers = transform
-				.findVisibleMembers(promotionMedia);
+        List<Member> mediaMembers = transform
+                .findVisibleMembers(promotionMedia);
 
-		assertThat("[Promotion Media].[All Media] member should be visible",
-				mediaMembers, is(notNullValue()));
-		assertThat("[Promotion Media].[All Media] member should be visible",
-				mediaMembers.isEmpty(), is(false));
-		assertThat("Only [Promotion Media].[All Media] member is visible",
-				mediaMembers.size(), is(equalTo(1)));
-	}
+        assertThat("[Promotion Media].[All Media] member should be visible",
+                mediaMembers, is(notNullValue()));
+        assertThat("[Promotion Media].[All Media] member should be visible",
+                mediaMembers.isEmpty(), is(false));
+        assertThat("Only [Promotion Media].[All Media] member is visible",
+                mediaMembers.size(), is(equalTo(1)));
+    }
 
-	@Test
-	public void testPlaceMembers() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testPlaceMembers() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		Hierarchy promotionMedia = cube.getHierarchies().get("Promotion Media");
-		Hierarchy product = cube.getHierarchies().get("Product");
+        Hierarchy promotionMedia = cube.getHierarchies().get("Promotion Media");
+        Hierarchy product = cube.getHierarchies().get("Product");
 
-		List<Member> members = new ArrayList<Member>();
+        List<Member> members = new ArrayList<Member>();
 
-		Member allMedia = promotionMedia.getDefaultMember();
-		Member allProducts = product.getDefaultMember();
+        Member allMedia = promotionMedia.getDefaultMember();
+        Member allProducts = product.getDefaultMember();
 
-		members.add(allMedia);
-		members.add(allMedia.getChildMembers().get("Bulk Mail"));
-		members.add(allMedia.getChildMembers().get("Daily Paper"));
+        members.add(allMedia);
+        members.add(allMedia.getChildMembers().get("Bulk Mail"));
+        members.add(allMedia.getChildMembers().get("Daily Paper"));
 
-		members.add(allProducts.getChildMembers().get("Food"));
-		members.add(allProducts.getChildMembers().get("Drink"));
+        members.add(allProducts.getChildMembers().get("Food"));
+        members.add(allProducts.getChildMembers().get("Drink"));
 
-		transform.placeMembers(Axis.ROWS, members);
+        transform.placeMembers(Axis.ROWS, members);
 
-		assertThat(
-				"Unexpected MDX query",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "CrossJoin({[Promotion Media].[All Media], [Promotion Media].[Bulk Mail], [Promotion Media].[Daily Paper]}, "
-						+ "{[Product].[Food], [Product].[Drink]}) ON ROWS FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                        + "CrossJoin({[Promotion Media].[All Media], [Promotion Media].[Bulk Mail], [Promotion Media].[Daily Paper]}, "
+                        + "{[Product].[Food], [Product].[Drink]}) ON ROWS FROM [Sales]")));
 
-		getPivotModel().getCellSet();
-	}
+        getPivotModel().getCellSet();
+    }
 
-	@Test
-	public void testAddMemberAtIndexMinusOne() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testAddMemberAtIndexMinusOne() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Profit]").getSegmentList());
+        Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Profit]").getSegmentList());
 
-		transform.addMember(member, -1);
+        transform.addMember(member, -1);
 
-		assertThat(
-				"Unexpected MDX query",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales], [Measures].[Profit]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales], [Measures].[Profit]} ON COLUMNS, "
+                        + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
-		getPivotModel().getCellSet();
-	}
+        getPivotModel().getCellSet();
+    }
 
-	@Test
-	public void testAddMemberAtIndexZero() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testAddMemberAtIndexZero() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Profit]").getSegmentList());
+        Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Profit]").getSegmentList());
 
-		transform.addMember(member, 0);
+        transform.addMember(member, 0);
 
-		assertThat(
-				"Unexpected MDX query",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Profit], [Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Profit], [Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                        + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
-		getPivotModel().getCellSet();
-	}
+        getPivotModel().getCellSet();
+    }
 
-	@Test
-	public void testAddMemberAtIndexOne() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testAddMemberAtIndexOne() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Profit]").getSegmentList());
+        Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Profit]").getSegmentList());
 
-		transform.addMember(member, 1);
+        transform.addMember(member, 1);
 
-		assertThat(
-				"Unexpected MDX query",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Profit], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Profit], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                        + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
-		getPivotModel().getCellSet();
-	}
+        getPivotModel().getCellSet();
+    }
 
-	@Test
-	public void testAddMembers() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testAddMembers() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		List<Member> members = new ArrayList<Member>(2);
-		members.add(cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Profit]").getSegmentList()));
-		members.add(cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Sales Count]").getSegmentList()));
+        List<Member> members = new ArrayList<Member>(2);
+        members.add(cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Profit]").getSegmentList()));
+        members.add(cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Sales Count]").getSegmentList()));
 
-		transform.addMembers(cube.getHierarchies().get("Measures"), members);
+        transform.addMembers(cube.getHierarchies().get("Measures"), members);
 
-		assertThat(
-				"Unexpected MDX query",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales], "
-						+ "[Measures].[Profit], [Measures].[Sales Count]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales], "
+                        + "[Measures].[Profit], [Measures].[Sales Count]} ON COLUMNS, "
+                        + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
-		getPivotModel().getCellSet();
-	}
+        getPivotModel().getCellSet();
+    }
 
-	@Test
-	public void testMoveMember() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testMoveMember() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Unit Sales]").getSegmentList());
+        Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Unit Sales]").getSegmentList());
 
-		transform.moveMember(member, 2);
+        transform.moveMember(member, 2);
 
-		assertThat(
-				"Unexpected MDX query",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Store Cost], [Measures].[Unit Sales], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Store Cost], [Measures].[Unit Sales], [Measures].[Store Sales]} ON COLUMNS, "
+                        + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
-		getPivotModel().getCellSet();
-	}
+        getPivotModel().getCellSet();
+    }
 
-	@Test
-	public void testRemoveMember() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testRemoveMember() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Unit Sales]").getSegmentList());
+        Member member = cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Unit Sales]").getSegmentList());
 
-		transform.removeMember(member);
+        transform.removeMember(member);
 
-		assertThat(
-				"Unexpected MDX query",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                        + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
-		getPivotModel().getCellSet();
-	}
+        getPivotModel().getCellSet();
+    }
 
-	@Test
-	public void testRemoveMembers() throws OlapException {
-		PlaceMembersOnAxes transform = getTransform();
+    @Test
+    public void testRemoveMembers() throws OlapException {
+        PlaceMembersOnAxes transform = getTransform();
 
-		Cube cube = getPivotModel().getCube();
+        Cube cube = getPivotModel().getCube();
 
-		List<Member> members = new ArrayList<Member>(2);
-		members.add(cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Unit Sales]").getSegmentList()));
-		members.add(cube.lookupMember(IdentifierNode.parseIdentifier(
-				"[Measures].[Store Sales]").getSegmentList()));
+        List<Member> members = new ArrayList<Member>(2);
+        members.add(cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Unit Sales]").getSegmentList()));
+        members.add(cube.lookupMember(IdentifierNode.parseIdentifier(
+                "[Measures].[Store Sales]").getSegmentList()));
 
-		transform.removeMembers(cube.getHierarchies().get("Measures"), members);
+        transform.removeMembers(cube.getHierarchies().get("Measures"), members);
 
-		assertThat(
-				"Unexpected MDX query",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {[Measures].[Store Cost]} ON COLUMNS, "
-						+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {[Measures].[Store Cost]} ON COLUMNS, "
+                        + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]")));
 
-		getPivotModel().getCellSet();
-	}
+        getPivotModel().getCellSet();
+    }
 }

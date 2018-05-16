@@ -15,36 +15,36 @@ import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
 
 public class FreeMarkerExpressionEvaluatorFactory implements
-		ExpressionEvaluatorFactory {
+        ExpressionEvaluatorFactory {
 
-	private Configuration configuration;
+    private Configuration configuration;
 
-	public FreeMarkerExpressionEvaluatorFactory() {
-		this.configuration = createConfiguration();
-	}
+    public FreeMarkerExpressionEvaluatorFactory() {
+        this.configuration = createConfiguration();
+    }
 
-	/**
-	 * @return configuration
-	 */
-	protected Configuration createConfiguration() {
-		Configuration config = new Configuration();
-		config.setObjectWrapper(new BeansWrapper());
+    /**
+     * @return configuration
+     */
+    protected Configuration createConfiguration() {
+        Configuration config = new Configuration();
+        config.setObjectWrapper(new BeansWrapper());
 
-		return config;
-	}
+        return config;
+    }
 
-	/**
-	 * @return configuration
-	 */
-	protected Configuration getConfiguration() {
-		return configuration;
-	}
+    /**
+     * @return configuration
+     */
+    protected Configuration getConfiguration() {
+        return configuration;
+    }
 
-	/**
-	 * @see org.pivot4j.el.ExpressionEvaluatorFactory#createEvaluator()
-	 */
-	@Override
-	public ExpressionEvaluator createEvaluator() {
-		return new FreeMarkerExpressionEvaluator(configuration);
-	}
+    /**
+     * @see org.pivot4j.el.ExpressionEvaluatorFactory#createEvaluator()
+     */
+    @Override
+    public ExpressionEvaluator createEvaluator() {
+        return new FreeMarkerExpressionEvaluator(configuration);
+    }
 }

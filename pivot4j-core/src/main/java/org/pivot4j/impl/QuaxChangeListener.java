@@ -12,9 +12,8 @@ import java.util.EventListener;
 
 public interface QuaxChangeListener extends EventListener {
 
-	/**
-	 * @param e
-	 *            the QuaxChangeEvent
-	 */
-	void quaxChanged(QuaxChangeEvent e);
+    /**
+     * @param e the QuaxChangeEvent
+     */
+    void quaxChanged(QuaxChangeEvent e);
 }

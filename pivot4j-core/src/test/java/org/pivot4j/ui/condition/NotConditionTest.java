@@ -22,65 +22,65 @@ import org.pivot4j.ui.condition.NotCondition;
 
 public class NotConditionTest extends AbstractConditionTest {
 
-	@Test(expected = IllegalStateException.class)
-	public void testEmptyCondition() {
-		RenderContext context = createDummyRenderContext();
+    @Test(expected = IllegalStateException.class)
+    public void testEmptyCondition() {
+        RenderContext context = createDummyRenderContext();
 
-		NotCondition not = new NotCondition(conditionFactory);
-		not.matches(context);
-	}
+        NotCondition not = new NotCondition(conditionFactory);
+        not.matches(context);
+    }
 
-	@Test
-	public void testCondition() {
-		RenderContext context = createDummyRenderContext();
+    @Test
+    public void testCondition() {
+        RenderContext context = createDummyRenderContext();
 
-		NotCondition not = new NotCondition(conditionFactory);
+        NotCondition not = new NotCondition(conditionFactory);
 
-		not.setSubCondition(TestCondition.FALSE);
-		assertThat("'!false' should be true.", not.matches(context), is(true));
+        not.setSubCondition(TestCondition.FALSE);
+        assertThat("'!false' should be true.", not.matches(context), is(true));
 
-		not.setSubCondition(TestCondition.TRUE);
-		assertThat("'!true' should be false.", not.matches(context), is(false));
-	}
+        not.setSubCondition(TestCondition.TRUE);
+        assertThat("'!true' should be false.", not.matches(context), is(false));
+    }
 
-	@Test
-	public void testStateManagement() {
-		RenderContext context = createDummyRenderContext();
+    @Test
+    public void testStateManagement() {
+        RenderContext context = createDummyRenderContext();
 
-		NotCondition not = new NotCondition(conditionFactory);
-		not.setSubCondition(TestCondition.TRUE);
+        NotCondition not = new NotCondition(conditionFactory);
+        not.setSubCondition(TestCondition.TRUE);
 
-		Serializable state = not.saveState();
+        Serializable state = not.saveState();
 
-		not = new NotCondition(conditionFactory);
-		not.restoreState(state);
+        not = new NotCondition(conditionFactory);
+        not.restoreState(state);
 
-		assertThat("Sub condition should not be null.", not.getSubCondition(),
-				is(notNullValue()));
-		assertThat("'!true' should be false.", not.matches(context), is(false));
-	}
+        assertThat("Sub condition should not be null.", not.getSubCondition(),
+                is(notNullValue()));
+        assertThat("'!true' should be false.", not.matches(context), is(false));
+    }
 
-	@Test
-	public void testSettingsManagement() throws ConfigurationException {
-		RenderContext context = createDummyRenderContext();
+    @Test
+    public void testSettingsManagement() throws ConfigurationException {
+        RenderContext context = createDummyRenderContext();
 
-		NotCondition not = new NotCondition(conditionFactory);
-		not.setSubCondition(TestCondition.FALSE);
+        NotCondition not = new NotCondition(conditionFactory);
+        not.setSubCondition(TestCondition.FALSE);
 
-		XMLConfiguration configuration = new XMLConfiguration();
-		configuration.setRootElementName("condition");
+        XMLConfiguration configuration = new XMLConfiguration();
+        configuration.setRootElementName("condition");
 
-		not.saveSettings(configuration);
+        not.saveSettings(configuration);
 
-		not = new NotCondition(conditionFactory);
-		not.restoreSettings(configuration);
+        not = new NotCondition(conditionFactory);
+        not.restoreSettings(configuration);
 
-		assertThat("Sub condition should not be null.", not.getSubCondition(),
-				is(notNullValue()));
-		assertThat("'!false' should be true.", not.matches(context), is(true));
+        assertThat("Sub condition should not be null.", not.getSubCondition(),
+                is(notNullValue()));
+        assertThat("'!false' should be true.", not.matches(context), is(true));
 
-		System.out.println("Saved configuration : ");
+        System.out.println("Saved configuration : ");
 
-		configuration.save(System.out);
-	}
+        configuration.save(System.out);
+    }
 }

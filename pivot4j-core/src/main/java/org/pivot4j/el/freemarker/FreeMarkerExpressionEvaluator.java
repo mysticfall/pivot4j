@@ -24,90 +24,91 @@ import freemarker.template.Template;
 
 public class FreeMarkerExpressionEvaluator extends AbstractExpressionEvaluator {
 
-	private Configuration configuration;
+    private Configuration configuration;
 
-	private Map<String, Template> cache = new HashMap<String, Template>();
+    private Map<String, Template> cache = new HashMap<String, Template>();
 
-	/**
-	 * @param configuration
-	 */
-	public FreeMarkerExpressionEvaluator(Configuration configuration) {
-		if (configuration == null) {
-			throw new NullArgumentException("configuration");
-		}
+    /**
+     * @param configuration
+     */
+    public FreeMarkerExpressionEvaluator(Configuration configuration) {
+        if (configuration == null) {
+            throw new NullArgumentException("configuration");
+        }
 
-		this.configuration = configuration;
-	}
+        this.configuration = configuration;
+    }
 
-	/**
-	 * @return configuration
-	 */
-	protected Configuration getConfiguration() {
-		return configuration;
-	}
+    /**
+     * @return configuration
+     */
+    protected Configuration getConfiguration() {
+        return configuration;
+    }
 
-	protected void clearTemplateCache() {
-		cache.clear();
-	}
+    protected void clearTemplateCache() {
+        cache.clear();
+    }
 
-	/**
-	 * @param expression
-	 */
-	protected Template getTemplateFromCache(String expression) {
-		return cache.get(expression);
-	}
+    /**
+     * @param expression
+     */
+    protected Template getTemplateFromCache(String expression) {
+        return cache.get(expression);
+    }
 
-	/**
-	 * @param expression
-	 */
-	protected void removeTemplateFromCache(String expression) {
-		cache.remove(expression);
-	}
+    /**
+     * @param expression
+     */
+    protected void removeTemplateFromCache(String expression) {
+        cache.remove(expression);
+    }
 
-	/**
-	 * @param expression
-	 * @param template
-	 */
-	protected void putTemplateInCache(String expression, Template template) {
-		cache.put(expression, template);
-	}
+    /**
+     * @param expression
+     * @param template
+     */
+    protected void putTemplateInCache(String expression, Template template) {
+        cache.put(expression, template);
+    }
 
-	/**
-	 * @param expression
-	 * @return
-	 * @throws IOException
-	 */
-	protected Template createTemplate(String expression) throws IOException {
-		Template template = new Template(expression, new StringReader(
-				expression), configuration);
-		putTemplateInCache(expression, template);
+    /**
+     * @param expression
+     * @return
+     * @throws IOException
+     */
+    protected Template createTemplate(String expression) throws IOException {
+        Template template = new Template(expression, new StringReader(
+                expression), configuration);
+        putTemplateInCache(expression, template);
 
-		return template;
-	}
+        return template;
+    }
 
-	/**
-	 * @see org.pivot4j.el.AbstractExpressionEvaluator#doEvaluate(java.lang.String,
-	 *      org.pivot4j.el.ExpressionContext)
-	 */
-	@Override
-	protected Object doEvaluate(String expression, ExpressionContext context)
-			throws Exception {
-		Template template = getTemplateFromCache(expression);
+    /**
+     * @see
+     * org.pivot4j.el.AbstractExpressionEvaluator#doEvaluate(java.lang.String,
+     * org.pivot4j.el.ExpressionContext)
+     */
+    @Override
+    protected Object doEvaluate(String expression, ExpressionContext context)
+            throws Exception {
+        Template template = getTemplateFromCache(expression);
 
-		if (template == null) {
-			template = createTemplate(expression);
-		}
+        if (template == null) {
+            template = createTemplate(expression);
+        }
 
-		Locale locale = (Locale) context.get("locale");
-		if (locale != null) {
-			template.setLocale(locale);
-		}
+        Locale locale = (Locale) context.get("locale");
+        if (locale != null) {
+            template.setLocale(locale);
+        }
 
-		StringWriter writer = new StringWriter();
+        StringWriter writer = new StringWriter();
 
-		template.process(context, writer);
-		writer.flush();
+        template.process(context, writer);
+        writer.flush();
 
-		return writer.toString();
-	}
+        return writer.toString();
+    }
 }

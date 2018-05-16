@@ -10,20 +10,20 @@ package org.pivot4j;
 
 public class NotInitializedException extends PivotException {
 
-	private static final long serialVersionUID = 397853501108728229L;
+    private static final long serialVersionUID = 397853501108728229L;
 
-	/**
-	 * Constructor for PivotException.
-	 */
-	public NotInitializedException() {
-	}
+    /**
+     * Constructor for PivotException.
+     */
+    public NotInitializedException() {
+    }
 
-	/**
-	 * Constructor for PivotException.
-	 * 
-	 * @param msg
-	 */
-	public NotInitializedException(String msg) {
-		super(msg);
-	}
+    /**
+     * Constructor for PivotException.
+     *
+     * @param msg
+     */
+    public NotInitializedException(String msg) {
+        super(msg);
+    }
 }

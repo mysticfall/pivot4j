@@ -14,107 +14,106 @@ import javax.servlet.http.HttpServletRequest;
 
 public class FacesDispatcherServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 9009308748116185472L;
+    private static final long serialVersionUID = 9009308748116185472L;
 
-	private FacesServlet facesServlet;
+    private FacesServlet facesServlet;
 
-	private PluginServletContext contextWrapper;
+    private PluginServletContext contextWrapper;
 
-	private Map<String, String> initParameters;
+    private Map<String, String> initParameters;
 
-	/**
-	 * @return the initParameters
-	 */
-	public Map<String, String> getInitParameters() {
-		return initParameters;
-	}
+    /**
+     * @return the initParameters
+     */
+    public Map<String, String> getInitParameters() {
+        return initParameters;
+    }
 
-	/**
-	 * @param initParameters
-	 *            the initParameters to set
-	 */
-	public void setInitParameters(Map<String, String> initParameters) {
-		this.initParameters = initParameters;
-	}
+    /**
+     * @param initParameters the initParameters to set
+     */
+    public void setInitParameters(Map<String, String> initParameters) {
+        this.initParameters = initParameters;
+    }
 
-	/**
-	 * @return the contextListener
-	 */
-	protected PluginServletContext getContextWrapper() {
-		return contextWrapper;
-	}
+    /**
+     * @return the contextListener
+     */
+    protected PluginServletContext getContextWrapper() {
+        return contextWrapper;
+    }
 
-	/**
-	 * @return facesServlet
-	 */
-	protected FacesServlet getFacesServlet() {
-		return facesServlet;
-	}
+    /**
+     * @return facesServlet
+     */
+    protected FacesServlet getFacesServlet() {
+        return facesServlet;
+    }
 
-	/**
-	 * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
-	 */
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
+    /**
+     * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
+     */
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
 
-		if (initParameters == null) {
-			this.initParameters = new HashMap<String, String>();
-		}
+        if (initParameters == null) {
+            this.initParameters = new HashMap<String, String>();
+        }
 
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-		try {
-			Thread.currentThread().setContextClassLoader(
-					getClass().getClassLoader());
+        try {
+            Thread.currentThread().setContextClassLoader(
+                    getClass().getClassLoader());
 
-			this.contextWrapper = new PluginServletContext(
-					config.getServletContext(), initParameters);
-			contextWrapper.initialize();
+            this.contextWrapper = new PluginServletContext(
+                    config.getServletContext(), initParameters);
+            contextWrapper.initialize();
 
-			this.facesServlet = new FacesServlet();
-			this.facesServlet.init(new PluginServletConfig(contextWrapper));
-		} finally {
-			Thread.currentThread().setContextClassLoader(loader);
-		}
-	}
+            this.facesServlet = new FacesServlet();
+            this.facesServlet.init(new PluginServletConfig(contextWrapper));
+        } finally {
+            Thread.currentThread().setContextClassLoader(loader);
+        }
+    }
 
-	/**
-	 * @see javax.servlet.GenericServlet#destroy()
-	 */
-	@Override
-	public void destroy() {
-		this.contextWrapper.destroy();
-		this.contextWrapper = null;
+    /**
+     * @see javax.servlet.GenericServlet#destroy()
+     */
+    @Override
+    public void destroy() {
+        this.contextWrapper.destroy();
+        this.contextWrapper = null;
 
-		this.facesServlet.destroy();
-		this.facesServlet = null;
+        this.facesServlet.destroy();
+        this.facesServlet = null;
 
-		super.destroy();
-	}
+        super.destroy();
+    }
 
-	/**
-	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.ServletRequest,
-	 *      javax.servlet.ServletResponse)
-	 */
-	@Override
-	public void service(ServletRequest request, ServletResponse response)
-			throws ServletException, IOException {
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    /**
+     * @see javax.servlet.http.HttpServlet#service(javax.servlet.ServletRequest,
+     * javax.servlet.ServletResponse)
+     */
+    @Override
+    public void service(ServletRequest request, ServletResponse response)
+            throws ServletException, IOException {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-		PluginServletRequest wrappedRequest = new PluginServletRequest(
-				contextWrapper, (HttpServletRequest) request);
-		try {
-			Thread.currentThread().setContextClassLoader(
-					getClass().getClassLoader());
+        PluginServletRequest wrappedRequest = new PluginServletRequest(
+                contextWrapper, (HttpServletRequest) request);
+        try {
+            Thread.currentThread().setContextClassLoader(
+                    getClass().getClassLoader());
 
-			wrappedRequest.initialize();
+            wrappedRequest.initialize();
 
-			facesServlet.service(wrappedRequest, response);
-		} finally {
-			Thread.currentThread().setContextClassLoader(loader);
+            facesServlet.service(wrappedRequest, response);
+        } finally {
+            Thread.currentThread().setContextClassLoader(loader);
 
-			wrappedRequest.destroy();
-		}
-	}
+            wrappedRequest.destroy();
+        }
+    }
 }

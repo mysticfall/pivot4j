@@ -32,69 +32,70 @@ import org.pivot4j.transform.TransformFactory;
  * Default implementation of TransformFactory service. Registered Transform
  * implementations should have a public constructor with a single argument of
  * type {@link QueryAdapter} in order to be looked up successfully.
- * 
+ *
  * Users can override the
  * {@link #createTransform(Class, QueryAdapter, OlapConnection)} method to
  * change this behavior.
  */
 public class TransformFactoryImpl implements TransformFactory {
 
-	private Map<Class<? extends Transform>, Class<? extends Transform>> transforms;
+    private Map<Class<? extends Transform>, Class<? extends Transform>> transforms;
 
-	public TransformFactoryImpl() {
-		this.transforms = new HashMap<Class<? extends Transform>, Class<? extends Transform>>();
+    public TransformFactoryImpl() {
+        this.transforms = new HashMap<Class<? extends Transform>, Class<? extends Transform>>();
 
-		registerDefaultTransforms(transforms);
-	}
+        registerDefaultTransforms(transforms);
+    }
 
-	/**
-	 * @param transforms
-	 */
-	protected void registerDefaultTransforms(
-			Map<Class<? extends Transform>, Class<? extends Transform>> transforms) {
-		transforms.put(DrillExpandMember.class, DrillExpandMemberImpl.class);
-		transforms
-				.put(DrillExpandPosition.class, DrillExpandPositionImpl.class);
-		transforms.put(DrillReplace.class, DrillReplaceImpl.class);
-		transforms.put(DrillThrough.class, DrillThroughImpl.class);
-		transforms.put(NonEmpty.class, NonEmptyImpl.class);
-		transforms.put(SwapAxes.class, SwapAxesImpl.class);
-		transforms.put(PlaceHierarchiesOnAxes.class,
-				PlaceHierarchiesOnAxesImpl.class);
-		transforms.put(PlaceMembersOnAxes.class, PlaceMembersOnAxesImpl.class);
-		transforms.put(PlaceLevelsOnAxes.class, PlaceLevelsOnAxesImpl.class);
-		transforms.put(ChangeSlicer.class, ChangeSlicerImpl.class);
-	}
+    /**
+     * @param transforms
+     */
+    protected void registerDefaultTransforms(
+            Map<Class<? extends Transform>, Class<? extends Transform>> transforms) {
+        transforms.put(DrillExpandMember.class, DrillExpandMemberImpl.class);
+        transforms
+                .put(DrillExpandPosition.class, DrillExpandPositionImpl.class);
+        transforms.put(DrillReplace.class, DrillReplaceImpl.class);
+        transforms.put(DrillThrough.class, DrillThroughImpl.class);
+        transforms.put(NonEmpty.class, NonEmptyImpl.class);
+        transforms.put(SwapAxes.class, SwapAxesImpl.class);
+        transforms.put(PlaceHierarchiesOnAxes.class,
+                PlaceHierarchiesOnAxesImpl.class);
+        transforms.put(PlaceMembersOnAxes.class, PlaceMembersOnAxesImpl.class);
+        transforms.put(PlaceLevelsOnAxes.class, PlaceLevelsOnAxesImpl.class);
+        transforms.put(ChangeSlicer.class, ChangeSlicerImpl.class);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.TransformFactory#createTransform(java.lang.Class,
-	 *      org.pivot4j.impl.QueryAdapter, org.olap4j.OlapConnection)
-	 */
-	public <T extends Transform> T createTransform(Class<T> type,
-			QueryAdapter queryAdapter, OlapConnection connection) {
-		T transform = null;
+    /**
+     * @see
+     * org.pivot4j.transform.TransformFactory#createTransform(java.lang.Class,
+     * org.pivot4j.impl.QueryAdapter, org.olap4j.OlapConnection)
+     */
+    public <T extends Transform> T createTransform(Class<T> type,
+            QueryAdapter queryAdapter, OlapConnection connection) {
+        T transform = null;
 
-		@SuppressWarnings("unchecked")
-		Class<T> implementationType = (Class<T>) transforms.get(type);
+        @SuppressWarnings("unchecked")
+        Class<T> implementationType = (Class<T>) transforms.get(type);
 
-		if (implementationType != null) {
-			try {
-				Constructor<T> constructor = implementationType.getConstructor(
-						QueryAdapter.class, OlapConnection.class);
-				transform = constructor.newInstance(queryAdapter, connection);
-			} catch (NoSuchMethodException e) {
-				String msg = "The registered implementation class does not have a suitable constructor : "
-						+ implementationType;
-				throw new IllegalArgumentException(msg);
-			} catch (RuntimeException e) {
-				throw e;
-			} catch (Exception e) {
-				String msg = "Failed to instantiate the transfom class : "
-						+ implementationType;
-				throw new PivotException(msg, e);
-			}
-		}
+        if (implementationType != null) {
+            try {
+                Constructor<T> constructor = implementationType.getConstructor(
+                        QueryAdapter.class, OlapConnection.class);
+                transform = constructor.newInstance(queryAdapter, connection);
+            } catch (NoSuchMethodException e) {
+                String msg = "The registered implementation class does not have a suitable constructor : "
+                        + implementationType;
+                throw new IllegalArgumentException(msg);
+            } catch (RuntimeException e) {
+                throw e;
+            } catch (Exception e) {
+                String msg = "Failed to instantiate the transfom class : "
+                        + implementationType;
+                throw new PivotException(msg, e);
+            }
+        }
 
-		return transform;
-	}
+        return transform;
+    }
 }

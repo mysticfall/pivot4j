@@ -23,136 +23,136 @@ import org.pivot4j.ui.command.UICommand;
 import org.pivot4j.ui.property.RenderPropertyList;
 
 public interface PivotRenderer<T extends RenderCallback<?>> extends
-		Configurable, Bookmarkable {
+        Configurable, Bookmarkable {
 
-	/**
-	 * @param model
-	 * @param callback
-	 */
-	void render(PivotModel model, T callback);
+    /**
+     * @param model
+     * @param callback
+     */
+    void render(PivotModel model, T callback);
 
-	/**
-	 * @param name
-	 * @return
-	 */
-	UICommand<?> getCommand(String name);
+    /**
+     * @param name
+     * @return
+     */
+    UICommand<?> getCommand(String name);
 
-	/**
-	 * @param command
-	 */
-	void addCommand(UICommand<?> command);
+    /**
+     * @param command
+     */
+    void addCommand(UICommand<?> command);
 
-	/**
-	 * @param name
-	 */
-	void removeCommand(String name);
+    /**
+     * @param name
+     */
+    void removeCommand(String name);
 
-	/**
-	 * @return
-	 */
-	boolean getEnableDrillDown();
+    /**
+     * @return
+     */
+    boolean getEnableDrillDown();
 
-	/**
-	 * @param enableDrillDown
-	 */
-	void setEnableDrillDown(boolean enableDrillDown);
+    /**
+     * @param enableDrillDown
+     */
+    void setEnableDrillDown(boolean enableDrillDown);
 
-	/**
-	 * @return
-	 */
-	String getDrillDownMode();
+    /**
+     * @return
+     */
+    String getDrillDownMode();
 
-	/**
-	 * @param mode
-	 */
-	void setDrillDownMode(String mode);
+    /**
+     * @param mode
+     */
+    void setDrillDownMode(String mode);
 
-	/**
-	 * @return
-	 */
-	boolean getEnableSort();
+    /**
+     * @return
+     */
+    boolean getEnableSort();
 
-	/**
-	 * @param enableSort
-	 */
-	void setEnableSort(boolean enableSort);
+    /**
+     * @param enableSort
+     */
+    void setEnableSort(boolean enableSort);
 
-	/**
-	 * @return
-	 */
-	boolean getEnableDrillThrough();
+    /**
+     * @return
+     */
+    boolean getEnableDrillThrough();
 
-	/**
-	 * @param enableDrillThrough
-	 */
-	void setEnableDrillThrough(boolean enableDrillThrough);
+    /**
+     * @param enableDrillThrough
+     */
+    void setEnableDrillThrough(boolean enableDrillThrough);
 
-	/**
-	 * @return
-	 */
-	SortMode getSortMode();
+    /**
+     * @return
+     */
+    SortMode getSortMode();
 
-	/**
-	 * @param mode
-	 */
-	void setSortMode(SortMode mode);
+    /**
+     * @param mode
+     */
+    void setSortMode(SortMode mode);
 
-	/**
-	 * @return
-	 */
-	boolean getRenderSlicer();
+    /**
+     * @return
+     */
+    boolean getRenderSlicer();
 
-	/**
-	 * @param renderSlicer
-	 */
-	void setRenderSlicer(boolean renderSlicer);
+    /**
+     * @param renderSlicer
+     */
+    void setRenderSlicer(boolean renderSlicer);
 
-	/**
-	 * @return
-	 */
-	PropertyCollector getPropertyCollector();
+    /**
+     * @return
+     */
+    PropertyCollector getPropertyCollector();
 
-	/**
-	 * @param collector
-	 */
-	void setPropertyCollector(PropertyCollector collector);
+    /**
+     * @param collector
+     */
+    void setPropertyCollector(PropertyCollector collector);
 
-	/**
-	 * @return
-	 */
-	AggregatorFactory getAggregatorFactory();
+    /**
+     * @return
+     */
+    AggregatorFactory getAggregatorFactory();
 
-	/**
-	 * @param axis
-	 * @param position
-	 * @return
-	 */
-	List<String> getAggregators(Axis axis, AggregatorPosition position);
+    /**
+     * @param axis
+     * @param position
+     * @return
+     */
+    List<String> getAggregators(Axis axis, AggregatorPosition position);
 
-	/**
-	 * @param axis
-	 * @param position
-	 * @param name
-	 */
-	void addAggregator(Axis axis, AggregatorPosition position, String name);
+    /**
+     * @param axis
+     * @param position
+     * @param name
+     */
+    void addAggregator(Axis axis, AggregatorPosition position, String name);
 
-	/**
-	 * @param axis
-	 * @param position
-	 * @param name
-	 */
-	void removeAggregator(Axis axis, AggregatorPosition position, String name);
+    /**
+     * @param axis
+     * @param position
+     * @param name
+     */
+    void removeAggregator(Axis axis, AggregatorPosition position, String name);
 
-	/**
-	 * @param axis
-	 * @param position
-	 * @param names
-	 */
-	void setAggregators(Axis axis, AggregatorPosition position,
-			List<String> names);
+    /**
+     * @param axis
+     * @param position
+     * @param names
+     */
+    void setAggregators(Axis axis, AggregatorPosition position,
+            List<String> names);
 
-	/**
-	 * @return
-	 */
-	Map<String, RenderPropertyList> getRenderProperties();
+    /**
+     * @return
+     */
+    Map<String, RenderPropertyList> getRenderProperties();
 }

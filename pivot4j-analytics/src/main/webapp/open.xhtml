@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
-<f:view>
-	<f:metadata>
-		<f:viewParam name="#{settings.fileParameterName}"
-			value="#{reportOpener.fileId}" />
-		<f:viewParam name="#{settings.pathParameterName}"
-			value="#{reportOpener.path}" />
-		<f:viewParam name="embeded" value="#{reportOpener.embeded}" />
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:view>
+        <f:metadata>
+            <f:viewParam name="#{settings.credor}"
+                         value="#{reportOpener.credor}" />
 
-		<f:viewAction action="#{reportOpener.load}" />
-	</f:metadata>
-</f:view>
+            <f:viewAction action="#{reportOpener.loadCredor}" />
+        </f:metadata>
+    </f:view>
 </html>

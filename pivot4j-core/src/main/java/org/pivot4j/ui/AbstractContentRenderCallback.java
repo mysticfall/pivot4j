@@ -13,25 +13,25 @@ import java.io.OutputStream;
 import org.apache.commons.lang.NullArgumentException;
 
 public abstract class AbstractContentRenderCallback<T extends RenderContext>
-		extends AbstractRenderCallback<T> {
+        extends AbstractRenderCallback<T> {
 
-	private OutputStream stream;
+    private OutputStream stream;
 
-	/**
-	 * @param stream
-	 */
-	public AbstractContentRenderCallback(OutputStream stream) {
-		if (stream == null) {
-			throw new NullArgumentException("out");
-		}
+    /**
+     * @param stream
+     */
+    public AbstractContentRenderCallback(OutputStream stream) {
+        if (stream == null) {
+            throw new NullArgumentException("out");
+        }
 
-		this.stream = stream;
-	}
+        this.stream = stream;
+    }
 
-	/**
-	 * @return the stream
-	 */
-	protected OutputStream getOutputStream() {
-		return stream;
-	}
+    /**
+     * @return the stream
+     */
+    protected OutputStream getOutputStream() {
+        return stream;
+    }
 }

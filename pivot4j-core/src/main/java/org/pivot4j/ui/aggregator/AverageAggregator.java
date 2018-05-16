@@ -18,39 +18,40 @@ import org.olap4j.metadata.Member;
 
 public class AverageAggregator extends TotalAggregator {
 
-	public static final String NAME = "AVG";
+    public static final String NAME = "AVG";
 
-	/**
-	 * @param axis
-	 * @param members
-	 * @param level
-	 * @param measure
-	 */
-	public AverageAggregator(Axis axis, List<Member> members, Level level,
-			Measure measure) {
-		super(axis, members, level, measure);
-	}
+    /**
+     * @param axis
+     * @param members
+     * @param level
+     * @param measure
+     */
+    public AverageAggregator(Axis axis, List<Member> members, Level level,
+            Measure measure) {
+        super(axis, members, level, measure);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.Aggregator#getName()
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.aggregator.Aggregator#getName()
+     */
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.aggregator.AbstractAggregator#getValue(org.olap4j.Position)
-	 */
-	@Override
-	protected Double getValue(Position position) {
-		int count = getCount(position);
-		Double value = super.getValue(position);
+    /**
+     * @see
+     * org.pivot4j.ui.aggregator.AbstractAggregator#getValue(org.olap4j.Position)
+     */
+    @Override
+    protected Double getValue(Position position) {
+        int count = getCount(position);
+        Double value = super.getValue(position);
 
-		if (count == 0 || value == null) {
-			return null;
-		}
+        if (count == 0 || value == null) {
+            return null;
+        }
 
-		return value / count;
-	}
+        return value / count;
+    }
 }

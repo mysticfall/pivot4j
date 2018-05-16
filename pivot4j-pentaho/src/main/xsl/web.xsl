@@ -5,19 +5,19 @@
 </xsl:text>">
 ]>
 <xsl:stylesheet version="1.0"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:web-app="http://java.sun.com/xml/ns/javaee">
-	<xsl:output method="xml" indent="yes" />
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:web-app="http://java.sun.com/xml/ns/javaee">
+    <xsl:output method="xml" indent="yes" />
 
-	<xsl:template match="node()|@*">
-		<xsl:copy>
-			<xsl:apply-templates select="node()|@*" />
-		</xsl:copy>
-	</xsl:template>
+    <xsl:template match="node()|@*">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*" />
+        </xsl:copy>
+    </xsl:template>
 
-	<xsl:template match="*/web-app:listener[last()]">
-		<xsl:copy-of select="." />&cr;&tab;
-		<listener>&cr;&tab;&tab;
-			<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>&cr;&tab;
-		</listener>
-	</xsl:template>
+    <xsl:template match="*/web-app:listener[last()]">
+        <xsl:copy-of select="." />&cr;&tab;
+        <listener>&cr;&tab;&tab;
+            <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>&cr;&tab;
+        </listener>
+    </xsl:template>
 </xsl:stylesheet>

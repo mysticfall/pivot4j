@@ -17,51 +17,52 @@ import org.pivot4j.transform.NonEmpty;
 
 public class NonEmptyImplIT extends AbstractTransformTestCase<NonEmpty> {
 
-	private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
+    private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+            + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
 
-	/**
-	 * @return the initialQuery
-	 * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
-	 */
-	protected String getInitialQuery() {
-		return initialQuery;
-	}
+    /**
+     * @return the initialQuery
+     * @see
+     * org.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
+     */
+    protected String getInitialQuery() {
+        return initialQuery;
+    }
 
-	/**
-	 * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getType()
-	 */
-	@Override
-	protected Class<NonEmpty> getType() {
-		return NonEmpty.class;
-	}
+    /**
+     * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getType()
+     */
+    @Override
+    protected Class<NonEmpty> getType() {
+        return NonEmpty.class;
+    }
 
-	@Test
-	public void testTransform() {
-		NonEmpty transform = getTransform();
+    @Test
+    public void testTransform() {
+        NonEmpty transform = getTransform();
 
-		assertThat("Initial query does not include NON EMPTY statement",
-				transform.isNonEmpty(), is(false));
+        assertThat("Initial query does not include NON EMPTY statement",
+                transform.isNonEmpty(), is(false));
 
-		transform.setNonEmpty(true);
+        transform.setNonEmpty(true);
 
-		assertThat("Query does contain NON EMPTY statement",
-				transform.isNonEmpty(), is(true));
-		assertThat(
-				"Unexpected MDX query after set NON EMPTY statement",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT NON EMPTY {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-						+ "NON EMPTY {([Promotion Media].[All Media], [Product].[All Products])} ON ROWS "
-						+ "FROM [Sales]")));
+        assertThat("Query does contain NON EMPTY statement",
+                transform.isNonEmpty(), is(true));
+        assertThat(
+                "Unexpected MDX query after set NON EMPTY statement",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT NON EMPTY {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                        + "NON EMPTY {([Promotion Media].[All Media], [Product].[All Products])} ON ROWS "
+                        + "FROM [Sales]")));
 
-		getPivotModel().getCellSet();
+        getPivotModel().getCellSet();
 
-		transform.setNonEmpty(false);
+        transform.setNonEmpty(false);
 
-		assertThat("Query does not contain NON EMPTY statement",
-				transform.isNonEmpty(), is(false));
+        assertThat("Query does not contain NON EMPTY statement",
+                transform.isNonEmpty(), is(false));
 
-		assertThat("Unexpected MDX query after removing NON EMPTY statement",
-				getPivotModel().getCurrentMdx(), is(equalTo(getInitialQuery())));
-	}
+        assertThat("Unexpected MDX query after removing NON EMPTY statement",
+                getPivotModel().getCurrentMdx(), is(equalTo(getInitialQuery())));
+    }
 }

@@ -12,9 +12,8 @@ import java.util.EventListener;
 
 public interface QueryChangeListener extends EventListener {
 
-	/**
-	 * @param e
-	 *            the QueryChangeEvent
-	 */
-	void queryChanged(QueryChangeEvent e);
+    /**
+     * @param e the QueryChangeEvent
+     */
+    void queryChanged(QueryChangeEvent e);
 }

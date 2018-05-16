@@ -17,59 +17,60 @@ import org.pivot4j.transform.SwapAxes;
 
 public class SwapAxesImplIT extends AbstractTransformTestCase<SwapAxes> {
 
-	private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-			+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
+    private String initialQuery = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+            + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
 
-	/**
-	 * @return the initialQuery
-	 * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
-	 */
-	protected String getInitialQuery() {
-		return initialQuery;
-	}
+    /**
+     * @return the initialQuery
+     * @see
+     * org.pivot4j.transform.impl.AbstractTransformTestCase#getInitialQuery()
+     */
+    protected String getInitialQuery() {
+        return initialQuery;
+    }
 
-	/**
-	 * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getType()
-	 */
-	@Override
-	protected Class<SwapAxes> getType() {
-		return SwapAxes.class;
-	}
+    /**
+     * @see org.pivot4j.transform.impl.AbstractTransformTestCase#getType()
+     */
+    @Override
+    protected Class<SwapAxes> getType() {
+        return SwapAxes.class;
+    }
 
-	@Test
-	public void testTransform() {
-		SwapAxes transform = getTransform();
+    @Test
+    public void testTransform() {
+        SwapAxes transform = getTransform();
 
-		assertThat("Initial query axes are not swapped",
-				transform.isSwapAxes(), is(false));
-		assertThat("Should be able to swap axes on initial query",
-				transform.canSwapAxes(), is(true));
+        assertThat("Initial query axes are not swapped",
+                transform.isSwapAxes(), is(false));
+        assertThat("Should be able to swap axes on initial query",
+                transform.canSwapAxes(), is(true));
 
-		transform.setSwapAxes(true);
+        transform.setSwapAxes(true);
 
-		assertThat("Query axes have been swapped", transform.isSwapAxes(),
-				is(true));
+        assertThat("Query axes have been swapped", transform.isSwapAxes(),
+                is(true));
 
-		assertThat(
-				"Unexpected MDX query after axes have been swapped",
-				getPivotModel().getCurrentMdx(),
-				is(equalTo("SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS, "
-						+ "{[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON ROWS "
-						+ "FROM [Sales]")));
+        assertThat(
+                "Unexpected MDX query after axes have been swapped",
+                getPivotModel().getCurrentMdx(),
+                is(equalTo("SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS, "
+                        + "{[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON ROWS "
+                        + "FROM [Sales]")));
 
-		getPivotModel().getCellSet();
+        getPivotModel().getCellSet();
 
-		transform.setSwapAxes(false);
+        transform.setSwapAxes(false);
 
-		assertThat("Unexpected MDX query after axes have been restored",
-				getPivotModel().getCurrentMdx(), is(equalTo(getInitialQuery())));
+        assertThat("Unexpected MDX query after axes have been restored",
+                getPivotModel().getCurrentMdx(), is(equalTo(getInitialQuery())));
 
-		getPivotModel().getCellSet();
+        getPivotModel().getCellSet();
 
-		getPivotModel()
-				.setMdx("SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS FROM [Sales]");
+        getPivotModel()
+                .setMdx("SELECT {([Promotion Media].[All Media], [Product].[All Products])} ON COLUMNS FROM [Sales]");
 
-		assertThat("Single query axis cannot be swapped with itself",
-				transform.canSwapAxes(), is(false));
-	}
+        assertThat("Single query axis cannot be swapped with itself",
+                transform.canSwapAxes(), is(false));
+    }
 }

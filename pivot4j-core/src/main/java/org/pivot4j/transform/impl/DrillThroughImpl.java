@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import javax.servlet.ServletRequest;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.olap4j.Cell;
@@ -38,173 +39,175 @@ import org.slf4j.LoggerFactory;
 
 public class DrillThroughImpl extends AbstractTransform implements DrillThrough {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	/**
-	 * @param queryAdapter
-	 * @param connection
-	 */
-	public DrillThroughImpl(QueryAdapter queryAdapter, OlapConnection connection) {
-		super(queryAdapter, connection);
-	}
+    /**
+     * @param queryAdapter
+     * @param connection
+     */
+    public DrillThroughImpl(QueryAdapter queryAdapter, OlapConnection connection) {
+        super(queryAdapter, connection);
+    }
 
-	/**
-	 * @return the logger
-	 */
-	protected Logger getLogger() {
-		return logger;
-	}
+    /**
+     * @return the logger
+     */
+    protected Logger getLogger() {
+        return logger;
+    }
 
-	/**
-	 * @see org.pivot4j.transform.DrillThrough#drillThrough(org.olap4j.Cell)
-	 */
-	@Override
-	public ResultSet drillThrough(Cell cell) {
-		return drillThrough(cell, null, 0);
-	}
+    /**
+     * @see org.pivot4j.transform.DrillThrough#drillThrough(org.olap4j.Cell)
+     */
+    @Override
+    public ResultSet drillThrough(Cell cell) {
+        return drillThrough(cell, null, 0);
+    }
 
-	/**
-	 * @see org.pivot4j.transform.DrillThrough#drillThrough(org.olap4j.Cell,
-	 *      java.util.List, int)
-	 */
-	@Override
-	public ResultSet drillThrough(Cell cell, List<MetadataElement> selection,
-			int maximumRows) {
-		if (cell == null) {
-			throw new NullArgumentException("cell");
-		}
+    /**
+     * @see org.pivot4j.transform.DrillThrough#drillThrough(org.olap4j.Cell,
+     * java.util.List, int)
+     */
+    @Override
+    public ResultSet drillThrough(Cell cell, List<MetadataElement> selection,
+            int maximumRows) {
+        if (cell == null) {
+            throw new NullArgumentException("cell");
+        }
 
-		ResultSet result;
+        ResultSet result;
 
-		if (selection==null) {
-			selection = Collections.emptyList();
-		}
+        if (selection == null) {
+            selection = Collections.emptyList();
+        }
 
-		result = performDrillThroughMdx(cell, selection, maximumRows);
+        result = performDrillThroughMdx(cell, selection, maximumRows);
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * @param cell
-	 * @return
-	 */
-	protected ResultSet performDrillThrough(Cell cell) {
-		try {
-			return cell.drillThrough();
-		} catch (OlapException e) {
-			throw new PivotException(e);
-		}
-	}
+    /**
+     * @param cell
+     * @return
+     */
+    protected ResultSet performDrillThrough(Cell cell) {
+        try {
+            return cell.drillThrough();
+        } catch (OlapException e) {
+            throw new PivotException(e);
+        }
+    }
 
-	/**
-	 * @param cell
-	 * @param selection
-	 * @param maximumRows
-	 * @return
-	 */
-	protected ResultSet performDrillThroughMdx(Cell cell,
-			List<MetadataElement> selection, int maximumRows) {
-		PivotModel model = getModel();
-		Cube cube = model.getCube();
+    /**
+     * @param cell
+     * @param selection
+     * @param maximumRows
+     * @return
+     */
+    private ServletRequest session;
 
-		QueryAdapter query = getQueryAdapter();
+    protected ResultSet performDrillThroughMdx(Cell cell,
+            List<MetadataElement> selection, int maximumRows) {
+        PivotModel model = getModel();
+        Cube cube = model.getCube();
 
-		StringBuilder builder = new StringBuilder();
+        QueryAdapter query = getQueryAdapter();
 
-		builder.append("DRILLTHROUGH");
+        StringBuilder builder = new StringBuilder();
 
-		if (maximumRows > 0) {
-			builder.append(" MAXROWS ");
-			builder.append(maximumRows);
-		}
+        builder.append("DRILLTHROUGH");
 
-		builder.append(" SELECT (");
+        if (maximumRows > 0) {
+            builder.append(" MAXROWS ");
+            builder.append(maximumRows);
+        }
 
-		boolean isFirst = true;
+        builder.append(" SELECT (");
 
-		List<Integer> coords = cell.getCoordinateList();
+        boolean isFirst = true;
 
-		CellSet cellSet = cell.getCellSet();
-		List<CellSetAxis> axes = cellSet.getAxes();
+        List<Integer> coords = cell.getCoordinateList();
 
-		OlapUtils utils = new OlapUtils(getModel().getCube());
-		utils.setMemberHierarchyCache(getQueryAdapter().getModel()
-				.getMemberHierarchyCache());
+        CellSet cellSet = cell.getCellSet();
+        List<CellSetAxis> axes = cellSet.getAxes();
 
-		int axisOrdinal = 0;
-		for (int ordinal : coords) {
-			Position position = axes.get(axisOrdinal++).getPositions()
-					.get(ordinal);
+        OlapUtils utils = new OlapUtils(getModel().getCube());
+        utils.setMemberHierarchyCache(getQueryAdapter().getModel()
+                .getMemberHierarchyCache());
 
-			for (Member member : position.getMembers()) {
-				if (isFirst) {
-					isFirst = false;
-				} else {
-					builder.append(", ");
-				}
+        int axisOrdinal = 0;
+        for (int ordinal : coords) {
+            Position position = axes.get(axisOrdinal++).getPositions()
+                    .get(ordinal);
 
-				builder.append(utils.wrapRaggedIfNecessary(member)
-						.getUniqueName());
-			}
-		}
+            for (Member member : position.getMembers()) {
+                if (isFirst) {
+                    isFirst = false;
+                } else {
+                    builder.append(", ");
+                }
 
-		builder.append(") ON COLUMNS FROM ");
-		builder.append(cube.getUniqueName());
+                builder.append(utils.wrapRaggedIfNecessary(member)
+                        .getUniqueName());
+            }
+        }
 
-		Exp slicer = query.getParsedQuery().getSlicer();
+        builder.append(") ON COLUMNS FROM ");
+        builder.append(cube.getUniqueName());
 
-		if (slicer != null) {
-			builder.append(" WHERE ");
-			builder.append(slicer.toMdx());
-		}
+        Exp slicer = query.getParsedQuery().getSlicer();
 
-		List<MetadataElement> members;
-		if (selection == null) {
-			members = Collections.emptyList();
-		} else {
-			members = new LinkedList<MetadataElement>();
+        if (slicer != null) {
+            builder.append(" WHERE ");
+            builder.append(slicer.toMdx());
+        }
 
-			for (MetadataElement elem : selection) {
-				if (elem instanceof Member){
-					members.add(utils.wrapRaggedIfNecessary((Member) elem));
-				} else if (elem instanceof Level) {
-					members.add(elem);
-				}
-			}
-		}
+        List<MetadataElement> members;
+        if (selection == null) {
+            members = Collections.emptyList();
+        } else {
+            members = new LinkedList<MetadataElement>();
 
-		if (!members.isEmpty()) {
-			builder.append(" RETURN ");
+            for (MetadataElement elem : selection) {
+                if (elem instanceof Member) {
+                    members.add(utils.wrapRaggedIfNecessary((Member) elem));
+                } else if (elem instanceof Level) {
+                    members.add(elem);
+                }
+            }
+        }
 
-			isFirst = true;
+        if (!members.isEmpty()) {
+            builder.append(" RETURN ");
 
-			for (MetadataElement elem : members) {
-				if (isFirst) {
-					isFirst = false;
-				} else {
-					builder.append(", ");
-				}
+            isFirst = true;
 
-				builder.append(elem.getUniqueName());
-			}
-		}
+            for (MetadataElement elem : members) {
+                if (isFirst) {
+                    isFirst = false;
+                } else {
+                    builder.append(", ");
+                }
 
-		String mdx = builder.toString();
+                builder.append(elem.getUniqueName());
+            }
+        }
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Drill through MDX : {}", mdx);
-		}
+        String mdx = builder.toString();
 
-		ResultSet result;
+        if (logger.isDebugEnabled()) {
+            logger.debug("Drill through MDX : {}", mdx);
+        }
 
-		try {
-			Statement stmt = getConnection().createStatement();
-			result = stmt.executeQuery(mdx);
-		} catch (SQLException e) {
-			throw new PivotException(e);
-		}
+        ResultSet result;
 
-		return result;
-	}
+        try {
+            Statement stmt = getConnection().createStatement();
+            result = stmt.executeQuery(mdx);
+        } catch (SQLException e) {
+            throw new PivotException(e);
+        }
+
+        return result;
+    }
 }

@@ -2,48 +2,48 @@
 
 <!-- Pivot4J plugin configuration file. -->
 <config>
-	<!-- Appearance settings. -->
-	<appearances>
-		<ui-theme>
-			<default>redmond</default>
-			<available-themes>
-				<theme name="aristo" description="Aristo" />
-				<theme name="bootstrap" description="Bootstrap" />
-				<theme name="black-tie" description="Black-Tie" />
-				<theme name="cruze" description="Cruze" />
-				<theme name="humanity" description="Humanity" />
-				<theme name="redmond" description="Redmond" />
-				<theme name="rocket" description="Rocket" />
-			</available-themes>
-		</ui-theme>
+    <!-- Appearance settings. -->
+    <appearances>
+        <ui-theme>
+            <default>redmond</default>
+            <available-themes>
+                <theme name="aristo" description="Aristo" />
+                <theme name="bootstrap" description="Bootstrap" />
+                <theme name="black-tie" description="Black-Tie" />
+                <theme name="cruze" description="Cruze" />
+                <theme name="humanity" description="Humanity" />
+                <theme name="redmond" description="Redmond" />
+                <theme name="rocket" description="Rocket" />
+            </available-themes>
+        </ui-theme>
 
-		<!--
-			For a complete list of available editor themes, please visit : 
-			http://codemirror.net/demo/theme.html
-		-->
-		<editor-theme>eclipse</editor-theme>
-	</appearances>
+        <!--
+                For a complete list of available editor themes, please visit : 
+                http://codemirror.net/demo/theme.html
+        -->
+        <editor-theme>eclipse</editor-theme>
+    </appearances>
 
-	<model>
-		<nonEmpty default="false" />
-	</model>
+    <model>
+        <nonEmpty default="false" />
+    </model>
 
-	<render>
-		<!-- Show all non-internal member properties -->
-		<!-- 
-		<propertyCollector type="non-internal" />
-		-->
-	</render>
+    <render>
+        <!-- Show all non-internal member properties -->
+        <!-- 
+        <propertyCollector type="non-internal" />
+        -->
+    </render>
 
-	<!-- Miscellaneous settings used for integration with other systems. -->
-	<web>
-		<!-- URI prefix for web resources like images or stylesheets. -->
-		<resource-prefix>/api/repos/pivot4j/webapp</resource-prefix>
+    <!-- Miscellaneous settings used for integration with other systems. -->
+    <web>
+        <!-- URI prefix for web resources like images or stylesheets. -->
+        <resource-prefix>/api/repos/pivot4j/webapp</resource-prefix>
 
-		<!-- Name of a session attribute variable for user locale. -->
-		<locale-attribute>locale_override</locale-attribute>
+        <!-- Name of a session attribute variable for user locale. -->
+        <locale-attribute>locale_override</locale-attribute>
 
-		<!-- Name of a request parameter for view id. -->
-		<view-parameter>ts</view-parameter>
-	</web>
+        <!-- Name of a request parameter for view id. -->
+        <view-parameter>ts</view-parameter>
+    </web>
 </config>
