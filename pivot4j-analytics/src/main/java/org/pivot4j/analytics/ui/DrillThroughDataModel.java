@@ -96,7 +96,11 @@ public class DrillThroughDataModel extends LazyDataModel<Map<String, Object>> {
             result = execute();
             stmt = result.getStatement();
 
-            boolean scrollable = (result.getStatement().getResultSetType() == ResultSet.TYPE_SCROLL_SENSITIVE);
+            boolean scrollable = true;
+            try {
+                scrollable = (result.getStatement().getResultSetType() == ResultSet.TYPE_SCROLL_SENSITIVE);
+            } catch (Exception e) {
+            }
 
             int rowCount = 0;
 
@@ -184,7 +188,11 @@ public class DrillThroughDataModel extends LazyDataModel<Map<String, Object>> {
             result = execute();
             stmt = result.getStatement();
 
-            boolean scrollable = (result.getStatement().getResultSetType() == ResultSet.TYPE_SCROLL_SENSITIVE);
+            boolean scrollable = true;
+            try {
+                scrollable = (result.getStatement().getResultSetType() == ResultSet.TYPE_SCROLL_SENSITIVE);
+            } catch (Exception e) {
+            }
 
             int rowIndex = 0;
 
