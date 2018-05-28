@@ -13,9 +13,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.FacesException;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.io.FileUtils;
@@ -31,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "reportRepository")
-@ApplicationScoped
+@ViewScoped
 public class LocalFileSystemRepository extends AbstractFileSystemRepository {
 
     @ManagedProperty(value = "#{settings}")
@@ -64,17 +66,38 @@ public class LocalFileSystemRepository extends AbstractFileSystemRepository {
         }
     }
 
+    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
     protected String getRootPath() {
         File home = settings.getApplicationHome();
-        return home.getPath() + File.separator + "repository";
+
+        try {
+            if ("client".equals(settings.getAplicationHomePerClient())) {
+                String client = null;
+
+                try {
+                    client = (String) session.getAttribute("client");
+                } catch (Exception e) {
+                }
+
+                if (client == null) {
+                    return home.getPath() + File.separator + "repository";
+                }
+                
+                return home.getPath() + File.separator + "repository_" + client;
+            } else {
+                return home.getPath() + File.separator + "repository";
+            }
+        } catch (Exception e) {
+            return home.getPath() + File.separator + "repository";
+        }
+
     }
 
     ;
-
-	/**
-	 * @see org.pivot4j.analytics.repository.ReportRepository#getRoot()
-	 */
-	@Override
+    /**
+     * @see org.pivot4j.analytics.repository.ReportRepository#getRoot()
+     */
+    @Override
     public ReportFile getRoot() {
         return root;
     }
