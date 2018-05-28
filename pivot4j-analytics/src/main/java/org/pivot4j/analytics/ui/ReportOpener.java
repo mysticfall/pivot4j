@@ -65,6 +65,7 @@ public class ReportOpener {
 
         session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("idCredor", credor);
+        session.setAttribute("client", credor);
 
         String path = "index?faces-redirect=true";
 
