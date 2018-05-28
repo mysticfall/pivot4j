@@ -67,6 +67,8 @@ public class Settings {
 
     private String credor;
 
+    private String aplicationHomePerClient;
+
     private SortedMap<String, String> availableThemes;
 
     @PostConstruct
@@ -247,6 +249,14 @@ public class Settings {
      */
     public HierarchicalConfiguration getConfiguration() {
         return configuration;
+    }
+
+    public String getAplicationHomePerClient() {
+        if (aplicationHomePerClient == null) {
+            this.aplicationHomePerClient = configuration.getString(
+                    "repository.aplicationHomePerClient", "general").trim();
+        }
+        return aplicationHomePerClient;
     }
 
     public String getCredor() {
