@@ -65,19 +65,51 @@
 					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
 					<property name="JdbcUser">sa</property>
                                         
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubos.xml</property>
-                                        <property name="Jdbc">jdbc:oracle:thin:@giex-scan.intra.local:1521/TAFGIEXPROD</property>
-                                        <property name="JdbcDrivers">oracle.jdbc.OracleDriver</property>
-                                        <property name="JdbcUser">giex_reportserver</property>
-                                        <property name="JdbcPassword">?806y*report</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>                                         
-                                        -->
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubos.xml</property>
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosOracle.xml</property>
                                         <property name="Jdbc">jdbc:oracle:thin:@giex-scan.intra.local:1521/TAFGIEXPROD</property>
                                         <property name="JdbcDrivers">oracle.jdbc.OracleDriver</property>
                                         <property name="JdbcUser">giex_reportserver</property>
                                         <property name="JdbcPassword">?806y*report</property>
                                         <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>    
+                                        
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMysql.xml</property>
+                                        <property name="Jdbc">jdbc:mysql://10.10.40.179:3306/giex?useSSL=false</property>
+                                        <property name="JdbcDrivers">com.mysql.cj.jdbc.Driver</property>
+                                        <property name="JdbcUser">giex</property>
+                                        <property name="JdbcPassword">7xt3Dw87</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>     
+                                        
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMysql.xml</property>
+                                        <property name="Jdbc">jdbc:mysql://173.22.21.47:3306/giex?useSSL=false</property>
+                                        <property name="JdbcDrivers">com.mysql.cj.jdbc.Driver</property>
+                                        <property name="JdbcUser">giex</property>
+                                        <property name="JdbcPassword">P247Yjdb</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>                                    
+                                        
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMysql.xml</property>
+                                        <property name="Jdbc">jdbc:mysql://localhost:3307/giex?useSSL=false</property>
+                                        <property name="JdbcDrivers">com.mysql.cj.jdbc.Driver</property>
+                                        <property name="JdbcUser">root</property>
+                                        <property name="JdbcPassword">root</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>     
+
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMysql.xml</property>
+                                        <property name="Jdbc">jdbc:mysql://173.22.21.47:3306/giex?useSSL=false</property>
+                                        <property name="JdbcDrivers">com.mysql.cj.jdbc.Driver</property>
+                                        <property name="JdbcUser">giex</property>
+                                        <property name="JdbcPassword">P247Yjdb</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>   
+                                        
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMongo.xml</property>
+                                        <property name="Jdbc">jdbc:mongodb://jjunior:DesenvJJunior*!"@173.22.21.29:27027/giex</property>
+                                        <property name="JdbcDrivers">net.sf.mongodb_jdbc.MongoDbDriver</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>   
+                                    -->
+
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMongo.xml</property>
+                                        <property name="Jdbc">jdbc:drill:drillbit=hadoop1.intra.local;schema=mongo</property>
+                                        <property name="JdbcDrivers">org.apache.drill.jdbc.Driver</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>   
                                         
 				</properties>
 			</connection-info>
@@ -143,6 +175,9 @@
     -->
     <repository>
         <extension>giex</extension>
+    
+    <!-- general or client -->
+        <aplicationHomePerClient>client</aplicationHomePerClient>
     </repository>
 
     <render>
@@ -168,5 +203,6 @@
         <path-parameter>path</path-parameter>
         
         <credor-parameter>credor</credor-parameter>
+        
     </web>
 </config>
