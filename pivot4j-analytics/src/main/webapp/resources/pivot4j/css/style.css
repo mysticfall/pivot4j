@@ -1114,3 +1114,7 @@ li.ui-menuitem>a.ui-menuitem-link {
 .ui-menu .ui-menuitem-link {
     width: 100% !important;
 }
+
+body .ui-picklist button.ui-picklist-button-remove, body .ui-picklist.ui-picklist-responsive button.ui-picklist-button-remove {
+    transform: rotate(180deg) !important;
+}
