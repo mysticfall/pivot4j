@@ -101,14 +101,16 @@
                                         <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>   
                                         
                                         <property name="Catalog">file:${webRoot}${FS}GiexCubosMongo.xml</property>
-                                        <property name="Jdbc">jdbc:mongodb://jjunior:DesenvJJunior*!"@173.22.21.29:27027/giex</property>
-                                        <property name="JdbcDrivers">net.sf.mongodb_jdbc.MongoDbDriver</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>   
-                                    -->
-
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMongo.xml</property>
                                         <property name="Jdbc">jdbc:drill:drillbit=hadoop1.intra.local;schema=mongo</property>
                                         <property name="JdbcDrivers">org.apache.drill.jdbc.Driver</property>
+                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>  
+                                    -->
+
+                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosOracle.xml</property>
+                                        <property name="Jdbc">jdbc:oracle:thin:@giex-scan.intra.local:1521/GIEXPROD</property>
+                                        <property name="JdbcDrivers">oracle.jdbc.OracleDriver</property>
+                                        <property name="JdbcUser">giex_reportserver</property>
+                                        <property name="JdbcPassword">?806y*report</property>
                                         <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>   
                                         
 				</properties>
