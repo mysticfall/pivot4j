@@ -36,8 +36,8 @@ public class PieChartBuilder extends AbstractChartBuilder<PieChartModel> {
         super.configureChart(context, chart, model);
 
         model.setShowDataLabels(true);
-        model.setDataFormat("value");
         model.setShadow(true);
+        model.setShowDataLabels(true);
     }
 
     /**
