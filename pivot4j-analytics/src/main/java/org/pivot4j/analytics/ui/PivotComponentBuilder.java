@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -51,6 +52,8 @@ import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.component.row.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.uuid.Generators;
 
 public class PivotComponentBuilder extends
         AbstractRenderCallback<TableRenderContext> implements
@@ -178,8 +181,7 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.AbstractRenderCallback#startRender(org.pivot4j.ui.RenderContext)
+     * @see org.pivot4j.ui.AbstractRenderCallback#startRender(org.pivot4j.ui.RenderContext)
      */
     @Override
     public void startRender(TableRenderContext context) {
@@ -224,8 +226,7 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#startTable(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#startTable(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void startTable(TableRenderContext context) {
@@ -239,8 +240,7 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#startHeader(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#startHeader(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void startHeader(TableRenderContext context) {
@@ -248,8 +248,7 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#endHeader(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#endHeader(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void endHeader(TableRenderContext context) {
@@ -261,16 +260,14 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#startBody(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#startBody(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void startBody(TableRenderContext context) {
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#startRow(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#startRow(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void startRow(TableRenderContext context) {
@@ -278,14 +275,15 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#startCell(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#startCell(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void startCell(TableRenderContext context) {
         this.column = new Column();
-
-        String id = "col-" + column.hashCode();
+        
+        UUID uuid  = Generators.timeBasedGenerator().generate();
+        
+        String id = "col-" + uuid.toString();
 
         column.setId(id);
         column.setColspan(context.getColumnSpan());
@@ -399,13 +397,12 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.RenderCallback#renderCommands(org.pivot4j.ui.RenderContext,
+     * @see org.pivot4j.ui.RenderCallback#renderCommands(org.pivot4j.ui.RenderContext,
      * java.util.List)
      */
     @Override
     public void renderCommands(TableRenderContext context,
-            List<UICommand<?>> commands) {
+                               List<UICommand<?>> commands) {
         if (expressionFactory != null) {
             for (UICommand<?> command : commands) {
                 UICommandParameters parameters = command
@@ -478,13 +475,12 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.RenderCallback#renderContent(org.pivot4j.ui.RenderContext,
+     * @see org.pivot4j.ui.RenderCallback#renderContent(org.pivot4j.ui.RenderContext,
      * java.lang.String, java.lang.Double)
      */
     @Override
     public void renderContent(TableRenderContext context, String label,
-            Double value) {
+                              Double value) {
         ExpressionContext elContext = context.getExpressionContext();
 
         elContext.put("label", label);
@@ -539,8 +535,10 @@ public class PivotComponentBuilder extends
             column.getChildren().add(inplace);
         } else {
             HtmlOutputText text = new HtmlOutputText();
-            String id = "txt-" + text.hashCode();
-
+                         
+            UUID uuid = Generators.timeBasedGenerator().generate();
+                        
+            String id = "txt-" + uuid.toString();
             text.setId(id);
             text.setValue(labelText);
 
@@ -564,8 +562,7 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#endCell(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#endCell(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void endCell(TableRenderContext context) {
@@ -574,8 +571,7 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#endRow(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#endRow(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void endRow(TableRenderContext context) {
@@ -589,16 +585,14 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#endBody(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#endBody(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void endBody(TableRenderContext context) {
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.table.TableRenderCallback#endTable(org.pivot4j.ui.table.TableRenderContext)
+     * @see org.pivot4j.ui.table.TableRenderCallback#endTable(org.pivot4j.ui.table.TableRenderContext)
      */
     @Override
     public void endTable(TableRenderContext context) {
@@ -612,8 +606,7 @@ public class PivotComponentBuilder extends
     }
 
     /**
-     * @see
-     * org.pivot4j.ui.RenderCallback#endRender(org.pivot4j.ui.RenderContext)
+     * @see org.pivot4j.ui.RenderCallback#endRender(org.pivot4j.ui.RenderContext)
      */
     @Override
     public void endRender(TableRenderContext context) {
@@ -629,7 +622,7 @@ public class PivotComponentBuilder extends
 
             for (String property : errors.keySet()) {
                 String title = mf.format(new String[]{resources
-                    .getString("properties." + property)});
+                        .getString("properties." + property)});
 
                 EvaluationFailedException e = errors.get(property);
 
