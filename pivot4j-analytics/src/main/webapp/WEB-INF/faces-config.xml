@@ -36,7 +36,7 @@
     </application>
     
     <factory>
-        <exception-handler-factory>org.pivot4j.analytics.exception.Pivot4JExceptionHandlerFactory</exception-handler-factory>
+        <exception-handler-factory>org.pivot4j.analytics.exception.ViewExpiredExceptionHandlerFactory</exception-handler-factory>
     </factory>
 
     <lifecycle>
