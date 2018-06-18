@@ -8,16 +8,19 @@
  */
 package org.pivot4j.ui.poi;
 
-import static org.pivot4j.ui.CellTypes.VALUE;
-import static org.pivot4j.ui.CellTypes.LABEL;
-
 import java.awt.Color;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -32,6 +35,7 @@ import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.olap4j.Axis;
 import org.pivot4j.PivotException;
@@ -39,6 +43,9 @@ import org.pivot4j.ui.AbstractContentRenderCallback;
 import org.pivot4j.ui.command.UICommand;
 import org.pivot4j.ui.table.TableRenderCallback;
 import org.pivot4j.ui.table.TableRenderContext;
+
+import static org.pivot4j.ui.CellTypes.LABEL;
+import static org.pivot4j.ui.CellTypes.VALUE;
 
 public class ExcelExporter extends
         AbstractContentRenderCallback<TableRenderContext> implements
@@ -67,6 +74,8 @@ public class ExcelExporter extends
     private int fontSize = 10;
 
     private int sheetIndex = 0;
+
+    private Map<String, CellStyle> styleCache = new HashMap<String, CellStyle>();
 
     /**
      * @param out
@@ -218,6 +227,21 @@ public class ExcelExporter extends
                 && context.getAxis() != Axis.FILTER) {
             if (value == null) {
                 cell.setCellValue("");
+            } else if (label.length() > 2 && label.charAt(0) == '|') {
+                StringTokenizer st = new StringTokenizer(label, "|");
+                cell.setCellValue(st.nextToken());
+                String styleName = st.nextToken();
+                CellStyle style = styleCache.get(styleName);
+
+                if (style == null) {
+                    Map<String, String> attrs = parseStyle(styleName);
+
+                    style = format == Format.HSSF
+                            ? createHSSFStyle(attrs) : createXSSFStyle(attrs);
+                    styleCache.put(styleName, style);
+                }
+                cell.setCellStyle(style);
+                cell.setCellType(Cell.CELL_TYPE_STRING);
             } else {
                 cell.setCellValue(value);
             }
@@ -234,6 +258,135 @@ public class ExcelExporter extends
 
             cell.setCellValue(label);
             cell.setCellType(Cell.CELL_TYPE_STRING);
+        }
+    }
+
+    private CellStyle createHSSFStyle(Map<String, String> attrs) {
+        HSSFCellStyle style = (HSSFCellStyle) workbook.createCellStyle();
+        style.cloneStyleFrom(cell.getCellStyle());
+        HSSFFont font = null;
+
+        for (Map.Entry<String, String> entry : attrs.entrySet()) {
+            if ("color".equalsIgnoreCase(entry.getKey())) {
+                Color rgb = fromHtmlColor(entry.getValue());
+                if (font == null) {
+                    font = (HSSFFont) workbook.createFont();
+                }
+                HSSFPalette palette = ((HSSFWorkbook) workbook).getCustomPalette();
+                HSSFColor color = palette.findSimilarColor(
+                        rgb.getRed(), rgb.getGreen(), rgb.getBlue());
+
+                if (color == null) {
+                    color = palette.addColor(
+                            (byte) rgb.getRed(), (byte) rgb.getGreen(), (byte) rgb.getBlue());
+                }
+
+                font.setColor(color.getIndex());
+            } else if ("font-style".equalsIgnoreCase(entry.getKey())) {
+                if (font == null) {
+                    font = (HSSFFont) workbook.createFont();
+                }
+                font.setItalic("italic".equalsIgnoreCase(entry.getValue()));
+            } else if ("font-weight".equalsIgnoreCase(entry.getKey())) {
+                if (font == null) {
+                    font = (HSSFFont) workbook.createFont();
+                }
+                boolean weight = "bold".equalsIgnoreCase(entry.getValue());
+                font.setBoldweight((short) (weight ? 700 : 400));
+            } else if ("border".equalsIgnoreCase(entry.getKey())) {
+                /* ???? */
+            }
+        }
+
+        if (font != null) {
+            style.setFont(font);
+        }
+
+        return style;
+    }
+
+    private CellStyle createXSSFStyle(Map<String, String> attrs) {
+        XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+        style.cloneStyleFrom(cell.getCellStyle());
+
+        XSSFFont font = null;
+
+        for (Map.Entry<String, String> entry : attrs.entrySet()) {
+            if ("color".equalsIgnoreCase(entry.getKey())) {
+                Color rgb = fromHtmlColor(entry.getValue());
+                if (font == null) {
+                    font = (XSSFFont) workbook.createFont();
+                }
+                font.setColor(new XSSFColor(rgb));
+            } else if ("font-style".equalsIgnoreCase(entry.getKey())) {
+                if (font == null) {
+                    font = (XSSFFont) workbook.createFont();
+                }
+                font.setItalic("italic".equalsIgnoreCase(entry.getValue()));
+            } else if ("font-weight".equalsIgnoreCase(entry.getKey())) {
+                if (font == null) {
+                    font = (XSSFFont) workbook.createFont();
+                }
+                font.setBold("bold".equalsIgnoreCase(entry.getValue()));
+            } else if ("border".equalsIgnoreCase(entry.getKey())) {
+                /* ???? */
+            }
+        }
+
+        if (font != null) {
+            style.setFont(font);
+        }
+
+        return style;
+    }
+
+    private static Map<String, String> parseStyle(String style) {
+        Map<String, String> attributes = new HashMap<String, String>();
+        StringTokenizer st = new StringTokenizer(style, ":;");
+
+        while (st.hasMoreTokens()) {
+            String key = st.nextToken();
+            if (st.hasMoreTokens()) {
+                attributes.put(key, st.nextToken());
+            }
+        }
+
+        return attributes;
+    }
+
+    private static Color fromHtmlColor(String color) {
+        if (color == null) {
+            throw new NullPointerException(
+                    "The color components or name must be specified");
+        }
+        if (color.isEmpty()) {
+            throw new IllegalArgumentException("Invalid color specification");
+        }
+
+        if (color.startsWith("#")) {
+            color = color.substring("#".length());
+        }
+
+        int len = color.length();
+
+        try {
+            int r;
+            int g;
+            int b;
+
+            if (len < 6) {
+                r = Integer.parseInt(color.substring(0, 1), 16);
+                g = Integer.parseInt(color.substring(1, 2), 16);
+                b = Integer.parseInt(color.substring(2, 3), 16);
+                return new Color(r * 16, g * 16, b * 16);
+            } else {
+                r = Integer.parseInt(color.substring(0, 2), 16);
+                g = Integer.parseInt(color.substring(2, 4), 16);
+                b = Integer.parseInt(color.substring(4, 6), 16);
+                return new Color(r, g, b);
+            }
+        } catch (NumberFormatException nfe) {
+            throw new IllegalArgumentException("Invalid color specification");
         }
     }
 
@@ -306,7 +459,7 @@ public class ExcelExporter extends
                 newWorkbook = new HSSFWorkbook();
                 break;
             case SXSSF:
-                newWorkbook = new SXSSFWorkbook(500);
+                newWorkbook = new SXSSFWorkbook(65535);
                 break;
             default:
                 assert false;
@@ -594,4 +747,5 @@ public class ExcelExporter extends
             }
         }
     }
+
 }

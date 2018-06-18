@@ -54,6 +54,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.uuid.Generators;
+import java.util.StringTokenizer;
 
 public class PivotComponentBuilder extends
         AbstractRenderCallback<TableRenderContext> implements
@@ -540,8 +541,20 @@ public class PivotComponentBuilder extends
                         
             String id = "txt-" + uuid.toString();
             text.setId(id);
-            text.setValue(labelText);
 
+            if (labelText.length() > 2 && labelText.charAt(0) == '|') {
+                StringTokenizer st = new StringTokenizer(labelText, "|");
+                if (st.hasMoreTokens()) {
+                    text.setValue(st.nextToken());
+                }
+                if (st.hasMoreTokens()) {
+                    text.setStyle(st.nextToken());
+                }
+            }
+            else {
+                text.setValue(labelText);
+            }
+            
             if (context.getMember() != null) {
                 text.setTitle(context.getMember().getUniqueName());
             }
