@@ -1121,3 +1121,7 @@ body .ui-picklist button.ui-picklist-button-remove, body .ui-picklist.ui-picklis
 div.ui-picklist-buttons-cell button > span::before {
     position: initial !important;
 }
+
+span.ui-icon-minus {
+    position: relative !important;
+}
