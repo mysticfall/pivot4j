@@ -8,14 +8,6 @@
  */
 package org.pivot4j.ui.table;
 
-import static org.pivot4j.ui.CellTypes.AGG_VALUE;
-import static org.pivot4j.ui.CellTypes.LABEL;
-import static org.pivot4j.ui.CellTypes.VALUE;
-import static org.pivot4j.ui.table.TableCellTypes.FILL;
-import static org.pivot4j.ui.table.TableCellTypes.TITLE;
-import static org.pivot4j.ui.table.TablePropertyCategories.CELL;
-import static org.pivot4j.ui.table.TablePropertyCategories.HEADER;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,14 +38,22 @@ import org.pivot4j.PivotModel;
 import org.pivot4j.impl.PivotModelImpl;
 import org.pivot4j.transform.ChangeSlicer;
 import org.pivot4j.ui.AbstractPivotRenderer;
+import static org.pivot4j.ui.CellTypes.AGG_VALUE;
+import static org.pivot4j.ui.CellTypes.LABEL;
+import static org.pivot4j.ui.CellTypes.VALUE;
 import org.pivot4j.ui.aggregator.Aggregator;
 import org.pivot4j.ui.aggregator.AggregatorFactory;
 import org.pivot4j.ui.aggregator.AggregatorPosition;
+import static org.pivot4j.ui.table.TableCellTypes.FILL;
+import static org.pivot4j.ui.table.TableCellTypes.TITLE;
+import static org.pivot4j.ui.table.TablePropertyCategories.CELL;
+import static org.pivot4j.ui.table.TablePropertyCategories.HEADER;
 import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.MemberSelection;
 import org.pivot4j.util.OlapUtils;
 import org.pivot4j.util.TreeNode;
 import org.pivot4j.util.TreeNodeCallback;
+import static org.pivot4j.util.TreeNodeCallback.CONTINUE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
