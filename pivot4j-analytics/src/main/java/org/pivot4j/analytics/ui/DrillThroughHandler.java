@@ -1,5 +1,6 @@
 package org.pivot4j.analytics.ui;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +29,7 @@ import org.primefaces.model.TreeNode;
 
 @ManagedBean(name = "drillThroughHandler")
 @ViewScoped
-public class DrillThroughHandler implements NodeFilter {
+public class DrillThroughHandler implements NodeFilter, Serializable {
 
     @ManagedProperty(value = "#{pivotStateManager}")
     private PivotStateManager stateManager;
