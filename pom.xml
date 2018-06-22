@@ -60,6 +60,7 @@
         <version.plugin.source>2.2.1</version.plugin.source>
         <version.plugin.war>2.4</version.plugin.war>
         <version.plugin.xml>1.0</version.plugin.xml>
+        <version.java.uuid.generator>3.1.5</version.java.uuid.generator>
 
         <version.extension.scm>1.9</version.extension.scm>
         <version.extension.wagon>2.6</version.extension.wagon>
@@ -68,7 +69,7 @@
         <version.jsp>2.1</version.jsp>
         <version.jstl>1.2</version.jstl>
         <version.servlet>2.5</version.servlet>
-        <version.myfaces>2.2.12</version.myfaces>
+        <version.myfaces>2.2.5</version.myfaces>
         <version.mojarra>2.3.2</version.mojarra>
 
         <version.slf4j>1.7.7</version.slf4j>
