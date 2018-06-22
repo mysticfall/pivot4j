@@ -310,13 +310,13 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
         ReportContent content = new ReportContent(state);
 
-        String extension = bundle.getString("report.title.extension");
+        String extension = settings.getExtension();
 
         if (reportName.toLowerCase().endsWith(extension)) {
-            reportName = reportName.substring(0, reportName.length() - 8);
+            reportName = reportName.substring(0, reportName.length()-(extension.length()+1));
         }
 
-        String fileName = reportName + extension;
+        String fileName = reportName + '.' + extension;
 
         ReportFile file;
 
@@ -421,10 +421,10 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
         String name = file.getName();
 
-        String extension = bundle.getString("report.title.extension");
+        String extension = settings.getExtension();
 
         if (name.toLowerCase().endsWith(extension)) {
-            name = name.substring(0, name.length() - 8);
+            name = name.substring(0, name.length()-(extension.length()+1));
         }
 
         ViewState state = new ViewState(viewId, name);
@@ -763,10 +763,10 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
             return;
         }
 
-        String extension = bundle.getString("report.title.extension");
+        String extension = settings.getExtension();
 
         if (name.toLowerCase().endsWith(extension)) {
-            name = name.substring(0, name.length() - 8);
+            name = name.substring(0, name.length()-(extension.length()+1));
         }
 
         ReportFile parent = getTargetDirectory();
@@ -782,7 +782,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
                 String childName = child.getName();
 
                 if (childName.toLowerCase().endsWith(extension)) {
-                    childName = childName.substring(0, childName.length() - 8);
+                    childName = childName.substring(0, childName.length()-(extension.length()+1));
                 }
 
                 names.add(childName);

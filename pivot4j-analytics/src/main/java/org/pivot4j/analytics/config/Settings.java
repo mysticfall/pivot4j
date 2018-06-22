@@ -42,6 +42,8 @@ public class Settings {
     public static final String CONFIG_FILE = "pivot4j.config";
 
     public static final String APPLICATION_HOME = "pivot4j.home";
+    
+    public static final String DEFAULT_EXTENSION = "pivot4j";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -309,7 +311,7 @@ public class Settings {
     public String getExtension() {
         if (extension == null) {
             this.extension = configuration
-                    .getString("repository.extension", "").trim();
+                    .getString("repository.extension", DEFAULT_EXTENSION).trim();
         }
 
         return extension;
