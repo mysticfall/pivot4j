@@ -35,83 +35,11 @@
 					You can also use '${FS}' to denote the OS specific file separator character.
 				-->
 				<properties>
-                                    <!--
+                                
 					<property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
 					<property name="Jdbc">jdbc:derby:${webRoot}${FS}foodmart</property>
 					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
 					<property name="JdbcUser">sa</property>
-                                        
-                                        <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
-                                        <property name="Jdbc">jdbc:mysql://localhost:3306/giex?useSSL=false</property>
-                                        <property name="JdbcDrivers">com.mysql.jdbc.Driver</property>
-                                        <property name="JdbcUser">root</property>
-                                        <property name="JdbcPassword">root</property>
-              
-                                        <property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
-                                        <property name="Jdbc">jdbc:postgresql://10.0.0.21:5432/giexonline</property>
-                                        <property name="JdbcDrivers">org.postgresql.Driver</property>
-                                        <property name="JdbcUser">postgres</property>
-                                        <property name="JdbcPassword">postgres</property>
-                                        
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubos.xml</property>
-                                        <property name="Jdbc">jdbc:postgresql://10.10.40.27:5432/giex?currentSchema=giexanalise</property>
-                                        <property name="JdbcDrivers">org.postgresql.Driver</property>
-                                        <property name="JdbcUser">giex</property>
-                                        <property name="JdbcPassword">NGw1J2G6</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>
-                      
-                                        <property name="Catalog">file:${webRoot}${FS}FoodMart_1.xml</property>
-					<property name="Jdbc">jdbc:derby:${webRoot}${FS}foodmart</property>
-					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
-					<property name="JdbcUser">sa</property>
-                                        
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosOracle.xml</property>
-                                        <property name="Jdbc">jdbc:oracle:thin:@giex-scan.intra.local:1521/TAFGIEXPROD</property>
-                                        <property name="JdbcDrivers">oracle.jdbc.OracleDriver</property>
-                                        <property name="JdbcUser">giex_reportserver</property>
-                                        <property name="JdbcPassword">?806y*report</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>    
-                                        
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMysql.xml</property>
-                                        <property name="Jdbc">jdbc:mysql://10.10.40.179:3306/giex?useSSL=false</property>
-                                        <property name="JdbcDrivers">com.mysql.cj.jdbc.Driver</property>
-                                        <property name="JdbcUser">giex</property>
-                                        <property name="JdbcPassword">7xt3Dw87</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>     
-                                        
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMysql.xml</property>
-                                        <property name="Jdbc">jdbc:mysql://173.22.21.47:3306/giex?useSSL=false</property>
-                                        <property name="JdbcDrivers">com.mysql.cj.jdbc.Driver</property>
-                                        <property name="JdbcUser">giex</property>
-                                        <property name="JdbcPassword">P247Yjdb</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>                                    
-                                        
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMysql.xml</property>
-                                        <property name="Jdbc">jdbc:mysql://localhost:3307/giex?useSSL=false</property>
-                                        <property name="JdbcDrivers">com.mysql.cj.jdbc.Driver</property>
-                                        <property name="JdbcUser">root</property>
-                                        <property name="JdbcPassword">root</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>     
-
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMysql.xml</property>
-                                        <property name="Jdbc">jdbc:mysql://173.22.21.47:3306/giex?useSSL=false</property>
-                                        <property name="JdbcDrivers">com.mysql.cj.jdbc.Driver</property>
-                                        <property name="JdbcUser">giex</property>
-                                        <property name="JdbcPassword">P247Yjdb</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>   
-                                        
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosMongo.xml</property>
-                                        <property name="Jdbc">jdbc:drill:drillbit=hadoop1.intra.local;schema=mongo</property>
-                                        <property name="JdbcDrivers">org.apache.drill.jdbc.Driver</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>  
-                                    -->
-
-                                        <property name="Catalog">file:${webRoot}${FS}GiexCubosOracle.xml</property>
-                                        <property name="Jdbc">jdbc:oracle:thin:@giex-scan.intra.local:1521/GIEXPROD</property>
-                                        <property name="JdbcDrivers">oracle.jdbc.OracleDriver</property>
-                                        <property name="JdbcUser">giex_reportserver</property>
-                                        <property name="JdbcPassword">?806y*report</property>
-                                        <property name="DynamicSchemaProcessor">org.pivot4j.analytics.util.Dsp</property>   
                                         
 				</properties>
 			</connection-info>
@@ -147,7 +75,7 @@
                 http://www.primefaces.org/themes.html
         -->
         <ui-theme>
-            <default>aristo</default>
+            <default>admin</default>
             <available-themes>
                 <theme name="aristo" description="Aristo" />
                 <theme name="bootstrap" description="Bootstrap" />
@@ -178,7 +106,7 @@
     <repository>
         <extension>giex</extension>
     
-    <!-- general or client -->
+        <!-- general or client -->
         <aplicationHomePerClient>client</aplicationHomePerClient>
     </repository>
 
