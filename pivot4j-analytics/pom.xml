@@ -58,6 +58,13 @@
                             </includes>
                             <targetPath>WEB-INF/classes</targetPath>
                         </resource>
+                        <resource>
+                            <directory>${basedir}/src/main/resources</directory>
+                            <includes>
+                                <include>context.xml</include>
+                            </includes>
+                            <targetPath>META-INF</targetPath>
+                        </resource>
                     </webResources>
                 </configuration>
             </plugin>
@@ -494,6 +501,17 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${version.poi}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.uuid</groupId>
+            <artifactId>java-uuid-generator</artifactId>
+            <version>3.1.5</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -530,6 +548,12 @@
                     <groupId>org.glassfish</groupId>
                     <artifactId>javax.faces</artifactId>
                     <version>${version.mojarra}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.weld.servlet</groupId>
+                    <artifactId>weld-servlet-shaded</artifactId>
+                    <version>3.0.3.Final</version>
+                    <scope>runtime</scope>
                 </dependency>
             </dependencies>
         </profile>

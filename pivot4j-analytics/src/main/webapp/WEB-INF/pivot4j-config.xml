@@ -147,7 +147,7 @@
                 http://www.primefaces.org/themes.html
         -->
         <ui-theme>
-            <default>admin</default>
+            <default>aristo</default>
             <available-themes>
                 <theme name="aristo" description="Aristo" />
                 <theme name="bootstrap" description="Bootstrap" />
