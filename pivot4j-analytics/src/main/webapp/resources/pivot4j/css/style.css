@@ -737,7 +737,7 @@ body.ie-compat .ui-toolbar .ui-separator {
 }
 
 .ui-button {
-    padding: 4px 10px !important;
+    padding: 1px 3px !important;
 }
 
 /*div.ui-button {
