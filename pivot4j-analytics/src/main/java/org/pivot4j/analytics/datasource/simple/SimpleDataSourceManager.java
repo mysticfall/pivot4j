@@ -1,5 +1,6 @@
 package org.pivot4j.analytics.datasource.simple;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +25,7 @@ import org.pivot4j.datasource.SimpleOlapDataSource;
 @ManagedBean(name = "dataSourceManager")
 @ApplicationScoped
 public class SimpleDataSourceManager extends
-        AbstractDataSourceManager<SimpleDataSourceInfo> {
+        AbstractDataSourceManager<SimpleDataSourceInfo> implements Serializable {
 
     /**
      * @see

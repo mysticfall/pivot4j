@@ -573,6 +573,12 @@
                     <artifactId>myfaces-impl</artifactId>
                     <version>${version.myfaces}</version>
                 </dependency>
+                <dependency>
+                    <groupId>org.jboss.weld.servlet</groupId>
+                    <artifactId>weld-servlet-shaded</artifactId>
+                    <version>3.0.3.Final</version>
+                    <scope>runtime</scope>
+                </dependency>
             </dependencies>
         </profile>
 

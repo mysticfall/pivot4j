@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -37,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "settings", eager = true)
 @ApplicationScoped
-public class Settings {
+public class Settings implements Serializable {
 
     public static final String CONFIG_FILE = "pivot4j.config";
 
@@ -49,7 +50,7 @@ public class Settings {
 
     private File applicationHome;
 
-    private HierarchicalConfiguration configuration;
+    private transient HierarchicalConfiguration configuration;
 
     private String theme;
 

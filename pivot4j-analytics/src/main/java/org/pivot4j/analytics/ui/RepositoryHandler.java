@@ -115,7 +115,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
         for (ViewState state : states) {
             context.addCallbackParam(state.getId(), new JSONObject(new ViewInfo(state)));
-        }
+            }
     }
 
     public void create() {

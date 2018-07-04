@@ -12,7 +12,7 @@ import org.pivot4j.analytics.datasource.ConnectionInfo;
 import org.pivot4j.analytics.repository.ReportFile;
 import org.pivot4j.analytics.ui.LayoutRegion;
 
-public class ViewState {
+public class ViewState implements Serializable {
 
     private String id;
 

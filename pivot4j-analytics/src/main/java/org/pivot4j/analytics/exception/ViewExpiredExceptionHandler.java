@@ -36,6 +36,8 @@ public class ViewExpiredExceptionHandler extends ExceptionHandlerWrapper {
                 facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, "index");
                 facesContext.renderResponse();
                 iter.remove();
+            } else {
+                exception.printStackTrace();
             }
         }
 
