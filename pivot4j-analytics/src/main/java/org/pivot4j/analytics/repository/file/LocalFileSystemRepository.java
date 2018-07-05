@@ -76,8 +76,14 @@ public class LocalFileSystemRepository extends AbstractFileSystemRepository impl
                 String client = null;
 
                 try {
+                    if (log.isInfoEnabled()) {
+                        log.info("Trying to get client name from session");
+                    }
                     client = (String) session.getAttribute("client");
                 } catch (Exception e) {
+                    if (log.isInfoEnabled()) {
+                        log.info("Exception: ", e);
+                    }
                 }
 
                 if (client == null) {
