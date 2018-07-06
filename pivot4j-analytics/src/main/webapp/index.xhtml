@@ -101,7 +101,7 @@
                                              onclick="getActiveWindow().$('table.pivot-grid:first').jqprint();"
                                              disabled="#{!workbenchHandler.viewValid}" />
                         </f:facet>
-                        <f:facet name="right" rendered="false">
+                        <f:facet name="right" rendered="true">
                             <p:themeSwitcher id="theme-switcher"
                                              value="#{workbenchHandler.theme}" widgetVar="themeSwitcher" rendered="false">
                                 <f:selectItem itemLabel="#{msg['label.theme.default']}"
@@ -123,6 +123,12 @@
                             <p:commandButton value="#{msg['toolbar.about']}"
                                              title="#{msg['toolbar.about.tooltip']}" type="button"
                                              icon="ui-icon-info" onclick="PF('about').show(); return false;" rendered="false"/>
+                            <p:commandButton value="#{msg['toolbar.logout']}"
+                                             title="#{msg['toolbar.logout']}"
+                                             action="#{viewStateHolder.logOff}"
+                                             oncomplete="document.location.reload();"
+                                             rendered="true"/>
+
                         </f:facet>
                     </p:toolbar>
                 </h:form>

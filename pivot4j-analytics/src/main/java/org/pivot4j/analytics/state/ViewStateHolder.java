@@ -364,6 +364,25 @@ public class ViewStateHolder implements Serializable {
         viewStateListeners.remove(listener);
     }
 
+    // TODO: get session attribut from settings
+    // TODO: use this function to manage visibility of the button
+    public boolean isLoggedIn() {
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        HttpSession session = (HttpSession) context.getSession(true);
+
+	String authorizedUsername = (String) session.getAttribute("authorizedUsername");
+	if(authorizedUsername == null) return false;
+        else if(authorizedUsername.isEmpty()) return false;
+        else return true;
+    }
+    
+    // TODO: get session attribut from settings
+    public void logOff() {
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        HttpSession session = (HttpSession) context.getSession(true);
+        session.setAttribute("authorizedUsername", null);
+    }
+    
     /**
      * @return the settings
      */

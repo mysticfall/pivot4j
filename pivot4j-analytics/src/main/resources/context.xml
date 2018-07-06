@@ -1,4 +1,4 @@
-<Context path="/pivot4jpnn">
+<Context path="/pivot4j">
     <Resource name="BeanManager"
         auth="Container"
         type="javax.enterprise.inject.spi.BeanManager"
