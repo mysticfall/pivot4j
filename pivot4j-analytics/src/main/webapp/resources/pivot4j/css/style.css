@@ -1128,3 +1128,10 @@ span.ui-icon-minus {
 .member-panel{
     width: 40% !important;
 }
+
+.ui-toolbar-group-left {
+    float: left;
+    overflow: auto !important;
+    width: 100%;
+    display: contents;
+}
