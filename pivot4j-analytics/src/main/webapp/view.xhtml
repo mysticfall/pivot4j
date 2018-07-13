@@ -506,9 +506,9 @@
                                  globalOnly="true" />
                     </h:form>
                 </pe:layoutPane>
-                <p:panel rendered="#{viewHandler.enableMdx}">
-                    <pe:layoutPane id="mdx-editor-pane" position="south"
-                                   rendered="#{viewHandler.editable}">
+
+                <pe:layoutPane id="mdx-editor-pane" position="south"
+                                   rendered="#{(viewHandler.enableMdx and viewHandler.editable)}">
                         <f:facet name="header">
                             <h:panelGroup layout="block">
                                 <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-script" />
@@ -556,8 +556,8 @@
 
                             <p:growl id="editor-growl" showDetail="true" sticky="true" />
                         </h:form>
-                    </pe:layoutPane>
-                </p:panel>
+            </pe:layoutPane>
+                
             </pe:layoutPane>
 
             <p:ajax event="open" listener="#{viewHandler.onPanelOpened}"
