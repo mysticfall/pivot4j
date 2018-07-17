@@ -1125,6 +1125,10 @@ span.ui-icon-minus {
     position: relative !important;
 }
 
+span.ui-icon-plus {
+    position: relative !important;
+}
+
 .member-panel{
     width: 40% !important;
 }
