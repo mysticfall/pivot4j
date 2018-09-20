@@ -1,12 +1,13 @@
 package org.pivot4j.analytics.property;
 
+import java.io.Serializable;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.lang.NullArgumentException;
 
-public class PropertyDescriptor {
+public class PropertyDescriptor implements Serializable {
 
     private String key;
 

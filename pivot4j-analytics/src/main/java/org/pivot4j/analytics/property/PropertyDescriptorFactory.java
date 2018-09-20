@@ -1,5 +1,6 @@
 package org.pivot4j.analytics.property;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import org.apache.commons.lang.NullArgumentException;
 
 @ManagedBean(name = "propertyDescriptorFactory")
 @ApplicationScoped
-public class PropertyDescriptorFactory {
+public class PropertyDescriptorFactory implements Serializable {
 
     private Map<String, PropertyDescriptor> cellProperties;
 

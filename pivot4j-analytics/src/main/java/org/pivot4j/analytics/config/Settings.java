@@ -50,7 +50,7 @@ public class Settings implements Serializable {
 
     private File applicationHome;
 
-    private transient HierarchicalConfiguration configuration;
+    private HierarchicalConfiguration configuration;
 
     private String theme;
 

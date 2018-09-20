@@ -55,7 +55,7 @@ public class ViewStateHolder implements Serializable {
 
     private List<ViewStateListener> viewStateListeners = new ArrayList<ViewStateListener>();
 
-    private Timer timer;
+    private transient Timer timer;
 
     private long checkInterval = 1 * MINUTE;
 
