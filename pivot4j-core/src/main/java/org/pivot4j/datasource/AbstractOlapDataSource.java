@@ -9,6 +9,7 @@
 package org.pivot4j.datasource;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
@@ -16,15 +17,15 @@ import java.util.logging.Logger;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapDataSource;
 
-public abstract class AbstractOlapDataSource implements OlapDataSource {
+public abstract class AbstractOlapDataSource implements OlapDataSource, Serializable {
 
-    private PrintWriter logWriter;
+    private transient PrintWriter logWriter;
 
     private String userName;
 
     private String password;
 
-    private int loginTimeout;
+    private Integer loginTimeout;
 
     /**
      * @see javax.sql.DataSource#getLogWriter()

@@ -61,51 +61,51 @@ import org.slf4j.LoggerFactory;
 /**
  * The pivot model represents all (meta-)data for an MDX query.
  */
-public class PivotModelImpl implements PivotModel {
+public class PivotModelImpl implements PivotModel, Serializable {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private OlapDataSource dataSource;
+    private transient OlapDataSource dataSource;
 
-    private OlapConnection connection;
+    private transient OlapConnection connection;
 
     private String roleName;
 
     private Locale locale;
 
-    private boolean initialized = false;
+    private Boolean initialized = false;
 
     private Boolean scenarioSupported;
 
-    private Collection<ModelChangeListener> modelListeners = new LinkedList<ModelChangeListener>();
+    private transient Collection<ModelChangeListener> modelListeners = new LinkedList<ModelChangeListener>();
 
-    private Collection<QueryListener> queryListeners = new LinkedList<QueryListener>();
+    private transient Collection<QueryListener> queryListeners = new LinkedList<QueryListener>();
 
-    private QueryAdapter queryAdapter;
+    private transient QueryAdapter queryAdapter;
 
-    private TransformFactory transformFactory = new TransformFactoryImpl();
+    private transient TransformFactory transformFactory = new TransformFactoryImpl();
 
-    private ExpressionEvaluatorFactory expressionEvaluatorFactory = new FreeMarkerExpressionEvaluatorFactory();
+    private transient ExpressionEvaluatorFactory expressionEvaluatorFactory = new FreeMarkerExpressionEvaluatorFactory();
 
-    private int topBottomCount = 10;
+    private Integer topBottomCount = 10;
 
     private SortCriteria sortCriteria = SortCriteria.ASC;
 
-    private boolean sorting = false;
+    private Boolean sorting = false;
 
-    private boolean defaultNonEmpty = true;
+    private Boolean defaultNonEmpty = true;
 
-    private List<Member> sortPosMembers;
+    private transient List<Member> sortPosMembers;
 
     private String mdxQuery;
 
-    private CellSet cellSet;
+    private transient CellSet cellSet;
 
-    private ExpressionContext expressionContext;
+    private transient ExpressionContext expressionContext;
 
-    private MemberHierarchyCache memberHierarchyCache;
+    private transient MemberHierarchyCache memberHierarchyCache;
 
-    private QueryChangeListener queryChangeListener = new QueryChangeListener() {
+    private transient QueryChangeListener queryChangeListener = new QueryChangeListener() {
 
         public void queryChanged(QueryChangeEvent e) {
             fireStructureChanged();
