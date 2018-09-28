@@ -444,3 +444,22 @@ function completeMdx(editor) {
         editor.complete();
     }
 }
+
+function exportChart() {
+    var Children = document.getElementsByClassName("jqplot-target");
+    var jqpoltParentDiv=Children[0];
+    var anchorElem = document.createElement('a');
+    var imgElem = $(jqpoltParentDiv).jqplotToImageElem();
+    $(anchorElem).prop("id","chart-anchor");
+    $(anchorElem).prop("download","chart.png");
+    $(imgElem).prop("id","chart-img");
+    $(anchorElem).prop("href",$(imgElem).prop("src"));
+    $(anchorElem).append(imgElem);
+    $('#chart-export-form\\:chart-img-div').empty();
+    $('#chart-export-form\\:chart-img-div').append(anchorElem);
+    $(anchorElem)[0].click();
+}
+
+function saveChart() {
+    $('#chart-anchor')[0].click();
+}

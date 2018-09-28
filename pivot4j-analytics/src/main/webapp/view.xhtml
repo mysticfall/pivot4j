@@ -216,6 +216,11 @@
                                             title="#{msg['toolbar.chart.settings.tooltip']}"
                                             icon="ui-icon-gear" action="#{chartHandler.reset}"
                                             oncomplete="PF('chartConfig').show()" />
+                                <p:separator />
+                                <p:menuitem value="#{msg['toolbar.export']}"
+                                            disabled="#{empty chartHandler.chartName}"
+                                            icon="ui-icon-print"
+                                            onclick="PF('chartExport').show()" />
                             </p:menuButton>
                             <p:separator rendered="#{viewHandler.editable}" styleClass="hide-on-embed"/>
                             <p:menuButton value="#{msg['toolbar.export']}"
@@ -572,6 +577,7 @@
         <ui:include src="export.xhtml" />
         <ui:include src="drillthrough.xhtml" />
         <ui:include src="chart.xhtml" />
+        <ui:include src="chartexport.xhtml" />
         <ui:include src="extension.xhtml" />
 
         <p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
