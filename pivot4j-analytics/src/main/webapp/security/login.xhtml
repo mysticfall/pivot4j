@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        <link rel="shortcut icon"
+              href="#{resource['pivot4j:images/logo16.png']}" />
+
+        <title>#{msg['title.about.welcome']}</title>
+        <!-- Bootstrap core CSS -->
+        <link href="../resources/pivot4j/css/signin.css" rel="stylesheet"/>
+
+        <!-- Custom styles for this template -->
+        <link href="../resources/pivot4j/css/bootstrap.min.css" rel="stylesheet"/>
+    </head>
+
+    <body class="text-center">
+        <form class="form-signin" th:action="@{/login}" method="post">
+            <img class="mb-4" src="../resources/pivot4j/images/logo.png" alt="" width="72" height="72"/>
+            <h1 class="h3 mb-3 font-weight-normal">#{msg['security.title']}</h1>
+            <label for="inputLogin" class="sr-only">#{msg['security.username']}</label>
+            <input type="text" id="inputLogin" class="form-control" placeholder="#{msg['security.username']}" name="username" required="true" autofocus="true"/>
+            <label for="inputPassword" class="sr-only">#{msg['security.password']}</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="#{msg['security.password']}" name="password" required="true"/>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">#{msg['security.login']}</button>
+        </form>
+    </body>
+</html>

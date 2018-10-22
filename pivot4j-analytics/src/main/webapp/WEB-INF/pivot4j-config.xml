@@ -12,8 +12,8 @@
 			http://www.olap4j.org/
 		-->
 		<datasource>
-			<name>Giex</name>
-			<description>Giex data source.</description>
+			<name>OBE</name>
+			<description>OBE data source.</description>
 
 			<connection-info>
 				<url>jdbc:mondrian:</url>
@@ -35,12 +35,19 @@
 					You can also use '${FS}' to denote the OS specific file separator character.
 				-->
 				<properties>
-                                
+                                    <!--
 					<property name="Catalog">file:${webRoot}${FS}FoodMart.xml</property>
 					<property name="Jdbc">jdbc:derby:${webRoot}${FS}foodmart</property>
 					<property name="JdbcDrivers">org.apache.derby.jdbc.EmbeddedDriver</property>
-					<property name="JdbcUser">sa</property>
-                                        
+                                                                            
+                                        -->
+  
+                                        <property name="Catalog">file:${webRoot}${FS}OBE.xml</property>
+                                        <property name="Jdbc">jdbc:mysql://localhost:3306/scobrcom_prontuario?useSSL=false</property>
+                                        <property name="JdbcDrivers">com.mysql.jdbc.Driver</property>
+                                        <property name="JdbcUser">scobrcom_pronto</property>
+                                        <property name="JdbcPassword">!@prontuario*</property>
+                                                                                
 				</properties>
 			</connection-info>
 		</datasource>
@@ -104,12 +111,27 @@
             an extension.
     -->
     <repository>
-        <extension>giex</extension>
-    
+        <extension>obe</extension>
+        
         <!-- general or client -->
         <aplicationHomePerClient>client</aplicationHomePerClient>
     </repository>
 
+    <security>
+        <!-- yes or no -->
+        
+        <accessPermission>no</accessPermission>
+        
+        <!-- 
+            case yes:        
+            external_base 
+            internal_base 
+            token_validation 
+            page_login 
+        -->
+        <accessMethod>token_validation</accessMethod>
+    </security>
+    
     <render>
         <!-- Show all non-internal member properties -->
         <propertyCollector type="non-internal" />
@@ -132,7 +154,6 @@
         <!-- Name of a request parameter for file path. -->
         <path-parameter>path</path-parameter>
         
-        <credor-parameter>credor</credor-parameter>
-        
+        <credor-parameter>obe</credor-parameter>
     </web>
 </config>

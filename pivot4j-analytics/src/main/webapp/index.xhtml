@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
@@ -102,7 +102,7 @@
                                              onclick="getActiveWindow().$('table.pivot-grid:first').jqprint();"
                                              disabled="#{!workbenchHandler.viewValid}" />
                         </f:facet>
-                        <f:facet name="right" rendered="false">
+                        <f:facet name="right">
                             <p:themeSwitcher id="theme-switcher"
                                              value="#{workbenchHandler.theme}" widgetVar="themeSwitcher" rendered="false">
                                 <f:selectItem itemLabel="#{msg['label.theme.default']}"
@@ -124,6 +124,9 @@
                             <p:commandButton value="#{msg['toolbar.about']}"
                                              title="#{msg['toolbar.about.tooltip']}" type="button"
                                              icon="ui-icon-info" onclick="PF('about').show(); return false;" rendered="false"/>
+                            <a href="./logout" onmouseover="#{msg['security.logout']}">
+                                <img border="0" alt="Logout" src="#{resource['pivot4j:images/logout.png']}" width="35" height="35"/>
+                            </a>
                         </f:facet>
                     </p:toolbar>
                 </h:form>
