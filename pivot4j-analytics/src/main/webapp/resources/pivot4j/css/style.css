@@ -736,7 +736,7 @@ body.ie-compat .ui-toolbar .ui-separator {
 }
 
 .ui-button {
-    padding: 1px 3px !important;
+    padding: 4px 10px !important;
 }
 
 /*div.ui-button {
@@ -828,7 +828,7 @@ div.ui-selectonemenu, div.ui-fluid div.ui-selectonemenu, div.ui-selectcheckboxme
 .ui-button-icon-only .ui-icon {
     left: 50% !important;
     margin-left: -8px !important;
-    margin-top: -3px !important;
+    margin-top: -6px !important;
     top: auto !important;
 }
 
