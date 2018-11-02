@@ -8,6 +8,7 @@
  */
 package org.pivot4j.datasource;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ import java.util.Properties;
 
 import org.olap4j.OlapConnection;
 
-public class SimpleOlapDataSource extends AbstractOlapDataSource {
+public class SimpleOlapDataSource extends AbstractOlapDataSource implements Serializable {
 
     private String connectionString;
 

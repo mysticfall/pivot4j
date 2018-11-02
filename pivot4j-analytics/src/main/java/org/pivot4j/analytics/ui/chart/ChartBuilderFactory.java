@@ -1,5 +1,6 @@
 package org.pivot4j.analytics.ui.chart;
 
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -14,9 +15,9 @@ import org.pivot4j.PivotException;
 
 @ManagedBean(name = "chartBuilderFactory")
 @ApplicationScoped
-public class ChartBuilderFactory {
+public class ChartBuilderFactory implements Serializable {
 
-    private Map<String, Class<? extends ChartBuilder>> builders;
+    private transient Map<String, Class<? extends ChartBuilder>> builders;
 
     public ChartBuilderFactory() {
         this.builders = new LinkedHashMap<String, Class<? extends ChartBuilder>>();

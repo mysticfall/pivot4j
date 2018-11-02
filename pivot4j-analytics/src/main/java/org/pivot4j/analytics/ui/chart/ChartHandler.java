@@ -64,7 +64,7 @@ public class ChartHandler implements ModelChangeListener, Serializable {
     private int xAxisAngle;
 
     private int yAxisAngle;
-
+    
     @PostConstruct
     protected void initialize() {
         this.model = stateManager.getModel();
@@ -397,7 +397,7 @@ public class ChartHandler implements ModelChangeListener, Serializable {
             stateManager.setChartState(renderer.saveState());
         }
     }
-
+    
     /**
      * @see
      * org.pivot4j.ModelChangeListener#modelInitialized(org.pivot4j.ModelChangeEvent)

@@ -2,6 +2,7 @@ package org.pivot4j.analytics.repository.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang.NullArgumentException;
@@ -9,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.pivot4j.analytics.repository.AbstractReportFile;
 import org.pivot4j.analytics.repository.ReportFile;
 
-public class LocalFile extends AbstractReportFile {
+public class LocalFile extends AbstractReportFile implements Serializable {
 
     private File root;
 

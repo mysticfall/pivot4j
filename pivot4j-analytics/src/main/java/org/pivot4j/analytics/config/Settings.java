@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -37,17 +38,19 @@ import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "settings", eager = true)
 @ApplicationScoped
-public class Settings {
+public class Settings implements Serializable {
 
     public static final String CONFIG_FILE = "pivot4j.config";
 
     public static final String APPLICATION_HOME = "pivot4j.home";
+    
+    public static final String DEFAULT_EXTENSION = "pivot4j";
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     private File applicationHome;
 
-    private HierarchicalConfiguration configuration;
+    private transient HierarchicalConfiguration configuration;
 
     private String theme;
 
@@ -309,7 +312,7 @@ public class Settings {
     public String getExtension() {
         if (extension == null) {
             this.extension = configuration
-                    .getString("repository.extension", "").trim();
+                    .getString("repository.extension", DEFAULT_EXTENSION).trim();
         }
 
         return extension;

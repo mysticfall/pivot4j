@@ -216,6 +216,11 @@
                                             title="#{msg['toolbar.chart.settings.tooltip']}"
                                             icon="ui-icon-gear" action="#{chartHandler.reset}"
                                             oncomplete="PF('chartConfig').show()" />
+                                <p:separator />
+                                <p:menuitem value="#{msg['toolbar.export']}"
+                                            disabled="#{empty chartHandler.chartName}"
+                                            icon="ui-icon-print"
+                                            onclick="PF('chartExport').show()" />
                             </p:menuButton>
                             <p:separator rendered="#{viewHandler.editable}" styleClass="hide-on-embed"/>
                             <p:menuButton value="#{msg['toolbar.export']}"
@@ -506,9 +511,9 @@
                                  globalOnly="true" />
                     </h:form>
                 </pe:layoutPane>
-                <p:panel rendered="#{viewHandler.enableMdx}">
-                    <pe:layoutPane id="mdx-editor-pane" position="south"
-                                   rendered="#{viewHandler.editable}">
+
+                <pe:layoutPane id="mdx-editor-pane" position="south"
+                                   rendered="#{(viewHandler.enableMdx and viewHandler.editable)}">
                         <f:facet name="header">
                             <h:panelGroup layout="block">
                                 <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-script" />
@@ -556,8 +561,8 @@
 
                             <p:growl id="editor-growl" showDetail="true" sticky="true" />
                         </h:form>
-                    </pe:layoutPane>
-                </p:panel>
+            </pe:layoutPane>
+                
             </pe:layoutPane>
 
             <p:ajax event="open" listener="#{viewHandler.onPanelOpened}"
@@ -572,6 +577,7 @@
         <ui:include src="export.xhtml" />
         <ui:include src="drillthrough.xhtml" />
         <ui:include src="chart.xhtml" />
+        <ui:include src="chartexport.xhtml" />
         <ui:include src="extension.xhtml" />
 
         <p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"

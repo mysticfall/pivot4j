@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,10 +35,10 @@ import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "reportRepository")
 @ViewScoped
-public class LocalFileSystemRepository extends AbstractFileSystemRepository {
+public class LocalFileSystemRepository extends AbstractFileSystemRepository implements Serializable {
 
     @ManagedProperty(value = "#{settings}")
-    private Settings settings;
+    private transient Settings settings;
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -75,8 +76,14 @@ public class LocalFileSystemRepository extends AbstractFileSystemRepository {
                 String client = null;
 
                 try {
+                    if (log.isInfoEnabled()) {
+                        log.info("Trying to get client name from session");
+                    }
                     client = (String) session.getAttribute("client");
                 } catch (Exception e) {
+                    if (log.isInfoEnabled()) {
+                        log.info("Exception: ", e);
+                    }
                 }
 
                 if (client == null) {
