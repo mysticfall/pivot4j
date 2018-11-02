@@ -130,8 +130,16 @@
         <version.selenium>2.43.1</version.selenium>
         <version.backport.concurrent>3.1</version.backport.concurrent>
         
-        <version.springframework.security>3.1</version.springframework.security>
+        <version.fasterxml.uuid>3.1.5</version.fasterxml.uuid>
         
+        <version.springframework.security>5.1.0.RELEASE</version.springframework.security>
+        <version.springframework.data>2.1.0.RELEASE</version.springframework.data>
+        <version.springframework.boot>2.0.5.RELEASE</version.springframework.boot>
+        <version.hymeleaf>3.0.10-SNAPSHOT</version.hymeleaf>
+        
+        <version.ultraq.thymeleaf>2.3.0</version.ultraq.thymeleaf>
+        <version.thymeleaf.extras>3.0.3.RELEASE</version.thymeleaf.extras>
+        <version.reactivestreams>1.0.2</version.reactivestreams>
         
     </properties>
 
