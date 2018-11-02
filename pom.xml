@@ -98,7 +98,7 @@
         <version.primefaces.resources-codemirror>6.1.1</version.primefaces.resources-codemirror>
         <version.primefaces.themes>1.0.10</version.primefaces.themes>
                 
-        <version.admin-theme>1.0.0-RC15</version.admin-theme>
+        <version.admin-theme>1.0.0-RC19</version.admin-theme>
                 
         <version.omnifaces>2.1</version.omnifaces>
 
