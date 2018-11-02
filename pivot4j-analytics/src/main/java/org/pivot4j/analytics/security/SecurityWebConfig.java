@@ -51,13 +51,11 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                // ... per H2 console
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
-                //
                 .authorizeRequests()
-                .antMatchers("/", "/home","/register","/input","/output","/output/*","/**/*.css","/**/*.js","/**/*.png","/**/*.svg").permitAll()
+                .antMatchers("/","/javax.faces.resource/**","/resource/**", "/home","/register","/input","/output","/output/*","/**/*.css","/**/*.js","/**/*.png","/**/*.svg","/**/*.map").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -66,23 +64,5 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutSuccessUrl("/security/login.xhtml");
-//        http
-//                //.loginPage("/login")
-//                .authorizeRequests()
-//                .anyRequest().authenticated()
-//                .and()
-//                .headers().disable()
-//                .csrf().disable()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/login");
-//        http
-//                .authorizeRequests()
-//                .anyRequest().authenticated()
-//                
-//                .and()
-//                .headers().disable()
-//                .csrf().disable()
-//                .formLogin();
     }
 }
