@@ -26,7 +26,7 @@ public class ViewState implements Serializable {
 
     private boolean editable = true;
 
-    private boolean enableMdx = true;
+    private boolean enableMdx = false;
 
     private Date lastActive = new Date();
 
