@@ -452,22 +452,23 @@ function exportChart() {
     var jqpoltParentDiv;
     var anchorElem;
     var imgElem;
-    var i=0;
-    for(i=0; i<numCharts; i++) {
-        jqpoltParentDiv=Children[i];
+    var i = 0;
+    for (i = 0; i < numCharts; i++) {
+        jqpoltParentDiv = Children[i];
         anchorElem = document.createElement('a');
         imgElem = $(jqpoltParentDiv).jqplotToImageElem();
-        $(anchorElem).prop("id","chart-anchor"+i);
-        $(anchorElem).prop("download","chart"+i+".png");
-        $(imgElem).prop("id","chart-img"+i);
-        $(anchorElem).prop("href",$(imgElem).prop("src"));
+        $(anchorElem).prop("id", "chart-anchor" + i);
+        $(anchorElem).prop("download", "chart" + i + ".png");
+        $(imgElem).prop("id", "chart-img" + i);
+        $(anchorElem).prop("href", $(imgElem).prop("src"));
         $(anchorElem).append(imgElem);
-        if(i==0) $('#chart-export-form\\:chart-img-div').empty();
+        if (i == 0)
+            $('#chart-export-form\\:chart-img-div').empty();
         $('#chart-export-form\\:chart-img-div').append(anchorElem);
         arrAnchors.push(anchorElem);
     }
-    for(i=0; i<numCharts; i++) {
-        anchorElem=arrAnchors[i];
+    for (i = 0; i < numCharts; i++) {
+        anchorElem = arrAnchors[i];
         $(anchorElem)[0].click();
     }
 }
