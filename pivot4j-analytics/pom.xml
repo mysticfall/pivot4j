@@ -515,21 +515,12 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${version.poi}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.uuid</groupId>
-            <artifactId>java-uuid-generator</artifactId>
-            <version>3.1.5</version>
-            <type>jar</type>
-        </dependency>
+
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
-        
-        
-        
-        
         
         
         <dependency>
@@ -545,55 +536,55 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>2.1.0.RELEASE</version>
+            <version>${version.springframework.data}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>5.1.0.RELEASE</version>
+            <version>${version.springframework.security}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>5.1.0.RELEASE</version>
+            <version>${version.springframework.security}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-            <version>2.0.5.RELEASE</version>
+            <version>${version.springframework.boot}</version>
         </dependency>
         
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>
-            <version>3.0.10-SNAPSHOT</version>
+            <version>${version.hymeleaf}</version>
         </dependency>
 		
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring4</artifactId>
-            <version>3.0.10-SNAPSHOT</version>
+            <version>${version.hymeleaf}</version>
         </dependency>
 		
         <dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
-            <version>2.3.0</version>
+            <version>${version.ultraq.thymeleaf}</version>
         </dependency>
 		
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity4</artifactId>
-            <version>3.0.3.RELEASE</version>
+            <version>${version.thymeleaf.extras}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reactivestreams</groupId>
             <artifactId>reactive-streams</artifactId>
-            <version>1.0.2</version>
+            <version>${version.reactivestreams}</version>
         </dependency>
  
         <dependency>
