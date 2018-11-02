@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -112,6 +113,7 @@
         <version.postgresql>42.1.4</version.postgresql>            
         <version.oracle>11.2.0.3</version.oracle>     
         <version.apache.drill>1.13.0</version.apache.drill>
+        <version.mariadb>2.3.0</version.mariadb>
         
         <version.doxia.markdown>1.5</version.doxia.markdown>
         <version.eigenbase.xom>1.3.4</version.eigenbase.xom>
@@ -127,17 +129,27 @@
         <version.velocity>1.7</version.velocity>
         <version.selenium>2.43.1</version.selenium>
         <version.backport.concurrent>3.1</version.backport.concurrent>
+        
+        <version.springframework.security>3.1</version.springframework.security>
+        
+        
     </properties>
 
     <prerequisites>
         <maven>3.0.0</maven>
     </prerequisites>
 
+ 
+         
     <modules>
         <module>pivot4j-core</module>
         <module>pivot4j-analytics</module>
         <module>pivot4j-pentaho</module>
-    </modules>
+        <module>pivot4j-security</module>
+        <!--
+        <module>pivot4j-security-rest</module>
+         -->
+  </modules>
 
     <developers>
         <developer>
@@ -237,7 +249,7 @@
             </roles>
         </contributor>
         <contributor>
-            <name>Сергей Шкарин</name>
+            <name>?????? ??????</name>
             <email>kouki.sergey@gmail.com</email>
             <roles>
                 <role>Russian Translation</role>
