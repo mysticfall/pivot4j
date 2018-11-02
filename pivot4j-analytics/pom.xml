@@ -466,6 +466,15 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${version.mysql}</version>
         </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>${version.mariadb}</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.github.adminfaces</groupId>
             <artifactId>admin-theme</artifactId>
