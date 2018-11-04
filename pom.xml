@@ -100,7 +100,7 @@
                 
         <version.admin-theme>1.0.0-RC19</version.admin-theme>
                 
-        <version.omnifaces>2.1</version.omnifaces>
+        <version.omnifaces>2.7</version.omnifaces>
 
         <version.arquillian.bom>1.1.5.Final</version.arquillian.bom>
         <version.arquillian.drone>2.0.0.Alpha2</version.arquillian.drone>
