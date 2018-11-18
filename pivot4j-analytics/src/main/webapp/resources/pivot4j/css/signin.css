@@ -21,9 +21,10 @@ body {
 .form-signin {
   width: 100%;
   max-width: 330px;
-  padding: 15px;
+  padding: 2px;
   margin: 0 auto;
 }
+
 .form-signin .checkbox {
   font-weight: 400;
 }
@@ -47,3 +48,11 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+.ui-panelgrid .ui-panelgrid-cell {
+    padding: 0px 2px !important;
+}
+
+.ui-panelgrid {
+    text-align: left !important;
+}
+

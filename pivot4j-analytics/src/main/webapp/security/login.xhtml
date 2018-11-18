@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-    <head>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         <meta name="description" content=""/>
@@ -12,21 +13,36 @@
         <title>#{msg['title.about.welcome']}</title>
         <!-- Bootstrap core CSS -->
         <link href="../resources/pivot4j/css/signin.css" rel="stylesheet"/>
-
         <!-- Custom styles for this template -->
         <link href="../resources/pivot4j/css/bootstrap.min.css" rel="stylesheet"/>
-    </head>
+    </h:head>
 
-    <body class="text-center">
-        <form class="form-signin" th:action="@{/login}" method="post">
-            <img class="mb-4" src="../resources/pivot4j/images/logo.png" alt="" width="72" height="72"/>
-            <h1 class="h3 mb-3 font-weight-normal">#{msg['security.title']}</h1>
-            <label for="inputLogin" class="sr-only">#{msg['security.username']}</label>
-            <input type="text" id="inputLogin" class="form-control" placeholder="#{msg['security.username']}" name="username" required="true" autofocus="true"/>
-            <label for="inputPassword" class="sr-only">#{msg['security.password']}</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="#{msg['security.password']}" name="password" required="true"/>
+    <h:body class="text-center">
+        <div class="form-signin">
+            <form class="form-signin" action="${request.contextPath}/Pivot4jLogin" method="POST">
+                <img class="mb-4" src="../resources/pivot4j/images/logo.png" alt="" width="72" height="72"/>
+                <h1 class="h3 mb-3 font-weight-normal">#{msg['security.title']}</h1>
+                <label for="inputLogin" class="sr-only">#{msg['security.username']}</label>
+                <input type="text" id="inputLogin" class="form-control" placeholder="#{msg['security.username']}" name="username" required="true" autofocus="true"/>
+                <label for="inputPassword" class="sr-only">#{msg['security.password']}</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="#{msg['security.password']}" name="password" required="true"/>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">#{msg['security.login']}</button>
-        </form>
-    </body>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" >#{msg['security.login']}</button>
+
+            </form>
+            <h:form>
+                <p:panelGrid columns="2" styleClass="ui-fluid card, ui-noborder">
+                    <p:selectBooleanCheckbox value="#{layoutOption.enableTheme}"> 
+                        <p:ajax event="change" listener="#{layoutOption.changeOptionTheme}"/>  
+                    </p:selectBooleanCheckbox>  
+                    <p:outputLabel value="#{msg['enable.available.themes.parameter']}" />
+
+                    <p:selectBooleanCheckbox value="#{layoutOption.enableMdx}"> 
+                        <p:ajax event="change" listener="#{layoutOption.changeOptionMdx}"/>  
+                    </p:selectBooleanCheckbox>  
+                    <p:outputLabel value="#{msg['enable.available.mdx.parameter']}" />
+                </p:panelGrid>
+            </h:form>
+        </div>
+    </h:body>
 </html>

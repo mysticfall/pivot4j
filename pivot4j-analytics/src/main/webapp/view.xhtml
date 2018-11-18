@@ -513,56 +513,56 @@
                 </pe:layoutPane>
 
                 <pe:layoutPane id="mdx-editor-pane" position="south"
-                                   rendered="#{(viewHandler.enableMdx and viewHandler.editable)}">
-                        <f:facet name="header">
-                            <h:panelGroup layout="block">
-                                <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-script" />
-                                <h:outputText value="#{msg['header.editor']}" />
-                            </h:panelGroup>
-                        </f:facet>
+                               rendered="#{((viewHandler.enableMdx and viewHandler.editable) or layoutOption.enableTheme)}">
+                    <f:facet name="header">
+                        <h:panelGroup layout="block">
+                            <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-script" />
+                            <h:outputText value="#{msg['header.editor']}" />
+                        </h:panelGroup>
+                    </f:facet>
 
-                        <h:form id="editor-form">
-                            <pe:layoutPane id="mdx-editor-toolbar" position="north"
-                                           rendered="#{viewHandler.editable}">
-                                <p:toolbar id="editor-toolbar">
-                                    <f:facet name="left">
-                                        <p:commandButton value="#{msg['button.run']}"
-                                                         title="#{msg['button.run.tooltip']}" icon="ui-icon-play"
-                                                         action="#{viewHandler.executeMdx}"
-                                                         update=":cube-list-form,:source-tree-form,:target-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:filter-items-form,:toolbar-form"
-                                                         oncomplete="onViewChanged()" />
-                                        <p:commandButton value="#{msg['button.reset']}"
-                                                         title="#{msg['button.reset.tooltip']}"
-                                                         icon="ui-icon-arrowreturnthick-1-w"
-                                                         update=":editor-form:mdx-editor" />
-                                    </f:facet>
-                                    <f:facet name="right" rendered="#{viewHandler.duration > null}">
-                                        <h:panelGroup layout="block" styleClass="query-info">
-                                            <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-clock" />
-                                            <h:outputText value="#{msg['message.query.elapsed']} : " />
-                                            <h:outputText value="#{viewHandler.duration}">
-                                                <f:convertNumber pattern="###,### msec" />
-                                            </h:outputText>
-                                        </h:panelGroup>
-                                    </f:facet>
-                                </p:toolbar>
-                            </pe:layoutPane>
+                    <h:form id="editor-form">
+                        <pe:layoutPane id="mdx-editor-toolbar" position="north"
+                                       rendered="#{viewHandler.editable}">
+                            <p:toolbar id="editor-toolbar">
+                                <f:facet name="left">
+                                    <p:commandButton value="#{msg['button.run']}"
+                                                     title="#{msg['button.run.tooltip']}" icon="ui-icon-play"
+                                                     action="#{viewHandler.executeMdx}"
+                                                     update=":cube-list-form,:source-tree-form,:target-tree-form,:grid-form,:editor-form:mdx-editor,:editor-form:editor-toolbar,:filter-items-form,:toolbar-form"
+                                                     oncomplete="onViewChanged()" />
+                                    <p:commandButton value="#{msg['button.reset']}"
+                                                     title="#{msg['button.reset.tooltip']}"
+                                                     icon="ui-icon-arrowreturnthick-1-w"
+                                                     update=":editor-form:mdx-editor" />
+                                </f:facet>
+                                <f:facet name="right" rendered="#{viewHandler.duration > null}">
+                                    <h:panelGroup layout="block" styleClass="query-info">
+                                        <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-clock" />
+                                        <h:outputText value="#{msg['message.query.elapsed']} : " />
+                                        <h:outputText value="#{viewHandler.duration}">
+                                            <f:convertNumber pattern="###,### msec" />
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </f:facet>
+                            </p:toolbar>
+                        </pe:layoutPane>
 
-                            <pe:layoutPane id="mdx-editor-content" position="center">
-                                <pe:codeMirror id="mdx-editor" mode="text/x-mdx"
-                                               value="#{viewHandler.currentMdx}" lineNumbers="true"
-                                               lineWrapping="true" theme="#{settings.editorTheme}"
-                                               widgetVar="mdxEditor"
-                                               completeMethod="#{autoCompletionSupport.complete}"
-                                               extraKeys="{ 'Ctrl-Space': function(cm) { completeMdx(PF('mdxEditor')); }}"
-                                               required="true" label="#{msg['label.mdx']}"
-                                               readonly="#{pivotStateManager.readOnly}" />
-                            </pe:layoutPane>
+                        <pe:layoutPane id="mdx-editor-content" position="center">
+                            <pe:codeMirror id="mdx-editor" mode="text/x-mdx"
+                                           value="#{viewHandler.currentMdx}" lineNumbers="true"
+                                           lineWrapping="true" theme="#{settings.editorTheme}"
+                                           widgetVar="mdxEditor"
+                                           completeMethod="#{autoCompletionSupport.complete}"
+                                           extraKeys="{ 'Ctrl-Space': function(cm) { completeMdx(PF('mdxEditor')); }}"
+                                           required="true" label="#{msg['label.mdx']}"
+                                           readonly="#{pivotStateManager.readOnly}" />
+                        </pe:layoutPane>
 
-                            <p:growl id="editor-growl" showDetail="true" sticky="true" />
-                        </h:form>
-            </pe:layoutPane>
-                
+                        <p:growl id="editor-growl" showDetail="true" sticky="true" />
+                    </h:form>
+                </pe:layoutPane>
+
             </pe:layoutPane>
 
             <p:ajax event="open" listener="#{viewHandler.onPanelOpened}"

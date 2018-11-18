@@ -60,6 +60,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/security/login.xhtml").permitAll()
+                .loginProcessingUrl("/Pivot4jLogin")
                 .failureUrl("/security/login.xhtml?error=true")
                 .and()
                 .logout()

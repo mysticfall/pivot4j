@@ -104,7 +104,7 @@
                         </f:facet>
                         <f:facet name="right">
                             <p:themeSwitcher id="theme-switcher"
-                                             value="#{workbenchHandler.theme}" widgetVar="themeSwitcher" rendered="false">
+                                             value="#{workbenchHandler.theme}" widgetVar="themeSwitcher" rendered="#{layoutOption.enableTheme}">
                                 <f:selectItem itemLabel="#{msg['label.theme.default']}"
                                               itemValue="" />
                                 <f:selectItems value="#{settings.availableThemes}" />
