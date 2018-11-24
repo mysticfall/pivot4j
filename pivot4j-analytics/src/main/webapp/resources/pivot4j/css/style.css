@@ -1159,3 +1159,7 @@ span.ui-icon-plusthick:before, span.ui-icon-plus:before {
     width: 100% !important;
     right: -36px !important;
 }
+
+.theme-switcher {
+    vertical-align: top !important;
+}
