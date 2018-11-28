@@ -10,3 +10,4 @@ Project Page
 =======
 
 Please visit Pivot4J home page at http://www.pivot4j.org
+ShowCase page http://scobr.com.br/pivot4j, User: admin Password: password
