@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      >
     <h:head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -30,7 +32,17 @@
                 <button class="btn btn-lg btn-primary btn-block" type="submit" >#{msg['security.login']}</button>
 
             </form>
+
+            <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+                <font color="red">
+                    #{msg['security.login.error']}<br/>
+                    <p:outputLabel value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
+                </font>
+            </c:if>
             <h:form>
+
+                <p:growl  showDetail="false" /> 
+
                 <p:panelGrid columns="2" styleClass="ui-fluid card, ui-noborder">
                     <p:selectBooleanCheckbox value="#{layoutOption.enableTheme}"> 
                         <p:ajax event="change" listener="#{layoutOption.changeOptionTheme}"/>  
