@@ -109,11 +109,11 @@
         <version.arquillian.tomcat6>1.0.0.CR7</version.arquillian.tomcat6>
 
         <version.derby>10.10.2.0</version.derby>
-        <version.mysql>5.1.44</version.mysql>
+        <version.mysql>8.0.15</version.mysql>
         <version.postgresql>42.1.4</version.postgresql>            
         <version.oracle>11.2.0.3</version.oracle>     
         <version.apache.drill>1.13.0</version.apache.drill>
-        <version.mariadb>2.3.0</version.mariadb>
+        <version.mariadb>2.4.0</version.mariadb>
         
         <version.doxia.markdown>1.5</version.doxia.markdown>
         <version.eigenbase.xom>1.3.4</version.eigenbase.xom>
@@ -135,29 +135,21 @@
         <version.springframework.security>5.1.0.RELEASE</version.springframework.security>
         <version.springframework.data>2.1.0.RELEASE</version.springframework.data>
         <version.springframework.boot>2.0.5.RELEASE</version.springframework.boot>
-        <version.hymeleaf>3.0.10-SNAPSHOT</version.hymeleaf>
-        
-        <version.ultraq.thymeleaf>2.3.0</version.ultraq.thymeleaf>
-        <version.thymeleaf.extras>3.0.3.RELEASE</version.thymeleaf.extras>
-        <version.reactivestreams>1.0.2</version.reactivestreams>
-        
+
+        <spring.binding.version>1.0.6</spring.binding.version>
+        <spring.webflow.version>2.4.1.RELEASE</spring.webflow.version>
+
     </properties>
 
     <prerequisites>
         <maven>3.0.0</maven>
     </prerequisites>
-
- 
-         
+      
     <modules>
         <module>pivot4j-core</module>
         <module>pivot4j-analytics</module>
         <module>pivot4j-pentaho</module>
-        <module>pivot4j-security</module>
-        <!--
-        <module>pivot4j-security-rest</module>
-         -->
-  </modules>
+    </modules>
 
     <developers>
         <developer>
@@ -269,6 +261,7 @@
             <url>https://github.com/Judilson</url>
             <roles>
                 <role>Primefaces 6.x</role>
+                <role>Login and logout</role>
             </roles>
         </contributor>
     </contributors>
