@@ -5,6 +5,7 @@
  */
 package org.pivot4j.analytics.ui;
 
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -14,7 +15,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean(name = "layoutOption")
 @SessionScoped
-public class LayoutOption {
+public class LayoutOption implements Serializable{
 
     private Boolean enableTheme;
     private Boolean enableMdx;
