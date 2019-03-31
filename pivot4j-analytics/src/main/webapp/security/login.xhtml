@@ -6,7 +6,6 @@
       >
     <h:head>
         <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         <meta name="description" content=""/>
         <meta name="author" content=""/>
         <link rel="shortcut icon"
@@ -17,44 +16,74 @@
         <link href="../resources/pivot4j/css/signin.css" rel="stylesheet"/>
         <!-- Custom styles for this template -->
         <link href="../resources/pivot4j/css/bootstrap.min.css" rel="stylesheet"/>
+
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous"/>
     </h:head>
 
-    <h:body class="text-center">
-        <div class="form-signin">
-            <form class="form-signin" action="${request.contextPath}/Pivot4jLogin" method="POST">
-                <img class="mb-4" src="../resources/pivot4j/images/logo.png" alt="" width="72" height="72"/>
-                <h1 class="h3 mb-3 font-weight-normal">#{msg['security.title']}</h1>
-                <label for="inputLogin" class="sr-only">#{msg['security.username']}</label>
-                <input type="text" id="inputLogin" class="form-control" placeholder="#{msg['security.username']}" name="username" required="true" autofocus="true"/>
-                <label for="inputPassword" class="sr-only">#{msg['security.password']}</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="#{msg['security.password']}" name="password" required="true"/>
+    <h:body>
+        <div class="container h-100" >
+            <div class="d-flex justify-content-center h-100">
+                <div class="user_card">
+                    <div class="d-flex justify-content-center">
+                        <div class="brand_logo_container">
+                            <img src="../resources/pivot4j/images/logoLogin.png" class="brand_logo" alt="Logo"/>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center form_container">
+                        <form action="${request.contextPath}/Pivot4jLogin" method="POST">
 
-                <button class="btn btn-lg btn-primary btn-block" type="submit" >#{msg['security.login']}</button>
 
-            </form>
+                            <div class="input-group mb-3">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" id="inputLogin" name="username" class="form-control input_user" placeholder="#{msg['security.username']}"  required="true" autofocus="true"/>
+                            </div>
 
-            <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
-                <font color="red">
-                    #{msg['security.login.error']}<br/>
-                    <p:outputLabel value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
-                </font>
-            </c:if>
-            <h:form>
 
-                <p:growl  showDetail="false" /> 
+                            <div class="input-group mb-2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                </div>
+                                <input type="password" id="inputPassword" name="password" class="form-control input_pass" placeholder="#{msg['security.password']}" required="true"/>
+                            </div>
 
-                <p:panelGrid columns="2" styleClass="ui-fluid card, ui-noborder">
-                    <p:selectBooleanCheckbox value="#{layoutOption.enableTheme}"> 
-                        <p:ajax event="change" listener="#{layoutOption.changeOptionTheme}"/>  
-                    </p:selectBooleanCheckbox>  
-                    <p:outputLabel value="#{msg['enable.available.themes.parameter']}" />
+                            <div class="d-flex justify-content-center mt-3 login_container">
+                                <button type="submit" name="button" class="btn login_btn">#{msg['security.login']}</button>
+                            </div>
 
-                    <p:selectBooleanCheckbox value="#{layoutOption.enableMdx}"> 
-                        <p:ajax event="change" listener="#{layoutOption.changeOptionMdx}"/>  
-                    </p:selectBooleanCheckbox>  
-                    <p:outputLabel value="#{msg['enable.available.mdx.parameter']}" />
-                </p:panelGrid>
-            </h:form>
+                        </form>
+                    </div>
+                    <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+                        <font color="red">
+                            #{msg['security.login.error']}<br/>
+                            <p:outputLabel value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>
+                        </font>
+                    </c:if>
+                    <div class="form-group">
+
+                        <h:form>
+
+                            <p:growl  showDetail="false" /> 
+                            <div>
+                                <p:selectBooleanCheckbox value="#{layoutOption.enableTheme}" id="enableTheme"> 
+                                    <p:ajax event="change" listener="#{layoutOption.changeOptionTheme}"/>  
+                                </p:selectBooleanCheckbox>  
+                                <label class="custom-control-label" for="enableTheme">#{msg['enable.available.themes.parameter']}</label>
+
+                            </div>
+                            <div>
+                                <p:selectBooleanCheckbox value="#{layoutOption.enableMdx}" id="enableMdx"> 
+                                    <p:ajax event="change" listener="#{layoutOption.changeOptionMdx}"/>  
+                                </p:selectBooleanCheckbox>  
+                                <label class="custom-control-label" for="enableMdx">#{msg['enable.available.mdx.parameter']}</label>
+                            </div>
+                        </h:form>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
     </h:body>
 </html>
