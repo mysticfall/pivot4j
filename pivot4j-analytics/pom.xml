@@ -568,6 +568,14 @@
             <version>2.0.5.Final</version>
             <scope>runtime</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>net.bootsfaces</groupId>
+            <artifactId>bootsfaces</artifactId>
+            <version>1.4.0</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

@@ -39,9 +39,9 @@ import org.pivot4j.impl.PivotModelImpl;
 import org.pivot4j.transform.ChangeSlicer;
 import org.pivot4j.util.MemberHierarchyCache;
 import org.pivot4j.util.MemberSelection;
+import org.primefaces.PrimeFaces;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.commandlink.CommandLink;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
@@ -381,7 +381,7 @@ public class FilterHandler implements ModelChangeListener, NodeFilter {
 
             show(hierarchy.getName());
 
-            RequestContext.getCurrentInstance().execute("PF('filterDialog').show();");
+            PrimeFaces.current().executeScript("PF('filterDialog').show();");
         }
     }
 

@@ -46,7 +46,7 @@ import org.pivot4j.ui.command.UICommand;
 import org.pivot4j.ui.command.UICommandParameters;
 import org.pivot4j.ui.table.TableRenderer;
 import org.pivot4j.util.OlapUtils;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.extensions.event.CloseEvent;
 import org.primefaces.extensions.event.OpenEvent;
 import org.primefaces.extensions.model.layout.LayoutOptions;
@@ -991,9 +991,8 @@ public class ViewHandler implements QueryListener, ModelChangeListener {
 
             drillThroughHandler.update(cell);
 
-            RequestContext context = RequestContext.getCurrentInstance();
-            context.update("drillthrough-form");
-            context.execute("PF('drillThroughDialog').show()");
+            PrimeFaces.current().ajax().update("drillthrough-form");
+            PrimeFaces.current().executeScript("PF('drillThroughDialog').show()");
 
             return null;
         }

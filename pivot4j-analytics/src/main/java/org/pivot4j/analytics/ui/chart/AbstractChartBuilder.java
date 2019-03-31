@@ -13,7 +13,6 @@ import org.pivot4j.ui.command.UICommand;
 import org.primefaces.component.breadcrumb.BreadCrumb;
 import org.primefaces.component.chart.Chart;
 import org.primefaces.component.menuitem.UIMenuItem;
-import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartModel;
 
 public abstract class AbstractChartBuilder<T extends ChartModel>

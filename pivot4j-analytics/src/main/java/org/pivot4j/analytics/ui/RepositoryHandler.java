@@ -39,7 +39,7 @@ import org.pivot4j.analytics.state.ViewStateEvent;
 import org.pivot4j.analytics.state.ViewStateHolder;
 import org.pivot4j.analytics.state.ViewStateListener;
 import org.pivot4j.analytics.ui.navigator.RepositoryNode;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.json.JSONObject;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
@@ -109,13 +109,11 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
     }
 
     public void loadReports() {
-        RequestContext context = RequestContext.getCurrentInstance();
-
         List<ViewState> states = viewStateHolder.getStates();
 
         for (ViewState state : states) {
-            context.addCallbackParam(state.getId(), new JSONObject(new ViewInfo(state)));
-            }
+            PrimeFaces.current().ajax().addCallbackParam(state.getId(), new JSONObject(new ViewInfo(state)));
+        }
     }
 
     public void create() {
@@ -128,8 +126,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
             log.info("Created a new view state : {}", state.getId());
         }
 
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.addCallbackParam("report", new JSONObject(new ViewInfo(state)));
+        PrimeFaces.current().ajax().addCallbackParam("report", new JSONObject(new ViewInfo(state)));
     }
 
     public void createDirectory() {
@@ -195,13 +192,11 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
         this.selection = newFileNode;
         this.folderName = null;
 
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.execute("PF('newFolderDialog').hide()");
+        PrimeFaces.current().executeScript("PF('newFolderDialog').hide()");
     }
 
     public void save() {
         FacesContext context = FacesContext.getCurrentInstance();
-        RequestContext requestContext = RequestContext.getCurrentInstance();
 
         ResourceBundle bundle = context.getApplication().getResourceBundle(
                 context, "msg");
@@ -225,13 +220,13 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
         if (file == null) {
             suggestNewName();
 
-            requestContext.update("new-form");
-            requestContext.execute("PF('newReportDialog').show()");
+            PrimeFaces.current().ajax().update("new-form");
+            PrimeFaces.current().executeScript("PF('newReportDialog').show()");
 
             return;
         }
 
-        requestContext.update(Arrays.asList(new String[]{
+        PrimeFaces.current().ajax().update(Arrays.asList(new String[]{
             "toolbar-form:toolbar", "repository-form:repository-panel",
             "growl"}));
 
@@ -264,7 +259,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
         }
 
         if (saveAndClose) {
-            requestContext.update("close-form");
+            PrimeFaces.current().ajax().update("close-form");
 
             close(viewId);
         } else {
@@ -287,7 +282,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 title, message));
 
-        requestContext.execute("enableSave(false);");
+        PrimeFaces.current().executeScript("enableSave(false);");
     }
 
     public void saveAs() {
@@ -313,7 +308,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
         String extension = settings.getExtension();
 
         if (reportName.toLowerCase().endsWith(extension)) {
-            reportName = reportName.substring(0, reportName.length()-(extension.length()+1));
+            reportName = reportName.substring(0, reportName.length() - (extension.length() + 1));
         }
 
         String fileName = reportName + '.' + extension;
@@ -389,9 +384,8 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
         this.selection = node;
         this.reportName = null;
 
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.addCallbackParam("name", state.getName());
-        requestContext.addCallbackParam("path", file.getPath());
+        PrimeFaces.current().ajax().addCallbackParam("name", state.getName());
+        PrimeFaces.current().ajax().addCallbackParam("path", file.getPath());
 
         String title = bundle.getString("message.save.report.title");
         String message = bundle.getString("message.saveAs.report.message")
@@ -424,7 +418,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
         String extension = settings.getExtension();
 
         if (name.toLowerCase().endsWith(extension)) {
-            name = name.substring(0, name.length()-(extension.length()+1));
+            name = name.substring(0, name.length() - (extension.length() + 1));
         }
 
         ViewState state = new ViewState(viewId, name);
@@ -469,8 +463,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
         this.activeViewId = viewId;
 
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.addCallbackParam("report", new JSONObject(new ViewInfo(state)));
+        PrimeFaces.current().ajax().addCallbackParam("report", new JSONObject(new ViewInfo(state)));
     }
 
     public void refresh() {
@@ -603,7 +596,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
             }
         }
 
-        RequestContext.getCurrentInstance().execute(
+        PrimeFaces.current().executeScript(
                 String.format("closeTab(getTabIndex('%s'))", viewId));
     }
 
@@ -670,8 +663,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
 
         viewStateHolder.unregisterState(viewToClose);
 
-        RequestContext.getCurrentInstance().execute(
-                String.format("closeTab(%s)", index));
+        PrimeFaces.current().executeScript(String.format("closeTab(%s)", index));
     }
 
     public boolean isOpenEnabled() {
@@ -766,7 +758,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
         String extension = settings.getExtension();
 
         if (name.toLowerCase().endsWith(extension)) {
-            name = name.substring(0, name.length()-(extension.length()+1));
+            name = name.substring(0, name.length() - (extension.length() + 1));
         }
 
         ReportFile parent = getTargetDirectory();
@@ -782,7 +774,7 @@ public class RepositoryHandler implements ViewStateListener, Serializable {
                 String childName = child.getName();
 
                 if (childName.toLowerCase().endsWith(extension)) {
-                    childName = childName.substring(0, childName.length()-(extension.length()+1));
+                    childName = childName.substring(0, childName.length() - (extension.length() + 1));
                 }
 
                 names.add(childName);
