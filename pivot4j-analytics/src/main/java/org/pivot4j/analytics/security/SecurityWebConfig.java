@@ -55,7 +55,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/","/javax.faces.resource/**","/resource/**", "/home","/register","/input","/output","/output/*","/**/*.css","/**/*.js","/**/*.png","/**/*.svg","/**/*.map").permitAll()
+                .antMatchers("/", "/javax.faces.resource/**", "/resource/**", "/home", "/register", "/input", "/output", "/output/*", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.svg", "/**/*.map", "/**/*.ttf").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
