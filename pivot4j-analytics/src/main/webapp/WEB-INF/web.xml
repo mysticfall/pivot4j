@@ -115,4 +115,5 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    <!-- Activates the waitcursor and the double-click protection -->
 </web-app>
