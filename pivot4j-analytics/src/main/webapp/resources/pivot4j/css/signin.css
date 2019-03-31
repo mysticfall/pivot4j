@@ -1,58 +1,77 @@
-html,
-body {
-  height: 100%;
+body  {
+  background-image: url("../images/backLogon.png");
 }
 
-body {
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: flex;
-  -ms-flex-align: center;
-  -ms-flex-pack: center;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #f5f5f5;
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #C8C3C3 !important;
 }
+.user_card {
+    height: 400px;
+    width: 350px;
+    margin-top: auto;
+    margin-bottom: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
 
-.form-signin {
-  width: 100%;
-  max-width: 330px;
-  padding: 2px;
-  margin: 0 auto;
 }
-
-.form-signin .checkbox {
-  font-weight: 400;
+.brand_logo_container {
+    position: absolute;
+    height: 170px;
+    width: 170px;
+    top: -75px;
+    border-radius: 50%;
+    background: #C8C3C3;
+    padding: 10px;
+    text-align: center;
 }
-.form-signin .form-control {
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
+.brand_logo {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    border: 2px solid white;
 }
-.form-signin .form-control:focus {
-  z-index: 2;
+.form_container {
+    margin-top: 100px;
 }
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+.login_btn {
+    width: 100%;
+    background: #4d4d4d !important;
+    color: white !important;
+    font-size: 15px !important
 }
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+.login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
 }
-.ui-panelgrid .ui-panelgrid-cell {
-    padding: 0px 2px !important;
+.login_container {
+    padding: 0 2rem;
 }
-
-.ui-panelgrid {
-    text-align: left !important;
+.input-group-text {
+    background: #4d4d4d  !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
 }
-
+.input_user,
+.input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+    font-size: 15px !important;
+}
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+    background-color: #4d4d4d !important;
+}
+a {
+    color: white;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}
