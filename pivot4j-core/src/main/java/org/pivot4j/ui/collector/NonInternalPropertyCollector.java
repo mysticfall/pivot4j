@@ -18,43 +18,44 @@ import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Property;
 
 public class NonInternalPropertyCollector implements PropertyCollector,
-		Serializable {
+        Serializable {
 
-	private static final long serialVersionUID = -4211909040876132617L;
+    private static final long serialVersionUID = -4211909040876132617L;
 
-	private static Set<String> internalProperties;
+    private static Set<String> internalProperties;
 
-	static {
-		internalProperties = new HashSet<String>();
+    static {
+        internalProperties = new HashSet<String>();
 
-		for (Property property : Property.StandardMemberProperty.values()) {
-			internalProperties.add(property.getName());
-		}
+        for (Property property : Property.StandardMemberProperty.values()) {
+            internalProperties.add(property.getName());
+        }
 
-		// Workaround for Olap4J issue #77
-		internalProperties.add("CELL_FORMATTER");
-		internalProperties.add("CELL_FORMATTER_SCRIPT");
-		internalProperties.add("CELL_FORMATTER_SCRIPT_LANGUAGE");
-		internalProperties.add("DISPLAY_FOLDER");
-		internalProperties.add("KEY");
-	}
+        // Workaround for Olap4J issue #77
+        internalProperties.add("CELL_FORMATTER");
+        internalProperties.add("CELL_FORMATTER_SCRIPT");
+        internalProperties.add("CELL_FORMATTER_SCRIPT_LANGUAGE");
+        internalProperties.add("DISPLAY_FOLDER");
+        internalProperties.add("KEY");
+    }
 
-	/**
-	 * @see org.pivot4j.ui.collector.PropertyCollector#getProperties(org.olap4j.metadata.Level)
-	 */
-	@Override
-	public List<Property> getProperties(Level level) {
-		List<Property> properties = level.getProperties();
+    /**
+     * @see
+     * org.pivot4j.ui.collector.PropertyCollector#getProperties(org.olap4j.metadata.Level)
+     */
+    @Override
+    public List<Property> getProperties(Level level) {
+        List<Property> properties = level.getProperties();
 
-		List<Property> selection = new ArrayList<Property>(properties.size());
+        List<Property> selection = new ArrayList<Property>(properties.size());
 
-		for (Property property : properties) {
-			if (property.isVisible()
-					&& !internalProperties.contains(property.getName())) {
-				selection.add(property);
-			}
-		}
+        for (Property property : properties) {
+            if (property.isVisible()
+                    && !internalProperties.contains(property.getName())) {
+                selection.add(property);
+            }
+        }
 
-		return selection;
-	}
+        return selection;
+    }
 }

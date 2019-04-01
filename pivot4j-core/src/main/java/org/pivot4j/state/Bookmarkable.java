@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public interface Bookmarkable {
 
-	Serializable saveState();
+    Serializable saveState();
 
-	void restoreState(Serializable state);
+    void restoreState(Serializable state);
 }

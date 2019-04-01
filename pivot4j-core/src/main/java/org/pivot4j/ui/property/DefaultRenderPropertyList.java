@@ -22,180 +22,186 @@ import org.pivot4j.ui.condition.ConditionFactory;
 
 public class DefaultRenderPropertyList implements RenderPropertyList {
 
-	private SortedMap<String, RenderProperty> properties = new TreeMap<String, RenderProperty>();
+    private SortedMap<String, RenderProperty> properties = new TreeMap<String, RenderProperty>();
 
-	private ConditionFactory conditionFactory;
+    private ConditionFactory conditionFactory;
 
-	/**
-	 * @param conditionFactory
-	 */
-	public DefaultRenderPropertyList(ConditionFactory conditionFactory) {
-		if (conditionFactory == null) {
-			throw new NullArgumentException("conditionFactory");
-		}
+    /**
+     * @param conditionFactory
+     */
+    public DefaultRenderPropertyList(ConditionFactory conditionFactory) {
+        if (conditionFactory == null) {
+            throw new NullArgumentException("conditionFactory");
+        }
 
-		this.conditionFactory = conditionFactory;
-	}
+        this.conditionFactory = conditionFactory;
+    }
 
-	protected ConditionFactory getConditionFactory() {
-		return conditionFactory;
-	}
+    protected ConditionFactory getConditionFactory() {
+        return conditionFactory;
+    }
 
-	/**
-	 * @return the renderProperties
-	 * @see org.pivot4j.ui.property.RenderPropertyList#getRenderProperties()
-	 */
-	public List<RenderProperty> getRenderProperties() {
-		return new LinkedList<RenderProperty>(properties.values());
-	}
+    /**
+     * @return the renderProperties
+     * @see org.pivot4j.ui.property.RenderPropertyList#getRenderProperties()
+     */
+    public List<RenderProperty> getRenderProperties() {
+        return new LinkedList<RenderProperty>(properties.values());
+    }
 
-	/**
-	 * @param name
-	 * @see org.pivot4j.ui.property.RenderPropertyList#getRenderProperty(java.lang.String)
-	 */
-	public RenderProperty getRenderProperty(String name) {
-		if (name == null) {
-			throw new NullArgumentException("name");
-		}
+    /**
+     * @param name
+     * @see
+     * org.pivot4j.ui.property.RenderPropertyList#getRenderProperty(java.lang.String)
+     */
+    public RenderProperty getRenderProperty(String name) {
+        if (name == null) {
+            throw new NullArgumentException("name");
+        }
 
-		return properties.get(name);
-	}
+        return properties.get(name);
+    }
 
-	/**
-	 * @param property
-	 * @see org.pivot4j.ui.property.RenderPropertyList#setRenderProperty(org.pivot4j.ui.property.RenderProperty)
-	 */
-	public void setRenderProperty(RenderProperty property) {
-		if (property == null) {
-			throw new NullArgumentException("property");
-		}
+    /**
+     * @param property
+     * @see
+     * org.pivot4j.ui.property.RenderPropertyList#setRenderProperty(org.pivot4j.ui.property.RenderProperty)
+     */
+    public void setRenderProperty(RenderProperty property) {
+        if (property == null) {
+            throw new NullArgumentException("property");
+        }
 
-		properties.put(property.getName(), property);
-	}
+        properties.put(property.getName(), property);
+    }
 
-	/**
-	 * @param name
-	 * @see org.pivot4j.ui.property.RenderPropertyList#removeRenderProperty(java.lang.String)
-	 */
-	public void removeRenderProperty(String name) {
-		if (name == null) {
-			throw new NullArgumentException("name");
-		}
+    /**
+     * @param name
+     * @see
+     * org.pivot4j.ui.property.RenderPropertyList#removeRenderProperty(java.lang.String)
+     */
+    public void removeRenderProperty(String name) {
+        if (name == null) {
+            throw new NullArgumentException("name");
+        }
 
-		properties.remove(name);
-	}
+        properties.remove(name);
+    }
 
-	/**
-	 * @param name
-	 * @see org.pivot4j.ui.property.RenderPropertyList#hasRenderProperty(java.lang.String)
-	 */
-	public boolean hasRenderProperty(String name) {
-		if (name == null) {
-			throw new NullArgumentException("name");
-		}
+    /**
+     * @param name
+     * @see
+     * org.pivot4j.ui.property.RenderPropertyList#hasRenderProperty(java.lang.String)
+     */
+    public boolean hasRenderProperty(String name) {
+        if (name == null) {
+            throw new NullArgumentException("name");
+        }
 
-		return properties.containsKey(name);
-	}
+        return properties.containsKey(name);
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#saveState()
-	 */
-	@Override
-	public Serializable saveState() {
-		Collection<RenderProperty> propertyList = this.properties.values();
+    /**
+     * @see org.pivot4j.state.Bookmarkable#saveState()
+     */
+    @Override
+    public Serializable saveState() {
+        Collection<RenderProperty> propertyList = this.properties.values();
 
-		Serializable[] states = new Serializable[propertyList.size()];
+        Serializable[] states = new Serializable[propertyList.size()];
 
-		int index = 0;
-		for (RenderProperty property : propertyList) {
-			boolean conditional = property instanceof ConditionalRenderProperty;
+        int index = 0;
+        for (RenderProperty property : propertyList) {
+            boolean conditional = property instanceof ConditionalRenderProperty;
 
-			states[index++] = new Serializable[] { conditional,
-					property.saveState() };
-		}
+            states[index++] = new Serializable[]{conditional,
+                property.saveState()};
+        }
 
-		return states;
-	}
+        return states;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
-	 */
-	@Override
-	public void restoreState(Serializable state) {
-		if (state == null) {
-			throw new NullArgumentException("state");
-		}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
+     */
+    @Override
+    public void restoreState(Serializable state) {
+        if (state == null) {
+            throw new NullArgumentException("state");
+        }
 
-		Serializable[] states = (Serializable[]) state;
+        Serializable[] states = (Serializable[]) state;
 
-		this.properties.clear();
+        this.properties.clear();
 
-		for (Serializable st : states) {
-			Serializable[] pair = (Serializable[]) st;
+        for (Serializable st : states) {
+            Serializable[] pair = (Serializable[]) st;
 
-			boolean conditional = (Boolean) pair[0];
+            boolean conditional = (Boolean) pair[0];
 
-			RenderProperty property;
+            RenderProperty property;
 
-			// TODO Need more robust method to determine property types.
-			if (conditional) {
-				property = new ConditionalRenderProperty(conditionFactory);
-			} else {
-				property = new SimpleRenderProperty();
-			}
+            // TODO Need more robust method to determine property types.
+            if (conditional) {
+                property = new ConditionalRenderProperty(conditionFactory);
+            } else {
+                property = new SimpleRenderProperty();
+            }
 
-			property.restoreState(pair[1]);
+            property.restoreState(pair[1]);
 
-			this.properties.put(property.getName(), property);
-		}
-	}
+            this.properties.put(property.getName(), property);
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void saveSettings(HierarchicalConfiguration configuration) {
-		int index = 0;
+    /**
+     * @see
+     * org.pivot4j.state.Configurable#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void saveSettings(HierarchicalConfiguration configuration) {
+        int index = 0;
 
-		for (RenderProperty property : properties.values()) {
-			String name = String.format("property(%s)", index++);
+        for (RenderProperty property : properties.values()) {
+            String name = String.format("property(%s)", index++);
 
-			configuration.setProperty(name, "");
+            configuration.setProperty(name, "");
 
-			SubnodeConfiguration propertyConfig = configuration
-					.configurationAt(name);
-			property.saveSettings(propertyConfig);
-		}
-	}
+            SubnodeConfiguration propertyConfig = configuration
+                    .configurationAt(name);
+            property.saveSettings(propertyConfig);
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void restoreSettings(HierarchicalConfiguration configuration) {
-		this.properties.clear();
+    /**
+     * @see
+     * org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void restoreSettings(HierarchicalConfiguration configuration) {
+        this.properties.clear();
 
-		try {
-			List<HierarchicalConfiguration> configurations = configuration
-					.configurationsAt("property");
+        try {
+            List<HierarchicalConfiguration> configurations = configuration
+                    .configurationsAt("property");
 
-			for (HierarchicalConfiguration propertyConfig : configurations) {
-				boolean conditional = propertyConfig.containsKey("conditions");
+            for (HierarchicalConfiguration propertyConfig : configurations) {
+                boolean conditional = propertyConfig.containsKey("conditions");
 
-				RenderProperty property;
+                RenderProperty property;
 
-				// TODO Need more robust method to determine property types.
-				if (conditional) {
-					property = new ConditionalRenderProperty(conditionFactory);
-				} else {
-					property = new SimpleRenderProperty();
-				}
+                // TODO Need more robust method to determine property types.
+                if (conditional) {
+                    property = new ConditionalRenderProperty(conditionFactory);
+                } else {
+                    property = new SimpleRenderProperty();
+                }
 
-				property.restoreSettings(propertyConfig);
+                property.restoreSettings(propertyConfig);
 
-				this.properties.put(property.getName(), property);
-			}
-		} catch (IllegalArgumentException e) {
-		}
-	}
+                this.properties.put(property.getName(), property);
+            }
+        } catch (IllegalArgumentException e) {
+        }
+    }
 }

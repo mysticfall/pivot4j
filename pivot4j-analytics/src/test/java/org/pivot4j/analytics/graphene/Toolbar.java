@@ -9,20 +9,20 @@ import org.openqa.selenium.support.FindBy;
 
 public class Toolbar implements PageFragment {
 
-	@Root
-	private WebElement toolbar;
+    @Root
+    private WebElement toolbar;
 
-	@FindBy(className = "ui-button")
-	private List<Button> buttons;
+    @FindBy(className = "ui-button")
+    private List<Button> buttons;
 
-	public Dimension getSize() {
-		return toolbar.getSize();
-	}
+    public Dimension getSize() {
+        return toolbar.getSize();
+    }
 
-	/**
-	 * @return the buttons
-	 */
-	public List<Button> getButtons() {
-		return buttons;
-	}
+    /**
+     * @return the buttons
+     */
+    public List<Button> getButtons() {
+        return buttons;
+    }
 }

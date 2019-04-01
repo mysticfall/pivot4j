@@ -1,134 +1,131 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
-<h:head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>#{msg['title.migrate']}</title>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>#{msg['title.migrate']}</title>
 
-	<c:set var="contextPath"
-		value="#{facesContext.externalContext.requestContextPath}" />
+        <c:set var="contextPath"
+               value="#{facesContext.externalContext.requestContextPath}" />
 
-	<link rel="shortcut icon"
-		href="#{resource['pivot4j:images/logo16.png']}" />
+        <link rel="shortcut icon"
+              href="#{resource['pivot4j:images/logo16.png']}" />
 
-	<h:outputStylesheet library="pivot4j" name="css/style.css" />
-	<h:outputStylesheet library="pivot4j" name="css/pentaho.css" />
+        <h:outputStylesheet library="pivot4j" name="css/style.css" />
+        <h:outputStylesheet library="pivot4j" name="css/pentaho.css" />
 
-	<h:outputScript library="pivot4j" name="js/pivot4j.js" />
-</h:head>
+        <h:outputScript library="pivot4j" name="js/pivot4j.js" />
+    </h:head>
 
-<f:metadata>
-	<f:viewParam name="#{settings.viewParameterName}"
-		value="#{migrationHandler.viewId}" />
-</f:metadata>
+    <f:metadata>
+        <f:viewParam name="#{settings.viewParameterName}"
+                     value="#{migrationHandler.viewId}" />
+    </f:metadata>
 
-<h:body id="body">
-	<h:form id="chooser-form">
-		<p:dialog id="target-chooser" header="#{plugin_msg['title.migrate']}"
-			modal="true" width="440" height="310" visible="true" closable="false"
-			resizable="false" styleClass="migration-dialog">
-			<p:layout>
-				<p:layoutUnit position="north" closable="false" collapsible="false"
-					resizable="false" size="40">
-					<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
-					<h:outputText value="#{plugin_msg['message.migrate']}" />
-				</p:layoutUnit>
+    <h:body id="body">
+        <h:form id="chooser-form">
+            <p:dialog id="target-chooser" header="#{plugin_msg['title.migrate']}"
+                      modal="true" width="440" height="310" visible="true" closable="false"
+                      resizable="false" styleClass="migration-dialog">
+                <p:layout>
+                    <p:layoutUnit position="north" closable="false" collapsible="false"
+                                  resizable="false" size="40">
+                        <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
+                        <h:outputText value="#{plugin_msg['message.migrate']}" />
+                    </p:layoutUnit>
 
-				<p:layoutUnit position="center">
-					<p:tree id="repository-navigator" styleClass="navigator"
-						value="#{migrationHandler.rootNode}"
-						selection="#{migrationHandler.selection}" dynamic="true"
-						cache="true" var="#{'node'}" animate="true" selectionMode="single"
-						widgetVar="navigatorTree"
-						rendered="#{!migrationHandler.migrationDone}">
-						<p:treeNode type="directory" expandedIcon="ui-icon-folder-open"
-							collapsedIcon="ui-icon-folder-collapsed">
-							<h:outputText id="directory-node" value="#{node.name}"
-								styleClass="node-directory" />
-						</p:treeNode>
+                    <p:layoutUnit position="center">
+                        <p:tree id="repository-navigator" styleClass="navigator"
+                                value="#{migrationHandler.rootNode}"
+                                selection="#{migrationHandler.selection}" dynamic="true"
+                                cache="true" var="#{'node'}" animate="true" selectionMode="single"
+                                widgetVar="navigatorTree"
+                                rendered="#{!migrationHandler.migrationDone}">
+                            <p:treeNode type="directory" expandedIcon="ui-icon-folder-open"
+                                        collapsedIcon="ui-icon-folder-collapsed">
+                                <h:outputText id="directory-node" value="#{node.name}"
+                                              styleClass="node-directory" />
+                            </p:treeNode>
 
-						<p:treeNode type="root" expandedIcon="ui-icon-home"
-							collapsedIcon="ui-icon-home">
-							<h:outputText id="root-node" value="#{msg['label.repository']}"
-								styleClass="node-directory" />
-						</p:treeNode>
+                            <p:treeNode type="root" expandedIcon="ui-icon-home"
+                                        collapsedIcon="ui-icon-home">
+                                <h:outputText id="root-node" value="#{msg['label.repository']}"
+                                              styleClass="node-directory" />
+                            </p:treeNode>
 
-						<p:treeNode type="file" icon="ui-icon-document">
-							<h:outputText id="file-node" value="#{node.name}"
-								styleClass="node-file" />
-						</p:treeNode>
+                            <p:treeNode type="file" icon="ui-icon-document">
+                                <h:outputText id="file-node" value="#{node.name}"
+                                              styleClass="node-file" />
+                            </p:treeNode>
 
-						<p:ajax event="select" global="false"
-							update=":chooser-form:button-bar" />
-					</p:tree>
+                            <p:ajax event="select" global="false"
+                                    update=":chooser-form:button-bar" />
+                        </p:tree>
 
-					<p:dataTable var="entry" value="#{migrationHandler.convertedFiles}"
-						rowKey="#{entry.file.id}"
-						selection="#{migrationHandler.selectedFile}"
-						selectionMode="single"
-						rendered="#{migrationHandler.migrationDone}">
-						<f:facet name="header">
-							<h:panelGroup id="summary">
-								<h:outputText value="#{migrationHandler.summary}"
-									rendered="#{empty migrationHandler.selectedFile.error}" />
-								<h:outputText value="#{migrationHandler.selectedFile.error}"
-									rendered="#{!empty migrationHandler.selectedFile.error}"
-									styleClass="error" />
-							</h:panelGroup>
-						</f:facet>
+                        <p:dataTable var="entry" value="#{migrationHandler.convertedFiles}"
+                                     rowKey="#{entry.file.id}"
+                                     selection="#{migrationHandler.selectedFile}"
+                                     selectionMode="single"
+                                     rendered="#{migrationHandler.migrationDone}">
+                            <f:facet name="header">
+                                <h:panelGroup id="summary">
+                                    <h:outputText value="#{migrationHandler.summary}"
+                                                  rendered="#{empty migrationHandler.selectedFile.error}" />
+                                    <h:outputText value="#{migrationHandler.selectedFile.error}"
+                                                  rendered="#{!empty migrationHandler.selectedFile.error}"
+                                                  styleClass="error" />
+                                </h:panelGroup>
+                            </f:facet>
 
-						<p:column headerText="#{plugin_msg['label.migrate.status']}"
-							width="30" align="center" styleClass="column-status">
-							<h:panelGroup styleClass="ui-icon ui-icon-check"
-								rendered="#{empty entry.error}"
-								title="#{plugin_msg['label.migrate.status.ok']}" />
+                            <p:column headerText="#{plugin_msg['label.migrate.status']}"
+                                      width="30"  styleClass="column-status">
+                                <h:panelGroup styleClass="ui-icon ui-icon-check"
+                                              rendered="#{empty entry.error}"/>
 
-							<h:panelGroup styleClass="ui-icon ui-icon-close"
-								rendered="#{!empty entry.error}"
-								title="#{plugin_msg['label.migrate.status.error']}" />
-						</p:column>
+                                <h:panelGroup styleClass="ui-icon ui-icon-close"
+                                              rendered="#{!empty entry.error}" />
+                            </p:column>
 
-						<p:column headerText="#{plugin_msg['label.migrate.path']}"
-							styleClass="column-path">
-							<h:outputText value="#{entry.file.path}" title="#{entry.error}"
-								styleClass="#{empty entry.error?'':'error'}" />
-						</p:column>
+                            <p:column headerText="#{plugin_msg['label.migrate.path']}"
+                                      styleClass="column-path">
+                                <h:outputText value="#{entry.file.path}" title="#{entry.error}"
+                                              styleClass="#{empty entry.error?'':'error'}" />
+                            </p:column>
 
-						<p:ajax event="rowSelect" global="false"
-							update="summary,:chooser-form:button-bar" />
-					</p:dataTable>
-				</p:layoutUnit>
-			</p:layout>
+                            <p:ajax event="rowSelect" global="false"
+                                    update="summary,:chooser-form:button-bar" />
+                        </p:dataTable>
+                    </p:layoutUnit>
+                </p:layout>
 
-			<f:facet name="footer">
-				<h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
-					layout="block">
-					<p:messages showDetail="true" autoUpdate="true" closable="true" />
+                <f:facet name="footer">
+                    <h:panelGroup id="button-bar" styleClass="ui-dialog-buttonpane"
+                                  layout="block">
+                        <p:messages showDetail="true" autoUpdate="true" closable="true" />
 
-					<p:commandButton id="btn-ok" value="#{msg['button.ok']}"
-						icon="ui-icon-check" action="#{migrationHandler.proceed}"
-						disabled="#{!migrationHandler.okButtonEnabled}"
-						update=":chooser-form,:growl" />
-				</h:panelGroup>
-			</f:facet>
-		</p:dialog>
-	</h:form>
+                        <p:commandButton id="btn-ok" value="#{msg['button.ok']}"
+                                         icon="ui-icon-check" action="#{migrationHandler.proceed}"
+                                         disabled="#{!migrationHandler.okButtonEnabled}"
+                                         update=":chooser-form,:growl" />
+                    </h:panelGroup>
+                </f:facet>
+            </p:dialog>
+        </h:form>
 
-	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
-		oncomplete="hideWaitDialog();" />
+        <p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
+                      oncomplete="hideWaitDialog();" />
 
-	<pe:blockUI widgetVar="waitDialog" targetSelector=".ui-dialog">
-		<h:panelGrid columns="2">
-			<p:graphicImage library="pivot4j" name="images/loading.gif" />
-			<h:outputText value="#{msg['message.loading']}" />
-		</h:panelGrid>
-	</pe:blockUI>
+        <pe:blockUI widgetVar="waitDialog" >
+            <h:panelGrid columns="2">
+                <p:graphicImage library="pivot4j" name="images/loading.gif" />
+                <h:outputText value="#{msg['message.loading']}" />
+            </h:panelGrid>
+        </pe:blockUI>
 
-	<p:growl id="growl" showDetail="true" sticky="true" />
-</h:body>
+        <p:growl id="growl" showDetail="true" sticky="true" />
+    </h:body>
 </html>

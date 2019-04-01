@@ -13,13 +13,13 @@ import org.pivot4j.state.Configurable;
 import org.pivot4j.ui.RenderContext;
 
 public interface RenderProperty extends Comparable<RenderProperty>,
-		Configurable, Bookmarkable {
+        Configurable, Bookmarkable {
 
-	String getName();
+    String getName();
 
-	/**
-	 * @param context
-	 * @return
-	 */
-	Object getValue(RenderContext context);
+    /**
+     * @param context
+     * @return
+     */
+    Object getValue(RenderContext context);
 }

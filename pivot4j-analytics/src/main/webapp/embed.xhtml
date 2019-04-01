@@ -1,113 +1,116 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
-<h:head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>#{msg['title']}</title>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-	<c:set var="contextPath"
-		value="#{facesContext.externalContext.requestContextPath}" />
+        <title>#{msg['title']}</title>
 
-	<link rel="shortcut icon"
-		href="#{resource['pivot4j:images/logo16.png']}" />
+        <c:set var="contextPath"
+               value="#{facesContext.externalContext.requestContextPath}" />
 
-	<h:outputStylesheet library="primefaces"
-		name="colorpicker/colorpicker.css" />
-	<h:outputStylesheet library="pivot4j" name="css/style.css" />
-	<h:outputScript library="primefaces" name="printer/printer.js" />
-	<h:outputScript library="pivot4j" name="js/pivot4j.js" />
-</h:head>
+        <link rel="shortcut icon"
+              href="#{resource['pivot4j:images/logo16.png']}" />
 
-<f:metadata>
-	<f:event type="preRenderView" listener="#{viewHandler.onPreRenderView}" />
-	<f:event type="preRenderView"
-		listener="#{filterHandler.onPreRenderView}" />
-	<f:event type="preRenderView"
-		listener="#{chartHandler.onPreRenderView}" />
-</f:metadata>
+        <h:outputStylesheet library="primefaces"
+                            name="colorpicker/colorpicker.css" />
+        <h:outputStylesheet library="pivot4j" name="css/style.css" />
+        <h:outputScript library="primefaces" name="printer/printer.js" />
+        <h:outputScript library="primefaces" name="charts/charts.js" />
+        <h:outputStylesheet library="primefaces" name="charts/charts.css" />
+        <h:outputScript library="pivot4j" name="js/pivot4j.js" />
+    </h:head>
 
-<h:body id="body" styleClass="embeded report">
-	<h:form id="toolbar-form">
-		<p:toolbar id="toolbar">
-			<f:facet name="left">
-				<p:menuButton value="#{msg['toolbar.export']}"
-					disabled="#{!viewHandler.valid}"
-					styleClass="export-menu">
-					<p:menuitem id="mi-export-xls"
-						value="#{msg['toolbar.export.format.xls']}"
-						action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
-						ajax="false">
-						<f:param name="format" value="HSSF" />
-					</p:menuitem>
-					<p:menuitem id="mi-export-xlsx"
-						value="#{msg['toolbar.export.format.xlsx']}"
-						action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
-						ajax="false">
-						<f:param name="format" value="SXSSF" />
-					</p:menuitem>
-					<p:menuitem id="mi-export-pdf"
-						value="#{msg['toolbar.export.format.pdf']}" icon="ui-icon-print"
-						onclick="PF('exportConfig').show();" />
-					<p:separator />
-					<p:menuitem
-						value="#{msg['toolbar.print']}" title="#{msg['toolbar.print.tooltip']}"
-						icon="ui-icon-print" onclick="$('table.pivot-grid:first').jqprint();" />
-				</p:menuButton>
-			</f:facet>
-		</p:toolbar>
-	</h:form>
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{viewHandler.onPreRenderView}" />
+        <f:event type="preRenderView"
+                 listener="#{filterHandler.onPreRenderView}" />
+        <f:event type="preRenderView"
+                 listener="#{chartHandler.onPreRenderView}" />
+    </f:metadata>
 
-	<h:form id="grid-form" onkeypress="return event.keyCode != 13;">
-		<h:panelGroup id="pivot-grid" binding="#{viewHandler.component}"
-			layout="block"
-			rendered="#{viewHandler.valid and viewHandler.visible}" />
+    <h:body id="body" styleClass="embeded report">
+        <h:form id="toolbar-form">
+            <p:toolbar id="toolbar">
+                <f:facet name="left">
+                    <p:menuButton value="#{msg['toolbar.export']}"
+                                  disabled="#{!viewHandler.valid}"
+                                  styleClass="export-menu">
+                        <p:menuitem id="mi-export-xls"
+                                    value="#{msg['toolbar.export.format.xls']}"
+                                    action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
+                                    ajax="false">
+                            <f:param name="format" value="HSSF" />
+                        </p:menuitem>
+                        <p:menuitem id="mi-export-xlsx"
+                                    value="#{msg['toolbar.export.format.xlsx']}"
+                                    action="#{pivotExportHandler.exportExcel}" icon="ui-icon-disk"
+                                    ajax="false">
+                            <f:param name="format" value="SXSSF" />
+                        </p:menuitem>
+                        <p:menuitem id="mi-export-pdf"
+                                    value="#{msg['toolbar.export.format.pdf']}" icon="ui-icon-print"
+                                    onclick="PF('exportConfig').show();" />
+                        <p:separator />
+                        <p:menuitem
+                            value="#{msg['toolbar.print']}" title="#{msg['toolbar.print.tooltip']}"
+                            icon="ui-icon-print" onclick="$('table.pivot-grid:first').jqprint();" />
+                    </p:menuButton>
+                </f:facet>
+            </p:toolbar>
+        </h:form>
 
-		<h:panelGroup id="chart-panel" styleClass="chart-panel"
-			binding="#{chartHandler.component}" layout="block"
-			rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
+        <h:form id="grid-form" onkeypress="return event.keyCode != 13;">
+            <h:panelGroup id="pivot-grid" binding="#{viewHandler.component}"
+                          layout="block"
+                          rendered="#{viewHandler.valid and viewHandler.visible}" />
 
-		<h:panelGroup styleClass="filter-info" layout="block"
-			rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
+            <h:panelGroup id="chart-panel" styleClass="chart-panel"
+                          binding="#{chartHandler.component}" layout="block"
+                          rendered="#{chartHandler.valid and !empty chartHandler.chartName}" />
 
-			<h:outputText class="title" value="#{msg['label.filter']}" />
+            <h:panelGroup styleClass="filter-info" layout="block"
+                          rendered="#{viewHandler.valid and viewHandler.renderer.renderSlicer}">
 
-			<h:panelGroup id="filter-grid" layout="block"
-				binding="#{viewHandler.filterComponent}" />
-		</h:panelGroup>
+                <h:outputText class="title" value="#{msg['label.filter']}" />
 
-		<h:panelGroup styleClass="info-panel" layout="block"
-			rendered="#{!viewHandler.valid and viewHandler.lastError == null}">
-			<h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
-			<h:outputText value="#{msg['message.query.blank']}"
-				styleClass="message-warn" />
-		</h:panelGroup>
+                <h:panelGroup id="filter-grid" layout="block"
+                              binding="#{viewHandler.filterComponent}" />
+            </h:panelGroup>
 
-		<p:growl id="grid-growl" showDetail="true" sticky="true"
-			globalOnly="true" />
-	</h:form>
+            <h:panelGroup styleClass="info-panel" layout="block"
+                          rendered="#{!viewHandler.valid and viewHandler.lastError == null}">
+                <h:panelGroup styleClass="ui-icon ui-icon-title ui-icon-info" />
+                <h:outputText value="#{msg['message.query.blank']}"
+                              styleClass="message-warn" />
+            </h:panelGroup>
 
-	<ui:include src="export.xhtml" />
-	<p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
-		oncomplete="hideWaitDialog();" />
+            <p:growl id="grid-growl" showDetail="true" sticky="true"
+                     globalOnly="true" />
+        </h:form>
 
-	<pe:blockUI widgetVar="waitDialog">
-		<h:panelGrid columns="2">
-			<p:graphicImage library="pivot4j" name="images/loading.gif" />
-			<h:outputText value="#{msg['message.loading']}" />
-		</h:panelGrid>
-	</pe:blockUI>
+        <ui:include src="export.xhtml" />
+        <p:ajaxStatus styleClass="ajax-status" onstart="showWaitDialog();"
+                      oncomplete="hideWaitDialog();" />
 
-	<p:growl id="growl" showDetail="true" sticky="true" />
+        <pe:blockUI widgetVar="waitDialog">
+            <h:panelGrid columns="2">
+                <p:graphicImage library="pivot4j" name="images/loading.gif" />
+                <h:outputText value="#{msg['message.loading']}" />
+            </h:panelGrid>
+        </pe:blockUI>
 
-	<h:form id="poll-form">
-		<p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true"
-			listener="#{pivotStateManager.keepAlive}" process="@this"
-			global="false" />
-	</h:form>
-</h:body>
+        <p:growl id="growl" showDetail="true" sticky="true" />
+
+        <h:form id="poll-form">
+            <p:poll interval="#{viewStateHolder.keepAliveInterval}" async="true"
+                    listener="#{pivotStateManager.keepAlive}" process="@this"
+                    global="false" />
+        </h:form>
+    </h:body>
 </html>

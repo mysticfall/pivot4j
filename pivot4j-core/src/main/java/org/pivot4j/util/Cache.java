@@ -14,76 +14,76 @@ import org.apache.commons.collections.map.ReferenceMap;
 
 public class Cache<K, V> {
 
-	@SuppressWarnings("unchecked")
-	private Map<K, V> data = new ReferenceMap();
+    @SuppressWarnings("unchecked")
+    private Map<K, V> data = new ReferenceMap();
 
-	private Cache<K, V> parent;
+    private Cache<K, V> parent;
 
-	public Cache() {
-	}
+    public Cache() {
+    }
 
-	public Cache(Cache<K, V> parent) {
-		this.parent = parent;
-	}
+    public Cache(Cache<K, V> parent) {
+        this.parent = parent;
+    }
 
-	/**
-	 * @return parent
-	 */
-	public Cache<K, V> getParent() {
-		return parent;
-	}
+    /**
+     * @return parent
+     */
+    public Cache<K, V> getParent() {
+        return parent;
+    }
 
-	public void clear() {
-		data.clear();
+    public void clear() {
+        data.clear();
 
-		if (parent != null) {
-			parent.clear();
-		}
-	}
+        if (parent != null) {
+            parent.clear();
+        }
+    }
 
-	/**
-	 * @param key
-	 * @return
-	 */
-	public boolean containsKey(K key) {
-		return data.containsKey(key)
-				|| (parent != null && parent.containsKey(key));
-	}
+    /**
+     * @param key
+     * @return
+     */
+    public boolean containsKey(K key) {
+        return data.containsKey(key)
+                || (parent != null && parent.containsKey(key));
+    }
 
-	/**
-	 * @param key
-	 * @return
-	 */
-	public V get(K key) {
-		V result = data.get(key);
+    /**
+     * @param key
+     * @return
+     */
+    public V get(K key) {
+        V result = data.get(key);
 
-		if (result == null && parent != null) {
-			result = parent.get(key);
-		}
+        if (result == null && parent != null) {
+            result = parent.get(key);
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * @param key
-	 * @param value
-	 */
-	public void put(K key, V value) {
-		if (value == null) {
-			remove(key);
-		} else {
-			data.put(key, value);
-		}
-	}
+    /**
+     * @param key
+     * @param value
+     */
+    public void put(K key, V value) {
+        if (value == null) {
+            remove(key);
+        } else {
+            data.put(key, value);
+        }
+    }
 
-	/**
-	 * @param key
-	 */
-	public void remove(K key) {
-		data.remove(key);
+    /**
+     * @param key
+     */
+    public void remove(K key) {
+        data.remove(key);
 
-		if (parent != null) {
-			parent.remove(key);
-		}
-	}
+        if (parent != null) {
+            parent.remove(key);
+        }
+    }
 }

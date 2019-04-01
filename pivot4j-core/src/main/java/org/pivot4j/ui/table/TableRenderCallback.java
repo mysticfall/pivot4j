@@ -12,53 +12,53 @@ import org.pivot4j.ui.RenderCallback;
 
 public interface TableRenderCallback extends RenderCallback<TableRenderContext> {
 
-	/**
-	 * @param context
-	 */
-	void startTable(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void startTable(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void startHeader(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void startHeader(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void endHeader(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void endHeader(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void startBody(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void startBody(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void startRow(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void startRow(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void startCell(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void startCell(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void endCell(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void endCell(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void endRow(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void endRow(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void endBody(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void endBody(TableRenderContext context);
 
-	/**
-	 * @param context
-	 */
-	void endTable(TableRenderContext context);
+    /**
+     * @param context
+     */
+    void endTable(TableRenderContext context);
 }

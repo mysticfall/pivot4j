@@ -14,11 +14,11 @@ import org.pivot4j.ui.RenderContext;
 
 public interface Condition extends Bookmarkable, Configurable {
 
-	String getName();
+    String getName();
 
-	/**
-	 * @param context
-	 * @return
-	 */
-	boolean matches(RenderContext context);
+    /**
+     * @param context
+     * @return
+     */
+    boolean matches(RenderContext context);
 }

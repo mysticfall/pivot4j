@@ -30,157 +30,157 @@ import org.pivot4j.util.OlapUtils;
 
 public class ExpressionEvaluatorIT extends AbstractIntegrationTestCase {
 
-	@Test
-	public void testSimpleExpression() {
-		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-				+ "{([Promotion Media].[All Media], "
-				+ "[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[year]";
+    @Test
+    public void testSimpleExpression() {
+        String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                + "{([Promotion Media].[All Media], "
+                + "[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[year]";
 
-		PivotModel model = getPivotModel();
+        PivotModel model = getPivotModel();
 
-		model.setMdx(query);
-		model.initialize();
+        model.setMdx(query);
+        model.initialize();
 
-		model.getExpressionContext().put("year", "[Time].[1997]");
+        model.getExpressionContext().put("year", "[Time].[1997]");
 
-		ChangeSlicer transform = model.getTransform(ChangeSlicer.class);
+        ChangeSlicer transform = model.getTransform(ChangeSlicer.class);
 
-		List<Member> members = transform.getSlicer();
+        List<Member> members = transform.getSlicer();
 
-		assertThat("Slicer axis should contain ONE member.", members.size(),
-				is(1));
-		assertThat("Wrong member found on the slicer axis.", members.get(0)
-				.getUniqueName(), equalTo("[Time].[1997]"));
-	}
+        assertThat("Slicer axis should contain ONE member.", members.size(),
+                is(1));
+        assertThat("Wrong member found on the slicer axis.", members.get(0)
+                .getUniqueName(), equalTo("[Time].[1997]"));
+    }
 
-	@Test
-	public void testFreeMarkerExpression() {
-		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-				+ "{([Promotion Media].[All Media], "
-				+ "$[cube.dimensions.get(\"Product\").defaultHierarchy.defaultMember.uniqueName]"
-				+ ")} ON ROWS FROM [Sales] WHERE [Time].[1997]";
+    @Test
+    public void testFreeMarkerExpression() {
+        String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                + "{([Promotion Media].[All Media], "
+                + "$[cube.dimensions.get(\"Product\").defaultHierarchy.defaultMember.uniqueName]"
+                + ")} ON ROWS FROM [Sales] WHERE [Time].[1997]";
 
-		PivotModel model = getPivotModel();
+        PivotModel model = getPivotModel();
 
-		model.setMdx(query);
-		model.initialize();
+        model.setMdx(query);
+        model.initialize();
 
-		CellSet cellSet = model.getCellSet();
+        CellSet cellSet = model.getCellSet();
 
-		List<Position> positions = cellSet.getAxes()
-				.get(Axis.ROWS.axisOrdinal()).getPositions();
-		assertThat("Row axis should contain ONE positions.", positions.size(),
-				is(1));
+        List<Position> positions = cellSet.getAxes()
+                .get(Axis.ROWS.axisOrdinal()).getPositions();
+        assertThat("Row axis should contain ONE positions.", positions.size(),
+                is(1));
 
-		Position position = positions.get(0);
+        Position position = positions.get(0);
 
-		assertThat("Row axis should contain two dimensions.", position
-				.getMembers().size(), is(2));
-		assertThat("Wrong member found on the row axis.", position.getMembers()
-				.get(1).getUniqueName(), equalTo("[Product].[All Products]"));
-	}
+        assertThat("Row axis should contain two dimensions.", position
+                .getMembers().size(), is(2));
+        assertThat("Wrong member found on the row axis.", position.getMembers()
+                .get(1).getUniqueName(), equalTo("[Product].[All Products]"));
+    }
 
-	@Test
-	public void testPreserveParameterOnSlicerAfterDrillDown() {
-		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-				+ "{([Promotion Media].[All Media], "
-				+ "[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[year]";
+    @Test
+    public void testPreserveParameterOnSlicerAfterDrillDown() {
+        String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                + "{([Promotion Media].[All Media], "
+                + "[Product].[All Products])} ON ROWS FROM [Sales] WHERE $[year]";
 
-		PivotModel model = getPivotModel();
+        PivotModel model = getPivotModel();
 
-		model.setMdx(query);
-		model.initialize();
+        model.setMdx(query);
+        model.initialize();
 
-		model.getExpressionContext().put("year", "[Time].[1997]");
+        model.getExpressionContext().put("year", "[Time].[1997]");
 
-		ChangeSlicer slicerTransform = model.getTransform(ChangeSlicer.class);
+        ChangeSlicer slicerTransform = model.getTransform(ChangeSlicer.class);
 
-		List<Member> members = slicerTransform.getSlicer();
+        List<Member> members = slicerTransform.getSlicer();
 
-		assertThat("Slicer axis should contain ONE member.", members.size(),
-				is(1));
+        assertThat("Slicer axis should contain ONE member.", members.size(),
+                is(1));
 
-		assertThat("Wrong member found on the slicer axis.", members.get(0)
-				.getUniqueName(), equalTo("[Time].[1997]"));
+        assertThat("Wrong member found on the slicer axis.", members.get(0)
+                .getUniqueName(), equalTo("[Time].[1997]"));
 
-		Member member = OlapUtils.lookupMember("[Product].[All Products]",
-				model.getCube());
+        Member member = OlapUtils.lookupMember("[Product].[All Products]",
+                model.getCube());
 
-		DrillExpandMember drillTransform = model
-				.getTransform(DrillExpandMember.class);
-		drillTransform.expand(member);
+        DrillExpandMember drillTransform = model
+                .getTransform(DrillExpandMember.class);
+        drillTransform.expand(member);
 
-		model.getExpressionContext().put("year", "[Time].[1998]");
-		model.getCellSet();
+        model.getExpressionContext().put("year", "[Time].[1998]");
+        model.getCellSet();
 
-		members = slicerTransform.getSlicer();
+        members = slicerTransform.getSlicer();
 
-		assertThat("Wrong member found on the slicer axis.", members.get(0)
-				.getUniqueName(), equalTo("[Time].[1998]"));
-	}
+        assertThat("Wrong member found on the slicer axis.", members.get(0)
+                .getUniqueName(), equalTo("[Time].[1998]"));
+    }
 
-	@Test
-	public void testPreserveParameterOnSlicerAfterAddingHierarchy() {
-		String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
-				+ "[Promotion Media].[All Media] ON ROWS FROM [Sales] WHERE $[year]";
+    @Test
+    public void testPreserveParameterOnSlicerAfterAddingHierarchy() {
+        String query = "SELECT {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                + "[Promotion Media].[All Media] ON ROWS FROM [Sales] WHERE $[year]";
 
-		PivotModel model = getPivotModel();
+        PivotModel model = getPivotModel();
 
-		model.setMdx(query);
-		model.initialize();
+        model.setMdx(query);
+        model.initialize();
 
-		model.getExpressionContext().put("year", "[Time].[1997]");
+        model.getExpressionContext().put("year", "[Time].[1997]");
 
-		ChangeSlicer slicerTransform = model.getTransform(ChangeSlicer.class);
+        ChangeSlicer slicerTransform = model.getTransform(ChangeSlicer.class);
 
-		List<Member> members = slicerTransform.getSlicer();
+        List<Member> members = slicerTransform.getSlicer();
 
-		assertThat("Slicer axis should contain ONE member.", members.size(),
-				is(1));
+        assertThat("Slicer axis should contain ONE member.", members.size(),
+                is(1));
 
-		assertThat("Wrong member found on the slicer axis.", members.get(0)
-				.getUniqueName(), equalTo("[Time].[1997]"));
+        assertThat("Wrong member found on the slicer axis.", members.get(0)
+                .getUniqueName(), equalTo("[Time].[1997]"));
 
-		PlaceHierarchiesOnAxes hierarchyTransform = model
-				.getTransform(PlaceHierarchiesOnAxes.class);
+        PlaceHierarchiesOnAxes hierarchyTransform = model
+                .getTransform(PlaceHierarchiesOnAxes.class);
 
-		Hierarchy hierarchy = model.getCube().getHierarchies().get("Product");
+        Hierarchy hierarchy = model.getCube().getHierarchies().get("Product");
 
-		hierarchyTransform.addHierarchy(Axis.ROWS, hierarchy, true, -1);
+        hierarchyTransform.addHierarchy(Axis.ROWS, hierarchy, true, -1);
 
-		model.getExpressionContext().put("year", "[Time].[1998]");
-		model.getCellSet();
+        model.getExpressionContext().put("year", "[Time].[1998]");
+        model.getCellSet();
 
-		members = slicerTransform.getSlicer();
+        members = slicerTransform.getSlicer();
 
-		assertThat("Wrong member found on the slicer axis.", members.get(0)
-				.getUniqueName(), equalTo("[Time].[1998]"));
-	}
+        assertThat("Wrong member found on the slicer axis.", members.get(0)
+                .getUniqueName(), equalTo("[Time].[1998]"));
+    }
 
-	@Test
-	public void testSimpleValueExpression() throws OlapException {
-		String query = "WITH MEMBER [Measures].[Calc Cost] AS '[Measures].[Store Cost] * ${ratio}' "
-				+ "SELECT {[Measures].[Calc Cost], [Measures].[Store Sales]} ON COLUMNS, "
-				+ "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
+    @Test
+    public void testSimpleValueExpression() throws OlapException {
+        String query = "WITH MEMBER [Measures].[Calc Cost] AS '[Measures].[Store Cost] * ${ratio}' "
+                + "SELECT {[Measures].[Calc Cost], [Measures].[Store Sales]} ON COLUMNS, "
+                + "{([Promotion Media].[All Media], [Product].[All Products])} ON ROWS FROM [Sales]";
 
-		PivotModel model = getPivotModel();
+        PivotModel model = getPivotModel();
 
-		model.setMdx(query);
-		model.initialize();
+        model.setMdx(query);
+        model.initialize();
 
-		model.getExpressionContext().put("ratio", "1.5");
+        model.getExpressionContext().put("ratio", "1.5");
 
-		CellSet cellSet = model.getCellSet();
+        CellSet cellSet = model.getCellSet();
 
-		assertThat("Wrong cell value returned(ratio = 1.5).", cellSet
-				.getCell(0).getFormattedValue(), equalTo("338,440.85"));
+        assertThat("Wrong cell value returned(ratio = 1.5).", cellSet
+                .getCell(0).getFormattedValue(), equalTo("338,440.85"));
 
-		model.getExpressionContext().put("ratio", "2.5");
-		model.refresh();
+        model.getExpressionContext().put("ratio", "2.5");
+        model.refresh();
 
-		cellSet = model.getCellSet();
+        cellSet = model.getCellSet();
 
-		assertThat("Wrong cell value returned(ratio = 2.5).", cellSet
-				.getCell(0).getFormattedValue(), equalTo("564,068.08"));
-	}
+        assertThat("Wrong cell value returned(ratio = 2.5).", cellSet
+                .getCell(0).getFormattedValue(), equalTo("564,068.08"));
+    }
 }

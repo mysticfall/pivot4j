@@ -12,6 +12,8 @@ import java.util.EventListener;
 
 public interface QueryListener extends EventListener {
 
-	/** Query has been executed */
-	void queryExecuted(QueryEvent e);
+    /**
+     * Query has been executed
+     */
+    void queryExecuted(QueryEvent e);
 }

@@ -10,11 +10,11 @@ package org.pivot4j.el;
 
 public interface ExpressionEvaluator {
 
-	/**
-	 * @param expression
-	 * @return
-	 * @throws EvaluationFailedException
-	 */
-	Object evaluate(String expression, ExpressionContext context)
-			throws EvaluationFailedException;
+    /**
+     * @param expression
+     * @return
+     * @throws EvaluationFailedException
+     */
+    Object evaluate(String expression, ExpressionContext context)
+            throws EvaluationFailedException;
 }

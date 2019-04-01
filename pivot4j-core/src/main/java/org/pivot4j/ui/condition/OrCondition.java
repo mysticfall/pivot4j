@@ -18,195 +18,197 @@ import org.pivot4j.ui.RenderContext;
 
 public class OrCondition extends AbstractCondition {
 
-	public static final String NAME = "or";
+    public static final String NAME = "or";
 
-	private List<Condition> subConditions;
+    private List<Condition> subConditions;
 
-	/**
-	 * @param conditionFactory
-	 */
-	public OrCondition(ConditionFactory conditionFactory) {
-		super(conditionFactory);
-	}
+    /**
+     * @param conditionFactory
+     */
+    public OrCondition(ConditionFactory conditionFactory) {
+        super(conditionFactory);
+    }
 
-	/**
-	 * @param conditionFactory
-	 * @param subConditions
-	 */
-	public OrCondition(ConditionFactory conditionFactory,
-			Condition... subConditions) {
-		super(conditionFactory);
+    /**
+     * @param conditionFactory
+     * @param subConditions
+     */
+    public OrCondition(ConditionFactory conditionFactory,
+            Condition... subConditions) {
+        super(conditionFactory);
 
-		if (subConditions != null) {
-			this.subConditions = new LinkedList<Condition>(
-					Arrays.asList(subConditions));
-		}
-	}
+        if (subConditions != null) {
+            this.subConditions = new LinkedList<Condition>(
+                    Arrays.asList(subConditions));
+        }
+    }
 
-	/**
-	 * @param conditionFactory
-	 */
-	public OrCondition(ConditionFactory conditionFactory,
-			List<Condition> subConditions) {
-		super(conditionFactory);
+    /**
+     * @param conditionFactory
+     */
+    public OrCondition(ConditionFactory conditionFactory,
+            List<Condition> subConditions) {
+        super(conditionFactory);
 
-		this.subConditions = subConditions;
-	}
+        this.subConditions = subConditions;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.Condition#getName()
-	 */
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.condition.Condition#getName()
+     */
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @return the subConditions
-	 */
-	public List<Condition> getSubConditions() {
-		return subConditions;
-	}
+    /**
+     * @return the subConditions
+     */
+    public List<Condition> getSubConditions() {
+        return subConditions;
+    }
 
-	/**
-	 * @param subConditions
-	 *            the subConditions to set
-	 */
-	public void setSubConditions(List<Condition> subConditions) {
-		this.subConditions = subConditions;
-	}
+    /**
+     * @param subConditions the subConditions to set
+     */
+    public void setSubConditions(List<Condition> subConditions) {
+        this.subConditions = subConditions;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.Condition#matches(org.pivot4j.ui.RenderContext)
-	 */
-	public boolean matches(RenderContext context) {
-		if (subConditions == null || subConditions.isEmpty()) {
-			throw new IllegalStateException("Missing sub conditions.");
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.condition.Condition#matches(org.pivot4j.ui.RenderContext)
+     */
+    public boolean matches(RenderContext context) {
+        if (subConditions == null || subConditions.isEmpty()) {
+            throw new IllegalStateException("Missing sub conditions.");
+        }
 
-		for (Condition condition : subConditions) {
-			if (condition.matches(context)) {
-				return true;
-			}
-		}
+        for (Condition condition : subConditions) {
+            if (condition.matches(context)) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#saveState()
-	 */
-	@Override
-	public Serializable saveState() {
-		if (subConditions == null) {
-			return null;
-		}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#saveState()
+     */
+    @Override
+    public Serializable saveState() {
+        if (subConditions == null) {
+            return null;
+        }
 
-		Serializable[] states = new Serializable[subConditions.size()];
+        Serializable[] states = new Serializable[subConditions.size()];
 
-		int index = 0;
-		for (Condition condition : subConditions) {
-			states[index++] = new Serializable[] { condition.getName(),
-					condition.saveState() };
-		}
+        int index = 0;
+        for (Condition condition : subConditions) {
+            states[index++] = new Serializable[]{condition.getName(),
+                condition.saveState()};
+        }
 
-		return states;
-	}
+        return states;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
-	 */
-	@Override
-	public void restoreState(Serializable state) {
-		Serializable[] states = (Serializable[]) state;
+    /**
+     * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
+     */
+    @Override
+    public void restoreState(Serializable state) {
+        Serializable[] states = (Serializable[]) state;
 
-		this.subConditions = new LinkedList<Condition>();
+        this.subConditions = new LinkedList<Condition>();
 
-		if (states != null) {
-			for (Serializable subState : states) {
-				Serializable[] subStates = (Serializable[]) subState;
+        if (states != null) {
+            for (Serializable subState : states) {
+                Serializable[] subStates = (Serializable[]) subState;
 
-				Condition condition = getConditionFactory().createCondition(
-						(String) subStates[0]);
-				condition.restoreState(subStates[1]);
+                Condition condition = getConditionFactory().createCondition(
+                        (String) subStates[0]);
+                condition.restoreState(subStates[1]);
 
-				this.subConditions.add(condition);
-			}
-		}
-	}
+                this.subConditions.add(condition);
+            }
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void saveSettings(HierarchicalConfiguration configuration) {
-		super.saveSettings(configuration);
+    /**
+     * @see
+     * org.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void saveSettings(HierarchicalConfiguration configuration) {
+        super.saveSettings(configuration);
 
-		if (subConditions == null) {
-			return;
-		}
+        if (subConditions == null) {
+            return;
+        }
 
-		int index = 0;
-		for (Condition condition : subConditions) {
-			String name = String.format("condition(%s)", index++);
+        int index = 0;
+        for (Condition condition : subConditions) {
+            String name = String.format("condition(%s)", index++);
 
-			configuration.setProperty(name, "");
+            configuration.setProperty(name, "");
 
-			HierarchicalConfiguration subConfig = configuration
-					.configurationAt(name);
-			condition.saveSettings(subConfig);
-		}
-	}
+            HierarchicalConfiguration subConfig = configuration
+                    .configurationAt(name);
+            condition.saveSettings(subConfig);
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void restoreSettings(HierarchicalConfiguration configuration) {
-		this.subConditions = new LinkedList<Condition>();
+    /**
+     * @see
+     * org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void restoreSettings(HierarchicalConfiguration configuration) {
+        this.subConditions = new LinkedList<Condition>();
 
-		try {
-			List<HierarchicalConfiguration> subConfigs = configuration
-					.configurationsAt("condition");
+        try {
+            List<HierarchicalConfiguration> subConfigs = configuration
+                    .configurationsAt("condition");
 
-			for (HierarchicalConfiguration subConfig : subConfigs) {
-				String name = subConfig.getString("[@name]");
+            for (HierarchicalConfiguration subConfig : subConfigs) {
+                String name = subConfig.getString("[@name]");
 
-				if (name != null) {
-					Condition condition = getConditionFactory()
-							.createCondition(name);
-					condition.restoreSettings(subConfig);
+                if (name != null) {
+                    Condition condition = getConditionFactory()
+                            .createCondition(name);
+                    condition.restoreSettings(subConfig);
 
-					this.subConditions.add(condition);
-				}
-			}
-		} catch (IllegalArgumentException e) {
-		}
-	}
+                    this.subConditions.add(condition);
+                }
+            }
+        } catch (IllegalArgumentException e) {
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.AbstractCondition#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("(");
+    /**
+     * @see org.pivot4j.ui.condition.AbstractCondition#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(");
 
-		if (subConditions != null) {
-			boolean first = true;
+        if (subConditions != null) {
+            boolean first = true;
 
-			for (Condition condition : subConditions) {
-				if (first) {
-					first = false;
-				} else {
-					builder.append(" || ");
-				}
+            for (Condition condition : subConditions) {
+                if (first) {
+                    first = false;
+                } else {
+                    builder.append(" || ");
+                }
 
-				builder.append(condition.toString());
-			}
-		}
+                builder.append(condition.toString());
+            }
+        }
 
-		builder.append(")");
+        builder.append(")");
 
-		return builder.toString();
-	}
+        return builder.toString();
+    }
 }

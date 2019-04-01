@@ -18,77 +18,77 @@ import org.pivot4j.impl.QueryAdapter;
 
 public abstract class AbstractTransform implements Transform {
 
-	private QueryAdapter queryAdapter;
+    private QueryAdapter queryAdapter;
 
-	private OlapConnection connection;
+    private OlapConnection connection;
 
-	/**
-	 * @param queryAdapter
-	 * @param connection
-	 */
-	public AbstractTransform(QueryAdapter queryAdapter,
-			OlapConnection connection) {
-		if (queryAdapter == null) {
-			throw new NullArgumentException("queryAdapter");
-		}
+    /**
+     * @param queryAdapter
+     * @param connection
+     */
+    public AbstractTransform(QueryAdapter queryAdapter,
+            OlapConnection connection) {
+        if (queryAdapter == null) {
+            throw new NullArgumentException("queryAdapter");
+        }
 
-		if (connection == null) {
-			throw new NullArgumentException("connection");
-		}
+        if (connection == null) {
+            throw new NullArgumentException("connection");
+        }
 
-		this.queryAdapter = queryAdapter;
-		this.connection = connection;
-	}
+        this.queryAdapter = queryAdapter;
+        this.connection = connection;
+    }
 
-	/**
-	 * @return the model
-	 * @see org.pivot4j.transform.Transform#getModel()
-	 */
-	public PivotModel getModel() {
-		return getQueryAdapter().getModel();
-	}
+    /**
+     * @return the model
+     * @see org.pivot4j.transform.Transform#getModel()
+     */
+    public PivotModel getModel() {
+        return getQueryAdapter().getModel();
+    }
 
-	/**
-	 * @return the queryAdapter
-	 */
-	protected QueryAdapter getQueryAdapter() {
-		return queryAdapter;
-	}
+    /**
+     * @return the queryAdapter
+     */
+    protected QueryAdapter getQueryAdapter() {
+        return queryAdapter;
+    }
 
-	/**
-	 * @return the connection
-	 */
-	protected OlapConnection getConnection() {
-		return connection;
-	}
+    /**
+     * @return the connection
+     */
+    protected OlapConnection getConnection() {
+        return connection;
+    }
 
-	/**
-	 * @param cellSet
-	 * @param axis
-	 * @return
-	 */
-	protected CellSetAxis getCellSetAxis(CellSet cellSet, Axis axis) {
-		Axis targetAxis = axis;
+    /**
+     * @param cellSet
+     * @param axis
+     * @return
+     */
+    protected CellSetAxis getCellSetAxis(CellSet cellSet, Axis axis) {
+        Axis targetAxis = axis;
 
-		if (queryAdapter.isAxesSwapped()) {
-			if (axis == Axis.COLUMNS) {
-				targetAxis = Axis.ROWS;
-			} else if (axis == Axis.ROWS) {
-				targetAxis = Axis.COLUMNS;
-			}
-		}
+        if (queryAdapter.isAxesSwapped()) {
+            if (axis == Axis.COLUMNS) {
+                targetAxis = Axis.ROWS;
+            } else if (axis == Axis.ROWS) {
+                targetAxis = Axis.COLUMNS;
+            }
+        }
 
-		CellSetAxis cellAxis = null;
+        CellSetAxis cellAxis = null;
 
-		if (cellSet != null) {
-			for (CellSetAxis item : cellSet.getAxes()) {
-				if (item.getAxisOrdinal() == targetAxis) {
-					cellAxis = item;
-					break;
-				}
-			}
-		}
+        if (cellSet != null) {
+            for (CellSetAxis item : cellSet.getAxes()) {
+                if (item.getAxisOrdinal() == targetAxis) {
+                    cellAxis = item;
+                    break;
+                }
+            }
+        }
 
-		return cellAxis;
-	}
+        return cellAxis;
+    }
 }

@@ -15,130 +15,127 @@ import org.primefaces.extensions.model.layout.LayoutOptions;
 @RequestScoped
 public class WorkbenchHandler {
 
-	@ManagedProperty(value = "#{settings}")
-	private Settings settings;
+    @ManagedProperty(value = "#{settings}")
+    private Settings settings;
 
-	@ManagedProperty(value = "#{repositoryHandler}")
-	private RepositoryHandler repositoryHandler;
+    @ManagedProperty(value = "#{repositoryHandler}")
+    private RepositoryHandler repositoryHandler;
 
-	private LayoutOptions layoutOptions;
+    private LayoutOptions layoutOptions;
 
-	/**
-	 * @return the layoutOptions
-	 */
-	public LayoutOptions getLayoutOptions() {
-		if (layoutOptions == null) {
-			this.layoutOptions = new LayoutOptions();
-			layoutOptions.addOption("enableCursorHotkey", false);
+    /**
+     * @return the layoutOptions
+     */
+    public LayoutOptions getLayoutOptions() {
+        if (layoutOptions == null) {
+            this.layoutOptions = new LayoutOptions();
+            layoutOptions.addOption("enableCursorHotkey", false);
 
-			LayoutOptions toolbarOptions = new LayoutOptions();
-			toolbarOptions.addOption("resizable", false);
-			toolbarOptions.addOption("resizable", false);
-			toolbarOptions.addOption("closable", false);
+            LayoutOptions toolbarOptions = new LayoutOptions();
+            toolbarOptions.addOption("resizable", false);
+            toolbarOptions.addOption("resizable", false);
+            toolbarOptions.addOption("closable", false);
 
-			layoutOptions.setNorthOptions(toolbarOptions);
+            layoutOptions.setNorthOptions(toolbarOptions);
 
-			LayoutOptions navigatorOptions = new LayoutOptions();
-			navigatorOptions.addOption("resizable", true);
-			navigatorOptions.addOption("closable", true);
-			navigatorOptions.addOption("slidable", true);
-			navigatorOptions.addOption("size", 200);
+            LayoutOptions navigatorOptions = new LayoutOptions();
+            navigatorOptions.addOption("resizable", true);
+            navigatorOptions.addOption("closable", true);
+            navigatorOptions.addOption("slidable", true);
+            navigatorOptions.addOption("size", 200);
 
-			layoutOptions.setWestOptions(navigatorOptions);
+            layoutOptions.setWestOptions(navigatorOptions);
 
-			LayoutOptions contentOptions = new LayoutOptions();
-			contentOptions.addOption("contentSelector", "#tab-panel");
-			contentOptions.addOption("maskIframesOnResize", true);
+            LayoutOptions contentOptions = new LayoutOptions();
+            contentOptions.addOption("contentSelector", "#tab-panel");
+            contentOptions.addOption("maskIframesOnResize", true);
 
-			layoutOptions.setCenterOptions(contentOptions);
-		}
+            layoutOptions.setCenterOptions(contentOptions);
+        }
 
-		return layoutOptions;
-	}
+        return layoutOptions;
+    }
 
-	/**
-	 * @return the theme
-	 */
-	public String getTheme() {
-		ExternalContext context = FacesContext.getCurrentInstance()
-				.getExternalContext();
-		String theme = (String) context.getSessionMap().get("ui-theme");
+    /**
+     * @return the theme
+     */
+    public String getTheme() {
+        ExternalContext context = FacesContext.getCurrentInstance()
+                .getExternalContext();
+        String theme = (String) context.getSessionMap().get("ui-theme");
 
-		if (theme == null) {
-			theme = settings.getTheme();
-		}
+        if (theme == null) {
+            theme = settings.getTheme();
+        }
 
-		return theme;
-	}
+        return theme;
+    }
 
-	/**
-	 * @param theme
-	 *            the theme to set
-	 */
-	public void setTheme(String theme) {
-		ExternalContext context = FacesContext.getCurrentInstance()
-				.getExternalContext();
+    /**
+     * @param theme the theme to set
+     */
+    public void setTheme(String theme) {
+        ExternalContext context = FacesContext.getCurrentInstance()
+                .getExternalContext();
 
-		if (theme == null) {
-			context.getSessionMap().remove("ui-theme");
-		} else {
-			context.getSessionMap().put("ui-theme", theme);
-		}
-	}
+        if (theme == null) {
+            context.getSessionMap().remove("ui-theme");
+        } else {
+            context.getSessionMap().put("ui-theme", theme);
+        }
+    }
 
-	public boolean isDeleteEnabled() {
-		ViewState viewState = repositoryHandler.getActiveView();
-		return viewState != null && viewState.getFile() != null;
-	}
+    public boolean isDeleteEnabled() {
+        ViewState viewState = repositoryHandler.getActiveView();
+        return viewState != null && viewState.getFile() != null;
+    }
 
-	public boolean isSaveEnabled() {
-		ViewState viewState = repositoryHandler.getActiveView();
-		return viewState != null && viewState.isDirty();
-	}
+    public boolean isSaveEnabled() {
+        ViewState viewState = repositoryHandler.getActiveView();
+        return viewState != null && viewState.isDirty();
+    }
 
-	public boolean isViewActive() {
-		ViewState viewState = repositoryHandler.getActiveView();
-		return viewState != null;
-	}
+    public boolean isViewActive() {
+        ViewState viewState = repositoryHandler.getActiveView();
+        return viewState != null;
+    }
 
-	public boolean isViewValid() {
-		ViewState viewState = repositoryHandler.getActiveView();
-		if (viewState == null) {
-			return false;
-		}
+    public boolean isViewValid() {
+        ViewState viewState = repositoryHandler.getActiveView();
+        if (viewState == null) {
+            return false;
+        }
 
-		PivotModel model = viewState.getModel();
+        PivotModel model = viewState.getModel();
 
-		return model != null && model.isInitialized();
-	}
+        return model != null && model.isInitialized();
+    }
 
-	/**
-	 * @return the settings
-	 */
-	public Settings getSettings() {
-		return settings;
-	}
+    /**
+     * @return the settings
+     */
+    public Settings getSettings() {
+        return settings;
+    }
 
-	/**
-	 * @param settings
-	 *            the settings to set
-	 */
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
+    /**
+     * @param settings the settings to set
+     */
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
 
-	/**
-	 * @return the repositoryHandler
-	 */
-	public RepositoryHandler getRepositoryHandler() {
-		return repositoryHandler;
-	}
+    /**
+     * @return the repositoryHandler
+     */
+    public RepositoryHandler getRepositoryHandler() {
+        return repositoryHandler;
+    }
 
-	/**
-	 * @param repositoryHandler
-	 *            the repositoryHandler to set
-	 */
-	public void setRepositoryHandler(RepositoryHandler repositoryHandler) {
-		this.repositoryHandler = repositoryHandler;
-	}
+    /**
+     * @param repositoryHandler the repositoryHandler to set
+     */
+    public void setRepositoryHandler(RepositoryHandler repositoryHandler) {
+        this.repositoryHandler = repositoryHandler;
+    }
 }

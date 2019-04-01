@@ -12,286 +12,286 @@ import org.pivot4j.analytics.datasource.ConnectionInfo;
 import org.pivot4j.analytics.repository.ReportFile;
 import org.pivot4j.analytics.ui.LayoutRegion;
 
-public class ViewState {
+public class ViewState implements Serializable {
 
-	private String id;
+    private String id;
 
-	private String name;
+    private String name;
 
-	private boolean dirty = false;
+    private boolean dirty = false;
 
-	private ReportFile file;
+    private ReportFile file;
 
-	private boolean readOnly = false;
+    private boolean readOnly = false;
 
-	private boolean editable = true;
+    private boolean editable = true;
 
-	private Date lastActive = new Date();
+    private boolean enableMdx = false;
 
-	private ConnectionInfo connectionInfo;
+    private Date lastActive = new Date();
 
-	private PivotModel model;
+    private ConnectionInfo connectionInfo;
 
-	private Serializable rendererState;
+    private PivotModel model;
 
-	private Serializable chartState;
+    private Serializable rendererState;
 
-	private Map<String, Object> parameters;
+    private Serializable chartState;
 
-	private Map<LayoutRegion, Boolean> layoutRegions;
+    private Map<String, Object> parameters;
 
-	/**
-	 * @param id
-	 * @param name
-	 */
-	public ViewState(String id, String name) {
-		if (id == null) {
-			throw new NullArgumentException("id");
-		}
+    private Map<LayoutRegion, Boolean> layoutRegions;
 
-		if (name == null) {
-			throw new NullArgumentException("name");
-		}
+    /**
+     * @param id
+     * @param name
+     */
+    public ViewState(String id, String name) {
+        if (id == null) {
+            throw new NullArgumentException("id");
+        }
 
-		this.id = id;
-		this.name = name;
-		this.layoutRegions = new HashMap<LayoutRegion, Boolean>();
-	}
+        if (name == null) {
+            throw new NullArgumentException("name");
+        }
 
-	/**
-	 * @param id
-	 * @param name
-	 * @param connectionInfo
-	 * @param model
-	 * @param file
-	 */
-	public ViewState(String id, String name, ConnectionInfo connectionInfo,
-			PivotModel model, ReportFile file) {
-		if (id == null) {
-			throw new NullArgumentException("id");
-		}
+        this.id = id;
+        this.name = name;
+        this.layoutRegions = new HashMap<LayoutRegion, Boolean>();
+    }
 
-		if (name == null) {
-			throw new NullArgumentException("name");
-		}
+    /**
+     * @param id
+     * @param name
+     * @param connectionInfo
+     * @param model
+     * @param file
+     */
+    public ViewState(String id, String name, ConnectionInfo connectionInfo,
+            PivotModel model, ReportFile file) {
+        if (id == null) {
+            throw new NullArgumentException("id");
+        }
 
-		this.id = id;
-		this.name = name;
-		this.connectionInfo = connectionInfo;
-		this.model = model;
-		this.file = file;
-		this.layoutRegions = new HashMap<LayoutRegion, Boolean>();
-	}
+        if (name == null) {
+            throw new NullArgumentException("name");
+        }
 
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
+        this.id = id;
+        this.name = name;
+        this.connectionInfo = connectionInfo;
+        this.model = model;
+        this.file = file;
+        this.layoutRegions = new HashMap<LayoutRegion, Boolean>();
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
 
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		if (name == null) {
-			throw new NullArgumentException("name");
-		}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-		this.name = name;
-	}
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        if (name == null) {
+            throw new NullArgumentException("name");
+        }
 
-	/**
-	 * @return the file
-	 */
-	public ReportFile getFile() {
-		return file;
-	}
+        this.name = name;
+    }
 
-	/**
-	 * @param file
-	 *            the file to set
-	 */
-	public void setFile(ReportFile file) {
-		this.file = file;
-	}
+    public boolean isEnableMdx() {
+        return enableMdx;
+    }
 
-	/**
-	 * @return the lastActive
-	 */
-	public Date getLastActive() {
-		return lastActive;
-	}
+    public void setEnableMdx(boolean enableMdx) {
+        this.enableMdx = enableMdx;
+    }
 
-	/**
-	 * @return the connectionInfo
-	 */
-	public ConnectionInfo getConnectionInfo() {
-		return connectionInfo;
-	}
+    /**
+     * @return the file
+     */
+    public ReportFile getFile() {
+        return file;
+    }
 
-	/**
-	 * @param connectionInfo
-	 *            the connectionInfo to set
-	 */
-	public void setConnectionInfo(ConnectionInfo connectionInfo) {
-		this.connectionInfo = connectionInfo;
-	}
+    /**
+     * @param file the file to set
+     */
+    public void setFile(ReportFile file) {
+        this.file = file;
+    }
 
-	/**
-	 * @return the readOnly
-	 */
-	public boolean isReadOnly() {
-		return readOnly;
-	}
+    /**
+     * @return the lastActive
+     */
+    public Date getLastActive() {
+        return lastActive;
+    }
 
-	/**
-	 * @param readOnly
-	 *            the readOnly to set
-	 */
-	public void setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
-	}
+    /**
+     * @return the connectionInfo
+     */
+    public ConnectionInfo getConnectionInfo() {
+        return connectionInfo;
+    }
 
-	/**
-	 * @return the editable
-	 */
-	public boolean isEditable() {
-		return editable;
-	}
+    /**
+     * @param connectionInfo the connectionInfo to set
+     */
+    public void setConnectionInfo(ConnectionInfo connectionInfo) {
+        this.connectionInfo = connectionInfo;
+    }
 
-	/**
-	 * @param editable
-	 *            the editable to set
-	 */
-	public void setEditable(boolean editable) {
-		this.editable = editable;
-	}
+    /**
+     * @return the readOnly
+     */
+    public boolean isReadOnly() {
+        return readOnly;
+    }
 
-	/**
-	 * @return the model
-	 */
-	public PivotModel getModel() {
-		return model;
-	}
+    /**
+     * @param readOnly the readOnly to set
+     */
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 
-	/**
-	 * @param model
-	 *            the model to set
-	 */
-	public void setModel(PivotModel model) {
-		this.model = model;
-	}
+    /**
+     * @return the editable
+     */
+    public boolean isEditable() {
+        return editable;
+    }
 
-	/**
-	 * @return the rendererState
-	 */
-	public Serializable getRendererState() {
-		return rendererState;
-	}
+    /**
+     * @param editable the editable to set
+     */
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
 
-	/**
-	 * @param rendererState
-	 *            the rendererState to set
-	 */
-	public void setRendererState(Serializable rendererState) {
-		this.rendererState = rendererState;
-	}
+    /**
+     * @return the model
+     */
+    public PivotModel getModel() {
+        return model;
+    }
 
-	/**
-	 * @return the chartState
-	 */
-	public Serializable getChartState() {
-		return chartState;
-	}
+    /**
+     * @param model the model to set
+     */
+    public void setModel(PivotModel model) {
+        this.model = model;
+    }
 
-	/**
-	 * @param chartState
-	 *            the chartState to set
-	 */
-	public void setChartState(Serializable chartState) {
-		this.chartState = chartState;
-	}
+    /**
+     * @return the rendererState
+     */
+    public Serializable getRendererState() {
+        return rendererState;
+    }
 
-	/**
-	 * @return the parameters
-	 */
-	public Map<String, Object> getParameters() {
-		return parameters;
-	}
+    /**
+     * @param rendererState the rendererState to set
+     */
+    public void setRendererState(Serializable rendererState) {
+        this.rendererState = rendererState;
+    }
 
-	/**
-	 * @param parameters
-	 *            the parameters to set
-	 */
-	public void setParameters(Map<String, Object> parameters) {
-		this.parameters = parameters;
-	}
+    /**
+     * @return the chartState
+     */
+    public Serializable getChartState() {
+        return chartState;
+    }
 
-	/**
-	 * @return the layoutRegions
-	 */
-	public Map<LayoutRegion, Boolean> getLayoutRegions() {
-		return layoutRegions;
-	}
+    /**
+     * @param chartState the chartState to set
+     */
+    public void setChartState(Serializable chartState) {
+        this.chartState = chartState;
+    }
 
-	/**
-	 * @param region
-	 * @return
-	 */
-	public boolean isRegionVisible(LayoutRegion region) {
-		if (region == null) {
-			throw new NullArgumentException("region");
-		}
+    /**
+     * @return the parameters
+     */
+    public Map<String, Object> getParameters() {
+        return parameters;
+    }
 
-		return !Boolean.FALSE.equals(layoutRegions.get(region));
-	}
+    /**
+     * @param parameters the parameters to set
+     */
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
+    }
 
-	/**
-	 * @param region
-	 * @param visible
-	 */
-	public void setRegionVisible(LayoutRegion region, boolean visible) {
-		if (region == null) {
-			throw new NullArgumentException("region");
-		}
+    /**
+     * @return the layoutRegions
+     */
+    public Map<LayoutRegion, Boolean> getLayoutRegions() {
+        return layoutRegions;
+    }
 
-		layoutRegions.put(region, visible);
-	}
+    /**
+     * @param region
+     * @return
+     */
+    public boolean isRegionVisible(LayoutRegion region) {
+        if (region == null) {
+            throw new NullArgumentException("region");
+        }
 
-	/**
-	 * @return the dirty
-	 */
-	public boolean isDirty() {
-		return dirty;
-	}
+        return !Boolean.FALSE.equals(layoutRegions.get(region));
+    }
 
-	/**
-	 * @param dirty
-	 *            the dirty to set
-	 */
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
-	}
+    /**
+     * @param region
+     * @param visible
+     */
+    public void setRegionVisible(LayoutRegion region, boolean visible) {
+        if (region == null) {
+            throw new NullArgumentException("region");
+        }
 
-	public void update() {
-		this.lastActive = new Date();
-	}
+        layoutRegions.put(region, visible);
+    }
 
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).append("id", id).append("name", name)
-				.append("connectionInfo", connectionInfo).toString();
-	}
+    /**
+     * @return the dirty
+     */
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    /**
+     * @param dirty the dirty to set
+     */
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
+
+    public void update() {
+        this.lastActive = new Date();
+    }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("id", id).append("name", name)
+                .append("connectionInfo", connectionInfo).toString();
+    }
 }

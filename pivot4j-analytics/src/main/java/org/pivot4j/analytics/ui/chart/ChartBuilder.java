@@ -6,9 +6,9 @@ import org.pivot4j.ui.chart.ChartRenderCallback;
 
 public interface ChartBuilder extends ChartRenderCallback {
 
-	String getName();
+    String getName();
 
-	UIComponent getComponent();
+    UIComponent getComponent();
 
-	void setComponent(UIComponent component);
+    void setComponent(UIComponent component);
 }

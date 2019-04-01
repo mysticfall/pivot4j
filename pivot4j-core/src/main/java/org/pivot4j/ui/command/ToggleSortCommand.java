@@ -18,54 +18,54 @@ import org.pivot4j.ui.PivotRenderer;
 
 public class ToggleSortCommand extends AbstractSortCommand {
 
-	public static final String NAME = "sort";
+    public static final String NAME = "sort";
 
-	/**
-	 * @param renderer
-	 */
-	public ToggleSortCommand(PivotRenderer<?> renderer) {
-		super(renderer);
-	}
+    /**
+     * @param renderer
+     */
+    public ToggleSortCommand(PivotRenderer<?> renderer) {
+        super(renderer);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#getName()
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.command.UICommand#getName()
+     */
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
-	 *      org.pivot4j.ui.command.UICommandParameters)
-	 */
-	@Override
-	public Void execute(PivotModel model, UICommandParameters parameters) {
-		CellSet cellSet = model.getCellSet();
+    /**
+     * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+     * org.pivot4j.ui.command.UICommandParameters)
+     */
+    @Override
+    public Void execute(PivotModel model, UICommandParameters parameters) {
+        CellSet cellSet = model.getCellSet();
 
-		CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
-		CellSetAxis otherAxis = cellSet.getAxes().get(
-				Math.abs(parameters.getAxisOrdinal() - 1));
+        CellSetAxis axis = cellSet.getAxes().get(parameters.getAxisOrdinal());
+        CellSetAxis otherAxis = cellSet.getAxes().get(
+                Math.abs(parameters.getAxisOrdinal() - 1));
 
-		Position position = axis.getPositions().get(
-				parameters.getPositionOrdinal());
+        Position position = axis.getPositions().get(
+                parameters.getPositionOrdinal());
 
-		SwapAxes transform = model.getTransform(SwapAxes.class);
+        SwapAxes transform = model.getTransform(SwapAxes.class);
 
-		if (transform.isSwapAxes()) {
-			CellSetAxis temp = axis;
-			axis = otherAxis;
-			otherAxis = temp;
-		}
+        if (transform.isSwapAxes()) {
+            CellSetAxis temp = axis;
+            axis = otherAxis;
+            otherAxis = temp;
+        }
 
-		SortMode mode = getRenderer().getSortMode();
+        SortMode mode = getRenderer().getSortMode();
 
-		if (mode != null) {
-			mode.toggleSort(model);
-		}
+        if (mode != null) {
+            mode.toggleSort(model);
+        }
 
-		model.sort(otherAxis, position);
+        model.sort(otherAxis, position);
 
-		return null;
-	}
+        return null;
+    }
 }

@@ -10,9 +10,9 @@ package org.pivot4j.mdx;
 
 public interface MdxParser {
 
-	/**
-	 * @param mdx
-	 * @return
-	 */
-	MdxStatement parse(String mdx);
+    /**
+     * @param mdx
+     * @return
+     */
+    MdxStatement parse(String mdx);
 }

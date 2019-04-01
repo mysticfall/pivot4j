@@ -15,72 +15,72 @@ import org.pivot4j.datasource.AbstractOlapDataSource;
 
 public class MdxOlap4JDataSource extends AbstractOlapDataSource {
 
-	private IPentahoSession session;
+    private IPentahoSession session;
 
-	private Properties properties;
+    private Properties properties;
 
-	private List<String> roleNames;
+    private List<String> roleNames;
 
-	/**
-	 * @param session
-	 * @param properties
-	 * @param roleNames
-	 */
-	public MdxOlap4JDataSource(IPentahoSession session, Properties properties,
-			List<String> roleNames) {
-		if (session == null) {
-			throw new IllegalAccessError("Required argument 'session' is null.");
-		}
+    /**
+     * @param session
+     * @param properties
+     * @param roleNames
+     */
+    public MdxOlap4JDataSource(IPentahoSession session, Properties properties,
+            List<String> roleNames) {
+        if (session == null) {
+            throw new IllegalAccessError("Required argument 'session' is null.");
+        }
 
-		if (properties == null) {
-			throw new IllegalAccessError(
-					"Required argument 'properties' is null.");
-		}
+        if (properties == null) {
+            throw new IllegalAccessError(
+                    "Required argument 'properties' is null.");
+        }
 
-		this.session = session;
-		this.properties = properties;
-		this.roleNames = roleNames;
-	}
+        this.session = session;
+        this.properties = properties;
+        this.roleNames = roleNames;
+    }
 
-	/**
-	 * @return the session
-	 */
-	public IPentahoSession getSession() {
-		return session;
-	}
+    /**
+     * @return the session
+     */
+    public IPentahoSession getSession() {
+        return session;
+    }
 
-	/**
-	 * @return the properties
-	 */
-	public Properties getProperties() {
-		return properties;
-	}
+    /**
+     * @return the properties
+     */
+    public Properties getProperties() {
+        return properties;
+    }
 
-	/**
-	 * @return the roleNames
-	 */
-	public List<String> getRoles() {
-		return roleNames;
-	}
+    /**
+     * @return the roleNames
+     */
+    public List<String> getRoles() {
+        return roleNames;
+    }
 
-	/**
-	 * @see org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java
-	 *      .lang.String, java.lang.String)
-	 */
-	@Override
-	protected OlapConnection createConnection(String userName, String password)
-			throws SQLException {
-		MDXOlap4jConnection connection = (MDXOlap4jConnection) PentahoConnectionFactory
-				.getConnection(IPentahoConnection.MDX_OLAP4J_DATASOURCE,
-						properties, session, null);
+    /**
+     * @see org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java
+     * .lang.String, java.lang.String)
+     */
+    @Override
+    protected OlapConnection createConnection(String userName, String password)
+            throws SQLException {
+        MDXOlap4jConnection connection = (MDXOlap4jConnection) PentahoConnectionFactory
+                .getConnection(IPentahoConnection.MDX_OLAP4J_DATASOURCE,
+                        properties, session, null);
 
-		OlapConnection olap4JCon = connection.getConnection();
+        OlapConnection olap4JCon = connection.getConnection();
 
-		if (roleNames != null && !roleNames.isEmpty()) {
-			MondrianOlap4jConnection monCon = (MondrianOlap4jConnection) olap4JCon;
-			monCon.setRoleNames(roleNames);
-		}
+        if (roleNames != null && !roleNames.isEmpty()) {
+            MondrianOlap4jConnection monCon = (MondrianOlap4jConnection) olap4JCon;
+            monCon.setRoleNames(roleNames);
+        }
 
-		return olap4JCon;
-	}
+        return olap4JCon;
+    }
 }

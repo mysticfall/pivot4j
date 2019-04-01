@@ -22,29 +22,29 @@ import org.pivot4j.mdx.impl.CupParser;
 
 public class MdxParserImpl implements MdxParser {
 
-	/**
-	 * @see org.pivot4j.mdx.MdxParser#parse(java.lang.String)
-	 */
-	@Override
-	public MdxStatement parse(String mdx) {
-		if (mdx == null) {
-			throw new NullArgumentException("mdx");
-		}
+    /**
+     * @see org.pivot4j.mdx.MdxParser#parse(java.lang.String)
+     */
+    @Override
+    public MdxStatement parse(String mdx) {
+        if (mdx == null) {
+            throw new NullArgumentException("mdx");
+        }
 
-		MdxStatement query;
+        MdxStatement query;
 
-		try {
-			CupParser parser = new CupParser(new StringReader(mdx));
-			Symbol parseTree = parser.parse();
+        try {
+            CupParser parser = new CupParser(new StringReader(mdx));
+            Symbol parseTree = parser.parse();
 
-			query = (MdxStatement) parseTree.value;
-		} catch (PivotException e) {
-			throw e;
-		} catch (Exception e) {
-			String msg = "Failed to parse MDX query : " + mdx;
-			throw new ParseException(msg, e);
-		}
+            query = (MdxStatement) parseTree.value;
+        } catch (PivotException e) {
+            throw e;
+        } catch (Exception e) {
+            String msg = "Failed to parse MDX query : " + mdx;
+            throw new ParseException(msg, e);
+        }
 
-		return query;
-	}
+        return query;
+    }
 }

@@ -23,71 +23,72 @@ import org.pivot4j.ui.PivotRenderer;
 import org.pivot4j.ui.RenderContext;
 
 public class BasicDrillThroughCommand extends AbstractUICommand<ResultSet>
-		implements DrillThroughCommand {
+        implements DrillThroughCommand {
 
-	public static final String NAME = "drillThrough";
+    public static final String NAME = "drillThrough";
 
-	/**
-	 * @param renderer
-	 */
-	public BasicDrillThroughCommand(PivotRenderer<?> renderer) {
-		super(renderer);
-	}
+    /**
+     * @param renderer
+     */
+    public BasicDrillThroughCommand(PivotRenderer<?> renderer) {
+        super(renderer);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#getName()
-	 */
-	@Override
-	public String getName() {
-		return NAME;
-	}
+    /**
+     * @see org.pivot4j.ui.command.UICommand#getName()
+     */
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#canExecute(org.pivot4j.ui
-	 *      .RenderContext)
-	 */
-	@Override
-	public boolean canExecute(RenderContext context) {
-		// See: http://jira.pentaho.com/browse/MONDRIAN-1036
-		PivotModel model = context.getModel();
-		boolean scenarioEnabled = model.isScenarioSupported()
-				&& model.getScenario() != null;
+    /**
+     * @see org.pivot4j.ui.command.UICommand#canExecute(org.pivot4j.ui
+     * .RenderContext)
+     */
+    @Override
+    public boolean canExecute(RenderContext context) {
+        // See: http://jira.pentaho.com/browse/MONDRIAN-1036
+        PivotModel model = context.getModel();
+        boolean scenarioEnabled = model.isScenarioSupported()
+                && model.getScenario() != null;
 
-		return !scenarioEnabled && getRenderer().getEnableDrillThrough()
-				&& model.getCube().isDrillThroughEnabled()
-				&& context.getCell() != null;
-	}
+        return !scenarioEnabled && getRenderer().getEnableDrillThrough()
+                && model.getCube().isDrillThroughEnabled()
+                && context.getCell() != null;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#createParameters(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public UICommandParameters createParameters(RenderContext context) {
-		UICommandParameters parameters = new UICommandParameters();
+    /**
+     * @see
+     * org.pivot4j.ui.command.UICommand#createParameters(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public UICommandParameters createParameters(RenderContext context) {
+        UICommandParameters parameters = new UICommandParameters();
 
-		List<Integer> list = context.getCell().getCoordinateList();
-		int[] coords = ArrayUtils.toPrimitive(list.toArray(new Integer[list.size()]));
+        List<Integer> list = context.getCell().getCoordinateList();
+        int[] coords = ArrayUtils.toPrimitive(list.toArray(new Integer[list.size()]));
 
-		parameters.setCellCoordinate(coords);
+        parameters.setCellCoordinate(coords);
 
-		return parameters;
-	}
+        return parameters;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
-	 *      org.pivot4j.ui.command.UICommandParameters)
-	 */
-	@Override
-	public ResultSet execute(PivotModel model, UICommandParameters parameters) {
-		int[] array = parameters.getCellCoordinate();
-		List<Integer> coords = Arrays.asList(ArrayUtils.toObject(array));
+    /**
+     * @see org.pivot4j.ui.command.UICommand#execute(org.pivot4j.PivotModel ,
+     * org.pivot4j.ui.command.UICommandParameters)
+     */
+    @Override
+    public ResultSet execute(PivotModel model, UICommandParameters parameters) {
+        int[] array = parameters.getCellCoordinate();
+        List<Integer> coords = Arrays.asList(ArrayUtils.toObject(array));
 
-		Cell cell = model.getCellSet().getCell(coords);
+        Cell cell = model.getCellSet().getCell(coords);
 
-		try {
-			return cell.drillThrough();
-		} catch (OlapException e) {
-			throw new PivotException(e);
-		}
-	}
+        try {
+            return cell.drillThrough();
+        } catch (OlapException e) {
+            throw new PivotException(e);
+        }
+    }
 }

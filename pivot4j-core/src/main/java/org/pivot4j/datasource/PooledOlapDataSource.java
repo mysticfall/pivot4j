@@ -23,272 +23,273 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PooledOlapDataSource extends AbstractOlapDataSource implements
-		CloseableDataSource {
+        CloseableDataSource {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private GenericObjectPool.Config poolConfig;
+    private GenericObjectPool.Config poolConfig;
 
-	private GenericObjectPool<OlapConnection> pool;
+    private GenericObjectPool<OlapConnection> pool;
 
-	private OlapDataSource dataSource;
+    private OlapDataSource dataSource;
 
-	private PooledOlapConnectionFactory connectionFactory;
+    private PooledOlapConnectionFactory connectionFactory;
 
-	/**
-	 * @param dataSource
-	 */
-	public PooledOlapDataSource(OlapDataSource dataSource) {
-		this(dataSource, null);
-	}
+    /**
+     * @param dataSource
+     */
+    public PooledOlapDataSource(OlapDataSource dataSource) {
+        this(dataSource, null);
+    }
 
-	/**
-	 * @param dataSource
-	 * @param poolConfig
-	 */
-	public PooledOlapDataSource(OlapDataSource dataSource,
-			GenericObjectPool.Config poolConfig) {
-		if (dataSource == null) {
-			throw new NullArgumentException("dataSource");
-		}
+    /**
+     * @param dataSource
+     * @param poolConfig
+     */
+    public PooledOlapDataSource(OlapDataSource dataSource,
+            GenericObjectPool.Config poolConfig) {
+        if (dataSource == null) {
+            throw new NullArgumentException("dataSource");
+        }
 
-		this.dataSource = dataSource;
-		this.poolConfig = poolConfig == null ? new GenericObjectPool.Config()
-				: poolConfig;
-		this.connectionFactory = createConnectionFactory(dataSource);
-		this.pool = createPool(connectionFactory, poolConfig);
-	}
+        this.dataSource = dataSource;
+        this.poolConfig = poolConfig == null ? new GenericObjectPool.Config()
+                : poolConfig;
+        this.connectionFactory = createConnectionFactory(dataSource);
+        this.pool = createPool(connectionFactory, poolConfig);
+    }
 
-	/**
-	 * @return the dataSource
-	 */
-	public OlapDataSource getDataSource() {
-		return dataSource;
-	}
+    /**
+     * @return the dataSource
+     */
+    public OlapDataSource getDataSource() {
+        return dataSource;
+    }
 
-	/**
-	 * @see org.pivot4j.datasource.CloseableDataSource#close()
-	 */
-	@Override
-	public synchronized void close() throws SQLException {
-		try {
-			if (logger.isInfoEnabled()) {
-				logger.info("Disposing the connection pool.");
-			}
+    /**
+     * @see org.pivot4j.datasource.CloseableDataSource#close()
+     */
+    @Override
+    public synchronized void close() throws SQLException {
+        try {
+            if (logger.isInfoEnabled()) {
+                logger.info("Disposing the connection pool.");
+            }
 
-			this.getPool().close();
-		} catch (SQLException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new SQLException(e);
-		}
-	}
+            this.getPool().close();
+        } catch (SQLException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new SQLException(e);
+        }
+    }
 
-	/**
-	 * @return the connectionFactory
-	 */
-	protected PooledOlapConnectionFactory createConnectionFactory(
-			OlapDataSource dataSource) {
-		return new PooledOlapConnectionFactory(dataSource);
-	}
+    /**
+     * @return the connectionFactory
+     */
+    protected PooledOlapConnectionFactory createConnectionFactory(
+            OlapDataSource dataSource) {
+        return new PooledOlapConnectionFactory(dataSource);
+    }
 
-	/**
-	 * @return the connectionFactory
-	 */
-	protected PooledOlapConnectionFactory getConnectionFactory() {
-		return connectionFactory;
-	}
+    /**
+     * @return the connectionFactory
+     */
+    protected PooledOlapConnectionFactory getConnectionFactory() {
+        return connectionFactory;
+    }
 
-	/**
-	 * @param factory
-	 * @param config
-	 * @return the pool
-	 */
-	protected GenericObjectPool<OlapConnection> createPool(
-			PoolableObjectFactory<OlapConnection> factory,
-			GenericObjectPool.Config config) {
-		if (logger.isInfoEnabled()) {
-			logger.info("Creating connection pool with following parameters : ");
-			logger.info("	- max active : {}", config.maxActive);
-			logger.info("	- max idle : {}", config.maxIdle);
-			logger.info("	- min idle: {}", config.minIdle);
-			logger.info("	- max wait : {}", config.maxWait);
-		}
-		return new GenericObjectPool<OlapConnection>(factory, config);
-	}
+    /**
+     * @param factory
+     * @param config
+     * @return the pool
+     */
+    protected GenericObjectPool<OlapConnection> createPool(
+            PoolableObjectFactory<OlapConnection> factory,
+            GenericObjectPool.Config config) {
+        if (logger.isInfoEnabled()) {
+            logger.info("Creating connection pool with following parameters : ");
+            logger.info("	- max active : {}", config.maxActive);
+            logger.info("	- max idle : {}", config.maxIdle);
+            logger.info("	- min idle: {}", config.minIdle);
+            logger.info("	- max wait : {}", config.maxWait);
+        }
+        return new GenericObjectPool<OlapConnection>(factory, config);
+    }
 
-	/**
-	 * @return the pool
-	 */
-	protected GenericObjectPool<OlapConnection> getPool() {
-		return pool;
-	}
+    /**
+     * @return the pool
+     */
+    protected GenericObjectPool<OlapConnection> getPool() {
+        return pool;
+    }
 
-	/**
-	 * Note: Both 'userName' and 'password' are ignored.
-	 * 
-	 * @see org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java.lang.String,
-	 *      java.lang.String)
-	 */
-	@Override
-	protected OlapConnection createConnection(String userName, String password)
-			throws SQLException {
-		try {
-			return pool.borrowObject();
-		} catch (SQLException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new SQLException(e);
-		}
-	}
+    /**
+     * Note: Both 'userName' and 'password' are ignored.
+     *
+     * @see
+     * org.pivot4j.datasource.AbstractOlapDataSource#createConnection(java.lang.String,
+     * java.lang.String)
+     */
+    @Override
+    protected OlapConnection createConnection(String userName, String password)
+            throws SQLException {
+        try {
+            return pool.borrowObject();
+        } catch (SQLException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new SQLException(e);
+        }
+    }
 
-	/**
-	 * @return the number of active connections
-	 */
-	public int getNumActive() {
-		return pool.getNumActive();
-	}
+    /**
+     * @return the number of active connections
+     */
+    public int getNumActive() {
+        return pool.getNumActive();
+    }
 
-	/**
-	 * @return the number of idle connections
-	 */
-	public int getNumIdle() {
-		return pool.getNumIdle();
-	}
+    /**
+     * @return the number of idle connections
+     */
+    public int getNumIdle() {
+        return pool.getNumIdle();
+    }
 
-	/**
-	 * @return the maxIdle
-	 */
-	public int getMaxIdle() {
-		return poolConfig.maxIdle;
-	}
+    /**
+     * @return the maxIdle
+     */
+    public int getMaxIdle() {
+        return poolConfig.maxIdle;
+    }
 
-	/**
-	 * @return the maxActive
-	 */
-	public int getMaxActive() {
-		return poolConfig.maxActive;
-	}
+    /**
+     * @return the maxActive
+     */
+    public int getMaxActive() {
+        return poolConfig.maxActive;
+    }
 
-	/**
-	 * @return the maxWait
-	 */
-	public long getMaxWait() {
-		return poolConfig.maxWait;
-	}
+    /**
+     * @return the maxWait
+     */
+    public long getMaxWait() {
+        return poolConfig.maxWait;
+    }
 
-	/**
-	 * @return the whenExhaustedAction
-	 */
-	public byte getWhenExhaustedAction() {
-		return poolConfig.whenExhaustedAction;
-	}
+    /**
+     * @return the whenExhaustedAction
+     */
+    public byte getWhenExhaustedAction() {
+        return poolConfig.whenExhaustedAction;
+    }
 
-	/**
-	 * @return the testOnBorrow
-	 */
-	public boolean isTestOnBorrow() {
-		return poolConfig.testOnBorrow;
-	}
+    /**
+     * @return the testOnBorrow
+     */
+    public boolean isTestOnBorrow() {
+        return poolConfig.testOnBorrow;
+    }
 
-	/**
-	 * @return the testOnReturn
-	 */
-	public boolean isTestOnReturn() {
-		return poolConfig.testOnReturn;
-	}
+    /**
+     * @return the testOnReturn
+     */
+    public boolean isTestOnReturn() {
+        return poolConfig.testOnReturn;
+    }
 
-	/**
-	 * @return the testWhileIdle
-	 */
-	public boolean isTestWhileIdle() {
-		return poolConfig.testWhileIdle;
-	}
+    /**
+     * @return the testWhileIdle
+     */
+    public boolean isTestWhileIdle() {
+        return poolConfig.testWhileIdle;
+    }
 
-	/**
-	 * @return the timeBetweenEvictionRunsMillis
-	 */
-	public long getTimeBetweenEvictionRunsMillis() {
-		return poolConfig.timeBetweenEvictionRunsMillis;
-	}
+    /**
+     * @return the timeBetweenEvictionRunsMillis
+     */
+    public long getTimeBetweenEvictionRunsMillis() {
+        return poolConfig.timeBetweenEvictionRunsMillis;
+    }
 
-	/**
-	 * @return the numTestsPerEvictionRun
-	 */
-	public int getNumTestsPerEvictionRun() {
-		return poolConfig.numTestsPerEvictionRun;
-	}
+    /**
+     * @return the numTestsPerEvictionRun
+     */
+    public int getNumTestsPerEvictionRun() {
+        return poolConfig.numTestsPerEvictionRun;
+    }
 
-	/**
-	 * @return the minEvictableIdleTimeMillis
-	 */
-	public long getMinEvictableIdleTimeMillis() {
-		return poolConfig.minEvictableIdleTimeMillis;
-	}
+    /**
+     * @return the minEvictableIdleTimeMillis
+     */
+    public long getMinEvictableIdleTimeMillis() {
+        return poolConfig.minEvictableIdleTimeMillis;
+    }
 
-	class PooledOlapConnectionFactory extends OlapConnectionFactory {
+    class PooledOlapConnectionFactory extends OlapConnectionFactory {
 
-		/**
-		 * @param dataSource
-		 */
-		public PooledOlapConnectionFactory(OlapDataSource dataSource) {
-			super(dataSource);
-		}
+        /**
+         * @param dataSource
+         */
+        public PooledOlapConnectionFactory(OlapDataSource dataSource) {
+            super(dataSource);
+        }
 
-		/**
-		 * @see org.pivot4j.datasource.OlapConnectionFactory#makeObject()
-		 */
-		@Override
-		public OlapConnection makeObject() {
-			final OlapConnection connection = super.makeObject();
+        /**
+         * @see org.pivot4j.datasource.OlapConnectionFactory#makeObject()
+         */
+        @Override
+        public OlapConnection makeObject() {
+            final OlapConnection connection = super.makeObject();
 
-			InvocationHandler handler = new InvocationHandler() {
+            InvocationHandler handler = new InvocationHandler() {
 
-				@Override
-				public Object invoke(Object proxy, Method method, Object[] args)
-						throws Throwable {
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args)
+                        throws Throwable {
 
-					if (method.getName().equals("close")) {
-						if (logger.isDebugEnabled()) {
-							logger.debug("Return a connection to the pool : "
-									+ connection);
-						}
+                    if (method.getName().equals("close")) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Return a connection to the pool : "
+                                    + connection);
+                        }
 
-						pool.returnObject((OlapConnection) proxy);
+                        pool.returnObject((OlapConnection) proxy);
 
-						if (logger.isDebugEnabled()) {
-							logger.debug("	- current pool size : "
-									+ pool.getNumActive() + " / "
-									+ pool.getMaxActive());
-						}
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("	- current pool size : "
+                                    + pool.getNumActive() + " / "
+                                    + pool.getMaxActive());
+                        }
 
-						return null;
-					} else {
-						return method.invoke(connection, args);
-					}
-				}
-			};
+                        return null;
+                    } else {
+                        return method.invoke(connection, args);
+                    }
+                }
+            };
 
-			return (OlapConnection) Proxy.newProxyInstance(getClass()
-					.getClassLoader(), new Class[] { OlapConnection.class },
-					handler);
-		}
+            return (OlapConnection) Proxy.newProxyInstance(getClass()
+                    .getClassLoader(), new Class[]{OlapConnection.class},
+                    handler);
+        }
 
-		/**
-		 * @see org.pivot4j.datasource.OlapConnectionFactory#destroyObject(org
-		 *      .olap4j.OlapConnection)
-		 */
-		@Override
-		public void destroyObject(OlapConnection con) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Closing a returned connection object : {}", con);
-			}
+        /**
+         * @see org.pivot4j.datasource.OlapConnectionFactory#destroyObject(org
+         * .olap4j.OlapConnection)
+         */
+        @Override
+        public void destroyObject(OlapConnection con) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Closing a returned connection object : {}", con);
+            }
 
-			try {
-				con.unwrap(OlapConnection.class).close();
-			} catch (SQLException e) {
-				throw new PivotException(e);
-			}
-		}
-	}
+            try {
+                con.unwrap(OlapConnection.class).close();
+            } catch (SQLException e) {
+                throw new PivotException(e);
+            }
+        }
+    }
 }

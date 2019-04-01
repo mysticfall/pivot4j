@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DesignerComponent>
-	<Header>
-		<Name>Pivot4J Widget</Name>
-		<IName>Pivot4JComponent</IName>
-		<Description>Pivot4J Widget Component</Description>
-		<Category>Pivot4J</Category>
-		<CatDescription>Pivot4J</CatDescription>
-		<Type>PalleteEntry</Type>
-		<Version>1.0</Version>
-	</Header>
-	<Contents>
-		<Model>
-			<Property>executeAtStart</Property>
-			<Property>htmlObject</Property>
-			<Property>width</Property>
-			<Property>height</Property>
-			<Property>filePath</Property>
-			<Property name="parameters">xActionArrayParameter</Property>
-			<Property>listeners</Property>
-			<Property>preExecution</Property>
-			<Property>postExecution</Property>
-		</Model>
+    <Header>
+        <Name>Pivot4J Widget</Name>
+        <IName>Pivot4JComponent</IName>
+        <Description>Pivot4J Widget Component</Description>
+        <Category>Pivot4J</Category>
+        <CatDescription>Pivot4J</CatDescription>
+        <Type>PalleteEntry</Type>
+        <Version>1.0</Version>
+    </Header>
+    <Contents>
+        <Model>
+            <Property>executeAtStart</Property>
+            <Property>htmlObject</Property>
+            <Property>width</Property>
+            <Property>height</Property>
+            <Property>filePath</Property>
+            <Property name="parameters">xActionArrayParameter</Property>
+            <Property>listeners</Property>
+            <Property>preExecution</Property>
+            <Property>postExecution</Property>
+        </Model>
 
-		<Implementation>
-			<Code src="pivot4j-widget.js" />
+        <Implementation>
+            <Code src="pivot4j-widget.js" />
 
-			<CustomProperties>
-				<DesignerProperty>
-					<Header>
-						<Name>filePath</Name>
-						<Parent>BaseProperty</Parent>
-						<DefaultValue></DefaultValue>
-						<Description>File Path</Description>
-						<Tooltip>Path of the Pivot4J report you want to embed.</Tooltip>
-						<InputType>String</InputType>
-						<OutputType>String</OutputType>
-						<Order>25</Order>
-						<Version>1.0</Version>
-					</Header>
-				</DesignerProperty>
-			</CustomProperties>
-		</Implementation>
-	</Contents>
+            <CustomProperties>
+                <DesignerProperty>
+                    <Header>
+                        <Name>filePath</Name>
+                        <Parent>BaseProperty</Parent>
+                        <DefaultValue></DefaultValue>
+                        <Description>File Path</Description>
+                        <Tooltip>Path of the Pivot4J report you want to embed.</Tooltip>
+                        <InputType>String</InputType>
+                        <OutputType>String</OutputType>
+                        <Order>25</Order>
+                        <Version>1.0</Version>
+                    </Header>
+                </DesignerProperty>
+            </CustomProperties>
+        </Implementation>
+    </Contents>
 </DesignerComponent>

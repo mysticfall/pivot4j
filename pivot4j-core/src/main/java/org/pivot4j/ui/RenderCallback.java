@@ -15,30 +15,30 @@ import org.pivot4j.state.Configurable;
 import org.pivot4j.ui.command.UICommand;
 
 public interface RenderCallback<T extends RenderContext> extends Configurable,
-		Bookmarkable {
+        Bookmarkable {
 
-	public String getContentType();
+    public String getContentType();
 
-	/**
-	 * @param context
-	 */
-	void startRender(T context);
+    /**
+     * @param context
+     */
+    void startRender(T context);
 
-	/**
-	 * @param context
-	 * @param commands
-	 */
-	void renderCommands(T context, List<UICommand<?>> commands);
+    /**
+     * @param context
+     * @param commands
+     */
+    void renderCommands(T context, List<UICommand<?>> commands);
 
-	/**
-	 * @param context
-	 * @param label
-	 * @param value
-	 */
-	void renderContent(T context, String label, Double value);
+    /**
+     * @param context
+     * @param label
+     * @param value
+     */
+    void renderContent(T context, String label, Double value);
 
-	/**
-	 * @param context
-	 */
-	void endRender(T context);
+    /**
+     * @param context
+     */
+    void endRender(T context);
 }

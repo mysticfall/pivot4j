@@ -10,9 +10,9 @@ package org.pivot4j.ui.command;
 
 public interface DrillDownCommand extends UICommand<Void> {
 
-	String MODE_POSITION = "position";
+    String MODE_POSITION = "position";
 
-	String MODE_MEMBER = "member";
+    String MODE_MEMBER = "member";
 
-	String MODE_REPLACE = "replace";
+    String MODE_REPLACE = "replace";
 }

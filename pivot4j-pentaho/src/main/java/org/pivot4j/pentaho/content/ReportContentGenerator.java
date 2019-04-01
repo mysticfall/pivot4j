@@ -13,48 +13,50 @@ import org.pentaho.platform.engine.services.solution.BaseContentGenerator;
 
 public class ReportContentGenerator extends BaseContentGenerator {
 
-	private static final long serialVersionUID = 7257498161100674425L;
+    private static final long serialVersionUID = 7257498161100674425L;
 
-	private transient Log log;
+    private transient Log log;
 
-	/**
-	 * @see org.pentaho.platform.engine.services.solution.BaseContentGenerator#getLogger()
-	 */
-	@Override
-	public Log getLogger() {
-		if (log == null) {
-			this.log = LogFactory.getLog(getClass());
-		}
+    /**
+     * @see
+     * org.pentaho.platform.engine.services.solution.BaseContentGenerator#getLogger()
+     */
+    @Override
+    public Log getLogger() {
+        if (log == null) {
+            this.log = LogFactory.getLog(getClass());
+        }
 
-		return log;
-	}
+        return log;
+    }
 
-	/**
-	 * @return the editable
-	 */
-	public boolean isEditable() {
-		return false;
-	}
+    /**
+     * @return the editable
+     */
+    public boolean isEditable() {
+        return false;
+    }
 
-	/**
-	 * @throws IOException
-	 * @throws ServletException
-	 * @see org.pentaho.platform.engine.services.solution.BaseContentGenerator#createContent()
-	 */
-	@Override
-	public void createContent() throws ServletException, IOException {
-		HttpServletRequest request = (HttpServletRequest) this.parameterProviders
-				.get("path").getParameter("httprequest");
+    /**
+     * @throws IOException
+     * @throws ServletException
+     * @see
+     * org.pentaho.platform.engine.services.solution.BaseContentGenerator#createContent()
+     */
+    @Override
+    public void createContent() throws ServletException, IOException {
+        HttpServletRequest request = (HttpServletRequest) this.parameterProviders
+                .get("path").getParameter("httprequest");
 
-		HttpServletResponse response = (HttpServletResponse) this.parameterProviders
-				.get("path").getParameter("httpresponse");
+        HttpServletResponse response = (HttpServletResponse) this.parameterProviders
+                .get("path").getParameter("httpresponse");
 
-		RepositoryFile file = (RepositoryFile) parameterProviders.get("path")
-				.getParameter("file");
+        RepositoryFile file = (RepositoryFile) parameterProviders.get("path")
+                .getParameter("file");
 
-		request.setAttribute("file", file);
-		request.getRequestDispatcher(
-				"/plugin/pivot4j/faces/open.xhtml?editable=" + isEditable())
-				.forward(request, response);
-	}
+        request.setAttribute("file", file);
+        request.getRequestDispatcher(
+                "/plugin/pivot4j/faces/open.xhtml?editable=" + isEditable())
+                .forward(request, response);
+    }
 }

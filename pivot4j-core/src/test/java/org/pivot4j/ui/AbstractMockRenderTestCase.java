@@ -16,8 +16,8 @@ import org.pivot4j.ui.table.TableRenderer;
 
 public abstract class AbstractMockRenderTestCase {
 
-	protected TableRenderContext createDummyRenderContext() {
-		PivotModel model = new PivotModelImpl(new SimpleOlapDataSource());
-		return new TableRenderContext(model, new TableRenderer(), 5, 10, 2, 2);
-	}
+    protected TableRenderContext createDummyRenderContext() {
+        PivotModel model = new PivotModelImpl(new SimpleOlapDataSource());
+        return new TableRenderContext(model, new TableRenderer(), 5, 10, 2, 2);
+    }
 }

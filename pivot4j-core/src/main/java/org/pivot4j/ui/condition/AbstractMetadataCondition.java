@@ -18,147 +18,149 @@ import org.pivot4j.ui.RenderContext;
 
 public abstract class AbstractMetadataCondition extends AbstractCondition {
 
-	private String uniqueName;
+    private String uniqueName;
 
-	/**
-	 * @param conditionFactory
-	 */
-	public AbstractMetadataCondition(ConditionFactory conditionFactory) {
-		super(conditionFactory);
-	}
+    /**
+     * @param conditionFactory
+     */
+    public AbstractMetadataCondition(ConditionFactory conditionFactory) {
+        super(conditionFactory);
+    }
 
-	/**
-	 * @param conditionFactory
-	 * @param uniqueName
-	 */
-	public AbstractMetadataCondition(ConditionFactory conditionFactory,
-			String uniqueName) {
-		super(conditionFactory);
+    /**
+     * @param conditionFactory
+     * @param uniqueName
+     */
+    public AbstractMetadataCondition(ConditionFactory conditionFactory,
+            String uniqueName) {
+        super(conditionFactory);
 
-		this.uniqueName = uniqueName;
-	}
+        this.uniqueName = uniqueName;
+    }
 
-	/**
-	 * @return the uniqueName
-	 */
-	public String getUniqueName() {
-		return uniqueName;
-	}
+    /**
+     * @return the uniqueName
+     */
+    public String getUniqueName() {
+        return uniqueName;
+    }
 
-	/**
-	 * @param uniqueName
-	 *            the uniqueName to set
-	 */
-	public void setUniqueName(String uniqueName) {
-		this.uniqueName = uniqueName;
-	}
+    /**
+     * @param uniqueName the uniqueName to set
+     */
+    public void setUniqueName(String uniqueName) {
+        this.uniqueName = uniqueName;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.Condition#matches(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public boolean matches(RenderContext context) {
-		if (uniqueName == null) {
-			throw new IllegalStateException(
-					"Unique name of the metadata is not specified.");
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.condition.Condition#matches(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public boolean matches(RenderContext context) {
+        if (uniqueName == null) {
+            throw new IllegalStateException(
+                    "Unique name of the metadata is not specified.");
+        }
 
-		if (matches(context.getMember())) {
-			return true;
-		}
+        if (matches(context.getMember())) {
+            return true;
+        }
 
-		for (Axis axis : context.getAxes()) {
-			Position pos = context.getPosition(axis);
+        for (Axis axis : context.getAxes()) {
+            Position pos = context.getPosition(axis);
 
-			if (pos != null && matches(pos)) {
-				return true;
-			}
-		}
+            if (pos != null && matches(pos)) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * @param position
-	 * @return
-	 */
-	protected boolean matches(Position position) {
-		if (position == null) {
-			return false;
-		}
+    /**
+     * @param position
+     * @return
+     */
+    protected boolean matches(Position position) {
+        if (position == null) {
+            return false;
+        }
 
-		boolean matches = false;
+        boolean matches = false;
 
-		for (Member member : position.getMembers()) {
-			if (matches(member)) {
-				matches = true;
-				break;
-			}
-		}
+        for (Member member : position.getMembers()) {
+            if (matches(member)) {
+                matches = true;
+                break;
+            }
+        }
 
-		return matches;
-	}
+        return matches;
+    }
 
-	/**
-	 * @param member
-	 * @return
-	 */
-	protected abstract boolean matches(Member member);
+    /**
+     * @param member
+     * @return
+     */
+    protected abstract boolean matches(Member member);
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#saveState()
-	 */
-	@Override
-	public Serializable saveState() {
-		return uniqueName;
-	}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#saveState()
+     */
+    @Override
+    public Serializable saveState() {
+        return uniqueName;
+    }
 
-	/**
-	 * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
-	 */
-	@Override
-	public void restoreState(Serializable state) {
-		if (state != null) {
-			this.uniqueName = (String) state;
-		}
-	}
+    /**
+     * @see org.pivot4j.state.Bookmarkable#restoreState(java.io.Serializable)
+     */
+    @Override
+    public void restoreState(Serializable state) {
+        if (state != null) {
+            this.uniqueName = (String) state;
+        }
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void saveSettings(HierarchicalConfiguration configuration) {
-		super.saveSettings(configuration);
+    /**
+     * @see
+     * org.pivot4j.ui.condition.AbstractCondition#saveSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void saveSettings(HierarchicalConfiguration configuration) {
+        super.saveSettings(configuration);
 
-		if (uniqueName == null) {
-			return;
-		}
+        if (uniqueName == null) {
+            return;
+        }
 
-		configuration.addProperty(getName(), uniqueName);
-	}
+        configuration.addProperty(getName(), uniqueName);
+    }
 
-	/**
-	 * @see org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
-	 */
-	@Override
-	public void restoreSettings(HierarchicalConfiguration configuration) {
-		this.uniqueName = configuration.getString(getName());
-	}
+    /**
+     * @see
+     * org.pivot4j.state.Configurable#restoreSettings(org.apache.commons.configuration.HierarchicalConfiguration)
+     */
+    @Override
+    public void restoreSettings(HierarchicalConfiguration configuration) {
+        this.uniqueName = configuration.getString(getName());
+    }
 
-	/**
-	 * @see org.pivot4j.ui.condition.AbstractCondition#toString()
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(getName() + " = '");
+    /**
+     * @see org.pivot4j.ui.condition.AbstractCondition#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getName() + " = '");
 
-		if (uniqueName != null) {
-			builder.append(uniqueName);
-		}
+        if (uniqueName != null) {
+            builder.append(uniqueName);
+        }
 
-		builder.append("'");
+        builder.append("'");
 
-		return builder.toString();
-	}
+        return builder.toString();
+    }
 }

@@ -18,27 +18,27 @@ import org.olap4j.metadata.Member;
  */
 public interface ChangeSlicer extends Transform {
 
-	List<Hierarchy> getHierarchies();
+    List<Hierarchy> getHierarchies();
 
-	/**
-	 * @return the current slicer.
-	 */
-	List<Member> getSlicer();
+    /**
+     * @return the current slicer.
+     */
+    List<Member> getSlicer();
 
-	/**
-	 * @param hierarchy
-	 * @return
-	 */
-	List<Member> getSlicer(Hierarchy hierarchy);
+    /**
+     * @param hierarchy
+     * @return
+     */
+    List<Member> getSlicer(Hierarchy hierarchy);
 
-	/**
-	 * sets the slicer
-	 */
-	void setSlicer(List<Member> members);
+    /**
+     * sets the slicer
+     */
+    void setSlicer(List<Member> members);
 
-	/**
-	 * @param hierarchy
-	 * @param members
-	 */
-	void setSlicer(Hierarchy hierarchy, List<Member> members);
+    /**
+     * @param hierarchy
+     * @param members
+     */
+    void setSlicer(Hierarchy hierarchy, List<Member> members);
 }

@@ -15,41 +15,41 @@ import org.pivot4j.PivotModel;
 import org.pivot4j.transform.Transform;
 
 public abstract class AbstractTransformTestCase<T extends Transform> extends
-		AbstractIntegrationTestCase {
+        AbstractIntegrationTestCase {
 
-	private T transform;
+    private T transform;
 
-	/**
-	 * @see org.pivot4j.AbstractIntegrationTestCase#setUp()
-	 */
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
+    /**
+     * @see org.pivot4j.AbstractIntegrationTestCase#setUp()
+     */
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
 
-		PivotModel model = getPivotModel();
-		model.setMdx(getInitialQuery());
-		model.initialize();
+        PivotModel model = getPivotModel();
+        model.setMdx(getInitialQuery());
+        model.initialize();
 
-		this.transform = model.getTransform(getType());
+        this.transform = model.getTransform(getType());
 
-		assertNotNull("No suitable transform found for " + getType(), transform);
-	}
+        assertNotNull("No suitable transform found for " + getType(), transform);
+    }
 
-	/**
-	 * @throws Exception 
-	 * @see org.pivot4j.AbstractIntegrationTestCase#tearDown()
-	 */
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-		this.transform = null;
-	}
+    /**
+     * @throws Exception
+     * @see org.pivot4j.AbstractIntegrationTestCase#tearDown()
+     */
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        this.transform = null;
+    }
 
-	protected abstract Class<T> getType();
+    protected abstract Class<T> getType();
 
-	protected abstract String getInitialQuery();
+    protected abstract String getInitialQuery();
 
-	protected T getTransform() {
-		return transform;
-	}
+    protected T getTransform() {
+        return transform;
+    }
 }

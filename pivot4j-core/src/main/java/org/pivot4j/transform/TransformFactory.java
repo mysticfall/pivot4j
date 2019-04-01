@@ -13,12 +13,12 @@ import org.pivot4j.impl.QueryAdapter;
 
 public interface TransformFactory {
 
-	/**
-	 * @param type
-	 * @param queryAdapter
-	 * @param connection
-	 * @return
-	 */
-	<T extends Transform> T createTransform(Class<T> type,
-			QueryAdapter queryAdapter, OlapConnection connection);
+    /**
+     * @param type
+     * @param queryAdapter
+     * @param connection
+     * @return
+     */
+    <T extends Transform> T createTransform(Class<T> type,
+            QueryAdapter queryAdapter, OlapConnection connection);
 }

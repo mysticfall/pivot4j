@@ -13,242 +13,248 @@ import org.pivot4j.ui.command.UICommand;
 import org.primefaces.component.breadcrumb.BreadCrumb;
 import org.primefaces.component.chart.Chart;
 import org.primefaces.component.menuitem.UIMenuItem;
-import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.ChartModel;
 
 public abstract class AbstractChartBuilder<T extends ChartModel>
-		extends AbstractRenderCallback<ChartRenderContext> implements
-		ChartBuilder {
+        extends AbstractRenderCallback<ChartRenderContext> implements
+        ChartBuilder {
 
-	private FacesContext context;
+    private FacesContext context;
 
-	private UIComponent component;
+    private UIComponent component;
 
-	private HtmlPanelGrid pageComponent;
+    private HtmlPanelGrid pageComponent;
 
-	private Chart chart;
+    private Chart chart;
 
-	private T model;
+    private T model;
 
-	/**
-	 * @param context
-	 */
-	public AbstractChartBuilder(FacesContext context) {
-		this.context = context;
-	}
+    /**
+     * @param context
+     */
+    public AbstractChartBuilder(FacesContext context) {
+        this.context = context;
+    }
 
-	/**
-	 * @return the context
-	 */
-	protected FacesContext getContext() {
-		return context;
-	}
+    /**
+     * @return the context
+     */
+    protected FacesContext getContext() {
+        return context;
+    }
 
-	/**
-	 * @return the component
-	 */
-	public UIComponent getComponent() {
-		return component;
-	}
+    /**
+     * @return the component
+     */
+    public UIComponent getComponent() {
+        return component;
+    }
 
-	/**
-	 * @param component
-	 *            the component to set
-	 */
-	public void setComponent(UIComponent component) {
-		this.component = component;
-	}
+    /**
+     * @param component the component to set
+     */
+    public void setComponent(UIComponent component) {
+        this.component = component;
+    }
 
-	/**
-	 * @return the pageComponent
-	 */
-	protected HtmlPanelGrid getPageComponent() {
-		return pageComponent;
-	}
+    /**
+     * @return the pageComponent
+     */
+    protected HtmlPanelGrid getPageComponent() {
+        return pageComponent;
+    }
 
-	/**
-	 * @return the chart
-	 */
-	protected Chart getChart() {
-		return chart;
-	}
+    /**
+     * @return the chart
+     */
+    protected Chart getChart() {
+        return chart;
+    }
 
-	/**
-	 * @return the model
-	 */
-	protected T getModel() {
-		return model;
-	}
+    /**
+     * @return the model
+     */
+    protected T getModel() {
+        return model;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.AbstractRenderCallback#startRender(org.pivot4j.ui.RenderContext)
-	 */
-	@Override
-	public void startRender(ChartRenderContext context) {
-		component.getChildren().clear();
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.AbstractRenderCallback#startRender(org.pivot4j.ui.RenderContext)
+     */
+    @Override
+    public void startRender(ChartRenderContext context) {
+        component.getChildren().clear();
+    }
 
-	/**
-	 * @see org.pivot4j.ui.chart.ChartRenderCallback#startPage(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	public void startPage(ChartRenderContext context) {
-		this.pageComponent = createPageComponent(context);
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.chart.ChartRenderCallback#startPage(org.pivot4j.ui.chart.ChartRenderContext)
+     */
+    @Override
+    public void startPage(ChartRenderContext context) {
+        this.pageComponent = createPageComponent(context);
+    }
 
-	/**
-	 * @see org.pivot4j.ui.chart.ChartRenderCallback#startChart(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	public void startChart(ChartRenderContext context) {
-		this.chart = createChart(context);
-		this.model = createModel(context);
+    /**
+     * @see
+     * org.pivot4j.ui.chart.ChartRenderCallback#startChart(org.pivot4j.ui.chart.ChartRenderContext)
+     */
+    @Override
+    public void startChart(ChartRenderContext context) {
+        this.chart = createChart(context);
+        this.model = createModel(context);
 
-		configureChart(context, chart, model);
-	}
+        configureChart(context, chart, model);
+    }
 
-	protected Chart createChart(ChartRenderContext context) {
-		return new Chart();
-	}
+    protected Chart createChart(ChartRenderContext context) {
+        return new Chart();
+    }
 
-	protected abstract T createModel(ChartRenderContext context);
+    protected abstract T createModel(ChartRenderContext context);
 
-	/**
-	 * @param context
-	 * @return
-	 */
-	protected BreadCrumb createBreadCrumb(ChartRenderContext context) {
-		BreadCrumb breadCrumb = new BreadCrumb();
+    /**
+     * @param context
+     * @return
+     */
+    protected BreadCrumb createBreadCrumb(ChartRenderContext context) {
+        BreadCrumb breadCrumb = new BreadCrumb();
 
-		UIMenuItem rootItem = new UIMenuItem();
+        UIMenuItem rootItem = new UIMenuItem();
 
-		rootItem.setValue("");
-		breadCrumb.getChildren().add(rootItem);
+        rootItem.setValue("");
+        breadCrumb.getChildren().add(rootItem);
 
-		List<Member> members = context.getPagePath();
+        List<Member> members = context.getPagePath();
 
-		for (Member member : members) {
-			UIMenuItem item = new UIMenuItem();
+        for (Member member : members) {
+            UIMenuItem item = new UIMenuItem();
 
-			item.setValue(member.getCaption());
-			item.setTitle(member.getDescription());
+            item.setValue(member.getCaption());
+            item.setTitle(member.getDescription());
 
-			breadCrumb.getChildren().add(item);
-		}
+            breadCrumb.getChildren().add(item);
+        }
 
-		return breadCrumb;
-	}
+        return breadCrumb;
+    }
 
-	/**
-	 * @param context
-	 * @return
-	 */
-	protected HtmlPanelGrid createPageComponent(ChartRenderContext context) {
-		DefaultChartRenderer renderer = (DefaultChartRenderer) context
-				.getRenderer();
+    /**
+     * @param context
+     * @return
+     */
+    protected HtmlPanelGrid createPageComponent(ChartRenderContext context) {
+        DefaultChartRenderer renderer = (DefaultChartRenderer) context
+                .getRenderer();
 
-		HtmlPanelGrid grid = new HtmlPanelGrid();
+        HtmlPanelGrid grid = new HtmlPanelGrid();
 
-		if (renderer.getWidth() <= 0) {
-			grid.setStyle("width: 100%;");
-		}
+        if (renderer.getWidth() <= 0) {
+            grid.setStyle("width: 100%;");
+        }
 
-		grid.setStyleClass("chart-page");
-		grid.setColumns(context.getChartCount());
+        grid.setStyleClass("chart-page");
+        grid.setColumns(context.getChartCount());
 
-		return grid;
-	}
+        return grid;
+    }
 
-	/**
-	 * @param context
-	 * @param chart
-	 * @param model
-	 */
-	protected void configureChart(ChartRenderContext context, Chart chart, T model) {
-		List<Member> path = context.getChartPath();
+    /**
+     * @param context
+     * @param chart
+     * @param model
+     */
+    protected void configureChart(ChartRenderContext context, Chart chart, T model) {
+        List<Member> path = context.getChartPath();
 
-		if (path != null && path.size() > 0) {
-			String title = path.get(path.size() - 1).getCaption();
+        if (path != null && path.size() > 0) {
+            String title = path.get(path.size() - 1).getCaption();
 
-			model.setTitle(title);
-		}
+            model.setTitle(title);
+        }
 
-		model.setShadow(true);
+        model.setShadow(true);
 
-		DefaultChartRenderer renderer = (DefaultChartRenderer) context
-				.getRenderer();
+        DefaultChartRenderer renderer = (DefaultChartRenderer) context
+                .getRenderer();
 
-		if (renderer.getLegendPosition() != null) {
-			model.setLegendPosition(renderer.getLegendPosition().name());
-		}
+        if (renderer.getLegendPosition() != null) {
+            model.setLegendPosition(renderer.getLegendPosition().name());
+        }
 
-		StringBuilder builder = new StringBuilder();
-		builder.append("width: ");
+        StringBuilder builder = new StringBuilder();
+        builder.append("width: ");
 
-		if (renderer.getWidth() <= 0) {
-			builder.append("100%; ");
-		} else {
-			builder.append(Integer.toString(renderer.getWidth()));
-			builder.append("px; ");
-		}
+        if (renderer.getWidth() <= 0) {
+            builder.append("100%; ");
+        } else {
+            builder.append(Integer.toString(renderer.getWidth()));
+            builder.append("px; ");
+        }
 
-		if (renderer.getHeight() > 0) {
-			builder.append("height: ");
-			builder.append(Integer.toString(renderer.getHeight()));
-			builder.append("px;");
-		}
+        if (renderer.getHeight() > 0) {
+            builder.append("height: ");
+            builder.append(Integer.toString(renderer.getHeight()));
+            builder.append("px;");
+        }
 
-		chart.setStyle(builder.toString());
-		chart.setType(getName().toLowerCase());
-	}
+        chart.setStyle(builder.toString());
+        chart.setType(getName().toLowerCase());
+    }
 
-	/**
-	 * @see org.pivot4j.ui.chart.ChartRenderCallback#startSeries(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	public void startSeries(ChartRenderContext context) {
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.chart.ChartRenderCallback#startSeries(org.pivot4j.ui.chart.ChartRenderContext)
+     */
+    @Override
+    public void startSeries(ChartRenderContext context) {
+    }
 
-	/**
-	 * @see org.pivot4j.ui.RenderCallback#renderCommands(org.pivot4j.ui.RenderContext,
-	 *      java.util.List)
-	 */
-	@Override
-	public void renderCommands(ChartRenderContext context,
-			List<UICommand<?>> commands) {
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.RenderCallback#renderCommands(org.pivot4j.ui.RenderContext,
+     * java.util.List)
+     */
+    @Override
+    public void renderCommands(ChartRenderContext context,
+            List<UICommand<?>> commands) {
+    }
 
-	/**
-	 * @see org.pivot4j.ui.chart.ChartRenderCallback#endSeries(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	public void endSeries(ChartRenderContext context) {
-	}
+    /**
+     * @see
+     * org.pivot4j.ui.chart.ChartRenderCallback#endSeries(org.pivot4j.ui.chart.ChartRenderContext)
+     */
+    @Override
+    public void endSeries(ChartRenderContext context) {
+    }
 
-	/**
-	 * @see org.pivot4j.ui.chart.ChartRenderCallback#endChart(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	public void endChart(ChartRenderContext context) {
-		chart.setModel(model);
+    /**
+     * @see
+     * org.pivot4j.ui.chart.ChartRenderCallback#endChart(org.pivot4j.ui.chart.ChartRenderContext)
+     */
+    @Override
+    public void endChart(ChartRenderContext context) {
+        chart.setModel(model);
 
-		pageComponent.getChildren().add(chart);
+        pageComponent.getChildren().add(chart);
 
-		this.model = null;
-		this.chart = null;
-	}
+        this.model = null;
+        this.chart = null;
+    }
 
-	/**
-	 * @see org.pivot4j.ui.chart.ChartRenderCallback#endPage(org.pivot4j.ui.chart.ChartRenderContext)
-	 */
-	@Override
-	public void endPage(ChartRenderContext context) {
-		if (!context.getPagePath().isEmpty()) {
-			pageComponent.getFacets().put("header", createBreadCrumb(context));
-		}
+    /**
+     * @see
+     * org.pivot4j.ui.chart.ChartRenderCallback#endPage(org.pivot4j.ui.chart.ChartRenderContext)
+     */
+    @Override
+    public void endPage(ChartRenderContext context) {
+        if (!context.getPagePath().isEmpty()) {
+            pageComponent.getFacets().put("header", createBreadCrumb(context));
+        }
 
-		component.getChildren().add(pageComponent);
+        component.getChildren().add(pageComponent);
 
-		this.pageComponent = null;
-	}
+        this.pageComponent = null;
+    }
 }

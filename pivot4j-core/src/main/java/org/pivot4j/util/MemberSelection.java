@@ -20,272 +20,271 @@ import org.olap4j.metadata.Member;
 
 public class MemberSelection extends TreeNode<Member> {
 
-	private Set<Member> selection = new HashSet<Member>();
+    private Set<Member> selection = new HashSet<Member>();
 
-	private Cube cube;
+    private Cube cube;
 
-	private MemberHierarchyCache memberHierarchyCache;
+    private MemberHierarchyCache memberHierarchyCache;
 
-	/**
-	 * @param cube
-	 */
-	public MemberSelection(Cube cube) {
-		super(null);
+    /**
+     * @param cube
+     */
+    public MemberSelection(Cube cube) {
+        super(null);
 
-		if (cube == null) {
-			throw new NullArgumentException("cube");
-		}
+        if (cube == null) {
+            throw new NullArgumentException("cube");
+        }
 
-		this.cube = cube;
-	}
+        this.cube = cube;
+    }
 
-	/**
-	 * @param members
-	 * @param cube
-	 */
-	public MemberSelection(List<Member> members, Cube cube) {
-		super(null);
+    /**
+     * @param members
+     * @param cube
+     */
+    public MemberSelection(List<Member> members, Cube cube) {
+        super(null);
 
-		if (cube == null) {
-			throw new NullArgumentException("cube");
-		}
+        if (cube == null) {
+            throw new NullArgumentException("cube");
+        }
 
-		this.cube = cube;
+        this.cube = cube;
 
-		addMembers(members);
-	}
+        addMembers(members);
+    }
 
-	/**
-	 * @param members
-	 */
-	public void addMembers(List<Member> members) {
-		for (Member member : members) {
-			addMember(member);
-		}
-	}
+    /**
+     * @param members
+     */
+    public void addMembers(List<Member> members) {
+        for (Member member : members) {
+            addMember(member);
+        }
+    }
 
-	/**
-	 * @param member
-	 */
-	public void addMember(Member member) {
-		TreeNode<Member> parent = this;
+    /**
+     * @param member
+     */
+    public void addMember(Member member) {
+        TreeNode<Member> parent = this;
 
-		OlapUtils utils = new OlapUtils(cube);
-		utils.setMemberHierarchyCache(memberHierarchyCache);
+        OlapUtils utils = new OlapUtils(cube);
+        utils.setMemberHierarchyCache(memberHierarchyCache);
 
-		Member wrappedMember = utils.wrapRaggedIfNecessary(member);
+        Member wrappedMember = utils.wrapRaggedIfNecessary(member);
 
-		List<Member> ancestors = new ArrayList<Member>(
-				wrappedMember.getAncestorMembers());
+        List<Member> ancestors = new ArrayList<Member>(
+                wrappedMember.getAncestorMembers());
 
-		Collections.reverse(ancestors);
+        Collections.reverse(ancestors);
 
-		for (Member ancestor : ancestors) {
-			ancestor = utils.wrapRaggedIfNecessary(ancestor);
+        for (Member ancestor : ancestors) {
+            ancestor = utils.wrapRaggedIfNecessary(ancestor);
 
-			if (utils.getBaseRaggedMember(ancestor).getDepth() != ancestor
-					.getDepth()) {
-				continue;
-			}
+            if (utils.getBaseRaggedMember(ancestor).getDepth() != ancestor
+                    .getDepth()) {
+                continue;
+            }
 
-			TreeNode<Member> node = findChild(ancestor);
+            TreeNode<Member> node = findChild(ancestor);
 
-			if (node == null) {
-				node = new SelectionNode(ancestor, false);
-				parent.addChild(node);
-			}
+            if (node == null) {
+                node = new SelectionNode(ancestor, false);
+                parent.addChild(node);
+            }
 
-			parent = node;
-		}
+            parent = node;
+        }
 
-		TreeNode<Member> node = findChild(wrappedMember);
+        TreeNode<Member> node = findChild(wrappedMember);
 
-		if (node == null) {
-			node = new SelectionNode(wrappedMember, true);
-			parent.addChild(node);
-		} else {
-			((SelectionNode) node).setSelected(true);
-		}
+        if (node == null) {
+            node = new SelectionNode(wrappedMember, true);
+            parent.addChild(node);
+        } else {
+            ((SelectionNode) node).setSelected(true);
+        }
 
-		if (!isSelected(wrappedMember)) {
-			selection.add(wrappedMember);
-		}
-	}
+        if (!isSelected(wrappedMember)) {
+            selection.add(wrappedMember);
+        }
+    }
 
-	/**
-	 * @param member
-	 */
-	public void removeMember(Member member) {
-		SelectionNode node = (SelectionNode) findChild(member);
+    /**
+     * @param member
+     */
+    public void removeMember(Member member) {
+        SelectionNode node = (SelectionNode) findChild(member);
 
-		if (node == null) {
-			throw new IllegalArgumentException(
-					"The specified member does not belong to the selection tree.");
-		}
+        if (node == null) {
+            throw new IllegalArgumentException(
+                    "The specified member does not belong to the selection tree.");
+        }
 
-		node.getParent().removeChild(node);
+        node.getParent().removeChild(node);
 
-		if (isSelected(member)) {
-			selection.remove(member);
-		}
-	}
+        if (isSelected(member)) {
+            selection.remove(member);
+        }
+    }
 
-	/**
-	 * @param member
-	 * @return
-	 */
-	public boolean isSelected(Member member) {
-		if (member == null) {
-			return false;
-		}
+    /**
+     * @param member
+     * @return
+     */
+    public boolean isSelected(Member member) {
+        if (member == null) {
+            return false;
+        }
 
-		OlapUtils utils = new OlapUtils(cube);
-		utils.setMemberHierarchyCache(memberHierarchyCache);
+        OlapUtils utils = new OlapUtils(cube);
+        utils.setMemberHierarchyCache(memberHierarchyCache);
 
-		Member wrappedMember = utils.wrapRaggedIfNecessary(member);
-		return selection.contains(wrappedMember);
-	}
+        Member wrappedMember = utils.wrapRaggedIfNecessary(member);
+        return selection.contains(wrappedMember);
+    }
 
-	public List<Member> getMembers() {
-		final List<Member> members = new ArrayList<Member>();
+    public List<Member> getMembers() {
+        final List<Member> members = new ArrayList<Member>();
 
-		TreeNodeCallback<Member> callback = new TreeNodeCallback<Member>() {
+        TreeNodeCallback<Member> callback = new TreeNodeCallback<Member>() {
 
-			@Override
-			public int handleTreeNode(TreeNode<Member> node) {
-				if (((SelectionNode) node).isSelected()) {
-					members.add(node.getReference());
-				}
+            @Override
+            public int handleTreeNode(TreeNode<Member> node) {
+                if (((SelectionNode) node).isSelected()) {
+                    members.add(node.getReference());
+                }
 
-				return CONTINUE;
-			}
-		};
+                return CONTINUE;
+            }
+        };
 
-		walkChildren(callback);
+        walkChildren(callback);
 
-		return members;
-	}
+        return members;
+    }
 
-	/**
-	 * @param member
-	 * @return
-	 */
-	public boolean canMoveUp(Member member) {
-		SelectionNode node = (SelectionNode) findChild(member);
+    /**
+     * @param member
+     * @return
+     */
+    public boolean canMoveUp(Member member) {
+        SelectionNode node = (SelectionNode) findChild(member);
 
-		if (node == null) {
-			throw new IllegalArgumentException(
-					"The specified member does not belong to the selection tree.");
-		}
+        if (node == null) {
+            throw new IllegalArgumentException(
+                    "The specified member does not belong to the selection tree.");
+        }
 
-		int index = node.getParent().getChildren().indexOf(node);
-		return index > 0;
-	}
+        int index = node.getParent().getChildren().indexOf(node);
+        return index > 0;
+    }
 
-	/**
-	 * @param member
-	 * @return
-	 */
-	public boolean canMoveDown(Member member) {
-		SelectionNode node = (SelectionNode) findChild(member);
+    /**
+     * @param member
+     * @return
+     */
+    public boolean canMoveDown(Member member) {
+        SelectionNode node = (SelectionNode) findChild(member);
 
-		if (node == null) {
-			throw new IllegalArgumentException(
-					"The specified member does not belong to the selection tree.");
-		}
+        if (node == null) {
+            throw new IllegalArgumentException(
+                    "The specified member does not belong to the selection tree.");
+        }
 
-		int index = node.getParent().getChildren().indexOf(node);
-		return index < node.getParent().getChildCount() - 1;
-	}
+        int index = node.getParent().getChildren().indexOf(node);
+        return index < node.getParent().getChildCount() - 1;
+    }
 
-	/**
-	 * @param member
-	 */
-	public void moveUp(Member member) {
-		SelectionNode node = (SelectionNode) findChild(member);
+    /**
+     * @param member
+     */
+    public void moveUp(Member member) {
+        SelectionNode node = (SelectionNode) findChild(member);
 
-		if (node == null) {
-			throw new IllegalArgumentException(
-					"The specified member does not belong to the selection tree.");
-		}
+        if (node == null) {
+            throw new IllegalArgumentException(
+                    "The specified member does not belong to the selection tree.");
+        }
 
-		TreeNode<Member> parentNode = node.getParent();
-		List<TreeNode<Member>> siblings = parentNode.getChildren();
+        TreeNode<Member> parentNode = node.getParent();
+        List<TreeNode<Member>> siblings = parentNode.getChildren();
 
-		int index = siblings.indexOf(node);
+        int index = siblings.indexOf(node);
 
-		TreeNode<Member> targetNode = siblings.get(index - 1);
+        TreeNode<Member> targetNode = siblings.get(index - 1);
 
-		parentNode.removeChild(node);
-		parentNode.removeChild(targetNode);
+        parentNode.removeChild(node);
+        parentNode.removeChild(targetNode);
 
-		parentNode.addChild(index - 1, node);
-		parentNode.addChild(index, targetNode);
-	}
+        parentNode.addChild(index - 1, node);
+        parentNode.addChild(index, targetNode);
+    }
 
-	/**
-	 * @param member
-	 */
-	public void moveDown(Member member) {
-		SelectionNode node = (SelectionNode) findChild(member);
+    /**
+     * @param member
+     */
+    public void moveDown(Member member) {
+        SelectionNode node = (SelectionNode) findChild(member);
 
-		if (node == null) {
-			throw new IllegalArgumentException(
-					"The specified member does not belong to the selection tree.");
-		}
+        if (node == null) {
+            throw new IllegalArgumentException(
+                    "The specified member does not belong to the selection tree.");
+        }
 
-		TreeNode<Member> parentNode = node.getParent();
-		List<TreeNode<Member>> siblings = parentNode.getChildren();
+        TreeNode<Member> parentNode = node.getParent();
+        List<TreeNode<Member>> siblings = parentNode.getChildren();
 
-		int index = siblings.indexOf(node);
+        int index = siblings.indexOf(node);
 
-		TreeNode<Member> targetNode = siblings.get(index + 1);
+        TreeNode<Member> targetNode = siblings.get(index + 1);
 
-		parentNode.removeChild(node);
-		parentNode.removeChild(targetNode);
+        parentNode.removeChild(node);
+        parentNode.removeChild(targetNode);
 
-		parentNode.addChild(index, targetNode);
-		parentNode.addChild(index + 1, node);
-	}
+        parentNode.addChild(index, targetNode);
+        parentNode.addChild(index + 1, node);
+    }
 
-	/**
-	 * @return the memberHierarchyCache
-	 */
-	public MemberHierarchyCache getMemberHierarchyCache() {
-		return memberHierarchyCache;
-	}
+    /**
+     * @return the memberHierarchyCache
+     */
+    public MemberHierarchyCache getMemberHierarchyCache() {
+        return memberHierarchyCache;
+    }
 
-	/**
-	 * @param memberHierarchyCache
-	 *            the memberHierarchyCache to set
-	 */
-	public void setMemberHierarchyCache(
-			MemberHierarchyCache memberHierarchyCache) {
-		this.memberHierarchyCache = memberHierarchyCache;
-	}
+    /**
+     * @param memberHierarchyCache the memberHierarchyCache to set
+     */
+    public void setMemberHierarchyCache(
+            MemberHierarchyCache memberHierarchyCache) {
+        this.memberHierarchyCache = memberHierarchyCache;
+    }
 
-	static class SelectionNode extends TreeNode<Member> {
+    static class SelectionNode extends TreeNode<Member> {
 
-		private boolean selected;
+        private boolean selected;
 
-		/**
-		 * @param member
-		 * @param selected
-		 */
-		SelectionNode(Member member, boolean selected) {
-			super(member);
-			this.selected = selected;
-		}
+        /**
+         * @param member
+         * @param selected
+         */
+        SelectionNode(Member member, boolean selected) {
+            super(member);
+            this.selected = selected;
+        }
 
-		boolean isSelected() {
-			return selected;
-		}
+        boolean isSelected() {
+            return selected;
+        }
 
-		/**
-		 * @param selected
-		 */
-		void setSelected(boolean selected) {
-			this.selected = selected;
-		}
-	}
+        /**
+         * @param selected
+         */
+        void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+    }
 }

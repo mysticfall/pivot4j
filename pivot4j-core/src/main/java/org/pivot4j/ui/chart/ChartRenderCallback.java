@@ -12,15 +12,15 @@ import org.pivot4j.ui.RenderCallback;
 
 public interface ChartRenderCallback extends RenderCallback<ChartRenderContext> {
 
-	void startPage(ChartRenderContext context);
+    void startPage(ChartRenderContext context);
 
-	void startChart(ChartRenderContext context);
+    void startChart(ChartRenderContext context);
 
-	void startSeries(ChartRenderContext context);
+    void startSeries(ChartRenderContext context);
 
-	void endSeries(ChartRenderContext context);
+    void endSeries(ChartRenderContext context);
 
-	void endChart(ChartRenderContext context);
+    void endChart(ChartRenderContext context);
 
-	void endPage(ChartRenderContext context);
+    void endPage(ChartRenderContext context);
 }

@@ -10,13 +10,13 @@ package org.pivot4j.mdx;
 
 public abstract class AbstractExp implements Exp {
 
-	private static final long serialVersionUID = -3736674439789473278L;
+    private static final long serialVersionUID = -3736674439789473278L;
 
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return toMdx();
-	}
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return toMdx();
+    }
 }

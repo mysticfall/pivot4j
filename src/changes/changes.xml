@@ -1,265 +1,265 @@
 <document xmlns="http://maven.apache.org/changes/1.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
-	<properties>
-		<title>Pivot4J Project</title>
-		<author email="mysticfallband@gmail.com">Xavier Cho</author>
-	</properties>
-	<body>
-		<release version="0.9" date="2014-05-25" description="Pivot4J 0.9 release">
-			<action dev="mysticfall" type="add" issue="141">
-				Integrate Pivot4J as a component to a CDE Dashboard in Pentaho.
-			</action>
-			<action dev="mysticfall" type="add" issue="136">
-				Add option to display filter selection on report.
-			</action>
-			<action dev="mysticfall" type="add" issue="117">
-				Support for bookmarkable URL for reports.
-			</action>
-			<action dev="mysticfall" type="add" issue="111">
-				Add charting support.
-			</action>
-			<action dev="mysticfall" type="add" issue="108">
-				Support Mondrian's cell writeback feature.
-			</action>
-			<action dev="mysticfall" type="update">
-				Update to JSF 2.2 and PrimeFaces 4.0.
-			</action>
-			<action dev="mysticfall" type="update" issue="144">
-				Selecting a member in filter dialog should not also select its children.
-			</action>
-			<action dev="mysticfall" type="update" issue="131">
-				Chart does not resize with window browser resize.
-			</action>
-			<action dev="mysticfall" type="update" issue="128">
-				Support for Glassfish depoyment.
-			</action>
-			<action dev="mysticfall" type="update" issue="119">
-				Allow users to edit MDX even when it contains invalid names.
-			</action>
-			<action dev="mysticfall" type="fix" issue="150">
-				Ragged hierarchy with 'show parent' option fails to render correctly.
-			</action>
-			<action dev="mysticfall" type="fix" issue="148">
-				Swap axes does not work properly with sorting.
-			</action>
-			<action dev="mysticfall" type="fix" issue="147">
-				Support for non-numeric measure values.
-			</action>
-			<action dev="mysticfall" type="fix" issue="143">
-				Catalog chooser shows hidden cubes.
-			</action>
-			<action dev="mysticfall" type="fix" issue="138">
-				Collapsed MDX pane cannot be expanded in Pentaho plugin.
-			</action>
-			<action dev="mysticfall" type="fix" issue="137">
-				Pentaho plugin ignores user's roles.
-			</action>
-			<action dev="mysticfall" type="fix" issue="127">
-				Drillthrough not working for ragged cubes.
-			</action>
-			<action dev="mysticfall" type="fix" issue="109">
-				NPE with Pentaho 5.0 EE.
-			</action>
-			<action dev="mysticfall" type="fix" issue="62">
-				NPE on closing filter dialog by clicking outside the window. 
-			</action>
-			<action dev="mysticfall" type="fix" issue="58">
-				Report file export does not work with the Pentaho plugin.
-			</action>
-		</release>
-		<release version="0.8" date="2013-08-31" description="Pivot4J 0.8 release">
-			<action dev="mysticfall" type="add" issue="59">
-				Basic report content management feature has been implemented.
-			</action>
-			<action dev="mysticfall" type="add" issue="67">
-				Conditional formatting support has been implemented.
-			</action>
-			<action dev="mysticfall" type="add" issue="63">
-				Data source and appearance settings can be configured by users.
-			</action>
-			<action dev="mysticfall" type="add" issue="53">
-				PDF and Excel export now contains filter information.
-			</action>
-			<action dev="mysticfall" type="add" issue="102">
-				Implement legacy JPivot report import feature in Pentaho plugin. 
-			</action>
-			<action dev="mysticfall" type="add" issue="101">
-				Block UI while Ajax request is being processed.
-			</action>
-			<action dev="mysticfall" type="update" issue="100">
-				Make drag &amp; drop operation on axis configuration view more consistent 
-				and responsive.
-			</action>
-			<action dev="mysticfall" type="update" issue="91">
-				Change show parent to include all the ancestor members.
-			</action>
-			<action dev="mysticfall" type="update" issue="98">
-				New Arquillian based integration tests for the UI project.  
-			</action>
-			<action dev="mysticfall" type="fix" issue="76">
-				Fixed problems with ragged hierarchies.
-			</action>
-			<action dev="mysticfall" type="fix" issue="77">
-				Fixed problems with parent-child hierarchies.
-			</action>
-			<action dev="mysticfall" type="fix" issue="79">
-				Support Mondrian/XMLA backend. 
-			</action>
-			<action dev="mysticfall" type="fix" issue="94">
-				Allow the ROW axis to appear before the COLUMN axis in a MDX query.  
-			</action>
-			<action dev="mysticfall" type="fix" issue="83">
-				Fixed a problem with drag &amp; drop reordering in the axis tree node. 
-			</action>
-			<action dev="mysticfall" type="fix" issue="93">
-				Fixed level / measure selection problem when one of the axis is empty.  
-			</action>
-			<action dev="mysticfall" type="fix" issue="81">
-				Fixed rendering problem with drill member/replace process when the 
-				show parent option is enabled. 
-			</action>
-			<action dev="mysticfall" type="fix" issue="78">
-				Fixed a bug in the filter dialog which made it impossible to uncheck 
-				selected members.
-			</action>
-			<action dev="mysticfall" type="fix" issue="74">
-				Fixed occasional view expiration errors.
-			</action>
-			<action dev="mysticfall" type="fix" issue="72">
-				Fixed hierarchy aggregator to correctly handle calculated values.
-			</action>
-			<action dev="mysticfall" type="fix" issue="71">
-				Fixed a bug in count aggregator which wrongly includes other 
-				aggregated values.
-			</action>
-			<action dev="mysticfall" type="fix" issue="73">
-				Preserve hierarchy order in axis when an all member is removed.
-			</action>
-			<action dev="mysticfall" type="fix" issue="86">
-				Fixed a MDX parsing problem with &quot;.Properties()&quot;.  
-			</action>
-		</release>
-		<release version="0.7" date="2013-04-14" description="Pivot4J 0.7 release">
-			<action dev="mysticfall" type="fix" issue="34">
-				Unable to parse MDX with member names containing ']]' escape.
-			</action>
-			<action dev="mysticfall" type="add" issue="37">
-				Expression language support in MDX query.
-			</action>
-			<action dev="mysticfall" type="update" issue="42">
-				Custom / long term serialization support for StateHolder API.
-			</action>
-			<action dev="mysticfall" type="add" issue="44">
-				Implement visual total feature(based on render strategy API).
-			</action>
-			<action dev="mysticfall" type="fix" issue="46">
-				Use unique name instead of object itself when comparing between metadata elements.
-			</action>
-			<action dev="mysticfall" type="fix" issue="49">
-				Missing member aggregation at the last position of the hierarchy.
-			</action>
-			<action dev="mysticfall" type="update" issue="50">
-				Allow multiple aggregators per position.
-			</action>
-			<action dev="mysticfall" type="add">
-				[UI/Plugin] Add internalization/localisation support.
-			</action>
-			<action dev="it4biz" type="update">
-				[UI/Plugin] Brazilian Portuguese translation by IT4Biz and Professor Coruja Team.
-			</action>
-			<action dev="mysticfall" type="add">
-				[UI/Plugin] Add basic Selenium integration test cases.
-			</action>
-		</release>
-		<release version="0.6" date="2013-02-02" description="Pivot4J 0.6 release">
-			<action dev="mysticfall" type="add" issue="26">
-				Implemented PDF export feature.
-			</action>
-			<action dev="mysticfall" type="add" issue="25">
-				Implemented Microsoft Excel export feature.
-			</action>
-			<action dev="mysticfall" type="update" issue="40">
-				Upgrade to Olap4J 1.1.0.
-			</action>
-			<action dev="mysticfall" type="add" issue="38">
-				New public MDX parser API.
-			</action>
-			<action dev="mysticfall" type="update" issue="33">
-				New convenient API for manipulating order of members in a hierarchy.
-			</action>
-			<action dev="mysticfall" type="update" issue="35">
-				Improved slicer axis manipulation.
-			</action>
-		</release>
-		<release version="0.0.5" date="2012-11-18" description="Pivot4J 0.0.5 release">
-			<action dev="mysticfall" type="add" issue="5">
-				Basic member properties support.
-			</action>
-			<action dev="mysticfall" type="fix" issue="32">
-				Fixed a bug causing incorrect behavior in PlaceMembersOnAxes transform when axes are swapped.
-			</action>
-			<action dev="mysticfall" type="fix" issue="31">
-				Level members are now added to their respective parent hierarchies.
-			</action>
-			<action dev="mysticfall" type="fix" issue="30">
-				Fixed a bug causing incorrect level order in PlaceLevelsOnAxes.findVisibleLevels method.
-			</action>
-			<action dev="mysticfall" type="update">
-				Built-in drill down and sorting support in PivotRenderer(command API).
-			</action>
-		</release>
-		<release version="0.0.4" date="2012-10-28" description="Pivot4J 0.0.4 release">
-			<action dev="mysticfall" type="update" issue="24">
-				Major refactoring on the UI related API. Replaced the TableBuilder interface with 
-				a callback style PivotRenderer interface for flexibility.
-			</action>
-		</release>
-		<release version="0.0.3" date="2012-10-20" description="Pivot4J 0.0.3 release">
-			<action dev="mysticfall" type="fix" issue="13">
-				Fixed a bug which made config parameters to be ignored in PooledOlapDataSource class.
-			</action>
-			<action dev="mysticfall" type="update" issue="14">
-				 Remove JDBC 4.0 API dependency to make it compile on Java 6.
-			</action>
-			<action dev="mysticfall" type="update" issue="15">
-				 Improved query transform API with more convenient methods. 
-			</action>
-			<action dev="mysticfall" type="fix" issue="18">
-				 Model state serialization code has been rewritten to fix a problem with PivotModel.restoreState(). 
-			</action>
-			<action dev="mysticfall" type="add" issue="21">
-				Provide an easier way to implement sort headers.
-			</action>
-			<action dev="mysticfall" type="update" issue="22">
-				Made TableBuilder API to generate missing level headers on row axis.
-			</action>
-			<action dev="mysticfall" type="fix" issue="23">
-				Fixed a bug in TableBuilder which generates incorrect table layout for non-contiguous level members. 
-			</action>
-		</release>
-		<release version="0.0.2" date="2012-10-08" description="Pivot4J 0.0.2 release">
-			<action dev="mysticfall" type="add" issue="6">
-				Added the table builder API to facilliate UI implementation process.
-			</action>
-			<action dev="mysticfall" type="fix" issue="9">
-				 Fixed the sorting problem. 
-			</action>
-			<action dev="mysticfall" type="add">
-				 Support for placing members on a non exisiting hierarchy. 
-			</action>
-			<action dev="mysticfall" type="add">
-				 Improve handling of an empty query axis. 
-			</action>
-		</release>
-		<release version="0.0.1" date="2012-09-28" description="The first public release">
-			<action dev="mysticfall" type="add" issue="2">
-				Finished migration
-				of major JPivot extensions as Transform API.
-			</action>
-			<action dev="mysticfall" type="add" issue="4">
-				Added various data source implementations including PooledOlapDataSource.
-			</action>
-		</release>
-	</body>
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+    <properties>
+        <title>Pivot4J Project</title>
+        <author email="mysticfallband@gmail.com">Xavier Cho</author>
+    </properties>
+    <body>
+        <release version="0.9" date="2014-05-25" description="Pivot4J 0.9 release">
+            <action dev="mysticfall" type="add" issue="141">
+                Integrate Pivot4J as a component to a CDE Dashboard in Pentaho.
+            </action>
+            <action dev="mysticfall" type="add" issue="136">
+                Add option to display filter selection on report.
+            </action>
+            <action dev="mysticfall" type="add" issue="117">
+                Support for bookmarkable URL for reports.
+            </action>
+            <action dev="mysticfall" type="add" issue="111">
+                Add charting support.
+            </action>
+            <action dev="mysticfall" type="add" issue="108">
+                Support Mondrian's cell writeback feature.
+            </action>
+            <action dev="mysticfall" type="update">
+                Update to JSF 2.2 and PrimeFaces 4.0.
+            </action>
+            <action dev="mysticfall" type="update" issue="144">
+                Selecting a member in filter dialog should not also select its children.
+            </action>
+            <action dev="mysticfall" type="update" issue="131">
+                Chart does not resize with window browser resize.
+            </action>
+            <action dev="mysticfall" type="update" issue="128">
+                Support for Glassfish depoyment.
+            </action>
+            <action dev="mysticfall" type="update" issue="119">
+                Allow users to edit MDX even when it contains invalid names.
+            </action>
+            <action dev="mysticfall" type="fix" issue="150">
+                Ragged hierarchy with 'show parent' option fails to render correctly.
+            </action>
+            <action dev="mysticfall" type="fix" issue="148">
+                Swap axes does not work properly with sorting.
+            </action>
+            <action dev="mysticfall" type="fix" issue="147">
+                Support for non-numeric measure values.
+            </action>
+            <action dev="mysticfall" type="fix" issue="143">
+                Catalog chooser shows hidden cubes.
+            </action>
+            <action dev="mysticfall" type="fix" issue="138">
+                Collapsed MDX pane cannot be expanded in Pentaho plugin.
+            </action>
+            <action dev="mysticfall" type="fix" issue="137">
+                Pentaho plugin ignores user's roles.
+            </action>
+            <action dev="mysticfall" type="fix" issue="127">
+                Drillthrough not working for ragged cubes.
+            </action>
+            <action dev="mysticfall" type="fix" issue="109">
+                NPE with Pentaho 5.0 EE.
+            </action>
+            <action dev="mysticfall" type="fix" issue="62">
+                NPE on closing filter dialog by clicking outside the window. 
+            </action>
+            <action dev="mysticfall" type="fix" issue="58">
+                Report file export does not work with the Pentaho plugin.
+            </action>
+        </release>
+        <release version="0.8" date="2013-08-31" description="Pivot4J 0.8 release">
+            <action dev="mysticfall" type="add" issue="59">
+                Basic report content management feature has been implemented.
+            </action>
+            <action dev="mysticfall" type="add" issue="67">
+                Conditional formatting support has been implemented.
+            </action>
+            <action dev="mysticfall" type="add" issue="63">
+                Data source and appearance settings can be configured by users.
+            </action>
+            <action dev="mysticfall" type="add" issue="53">
+                PDF and Excel export now contains filter information.
+            </action>
+            <action dev="mysticfall" type="add" issue="102">
+                Implement legacy JPivot report import feature in Pentaho plugin. 
+            </action>
+            <action dev="mysticfall" type="add" issue="101">
+                Block UI while Ajax request is being processed.
+            </action>
+            <action dev="mysticfall" type="update" issue="100">
+                Make drag &amp; drop operation on axis configuration view more consistent 
+                and responsive.
+            </action>
+            <action dev="mysticfall" type="update" issue="91">
+                Change show parent to include all the ancestor members.
+            </action>
+            <action dev="mysticfall" type="update" issue="98">
+                New Arquillian based integration tests for the UI project.  
+            </action>
+            <action dev="mysticfall" type="fix" issue="76">
+                Fixed problems with ragged hierarchies.
+            </action>
+            <action dev="mysticfall" type="fix" issue="77">
+                Fixed problems with parent-child hierarchies.
+            </action>
+            <action dev="mysticfall" type="fix" issue="79">
+                Support Mondrian/XMLA backend. 
+            </action>
+            <action dev="mysticfall" type="fix" issue="94">
+                Allow the ROW axis to appear before the COLUMN axis in a MDX query.  
+            </action>
+            <action dev="mysticfall" type="fix" issue="83">
+                Fixed a problem with drag &amp; drop reordering in the axis tree node. 
+            </action>
+            <action dev="mysticfall" type="fix" issue="93">
+                Fixed level / measure selection problem when one of the axis is empty.  
+            </action>
+            <action dev="mysticfall" type="fix" issue="81">
+                Fixed rendering problem with drill member/replace process when the 
+                show parent option is enabled. 
+            </action>
+            <action dev="mysticfall" type="fix" issue="78">
+                Fixed a bug in the filter dialog which made it impossible to uncheck 
+                selected members.
+            </action>
+            <action dev="mysticfall" type="fix" issue="74">
+                Fixed occasional view expiration errors.
+            </action>
+            <action dev="mysticfall" type="fix" issue="72">
+                Fixed hierarchy aggregator to correctly handle calculated values.
+            </action>
+            <action dev="mysticfall" type="fix" issue="71">
+                Fixed a bug in count aggregator which wrongly includes other 
+                aggregated values.
+            </action>
+            <action dev="mysticfall" type="fix" issue="73">
+                Preserve hierarchy order in axis when an all member is removed.
+            </action>
+            <action dev="mysticfall" type="fix" issue="86">
+                Fixed a MDX parsing problem with &quot;.Properties()&quot;.  
+            </action>
+        </release>
+        <release version="0.7" date="2013-04-14" description="Pivot4J 0.7 release">
+            <action dev="mysticfall" type="fix" issue="34">
+                Unable to parse MDX with member names containing ']]' escape.
+            </action>
+            <action dev="mysticfall" type="add" issue="37">
+                Expression language support in MDX query.
+            </action>
+            <action dev="mysticfall" type="update" issue="42">
+                Custom / long term serialization support for StateHolder API.
+            </action>
+            <action dev="mysticfall" type="add" issue="44">
+                Implement visual total feature(based on render strategy API).
+            </action>
+            <action dev="mysticfall" type="fix" issue="46">
+                Use unique name instead of object itself when comparing between metadata elements.
+            </action>
+            <action dev="mysticfall" type="fix" issue="49">
+                Missing member aggregation at the last position of the hierarchy.
+            </action>
+            <action dev="mysticfall" type="update" issue="50">
+                Allow multiple aggregators per position.
+            </action>
+            <action dev="mysticfall" type="add">
+                [UI/Plugin] Add internalization/localisation support.
+            </action>
+            <action dev="it4biz" type="update">
+                [UI/Plugin] Brazilian Portuguese translation by IT4Biz and Professor Coruja Team.
+            </action>
+            <action dev="mysticfall" type="add">
+                [UI/Plugin] Add basic Selenium integration test cases.
+            </action>
+        </release>
+        <release version="0.6" date="2013-02-02" description="Pivot4J 0.6 release">
+            <action dev="mysticfall" type="add" issue="26">
+                Implemented PDF export feature.
+            </action>
+            <action dev="mysticfall" type="add" issue="25">
+                Implemented Microsoft Excel export feature.
+            </action>
+            <action dev="mysticfall" type="update" issue="40">
+                Upgrade to Olap4J 1.1.0.
+            </action>
+            <action dev="mysticfall" type="add" issue="38">
+                New public MDX parser API.
+            </action>
+            <action dev="mysticfall" type="update" issue="33">
+                New convenient API for manipulating order of members in a hierarchy.
+            </action>
+            <action dev="mysticfall" type="update" issue="35">
+                Improved slicer axis manipulation.
+            </action>
+        </release>
+        <release version="0.0.5" date="2012-11-18" description="Pivot4J 0.0.5 release">
+            <action dev="mysticfall" type="add" issue="5">
+                Basic member properties support.
+            </action>
+            <action dev="mysticfall" type="fix" issue="32">
+                Fixed a bug causing incorrect behavior in PlaceMembersOnAxes transform when axes are swapped.
+            </action>
+            <action dev="mysticfall" type="fix" issue="31">
+                Level members are now added to their respective parent hierarchies.
+            </action>
+            <action dev="mysticfall" type="fix" issue="30">
+                Fixed a bug causing incorrect level order in PlaceLevelsOnAxes.findVisibleLevels method.
+            </action>
+            <action dev="mysticfall" type="update">
+                Built-in drill down and sorting support in PivotRenderer(command API).
+            </action>
+        </release>
+        <release version="0.0.4" date="2012-10-28" description="Pivot4J 0.0.4 release">
+            <action dev="mysticfall" type="update" issue="24">
+                Major refactoring on the UI related API. Replaced the TableBuilder interface with 
+                a callback style PivotRenderer interface for flexibility.
+            </action>
+        </release>
+        <release version="0.0.3" date="2012-10-20" description="Pivot4J 0.0.3 release">
+            <action dev="mysticfall" type="fix" issue="13">
+                Fixed a bug which made config parameters to be ignored in PooledOlapDataSource class.
+            </action>
+            <action dev="mysticfall" type="update" issue="14">
+                Remove JDBC 4.0 API dependency to make it compile on Java 6.
+            </action>
+            <action dev="mysticfall" type="update" issue="15">
+                Improved query transform API with more convenient methods. 
+            </action>
+            <action dev="mysticfall" type="fix" issue="18">
+                Model state serialization code has been rewritten to fix a problem with PivotModel.restoreState(). 
+            </action>
+            <action dev="mysticfall" type="add" issue="21">
+                Provide an easier way to implement sort headers.
+            </action>
+            <action dev="mysticfall" type="update" issue="22">
+                Made TableBuilder API to generate missing level headers on row axis.
+            </action>
+            <action dev="mysticfall" type="fix" issue="23">
+                Fixed a bug in TableBuilder which generates incorrect table layout for non-contiguous level members. 
+            </action>
+        </release>
+        <release version="0.0.2" date="2012-10-08" description="Pivot4J 0.0.2 release">
+            <action dev="mysticfall" type="add" issue="6">
+                Added the table builder API to facilliate UI implementation process.
+            </action>
+            <action dev="mysticfall" type="fix" issue="9">
+                Fixed the sorting problem. 
+            </action>
+            <action dev="mysticfall" type="add">
+                Support for placing members on a non exisiting hierarchy. 
+            </action>
+            <action dev="mysticfall" type="add">
+                Improve handling of an empty query axis. 
+            </action>
+        </release>
+        <release version="0.0.1" date="2012-09-28" description="The first public release">
+            <action dev="mysticfall" type="add" issue="2">
+                Finished migration
+                of major JPivot extensions as Transform API.
+            </action>
+            <action dev="mysticfall" type="add" issue="4">
+                Added various data source implementations including PooledOlapDataSource.
+            </action>
+        </release>
+    </body>
 </document>

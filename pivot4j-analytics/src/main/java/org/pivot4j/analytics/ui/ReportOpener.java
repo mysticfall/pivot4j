@@ -10,8 +10,10 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.pivot4j.analytics.config.Settings;
@@ -22,252 +24,275 @@ import org.pivot4j.analytics.repository.ReportFile;
 import org.pivot4j.analytics.repository.ReportRepository;
 import org.pivot4j.analytics.state.ViewState;
 import org.pivot4j.analytics.state.ViewStateHolder;
+import org.pivot4j.analytics.util.DspCredor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ManagedBean(name = "reportOpener")
-@RequestScoped
+@ViewScoped
 public class ReportOpener {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+    private Logger log = LoggerFactory.getLogger(getClass());
 
-	@ManagedProperty(value = "#{settings}")
-	private Settings settings;
+    @ManagedProperty(value = "#{settings}")
+    private Settings settings;
 
-	@ManagedProperty(value = "#{viewStateHolder}")
-	private ViewStateHolder viewStateHolder;
+    @ManagedProperty(value = "#{viewStateHolder}")
+    private ViewStateHolder viewStateHolder;
 
-	@ManagedProperty(value = "#{dataSourceManager}")
-	private DataSourceManager dataSourceManager;
+    @ManagedProperty(value = "#{dataSourceManager}")
+    private DataSourceManager dataSourceManager;
 
-	@ManagedProperty(value = "#{reportRepository}")
-	private ReportRepository reportRepository;
+    @ManagedProperty(value = "#{reportRepository}")
+    private ReportRepository reportRepository;
 
-	private String fileId;
+    private String fileId;
 
-	private String path;
+    private String path;
 
-	private boolean embeded = false;
+    private String credor;
 
-	public void load() throws IOException, ClassNotFoundException,
-			ConfigurationException, DataSourceNotFoundException {
-		FacesContext context = FacesContext.getCurrentInstance();
+    private boolean embeded = false;
 
-		HttpServletRequest request = (HttpServletRequest) context
-				.getExternalContext().getRequest();
+    HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 
-		ReportFile file = getReportFromRequest(request);
+    public void loadCredor() throws IOException, ClassNotFoundException,
+            ConfigurationException, DataSourceNotFoundException {
+        FacesContext context = FacesContext.getCurrentInstance();
 
-		if (file == null) {
-			throw new FacesException("Unable to find requested report file.");
-		}
+        NavigationHandler navigationHandler = context.getApplication()
+                .getNavigationHandler();
 
-		ViewState state = createViewWithRequest(request, file);
+        session = (HttpSession) context.getExternalContext().getSession(true);
+        session.setAttribute("idCredor", credor);
+        session.setAttribute("client", credor);
 
-		if (state == null) {
-			throw new FacesException("Unable to create a view state.");
-		}
+        String path = "index?faces-redirect=true";
 
-		ReportContent content = reportRepository.getReportContent(file);
-		content.read(state, dataSourceManager, settings.getConfiguration());
+        navigationHandler.handleNavigation(context, null, path);
+    }
 
-		viewStateHolder.registerState(state);
+    public void load() throws IOException, ClassNotFoundException,
+            ConfigurationException, DataSourceNotFoundException {
+        FacesContext context = FacesContext.getCurrentInstance();
 
-		NavigationHandler navigationHandler = context.getApplication()
-				.getNavigationHandler();
+        HttpServletRequest request = (HttpServletRequest) context
+                .getExternalContext().getRequest();
 
-		String target = embeded ? "embed" : "view";
+        ReportFile file = getReportFromRequest(request);
 
-		String path = String.format("%s?faces-redirect=true&%s=%s", target,
-				settings.getViewParameterName(), state.getId());
+        if (file == null) {
+            throw new FacesException("Unable to find requested report file.");
+        }
 
-		navigationHandler.handleNavigation(context, null, path);
-	}
+        ViewState state = createViewWithRequest(request, file);
 
-	/**
-	 * @param request
-	 * @param file
-	 * @return
-	 */
-	protected ViewState createViewWithRequest(HttpServletRequest request,
-			ReportFile file) {
-		String viewId = request.getParameter(settings.getViewParameterName());
+        if (state == null) {
+            throw new FacesException("Unable to create a view state.");
+        }
 
-		if (log.isInfoEnabled()) {
-			log.info("Creating a view '{}' with a report: {}", viewId, file);
-		}
+        ReportContent content = reportRepository.getReportContent(file);
+        content.read(state, dataSourceManager, settings.getConfiguration());
 
-		ViewState state;
+        viewStateHolder.registerState(state);
 
-		String name = file.getName();
+        NavigationHandler navigationHandler = context.getApplication()
+                .getNavigationHandler();
 
-		if (name.toLowerCase().endsWith(".pivot4j")) {
-			name = name.substring(0, name.length() - 8);
-		}
+        String target = embeded ? "embed" : "view";
 
-		if (viewId == null) {
-			state = viewStateHolder.createNewState();
-			state.setName(name);
-		} else {
-			state = new ViewState(viewId, name);
-		}
+        String path = String.format("%s?faces-redirect=true&%s=%s", target,
+                settings.getViewParameterName(), state.getId());
 
-		@SuppressWarnings("unchecked")
-		Map<String, String[]> parameterMap = request.getParameterMap();
+        navigationHandler.handleNavigation(context, null, path);
+    }
 
-		Map<String, Object> parameters = new HashMap<String, Object>(
-				parameterMap.size());
+    /**
+     * @param request
+     * @param file
+     * @return
+     */
+    protected ViewState createViewWithRequest(HttpServletRequest request,
+            ReportFile file) {
+        String viewId = request.getParameter(settings.getViewParameterName());
 
-		for (String key : parameterMap.keySet()) {
-			String[] values = parameterMap.get(key);
+        if (log.isInfoEnabled()) {
+            log.info("Creating a view '{}' with a report: {}", viewId, file);
+        }
 
-			if (values == null) {
-				continue;
-			}
+        ViewState state;
 
-			if (values.length == 1) {
-				parameters.put(key, values[0]);
-			} else {
-				parameters.put(key, Arrays.asList(values));
-			}
-		}
+        String name = file.getName();
 
-		state.setFile(file);
-		state.setParameters(parameters);
-		state.setReadOnly(!file.canWrite());
-		state.setEditable(!state.isReadOnly() && !embeded);
+        if (name.toLowerCase().endsWith(".pivot4j")) {
+            name = name.substring(0, name.length() - 8);
+        }
 
-		return state;
-	}
+        if (viewId == null) {
+            state = viewStateHolder.createNewState();
+            state.setName(name);
+        } else {
+            state = new ViewState(viewId, name);
+        }
 
-	/**
-	 * @param request
-	 * @return
-	 * @throws IOException
-	 */
-	protected ReportFile getReportFromRequest(HttpServletRequest request)
-			throws IOException {
-		ReportFile file = null;
+        @SuppressWarnings("unchecked")
+        Map<String, String[]> parameterMap = request.getParameterMap();
 
-		if (fileId != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Opening report file with id: {}", fileId);
-			}
+        Map<String, Object> parameters = new HashMap<String, Object>(
+                parameterMap.size());
 
-			file = reportRepository.getFileById(fileId);
-		} else if (path != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Opening report file with path: {}", path);
-			}
+        for (String key : parameterMap.keySet()) {
+            String[] values = parameterMap.get(key);
 
-			file = reportRepository.getFile(path);
-		}
+            if (values == null) {
+                continue;
+            }
 
-		return file;
-	}
+            if (values.length == 1) {
+                parameters.put(key, values[0]);
+            } else {
+                parameters.put(key, Arrays.asList(values));
+            }
+        }
 
-	/**
-	 * @return the fileId
-	 */
-	public String getFileId() {
-		return fileId;
-	}
+        state.setFile(file);
+        state.setParameters(parameters);
+        state.setReadOnly(!file.canWrite());
+        state.setEditable(!state.isReadOnly() && !embeded);
 
-	/**
-	 * @param fileId
-	 *            the fileId to set
-	 */
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
-	}
+        return state;
+    }
 
-	/**
-	 * @return the path
-	 */
-	public String getPath() {
-		return path;
-	}
+    /**
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    protected ReportFile getReportFromRequest(HttpServletRequest request)
+            throws IOException {
+        ReportFile file = null;
 
-	/**
-	 * @param path
-	 *            the path to set
-	 */
-	public void setPath(String path) {
-		this.path = path;
-	}
+        if (fileId != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Opening report file with id: {}", fileId);
+            }
 
-	/**
-	 * @return the embeded
-	 */
-	public boolean isEmbeded() {
-		return embeded;
-	}
+            file = reportRepository.getFileById(fileId);
+        } else if (path != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Opening report file with path: {}", path);
+            }
 
-	/**
-	 * @param embeded
-	 *            the embeded to set
-	 */
-	public void setEmbeded(boolean embeded) {
-		this.embeded = embeded;
-	}
+            file = reportRepository.getFile(path);
+        }
 
-	/**
-	 * @return the settings
-	 */
-	public Settings getSettings() {
-		return settings;
-	}
+        return file;
+    }
 
-	/**
-	 * @param settings
-	 *            the settings to set
-	 */
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
+    /**
+     * @return the fileId
+     */
+    public String getFileId() {
+        return fileId;
+    }
 
-	/**
-	 * @return the viewStateHolder
-	 */
-	public ViewStateHolder getViewStateHolder() {
-		return viewStateHolder;
-	}
+    /**
+     * @param fileId the fileId to set
+     */
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
 
-	/**
-	 * @param viewStateHolder
-	 *            the viewStateHolder to set
-	 */
-	public void setViewStateHolder(ViewStateHolder viewStateHolder) {
-		this.viewStateHolder = viewStateHolder;
-	}
+    /**
+     * @return the path
+     */
+    public String getPath() {
+        return path;
+    }
 
-	/**
-	 * @return the dataSourceManager
-	 */
-	public DataSourceManager getDataSourceManager() {
-		return dataSourceManager;
-	}
+    /**
+     * @param path the path to set
+     */
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-	/**
-	 * @param dataSourceManager
-	 *            the dataSourceManager to set
-	 */
-	public void setDataSourceManager(DataSourceManager dataSourceManager) {
-		this.dataSourceManager = dataSourceManager;
-	}
+    /**
+     * @return the embeded
+     */
+    public boolean isEmbeded() {
+        return embeded;
+    }
 
-	/**
-	 * @return the reportRepository
-	 */
-	public ReportRepository getReportRepository() {
-		return reportRepository;
-	}
+    /**
+     * @param embeded the embeded to set
+     */
+    public void setEmbeded(boolean embeded) {
+        this.embeded = embeded;
+    }
 
-	/**
-	 * @param reportRepository
-	 *            the reportRepository to set
-	 */
-	public void setReportRepository(ReportRepository reportRepository) {
-		this.reportRepository = reportRepository;
-	}
+    /**
+     * @return the settings
+     */
+    public Settings getSettings() {
+        return settings;
+    }
+
+    /**
+     * @param settings the settings to set
+     */
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
+
+    /**
+     * @return the viewStateHolder
+     */
+    public ViewStateHolder getViewStateHolder() {
+        return viewStateHolder;
+    }
+
+    /**
+     * @param viewStateHolder the viewStateHolder to set
+     */
+    public void setViewStateHolder(ViewStateHolder viewStateHolder) {
+        this.viewStateHolder = viewStateHolder;
+    }
+
+    /**
+     * @return the dataSourceManager
+     */
+    public DataSourceManager getDataSourceManager() {
+        return dataSourceManager;
+    }
+
+    /**
+     * @param dataSourceManager the dataSourceManager to set
+     */
+    public void setDataSourceManager(DataSourceManager dataSourceManager) {
+        this.dataSourceManager = dataSourceManager;
+    }
+
+    /**
+     * @return the reportRepository
+     */
+    public ReportRepository getReportRepository() {
+        return reportRepository;
+    }
+
+    /**
+     * @param reportRepository the reportRepository to set
+     */
+    public void setReportRepository(ReportRepository reportRepository) {
+        this.reportRepository = reportRepository;
+    }
+
+    public String getCredor() {
+        return credor;
+    }
+
+    public void setCredor(String credor) {
+        this.credor = credor;
+    }
+
 }

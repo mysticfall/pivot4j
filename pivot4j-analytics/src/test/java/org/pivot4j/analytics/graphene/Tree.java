@@ -7,21 +7,21 @@ import org.openqa.selenium.support.FindBy;
 
 public class Tree implements PageFragment {
 
-	@Root
-	private WebElement navigator;
+    @Root
+    private WebElement navigator;
 
-	@FindBy(className = "ui-widget-header")
-	private WebElement header;
+    @FindBy(className = "ui-widget-header")
+    private WebElement header;
 
-	public Dimension getSize() {
-		return navigator.getSize();
-	}
+    public Dimension getSize() {
+        return navigator.getSize();
+    }
 
-	public String getTitle() {
-		if (header == null) {
-			return null;
-		}
+    public String getTitle() {
+        if (header == null) {
+            return null;
+        }
 
-		return header.getText();
-	}
+        return header.getText();
+    }
 }

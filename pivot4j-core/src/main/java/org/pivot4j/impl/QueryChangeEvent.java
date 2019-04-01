@@ -15,18 +15,18 @@ import java.util.EventObject;
  */
 public class QueryChangeEvent extends EventObject {
 
-	private static final long serialVersionUID = -4579513913541469377L;
+    private static final long serialVersionUID = -4579513913541469377L;
 
-	/**
-	 * Constructor for QueryChangeEvent.
-	 * 
-	 * @param source
-	 */
-	public QueryChangeEvent(QueryAdapter source) {
-		super(source);
-	}
+    /**
+     * Constructor for QueryChangeEvent.
+     *
+     * @param source
+     */
+    public QueryChangeEvent(QueryAdapter source) {
+        super(source);
+    }
 
-	public QueryAdapter getQueryAdapter() {
-		return (QueryAdapter) getSource();
-	}
+    public QueryAdapter getQueryAdapter() {
+        return (QueryAdapter) getSource();
+    }
 }

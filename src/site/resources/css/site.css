@@ -1,54 +1,54 @@
 body.topBarDisabled {
-	padding-top: 10px;
+    padding-top: 10px;
 }
 
 a.brand {
-	font-weight: bold !important;
-	background-image: url("../img/logo32.png");
-	background-repeat: no-repeat;
-	background-position: left;
-	padding-left: 40px !important;
+    font-weight: bold !important;
+    background-image: url("../img/logo32.png");
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 40px !important;
 }
 
 .nav-list > .active > a, .nav-list > .active > a:hover {
-	background-color: #D47541;
+    background-color: #D47541;
 }
 
 h1, h2, h3, h4, h5, h6, a, a:hover {
-	color: #D47541;
+    color: #D47541;
 }	
 
 .section p, .section p, .section dt, .section dt {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .subfooter p {
-	float: right;
+    float: right;
 }
 
 .subfooter p.copyright, .subfooter p.version-date {
-	float: left;
+    float: left;
 }
 
 .subfooter p.version-date {
-	clear: both;
+    clear: both;
 }
 
 .subfooter p.pull-right {
-	margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 iframe.twitter-frame {
-	width: 300px;
-	height: 20px;
+    width: 300px;
+    height: 20px;
 }
 
 h1[id]:before, h2[id]:before, h3[id]:before, h4[id]:before, h5[id]:before, h6[id]:before, a[name]:before {
-	height: auto;
-	margin-top: inherit;
+    height: auto;
+    margin-top: inherit;
 }
 
 .thumbnail img {
-	width: 360px;
-	height: 204px;
+    width: 360px;
+    height: 204px;
 }

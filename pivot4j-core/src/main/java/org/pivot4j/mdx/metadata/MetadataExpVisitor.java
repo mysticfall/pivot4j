@@ -15,11 +15,11 @@ import org.pivot4j.mdx.ExpVisitor;
  */
 public interface MetadataExpVisitor extends ExpVisitor {
 
-	void visitDimension(DimensionExp exp);
+    void visitDimension(DimensionExp exp);
 
-	void visitHierarchy(HierarchyExp exp);
+    void visitHierarchy(HierarchyExp exp);
 
-	void visitLevel(LevelExp exp);
+    void visitLevel(LevelExp exp);
 
-	void visitMember(MemberExp exp);
+    void visitMember(MemberExp exp);
 }

@@ -21,73 +21,73 @@ import org.pivot4j.ui.condition.DefaultConditionFactory;
 
 public abstract class AbstractConditionTest extends AbstractMockRenderTestCase {
 
-	protected static ConditionFactory conditionFactory = new DefaultConditionFactory() {
+    protected static ConditionFactory conditionFactory = new DefaultConditionFactory() {
 
-		@Override
-		public List<String> getAvailableConditions() {
-			List<String> conditions = super.getAvailableConditions();
-			conditions.add("TRUE");
-			conditions.add("FALSE");
+        @Override
+        public List<String> getAvailableConditions() {
+            List<String> conditions = super.getAvailableConditions();
+            conditions.add("TRUE");
+            conditions.add("FALSE");
 
-			return conditions;
-		}
+            return conditions;
+        }
 
-		@Override
-		public Condition createCondition(String name) {
-			if (name.equals("TRUE")) {
-				return TestCondition.TRUE;
-			} else if (name.equals("FALSE")) {
-				return TestCondition.FALSE;
-			}
+        @Override
+        public Condition createCondition(String name) {
+            if (name.equals("TRUE")) {
+                return TestCondition.TRUE;
+            } else if (name.equals("FALSE")) {
+                return TestCondition.FALSE;
+            }
 
-			return super.createCondition(name);
-		}
-	};
+            return super.createCondition(name);
+        }
+    };
 
-	static class TestCondition extends AbstractCondition {
+    static class TestCondition extends AbstractCondition {
 
-		private boolean result;
+        private boolean result;
 
-		static Condition TRUE = new TestCondition(true);
+        static Condition TRUE = new TestCondition(true);
 
-		static Condition FALSE = new TestCondition(false);
+        static Condition FALSE = new TestCondition(false);
 
-		private TestCondition(boolean result) {
-			super(conditionFactory);
+        private TestCondition(boolean result) {
+            super(conditionFactory);
 
-			this.result = result;
-		}
+            this.result = result;
+        }
 
-		@Override
-		public String getName() {
-			return result ? "TRUE" : "FALSE";
-		}
+        @Override
+        public String getName() {
+            return result ? "TRUE" : "FALSE";
+        }
 
-		@Override
-		public boolean matches(RenderContext context) {
-			return result;
-		}
+        @Override
+        public boolean matches(RenderContext context) {
+            return result;
+        }
 
-		@Override
-		public Serializable saveState() {
-			return result;
-		}
+        @Override
+        public Serializable saveState() {
+            return result;
+        }
 
-		@Override
-		public void restoreState(Serializable state) {
-			this.result = (Boolean) state;
-		}
+        @Override
+        public void restoreState(Serializable state) {
+            this.result = (Boolean) state;
+        }
 
-		@Override
-		public void saveSettings(HierarchicalConfiguration configuration) {
-			super.saveSettings(configuration);
+        @Override
+        public void saveSettings(HierarchicalConfiguration configuration) {
+            super.saveSettings(configuration);
 
-			configuration.setProperty("[@result]", result);
-		}
+            configuration.setProperty("[@result]", result);
+        }
 
-		@Override
-		public void restoreSettings(HierarchicalConfiguration configuration) {
-			this.result = configuration.getBoolean("[@result]");
-		}
-	}
+        @Override
+        public void restoreSettings(HierarchicalConfiguration configuration) {
+            this.result = configuration.getBoolean("[@result]");
+        }
+    }
 }
