@@ -39,7 +39,7 @@ import org.pivot4j.mdx.MdxParser;
 import org.pivot4j.mdx.MdxStatement;
 import org.pivot4j.mdx.impl.MdxParserImpl;
 import org.pivot4j.ui.table.TableRenderer;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
@@ -112,7 +112,7 @@ public class MigrationHandler {
                     navigation = open(target, true);
                 }
 
-                RequestContext.getCurrentInstance().execute(
+                PrimeFaces.current().executeScript(
                         "if (parent) parent.mantle_refreshRepository()");
 
                 this.migrationDone = true;
