@@ -94,7 +94,7 @@
         <version.junit>4.11</version.junit>
 
         <version.primefaces>7.0</version.primefaces>
-        <version.primefaces.extensions>6.2.1</version.primefaces.extensions>
+        <version.primefaces.extensions>7.0</version.primefaces.extensions>
         <version.primefaces.resources-codemirror>6.1.1</version.primefaces.resources-codemirror>
         <version.primefaces.themes>1.0.10</version.primefaces.themes>
                 
