@@ -297,5 +297,11 @@
 			<name>emuStudio Repository</name>
 			<url>http://emustudio.sf.net/repository/</url>
 		</pluginRepository>
+		<!--	Для cup-maven-plugin, т.к. в интернете больше его нет. Удача повернулась лицом и зависимость было найдена в локальном репозитории-->
+		<pluginRepository>
+			<id>central</id>
+			<name>argus-internal</name>
+			<url>http://git:8081/artifactory/repo</url>
+		</pluginRepository>
 	</pluginRepositories>
 </project>

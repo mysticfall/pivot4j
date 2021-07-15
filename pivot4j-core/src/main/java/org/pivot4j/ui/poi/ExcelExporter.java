@@ -8,8 +8,8 @@
  */
 package org.pivot4j.ui.poi;
 
-import static org.pivot4j.ui.CellTypes.VALUE;
 import static org.pivot4j.ui.CellTypes.LABEL;
+import static org.pivot4j.ui.CellTypes.VALUE;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -20,11 +20,15 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
@@ -396,11 +400,11 @@ public class ExcelExporter extends
 
 		font.setFontName(fontFamily);
 		font.setFontHeightInPoints((short) fontSize);
-		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		font.setBold(true);
 
 		style.setFont(font);
-		style.setAlignment(CellStyle.ALIGN_LEFT);
-		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		style.setAlignment(HorizontalAlignment.LEFT);
+		style.setVerticalAlignment(VerticalAlignment.CENTER);
 
 		switch (format) {
 		case XSSF:
@@ -415,11 +419,11 @@ public class ExcelExporter extends
 			assert false;
 		}
 
-		style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-		style.setBorderTop(CellStyle.BORDER_THIN);
-		style.setBorderLeft(CellStyle.BORDER_THIN);
-		style.setBorderRight(CellStyle.BORDER_THIN);
-		style.setBorderBottom(CellStyle.BORDER_THIN);
+		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		style.setBorderTop(BorderStyle.THIN);
+		style.setBorderLeft(BorderStyle.THIN);
+		style.setBorderRight(BorderStyle.THIN);
+		style.setBorderBottom(BorderStyle.THIN);
 
 		return style;
 	}
@@ -441,15 +445,15 @@ public class ExcelExporter extends
 
 		font.setFontName(fontFamily);
 		font.setFontHeightInPoints((short) fontSize);
-		font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+		font.setBold(true);
 
 		style.setFont(font);
-		style.setAlignment(CellStyle.ALIGN_RIGHT);
-		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-		style.setBorderTop(CellStyle.BORDER_THIN);
-		style.setBorderLeft(CellStyle.BORDER_THIN);
-		style.setBorderRight(CellStyle.BORDER_THIN);
-		style.setBorderBottom(CellStyle.BORDER_THIN);
+		style.setAlignment(HorizontalAlignment.RIGHT);
+		style.setVerticalAlignment(VerticalAlignment.CENTER);
+		style.setBorderTop(BorderStyle.THIN);
+		style.setBorderLeft(BorderStyle.THIN);
+		style.setBorderRight(BorderStyle.THIN);
+		style.setBorderBottom(BorderStyle.THIN);
 		style.setDataFormat((short) 4);
 
 		return style;
@@ -472,11 +476,11 @@ public class ExcelExporter extends
 
 		font.setFontName(fontFamily);
 		font.setFontHeightInPoints((short) fontSize);
-		font.setBoldweight(Font.BOLDWEIGHT_NORMAL);
+		font.setBold(true);
 
 		style.setFont(font);
-		style.setAlignment(CellStyle.ALIGN_RIGHT);
-		style.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		style.setAlignment(HorizontalAlignment.RIGHT);
+		style.setVerticalAlignment(VerticalAlignment.CENTER);
 
 		switch (format) {
 		case XSSF:
@@ -491,11 +495,11 @@ public class ExcelExporter extends
 			assert false;
 		}
 
-		style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-		style.setBorderTop(CellStyle.BORDER_THIN);
-		style.setBorderLeft(CellStyle.BORDER_THIN);
-		style.setBorderRight(CellStyle.BORDER_THIN);
-		style.setBorderBottom(CellStyle.BORDER_THIN);
+		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		style.setBorderTop(BorderStyle.THIN);
+		style.setBorderLeft(BorderStyle.THIN);
+		style.setBorderRight(BorderStyle.THIN);
+		style.setBorderBottom(BorderStyle.THIN);
 		style.setDataFormat((short) 4);
 
 		return style;
@@ -558,14 +562,10 @@ public class ExcelExporter extends
 		for (CellRangeAddress region : regions) {
 			sheet.addMergedRegion(region);
 
-			RegionUtil.setBorderTop(CellStyle.BORDER_THIN, region, sheet,
-					workbook);
-			RegionUtil.setBorderLeft(CellStyle.BORDER_THIN, region, sheet,
-					workbook);
-			RegionUtil.setBorderBottom(CellStyle.BORDER_THIN, region, sheet,
-					workbook);
-			RegionUtil.setBorderRight(CellStyle.BORDER_THIN, region, sheet,
-					workbook);
+			RegionUtil.setBorderTop(BorderStyle.THIN, region, sheet);
+			RegionUtil.setBorderLeft(BorderStyle.THIN, region, sheet);
+			RegionUtil.setBorderBottom(BorderStyle.THIN, region, sheet);
+			RegionUtil.setBorderRight(BorderStyle.THIN, region, sheet);
 		}
 	}
 
